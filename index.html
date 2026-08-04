@@ -235,27 +235,52 @@ tr.cmp-same td:nth-child(3),tr.cmp-same td:nth-child(4){color:var(--dim);}
 .logline.neu{color:var(--dim);}
 
 /* ---- hero / title ---- */
-/* V0.9.7.8.12: splash studio FUORISCALA — colori esatti del brand kit, non il tema del gioco */
+/* V0.9.7.8.13: splash studio FUORISCALA — "Studio splash specification" dal brand book (10/MOTION):
+   1.8-2.4s, scale escalation oltre i bordi del frame poi assestamento, etichetta tecnica PT Mono,
+   niente particelle/riflessi/fiamme/boati. Fallback prefers-reduced-motion: solo fade breve. */
 .studio-splash{
   position:fixed; inset:0; z-index:999; background:#0D0D0F;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  cursor:pointer; animation: studioSplashFadeOut 0.5s ease-in 2.7s forwards;
+  cursor:pointer; overflow:hidden;
+  animation: studioSplashFadeOut 0.35s ease-in 1.85s forwards;
+}
+.studio-splash-stage{
+  position:relative; display:flex; align-items:center; justify-content:center;
+  width:100%; overflow:hidden; padding:40px 0;
+}
+.studio-splash-scale-label{
+  position:absolute; top:-26px; left:50%; transform:translateX(-50%);
+  font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; color:#E54732;
+  transition:opacity 0.25s ease; white-space:nowrap;
 }
 .studio-splash-logo{
-  width:min(62vw, 320px); opacity:0; transform:scale(0.88);
-  animation: studioSplashLogoIn 1s cubic-bezier(.2,.8,.2,1) 0.15s forwards;
+  width:min(58vw, 300px);
+  animation: studioSplashScaleEscalation 1.15s cubic-bezier(.3,.75,.15,1) forwards;
 }
 .studio-splash-tagline{
   margin-top:22px; font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
-  color:#8B8D91; opacity:0; animation: studioSplashFadeIn 0.7s ease-out 1.3s forwards;
+  color:#8B8D91; opacity:0; animation: studioSplashFadeIn 0.6s ease-out 1.05s forwards;
 }
 .studio-splash-skip{
   position:absolute; bottom:28px; font-size:10.5px; letter-spacing:0.08em; color:#4a4a4e;
-  opacity:0; animation: studioSplashFadeIn 0.7s ease-out 2s forwards;
+  opacity:0; animation: studioSplashFadeIn 0.6s ease-out 1.4s forwards;
 }
-@keyframes studioSplashLogoIn{ from{ opacity:0; transform:scale(0.88); } to{ opacity:1; transform:scale(1); } }
+@keyframes studioSplashScaleEscalation{
+  0%{ transform:scale(1); }
+  45%{ transform:scale(4.2); } /* cresce oltre i bordi del frame, come da mockup 1:1 -> 4:1 */
+  100%{ transform:scale(1); } /* si assesta sul wordmark primario */
+}
 @keyframes studioSplashFadeIn{ from{ opacity:0; } to{ opacity:1; } }
 @keyframes studioSplashFadeOut{ from{ opacity:1; } to{ opacity:0; visibility:hidden; } }
+/* niente scale escalation per chi preferisce meno movimento — solo un fade rapido */
+.studio-splash.reduced .studio-splash-logo{ animation:none; }
+.studio-splash.reduced .studio-splash-scale-label{ display:none; }
+.studio-splash.reduced .studio-splash-tagline{ animation-delay:0.15s; }
+.studio-splash.reduced .studio-splash-skip{ animation-delay:0.3s; }
+.studio-splash.reduced{ animation-delay:1.05s; }
+@media (prefers-reduced-motion: reduce){
+  .studio-splash-logo{ animation:none !important; }
+}
 .hero{
   position:relative;padding:60px 20px 40px;text-align:center;overflow:hidden;
   border:1px solid var(--line);border-radius:8px;margin-bottom:22px;

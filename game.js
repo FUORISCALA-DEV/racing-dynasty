@@ -3892,27 +3892,44 @@ function fullResetAll(){
   achievementData = { ...ACHIEVEMENT_DATA_DEFAULTS };
 }
 
-// V0.9.7.8.12: splash dello studio — appare ad OGNI apertura dell'app (prassi standard per un
-// bollino di studio, come i vari "EA Sports"/"Ubisoft" a inizio gioco), ma solo in questo preciso
-// momento del boot: tornare al titolo da dentro il gioco (menu, fine carriera, ecc.) NON lo
-// rimostra mai, quello resta sempre un semplice "torna al titolo diretto".
+// V0.9.7.8.13: splash riscritto secondo la "Studio splash specification" del brand book FUORISCALA
+// (sezione 10/MOTION): durata 1.8-2.4s, parte da un'etichetta tecnica "SCALE 1:1" in monospace,
+// il wordmark cresce rapidamente oltre i bordi del frame, si assesta sul wordmark primario, poi
+// rivela il testo. Niente particelle/riflessi/fiamme/boati — esplicitamente vietati dalla spec.
+// Rispetta prefers-reduced-motion: in quel caso, solo un breve fade, senza scale escalation.
 function renderStudioSplash(){
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   app.innerHTML = `
-  <div class="studio-splash" id="studioSplashRoot">
-    <img class="studio-splash-logo" src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA">
-    <div class="studio-splash-tagline">Il primo gioco di FUORISCALA</div>
+  <div class="studio-splash ${reduced?'reduced':''}" id="studioSplashRoot">
+    <div class="studio-splash-stage">
+      <div class="studio-splash-scale-label" id="splashScaleLabel">SCALE 1:1</div>
+      <img class="studio-splash-logo" id="splashLogoImg" src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA">
+    </div>
+    <div class="studio-splash-tagline" id="splashTagline">Il primo gioco di FUORISCALA</div>
     <div class="studio-splash-skip">tocca per continuare</div>
   </div>
   `;
+  const root = document.getElementById('studioSplashRoot');
   const advance = ()=>{
-    if(state.phase!=='studio-splash') return; // gia' avanzato (doppio trigger tocco+timer)
+    if(state.phase!=='studio-splash') return;
     state.phase = 'title';
     render();
-    playIntroOnce(); // V0.9.7.8.12: l'animazione fumo/auto ora parte insieme al titolo, non sovrapposta allo splash
+    playIntroOnce();
   };
-  const root = document.getElementById('studioSplashRoot');
   if(root) root.addEventListener('click', advance, { once:true });
-  setTimeout(advance, 3200);
+
+  if(!reduced){
+    // readout tecnico sincronizzato con la crescita del logo (echi del mockup "1:1 / 2:1 / 4:1")
+    const label = document.getElementById('splashScaleLabel');
+    if(label){
+      setTimeout(()=>{ label.textContent = 'SCALE 2:1'; }, 260);
+      setTimeout(()=>{ label.textContent = 'SCALE 4:1'; }, 520);
+      setTimeout(()=>{ label.style.opacity = '0'; }, 900);
+    }
+    setTimeout(advance, 2200);
+  } else {
+    setTimeout(advance, 1400); // fallback ridotto: solo fade, niente attesa lunga
+  }
 }
 
 function renderTitle(){
