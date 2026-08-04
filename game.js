@@ -5902,6 +5902,7 @@ function onAction(e){
     const inputEl = document.getElementById('teamNameInput');
     const nationEl = document.getElementById('teamNationSelect');
     const flagPreview = document.getElementById('teamNationFlagPreview');
+    playRealSfx('audio/sfx_reroll.mp3'); // V0.9.7.8.16: stesso suono del reroll draft, richiesto anche qui
     // evita, quando possibile, di riproporre di fila lo stesso nome gia' visibile nel campo
     const prevName = inputEl ? inputEl.value.trim() : '';
     let pool = TEAM_INSPIRATION;
