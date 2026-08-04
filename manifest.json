@@ -1,0 +1,15 @@
+{
+  "name": "Racing Dynasty — Roguelike GP Manager",
+  "short_name": "Racing Dynasty",
+  "description": "Roguelike gestionale di corse automobilistiche",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0e14",
+  "theme_color": "#0a0e14",
+  "icons": [
+    { "src": "assets/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

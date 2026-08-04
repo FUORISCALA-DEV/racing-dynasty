@@ -1,0 +1,44 @@
+RACING DYNASTY — versione PWA (app web)
+=========================================
+
+IMPORTANTE: questa versione NON funziona aprendo index.html con doppio click.
+Va servita via http/https, anche in locale. Il motivo: il gioco carica i suoi
+dati (data/data.json) e tutti gli asset via richieste di rete — i browser
+bloccano questo tipo di richieste quando la pagina è aperta come file://,
+per ragioni di sicurezza (CORS).
+
+COME PROVARLA IN LOCALE (rapido, un solo comando)
+--------------------------------------------------
+Se hai Python installato (praticamente ovunque, Mac/Linux di serie):
+
+  1. Apri il Terminale
+  2. Vai dentro questa cartella (quella con index.html)
+  3. Lancia:  python3 -m http.server 8000
+  4. Apri il browser su:  http://localhost:8000
+
+Su Windows senza Python, in alternativa: installa l'estensione "Live Server"
+di VS Code, oppure Node.js e lancia `npx serve`.
+
+COSA CAMBIA RISPETTO ALLA VERSIONE FILE SINGOLO
+--------------------------------------------------
+- Peso totale sceso da ~15MB a ~12MB (niente più overhead del base64)
+- Le riaperture successive sono molto più veloci: il Service Worker
+  (sw.js) mette in cache gli asset già visti, quindi non li riscarica
+  ogni volta
+- È "installabile": aprendola in Chrome/Edge su desktop o mobile,
+  compare l'opzione "Installa app" / "Aggiungi a schermata Home" — da lì
+  in poi si apre come un'app a sé, senza barra degli indirizzi
+- Per un vero hosting (non solo test in locale), basta caricare tutta
+  questa cartella su un servizio di hosting statico qualsiasi (Netlify,
+  Vercel, GitHub Pages, un normale hosting web) — nessuna configurazione
+  server particolare richiesta, sono tutti file statici
+
+STRUTTURA DELLA CARTELLA
+--------------------------------------------------
+index.html       — la pagina principale
+game.js          — tutto il codice del gioco
+manifest.json    — manifest PWA (nome, icona, installabilità)
+sw.js            — service worker (cache offline)
+data/data.json   — dati di gioco (piloti, componenti, circuiti...)
+assets/          — tutte le immagini (auto, trofei, icone, bandiere...)
+audio/           — le 3 tracce audio (musica + passby d'apertura)
