@@ -257,16 +257,23 @@ function applyMusicVolumeNow(){
 // nel momento in cui serve fare il salto a un punto casuale.
 const INTRO_WHOOSH_SRC = 'audio/intro-passby.mp3';
 let __introWhooshPlayed = false;
+// V0.9.7.8.14: player generico per SFX da file audio VERI (non sintetizzati) — stesso identico
+// meccanismo gia' usato per il passby d'apertura, riutilizzabile per qualunque nuovo suono reale.
+function playRealSfx(path, volumeMult){
+  if(__suppressSfx) return null;
+  if(audioSettings.sfxEnabled===false || (audioSettings.sfxVolume||0)<=0) return null;
+  try{
+    const el = new Audio(path);
+    el.loop = false;
+    el.volume = Math.min(1, audioSettings.sfxVolume * (volumeMult!=null?volumeMult:1));
+    el.play().catch(()=>{});
+    return el;
+  }catch(e){ return null; /* mai far crashare il gioco per un suono */ }
+}
 function playIntroWhoosh(){
   if(__introWhooshPlayed || !INTRO_WHOOSH_SRC) return;
   __introWhooshPlayed = true;
-  if(audioSettings.sfxEnabled===false || (audioSettings.sfxVolume||0)<=0) return;
-  try{
-    const el = new Audio(INTRO_WHOOSH_SRC);
-    el.loop = false; // V0.9.7.8.10: una tantum, non in loop
-    el.volume = audioSettings.sfxVolume;
-    el.play().catch(()=>{});
-  }catch(e){ /* mai far crashare il gioco per un suono */ }
+  playRealSfx(INTRO_WHOOSH_SRC);
 }
 getMusicAudioEl('race'); getMusicAudioEl('other');
 // V0.9.7.8.10: se il telefono si blocca (o si cambia app) l'audio non deve continuare a suonare
@@ -746,6 +753,7 @@ function rerollDraftTurn(){
   if(state.rerollsLeft<=0){ playSfx('error_disabled'); return; } // V0.9.7.8.2
   state.rerollsLeft--;
   unlockAchievement('seconda-occasione'); // V0.9.7.9
+  playRealSfx('audio/sfx_reroll.mp3'); // V0.9.7.8.14
   startDraftTurn();
 }
 
@@ -921,6 +929,8 @@ function pickDraftTurnOption(id){
   } else {
     state.team[catKey] = JSON.parse(JSON.stringify(chosen));
     state.draftOpenCategories = state.draftOpenCategories.filter(c=>c!==catKey);
+    // V0.9.7.8.14: suono dedicato solo per i pezzi auto (motore/telaio/aero/gomme) — non per team principal
+    if(catKey!=='stratega') playRealSfx('audio/sfx_component_pick.mp3');
   }
   state.draftPicksDone++;
 
@@ -1729,7 +1739,9 @@ function buildPhaseLog(t, timeline){
       lines.push({ tone:'neg', sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`${emo} GIRO ${giro} — Ritiro per ${shortName(e.driverName)} (${e.teamName}): ${event.nome}${e.isPlayerTeam?' — è un tuo pilota!':''}` });
     } else {
       const tone = event.esito==='Positivo' ? 'pos' : (event.esito==='Negativo' ? 'neg' : 'neu');
-      lines.push({ tone, text:`${emo} GIRO ${giro} — ${shortName(e.driverName)}: ${event.nome}${e.isPlayerTeam?' (tuo pilota)':''}` });
+      // V0.9.7.8.14: suono reale per le azioni di gara del giocatore (eventi tecnici/narrativi
+      // generici che non hanno gia' un suono dedicato come sorpasso/pit/safety car/pioggia)
+      lines.push({ tone, realSfx: e.isPlayerTeam?'audio/sfx_race_action.mp3':undefined, text:`${emo} GIRO ${giro} — ${shortName(e.driverName)}: ${event.nome}${e.isPlayerTeam?' (tuo pilota)':''}` });
     }
   });
 
@@ -2015,7 +2027,7 @@ function advanceLivePhase(){
   const t = state.live.phaseIndex;
   const timeline = state.live.timeline;
   const newLines = buildPhaseLog(t, timeline);
-  newLines.forEach(l=>{ if(l.sfx) playSfx(l.sfx); }); // V0.9.7.8.2
+  newLines.forEach(l=>{ if(l.sfx) playSfx(l.sfx); if(l.realSfx) playRealSfx(l.realSfx); }); // V0.9.7.8.2 / V0.9.7.8.14
   state.live.visibleLog = [...newLines.slice().reverse(), ...state.live.visibleLog].slice(0,40);
   if(timeline.weatherChangePhase===t) state.live.weather = timeline.weatherAfter;
   if(timeline.safetyCarPhase===t) state.live.trackStatus = 'Safety Car';
@@ -2618,6 +2630,8 @@ function applyScout(catKey, chosenId, options){
     }
   } else {
     state.everUsedScoutingOnComponent = true; // V0.9.7.9: fedele-alla-linea-di-partenza si riferisce SOLO ai componenti
+    // V0.9.7.8.14: suono dedicato solo per i pezzi auto (motore/telaio/aero/gomme) — non per team principal
+    if(catKey!=='stratega') playRealSfx('audio/sfx_component_pick.mp3');
   }
   if(RARITY_ORDER && RARITY_ORDER.indexOf(chosen.rarita) >= RARITY_ORDER.indexOf('Epic')){
     state.everUsedEpicOrHigher = true; // V0.9.7.9: con-quello-che-c-e
@@ -3209,6 +3223,7 @@ function render(){
   if(typeof updateSidebarVisibility==='function') updateSidebarVisibility();
   showGoatRevealIfPending();
   updateMusicForCurrentPhase(); // V0.9.7.8.10
+  if(state && state.phase!=='title') fadeOutIntroCarAudioIfNeeded(); // V0.9.7.8.15
   saveGame();
 }
 // V0.9.7.6: rivelazione speciale quando THE GOAT entra in squadra (draft o scouting) — overlay a
@@ -3892,11 +3907,9 @@ function fullResetAll(){
   achievementData = { ...ACHIEVEMENT_DATA_DEFAULTS };
 }
 
-// V0.9.7.8.13: splash riscritto secondo la "Studio splash specification" del brand book FUORISCALA
-// (sezione 10/MOTION): durata 1.8-2.4s, parte da un'etichetta tecnica "SCALE 1:1" in monospace,
-// il wordmark cresce rapidamente oltre i bordi del frame, si assesta sul wordmark primario, poi
-// rivela il testo. Niente particelle/riflessi/fiamme/boati — esplicitamente vietati dalla spec.
-// Rispetta prefers-reduced-motion: in quel caso, solo un breve fade, senza scale escalation.
+// V0.9.7.8.15: lo splash NON avanza piu' da solo — resta finche' non si tocca, come richiesto.
+// L'unica eccezione temporale e' un piccolo aiuto per chi non capisce di dover toccare: dopo 5s
+// di inattivita' compare una scritta lampeggiante "premi per continuare".
 function renderStudioSplash(){
   const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   app.innerHTML = `
@@ -3905,16 +3918,19 @@ function renderStudioSplash(){
       <div class="studio-splash-scale-label" id="splashScaleLabel">SCALE 1:1</div>
       <img class="studio-splash-logo" id="splashLogoImg" src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA">
     </div>
-    <div class="studio-splash-tagline" id="splashTagline">Il primo gioco di FUORISCALA</div>
-    <div class="studio-splash-skip">tocca per continuare</div>
+    <div class="studio-splash-tagline" id="splashTagline">FUORISCALA presenta</div>
+    <div class="studio-splash-skip" id="splashSkipHint">tocca per continuare</div>
   </div>
   `;
   const root = document.getElementById('studioSplashRoot');
   const advance = ()=>{
     if(state.phase!=='studio-splash') return;
-    state.phase = 'title';
-    render();
-    playIntroOnce();
+    if(root) root.classList.add('leaving');
+    setTimeout(()=>{
+      state.phase = 'title';
+      render();
+      playIntroOnce();
+    }, 280);
   };
   if(root) root.addEventListener('click', advance, { once:true });
 
@@ -3926,10 +3942,12 @@ function renderStudioSplash(){
       setTimeout(()=>{ label.textContent = 'SCALE 4:1'; }, 520);
       setTimeout(()=>{ label.style.opacity = '0'; }, 900);
     }
-    setTimeout(advance, 2200);
-  } else {
-    setTimeout(advance, 1400); // fallback ridotto: solo fade, niente attesa lunga
   }
+  // "premi per continuare" lampeggiante dopo 5s, se ancora sullo splash — per chi non capisce da solo
+  setTimeout(()=>{
+    const hint = document.getElementById('splashSkipHint');
+    if(hint && state.phase==='studio-splash') hint.classList.add('splash-hint-blink');
+  }, 5000);
 }
 
 function renderTitle(){
@@ -6051,7 +6069,9 @@ function onAction(e){
 }
 
 /* ---------------- V0.9.2: intro d'apertura (muta, una sola volta per avvio) ---------------- */
+let __introCarAudioEl = null; // V0.9.7.8.15: tracciato per poterlo sfumare, non solo interromperlo di colpo
 function playIntroOnce(){
+  __introCarAudioEl = playRealSfx('audio/sfx_intro_car.mp3'); // V0.9.7.8.14 — resta lungo (10s) di suo
   const overlay = document.createElement('div');
   overlay.id = 'introOverlay';
   overlay.innerHTML = `
@@ -6065,6 +6085,20 @@ function playIntroOnce(){
   `;
   document.body.appendChild(overlay);
   setTimeout(()=>{ overlay.remove(); }, 2600);
+}
+// V0.9.7.8.15: quando si lascia il titolo per un'altra schermata, se il suono dell'auto d'apertura
+// sta ancora suonando lo sfumiamo in 0.5s invece di tagliarlo di netto — nessuna interruzione brusca.
+function fadeOutIntroCarAudioIfNeeded(){
+  const el = __introCarAudioEl;
+  if(!el || el.paused) { __introCarAudioEl = null; return; }
+  __introCarAudioEl = null; // consumato: non ri-innescare il fade piu' volte
+  const startVol = el.volume, steps = 10, stepMs = 50; // 0.5s totali
+  let i = 0;
+  const timer = setInterval(()=>{
+    i++;
+    el.volume = Math.max(0, startVol * (1 - i/steps));
+    if(i>=steps){ clearInterval(timer); el.pause(); }
+  }, stepMs);
 }
 
 /* ==================== V0.9.4.2.8: icona hamburger + pannello menu — logica ====================
