@@ -3251,6 +3251,7 @@ function renderInner(){
   if(state.phase==='race_live' && state.live && state.live.domReady) return updateLiveBoard();
   window.scrollTo(0,0);
   if(state.phase==='race_live') return renderRaceLiveInit();
+  if(state.phase==='studio-splash') return renderStudioSplash();
   if(state.phase==='title') return renderTitle();
   if(state.phase==='difficulty') return renderDifficulty();
   if(state.phase==='season-length') return renderSeasonLength();
@@ -3816,7 +3817,7 @@ function checkSeasonEndAchievements(){
 
 
 const SAVE_KEY = 'racingDynastySaveV09';
-const NO_SAVE_PHASES = new Set(['title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage']);
+const NO_SAVE_PHASES = new Set(['studio-splash','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -3889,6 +3890,29 @@ function fullResetAll(){
   museumData = { piloti:{}, componenti:{} };
   trophyData = {};
   achievementData = { ...ACHIEVEMENT_DATA_DEFAULTS };
+}
+
+// V0.9.7.8.12: splash dello studio — appare ad OGNI apertura dell'app (prassi standard per un
+// bollino di studio, come i vari "EA Sports"/"Ubisoft" a inizio gioco), ma solo in questo preciso
+// momento del boot: tornare al titolo da dentro il gioco (menu, fine carriera, ecc.) NON lo
+// rimostra mai, quello resta sempre un semplice "torna al titolo diretto".
+function renderStudioSplash(){
+  app.innerHTML = `
+  <div class="studio-splash" id="studioSplashRoot">
+    <img class="studio-splash-logo" src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA">
+    <div class="studio-splash-tagline">Il primo gioco di FUORISCALA</div>
+    <div class="studio-splash-skip">tocca per continuare</div>
+  </div>
+  `;
+  const advance = ()=>{
+    if(state.phase!=='studio-splash') return; // gia' avanzato (doppio trigger tocco+timer)
+    state.phase = 'title';
+    render();
+    playIntroOnce(); // V0.9.7.8.12: l'animazione fumo/auto ora parte insieme al titolo, non sovrapposta allo splash
+  };
+  const root = document.getElementById('studioSplashRoot');
+  if(root) root.addEventListener('click', advance, { once:true });
+  setTimeout(advance, 3200);
 }
 
 function renderTitle(){
@@ -6394,6 +6418,33 @@ function closeGuidePanel(){
   document.getElementById('sidebarGuidePanel').style.display = 'none';
 }
 
+// V0.9.7.8.12: pannello Crediti — firme standard dal brand kit FUORISCALA (copy_deck.md), stesso
+// identico pattern di apertura/chiusura di Guida e Obiettivi.
+function creditsPanelHTML(){
+  return `
+  <div style="text-align:center;padding:24px 12px;">
+    <img src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA" style="width:180px;max-width:70%;margin-bottom:18px;">
+    <div class="dim" style="font-size:12px;letter-spacing:0.04em;margin-bottom:28px;">Piccolo studio. Giochi fuori misura.</div>
+  </div>
+  <div style="font-size:13px;line-height:2;text-align:center;color:var(--text);">
+    <div style="text-transform:uppercase;letter-spacing:0.08em;font-size:11px;color:var(--dim);margin-bottom:4px;">Racing Dynasty</div>
+    <div style="font-weight:800;margin-bottom:18px;">Il primo gioco di FUORISCALA</div>
+    <div>Sviluppato e pubblicato da <b>FUORISCALA</b></div>
+    <div>Creato da <b>Giorgio Gardon</b></div>
+  </div>
+  <div class="dim" style="text-align:center;font-size:11px;margin-top:28px;">© ${new Date().getFullYear()} FUORISCALA</div>
+  `;
+}
+function openCredits(){
+  closeMenuPanel();
+  document.getElementById('sidebarCreditsBody').innerHTML = creditsPanelHTML();
+  document.getElementById('sidebarCreditsPanel').style.display = 'flex';
+  pushBackGuard();
+}
+function closeCreditsPanel(){
+  document.getElementById('sidebarCreditsPanel').style.display = 'none';
+}
+
 // V0.9.7: pannello Obiettivi — 15 achievement raggruppati per categoria, stato sbloccato/bloccato
 function achievementsPanelHTML(){
   const cats = ['Facile','Medio','Difficile','Estremo'];
@@ -6463,7 +6514,12 @@ function updateMenuNewCareerVisibility(){
   btn.style.display = inCareer ? '' : 'none';
 }
 // alias per compatibilita' con render() che chiama questo nome ad ogni cambio schermata
-function updateSidebarVisibility(){ updateMenuNewCareerVisibility(); }
+function updateSidebarVisibility(){
+  updateMenuNewCareerVisibility();
+  // V0.9.7.8.12: niente icona menu sopra lo splash FUORISCALA — e' un momento di brand puro
+  const toggleBtn = document.getElementById('gameMenuToggleBtn');
+  if(toggleBtn) toggleBtn.style.display = (state && state.phase==='studio-splash') ? 'none' : '';
+}
 
 function initSidebar(){
   document.getElementById('gameMenuToggleBtn').addEventListener('click', toggleMenuPanel);
@@ -6480,10 +6536,13 @@ function initSidebar(){
   const achBtn = document.getElementById('menuAchievementsBtn');
   if(achBtn) achBtn.addEventListener('click', openAchievements);
   document.getElementById('menuSettingsBtn').addEventListener('click', openSettings);
+  const creditsBtn = document.getElementById('menuCreditsBtn');
+  if(creditsBtn) creditsBtn.addEventListener('click', openCredits);
   document.getElementById('menuFullscreenBtn').addEventListener('click', toggleFullscreen);
   document.querySelectorAll('.sidebar-settings-close').forEach(btn=>{
     if(btn.id==='sidebarGuideCloseBtn') btn.addEventListener('click', closeGuidePanel);
     else if(btn.id==='sidebarAchievementsCloseBtn') btn.addEventListener('click', closeAchievementsPanel);
+    else if(btn.id==='sidebarCreditsCloseBtn') btn.addEventListener('click', closeCreditsPanel);
     else btn.addEventListener('click', closeSettingsPanel);
   });
 
@@ -6499,6 +6558,10 @@ function initSidebar(){
   const achPanel = document.getElementById('sidebarAchievementsPanel');
   if(achPanel) achPanel.addEventListener('click', (e)=>{
     if(e.target.id==='sidebarAchievementsPanel') closeAchievementsPanel();
+  });
+  const creditsPanel = document.getElementById('sidebarCreditsPanel');
+  if(creditsPanel) creditsPanel.addEventListener('click', (e)=>{
+    if(e.target.id==='sidebarCreditsPanel') closeCreditsPanel();
   });
 }
 
@@ -6530,6 +6593,7 @@ function handleBackGesture(){
   }
   if(isPanelOpen('sidebarGuidePanel')){ closeGuidePanel(); return; }
   if(isPanelOpen('sidebarAchievementsPanel')){ closeAchievementsPanel(); return; }
+  if(isPanelOpen('sidebarCreditsPanel')){ closeCreditsPanel(); return; }
   if(isPanelOpen('sidebarSettingsPanel')){ closeSettingsPanel(); return; }
   if(isPanelOpen('gameMenuPanel')){ closeMenuPanel(); return; }
   if(state && state.phase==='trophy-room'){ state.phase = trophyRoomPreviousPhase || 'title'; render(); return; }
@@ -6547,10 +6611,9 @@ let defaultRaceSpeed = 1; // V0.7.3: velocita' predefinita per l'avvio di ogni g
 let decisionTimerEnabled = true; // V0.9.3.2: countdown per le decisioni in gara, disattivabile dal menu
 let trophyRoomPreviousPhase = 'title'; // V0.9.4: dove tornare chiudendo la sala trofei
 let museumPreviousPhase = 'title'; // V0.9.4.1: dove tornare chiudendo il Museo Dynasty
-state = { phase:'title', selectedDifficulty:'medio' };
+state = { phase:'studio-splash', selectedDifficulty:'medio' };
 initSidebar();
 render();
-playIntroOnce();
 window.addEventListener('popstate', handleBackGesture);
 pushBackGuard(); // prima voce di cronologia, cosi' anche la primissima gesture back viene intercettata
 

@@ -235,6 +235,27 @@ tr.cmp-same td:nth-child(3),tr.cmp-same td:nth-child(4){color:var(--dim);}
 .logline.neu{color:var(--dim);}
 
 /* ---- hero / title ---- */
+/* V0.9.7.8.12: splash studio FUORISCALA — colori esatti del brand kit, non il tema del gioco */
+.studio-splash{
+  position:fixed; inset:0; z-index:999; background:#0D0D0F;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  cursor:pointer; animation: studioSplashFadeOut 0.5s ease-in 2.7s forwards;
+}
+.studio-splash-logo{
+  width:min(62vw, 320px); opacity:0; transform:scale(0.88);
+  animation: studioSplashLogoIn 1s cubic-bezier(.2,.8,.2,1) 0.15s forwards;
+}
+.studio-splash-tagline{
+  margin-top:22px; font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+  color:#8B8D91; opacity:0; animation: studioSplashFadeIn 0.7s ease-out 1.3s forwards;
+}
+.studio-splash-skip{
+  position:absolute; bottom:28px; font-size:10.5px; letter-spacing:0.08em; color:#4a4a4e;
+  opacity:0; animation: studioSplashFadeIn 0.7s ease-out 2s forwards;
+}
+@keyframes studioSplashLogoIn{ from{ opacity:0; transform:scale(0.88); } to{ opacity:1; transform:scale(1); } }
+@keyframes studioSplashFadeIn{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes studioSplashFadeOut{ from{ opacity:1; } to{ opacity:0; visibility:hidden; } }
 .hero{
   position:relative;padding:60px 20px 40px;text-align:center;overflow:hidden;
   border:1px solid var(--line);border-radius:8px;margin-bottom:22px;
@@ -1439,6 +1460,7 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
       <button type="button" class="menu-item" id="menuGuideBtn">📖 <span>Guida</span></button>
       <button type="button" class="menu-item" id="menuAchievementsBtn">🎖️ <span>Obiettivi</span></button>
       <button type="button" class="menu-item" id="menuSettingsBtn">⚙️ <span>Impostazioni</span></button>
+      <button type="button" class="menu-item" id="menuCreditsBtn">🏢 <span>Crediti</span></button>
       <button type="button" class="menu-item" id="menuFullscreenBtn">⛶ <span id="menuFullscreenLabel">Schermo Intero</span></button>
     </div>
   </div>
@@ -1451,6 +1473,16 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
       <button type="button" class="sidebar-settings-close">✕</button>
     </div>
     <div class="sidebar-settings-body" id="sidebarSettingsBody"></div>
+  </div>
+</div>
+
+<div id="sidebarCreditsPanel" class="sidebar-settings-overlay" style="display:none;">
+  <div class="sidebar-settings-window">
+    <div class="sidebar-settings-title">
+      <span>🏢 Crediti</span>
+      <button type="button" class="sidebar-settings-close" id="sidebarCreditsCloseBtn">✕</button>
+    </div>
+    <div class="sidebar-settings-body" id="sidebarCreditsBody" style="padding:16px;"></div>
   </div>
 </div>
 
