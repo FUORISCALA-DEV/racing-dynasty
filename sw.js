@@ -1,16 +1,18 @@
 // Racing Dynasty — Service Worker
-// Strategia: i file essenziali (shell + dati di gioco) vengono precaricati all'installazione.
-// Tutto il resto (immagini, audio) viene messo in cache "al volo" la prima volta che serve
-// davvero (cache-first con fallback rete) — non serve elencare a mano centinaia di file, la
-// cache si riempie da sola mentre si gioca, e da quel momento in poi funziona anche offline.
-const CACHE_NAME = 'racing-dynasty-v0.9.7.8.11';
-const PRECACHE_URLS = [
-  './',
-  'index.html',
-  'game.js',
-  'manifest.json',
-  'data/data.json',
-];
+// FIX V0.9.7.8.17: la versione precedente era cache-first per TUTTO, incluso game.js — questo
+// significava che dopo la prima visita, il codice restava bloccato per sempre alla versione vista
+// quella prima volta, anche con decine di aggiornamenti pubblicati dopo (bug segnalato: suoni
+// nuovi che continuavano a non sentirsi perche' il browser usava ancora il game.js vecchio).
+//
+// Strategia corretta, divisa in due:
+// - CODICE (index.html, game.js, manifest.json) -> network-first: prova sempre la rete per primo,
+//   cosi' ogni aggiornamento pubblicato arriva SUBITO alla visita successiva. Cache solo come
+//   fallback per l'uso offline.
+// - ASSET PESANTI (immagini, audio, dati di gioco) -> cache-first: cambiano raramente, meglio
+//   risparmiare banda e tempo di caricamento; si aggiornano da soli quando cambia il loro nome file.
+const CACHE_NAME = 'racing-dynasty-v0.9.7.8.17';
+const CODE_FILES = ['index.html', 'game.js', 'manifest.json', './'];
+const PRECACHE_URLS = [...CODE_FILES, 'data/data.json'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -28,13 +30,34 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+function isCodeFile(url) {
+  const path = new URL(url).pathname;
+  return CODE_FILES.some((f) => path.endsWith(f) || path.endsWith('/' + f)) || path.endsWith('/');
+}
+
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  const isCode = isCodeFile(event.request.url);
+
+  if (isCode) {
+    // network-first: prova la rete, aggiorna la cache, usa la cache solo se offline
+    event.respondWith(
+      fetch(event.request).then((response) => {
+        if (response && response.status === 200) {
+          const toCache = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, toCache));
+        }
+        return response;
+      }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // asset pesanti: cache-first, come prima
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
       return fetch(event.request).then((response) => {
-        // salviamo in cache solo risposte valide dello stesso dominio (asset del gioco)
         if (response && response.status === 200 && response.type === 'basic') {
           const toCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, toCache));
