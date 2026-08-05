@@ -2041,6 +2041,7 @@ function advanceLivePhase(){
     state.live.paused = true;
     state.live.decisionDeadline = decisionTimerEnabled ? (Date.now()+DECISION_TIME_MS) : null;
     triggerTensionHaptic(); // V0.9.7.8.10
+    playRealSfx('audio/sfx_race_action.mp3'); // V0.9.7.8.19: suono all'apparire della scheda decisione, non al click
   }
 }
 
