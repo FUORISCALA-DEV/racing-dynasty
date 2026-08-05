@@ -52,6 +52,79 @@ function loadAudioSettings(){
   }catch(e){ return { sfxVolume:0.6, musicVolume:0.5, sfxEnabled:true, musicEnabled:true, hapticEnabled:true }; }
 }
 let audioSettings = loadAudioSettings();
+
+// V0.9.7.8.26 — SISTEMA LINGUA: fase 1. Copre titolo, menu, hub, impostazioni, crediti — la parte
+// SEMPRE visibile del gioco. Obiettivi (50), eventi narrativi di gara (120) e Guida restano in
+// italiano per ora, sono un secondo giro di lavoro dato il volume di testo.
+function loadLang(){
+  try{ return localStorage.getItem('racingDynastyLangV1') || 'it'; }catch(e){ return 'it'; }
+}
+let currentLang = loadLang();
+function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
+const I18N = {
+  it: {
+    // Titolo
+    title_tagline_return: (race,total)=>`Bentornato — hai una stagione in corso (Gara ${race}/${total})`,
+    title_continue: '▶ Continua Stagione', title_new: 'Nuova Stagione', title_delete: '🗑 Cancella Salvataggio',
+    title_cta: '🏁 Scegli la tua sfida e scendi in pista — ', title_cta_bold: 'premi per iniziare',
+    // Menu laterale
+    menu_new_career: 'Nuova Carriera', menu_trophy_room: 'Sala Trofei', menu_guide: 'Guida',
+    menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti',
+    menu_fullscreen: 'Schermo Intero', menu_language: 'Lingua',
+    // Impostazioni comuni
+    settings_title: '⚙️ Impostazioni', settings_sfx_vol: 'Volume Effetti', settings_music_vol: 'Volume Musica',
+    settings_haptic: 'Feedback Aptico', settings_speed: 'Velocità Gara Predefinita', settings_decision_timer: 'Countdown Decisioni',
+    settings_export: 'Esporta Run (.json)', settings_import: 'Importa Run (.json)', settings_install: "Installa l'App",
+    settings_reset: 'Ripristina Tutto (Prima Apertura)', on: 'Attivo', off: 'Disattivato',
+    // Crediti
+    credits_title: '🏢 Crediti', credits_tagline: 'Piccolo studio. Giochi fuori misura.',
+    credits_first_game: 'Il primo gioco di FUORISCALA', credits_dev: 'Sviluppato e pubblicato da',
+    credits_created: 'Creato da',
+    // Hub — etichette HUD
+    hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Gara',
+    hud_best_driver: 'Miglior Pilota', hud_constructors: 'Costruttori',
+  },
+  en: {
+    title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
+    title_continue: '▶ Continue Season', title_new: 'New Season', title_delete: '🗑 Delete Save',
+    title_cta: '🏁 Choose your challenge and hit the track — ', title_cta_bold: 'tap to start',
+    menu_new_career: 'New Career', menu_trophy_room: 'Trophy Room', menu_guide: 'Guide',
+    menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits',
+    menu_fullscreen: 'Fullscreen', menu_language: 'Language',
+    settings_title: '⚙️ Settings', settings_sfx_vol: 'Sound Effects Volume', settings_music_vol: 'Music Volume',
+    settings_haptic: 'Haptic Feedback', settings_speed: 'Default Race Speed', settings_decision_timer: 'Decision Countdown',
+    settings_export: 'Export Run (.json)', settings_import: 'Import Run (.json)', settings_install: 'Install the App',
+    settings_reset: 'Reset Everything (First Launch)', on: 'On', off: 'Off',
+    credits_title: '🏢 Credits', credits_tagline: 'Small studio. Outsized games.',
+    credits_first_game: "FUORISCALA's first game", credits_dev: 'Developed and published by',
+    credits_created: 'Created by',
+    hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Race',
+    hud_best_driver: 'Best Driver', hud_constructors: 'Constructors',
+  },
+  es: {
+    title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
+    title_continue: '▶ Continuar Temporada', title_new: 'Nueva Temporada', title_delete: '🗑 Borrar Partida',
+    title_cta: '🏁 Elige tu desafío y sal a pista — ', title_cta_bold: 'toca para empezar',
+    menu_new_career: 'Nueva Carrera', menu_trophy_room: 'Sala de Trofeos', menu_guide: 'Guía',
+    menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos',
+    menu_fullscreen: 'Pantalla Completa', menu_language: 'Idioma',
+    settings_title: '⚙️ Ajustes', settings_sfx_vol: 'Volumen de Efectos', settings_music_vol: 'Volumen de Música',
+    settings_haptic: 'Vibración', settings_speed: 'Velocidad de Carrera Predeterminada', settings_decision_timer: 'Cuenta Atrás de Decisiones',
+    settings_export: 'Exportar Partida (.json)', settings_import: 'Importar Partida (.json)', settings_install: 'Instalar la App',
+    settings_reset: 'Restablecer Todo (Primera Apertura)', on: 'Activado', off: 'Desactivado',
+    credits_title: '🏢 Créditos', credits_tagline: 'Estudio pequeño. Juegos fuera de escala.',
+    credits_first_game: 'El primer juego de FUORISCALA', credits_dev: 'Desarrollado y publicado por',
+    credits_created: 'Creado por',
+    hud_reroll: 'Reroll', hud_budget: 'Presupuesto', hud_sponsor: 'Patrocinador', hud_race: 'Carrera',
+    hud_best_driver: 'Mejor Piloto', hud_constructors: 'Constructores',
+  },
+};
+function t(key, ...args){
+  const dict = I18N[currentLang] || I18N.it;
+  const val = dict[key] !== undefined ? dict[key] : I18N.it[key];
+  if(typeof val === 'function') return val(...args);
+  return val !== undefined ? val : key;
+}
 function saveAudioSettings(){
   try{ localStorage.setItem(AUDIO_SETTINGS_KEY, JSON.stringify(audioSettings)); }catch(e){ /* ignorato */ }
 }
@@ -4026,13 +4099,13 @@ function renderTitle(){
     <div class="hero" style="padding:26px 20px 22px;">
       <div class="hero-inner">
         <div class="title-logo-wrap"><img src="${LOGO_DATA_URI}" alt="Racing Dynasty" class="title-logo"></div>
-        <div class="tagline title-cta">Bentornato — hai una stagione in corso (Gara ${Math.min(s.raceIndex+1, s.calendar.length)}/${s.calendar.length})</div>
+        <div class="tagline title-cta">${t('title_tagline_return', Math.min(s.raceIndex+1, s.calendar.length), s.calendar.length)}</div>
       </div>
     </div>
     <div class="btnrow" style="flex-direction:column;align-items:stretch;">
-      <button class="primary" data-action="continue-save" style="width:100%;">▶ Continua Stagione</button>
-      <button class="ghost" data-action="new-season-confirm" style="width:100%;">Nuova Stagione</button>
-      <button class="ghost" data-action="delete-save" style="width:100%;">🗑 Cancella Salvataggio</button>
+      <button class="primary" data-action="continue-save" style="width:100%;">${t('title_continue')}</button>
+      <button class="ghost" data-action="new-season-confirm" style="width:100%;">${t('title_new')}</button>
+      <button class="ghost" data-action="delete-save" style="width:100%;">${t('title_delete')}</button>
     </div>
     `;
     bindActions();
@@ -4044,7 +4117,7 @@ function renderTitle(){
       <div class="title-logo-wrap">
         <img src="${LOGO_DATA_URI}" alt="Racing Dynasty" class="title-logo">
       </div>
-      <div class="tagline title-cta">🏁 Scegli la tua sfida e scendi in pista — <b class="heartbeat">premi per iniziare</b></div>
+      <div class="tagline title-cta">${t('title_cta')}<b class="heartbeat">${t('title_cta_bold')}</b></div>
       <div class="pill" style="margin-top:12px;">v0.9.5 · DATABASE V1 · 250 PILOTI · 830+ COMPONENTI</div>
     </div>
   </div>
@@ -6252,22 +6325,30 @@ function openSettings(){
   body.innerHTML = `
     <button type="button" class="menu-item" id="sidebarSfxToggleBtn">🔊 <span>Effetti Sonori: ${audioSettings.sfxEnabled!==false?'Attivi':'Disattivati'}</span></button>
     <div class="menu-item" style="flex-direction:column;align-items:stretch;gap:6px;cursor:default;">
-      <span>Volume Effetti (SFX): <b id="sfxVolumeLabel">${Math.round(audioSettings.sfxVolume*100)}%</b></span>
+      <span>${t('settings_sfx_vol')}: <b id="sfxVolumeLabel">${Math.round(audioSettings.sfxVolume*100)}%</b></span>
       <input type="range" id="sfxVolumeSlider" min="0" max="100" value="${Math.round(audioSettings.sfxVolume*100)}" style="width:100%;">
     </div>
     <button type="button" class="menu-item" id="sidebarMusicToggleBtn">🎵 <span>Musica: ${audioSettings.musicEnabled!==false?'Attiva':'Disattivata'}</span></button>
     <div class="menu-item" style="flex-direction:column;align-items:stretch;gap:6px;cursor:default;">
-      <span>Volume Musica: <b id="musicVolumeLabel">${Math.round(audioSettings.musicVolume*100)}%</b></span>
+      <span>${t('settings_music_vol')}: <b id="musicVolumeLabel">${Math.round(audioSettings.musicVolume*100)}%</b></span>
       <input type="range" id="musicVolumeSlider" min="0" max="100" value="${Math.round(audioSettings.musicVolume*100)}" style="width:100%;">
     </div>
-    <button type="button" class="menu-item" id="sidebarHapticToggleBtn">📳 <span>Feedback Aptico: ${audioSettings.hapticEnabled!==false?'Attivo':'Disattivato'}</span></button>
-    <button type="button" class="menu-item" id="sidebarSpeedBtn">🚀 <span>Velocità Gara Predefinita: ${defaultRaceSpeed}×</span></button>
-    <button type="button" class="menu-item" id="sidebarDecisionTimerBtn">⏱️ <span>Countdown Decisioni: ${decisionTimerEnabled?'Attivo':'Disattivato'}</span></button>
-    <button type="button" class="menu-item" id="sidebarExportSaveBtn">📤 <span>Esporta Run (.json)</span></button>
-    <button type="button" class="menu-item" id="sidebarImportSaveBtn">📥 <span>Importa Run (.json)</span></button>
+    <div style="margin-bottom:14px;">
+      <label class="dim" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:8px;">${t('menu_language')}</label>
+      <div style="display:flex;gap:8px;">
+        <button type="button" class="lang-btn ${currentLang==='it'?'active':''}" data-lang-choice="it">Italiano</button>
+        <button type="button" class="lang-btn ${currentLang==='en'?'active':''}" data-lang-choice="en">English</button>
+        <button type="button" class="lang-btn ${currentLang==='es'?'active':''}" data-lang-choice="es">Español</button>
+      </div>
+    </div>
+    <button type="button" class="menu-item" id="sidebarHapticToggleBtn">📳 <span>${t('settings_haptic')}: ${audioSettings.hapticEnabled!==false?t('on'):t('off')}</span></button>
+    <button type="button" class="menu-item" id="sidebarSpeedBtn">🚀 <span>${t('settings_speed')}: ${defaultRaceSpeed}×</span></button>
+    <button type="button" class="menu-item" id="sidebarDecisionTimerBtn">⏱️ <span>${t('settings_decision_timer')}: ${decisionTimerEnabled?t('on'):t('off')}</span></button>
+    <button type="button" class="menu-item" id="sidebarExportSaveBtn">📤 <span>${t('settings_export')}</span></button>
+    <button type="button" class="menu-item" id="sidebarImportSaveBtn">📥 <span>${t('settings_import')}</span></button>
     <input type="file" id="importSaveFileInput" accept="application/json,.json" style="display:none;">
-    ${!isStandaloneApp() ? `<button type="button" class="menu-item" id="sidebarInstallBtn" style="color:var(--legendary);">📲 <span>Installa l'App</span></button>` : ''}
-    <button type="button" class="menu-item" id="sidebarFullResetBtn" style="color:var(--danger);">🗑️ <span>Ripristina Tutto (Prima Apertura)</span></button>
+    ${!isStandaloneApp() ? `<button type="button" class="menu-item" id="sidebarInstallBtn" style="color:var(--legendary);">📲 <span>${t('settings_install')}</span></button>` : ''}
+    <button type="button" class="menu-item" id="sidebarFullResetBtn" style="color:var(--danger);">🗑️ <span>${t('settings_reset')}</span></button>
   `;
   // V0.9.7.8.3: toggle on/off indipendenti dal volume — utile per silenziare del tutto senza
   // perdere il livello di volume preferito. La Musica non ha ancora tracce, ma il toggle e il
@@ -6297,6 +6378,15 @@ function openSettings(){
     document.getElementById('musicVolumeLabel').textContent = musicSlider.value+'%';
     saveAudioSettings();
     applyMusicVolumeNow(); // V0.9.7.8.10
+  });
+  document.querySelectorAll('.lang-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      currentLang = btn.dataset.langChoice;
+      saveLang();
+      applyStaticMenuTranslations();
+      openSettings(); // ridisegna il pannello impostazioni nella nuova lingua
+      if(state && state.phase) render(); // ridisegna anche lo sfondo (titolo, hub, ecc.) nella nuova lingua
+    });
   });
   document.getElementById('sidebarHapticToggleBtn').addEventListener('click', ()=>{
     audioSettings.hapticEnabled = audioSettings.hapticEnabled===false ? true : false;
@@ -6566,16 +6656,16 @@ function creditsPanelHTML(){
   const siteUrl = 'https://fuoriscala-dev.github.io/FUORISCALA.SITOWEB/';
   return `
   <div style="text-align:center;padding:24px 12px;">
-    <a href="${siteUrl}" target="_blank" rel="noopener" title="Vai al sito FUORISCALA">
+    <a href="${siteUrl}" target="_blank" rel="noopener" title="FUORISCALA">
       <img src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA" style="width:180px;max-width:70%;margin-bottom:18px;cursor:pointer;">
     </a>
-    <div class="dim" style="font-size:12px;letter-spacing:0.04em;margin-bottom:28px;">Piccolo studio. Giochi fuori misura.</div>
+    <div class="dim" style="font-size:12px;letter-spacing:0.04em;margin-bottom:28px;">${t('credits_tagline')}</div>
   </div>
   <div style="font-size:13px;line-height:2;text-align:center;color:var(--text);">
     <div style="text-transform:uppercase;letter-spacing:0.08em;font-size:11px;color:var(--dim);margin-bottom:4px;">Racing Dynasty</div>
-    <div style="font-weight:800;margin-bottom:18px;">Il primo gioco di FUORISCALA</div>
-    <div>Sviluppato e pubblicato da <b>FUORISCALA</b></div>
-    <div>Creato da <b>Giorgio Gardon</b></div>
+    <div style="font-weight:800;margin-bottom:18px;">${t('credits_first_game')}</div>
+    <div>${t('credits_dev')} <b>FUORISCALA</b></div>
+    <div>${t('credits_created')} <b>Giorgio Gardon</b></div>
   </div>
   <div class="dim" style="text-align:center;font-size:11px;margin-top:28px;">© ${new Date().getFullYear()} FUORISCALA</div>
   `;
@@ -6672,6 +6762,21 @@ function updateSidebarVisibility(){
   document.body.classList.toggle('has-promo-banner', !!showBanner);
 }
 
+// V0.9.7.8.26: il menu laterale vive fuori dal normale ciclo render() (e' markup statico in
+// index.html), quindi le sue traduzioni vanno applicate a mano qui, non tramite t() dentro un
+// template — richiamata all'avvio e ad ogni cambio lingua.
+function applyStaticMenuTranslations(){
+  const map = {
+    menuNewCareerBtn: 'menu_new_career', menuTrophyBtn: 'menu_trophy_room', menuGuideBtn: 'menu_guide',
+    menuAchievementsBtn: 'menu_achievements', menuSettingsBtn: 'menu_settings', menuCreditsBtn: 'menu_credits',
+  };
+  Object.entries(map).forEach(([id, key])=>{
+    const el = document.getElementById(id);
+    if(el){ const span = el.querySelector('span'); if(span) span.textContent = t(key); }
+  });
+  const fsLabel = document.getElementById('menuFullscreenLabel');
+  if(fsLabel && !document.fullscreenElement) fsLabel.textContent = t('menu_fullscreen');
+}
 function initSidebar(){
   document.getElementById('gameMenuToggleBtn').addEventListener('click', toggleMenuPanel);
   document.querySelector('.game-menu-close').addEventListener('click', closeMenuPanel);
@@ -6764,6 +6869,7 @@ let trophyRoomPreviousPhase = 'title'; // V0.9.4: dove tornare chiudendo la sala
 let museumPreviousPhase = 'title'; // V0.9.4.1: dove tornare chiudendo il Museo Dynasty
 state = { phase:'studio-splash', selectedDifficulty:'medio' };
 initSidebar();
+applyStaticMenuTranslations();
 render();
 window.addEventListener('popstate', handleBackGesture);
 pushBackGuard(); // prima voce di cronologia, cosi' anche la primissima gesture back viene intercettata
