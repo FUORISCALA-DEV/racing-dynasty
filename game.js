@@ -3697,60 +3697,68 @@ let trophyData = loadTrophyData(); // caricato una sola volta all'avvio, prima d
    ACHIEVEMENTS senza dover toccare lo storage o la UI. */
 const ACHIEVEMENTS = [
   // Facile
-  { id:'primo-giorno', cat:'Facile', title:'Primo Giorno', desc:'Completa il tuo primo Draft e schiera la scuderia.' },
-  { id:'debutto', cat:'Facile', title:'Debutto', desc:'Taglia il traguardo nella tua prima gara, in qualsiasi posizione.' },
-  { id:'sul-podio', cat:'Facile', title:'Sul Podio', desc:'Sali per la prima volta su un podio.' },
-  { id:'prima-vittoria', cat:'Facile', title:'Prima Vittoria', desc:'Vinci il tuo primo Gran Premio.' },
-  { id:'traguardo-raggiunto', cat:'Facile', title:'Traguardo Raggiunto', desc:'Porta a termine una Stagione Veloce (10 gare) dall\'inizio alla fine.' },
-  { id:'seconda-occasione', cat:'Facile', title:'Seconda Occasione', desc:'Usa un reroll durante il Draft.' },
-  { id:'si-impara-perdendo', cat:'Facile', title:'Si Impara Perdendo', desc:'Fai fallire almeno uno sviluppo in Pit Lane.' },
-  { id:'nuovo-volto', cat:'Facile', title:'Nuovo Volto', desc:'Sostituisci un pilota tramite lo scouting per la prima volta.' },
-  { id:'prima-scintilla', cat:'Facile', title:'Prima Scintilla', desc:'Ottieni la tua prima coppia sinergica (semaforo acceso).' },
-  { id:'primo-cimelio', cat:'Facile', title:'Primo Cimelio', desc:'Colleziona il primo pezzo nel Museo Dynasty.' },
-  { id:'underdog', cat:'Facile', title:'Underdog', desc:'Vinci una gara con un pilota di rarità Common.' },
-  { id:'partecipazione-onesta', cat:'Facile', title:'Partecipazione Onesta', desc:'Completa una carriera intera senza vincere alcun titolo.' },
+  { id:'primo-giorno', cat:'Facile', title:'Primo Giorno', desc:'Completa il tuo primo Draft e schiera la scuderia.', en:{title:'First Day', desc:'Complete your first Draft and field your team.'}, es:{title:'Primer Día', desc:'Completa tu primer Draft y alinea tu escudería.'} },
+  { id:'debutto', cat:'Facile', title:'Debutto', desc:'Taglia il traguardo nella tua prima gara, in qualsiasi posizione.', en:{title:'Debut', desc:'Cross the finish line in your first race, in any position.'}, es:{title:'Debut', desc:'Cruza la meta en tu primera carrera, en cualquier posición.'} },
+  { id:'sul-podio', cat:'Facile', title:'Sul Podio', desc:'Sali per la prima volta su un podio.', en:{title:'On the Podium', desc:'Reach the podium for the first time.'}, es:{title:'En el Podio', desc:'Sube al podio por primera vez.'} },
+  { id:'prima-vittoria', cat:'Facile', title:'Prima Vittoria', desc:'Vinci il tuo primo Gran Premio.', en:{title:'First Victory', desc:'Win your first Grand Prix.'}, es:{title:'Primera Victoria', desc:'Gana tu primer Gran Premio.'} },
+  { id:'traguardo-raggiunto', cat:'Facile', title:'Traguardo Raggiunto', desc:'Porta a termine una Stagione Veloce (10 gare) dall\'inizio alla fine.', en:{title:'Finish Line Reached', desc:'Complete a Quick Season (10 races) from start to finish.'}, es:{title:'Meta Alcanzada', desc:'Completa una Temporada Rápida (10 carreras) de principio a fin.'} },
+  { id:'seconda-occasione', cat:'Facile', title:'Seconda Occasione', desc:'Usa un reroll durante il Draft.', en:{title:'Second Chance', desc:'Use a reroll during the Draft.'}, es:{title:'Segunda Oportunidad', desc:'Usa un reroll durante el Draft.'} },
+  { id:'si-impara-perdendo', cat:'Facile', title:'Si Impara Perdendo', desc:'Fai fallire almeno uno sviluppo in Pit Lane.', en:{title:'You Learn by Losing', desc:'Have at least one Pit Lane development fail.'}, es:{title:'Se Aprende Perdiendo', desc:'Haz que falle al menos un desarrollo en Pit Lane.'} },
+  { id:'nuovo-volto', cat:'Facile', title:'Nuovo Volto', desc:'Sostituisci un pilota tramite lo scouting per la prima volta.', en:{title:'New Face', desc:'Replace a driver via scouting for the first time.'}, es:{title:'Cara Nueva', desc:'Sustituye a un piloto mediante scouting por primera vez.'} },
+  { id:'prima-scintilla', cat:'Facile', title:'Prima Scintilla', desc:'Ottieni la tua prima coppia sinergica (semaforo acceso).', en:{title:'First Spark', desc:'Get your first synergy pair (lit-up semaphore).'}, es:{title:'Primera Chispa', desc:'Consigue tu primera pareja con sinergia (semáforo encendido).'} },
+  { id:'primo-cimelio', cat:'Facile', title:'Primo Cimelio', desc:'Colleziona il primo pezzo nel Museo Dynasty.', en:{title:'First Keepsake', desc:'Collect the first piece in the Dynasty Museum.'}, es:{title:'Primera Reliquia', desc:'Consigue la primera pieza del Museo Dynasty.'} },
+  { id:'underdog', cat:'Facile', title:'Underdog', desc:'Vinci una gara con un pilota di rarità Common.', en:{title:'Underdog', desc:'Win a race with a Common rarity driver.'}, es:{title:'Underdog', desc:'Gana una carrera con un piloto de rareza Common.'} },
+  { id:'partecipazione-onesta', cat:'Facile', title:'Partecipazione Onesta', desc:'Completa una carriera intera senza vincere alcun titolo.', en:{title:'Honest Participation', desc:'Complete a full career without winning any title.'}, es:{title:'Participación Honesta', desc:'Completa una carrera entera sin ganar ningún título.'} },
   // Medio
-  { id:'cenerentola', cat:'Medio', title:'Cenerentola', desc:'Vinci una gara avendo overall scuderia massimo 60.' },
-  { id:'lavoro-di-squadra', cat:'Medio', title:'Lavoro di Squadra', desc:'Vinci il titolo Costruttori senza mai essere primo in classifica Piloti.' },
-  { id:'domatore-di-pioggia', cat:'Medio', title:'Domatore di Pioggia', desc:'Vinci sotto la pioggia con un Rain Master.' },
-  { id:'la-grande-rimonta', cat:'Medio', title:'La Grande Rimonta', desc:'Vinci rimontando dalla P10 o peggio.' },
-  { id:'scintilla-collettiva', cat:'Medio', title:'Scintilla Collettiva', desc:'Attiva il semaforo "in fiamme" in una gara.' },
-  { id:'ripartenza-perfetta', cat:'Medio', title:'Ripartenza Perfetta', desc:'Vinci un Gran Premio dopo una Safety Car.' },
-  { id:'rivoluzione-a-meta-stagione', cat:'Medio', title:'Rivoluzione a Metà Stagione', desc:'Sostituisci entrambi i piloti al Mid Season Draft.' },
-  { id:'maratoneta', cat:'Medio', title:'Maratoneta', desc:'Vinci il titolo Piloti in una Stagione Completa (20 gare).' },
-  { id:'turista-instancabile', cat:'Medio', title:'Turista Instancabile', desc:'Corri su dieci circuiti diversi.' },
-  { id:'domatore-del-caos', cat:'Medio', title:'Domatore del Caos', desc:'Vinci con un Wild Card senza mai ritirarti.' },
-  { id:'fedele-alla-linea-di-partenza', cat:'Medio', title:'Fedele alla Linea di Partenza', desc:'Completa una stagione senza mai fare scouting sui componenti.' },
-  { id:'ultimo-centesimo', cat:'Medio', title:'Ultimo Centesimo', desc:'Vinci il titolo Costruttori con meno di 5M di budget residuo.' },
-  { id:'meta-sala-trofei', cat:'Medio', title:'Metà Sala Trofei', desc:'Vinci su cinque circuiti diversi.' },
-  { id:'nato-per-soffrire', cat:'Medio', title:'Nato per Soffrire', desc:'Vinci con un Comeback King partito oltre la P10.' },
-  { id:'coro-a-due-voci', cat:'Medio', title:'Coro a Due Voci', desc:'Ottieni due coppie sinergiche della stessa mentalità.' },
+  { id:'cenerentola', cat:'Medio', title:'Cenerentola', desc:'Vinci una gara avendo overall scuderia massimo 60.', en:{title:'Cinderella Story', desc:'Win a race with a team overall of 60 or less.'}, es:{title:'Historia de Cenicienta', desc:'Gana una carrera con un overall de escudería de 60 o menos.'} },
+  { id:'lavoro-di-squadra', cat:'Medio', title:'Lavoro di Squadra', desc:'Vinci il titolo Costruttori senza mai essere primo in classifica Piloti.', en:{title:'Team Effort', desc:'Win the Constructors\' title without ever leading the Drivers\' standings.'}, es:{title:'Trabajo en Equipo', desc:'Gana el título de Constructores sin liderar nunca el campeonato de Pilotos.'} },
+  { id:'domatore-di-pioggia', cat:'Medio', title:'Domatore di Pioggia', desc:'Vinci sotto la pioggia con un Rain Master.', en:{title:'Rain Tamer', desc:'Win in the rain with a Rain Master.'}, es:{title:'Domador de Lluvia', desc:'Gana bajo la lluvia con un Rain Master.'} },
+  { id:'la-grande-rimonta', cat:'Medio', title:'La Grande Rimonta', desc:'Vinci rimontando dalla P10 o peggio.', en:{title:'The Great Comeback', desc:'Win after starting P10 or worse.'}, es:{title:'La Gran Remontada', desc:'Gana remontando desde la P10 o peor.'} },
+  { id:'scintilla-collettiva', cat:'Medio', title:'Scintilla Collettiva', desc:'Attiva il semaforo "in fiamme" in una gara.', en:{title:'Collective Spark', desc:'Trigger the "on fire" semaphore in a race.'}, es:{title:'Chispa Colectiva', desc:'Activa el semáforo "en llamas" en una carrera.'} },
+  { id:'ripartenza-perfetta', cat:'Medio', title:'Ripartenza Perfetta', desc:'Vinci un Gran Premio dopo una Safety Car.', en:{title:'Perfect Restart', desc:'Win a Grand Prix after a Safety Car.'}, es:{title:'Reinicio Perfecto', desc:'Gana un Gran Premio después de un Safety Car.'} },
+  { id:'rivoluzione-a-meta-stagione', cat:'Medio', title:'Rivoluzione a Metà Stagione', desc:'Sostituisci entrambi i piloti al Mid Season Draft.', en:{title:'Midseason Revolution', desc:'Replace both drivers at the Mid Season Draft.'}, es:{title:'Revolución de Mitad de Temporada', desc:'Sustituye a ambos pilotos en el Draft de Mitad de Temporada.'} },
+  { id:'maratoneta', cat:'Medio', title:'Maratoneta', desc:'Vinci il titolo Piloti in una Stagione Completa (20 gare).', en:{title:'Marathon Runner', desc:'Win the Drivers\' title in a Full Season (20 races).'}, es:{title:'Maratonista', desc:'Gana el título de Pilotos en una Temporada Completa (20 carreras).'} },
+  { id:'turista-instancabile', cat:'Medio', title:'Turista Instancabile', desc:'Corri su dieci circuiti diversi.', en:{title:'Tireless Tourist', desc:'Race on ten different circuits.'}, es:{title:'Turista Incansable', desc:'Corre en diez circuitos diferentes.'} },
+  { id:'domatore-del-caos', cat:'Medio', title:'Domatore del Caos', desc:'Vinci con un Wild Card senza mai ritirarti.', en:{title:'Chaos Tamer', desc:'Win with a Wild Card without ever retiring.'}, es:{title:'Domador del Caos', desc:'Gana con un Wild Card sin retirarte nunca.'} },
+  { id:'fedele-alla-linea-di-partenza', cat:'Medio', title:'Fedele alla Linea di Partenza', desc:'Completa una stagione senza mai fare scouting sui componenti.', en:{title:'Loyal to the Starting Line', desc:'Complete a season without ever scouting components.'}, es:{title:'Fiel a la Línea de Salida', desc:'Completa una temporada sin hacer nunca scouting de componentes.'} },
+  { id:'ultimo-centesimo', cat:'Medio', title:'Ultimo Centesimo', desc:'Vinci il titolo Costruttori con meno di 5M di budget residuo.', en:{title:'Down to the Last Cent', desc:'Win the Constructors\' title with less than 5M budget remaining.'}, es:{title:'Hasta el Último Céntimo', desc:'Gana el título de Constructores con menos de 5M de presupuesto restante.'} },
+  { id:'meta-sala-trofei', cat:'Medio', title:'Metà Sala Trofei', desc:'Vinci su cinque circuiti diversi.', en:{title:'Halfway Trophy Room', desc:'Win on five different circuits.'}, es:{title:'Sala de Trofeos a Mitad', desc:'Gana en cinco circuitos diferentes.'} },
+  { id:'nato-per-soffrire', cat:'Medio', title:'Nato per Soffrire', desc:'Vinci con un Comeback King partito oltre la P10.', en:{title:'Born to Suffer', desc:'Win with a Comeback King starting beyond P10.'}, es:{title:'Nacido para Sufrir', desc:'Gana con un Comeback King partiendo más allá de la P10.'} },
+  { id:'coro-a-due-voci', cat:'Medio', title:'Coro a Due Voci', desc:'Ottieni due coppie sinergiche della stessa mentalità.', en:{title:'Two-Voice Choir', desc:'Get two synergy pairs of the same mentality.'}, es:{title:'Coro a Dos Voces', desc:'Consigue dos parejas con sinergia de la misma mentalidad.'} },
   // Difficile
-  { id:'dominio-assoluto', cat:'Difficile', title:'Dominio Assoluto', desc:'Vinci una stagione intera senza perdere un solo Gran Premio.' },
-  { id:'doppietta-perfetta', cat:'Difficile', title:'Doppietta Perfetta', desc:'Vinci Piloti e Costruttori nella stessa stagione.' },
-  { id:'senza-rete-di-sicurezza', cat:'Difficile', title:'Senza Rete di Sicurezza', desc:'Vinci una stagione a difficoltà Hardcore.' },
-  { id:'risonanza-totale', cat:'Difficile', title:'Risonanza Totale', desc:'Attiva 3 o più coppie della stessa mentalità (+90%).' },
-  { id:'dal-nulla-all-olimpo', cat:'Difficile', title:'Dal Nulla all\'Olimpo', desc:'Vinci il titolo Costruttori partendo da rating scuderia sotto 55 al Draft.' },
-  { id:'collezionista-assoluto', cat:'Difficile', title:'Collezionista Assoluto', desc:'Completa la Sala Trofei al 100%.' },
-  { id:'anima-della-scuderia', cat:'Difficile', title:'Anima della Scuderia', desc:'Completa il Museo Dynasty con ogni pilota e componente del gioco.' },
-  { id:'leggenda-al-volante', cat:'Difficile', title:'Leggenda al Volante', desc:'Vinci una gara con THE GOAT al volante.' },
-  { id:'osso-duro', cat:'Difficile', title:'Osso Duro', desc:'Completa una stagione Hardcore senza sostituire mai nulla.' },
-  { id:'il-migliore-che-ci-sia', cat:'Difficile', title:'Il Migliore Che Ci Sia', desc:'Grande Slam a difficoltà Hardcore.' },
-  { id:'vittoria-agrodolce', cat:'Difficile', title:'Vittoria Agrodolce', desc:'Vinci mentre il tuo secondo pilota si ritira nella stessa corsa.' },
-  { id:'tutto-o-niente', cat:'Difficile', title:'Tutto o Niente', desc:'Completa una stagione investendo sempre al rischio massimo.' },
-  { id:'padrone-di-ogni-asfalto', cat:'Difficile', title:'Padrone di Ogni Asfalto', desc:'Vinci su ogni tipo di circuito del gioco.' },
+  { id:'dominio-assoluto', cat:'Difficile', title:'Dominio Assoluto', desc:'Vinci una stagione intera senza perdere un solo Gran Premio.', en:{title:'Absolute Dominance', desc:'Win an entire season without losing a single Grand Prix.'}, es:{title:'Dominio Absoluto', desc:'Gana una temporada entera sin perder un solo Gran Premio.'} },
+  { id:'doppietta-perfetta', cat:'Difficile', title:'Doppietta Perfetta', desc:'Vinci Piloti e Costruttori nella stessa stagione.', en:{title:'Perfect Double', desc:'Win both Drivers\' and Constructors\' in the same season.'}, es:{title:'Doblete Perfecto', desc:'Gana Pilotos y Constructores en la misma temporada.'} },
+  { id:'senza-rete-di-sicurezza', cat:'Difficile', title:'Senza Rete di Sicurezza', desc:'Vinci una stagione a difficoltà Hardcore.', en:{title:'No Safety Net', desc:'Win a season on Hardcore difficulty.'}, es:{title:'Sin Red de Seguridad', desc:'Gana una temporada en dificultad Hardcore.'} },
+  { id:'risonanza-totale', cat:'Difficile', title:'Risonanza Totale', desc:'Attiva 3 o più coppie della stessa mentalità (+90%).', en:{title:'Total Resonance', desc:'Activate 3 or more pairs of the same mentality (+90%).'}, es:{title:'Resonancia Total', desc:'Activa 3 o más parejas de la misma mentalidad (+90%).'} },
+  { id:'dal-nulla-all-olimpo', cat:'Difficile', title:'Dal Nulla all\'Olimpo', desc:'Vinci il titolo Costruttori partendo da rating scuderia sotto 55 al Draft.', en:{title:'From Nothing to Olympus', desc:'Win the Constructors\' title starting from a team rating below 55 at the Draft.'}, es:{title:'De la Nada al Olimpo', desc:'Gana el título de Constructores partiendo de un rating de escudería inferior a 55 en el Draft.'} },
+  { id:'collezionista-assoluto', cat:'Difficile', title:'Collezionista Assoluto', desc:'Completa la Sala Trofei al 100%.', en:{title:'Ultimate Collector', desc:'Complete the Trophy Room 100%.'}, es:{title:'Coleccionista Absoluto', desc:'Completa la Sala de Trofeos al 100%.'} },
+  { id:'anima-della-scuderia', cat:'Difficile', title:'Anima della Scuderia', desc:'Completa il Museo Dynasty con ogni pilota e componente del gioco.', en:{title:'Soul of the Team', desc:'Complete the Dynasty Museum with every driver and component in the game.'}, es:{title:'Alma de la Escudería', desc:'Completa el Museo Dynasty con todos los pilotos y componentes del juego.'} },
+  { id:'leggenda-al-volante', cat:'Difficile', title:'Leggenda al Volante', desc:'Vinci una gara con THE GOAT al volante.', en:{title:'Legend at the Wheel', desc:'Win a race with THE GOAT behind the wheel.'}, es:{title:'Leyenda al Volante', desc:'Gana una carrera con THE GOAT al volante.'} },
+  { id:'osso-duro', cat:'Difficile', title:'Osso Duro', desc:'Completa una stagione Hardcore senza sostituire mai nulla.', en:{title:'Tough Nut', desc:'Complete a Hardcore season without ever replacing anything.'}, es:{title:'Hueso Duro de Roer', desc:'Completa una temporada Hardcore sin sustituir nunca nada.'} },
+  { id:'il-migliore-che-ci-sia', cat:'Difficile', title:'Il Migliore Che Ci Sia', desc:'Grande Slam a difficoltà Hardcore.', en:{title:'The Best There Is', desc:'Grand Slam on Hardcore difficulty.'}, es:{title:'El Mejor Que Existe', desc:'Grande Slam en dificultad Hardcore.'} },
+  { id:'vittoria-agrodolce', cat:'Difficile', title:'Vittoria Agrodolce', desc:'Vinci mentre il tuo secondo pilota si ritira nella stessa corsa.', en:{title:'Bittersweet Victory', desc:'Win while your second driver retires in the same race.'}, es:{title:'Victoria Agridulce', desc:'Gana mientras tu segundo piloto se retira en la misma carrera.'} },
+  { id:'tutto-o-niente', cat:'Difficile', title:'Tutto o Niente', desc:'Completa una stagione investendo sempre al rischio massimo.', en:{title:'All or Nothing', desc:'Complete a season always investing at maximum risk.'}, es:{title:'Todo o Nada', desc:'Completa una temporada invirtiendo siempre al riesgo máximo.'} },
+  { id:'padrone-di-ogni-asfalto', cat:'Difficile', title:'Padrone di Ogni Asfalto', desc:'Vinci su ogni tipo di circuito del gioco.', en:{title:'Master of Every Surface', desc:'Win on every circuit type in the game.'}, es:{title:'Amo de Todo el Asfalto', desc:'Gana en todos los tipos de circuito del juego.'} },
   // Estremo
-  { id:'infallibile', cat:'Estremo', title:'Infallibile', desc:'Vinci il titolo Piloti con THE GOAT senza mai subire il suo malus in tutta la stagione.' },
-  { id:'costanza-chirurgica', cat:'Estremo', title:'Costanza Chirurgica', desc:'Vinci una stagione Hardcore completa restando sempre sul podio.' },
-  { id:'l-impossibile-fatto-possibile', cat:'Estremo', title:'L\'Impossibile Fatto Possibile', desc:'Grande Slam Hardcore, stagione completa, partendo da rating scuderia sotto 60.' },
-  { id:'fortuna-sfacciata', cat:'Estremo', title:'Fortuna Sfacciata', desc:'Ottieni THE GOAT sia al Draft sia allo scouting, in due carriere diverse.' },
-  { id:'dinastia', cat:'Estremo', title:'Dinastia', desc:'Vinci cinque stagioni Hardcore consecutive.' },
-  { id:'terrore-della-griglia', cat:'Estremo', title:'Terrore della Griglia', desc:'Vinci ogni gara di una stagione Hardcore senza mai essere ripreso nel finale.' },
-  { id:'rivincita', cat:'Estremo', title:'Rivincita', desc:'Batti il titolo Costruttori contro una rivale che ti aveva già sconfitto in una carriera precedente.' },
-  { id:'enciclopedia-vivente', cat:'Estremo', title:'Enciclopedia Vivente', desc:'Sblocca tutti gli altri 49 obiettivi di questa lista.' },
-  { id:'con-quello-che-c-e', cat:'Estremo', title:'Con Quello Che C\'è', desc:'Vinci una stagione Hardcore usando solo pezzi Common o Rare.' },
-  { id:'il-mito-assoluto', cat:'Estremo', title:'Il Mito Assoluto', desc:'Grande Slam Hardcore, stagione completa, con THE GOAT, senza sostituire nulla, sempre primi in entrambe le classifiche.' },
+  { id:'infallibile', cat:'Estremo', title:'Infallibile', desc:'Vinci il titolo Piloti con THE GOAT senza mai subire il suo malus in tutta la stagione.', en:{title:'Infallible', desc:'Win the Drivers\' title with THE GOAT without ever suffering its malus all season.'}, es:{title:'Infalible', desc:'Gana el título de Pilotos con THE GOAT sin sufrir nunca su penalización en toda la temporada.'} },
+  { id:'costanza-chirurgica', cat:'Estremo', title:'Costanza Chirurgica', desc:'Vinci una stagione Hardcore completa restando sempre sul podio.', en:{title:'Surgical Consistency', desc:'Win a full Hardcore season always finishing on the podium.'}, es:{title:'Constancia Quirúrgica', desc:'Gana una temporada Hardcore completa quedando siempre en el podio.'} },
+  { id:'l-impossibile-fatto-possibile', cat:'Estremo', title:'L\'Impossibile Fatto Possibile', desc:'Grande Slam Hardcore, stagione completa, partendo da rating scuderia sotto 60.', en:{title:'The Impossible Made Possible', desc:'Hardcore Grand Slam, full season, starting from a team rating below 60.'}, es:{title:'Lo Imposible Hecho Posible', desc:'Grande Slam Hardcore, temporada completa, partiendo de un rating de escudería inferior a 60.'} },
+  { id:'fortuna-sfacciata', cat:'Estremo', title:'Fortuna Sfacciata', desc:'Ottieni THE GOAT sia al Draft sia allo scouting, in due carriere diverse.', en:{title:'Shameless Luck', desc:'Get THE GOAT both at the Draft and via scouting, in two different careers.'}, es:{title:'Suerte Descarada', desc:'Consigue a THE GOAT tanto en el Draft como en el scouting, en dos carreras diferentes.'} },
+  { id:'dinastia', cat:'Estremo', title:'Dinastia', desc:'Vinci cinque stagioni Hardcore consecutive.', en:{title:'Dynasty', desc:'Win five consecutive Hardcore seasons.'}, es:{title:'Dinastía', desc:'Gana cinco temporadas Hardcore consecutivas.'} },
+  { id:'terrore-della-griglia', cat:'Estremo', title:'Terrore della Griglia', desc:'Vinci ogni gara di una stagione Hardcore senza mai essere ripreso nel finale.', en:{title:'Terror of the Grid', desc:'Win every race of a Hardcore season without ever being caught at the end.'}, es:{title:'Terror de la Parrilla', desc:'Gana todas las carreras de una temporada Hardcore sin ser alcanzado nunca en el tramo final.'} },
+  { id:'rivincita', cat:'Estremo', title:'Rivincita', desc:'Batti il titolo Costruttori contro una rivale che ti aveva già sconfitto in una carriera precedente.', en:{title:'Rematch', desc:'Beat the Constructors\' title against a rival who had already beaten you in a previous career.'}, es:{title:'Revancha', desc:'Gana el título de Constructores contra una rival que ya te había derrotado en una carrera anterior.'} },
+  { id:'enciclopedia-vivente', cat:'Estremo', title:'Enciclopedia Vivente', desc:'Sblocca tutti gli altri 49 obiettivi di questa lista.', en:{title:'Living Encyclopedia', desc:'Unlock all the other 49 achievements on this list.'}, es:{title:'Enciclopedia Viviente', desc:'Desbloquea los otros 49 logros de esta lista.'} },
+  { id:'con-quello-che-c-e', cat:'Estremo', title:'Con Quello Che C\'è', desc:'Vinci una stagione Hardcore usando solo pezzi Common o Rare.', en:{title:'With What You\'ve Got', desc:'Win a Hardcore season using only Common or Rare pieces.'}, es:{title:'Con Lo Que Hay', desc:'Gana una temporada Hardcore usando solo piezas Common o Rare.'} },
+  { id:'il-mito-assoluto', cat:'Estremo', title:'Il Mito Assoluto', desc:'Grande Slam Hardcore, stagione completa, con THE GOAT, senza sostituire nulla, sempre primi in entrambe le classifiche.', en:{title:'The Absolute Legend', desc:'Hardcore Grand Slam, full season, with THE GOAT, without replacing anything, always first in both standings.'}, es:{title:'El Mito Absoluto', desc:'Grande Slam Hardcore, temporada completa, con THE GOAT, sin sustituir nada, siempre primero en ambas clasificaciones.'} },
 ];
+// V0.9.7.8.27: seleziona titolo/descrizione dell'obiettivo nella lingua corrente — fallback
+// automatico all'italiano se manca la traduzione per quella lingua (non dovrebbe succedere, tutti
+// e 50 sono tradotti, ma e' una sicurezza).
+function achText(ach){
+  if(!ach) return { title:'', desc:'' };
+  if(currentLang!=='it' && ach[currentLang]) return ach[currentLang];
+  return { title:ach.title, desc:ach.desc };
+}
 const ACHIEVEMENT_SAVE_KEY = 'racingDynastyAchievementsV1';
 const ACHIEVEMENT_DATA_DEFAULTS = {
   unlockedIds:[], circuitsRaced:[],
@@ -3813,6 +3821,7 @@ function unlockAchievement(id){
 function showAchievementToast(id){
   const ach = ACHIEVEMENTS.find(a=>a.id===id);
   if(!ach) return;
+  const achLoc = achText(ach);
   playSfx('notify_generic'); // V0.9.7.8.2
   let container = document.getElementById('achievementToastContainer');
   if(!container){
@@ -3827,7 +3836,7 @@ function showAchievementToast(id){
     <div class="achievement-toast-icon">${iconSrc}</div>
     <div class="achievement-toast-body">
       <div class="achievement-toast-eyebrow">Obiettivo Sbloccato</div>
-      <div class="achievement-toast-title">${ach.title}</div>
+      <div class="achievement-toast-title">${achLoc.title}</div>
     </div>`;
   container.appendChild(toast);
   // V0.9.7.9: click sul banner -> apre la schermata Obiettivi scrollata sulla card appena sbloccata
@@ -5380,13 +5389,14 @@ function garagePatternCardHTML(pattern){
   const unlocked = isLiveryPatternUnlocked(pattern.id);
   const isSelected = liveryData.selectedPatternId===pattern.id;
   const ach = ACHIEVEMENTS.find(a=>a.id===pattern.achievementId);
+  const achLoc = achText(ach);
   const revealed = garageRevealedPatternId===pattern.id;
   if(!unlocked){
     return `<div class="card garage-pattern-card locked" data-action="reveal-garage-pattern" data-pattern="${pattern.id}">
       <div class="garage-pattern-swatch locked">🔒</div>
       <div class="garage-pattern-name dim">${pattern.nome}</div>
       ${revealed
-        ? `<div class="garage-pattern-req">Si sblocca con:<br><b style="color:var(--legendary);">${ach?ach.title:'?'}</b><br><span class="dim" style="font-size:10.5px;">${ach?ach.desc:''}</span></div>`
+        ? `<div class="garage-pattern-req">Si sblocca con:<br><b style="color:var(--legendary);">${ach?achLoc.title:'?'}</b><br><span class="dim" style="font-size:10.5px;">${ach?achLoc.desc:''}</span></div>`
         : `<div class="dim" style="font-size:10.5px;">Tocca per vedere come si sblocca</div>`}
     </div>`;
   }
@@ -6690,12 +6700,13 @@ function achievementsPanelHTML(){
     if(!items.length) return '';
     const cards = items.map(a=>{
       const unlocked = isAchievementUnlocked(a.id);
+      const aLoc = achText(a);
       const iconHTML = `<img src="assets/achievements/${a.id}.webp" alt="">`;
       return `<div class="ach-card ${unlocked?'unlocked':'locked'}" id="ach-item-${a.id}">
         <div class="ach-icon">${iconHTML}</div>
         <div class="ach-body">
-          <div class="ach-title">${a.title}</div>
-          <div class="ach-desc">${a.desc}</div>
+          <div class="ach-title">${aLoc.title}</div>
+          <div class="ach-desc">${aLoc.desc}</div>
         </div>
       </div>`;
     }).join('');
