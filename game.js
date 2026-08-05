@@ -63,6 +63,14 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    sponsor_suspended: 'sospeso',
+    hub_next_gp: 'Prossimo Gran Premio', hub_rain: 'Pioggia', hub_safety_car: 'Safety Car',
+    hub_overtake: 'Sorpasso', hub_degradation: 'Degrado', hub_team_strength: 'FORZA SCUDERIA (P1/P2)',
+    hub_pos_drivers: 'POS. PILOTI', hub_pos_constructors: 'POS. COSTRUTTORI', hub_go_to_gp: 'Vai al Gran Premio →',
+    hub_rivalry: '🏆 Rivalità', hub_calendar: '🗓️ Calendario Stagione', hub_race_word: 'GARA',
+    hub_your_team: '🏎️ La Tua Scuderia', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento speciale',
+    hub_weather: 'Clima', comp_driver1: 'Pilota #1', comp_driver2: 'Pilota #2', comp_engine: 'Motore',
+    comp_chassis: 'Telaio', comp_aero: 'Aerodinamica', comp_tires: 'Gomme', comp_strategist: 'Team Principal',
     // Titolo
     title_tagline_return: (race,total)=>`Bentornato — hai una stagione in corso (Gara ${race}/${total})`,
     title_continue: '▶ Continua Stagione', title_new: 'Nuova Stagione', title_delete: '🗑 Cancella Salvataggio',
@@ -92,6 +100,14 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    sponsor_suspended: 'suspended',
+    hub_next_gp: 'Next Grand Prix', hub_rain: 'Rain', hub_safety_car: 'Safety Car',
+    hub_overtake: 'Overtaking', hub_degradation: 'Degradation', hub_team_strength: 'TEAM STRENGTH (P1/P2)',
+    hub_pos_drivers: 'DRIVERS POS.', hub_pos_constructors: 'CONSTRUCTORS POS.', hub_go_to_gp: 'Go to Grand Prix →',
+    hub_rivalry: '🏆 Rivalry', hub_calendar: '🗓️ Season Calendar', hub_race_word: 'RACE',
+    hub_your_team: '🏎️ Your Team', hub_dominant_component: 'Dominant component', hub_special_event: 'Special event',
+    hub_weather: 'Weather', comp_driver1: 'Driver #1', comp_driver2: 'Driver #2', comp_engine: 'Engine',
+    comp_chassis: 'Chassis', comp_aero: 'Aerodynamics', comp_tires: 'Tires', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
     title_continue: '▶ Continue Season', title_new: 'New Season', title_delete: '🗑 Delete Save',
     title_cta: '🏁 Choose your challenge and hit the track — ', title_cta_bold: 'tap to start',
@@ -115,6 +131,14 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    sponsor_suspended: 'suspendido',
+    hub_next_gp: 'Próximo Gran Premio', hub_rain: 'Lluvia', hub_safety_car: 'Safety Car',
+    hub_overtake: 'Adelantamiento', hub_degradation: 'Degradación', hub_team_strength: 'FUERZA DE ESCUDERÍA (P1/P2)',
+    hub_pos_drivers: 'POS. PILOTOS', hub_pos_constructors: 'POS. CONSTRUCTORES', hub_go_to_gp: 'Ir al Gran Premio →',
+    hub_rivalry: '🏆 Rivalidad', hub_calendar: '🗓️ Calendario de Temporada', hub_race_word: 'CARRERA',
+    hub_your_team: '🏎️ Tu Escudería', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento especial',
+    hub_weather: 'Clima', comp_driver1: 'Piloto #1', comp_driver2: 'Piloto #2', comp_engine: 'Motor',
+    comp_chassis: 'Chasis', comp_aero: 'Aerodinámica', comp_tires: 'Neumáticos', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
     title_continue: '▶ Continuar Temporada', title_new: 'Nueva Temporada', title_delete: '🗑 Borrar Partida',
     title_cta: '🏁 Elige tu desafío y sal a pista — ', title_cta_bold: 'toca para empezar',
@@ -3559,18 +3583,18 @@ function topbarHTML(){
   const constructorPos = cstd.findIndex(c=>c.teamId==='PLAYER')+1;
   const sponsorIcon = { title:'👑', tecnico:'🔧', secondario:'🤝' };
   const sponsorHTML = state.sponsor
-    ? `<div class="hud-item"><div class="hud-label">Sponsor</div><div class="hud-value" style="${state.sponsor.tier==='title' && state.sponsor.active===false ? 'color:var(--danger);' : ''}" title="${state.sponsor.nome}">${sponsorIcon[state.sponsor.tier]}${state.sponsor.tier==='title' && state.sponsor.active===false ? ' (sospeso)' : ''}</div></div>`
+    ? `<div class="hud-item"><div class="hud-label">${t('hud_sponsor')}</div><div class="hud-value" style="${state.sponsor.tier==='title' && state.sponsor.active===false ? 'color:var(--danger);' : ''}" title="${state.sponsor.nome}">${sponsorIcon[state.sponsor.tier]}${state.sponsor.tier==='title' && state.sponsor.active===false ? ' ('+t('sponsor_suspended')+')' : ''}</div></div>`
     : '';
   return `
   <div class="topbar">
     <div class="brand hdr">RACING DYNASTY<small>Roguelike GP Manager — v0.9.5 · ${DIFFICULTY_LABEL[state.difficulty]}</small></div>
     <div class="hud">
-      <div class="hud-item"><div class="hud-label">Reroll</div><div class="hud-value">${state.rerollsLeft}/${state.rerollsTotal}</div></div>
-      <div class="hud-item"><div class="hud-label">Budget</div><div class="hud-value amber">${fmtM(state.budget)}</div></div>
+      <div class="hud-item"><div class="hud-label">${t('hud_reroll')}</div><div class="hud-value">${state.rerollsLeft}/${state.rerollsTotal}</div></div>
+      <div class="hud-item"><div class="hud-label">${t('hud_budget')}</div><div class="hud-value amber">${fmtM(state.budget)}</div></div>
       ${sponsorHTML}
-      <div class="hud-item"><div class="hud-label">Gara</div><div class="hud-value">${Math.min(state.raceIndex+1,state.calendar.length)}/${state.calendar.length}</div></div>
-      <div class="hud-item"><div class="hud-label">Miglior Pilota</div><div class="hud-value cyan">P${bestDriverPos||'-'}</div></div>
-      <div class="hud-item"><div class="hud-label">Costruttori</div><div class="hud-value cyan">P${constructorPos||'-'}</div></div>
+      <div class="hud-item"><div class="hud-label">${t('hud_race')}</div><div class="hud-value">${Math.min(state.raceIndex+1,state.calendar.length)}/${state.calendar.length}</div></div>
+      <div class="hud-item"><div class="hud-label">${t('hud_best_driver')}</div><div class="hud-value cyan">P${bestDriverPos||'-'}</div></div>
+      <div class="hud-item"><div class="hud-label">${t('hud_constructors')}</div><div class="hud-value cyan">P${constructorPos||'-'}</div></div>
     </div>
   </div>`;
 }
@@ -4738,46 +4762,46 @@ function renderHub(){
   ${topbarHTML()}
   <div class="circuit-banner">
     <div>
-      <div class="eyebrow">Prossimo Gran Premio</div>
+      <div class="eyebrow">${window.t('hub_next_gp')}</div>
       <h2 class="hdr" style="font-size:26px;">${flag(circuit.paese)} ${circuit.nome} ${circuitStatusBadgeHTML(circuit.nome)}</h2>
-      <div class="dim" style="font-size:13px;margin-top:4px;">${circuit.paese} · ${circuit.tipo} · ${circuit.lunghezza}km/giro · ${circuit.giri} giri · ${(circuit.lunghezza*circuit.giri).toFixed(0)}km totali · Clima ${circuit.clima}</div>
-      <div style="margin-top:8px;font-size:12px;" class="dim">Componente dominante: <b style="color:var(--cyan);">${displayArea(circuit.componentedominante)}</b> · Evento speciale: ${circuit.eventospeciale}</div>
+      <div class="dim" style="font-size:13px;margin-top:4px;">${circuit.paese} · ${circuit.tipo} · ${circuit.lunghezza}km/giro · ${circuit.giri} giri · ${(circuit.lunghezza*circuit.giri).toFixed(0)}km totali · ${window.t('hub_weather')} ${circuit.clima}</div>
+      <div style="margin-top:8px;font-size:12px;" class="dim">${window.t('hub_dominant_component')}: <b style="color:var(--cyan);">${displayArea(circuit.componentedominante)}</b> · ${window.t('hub_special_event')}: ${circuit.eventospeciale}</div>
     </div>
     <div class="circuit-stats">
-      <div class="cstat"><div class="n">${EMOJI_RAIN} ${circuit.probpioggia}%</div><div class="l">Pioggia</div></div>
-      <div class="cstat"><div class="n">${EMOJI_SAFETYCAR} ${circuit.probsc}%</div><div class="l">Safety Car</div></div>
-      <div class="cstat"><div class="n">${EMOJI_OVERTAKE} ${circuit.sorpassabilita}</div><div class="l">Sorpasso</div></div>
-      <div class="cstat"><div class="n">${EMOJI_TIRE} ${circuit.degrado}</div><div class="l">Degrado</div></div>
+      <div class="cstat"><div class="n">${EMOJI_RAIN} ${circuit.probpioggia}%</div><div class="l">${window.t('hub_rain')}</div></div>
+      <div class="cstat"><div class="n">${EMOJI_SAFETYCAR} ${circuit.probsc}%</div><div class="l">${window.t('hub_safety_car')}</div></div>
+      <div class="cstat"><div class="n">${EMOJI_OVERTAKE} ${circuit.sorpassabilita}</div><div class="l">${window.t('hub_overtake')}</div></div>
+      <div class="cstat"><div class="n">${EMOJI_TIRE} ${circuit.degrado}</div><div class="l">${window.t('hub_degradation')}</div></div>
     </div>
   </div>
   <div class="hub-quick-stats">
-    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:${teamStrengthColor(teamStrength)};">${teamStrength}</div><div class="hub-quick-label">FORZA SCUDERIA (P1/P2)</div></div>
-    <div class="hub-quick-stat"><div class="hub-quick-val">P${p1Pos}</div><div class="hub-quick-label">POS. PILOTI</div></div>
-    <div class="hub-quick-stat"><div class="hub-quick-val">P${cPos}</div><div class="hub-quick-label">POS. COSTRUTTORI</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:${teamStrengthColor(teamStrength)};">${teamStrength}</div><div class="hub-quick-label">${window.t('hub_team_strength')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val">P${p1Pos}</div><div class="hub-quick-label">${window.t('hub_pos_drivers')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val">P${cPos}</div><div class="hub-quick-label">${window.t('hub_pos_constructors')}</div></div>
   </div>
   ${synergyBannerHTML()}
-  <div class="btnrow"><button class="primary" data-action="run-race">Vai al Gran Premio →</button></div>
+  <div class="btnrow"><button class="primary" data-action="run-race">${window.t('hub_go_to_gp')}</button></div>
 
   <details class="hub-expand">
-    <summary>🏆 Rivalità</summary>
+    <summary>${window.t('hub_rivalry')}</summary>
     ${rivalPanelHTML()}
   </details>
 
   <details class="hub-expand">
-    <summary>🗓️ Calendario Stagione <span class="dim mono" style="font-size:11px;">GARA ${state.raceIndex+1}/${state.calendar.length}</span></summary>
+    <summary>${window.t('hub_calendar')} <span class="dim mono" style="font-size:11px;">${window.t('hub_race_word')} ${state.raceIndex+1}/${state.calendar.length}</span></summary>
     <div class="panel">
       <div class="calendar">${dots}</div>
     </div>
   </details>
 
   <details class="hub-expand">
-    <summary>🏎️ La Tua Scuderia</summary>
+    <summary>${window.t('hub_your_team')}</summary>
     <div class="panel">
       <div class="roster">
-        ${componentRow('Pilota #1', t.pilotMain)}
-        ${componentRow('Pilota #2', t.pilotSecond)}
-        ${componentRow('Motore', t.motore)}
-        ${componentRow('Telaio', t.telaio)}
+        ${componentRow(window.t('comp_driver1'), t.pilotMain)}
+        ${componentRow(window.t('comp_driver2'), t.pilotSecond)}
+        ${componentRow(window.t('comp_engine'), t.motore)}
+        ${componentRow(window.t('comp_chassis'), t.telaio)}
         ${componentRow('Aero', t.aero)}
         ${componentRow('Gomme', t.gomme)}
         ${componentRow('Team Principal', t.stratega)}
