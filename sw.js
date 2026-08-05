@@ -10,8 +10,13 @@
 //   fallback per l'uso offline.
 // - ASSET PESANTI (immagini, audio, dati di gioco) -> cache-first: cambiano raramente, meglio
 //   risparmiare banda e tempo di caricamento; si aggiornano da soli quando cambia il loro nome file.
-const CACHE_NAME = 'racing-dynasty-v0.9.7.8.17';
-const CODE_FILES = ['index.html', 'game.js', 'manifest.json', './'];
+// FIX V0.9.7.8.21: il manifest.json era network-first, ma le IMMAGINI a cui punta (logo.png,
+// favicon) no — restavano cache-first come tutti gli asset pesanti. Risultato: ogni modifica
+// all'icona veniva ignorata dal browser, che continuava a servire il file vecchio dalla propria
+// cache — disinstallare/reinstallare l'app dalla schermata Home NON svuota questa cache, sono
+// due meccanismi completamente separati. Ora le icone sono network-first come il codice.
+const CACHE_NAME = 'racing-dynasty-v0.9.7.8.21';
+const CODE_FILES = ['index.html', 'game.js', 'manifest.json', './', 'assets/logo.png', 'assets/fuoriscala/fuoriscala_primary_white.svg'];
 const PRECACHE_URLS = [...CODE_FILES, 'data/data.json'];
 
 self.addEventListener('install', (event) => {
