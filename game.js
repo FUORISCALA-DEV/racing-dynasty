@@ -83,6 +83,13 @@ const I18N = {
     // Hub — etichette HUD
     hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Gara',
     hud_best_driver: 'Miglior Pilota', hud_constructors: 'Costruttori',
+    // Log gara live
+    race_lap: 'GIRO', race_retirement: (d,tm)=>`Ritiro per ${d} (${tm})`, race_your_driver_bang: ' — è un tuo pilota!',
+    race_your_driver_paren: ' (tuo pilota)', race_safety_car_track: 'SAFETY CAR in pista',
+    race_restart: 'Ripartenza, gara regolare', race_weather_change: (w)=>`Il meteo cambia: pista ${w}`,
+    weather_wet: 'bagnata', weather_dry: 'asciutta', race_pit_wave: 'Ondata di soste ai box',
+    race_gains: 'guadagna', race_loses: 'perde', race_position: 'posizione', race_positions: 'posizioni',
+    race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
@@ -100,6 +107,12 @@ const I18N = {
     credits_created: 'Created by',
     hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Race',
     hud_best_driver: 'Best Driver', hud_constructors: 'Constructors',
+    race_lap: 'LAP', race_retirement: (d,tm)=>`Retirement for ${d} (${tm})`, race_your_driver_bang: " — that's your driver!",
+    race_your_driver_paren: ' (your driver)', race_safety_car_track: 'SAFETY CAR on track',
+    race_restart: 'Restart, race green', race_weather_change: (w)=>`Weather changes: track ${w}`,
+    weather_wet: 'wet', weather_dry: 'dry', race_pit_wave: 'Wave of pit stops',
+    race_gains: 'gains', race_loses: 'loses', race_position: 'position', race_positions: 'positions',
+    race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
@@ -117,6 +130,12 @@ const I18N = {
     credits_created: 'Creado por',
     hud_reroll: 'Reroll', hud_budget: 'Presupuesto', hud_sponsor: 'Patrocinador', hud_race: 'Carrera',
     hud_best_driver: 'Mejor Piloto', hud_constructors: 'Constructores',
+    race_lap: 'VUELTA', race_retirement: (d,tm)=>`Retirada de ${d} (${tm})`, race_your_driver_bang: ' — ¡es tu piloto!',
+    race_your_driver_paren: ' (tu piloto)', race_safety_car_track: 'SAFETY CAR en pista',
+    race_restart: 'Reinicio, carrera en verde', race_weather_change: (w)=>`Cambia el clima: pista ${w}`,
+    weather_wet: 'mojada', weather_dry: 'seca', race_pit_wave: 'Oleada de paradas en boxes',
+    race_gains: 'gana', race_loses: 'pierde', race_position: 'posición', race_positions: 'posiciones',
+    race_lights_out: '¡Se apagan los semáforos, arrancamos!', race_checkered: 'BANDERA A CUADROS — ¡carrera terminada!',
   },
 };
 function t(key, ...args){
@@ -124,6 +143,103 @@ function t(key, ...args){
   const val = dict[key] !== undefined ? dict[key] : I18N.it[key];
   if(typeof val === 'function') return val(...args);
   return val !== undefined ? val : key;
+}
+
+// V0.9.7.8.28: nomi dei 42 eventi narrativi di gara (su 120 righe totali, molte sono ripetizioni
+// con severita' diversa dello stesso nome) — contestualizzati con terminologia motoristica reale,
+// non traduzione letterale (es. "Diluvio" -> "Downpour" non "Flood").
+const EVENT_NAME_EN = {
+  'Ala danneggiata': 'Damaged Wing',
+  'Bandiera rossa': 'Red Flag',
+  'Blackout della telemetria': 'Telemetry Blackout',
+  'Calcolo carburante perfetto': 'Perfect Fuel Calculation',
+  'Caldo estremo': 'Extreme Heat',
+  'Chiamata gomme errata': 'Wrong Tire Call',
+  'Collisione ai box': 'Pit Lane Collision',
+  'Contatto al via': 'First-Lap Contact',
+  'Crollo gomme': 'Tire Cliff',
+  'Detriti in pista': 'Track Debris',
+  'Diluvio': 'Downpour',
+  'Doppio pit stop': 'Double Pit Stop',
+  'Drive-through': 'Drive-Through Penalty',
+  'Errore individuale': 'Individual Mistake',
+  'Errore sotto pressione': 'Error Under Pressure',
+  'Foratura': 'Puncture',
+  'Freddo estremo': 'Extreme Cold',
+  'Gara accorciata': 'Shortened Race',
+  'Giro perfetto': 'Perfect Lap',
+  'Grandine': 'Hailstorm',
+  'Guasto elettronico': 'Electronics Failure',
+  'Guasto motore': 'Engine Failure',
+  'Incidente multiplo': 'Multi-Car Incident',
+  'Neve sul circuito': 'Snow on Track',
+  'Overcut riuscito': 'Successful Overcut',
+  'Partenza fulminea': 'Lightning Start',
+  'Penalità 5 secondi': '5-Second Penalty',
+  'Pioggia improvvisa': 'Sudden Rain',
+  'Pista in asciugamento': 'Drying Track',
+  'Pit stop lento': 'Slow Pit Stop',
+  'Problema cambio': 'Gearbox Issue',
+  'Record assoluto ai box': 'Pit Stop Record',
+  'Rimonta furiosa': 'Furious Recovery',
+  'Safety Car': 'Safety Car',
+  'Sosta gratuita': 'Free Stop',
+  'Squalifica': 'Disqualification',
+  'Strategia a una sosta': 'One-Stop Strategy',
+  'Surriscaldamento': 'Overheating',
+  'Testacoda': 'Spin',
+  'Undercut perfetto': 'Perfect Undercut',
+  'Vento forte': 'Strong Wind',
+  'Virtual Safety Car': 'Virtual Safety Car',
+};
+const EVENT_NAME_ES = {
+  'Ala danneggiata': 'Ala Dañada',
+  'Bandiera rossa': 'Bandera Roja',
+  'Blackout della telemetria': 'Apagón de Telemetría',
+  'Calcolo carburante perfetto': 'Cálculo de Combustible Perfecto',
+  'Caldo estremo': 'Calor Extremo',
+  'Chiamata gomme errata': 'Llamada de Neumáticos Errónea',
+  'Collisione ai box': 'Colisión en Boxes',
+  'Contatto al via': 'Contacto en la Salida',
+  'Crollo gomme': 'Caída de Neumáticos',
+  'Detriti in pista': 'Restos en Pista',
+  'Diluvio': 'Diluvio',
+  'Doppio pit stop': 'Doble Parada en Boxes',
+  'Drive-through': 'Drive-Through',
+  'Errore individuale': 'Error Individual',
+  'Errore sotto pressione': 'Error Bajo Presión',
+  'Foratura': 'Pinchazo',
+  'Freddo estremo': 'Frío Extremo',
+  'Gara accorciata': 'Carrera Acortada',
+  'Giro perfetto': 'Vuelta Perfecta',
+  'Grandine': 'Granizo',
+  'Guasto elettronico': 'Avería Electrónica',
+  'Guasto motore': 'Avería de Motor',
+  'Incidente multiplo': 'Accidente Múltiple',
+  'Neve sul circuito': 'Nieve en el Circuito',
+  'Overcut riuscito': 'Overcut Exitoso',
+  'Partenza fulminea': 'Salida Fulgurante',
+  'Penalità 5 secondi': 'Penalización de 5 Segundos',
+  'Pioggia improvvisa': 'Lluvia Repentina',
+  'Pista in asciugamento': 'Pista Secándose',
+  'Pit stop lento': 'Parada Lenta',
+  'Problema cambio': 'Problema de Caja de Cambios',
+  'Record assoluto ai box': 'Récord Absoluto en Boxes',
+  'Rimonta furiosa': 'Remontada Furiosa',
+  'Safety Car': 'Safety Car',
+  'Sosta gratuita': 'Parada Gratuita',
+  'Squalifica': 'Descalificación',
+  'Strategia a una sosta': 'Estrategia a Una Parada',
+  'Surriscaldamento': 'Sobrecalentamiento',
+  'Testacoda': 'Trompo',
+  'Undercut perfetto': 'Undercut Perfecto',
+  'Vento forte': 'Viento Fuerte',
+  'Virtual Safety Car': 'Virtual Safety Car',
+};
+function evName(nomeIt){
+  if(currentLang==='en') return EVENT_NAME_EN[nomeIt] || nomeIt;
+  if(currentLang==='es') return EVENT_NAME_ES[nomeIt] || nomeIt;
+  return nomeIt;
 }
 function saveAudioSettings(){
   try{ localStorage.setItem(AUDIO_SETTINGS_KEY, JSON.stringify(audioSettings)); }catch(e){ /* ignorato */ }
@@ -1863,6 +1979,7 @@ function statusFor(slotKey, t, timeline){
 function buildPhaseLog(t, timeline){
   const lines = [];
   const giro = timeline.lapNumbers[t];
+  const L = window.t('race_lap'); // V0.9.7.8.28: 'GIRO'/'LAP'/'VUELTA' a seconda della lingua
   const entries = timeline.entries;
   const byKey = {}; entries.forEach(e=> byKey[e.slotKey]=e);
   const prevOrder = t===0 ? timeline.gridOrder : timeline.phaseOrders[t-1];
@@ -1872,29 +1989,30 @@ function buildPhaseLog(t, timeline){
   (timeline.eventsByPhase[t]||[]).forEach(({slotKey,event,causedDnf})=>{
     const e = byKey[slotKey];
     const emo = EVENT_EMOJI[event.categoria] || '⚠️';
+    const evNameLoc = evName(event.nome);
     if(causedDnf){
       dnfCausingEvents.add(slotKey);
-      lines.push({ tone:'neg', sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`${emo} GIRO ${giro} — Ritiro per ${shortName(e.driverName)} (${e.teamName}): ${event.nome}${e.isPlayerTeam?' — è un tuo pilota!':''}` });
+      lines.push({ tone:'neg', sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`${emo} ${L} ${giro} — ${window.t('race_retirement', shortName(e.driverName), e.teamName)}: ${evNameLoc}${e.isPlayerTeam?window.t('race_your_driver_bang'):''}` });
     } else {
       const tone = event.esito==='Positivo' ? 'pos' : (event.esito==='Negativo' ? 'neg' : 'neu');
       // V0.9.7.8.14: suono reale per le azioni di gara del giocatore (eventi tecnici/narrativi
       // generici che non hanno gia' un suono dedicato come sorpasso/pit/safety car/pioggia)
-      lines.push({ tone, realSfx: e.isPlayerTeam?'audio/sfx_race_action.mp3':undefined, text:`${emo} GIRO ${giro} — ${shortName(e.driverName)}: ${event.nome}${e.isPlayerTeam?' (tuo pilota)':''}` });
+      lines.push({ tone, realSfx: e.isPlayerTeam?'audio/sfx_race_action.mp3':undefined, text:`${emo} ${L} ${giro} — ${shortName(e.driverName)}: ${evNameLoc}${e.isPlayerTeam?window.t('race_your_driver_paren'):''}` });
     }
   });
 
   entries.forEach(e=>{
     if(timeline.retiredAtPhase[e.slotKey]===t && !dnfCausingEvents.has(e.slotKey)){
-      lines.push({ tone:'neg', sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`🔧 GIRO ${giro} — Ritiro per ${shortName(e.driverName)} (${e.teamName})${e.isPlayerTeam?' — è un tuo pilota!':''}` });
+      lines.push({ tone:'neg', sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`🔧 ${L} ${giro} — ${window.t('race_retirement', shortName(e.driverName), e.teamName)}${e.isPlayerTeam?window.t('race_your_driver_bang'):''}` });
     }
   });
 
-  if(t===timeline.safetyCarPhase) lines.push({ tone:'neu', sfx:'safety_car', text:`${EMOJI_SAFETYCAR} GIRO ${giro} — SAFETY CAR in pista` });
-  if(timeline.safetyCarPhase!==null && t===timeline.safetyCarPhase+1) lines.push({ tone:'neu', text:`🟢 GIRO ${giro} — Ripartenza, gara regolare` });
-  if(t===timeline.weatherChangePhase) lines.push({ tone:'neu', sfx: timeline.weatherAfter==='Bagnato'?'rain_start':undefined, text:`${timeline.weatherAfter==='Bagnato'?EMOJI_RAIN:'☀️'} GIRO ${giro} — Il meteo cambia: pista ${timeline.weatherAfter.toLowerCase()}` });
+  if(t===timeline.safetyCarPhase) lines.push({ tone:'neu', sfx:'safety_car', text:`${EMOJI_SAFETYCAR} ${L} ${giro} — ${window.t('race_safety_car_track')}` });
+  if(timeline.safetyCarPhase!==null && t===timeline.safetyCarPhase+1) lines.push({ tone:'neu', text:`🟢 ${L} ${giro} — ${window.t('race_restart')}` });
+  if(t===timeline.weatherChangePhase) lines.push({ tone:'neu', sfx: timeline.weatherAfter==='Bagnato'?'rain_start':undefined, text:`${timeline.weatherAfter==='Bagnato'?EMOJI_RAIN:'☀️'} ${L} ${giro} — ${window.t('race_weather_change', timeline.weatherAfter==='Bagnato'?window.t('weather_wet'):window.t('weather_dry'))}` });
   if(timeline.pitByPhase[t] && timeline.pitByPhase[t].size>0){
     const playerPitting = (timeline.pitByPhase[t].has('PLAYER-1') || timeline.pitByPhase[t].has('PLAYER-2'));
-    lines.push({ tone:'neu', sfx: playerPitting?'pit_stop':undefined, text:`${EMOJI_TIRE} GIRO ${giro} — Ondata di soste ai box` });
+    lines.push({ tone:'neu', sfx: playerPitting?'pit_stop':undefined, text:`${EMOJI_TIRE} ${L} ${giro} — ${window.t('race_pit_wave')}` });
   }
 
   const deltas = currOrder.map((key,i)=>{
@@ -1915,13 +2033,14 @@ function buildPhaseLog(t, timeline){
     if(timeline.retiredAtPhase[e.slotKey]===t) continue;
     if(!e.isPlayerTeam && Math.abs(d.delta)<2) continue;
     if(shown>=4) break;
-    const verb = d.delta>0 ? 'guadagna' : 'perde';
-    lines.push({ tone: d.delta>0?'pos':'neg', sfx: e.isPlayerTeam ? (d.delta>0?'overtake':'overtaken') : undefined, text:`${EMOJI_OVERTAKE} GIRO ${giro} — ${shortName(e.driverName)} ${verb} ${Math.abs(d.delta)} posizion${Math.abs(d.delta)===1?'e':'i'}: P${d.from} → P${d.to}` });
+    const verb = d.delta>0 ? window.t('race_gains') : window.t('race_loses');
+    const posWord = Math.abs(d.delta)===1 ? window.t('race_position') : window.t('race_positions');
+    lines.push({ tone: d.delta>0?'pos':'neg', sfx: e.isPlayerTeam ? (d.delta>0?'overtake':'overtaken') : undefined, text:`${EMOJI_OVERTAKE} ${L} ${giro} — ${shortName(e.driverName)} ${verb} ${Math.abs(d.delta)} ${posWord}: P${d.from} → P${d.to}` });
     shown++;
   }
 
-  if(t===0) lines.unshift({ tone:'neu', text:`🟢 GIRO ${giro} — Si spengono i semafori, si parte!` });
-  if(t===PHASES.length-1) lines.push({ tone:'neu', sfx:'checkered_flag', text:`${EMOJI_FLAG_CHECKERED} BANDIERA A SCACCHI — gara conclusa!` });
+  if(t===0) lines.unshift({ tone:'neu', text:`🟢 ${L} ${giro} — ${window.t('race_lights_out')}` });
+  if(t===PHASES.length-1) lines.push({ tone:'neu', sfx:'checkered_flag', text:`${EMOJI_FLAG_CHECKERED} ${window.t('race_checkered')}` });
 
   return lines;
 }
