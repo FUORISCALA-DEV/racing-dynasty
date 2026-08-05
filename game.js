@@ -275,6 +275,69 @@ function playIntroWhoosh(){
   __introWhooshPlayed = true;
   playRealSfx(INTRO_WHOOSH_SRC);
 }
+// V0.9.7.8.20 — Installazione PWA: catturiamo l'evento che Chrome/Edge lanciano quando l'app e'
+// installabile, cosi' possiamo offrire un bottone "Installa" nostro invece di aspettare che il
+// giocatore trovi la voce nascosta nel menu del browser. Su iOS Safari questo evento non esiste
+// (Apple non lo supporta): li' possiamo solo mostrare istruzioni testuali ("Condividi -> Aggiungi
+// alla schermata Home"), non c'e' un vero prompt programmabile.
+let __deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  __deferredInstallPrompt = e;
+});
+window.addEventListener('appinstalled', ()=>{ __deferredInstallPrompt = null; });
+function isStandaloneApp(){
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+}
+function isIOSDevice(){
+  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+// Innesca il prompt nativo (Android/Chrome/Edge) se disponibile; su iOS mostra le istruzioni,
+// perche' li' non esiste alcuna API per farlo in automatico.
+async function triggerInstallPrompt(){
+  if(__deferredInstallPrompt){
+    __deferredInstallPrompt.prompt();
+    try{ await __deferredInstallPrompt.userChoice; }catch(e){}
+    __deferredInstallPrompt = null;
+    return true;
+  }
+  return false; // il chiamante mostrera' le istruzioni manuali (iOS o browser non supportato)
+}
+// V0.9.7.8.20: schedina invito all'installazione — solo per chi NON gioca gia' dall'icona, mostrata
+// a fine stagione subito dopo aver condiviso il risultato (momento in cui l'entusiasmo e' piu' alto).
+function showInstallPitchCard(){
+  if(isStandaloneApp() || document.getElementById('installPitchOverlay')) return;
+  const overlay = document.createElement('div');
+  overlay.id = 'installPitchOverlay';
+  overlay.className = 'install-pitch-overlay';
+  overlay.innerHTML = `
+    <div class="install-pitch-card">
+      <div class="install-pitch-emoji">🏁</div>
+      <div class="install-pitch-title">Ti sta piacendo Racing Dynasty?</div>
+      <div class="install-pitch-body">Installalo sul tuo dispositivo: si apre come un'app vera, a schermo intero, con un'icona tutta sua — niente barra del browser, niente da digitare.</div>
+      <div class="install-pitch-actions">
+        <button class="button primary" id="installPitchYes">📲 Installalo sul tuo dispositivo</button>
+        <button class="install-pitch-dismiss" id="installPitchNo">Magari dopo</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  const close = ()=>{ overlay.remove(); };
+  document.getElementById('installPitchNo').addEventListener('click', close);
+  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) close(); });
+  document.getElementById('installPitchYes').addEventListener('click', async ()=>{
+    const worked = await triggerInstallPrompt();
+    if(!worked){
+      close();
+      if(isIOSDevice()){
+        alert('Per installare Racing Dynasty su iPhone/iPad:\n\n1. Tocca il pulsante Condividi (il quadrato con la freccia verso l\'alto) in basso nel browser\n2. Scorri e scegli "Aggiungi alla schermata Home"\n3. Conferma con "Aggiungi"');
+      } else {
+        alert('Cerca la voce "Installa app" o "Aggiungi a schermata Home" nel menu del tuo browser (di solito le tre puntine in alto a destra).');
+      }
+    } else {
+      close();
+    }
+  });
+}
 getMusicAudioEl('race'); getMusicAudioEl('other');
 // V0.9.7.8.10: se il telefono si blocca (o si cambia app) l'audio non deve continuare a suonare
 // in sottofondo — Page Visibility API, nessuna dipendenza da eventi del browser piu' fragili.
@@ -5630,14 +5693,14 @@ async function buildTrophyRoomCanvas(){
 }
 
 async function shareTrophyRoomCard(){
-  unlockAchievement('vetrina'); // V0.9.7
   try{
     const cv = await buildTrophyRoomCanvas();
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
     const fileName = 'racing-dynasty-sala-trofei.png';
-    const shareText = 'La mia Sala Trofei su Racing Dynasty — prova a battermi! (link non ancora attivo)';
+    const gameUrl = 'https://fuoriscala-dev.github.io/racing-dynasty/';
+    const shareText = `La mia Sala Trofei su Racing Dynasty — prova a battermi!\n${gameUrl}`;
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
-      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
+      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText, url: gameUrl });
     } else {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -5651,14 +5714,14 @@ async function shareTrophyRoomCard(){
 }
 
 async function shareResultCard(){
-  unlockAchievement('racconta-la-storia'); // V0.9.7
   try{
     const cv = await buildShareCardCanvas();
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
     const fileName = 'racing-dynasty-risultato.png';
-    const shareText = 'Ho appena chiuso una stagione su Racing Dynasty — prova a battermi! (link non ancora attivo)';
+    const gameUrl = 'https://fuoriscala-dev.github.io/racing-dynasty/';
+    const shareText = `Ho appena chiuso una stagione su Racing Dynasty — prova a battermi!\n${gameUrl}`;
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
-      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
+      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText, url: gameUrl });
     } else {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -6022,7 +6085,11 @@ function onAction(e){
       render();
     }, 'Cancella Salvataggio');
   }
-  else if(action==='share-result-card'){ shareResultCard(); }
+  else if(action==='share-result-card'){
+    shareResultCard().then(()=>{
+      if(!isStandaloneApp()) setTimeout(showInstallPitchCard, 600); // V0.9.7.8.20
+    });
+  }
   else if(action==='open-trophy-room'){
     trophyRoomPreviousPhase = state.phase;
     state.phase = 'trophy-room';
@@ -6199,6 +6266,7 @@ function openSettings(){
     <button type="button" class="menu-item" id="sidebarExportSaveBtn">📤 <span>Esporta Run (.json)</span></button>
     <button type="button" class="menu-item" id="sidebarImportSaveBtn">📥 <span>Importa Run (.json)</span></button>
     <input type="file" id="importSaveFileInput" accept="application/json,.json" style="display:none;">
+    ${!isStandaloneApp() ? `<button type="button" class="menu-item" id="sidebarInstallBtn" style="color:var(--legendary);">📲 <span>Installa l'App</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarFullResetBtn" style="color:var(--danger);">🗑️ <span>Ripristina Tutto (Prima Apertura)</span></button>
   `;
   // V0.9.7.8.3: toggle on/off indipendenti dal volume — utile per silenziare del tutto senza
@@ -6248,6 +6316,19 @@ function openSettings(){
     }
   });
   document.getElementById('sidebarExportSaveBtn').addEventListener('click', exportRunSave);
+  const installBtn = document.getElementById('sidebarInstallBtn');
+  if(installBtn){
+    installBtn.addEventListener('click', async ()=>{
+      const worked = await triggerInstallPrompt();
+      if(!worked){
+        if(isIOSDevice()){
+          alert('Per installare Racing Dynasty su iPhone/iPad:\n\n1. Tocca il pulsante Condividi (il quadrato con la freccia verso l\'alto) in basso nel browser\n2. Scorri e scegli "Aggiungi alla schermata Home"\n3. Conferma con "Aggiungi"');
+        } else {
+          alert('Per installare Racing Dynasty, cerca la voce "Installa app" o "Aggiungi a schermata Home" nel menu del tuo browser (di solito le tre puntine in alto a destra).');
+        }
+      }
+    });
+  }
   document.getElementById('sidebarImportSaveBtn').addEventListener('click', ()=>{
     document.getElementById('importSaveFileInput').click();
   });
