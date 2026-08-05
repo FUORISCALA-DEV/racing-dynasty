@@ -63,6 +63,20 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    rival_ahead: (n)=>`+${n} su di loro`, rival_behind: (n)=>`${n} da recuperare`, rival_tied: 'in parità',
+    rival_you_badge: 'TU', rival_constructor_points: 'punti costruttori · forza',
+    rival_title_initial: '🎯 La Tua Rivalità', rival_title_new: '↗ Nuova Rivalità',
+    rival_subtitle_initial_plural: 'In base alla forza della tua scuderia, queste sono le tue scuderie rivali. Batterle è il primo obiettivo della stagione, prima ancora del titolo.',
+    rival_subtitle_initial_single: 'In base alla forza della tua scuderia, questa è la tua scuderia rivale. Batterle è il primo obiettivo della stagione, prima ancora del titolo.',
+    rival_subtitle_new: (names)=>`Hai superato ${names}: non c'è più partita con loro.`,
+    rival_new_goal_plural: ' I tuoi nuovi obiettivi:', rival_new_goal_single: ' Il tuo nuovo obiettivo:',
+    rival_continue: 'Continua →',
+    sponsor_technical: 'Sponsor Tecnico', sponsor_secondary: 'Sponsor Secondario',
+    sponsor_desc_title_prizes: 'sui premi gara.', sponsor_desc_title_condition: 'Attivo solo mentre resti in Top 8 in classifica Costruttori — se scendi sotto, il bonus si sospende (torna da solo se rientri in Top 8).',
+    sponsor_desc_tecnico: (cat)=>`Sblocca da subito gli upgrade "${cat}" normalmente riservati agli sponsor. Nessun bonus economico diretto.`,
+    sponsor_desc_secondario_amount: '+0.3M a gara', sponsor_desc_secondario_rest: ', fisso, garantito, senza alcuna condizione.',
+    sponsor_choose_subtitle: 'Scegli il tuo sponsor per la stagione', sponsor_choose_one: "Scegli una sola offerta per l'intera stagione",
+    sponsor_headline: 'Chi ti accompagna quest\'anno?', sponsor_subtitle: 'La scelta vale per tutta la stagione e non si può cambiare a metà strada.',
     naming_title: 'Dai un nome alla tua scuderia', naming_optional: 'Facoltativo — se lo lasci vuoto useremo un nome automatico (es. "Dynasty Racing").',
     naming_placeholder: 'Es. Nova Racing Team', naming_inspire: '🎲 Ispira la scuderia', naming_nation: 'Nazione della Scuderia',
     naming_confirm: 'Conferma e inizia il Draft →',
@@ -120,6 +134,20 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    rival_ahead: (n)=>`+${n} ahead of them`, rival_behind: (n)=>`${n} to catch up`, rival_tied: 'tied',
+    rival_you_badge: 'YOU', rival_constructor_points: 'constructor points · strength',
+    rival_title_initial: '🎯 Your Rivalry', rival_title_new: '↗ New Rivalry',
+    rival_subtitle_initial_plural: "Based on your team's strength, these are your rival teams. Beating them is the season's first goal, even before the title.",
+    rival_subtitle_initial_single: "Based on your team's strength, this is your rival team. Beating them is the season's first goal, even before the title.",
+    rival_subtitle_new: (names)=>`You've overtaken ${names}: there's no more contest with them.`,
+    rival_new_goal_plural: ' Your new targets:', rival_new_goal_single: ' Your new target:',
+    rival_continue: 'Continue →',
+    sponsor_technical: 'Technical Sponsor', sponsor_secondary: 'Secondary Sponsor',
+    sponsor_desc_title_prizes: 'on race prizes.', sponsor_desc_title_condition: 'Active only while you stay in the Top 8 of the Constructors\' standings — if you drop below, the bonus is suspended (comes back on its own if you re-enter the Top 8).',
+    sponsor_desc_tecnico: (cat)=>`Immediately unlocks "${cat}" upgrades normally reserved for sponsors. No direct economic bonus.`,
+    sponsor_desc_secondario_amount: '+0.3M per race', sponsor_desc_secondario_rest: ', fixed, guaranteed, no conditions.',
+    sponsor_choose_subtitle: 'Choose your sponsor for the season', sponsor_choose_one: 'Choose only one offer for the whole season',
+    sponsor_headline: "Who's with you this year?", sponsor_subtitle: "The choice applies for the whole season and can't be changed midway.",
     naming_title: 'Name your team', naming_optional: 'Optional — if you leave it blank we\'ll use an automatic name (e.g. "Dynasty Racing").',
     naming_placeholder: 'E.g. Nova Racing Team', naming_inspire: '🎲 Inspire the team', naming_nation: 'Team Nationality',
     naming_confirm: 'Confirm and start the Draft →',
@@ -171,6 +199,20 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    rival_ahead: (n)=>`+${n} por delante`, rival_behind: (n)=>`${n} por recuperar`, rival_tied: 'empatado',
+    rival_you_badge: 'TÚ', rival_constructor_points: 'puntos de constructores · fuerza',
+    rival_title_initial: '🎯 Tu Rivalidad', rival_title_new: '↗ Nueva Rivalidad',
+    rival_subtitle_initial_plural: 'Según la fuerza de tu escudería, estas son tus escuderías rivales. Vencerlas es el primer objetivo de la temporada, incluso antes que el título.',
+    rival_subtitle_initial_single: 'Según la fuerza de tu escudería, esta es tu escudería rival. Vencerla es el primer objetivo de la temporada, incluso antes que el título.',
+    rival_subtitle_new: (names)=>`Has superado a ${names}: ya no hay partida con ellos.`,
+    rival_new_goal_plural: ' Tus nuevos objetivos:', rival_new_goal_single: ' Tu nuevo objetivo:',
+    rival_continue: 'Continuar →',
+    sponsor_technical: 'Patrocinador Técnico', sponsor_secondary: 'Patrocinador Secundario',
+    sponsor_desc_title_prizes: 'sobre los premios de carrera.', sponsor_desc_title_condition: 'Activo solo mientras te mantengas en el Top 8 de la clasificación de Constructores — si bajas de ahí, el bonus se suspende (vuelve solo si regresas al Top 8).',
+    sponsor_desc_tecnico: (cat)=>`Desbloquea de inmediato las mejoras de "${cat}" normalmente reservadas a los patrocinadores. Sin bonus económico directo.`,
+    sponsor_desc_secondario_amount: '+0.3M por carrera', sponsor_desc_secondario_rest: ', fijo, garantizado, sin condiciones.',
+    sponsor_choose_subtitle: 'Elige tu patrocinador para la temporada', sponsor_choose_one: 'Elige solo una oferta para toda la temporada',
+    sponsor_headline: '¿Quién te acompaña este año?', sponsor_subtitle: 'La elección vale para toda la temporada y no se puede cambiar a mitad de camino.',
     naming_title: 'Ponle nombre a tu escudería', naming_optional: 'Opcional — si lo dejas vacío usaremos un nombre automático (ej. "Dynasty Racing").',
     naming_placeholder: 'Ej. Nova Racing Team', naming_inspire: '🎲 Inspirar la escudería', naming_nation: 'Nacionalidad de la Escudería',
     naming_confirm: 'Confirmar y empezar el Draft →',
@@ -2783,17 +2825,18 @@ const SPONSOR_TECNICO_CATEGORIES = ['Aerodinamica','Telaio','Strategia']; // uni
 function generateSponsorOffers(){
   const names = weightedSampleDistinct(SPONSOR_NAMES.map(n=>({id:n,nome:n,costo:1})), 3, 'costo', new Set()).map(o=>o.nome);
   const tecnicoCategory = SPONSOR_TECNICO_CATEGORIES[Math.floor(rnd()*SPONSOR_TECNICO_CATEGORIES.length)];
+  const labels = { title:'Title Sponsor', tecnico:t('sponsor_technical'), secondario:t('sponsor_secondary') };
   return [
-    { tier:'title', nome:names[0], label:'Title Sponsor' },
-    { tier:'tecnico', nome:names[1], label:'Sponsor Tecnico', category:tecnicoCategory },
-    { tier:'secondario', nome:names[2], label:'Sponsor Secondario' },
+    { tier:'title', nome:names[0], label:labels.title },
+    { tier:'tecnico', nome:names[1], label:labels.tecnico, category:tecnicoCategory },
+    { tier:'secondario', nome:names[2], label:labels.secondario },
   ];
 }
 function sponsorCardHTML(offer){
   const descByTier = {
-    title: `<b>+15% sui premi gara.</b> Attivo solo mentre resti in Top 8 in classifica Costruttori — se scendi sotto, il bonus si sospende (torna da solo se rientri in Top 8).`,
-    tecnico: `Sblocca da subito gli upgrade "${offer.category}" normalmente riservati agli sponsor. Nessun bonus economico diretto.`,
-    secondario: `<b>+0.3M a gara</b>, fisso, garantito, senza alcuna condizione.`,
+    title: `<b>+15% ${t('sponsor_desc_title_prizes')}</b> ${t('sponsor_desc_title_condition')}`,
+    tecnico: t('sponsor_desc_tecnico', offer.category),
+    secondario: `<b>${t('sponsor_desc_secondario_amount')}</b> ${t('sponsor_desc_secondario_rest')}`,
   };
   const iconByTier = { title:'👑', tecnico:'🔧', secondario:'🤝' };
   return `<div class="card pickable sponsor-card" data-action="choose-sponsor" data-tier="${offer.tier}">
@@ -2807,12 +2850,12 @@ function renderSponsorChoice(){
   state.sponsorOffers = offers;
   app.innerHTML = `
   <div class="topbar">
-    <div class="brand hdr">RACING DYNASTY<small>Scegli il tuo sponsor per la stagione</small></div>
+    <div class="brand hdr">RACING DYNASTY<small>${t('sponsor_choose_subtitle')}</small></div>
   </div>
   <div class="panel">
-    <div class="eyebrow">Scegli una sola offerta per l'intera stagione</div>
-    <h2 class="hdr" style="font-size:22px;">Chi ti accompagna quest'anno?</h2>
-    <div class="dim" style="font-size:12px;margin-top:6px;">La scelta vale per tutta la stagione e non si può cambiare a metà strada.</div>
+    <div class="eyebrow">${t('sponsor_choose_one')}</div>
+    <h2 class="hdr" style="font-size:22px;">${t('sponsor_headline')}</h2>
+    <div class="dim" style="font-size:12px;margin-top:6px;">${t('sponsor_subtitle')}</div>
   </div>
   <div class="draft-turn-grid">${offers.map(sponsorCardHTML).join('')}</div>
   `;
@@ -4602,7 +4645,7 @@ function renderRivalAnnounce(){
   const myTeamHTML = `
     <div class="panel rival-team-card my-team-card">
       <div class="eyebrow" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-        <span>${teamFlag('PLAYER')} ${teamDisplayName()} <span class="qtc-badge" style="margin-left:6px;">TU</span></span>
+        <span>${teamFlag('PLAYER')} ${teamDisplayName()} <span class="qtc-badge" style="margin-left:6px;">${window.t('rival_you_badge')}</span></span>
         <span class="qtc-mini-sem" style="flex:none;">${miniSemaforoHTML(myCircles)}</span>
       </div>
       <div class="grid grid-2" style="margin-top:8px;">
@@ -4617,7 +4660,7 @@ function renderRivalAnnounce(){
           <div class="dim mono" style="font-size:11px;">${t.pilotSecond.rating} RATING</div>
         </div>
       </div>
-      <div class="dim mono" style="font-size:11px;margin-top:8px;">${state.constructorStandings['PLAYER'].points} punti costruttori · forza <b style="color:var(--amber);font-size:13px;">${Math.round(aiTeamWeightedStrength({drivers:[t.pilotMain,t.pilotSecond], components:{motore:t.motore,telaio:t.telaio,aero:t.aero,gomme:t.gomme,stratega:t.stratega}}))}</b></div>
+      <div class="dim mono" style="font-size:11px;margin-top:8px;">${state.constructorStandings['PLAYER'].points} ${window.t('rival_constructor_points')} <b style="color:var(--amber);font-size:13px;">${Math.round(aiTeamWeightedStrength({drivers:[t.pilotMain,t.pilotSecond], components:{motore:t.motore,telaio:t.telaio,aero:t.aero,gomme:t.gomme,stratega:t.stratega}}))}</b></div>
     </div>`;
   const teamsHTML = notice.newTeamIds.map(id=>{
     const t = state.aiTeams.find(x=>x.id===id);
@@ -4643,14 +4686,14 @@ function renderRivalAnnounce(){
           <div class="dim mono" style="font-size:11px;">${t.drivers[1].rating} RATING</div>
         </div>
       </div>
-      <div class="dim mono" style="font-size:11px;margin-top:8px;">${state.constructorStandings[id].points} punti costruttori · forza <b style="color:var(--cyan);font-size:13px;">${Math.round(aiTeamWeightedStrength(t))}</b></div>
+      <div class="dim mono" style="font-size:11px;margin-top:8px;">${state.constructorStandings[id].points} ${window.t('rival_constructor_points')} <b style="color:var(--cyan);font-size:13px;">${Math.round(aiTeamWeightedStrength(t))}</b></div>
     </div>`;
   }).join('');
 
-  const title = notice.initial ? '🎯 La Tua Rivalità' : '↗ Nuova Rivalità';
+  const title = notice.initial ? window.t('rival_title_initial') : window.t('rival_title_new');
   const subtitle = notice.initial
-    ? `In base alla forza della tua scuderia, ${notice.newTeamIds.length>1?'queste sono le tue scuderie rivali':'questa è la tua scuderia rivale'}. Batterle è il primo obiettivo della stagione, prima ancora del titolo.`
-    : `Hai superato ${notice.surpassedNames.join(', ')}: non c'è più partita con loro. ${notice.newTeamIds.length>1?'I tuoi nuovi obiettivi':'Il tuo nuovo obiettivo'}:`;
+    ? (notice.newTeamIds.length>1 ? window.t('rival_subtitle_initial_plural') : window.t('rival_subtitle_initial_single'))
+    : window.t('rival_subtitle_new', notice.surpassedNames.join(', ')) + (notice.newTeamIds.length>1 ? window.t('rival_new_goal_plural') : window.t('rival_new_goal_single'));
 
   app.innerHTML = `
   ${topbarHTML()}
@@ -4660,7 +4703,7 @@ function renderRivalAnnounce(){
       <div class="tagline">${subtitle}</div>
     </div>
   </div>
-  <div class="btnrow"><button class="primary" data-action="continue-from-rival-announce">Continua →</button></div>
+  <div class="btnrow"><button class="primary" data-action="continue-from-rival-announce">${window.t('rival_continue')}</button></div>
   <div class="grid grid-2">${myTeamHTML}${teamsHTML}</div>
   `;
   bindActions();
@@ -4674,7 +4717,7 @@ function rivalPanelHTML(){
     if(!cs || !t) return '';
     const myPoints = state.constructorStandings['PLAYER'].points;
     const diff = myPoints - cs.points;
-    const diffLabel = diff>0 ? `+${diff} su di loro` : diff<0 ? `${Math.abs(diff)} da recuperare` : 'in parità';
+    const diffLabel = diff>0 ? window.t('rival_ahead', diff) : diff<0 ? window.t('rival_behind', Math.abs(diff)) : window.t('rival_tied');
     const rStrength = aiTeamWeightedStrength(t);
     const rCircles = aiTeamSynergyCircles(t);
     const slot1 = state.grid.find(g=>g.teamId===id && g.role===0);
