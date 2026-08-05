@@ -1063,22 +1063,31 @@ function rerollDraftTurn(){
 // sinergia in squadra si accoppiano e danno +3 rating a entrambi. Il bonus viene sempre rimosso e
 // ricalcolato da zero ad ogni cambio squadra, per non accumulare per errore.
 const MENTALITA_DEFS = {
-  imperturbabile: { label:'Imperturbabile', color:'#3AAFA9' },
-  paziente:       { label:'Paziente',       color:'#E67E22' },
-  perfezionista:  { label:'Perfezionista',  color:'#6C5CE7' },
-  metodico:       { label:'Metodico',       color:'#95A5A6' },
-  istintivo:      { label:'Istintivo',      color:'#A3D63C' },
-  audace:         { label:'Audace',         color:'#E63946' },
-  spietato:       { label:'Spietato',       color:'#C2185B' },
-  calcolatore:    { label:'Calcolatore',    color:'#2ECC71' },
-  ribelle:        { label:'Ribelle',        color:'#FF6B9D' },
-  instancabile:   { label:'Instancabile',   color:'#16A085' },
-  visionario:     { label:'Visionario',     color:'#F39C12' },
-  risoluto:       { label:'Risoluto',       color:'#34495E' },
-  elastico:       { label:'Elastico',       color:'#1ABC9C' },
-  impulsivo:      { label:'Impulsivo',      color:'#D35400' },
-  silenzioso:     { label:'Silenzioso',     color:'#5D6D7E' },
+  imperturbabile: { label:'Imperturbabile', label_en:'Unshakeable', label_es:'Imperturbable', color:'#3AAFA9' },
+  paziente:       { label:'Paziente',       label_en:'Patient',     label_es:'Paciente',      color:'#E67E22' },
+  perfezionista:  { label:'Perfezionista',  label_en:'Perfectionist', label_es:'Perfeccionista', color:'#6C5CE7' },
+  metodico:       { label:'Metodico',       label_en:'Methodical',  label_es:'Metódico',      color:'#95A5A6' },
+  istintivo:      { label:'Istintivo',      label_en:'Instinctive', label_es:'Instintivo',    color:'#A3D63C' },
+  audace:         { label:'Audace',         label_en:'Bold',        label_es:'Audaz',         color:'#E63946' },
+  spietato:       { label:'Spietato',       label_en:'Ruthless',    label_es:'Despiadado',    color:'#C2185B' },
+  calcolatore:    { label:'Calcolatore',    label_en:'Calculating', label_es:'Calculador',    color:'#2ECC71' },
+  ribelle:        { label:'Ribelle',        label_en:'Rebel',       label_es:'Rebelde',       color:'#FF6B9D' },
+  instancabile:   { label:'Instancabile',   label_en:'Tireless',    label_es:'Incansable',    color:'#16A085' },
+  visionario:     { label:'Visionario',     label_en:'Visionary',   label_es:'Visionario',    color:'#F39C12' },
+  risoluto:       { label:'Risoluto',       label_en:'Resolute',    label_es:'Resuelto',      color:'#34495E' },
+  elastico:       { label:'Elastico',       label_en:'Adaptable',   label_es:'Elástico',      color:'#1ABC9C' },
+  impulsivo:      { label:'Impulsivo',      label_en:'Impulsive',   label_es:'Impulsivo',     color:'#D35400' },
+  silenzioso:     { label:'Silenzioso',     label_en:'Silent',      label_es:'Silencioso',    color:'#5D6D7E' },
 };
+// V0.9.7.8.29: restituisce l'etichetta della mentalita' nella lingua corrente — usata dalla Guida
+// e riusabile ovunque altro nel gioco si mostri una mentalita', in futuro.
+function mentaLabel(id){
+  const m = MENTALITA_DEFS[id];
+  if(!m) return '';
+  if(currentLang==='en') return m.label_en || m.label;
+  if(currentLang==='es') return m.label_es || m.label;
+  return m.label;
+}
 const SYNERGY_BONUS = 3;
 const TEAM_ROLE_ORDER = [
   ['pilotMain','Pilota #1'], ['pilotSecond','Pilota #2'], ['motore','Motore'],
@@ -6646,7 +6655,7 @@ function guideRarityLegendHTML(){
   return `<div class="guide-img-wrap"><div class="guide-rarity-mocks">${mocks}</div></div>`;
 }
 function guideArchetypeTableHTML(){
-  const entries = {
+  const entriesIt = {
     'Rain Master': { bullets:['+18 ritmo sul bagnato','45% di errori in meno','−5 in qualifica sull\'asciutto'], closing:'Quando arriva la pioggia, può cambiare completamente il risultato della gara.' },
     'Pole Specialist': { bullets:['+20 netto in qualifica','12% di possibilità di ottenere un ulteriore bonus'], closing:'Parte spesso più avanti rispetto al suo reale valore sul passo gara.' },
     'The Hunter': { bullets:['+18 nei sorpassi','+10 alle ripartenze dopo Safety Car'], closing:'Il suo stile estremamente aggressivo aumenta però il rischio di incidente.' },
@@ -6660,6 +6669,35 @@ function guideArchetypeTableHTML(){
     'Strategic Mind': { bullets:['−4 in qualifica','+15 utilizzando una strategia alternativa'], closing:'Premia chi è disposto a rischiare e a leggere la gara in modo diverso dagli avversari.' },
     'Rookie Wonder': { bullets:['−10 sotto pressione all\'inizio','migliora concretamente dopo ogni podio conquistato'], closing:'È un investimento a lungo termine: più cresce, più il suo potenziale emerge.' },
   };
+  const entriesEn = {
+    'Rain Master': { bullets:['+18 pace in the wet','45% fewer mistakes','−5 in qualifying on a dry track'], closing:'When the rain comes, it can completely change the race result.' },
+    'Pole Specialist': { bullets:['+20 net in qualifying','12% chance of an extra bonus'], closing:'Often starts higher than their real race-pace value.' },
+    'The Hunter': { bullets:['+18 on overtakes','+10 at restarts after a Safety Car'], closing:'Their extremely aggressive style raises the risk of a crash, though.' },
+    'The Machine': { bullets:['variance halved','retirement risk halved','output rarely dips below its floor'], closing:"It's THE GOAT's archetype." },
+    'Comeback King': { bullets:['−9 in qualifying','+20 if starting beyond P10','recovery amplified by 60% after a Safety Car'], closing:'The further back they start, the more dangerous they become.' },
+    'Tire Whisperer': { bullets:['tire wear reduced by 22%','15% chance of skipping a pit stop'], closing:'Especially effective on circuits that put heavy stress on tires.' },
+    'Last Lap Killer': { bullets:['less effective early on','a massive +25 in the final laps'], closing:'Their performance climbs as the laps go by, right when the race is being decided.' },
+    'Street King': { bullets:['+16 on tight street circuits','−7 on circuits dominated by high-speed straights','traffic annoyance halved'], closing:'In the chaos of city streets, they find space where others see only walls.' },
+    'Ice Man': { bullets:['+20 under pressure','bonus in the closing stages of the race'], closing:"Slightly less aggressive than average, but rarely loses composure when the result is on a knife's edge." },
+    'Wild Card': { bullets:['much higher aggression','variance almost 2.5× the norm'], closing:'Can turn a race into a memorable feat or a complete disaster.' },
+    'Strategic Mind': { bullets:['−4 in qualifying','+15 when using an alternative strategy'], closing:'Rewards those willing to take risks and read the race differently from their rivals.' },
+    'Rookie Wonder': { bullets:['−10 under pressure early on','improves concretely after every podium earned'], closing:'A long-term investment: the more they grow, the more their potential shows.' },
+  };
+  const entriesEs = {
+    'Rain Master': { bullets:['+18 de ritmo en mojado','45% menos errores','−5 en clasificación en seco'], closing:'Cuando llega la lluvia, puede cambiar por completo el resultado de la carrera.' },
+    'Pole Specialist': { bullets:['+20 neto en clasificación','12% de probabilidad de un bonus adicional'], closing:'Suele salir más adelante de lo que su ritmo real de carrera merece.' },
+    'The Hunter': { bullets:['+18 en adelantamientos','+10 en las reanudaciones tras Safety Car'], closing:'Su estilo extremadamente agresivo aumenta el riesgo de accidente.' },
+    'The Machine': { bullets:['varianza reducida a la mitad','riesgo de retirada reducido a la mitad','rendimiento raramente por debajo de su mínimo'], closing:'Es el arquetipo de THE GOAT.' },
+    'Comeback King': { bullets:['−9 en clasificación','+20 si parte más allá de la P10','remontada amplificada un 60% tras un Safety Car'], closing:'Cuanto más atrás sale, más peligroso se vuelve.' },
+    'Tire Whisperer': { bullets:['desgaste de neumáticos reducido un 22%','15% de probabilidad de saltarse una parada'], closing:'Especialmente eficaz en circuitos que exigen mucho a los neumáticos.' },
+    'Last Lap Killer': { bullets:['menos eficaz en las fases iniciales','enorme +25 en las últimas vueltas'], closing:'Su rendimiento aumenta con el paso de las vueltas, justo cuando se decide la carrera.' },
+    'Street King': { bullets:['+16 en trazados urbanos estrechos','−7 en circuitos dominados por rectas de alta velocidad','molestia por tráfico reducida a la mitad'], closing:'En el caos de las calles urbanas encuentra espacio donde otros solo ven muros.' },
+    'Ice Man': { bullets:['+20 bajo presión','bonus en las fases finales de la carrera'], closing:'Es ligeramente menos agresivo de lo normal, pero rara vez pierde la cabeza cuando el resultado está en juego.' },
+    'Wild Card': { bullets:['agresividad mucho más alta','varianza casi 2,5 veces superior a la norma'], closing:'Puede convertir una carrera en una hazaña memorable o en un desastre completo.' },
+    'Strategic Mind': { bullets:['−4 en clasificación','+15 usando una estrategia alternativa'], closing:'Premia a quien está dispuesto a arriesgar y a leer la carrera de forma distinta a sus rivales.' },
+    'Rookie Wonder': { bullets:['−10 bajo presión al principio','mejora de forma concreta tras cada podio conseguido'], closing:'Es una inversión a largo plazo: cuanto más crece, más se revela su potencial.' },
+  };
+  const entries = currentLang==='en' ? entriesEn : (currentLang==='es' ? entriesEs : entriesIt);
   const rows = Object.keys(TRAIT_TABLE).map(name=>{
     const e = entries[name] || {bullets:[], closing:''};
     const bullets = e.bullets.map(b=> `<li>${b}</li>`).join('');
@@ -6673,6 +6711,48 @@ function guideArchetypeTableHTML(){
 }
 function guideGoatChapterHTML(){
   const img = `<img class="guide-goat-portrait" src="${GOAT_GUIDE_IMG_SRC}" alt="THE GOAT">`;
+  if(currentLang==='en'){
+    return `<div class="guide-img-wrap"><div class="guide-goat-chapter">
+    ${img}
+    <div class="guide-goat-stats">
+      <div style="font-weight:900;font-size:15px;color:var(--immortal);">THE GOAT</div>
+      <div class="dim" style="font-size:10.5px;margin-bottom:4px;">Italy · Rating 100 · Immortal Rarity · "The Machine" Archetype</div>
+      <div>THE GOAT is one of only 3 Immortal drivers in the entire game and holds a rating of 100 in every single stat. Their archetype, The Machine, further amplifies this dominance through:</div>
+      <ul style="margin:6px 0 8px 18px;padding:0;">
+        <li>extremely low variance</li>
+        <li>a very high performance floor</li>
+        <li>retirement risk halved</li>
+        <li>unmatched reliability</li>
+      </ul>
+      <div style="margin-top:6px;"><b style="color:var(--text);">Bonus</b><br>+20 to all contextual stats.</div>
+      <div style="margin-top:8px;"><b style="color:var(--text);">Risk variable</b><br>When fighting directly for the win, there's a 15% chance of a devastating mistake — the only variable capable of breaking an otherwise dominant performance in the moments of highest tension.</div>
+      <div style="margin-top:8px;"><b style="color:var(--text);">Odds of finding them</b><br>The chance of getting THE GOAT in a single draw is roughly <b>1 in 6,000</b>. During every driver-dedicated turn, the Draft considers the best of 3 independent draws: the effective chance of seeing them appear among the options gets closer to <b>1 in 2,000 per turn</b> — an exceptionally rare chance.</div>
+      <div class="guide-goat-oddsbar"><div class="guide-goat-oddsbar-fill"></div></div>
+      <div style="margin-top:8px;font-style:italic;color:var(--dim);">When THE GOAT shows up at the Draft or during scouting, it's not just another offer: it's one of the biggest events that can happen in a career. You might never see them again.</div>
+    </div>
+  </div></div>`;
+  }
+  if(currentLang==='es'){
+    return `<div class="guide-img-wrap"><div class="guide-goat-chapter">
+    ${img}
+    <div class="guide-goat-stats">
+      <div style="font-weight:900;font-size:15px;color:var(--immortal);">THE GOAT</div>
+      <div class="dim" style="font-size:10.5px;margin-bottom:4px;">Italia · Rating 100 · Rareza Immortal · Arquetipo "The Machine"</div>
+      <div>THE GOAT es uno de los solo 3 pilotos Immortal de todo el juego y tiene rating 100 en cada estadística. Su arquetipo, The Machine, potencia aún más ese dominio mediante:</div>
+      <ul style="margin:6px 0 8px 18px;padding:0;">
+        <li>varianza extremadamente baja</li>
+        <li>un mínimo de rendimiento altísimo</li>
+        <li>riesgo de retirada reducido a la mitad</li>
+        <li>fiabilidad sin comparación</li>
+      </ul>
+      <div style="margin-top:6px;"><b style="color:var(--text);">Bonus</b><br>+20 a todas las estadísticas contextuales.</div>
+      <div style="margin-top:8px;"><b style="color:var(--text);">Variable de riesgo</b><br>Cuando lucha directamente por la victoria, existe un 15% de probabilidad de un error devastador — la única variable capaz de interrumpir una actuación por lo demás dominante en los momentos de máxima tensión.</div>
+      <div style="margin-top:8px;"><b style="color:var(--text);">Probabilidad de encontrarlo</b><br>La probabilidad de obtener a THE GOAT en una sola extracción es de aproximadamente <b>1 entre 6.000</b>. En cada turno dedicado a los pilotos, el Draft considera lo mejor de 3 extracciones independientes: la probabilidad efectiva de verlo aparecer entre las opciones se acerca por tanto a <b>1 entre 2.000 por turno</b> — una posibilidad excepcionalmente rara.</div>
+      <div class="guide-goat-oddsbar"><div class="guide-goat-oddsbar-fill"></div></div>
+      <div style="margin-top:8px;font-style:italic;color:var(--dim);">Cuando THE GOAT aparece en el Draft o durante el scouting, no es una propuesta cualquiera: es uno de los eventos más importantes que pueden ocurrir en una carrera deportiva. Puede que no vuelvas a encontrarlo nunca más.</div>
+    </div>
+  </div></div>`;
+  }
   return `<div class="guide-img-wrap"><div class="guide-goat-chapter">
     ${img}
     <div class="guide-goat-stats">
@@ -6696,27 +6776,58 @@ function guideGoatChapterHTML(){
 function guideSynergyStackDemoHTML(){
   const ids = Object.keys(MENTALITA_DEFS);
   const m = MENTALITA_DEFS[ids[2]];
+  const lbl = mentaLabel(ids[2]);
   const circle = (lit)=> `<div class="sem-circle mini${lit?' full':''}" style="--glow:${m.color};">
     <div class="sem-half" style="background:${m.color};"></div><div class="sem-half" style="background:${m.color};"></div>
   </div>`;
+  const fireCircles = Object.keys(MENTALITA_DEFS).slice(0,3).map(id=>{
+    const mm = MENTALITA_DEFS[id];
+    return `<div class="sem-circle mini full on-fire" style="--glow:${mm.color};"><div class="sem-half" style="background:${mm.color};"></div><div class="sem-half" style="background:${mm.color};"></div></div>`;
+  }).join('');
+  if(currentLang==='en'){
+    return `
+    <div class="guide-special-demo">
+      <div class="gsd-title" style="color:${m.color};">⚡ Stacked synergies — 2 pairs of the same mentality</div>
+      <div class="gsd-circles">${circle(true)}${circle(true)}</div>
+      <div class="guide-section-body">If you have <b>2 pairs</b> (4 pieces in total) sharing the same "${lbl}" mentality, each pair's flat bonus is replaced by a <b>+45%</b> multiplier on the whole team's rating. With <b>3 or more pairs</b> of the same mentality, the multiplier rises to <b>+90%</b> — almost double the rating. It's one of the most powerful (and rarest to build) situations in the game: worth planning scouting and development around a single mentality if you already have 2-3 pieces sharing it.</div>
+    </div>
+    <div class="guide-special-demo semaforo-widget semaforo-on-fire" style="border:1px solid rgba(255,106,26,0.4);">
+      <div class="gsd-title" style="color:var(--amber);">🔥 "On fire" semaphore — 3+ different synergies together</div>
+      <div class="gsd-circles">${fireCircles}</div>
+      <div class="guide-section-body">If instead you have <b>3 or more pairs of DIFFERENT mentalities</b> active at the same time (none repeated), the whole semaphore visually catches fire and the team gets an extra <b>+5%</b> rating, added on top of the flat bonuses each pair already earned. It's the sign your team is well-rounded in depth, not just stacked on a single mentality — keep an eye on it in the Hub and Pit Lane: if you see the semaphore light up like that, you're doing something right.</div>
+    </div>`;
+  }
+  if(currentLang==='es'){
+    return `
+    <div class="guide-special-demo">
+      <div class="gsd-title" style="color:${m.color};">⚡ Sinergias apiladas — 2 parejas de la misma mentalidad</div>
+      <div class="gsd-circles">${circle(true)}${circle(true)}</div>
+      <div class="guide-section-body">Si tienes <b>2 parejas</b> (4 piezas en total) que comparten la misma mentalidad "${lbl}", el bonus fijo de cada pareja se sustituye por un multiplicador del <b>+45%</b> sobre el rating de toda la escudería. Con <b>3 o más parejas</b> de la misma mentalidad, el multiplicador sube al <b>+90%</b> — casi el doble del rating. Es una de las situaciones más poderosas (y más raras de conseguir) del juego: vale la pena planificar el scouting y el desarrollo en torno a una sola mentalidad si ya tienes 2-3 piezas que la comparten.</div>
+    </div>
+    <div class="guide-special-demo semaforo-widget semaforo-on-fire" style="border:1px solid rgba(255,106,26,0.4);">
+      <div class="gsd-title" style="color:var(--amber);">🔥 Semáforo "en llamas" — 3+ sinergias distintas juntas</div>
+      <div class="gsd-circles">${fireCircles}</div>
+      <div class="guide-section-body">Si en cambio tienes <b>3 o más parejas de mentalidades DISTINTAS</b> activas al mismo tiempo (ninguna repetida), todo el semáforo se enciende visualmente y la escudería recibe un <b>+5%</b> adicional de rating, sumado a los bonus fijos que cada pareja ya obtuvo. Es la señal de que tu equipo está bien equilibrado en profundidad, no solo apilado en una sola mentalidad — vigílalo en el Hub y en Pit Lane: si ves el semáforo encenderse así, estás haciendo algo bien.</div>
+    </div>`;
+  }
   return `
   <div class="guide-special-demo">
     <div class="gsd-title" style="color:${m.color};">⚡ Sinergie impilate — 2 coppie della stessa mentalità</div>
     <div class="gsd-circles">${circle(true)}${circle(true)}</div>
-    <div class="guide-section-body">Se hai <b>2 coppie</b> (4 pezzi in tutto) che condividono la stessa mentalità "${m.label}", il bonus flat di ogni coppia viene sostituito da un moltiplicatore del <b>+45%</b> sul rating dell'intera scuderia. Con <b>3 o più coppie</b> della stessa mentalità, il moltiplicatore sale al <b>+90%</b> — quasi il doppio del rating. È una delle situazioni più potenti (e più rare da costruire) del gioco: vale la pena pianificare scouting e sviluppo attorno a un'unica mentalità se ti capitano già 2-3 pezzi che la condividono.</div>
+    <div class="guide-section-body">Se hai <b>2 coppie</b> (4 pezzi in tutto) che condividono la stessa mentalità "${lbl}", il bonus flat di ogni coppia viene sostituito da un moltiplicatore del <b>+45%</b> sul rating dell'intera scuderia. Con <b>3 o più coppie</b> della stessa mentalità, il moltiplicatore sale al <b>+90%</b> — quasi il doppio del rating. È una delle situazioni più potenti (e più rare da costruire) del gioco: vale la pena pianificare scouting e sviluppo attorno a un'unica mentalità se ti capitano già 2-3 pezzi che la condividono.</div>
   </div>
   <div class="guide-special-demo semaforo-widget semaforo-on-fire" style="border:1px solid rgba(255,106,26,0.4);">
     <div class="gsd-title" style="color:var(--amber);">🔥 Semaforo "in fiamme" — 3+ sinergie diverse insieme</div>
-    <div class="gsd-circles">${Object.keys(MENTALITA_DEFS).slice(0,3).map(id=>{
-      const mm = MENTALITA_DEFS[id];
-      return `<div class="sem-circle mini full on-fire" style="--glow:${mm.color};"><div class="sem-half" style="background:${mm.color};"></div><div class="sem-half" style="background:${mm.color};"></div></div>`;
-    }).join('')}</div>
+    <div class="gsd-circles">${fireCircles}</div>
     <div class="guide-section-body">Se invece hai <b>3 o più coppie di mentalità DIVERSE</b> attive contemporaneamente (nessuna ripetuta), l'intero semaforo prende fuoco visivamente e la scuderia riceve un ulteriore <b>+5%</b> di rating, sommato ai bonus flat già ottenuti da ciascuna coppia. È il segnale che la tua squadra è ben assortita in profondità, non solo su una singola mentalità — tienilo d'occhio nell'Hub e in Pit Lane: se vedi il semaforo animarsi così, stai facendo qualcosa di giusto.</div>
   </div>`;
 }
 
 function guideWeightBarsHTML(){
-  const labels = { pilota:'Pilota', motore:'Motore', telaio:'Telaio', aero:'Aero', gomme:'Gomme', stratega:'Team Pr.' };
+  const labelsIt = { pilota:'Pilota', motore:'Motore', telaio:'Telaio', aero:'Aero', gomme:'Gomme', stratega:'Team Pr.' };
+  const labelsEn = { pilota:'Driver', motore:'Engine', telaio:'Chassis', aero:'Aero', gomme:'Tires', stratega:'Team Pr.' };
+  const labelsEs = { pilota:'Piloto', motore:'Motor', telaio:'Chasis', aero:'Aero', gomme:'Neumáticos', stratega:'Team Pr.' };
+  const labels = currentLang==='en' ? labelsEn : (currentLang==='es' ? labelsEs : labelsIt);
   const maxW = Math.max(...Object.values(WEIGHTS));
   const rows = Object.keys(WEIGHTS).map(k=>{
     const pct = Math.round(WEIGHTS[k]*100);
@@ -6732,16 +6843,45 @@ function guideWeightBarsHTML(){
 function guideSemaforoDemoHTML(){
   const ids = Object.keys(MENTALITA_DEFS);
   const m1 = MENTALITA_DEFS[ids[0]], m2 = MENTALITA_DEFS[ids[5]];
+  const capLit = { it:(l,c)=>`<b style="color:${c};">Coppia accesa</b> — due pezzi diversi condividono la mentalità "${l}": entrambi ricevono +${SYNERGY_BONUS} rating.`,
+                    en:(l,c)=>`<b style="color:${c};">Lit-up pair</b> — two different pieces share the "${l}" mentality: both get +${SYNERGY_BONUS} rating.`,
+                    es:(l,c)=>`<b style="color:${c};">Pareja encendida</b> — dos piezas distintas comparten la mentalidad "${l}": ambas reciben +${SYNERGY_BONUS} de rating.` };
+  const capOff = { it:(l)=>`<b style="color:var(--dim);">Mezzo cerchio spento</b> — "${l}" non ha ancora un secondo pezzo che la condivide: nessun bonus finché non trovi l'abbinamento.`,
+                    en:(l)=>`<b style="color:var(--dim);">Half-lit circle</b> — "${l}" doesn't have a second piece sharing it yet: no bonus until you find the match.`,
+                    es:(l)=>`<b style="color:var(--dim);">Medio círculo apagado</b> — "${l}" todavía no tiene una segunda pieza que la comparta: sin bonus hasta que encuentres la pareja.` };
+  const lang = I18N[currentLang] ? currentLang : 'it';
   return `<div class="guide-img-wrap"><div class="guide-semaforo-demo">
     <div class="guide-sem-circle"><div class="guide-sem-half" style="background:${m1.color};"></div><div class="guide-sem-half" style="background:${m1.color};"></div></div>
-    <div class="guide-sem-caption"><b style="color:${m1.color};">Coppia accesa</b> — due pezzi diversi condividono la mentalità "${m1.label}": entrambi ricevono +${SYNERGY_BONUS} rating.</div>
+    <div class="guide-sem-caption">${capLit[lang](mentaLabel(ids[0]), m1.color)}</div>
   </div></div>
   <div class="guide-img-wrap"><div class="guide-semaforo-demo">
     <div class="guide-sem-circle"><div class="guide-sem-half" style="background:${m2.color};"></div><div class="guide-sem-half" style="background:rgba(255,255,255,0.06);"></div></div>
-    <div class="guide-sem-caption"><b style="color:var(--dim);">Mezzo cerchio spento</b> — "${m2.label}" non ha ancora un secondo pezzo che la condivide: nessun bonus finché non trovi l'abbinamento.</div>
+    <div class="guide-sem-caption">${capOff[lang](mentaLabel(ids[5]))}</div>
   </div></div>`;
 }
 function guideAnnotatedCardHTML(){
+  if(currentLang==='en'){
+    return `<div class="guide-img-wrap"><div class="guide-card-annotated">
+    <div class="ga-row"><span class="ga-key">Archetype</span><span class="ga-val">"Comeback King" — triggers a package of real in-race effects (see the archetypes chapter)</span></div>
+    <div class="ga-row"><span class="ga-key">Rating</span><span class="ga-val">65 — the overall estimate, the one that weighs into the team strength formula</span></div>
+    <div class="ga-row"><span class="ga-key">Rarity</span><span class="ga-val">Common — starting tier: typically lower rating, but not always</span></div>
+    <div class="ga-row"><span class="ga-key">Bonus</span><span class="ga-val">"+20 if starting beyond P10" — specific condition, only triggers in-race if true</span></div>
+    <div class="ga-row"><span class="ga-key">Malus</span><span class="ga-val">"−9 Qualifying" — fixed trade-off, always active</span></div>
+    <div class="ga-row"><span class="ga-key">Ability</span><span class="ga-val">"COMEBACK KING: amplified recovery after Safety Car" — unique narrative/situational effect of the piece</span></div>
+    <div class="ga-row"><span class="ga-key">Synergy</span><span class="ga-val">"Impulsive" — the mentality that counts for the semaphore, independent from bonus/malus/ability</span></div>
+  </div></div>`;
+  }
+  if(currentLang==='es'){
+    return `<div class="guide-img-wrap"><div class="guide-card-annotated">
+    <div class="ga-row"><span class="ga-key">Arquetipo</span><span class="ga-val">"Comeback King" — activa un paquete de efectos reales en carrera (ver capítulo dedicado a los arquetipos)</span></div>
+    <div class="ga-row"><span class="ga-key">Rating</span><span class="ga-val">65 — la estimación general, la que pesa en la fórmula de fuerza de escudería</span></div>
+    <div class="ga-row"><span class="ga-key">Rareza</span><span class="ga-val">Common — franja de partida: rating típicamente más bajo, pero no siempre</span></div>
+    <div class="ga-row"><span class="ga-key">Bonus</span><span class="ga-val">"+20 si parte más allá de la P10" — condición específica, se activa solo en carrera si se cumple</span></div>
+    <div class="ga-row"><span class="ga-key">Malus</span><span class="ga-val">"−9 Clasificación" — contrapartida fija, siempre activa</span></div>
+    <div class="ga-row"><span class="ga-key">Habilidad</span><span class="ga-val">"COMEBACK KING: remontada amplificada tras Safety Car" — efecto narrativo/situacional único de la pieza</span></div>
+    <div class="ga-row"><span class="ga-key">Sinergia</span><span class="ga-val">"Impulsivo" — la mentalidad que cuenta para el semáforo, independiente de bonus/malus/habilidad</span></div>
+  </div></div>`;
+  }
   return `<div class="guide-img-wrap"><div class="guide-card-annotated">
     <div class="ga-row"><span class="ga-key">Archetipo</span><span class="ga-val">"Comeback King" — attiva un pacchetto di effetti reali in gara (vedi capitolo dedicato agli archetipi)</span></div>
     <div class="ga-row"><span class="ga-key">Rating</span><span class="ga-val">65 — la stima complessiva, quella che pesa nella formula della forza scuderia</span></div>
@@ -6755,12 +6895,12 @@ function guideAnnotatedCardHTML(){
 function guideMentalityGridHTML(){
   const chips = Object.keys(MENTALITA_DEFS).map(id=>{
     const m = MENTALITA_DEFS[id];
-    return `<span class="guide-mentality-chip" style="background:${m.color};">${m.label}</span>`;
+    return `<span class="guide-mentality-chip" style="background:${m.color};">${mentaLabel(id)}</span>`;
   }).join('');
   return `<div class="guide-img-wrap"><div class="guide-mentality-grid">${chips}</div></div>`;
 }
 function guidePanelHTML(){
-  const sections = [
+  const sectionsIt = [
     { title:'Obiettivo della Carriera', body:`
       <p>Ogni carriera è una stagione: 10 Gran Premi (Veloce) o 20 (Completa). Vinci punti in ogni gara con entrambi i tuoi piloti, per due classifiche separate e indipendenti: <b>Piloti</b> (il singolo pilota con più punti) e <b>Costruttori</b> (la somma dei punti dei tuoi due piloti contro quella delle scuderie rivali). Puoi vincere l'una senza l'altra, o entrambe nella stessa stagione — un vero "Grande Slam".</p>` },
     { title:'La Scuderia: Rating e Peso di Ciascun Ruolo', body:`
@@ -6812,6 +6952,111 @@ function guidePanelHTML(){
     { title:'Sala Trofei, Museo Dynasty e Obiettivi', body:`
       <p>La <b>Sala Trofei</b> mostra un trofeo per ogni circuito del gioco: dorato se l'hai già vinto, spento se ancora no — persiste tra tutte le tue carriere. Il <b>Museo Dynasty</b> colleziona ogni pilota e componente che hai posseduto almeno una volta, in qualunque carriera. Gli <b>Obiettivi</b> sono traguardi speciali (stagioni perfette, sfide Hardcore, stili di gioco particolari) che si sbloccano automaticamente mentre giochi: si trovano nella voce dedicata del menu.</p>` },
   ];
+  const sectionsEn = [
+    { title:'Career Goal', body:`
+      <p>Every career is a season: 10 Grands Prix (Quick) or 20 (Full). Score points in every race with both your drivers, for two separate, independent standings: <b>Drivers</b> (the single driver with the most points) and <b>Constructors</b> (the sum of your two drivers' points against rival teams). You can win one without the other, or both in the same season — a true "Grand Slam".</p>` },
+    { title:'The Team: Rating and the Weight of Each Role', body:`
+      <p>Your team is made up of 7 pieces: two drivers and five shared components (engine, chassis, aerodynamics, tires, team principal/strategy). Each piece has a <b>rating</b> from 1 to 100, but they DON'T all count equally toward the team's overall strength: a driver weighs almost twice as much as a single component. Here are the real weights used by the game:</p>
+      ${guideWeightBarsHTML()}
+      <p>That's why a strong driver in a mediocre car often outperforms a perfect car with a weak driver — worth keeping in mind both at the Draft and when deciding where to invest in Pit Lane.</p>` },
+    { title:'Rarity: what really changes', body:`
+      <p>Every driver and component belongs to a rarity tier, from most common to most exceptional:</p>
+      ${guideRarityLegendHTML()}
+      <p>Rarity mainly affects the <b>expected average rating</b> of that piece (an Immortal tends to have a much higher rating than a Common) and how rare it is to find among the options offered by the Draft or scouting. It's not an absolute guarantee though: a lucky Common can still have a respectable rating, and a Legendary might come with a malus that's awkward for your racing style.</p>` },
+    { title:'Reading a Card: Archetype, Bonus, Malus, Ability, Synergy', body:`
+      <p>Every Card contains several fields. Some may look similar, but they indicate different aspects of the driver or component:</p>
+      <ul style="margin:2px 0 10px 18px;padding:0;">
+        <li><b>Archetype</b> — for drivers this isn't just a flavor name: it identifies a real package of effects applied during race simulation.</li>
+        <li><b>Rating</b> — the piece's overall evaluation, the value used to calculate team strength.</li>
+        <li><b>Rarity</b> — the tier it belongs to. A Common generally starts from lower values than higher rarities, but won't necessarily be useless.</li>
+        <li><b>Bonus</b> — a conditional effect: it only triggers when the stated condition is met during the race.</li>
+        <li><b>Malus</b> — a fixed penalty, always active.</li>
+        <li><b>Ability</b> — describes in plain language the archetype's real behavior. It's not an effect separate from the archetype.</li>
+        <li><b>Synergy</b> — the piece's mentality, used by the Semaphore system. It's independent from bonus, malus and ability.</li>
+      </ul>
+      <p>Here's a real example, annotated field by field:</p>
+      ${guideAnnotatedCardHTML()}
+      <p><b>Important, pay attention:</b> for <b>drivers</b>, the archetype triggers real mechanical effects within the simulation (see the dedicated chapter right below). For <b>components</b> instead, the archetype is purely narrative: their effectiveness depends on rating and detailed stats, already summarized through bonus and malus.</p>` },
+    { title:"Driver Archetypes: what each one really does", body:`
+      <p>These are the 12 archetypes a driver can have, with the exact mechanical effect they bring to the race — not simplifications:</p>
+      ${guideArchetypeTableHTML()}` },
+    { title:'THE GOAT', body: guideGoatChapterHTML() },
+    { title:'Synergies: how the Semaphore really works', body:`
+      <p>Every piece (driver or component) also has a hidden <b>mentality</b>, one of 15 available in the game:</p>
+      ${guideMentalityGridHTML()}
+      <p>When <b>two different pieces on your team share the same mentality</b>, they form a pair: both get +${SYNERGY_BONUS} to their rating, permanently, as long as both stay on the team. The "semaphore" you see in the interface is exactly the visual representation of these pairs:</p>
+      ${guideSemaforoDemoHTML()}
+      <p>That's the basics. But there are two much rarer, much stronger <b>special conditions</b>, worth actively chasing instead of leaving to chance:</p>
+      ${guideSynergyStackDemoHTML()}` },
+    { title:'Circuits: not all the same', body:`
+      <p>Every Grand Prix is run on a circuit with its own characteristics: track type (high-speed, street, mixed...), weather, chance of rain and Safety Car, how much it stresses tires and engine, and above all a <b>dominant component</b> — the one that matters most for the result on that specific circuit. On a circuit where tires are the dominant component, for example, a good tire department counts more than usual, even with the same overall team rating.</p>` },
+    { title:'The Draft: build your starting team', body:`
+      <p>At the start of every career you choose, turn by turn, your two drivers and five components. Each turn you're offered a candidate: you can accept it or, if you still have rerolls available, request a different one. The number of rerolls depends on the chosen difficulty — the higher the difficulty, the less choice you have, and the more the synergy between the pieces you get matters over their raw rating.</p>` },
+    { title:'Pit Lane: development and scouting', body:`
+      <p>After every race, the budget earned from your results can be invested in two ways, or saved for later:</p>
+      <p><b>Development (permanent upgrade)</b> — you upgrade an existing component. Choose how much to risk with a slider: minimum investment (higher risk, up to 50%, but cheaper) up to maximum investment (lowest risk, down to 5%, but pricier, up to 2.2× the base cost). If the investment fails, a malus is applied instead of the improvement. Risk never reaches zero, even at maximum investment.</p>
+      <p><b>Scouting (replacement)</b> — you replace a piece with a new candidate. Unlike development, there's no failure risk here: if you have the budget, you get exactly the piece you see. The replaced piece can't be recovered in that career, but it enriches the Dynasty Museum.</p>` },
+    { title:'Rivalry: who you need to beat', body:`
+      <p>The game assigns you one or more rival teams based on your current strength: they're the direct opponents to beat for the Constructors' standings. If you clearly overtake a rival, you get a new, tougher one — the challenge adapts to your progress instead of staying fixed all season.</p>` },
+    { title:'Difficulty and Season Length', body:`
+      <p><b>Season length</b> (Quick = 10 races, Full = 20 races) defines how many races you run. In the Full Season, between race 10 and race 11 there's a unique event, the <b>Mid Season Draft</b>: you can re-evaluate both drivers (2 candidates each, no risk) — it's the only chance in the whole season to do so, since driver scouting stays locked for the rest of the Full Season.</p>
+      <p><b>Difficulty</b> (Easy → Hardcore) mainly affects the rerolls available at the Draft — the higher it is, the less choice you have, and the more on-the-spot decisions matter.</p>` },
+    { title:'Trophy Room, Dynasty Museum and Achievements', body:`
+      <p>The <b>Trophy Room</b> shows a trophy for every circuit in the game: gold if you've already won it, dim if not yet — it persists across all your careers. The <b>Dynasty Museum</b> collects every driver and component you've ever owned, in any career. <b>Achievements</b> are special milestones (perfect seasons, Hardcore challenges, particular playstyles) that unlock automatically as you play: you'll find them in the dedicated menu entry.</p>` },
+  ];
+  const sectionsEs = [
+    { title:'Objetivo de la Carrera Deportiva', body:`
+      <p>Cada carrera deportiva es una temporada: 10 Grandes Premios (Rápida) o 20 (Completa). Suma puntos en cada carrera con tus dos pilotos, para dos clasificaciones separadas e independientes: <b>Pilotos</b> (el piloto individual con más puntos) y <b>Constructores</b> (la suma de los puntos de tus dos pilotos frente a las escuderías rivales). Puedes ganar una sin la otra, o ambas en la misma temporada — un verdadero "Grande Slam".</p>` },
+    { title:'La Escudería: Rating y Peso de Cada Rol', body:`
+      <p>Tu escudería está formada por 7 piezas: dos pilotos y cinco componentes compartidos (motor, chasis, aerodinámica, neumáticos, team principal/estrategia). Cada pieza tiene un <b>rating</b> de 1 a 100, pero NO cuentan todas igual en la fuerza total de la escudería: un piloto pesa casi el doble que un solo componente. Estos son los pesos reales usados por el juego:</p>
+      ${guideWeightBarsHTML()}
+      <p>Por eso un piloto fuerte con un coche mediocre a menudo rinde más que un coche perfecto con un piloto flojo — vale la pena tenerlo en cuenta tanto en el Draft como al elegir dónde invertir en Pit Lane.</p>` },
+    { title:'Rareza: qué cambia realmente', body:`
+      <p>Cada piloto y componente pertenece a una franja de rareza, de la más común a la más excepcional:</p>
+      ${guideRarityLegendHTML()}
+      <p>La rareza influye sobre todo en el <b>rating medio esperado</b> de esa pieza (un Immortal tiende a tener un rating mucho más alto que un Common) y en lo raro que es encontrarlo entre las opciones propuestas por el Draft o el scouting. No es una garantía absoluta: un Common afortunado puede tener igualmente un rating respetable, y un Legendary puede tocarte con un malus incómodo para tu estilo de carrera.</p>` },
+    { title:'Leer una Card: Arquetipo, Bonus, Malus, Habilidad, Sinergia', body:`
+      <p>Cada Card contiene varios campos. Algunos pueden parecer similares, pero indican aspectos diferentes del piloto o del componente:</p>
+      <ul style="margin:2px 0 10px 18px;padding:0;">
+        <li><b>Arquetipo</b> — para los pilotos no es solo un nombre evocador: identifica un paquete real de efectos aplicados durante la simulación de la carrera.</li>
+        <li><b>Rating</b> — la valoración general de la pieza, el valor usado para calcular la fuerza de la escudería.</li>
+        <li><b>Rareza</b> — la franja a la que pertenece. Un Common suele partir de valores más bajos que las rarezas superiores, pero no por eso será inútil.</li>
+        <li><b>Bonus</b> — un efecto condicional: se activa solo cuando se cumple la condición indicada durante la carrera.</li>
+        <li><b>Malus</b> — una penalización fija, siempre activa.</li>
+        <li><b>Habilidad</b> — describe en lenguaje natural el comportamiento real del arquetipo. No es un efecto separado del arquetipo.</li>
+        <li><b>Sinergia</b> — la mentalidad de la pieza, usada por el sistema del Semáforo. Es independiente de bonus, malus y habilidad.</li>
+      </ul>
+      <p>Aquí tienes un ejemplo real, anotado campo por campo:</p>
+      ${guideAnnotatedCardHTML()}
+      <p><b>Atención, esto es importante:</b> para los <b>pilotos</b>, el arquetipo activa efectos mecánicos reales dentro de la simulación (ver el capítulo dedicado justo abajo). Para los <b>componentes</b> en cambio el arquetipo es puramente narrativo: su eficacia depende del rating y de las estadísticas detalladas, ya resumidas mediante bonus y malus.</p>` },
+    { title:'Los Arquetipos de los Pilotos: el efecto real de cada uno', body:`
+      <p>Estos son los 12 arquetipos que puede tener un piloto, con el efecto mecánico exacto que aporta a la carrera — no simplificaciones:</p>
+      ${guideArchetypeTableHTML()}` },
+    { title:'THE GOAT', body: guideGoatChapterHTML() },
+    { title:'Las Sinergias: cómo funciona realmente el Semáforo', body:`
+      <p>Cada pieza (piloto o componente) tiene también una <b>mentalidad</b> oculta, una de las 15 disponibles en el juego:</p>
+      ${guideMentalityGridHTML()}
+      <p>Cuando <b>dos piezas distintas de tu escudería comparten la misma mentalidad</b>, se forma una pareja: ambas reciben +${SYNERGY_BONUS} al rating, de forma permanente mientras ambas sigan en el equipo. El "semáforo" que ves en la interfaz es precisamente la representación visual de estas parejas:</p>
+      ${guideSemaforoDemoHTML()}
+      <p>Hasta aquí lo básico. Pero hay dos <b>condiciones especiales</b> mucho más raras y mucho más fuertes, que vale la pena perseguir activamente en lugar de dejar al azar:</p>
+      ${guideSynergyStackDemoHTML()}` },
+    { title:'Los Circuitos: no son todos iguales', body:`
+      <p>Cada Gran Premio se disputa en un circuito con características propias: tipo de trazado (alta velocidad, urbano, mixto...), clima, probabilidad de lluvia y de Safety Car, cuánto exige a neumáticos y motor, y sobre todo un <b>componente dominante</b> — el que más pesa en el resultado en ese circuito específico. En un circuito donde los neumáticos son el componente dominante, por ejemplo, un buen departamento de neumáticos cuenta más de lo habitual, incluso con el mismo rating general de escudería.</p>` },
+    { title:'El Draft: construye tu escudería inicial', body:`
+      <p>Al principio de cada carrera deportiva eliges, turno tras turno, a los dos pilotos y los cinco componentes. En cada turno se te propone un candidato: puedes aceptarlo o, si aún tienes rerolls disponibles, pedir uno diferente. El número de rerolls depende de la dificultad elegida — cuanto más alta es la dificultad, menos margen de elección tienes, y más cuenta la sinergia entre las piezas que te tocan en lugar del rating puro de cada una.</p>` },
+    { title:'La Pit Lane: desarrollo y scouting', body:`
+      <p>Después de cada carrera, el presupuesto ganado con las posiciones se puede invertir de dos formas, o ahorrar para después:</p>
+      <p><b>Desarrollo (mejora permanente)</b> — mejoras un componente existente. Eliges cuánto arriesgar con un control deslizante: inversión mínima (riesgo más alto, hasta el 50%, pero más económica) hasta inversión máxima (riesgo mínimo, hasta el 5%, pero más cara, hasta 2.2× el coste base). Si la inversión falla, se aplica un malus en lugar de la mejora. El riesgo nunca llega a cero, ni siquiera invirtiendo el máximo posible.</p>
+      <p><b>Scouting (sustitución)</b> — sustituyes una pieza por un candidato nuevo. A diferencia del desarrollo, aquí no hay riesgo de fallo: si tienes el presupuesto, obtienes exactamente la pieza que ves. La pieza sustituida no se puede recuperar en esa carrera, pero pasa a enriquecer el Museo Dynasty.</p>` },
+    { title:'Rivalidad: a quién tienes que vencer', body:`
+      <p>El juego te asigna una o más escuderías rivales según tu fuerza actual: son los oponentes directos a batir para la clasificación de Constructores. Si superas claramente a una rival, obtienes una nueva, más temible — el desafío se adapta a tu progreso en lugar de permanecer fijo toda la temporada.</p>` },
+    { title:'Dificultad y Duración de la Temporada', body:`
+      <p>La <b>duración de la temporada</b> (Rápida = 10 carreras, Completa = 20 carreras) define cuántas carreras disputas. En la Temporada Completa, entre la carrera 10 y la 11 hay un evento único, el <b>Mid Season Draft</b>: puedes reevaluar a ambos pilotos (2 candidatos cada uno, sin riesgo) — es la única ocasión en toda la temporada para hacerlo, porque durante el resto de la Temporada Completa el scouting de pilotos permanece bloqueado.</p>
+      <p>La <b>dificultad</b> (Fácil → Hardcore) actúa sobre todo en los rerolls disponibles en el Draft — cuanto más alta, menos elección tienes, y más cuentan las decisiones tomadas sobre la marcha.</p>` },
+    { title:'Sala de Trofeos, Museo Dynasty y Logros', body:`
+      <p>La <b>Sala de Trofeos</b> muestra un trofeo por cada circuito del juego: dorado si ya lo has ganado, apagado si todavía no — persiste entre todas tus carreras deportivas. El <b>Museo Dynasty</b> reúne cada piloto y componente que has poseído alguna vez, en cualquier carrera. Los <b>Logros</b> son hitos especiales (temporadas perfectas, desafíos Hardcore, estilos de juego particulares) que se desbloquean automáticamente mientras juegas: se encuentran en la entrada dedicada del menú.</p>` },
+  ];
+  const sections = currentLang==='en' ? sectionsEn : (currentLang==='es' ? sectionsEs : sectionsIt);
   return sections.map(s=> `<div class="guide-section">
     <div class="guide-section-title">${s.title}</div>
     <div class="guide-section-body">${s.body}</div>
