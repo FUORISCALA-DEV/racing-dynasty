@@ -919,6 +919,7 @@ function pickDraftTurnOption(id){
   const chosen = state.draftTurnOffers[catKey];
   state.usedIds.add(chosen.id);
   if(catKey==='pilota'){
+    playSfx('ui_confirm'); // V0.9.7.8.18: niente suono reale per i piloti, ripristinato il placeholder
     state.draftPilotsChosen.push(JSON.parse(JSON.stringify(chosen)));
     if(chosen.nome==='THE GOAT'){
       state.pendingGoatReveal = true; // V0.9.7.6
@@ -931,6 +932,7 @@ function pickDraftTurnOption(id){
     state.draftOpenCategories = state.draftOpenCategories.filter(c=>c!==catKey);
     // V0.9.7.8.14: suono dedicato solo per i pezzi auto (motore/telaio/aero/gomme) — non per team principal
     if(catKey!=='stratega') playRealSfx('audio/sfx_component_pick.mp3');
+    else playSfx('ui_confirm'); // V0.9.7.8.18: team principal non ha un suono reale, placeholder ripristinato
   }
   state.draftPicksDone++;
 
@@ -2615,6 +2617,7 @@ function applyScout(catKey, chosenId, options){
   state.everUsedScouting = true;
   const isPilotCat = (catKey==='pilotMain' || catKey==='pilotSecond');
   if(isPilotCat){
+    playSfx('ui_confirm'); // V0.9.7.8.18: niente suono reale per i piloti, ripristinato il placeholder
     const alreadySwappedPilot = state.everSwappedPilot;
     state.everSwappedPilot = true;
     if(!alreadySwappedPilot) unlockAchievement('nuovo-volto'); // V0.9.7.9: primo cambio pilota in assoluto
@@ -2632,6 +2635,7 @@ function applyScout(catKey, chosenId, options){
     state.everUsedScoutingOnComponent = true; // V0.9.7.9: fedele-alla-linea-di-partenza si riferisce SOLO ai componenti
     // V0.9.7.8.14: suono dedicato solo per i pezzi auto (motore/telaio/aero/gomme) — non per team principal
     if(catKey!=='stratega') playRealSfx('audio/sfx_component_pick.mp3');
+    else playSfx('ui_confirm'); // V0.9.7.8.18: team principal non ha un suono reale, placeholder ripristinato
   }
   if(RARITY_ORDER && RARITY_ORDER.indexOf(chosen.rarita) >= RARITY_ORDER.indexOf('Epic')){
     state.everUsedEpicOrHigher = true; // V0.9.7.9: con-quello-che-c-e
@@ -5881,8 +5885,12 @@ function onAction(e){
   const el = e.currentTarget;
   const action = el.dataset.action;
   // V0.9.7.8.2: SFX #1/#2 — click generico ovunque, "conferma" per le azioni che chiudono una scelta
-  const CONFIRM_SFX_ACTIONS = new Set(['pick-draft','confirm-upgrade-invest','confirm-replacement','confirm-team-name','start-run','skip-midseason-swap']);
-  playSfx(CONFIRM_SFX_ACTIONS.has(action) ? 'ui_confirm' : 'ui_click');
+  // V0.9.7.8.18 fix: pick-draft/confirm-replacement/reroll-draft/inspire-team-name hanno GIA' un
+  // suono reale dedicato gestito dentro le loro funzioni — escluse qui per non farle suonare doppie
+  // (il placeholder generico insieme al suono vero, segnalato come "suona male" dall'utente).
+  const NO_GENERIC_SFX_ACTIONS = new Set(['reroll-draft','inspire-team-name','pick-draft','confirm-replacement']);
+  const CONFIRM_SFX_ACTIONS = new Set(['confirm-upgrade-invest','confirm-team-name','start-run','skip-midseason-swap']);
+  if(!NO_GENERIC_SFX_ACTIONS.has(action)) playSfx(CONFIRM_SFX_ACTIONS.has(action) ? 'ui_confirm' : 'ui_click');
   triggerHaptic();
   if(action==='go-to-season-length'){ state.phase='season-length'; render(); }
   else if(action==='choose-season-length'){
