@@ -63,6 +63,14 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    pitlane_window: 'Pit Lane · Finestra di Sviluppo', pitlane_headline: 'Scegli come investire prima della prossima gara',
+    pitlane_subtitle: 'Nodo roguelike: puoi comprare un upgrade permanente, sostituire un componente tramite scouting, oppure conservare il budget.',
+    pitlane_skip: 'Salta — conserva il budget', pitlane_team_now: 'La Tua Scuderia Ora', pitlane_strength: 'FORZA',
+    draft_reroll: (n)=>`Reroll — ${n} rimasti`, draft_hardcore_no_reroll: 'HARDCORE · NESSUN REROLL DISPONIBILE',
+    draft_pilot_nth: (nth)=>`Pilota (${nth})`, draft_choose_one: 'Scegli una sola offerta per questo turno',
+    draft_headline: "Cogli l'attimo, o l'attesa ti premierà?",
+    draft_subtitle: 'Le altre offerte di questo turno spariscono: al turno successivo torneranno proposte nuove per le categorie ancora libere.',
+    draft_already_chosen: 'GIA SCELTE QUESTA SESSIONE', draft_taken: ' · PRESO', draft_pilot_first_taken: 'Pilota (1º) · PRESO',
     sponsor_suspended: 'sospeso',
     hub_next_gp: 'Prossimo Gran Premio', hub_rain: 'Pioggia', hub_safety_car: 'Safety Car',
     hub_overtake: 'Sorpasso', hub_degradation: 'Degrado', hub_team_strength: 'FORZA SCUDERIA (P1/P2)',
@@ -100,6 +108,14 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    pitlane_window: 'Pit Lane · Development Window', pitlane_headline: 'Choose how to invest before the next race',
+    pitlane_subtitle: 'Roguelike node: you can buy a permanent upgrade, replace a component via scouting, or save your budget.',
+    pitlane_skip: 'Skip — save the budget', pitlane_team_now: 'Your Team Right Now', pitlane_strength: 'STRENGTH',
+    draft_reroll: (n)=>`Reroll — ${n} left`, draft_hardcore_no_reroll: 'HARDCORE · NO REROLLS AVAILABLE',
+    draft_pilot_nth: (nth)=>`Driver (${nth})`, draft_choose_one: 'Choose only one offer for this turn',
+    draft_headline: 'Seize the moment, or will waiting pay off?',
+    draft_subtitle: "The other offers this turn disappear: next turn, new proposals will appear for the categories still open.",
+    draft_already_chosen: 'ALREADY CHOSEN THIS SESSION', draft_taken: ' · TAKEN', draft_pilot_first_taken: 'Driver (1st) · TAKEN',
     sponsor_suspended: 'suspended',
     hub_next_gp: 'Next Grand Prix', hub_rain: 'Rain', hub_safety_car: 'Safety Car',
     hub_overtake: 'Overtaking', hub_degradation: 'Degradation', hub_team_strength: 'TEAM STRENGTH (P1/P2)',
@@ -131,6 +147,14 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    pitlane_window: 'Pit Lane · Ventana de Desarrollo', pitlane_headline: 'Elige cómo invertir antes de la próxima carrera',
+    pitlane_subtitle: 'Nodo roguelike: puedes comprar una mejora permanente, sustituir un componente mediante scouting, o conservar el presupuesto.',
+    pitlane_skip: 'Saltar — conserva el presupuesto', pitlane_team_now: 'Tu Escudería Ahora', pitlane_strength: 'FUERZA',
+    draft_reroll: (n)=>`Reroll — ${n} restantes`, draft_hardcore_no_reroll: 'HARDCORE · SIN REROLLS DISPONIBLES',
+    draft_pilot_nth: (nth)=>`Piloto (${nth})`, draft_choose_one: 'Elige solo una oferta para este turno',
+    draft_headline: '¿Aprovechas el momento, o esperar te recompensará?',
+    draft_subtitle: 'Las demás ofertas de este turno desaparecen: en el próximo turno habrá nuevas propuestas para las categorías aún libres.',
+    draft_already_chosen: 'YA ELEGIDAS EN ESTA SESIÓN', draft_taken: ' · ELEGIDO', draft_pilot_first_taken: 'Piloto (1º) · ELEGIDO',
     sponsor_suspended: 'suspendido',
     hub_next_gp: 'Próximo Gran Premio', hub_rain: 'Lluvia', hub_safety_car: 'Safety Car',
     hub_overtake: 'Adelantamiento', hub_degradation: 'Degradación', hub_team_strength: 'FUERZA DE ESCUDERÍA (P1/P2)',
@@ -4451,8 +4475,8 @@ function renderDraft(){
   const showReroll = state.difficulty !== 'hardcore';
   const canReroll = state.rerollsLeft > 0;
   const rerollBtn = showReroll
-    ? `<button class="ghost" data-action="reroll-draft" ${canReroll?'':'disabled'}>Reroll — ${state.rerollsLeft} rimasti</button>`
-    : `<span class="dim mono" style="font-size:11px;">HARDCORE · NESSUN REROLL DISPONIBILE</span>`;
+    ? `<button class="ghost" data-action="reroll-draft" ${canReroll?'':'disabled'}>${t('draft_reroll', state.rerollsLeft)}</button>`
+    : `<span class="dim mono" style="font-size:11px;">${t('draft_hardcore_no_reroll')}</span>`;
 
   const doneDots = Array.from({length: state.draftPicksDone}, ()=>`<div class="dot done">✓</div>`).join('');
   const nowDot = `<div class="dot now">${state.draftPicksDone+1}</div>`;
@@ -4463,7 +4487,7 @@ function renderDraft(){
   if(state.draftTurnOffers.pilota){
     const nth = state.draftPilotsChosen.length===0 ? '1º' : '2º';
     const pilotSynKey = state.draftPilotsChosen.length===0 ? 'pilotMain' : 'pilotSecond';
-    offerCards.push(draftTurnCardHTML(`Pilota (${nth})`, state.draftTurnOffers.pilota, STAT_KEYS.pilotMain, pilotSynKey));
+    offerCards.push(draftTurnCardHTML(t('draft_pilot_nth', nth), state.draftTurnOffers.pilota, STAT_KEYS.pilotMain, pilotSynKey));
   }
   state.draftOpenCategories.forEach(catKey=>{
     const def = DRAFT_CATEGORY_DEFS[catKey];
@@ -4473,11 +4497,11 @@ function renderDraft(){
   // V0.9.4.2.3: le categorie gia' scelte restano visibili (bloccate), per il confronto con le nuove proposte
   const lockedCards = [];
   if(state.draftPilotsChosen.length===1){
-    lockedCards.push(draftLockedCardHTML('Pilota (1º) · PRESO', state.draftPilotsChosen[0]));
+    lockedCards.push(draftLockedCardHTML(t('draft_pilot_first_taken'), state.draftPilotsChosen[0]));
   }
   Object.keys(DRAFT_CATEGORY_DEFS).forEach(catKey=>{
     if(!state.draftOpenCategories.includes(catKey) && state.team[catKey]){
-      lockedCards.push(draftLockedCardHTML(`${DRAFT_CATEGORY_DEFS[catKey].label} · PRESO`, state.team[catKey]));
+      lockedCards.push(draftLockedCardHTML(`${DRAFT_CATEGORY_DEFS[catKey].label}${t('draft_taken')}`, state.team[catKey]));
     }
   });
 
@@ -4486,14 +4510,14 @@ function renderDraft(){
     <div class="brand hdr">RACING DYNASTY<small>Fondazione scuderia — Draft ${state.draftPicksDone+1}/${DRAFT_TOTAL_PICKS} · ${DIFFICULTY_LABEL[state.difficulty]}</small></div>
   </div>
   <div class="panel">
-    <div class="eyebrow">Scegli una sola offerta per questo turno</div>
-    <h2 class="hdr" style="font-size:22px;">Cogli l'attimo, o l'attesa ti premierà?</h2>
-    <div class="dim" style="font-size:12px;margin-top:6px;">Le altre offerte di questo turno spariscono: al turno successivo torneranno proposte nuove per le categorie ancora libere.</div>
+    <div class="eyebrow">${t('draft_choose_one')}</div>
+    <h2 class="hdr" style="font-size:22px;">${t('draft_headline')}</h2>
+    <div class="dim" style="font-size:12px;margin-top:6px;">${t('draft_subtitle')}</div>
     <div class="calendar">${doneDots}${nowDot}${restDots}</div>
     <div class="btnrow" style="margin-top:12px;margin-bottom:0;">${rerollBtn}</div>
   </div>
   <div class="draft-turn-grid">${offerCards.join('')}</div>
-  ${lockedCards.length ? `<div class="dim mono" style="font-size:11px;margin-top:16px;">GIA SCELTE QUESTA SESSIONE</div><div class="draft-turn-grid draft-locked-grid">${lockedCards.join('')}</div>` : ''}
+  ${lockedCards.length ? `<div class="dim mono" style="font-size:11px;margin-top:16px;">${t('draft_already_chosen')}</div><div class="draft-turn-grid draft-locked-grid">${lockedCards.join('')}</div>` : ''}
   ${semaforoWidgetHTML()}
   `;
   bindActions();
@@ -5665,15 +5689,15 @@ function renderPitlane(){
   app.innerHTML = `
   ${topbarHTML()}
   <div class="panel">
-    <div class="eyebrow" style="font-size:14px;">Pit Lane · Finestra di Sviluppo</div>
-    <h2 class="hdr" style="font-size:26px;">Scegli come investire prima della prossima gara</h2>
-    <div class="dim" style="font-size:14px;margin-top:8px;line-height:1.5;">Nodo roguelike: puoi comprare un upgrade permanente, sostituire un componente tramite scouting, oppure conservare il budget.</div>
+    <div class="eyebrow" style="font-size:14px;">${window.t('pitlane_window')}</div>
+    <h2 class="hdr" style="font-size:26px;">${window.t('pitlane_headline')}</h2>
+    <div class="dim" style="font-size:14px;margin-top:8px;line-height:1.5;">${window.t('pitlane_subtitle')}</div>
   </div>
-  <div class="btnrow"><button class="ghost" data-action="skip-pitlane">Salta — conserva il budget</button></div>
+  <div class="btnrow"><button class="ghost" data-action="skip-pitlane">${window.t('pitlane_skip')}</button></div>
   <div class="grid grid-3">${cards}</div>
   ${scoutNode ? pitlaneCardHTML(scoutNode) : ''}
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">La Tua Scuderia Ora</h3><span class="strength-badge">FORZA <b>${Math.round(playerStrength())}</b></span></div>
+    <div class="panel-title"><h3 class="hdr">${window.t('pitlane_team_now')}</h3><span class="strength-badge">${window.t('pitlane_strength')} <b>${Math.round(playerStrength())}</b></span></div>
     <div class="grid grid-2 pitlane-cars">
       <div class="pitlane-car-mini">
         ${carVisualHTML(t.pilotMain, compShared, p1Slot.carNumber)}
@@ -5685,11 +5709,11 @@ function renderPitlane(){
       </div>
     </div>
     <div class="pregara-legend" style="margin-top:10px;">
-      ${pregaraLegendRow('MOTORE', t.motore)}
-      ${pregaraLegendRow('TELAIO', t.telaio)}
-      ${pregaraLegendRow('AERODINAMICA', t.aero)}
-      ${pregaraLegendRow('GOMME', t.gomme)}
-      ${pregaraLegendRow('TEAM PRINCIPAL', t.stratega)}
+      ${pregaraLegendRow(window.t('comp_engine').toUpperCase(), t.motore)}
+      ${pregaraLegendRow(window.t('comp_chassis').toUpperCase(), t.telaio)}
+      ${pregaraLegendRow(window.t('comp_aero').toUpperCase(), t.aero)}
+      ${pregaraLegendRow(window.t('comp_tires').toUpperCase(), t.gomme)}
+      ${pregaraLegendRow(window.t('comp_strategist').toUpperCase(), t.stratega)}
     </div>
     ${semaforoWidgetHTML()}
   </div>
