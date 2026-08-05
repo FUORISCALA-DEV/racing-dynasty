@@ -38,22 +38,30 @@ body{
 }
 ::selection{background:var(--amber);color:#0A0C10;}
 .wrap{max-width:1180px;margin:0 auto;padding:18px 18px 44px;flex:1;display:flex;flex-direction:column;width:100%;box-sizing:border-box;}
-/* V0.9.7.8.24: banner promozionale fisso in basso — sempre visibile tranne al titolo, non copre
-   mai contenuti perche' body ha padding-bottom pari alla sua altezza (vedi .has-promo-banner) */
+/* V0.9.7.8.25: banner promozionale — palette ufficiale FUORISCALA (carbon/ivory/signal), non il
+   tema del gioco, cosi' si riconosce subito come "un'altra identita'" che si affaccia, non un
+   elemento nativo del gioco. Badge col monogramma vero, non solo testo. */
 .promo-banner{
-  position:fixed; left:0; right:0; bottom:0; z-index:500; height:52px;
-  background:var(--panel2); border-top:1px solid var(--line);
+  position:fixed; left:0; right:0; bottom:0; z-index:500; height:58px;
+  background:#0D0D0F; border-top:1px solid #2A2A2E;
   display:flex; align-items:center; justify-content:center;
+  box-shadow:0 -4px 16px rgba(0,0,0,0.35);
 }
 .promo-banner-link{
-  display:flex; align-items:center; justify-content:space-between; gap:14px;
-  width:100%; max-width:1180px; padding:0 18px; height:100%; text-decoration:none;
+  display:flex; align-items:center; gap:12px;
+  width:100%; max-width:1180px; padding:0 16px; height:100%; text-decoration:none;
 }
-.promo-banner-text{ font-size:12px; color:var(--text); line-height:1.3; }
-.promo-banner-text b{ color:var(--legendary); }
-.promo-banner-cta{ font-size:11.5px; font-weight:800; color:var(--signal, var(--legendary)); white-space:nowrap; }
-body.has-promo-banner .wrap{ padding-bottom:64px; }
-body.has-promo-banner .install-pitch-overlay{ padding-bottom:52px; }
+.promo-banner-badge{
+  flex-shrink:0; width:36px; height:36px; border-radius:9px;
+  background:#E54732; display:flex; align-items:center; justify-content:center;
+}
+.promo-banner-badge img{ width:19px; height:19px; }
+.promo-banner-copy{ display:flex; flex-direction:column; flex:1; min-width:0; line-height:1.25; }
+.promo-banner-brand{ font-size:12.5px; font-weight:800; letter-spacing:0.04em; color:#F3F0E8; }
+.promo-banner-text{ font-size:10.5px; color:#8B8D91; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.promo-banner-cta{ flex-shrink:0; font-size:11.5px; font-weight:800; color:#E54732; white-space:nowrap; }
+body.has-promo-banner .wrap{ padding-bottom:70px; }
+body.has-promo-banner .install-pitch-overlay{ padding-bottom:58px; }
 
 /* ---- typography ---- */
 h1,h2,h3{margin:0;font-weight:800;letter-spacing:0.02em;}
@@ -1505,7 +1513,11 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
 <div class="wrap" id="app"></div>
 <div id="promoBanner" class="promo-banner" style="display:none;">
   <a href="https://fuoriscala-dev.github.io/FUORISCALA.SITOWEB/" target="_blank" rel="noopener" class="promo-banner-link">
-    <span class="promo-banner-text"><b>FUORISCALA</b> — piccolo studio, giochi fuori misura</span>
+    <span class="promo-banner-badge"><img src="assets/fuoriscala/fuoriscala_monogram_white.svg" alt="FS"></span>
+    <span class="promo-banner-copy">
+      <span class="promo-banner-brand">FUORISCALA</span>
+      <span class="promo-banner-text">Piccolo studio, giochi fuori misura</span>
+    </span>
     <span class="promo-banner-cta">Scopri di più ↗</span>
   </a>
 </div>
