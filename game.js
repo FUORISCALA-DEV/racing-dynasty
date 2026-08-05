@@ -6563,9 +6563,12 @@ function closeGuidePanel(){
 // V0.9.7.8.12: pannello Crediti — firme standard dal brand kit FUORISCALA (copy_deck.md), stesso
 // identico pattern di apertura/chiusura di Guida e Obiettivi.
 function creditsPanelHTML(){
+  const siteUrl = 'https://fuoriscala-dev.github.io/FUORISCALA.SITOWEB/';
   return `
   <div style="text-align:center;padding:24px 12px;">
-    <img src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA" style="width:180px;max-width:70%;margin-bottom:18px;">
+    <a href="${siteUrl}" target="_blank" rel="noopener" title="Vai al sito FUORISCALA">
+      <img src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA" style="width:180px;max-width:70%;margin-bottom:18px;cursor:pointer;">
+    </a>
     <div class="dim" style="font-size:12px;letter-spacing:0.04em;margin-bottom:28px;">Piccolo studio. Giochi fuori misura.</div>
   </div>
   <div style="font-size:13px;line-height:2;text-align:center;color:var(--text);">
