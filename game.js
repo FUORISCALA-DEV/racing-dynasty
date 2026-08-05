@@ -6664,6 +6664,12 @@ function updateSidebarVisibility(){
   // V0.9.7.8.12: niente icona menu sopra lo splash FUORISCALA — e' un momento di brand puro
   const toggleBtn = document.getElementById('gameMenuToggleBtn');
   if(toggleBtn) toggleBtn.style.display = (state && state.phase==='studio-splash') ? 'none' : '';
+  // V0.9.7.8.24: banner promozionale — sempre visibile tranne su splash e titolo
+  const banner = document.getElementById('promoBanner');
+  const hideBannerOn = new Set(['studio-splash','title']);
+  const showBanner = state && !hideBannerOn.has(state.phase);
+  if(banner) banner.style.display = showBanner ? 'flex' : 'none';
+  document.body.classList.toggle('has-promo-banner', !!showBanner);
 }
 
 function initSidebar(){
