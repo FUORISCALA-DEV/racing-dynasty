@@ -15,8 +15,8 @@
 // all'icona veniva ignorata dal browser, che continuava a servire il file vecchio dalla propria
 // cache — disinstallare/reinstallare l'app dalla schermata Home NON svuota questa cache, sono
 // due meccanismi completamente separati. Ora le icone sono network-first come il codice.
-const CACHE_NAME = 'racing-dynasty-v0.9.7.8.21';
-const CODE_FILES = ['index.html', 'game.js', 'manifest.json', './', 'assets/logo.png', 'assets/fuoriscala/fuoriscala_primary_white.svg'];
+const CACHE_NAME = 'racing-dynasty-v0.9.7.8.22';
+const CODE_FILES = ['index.html', 'game.js', 'manifest.json', './', 'assets/app-icon.png', 'assets/fuoriscala/fuoriscala_primary_white.svg'];
 const PRECACHE_URLS = [...CODE_FILES, 'data/data.json'];
 
 self.addEventListener('install', (event) => {
