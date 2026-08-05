@@ -63,6 +63,18 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    naming_title: 'Dai un nome alla tua scuderia', naming_optional: 'Facoltativo — se lo lasci vuoto useremo un nome automatico (es. "Dynasty Racing").',
+    naming_placeholder: 'Es. Nova Racing Team', naming_inspire: '🎲 Ispira la scuderia', naming_nation: 'Nazione della Scuderia',
+    naming_confirm: 'Conferma e inizia il Draft →',
+    sl_choose: 'Scegli la lunghezza della stagione', sl_subtitle: 'Un tocco e si passa alla scelta della difficoltà.',
+    sl_quick: 'STAGIONE VELOCE', sl_quick_desc: 'Il formato classico: 10 Gran Premi, pit-lane completo (upgrade e scouting, pilota incluso) ad ogni gara.', sl_quick_hint: 'Tocca per scegliere — Stagione Veloce',
+    sl_full: 'STAGIONE COMPLETA', sl_full_desc: 'Il doppio dei Gran Premi. Gli upgrade dei componenti restano disponibili come sempre, ma il Secondo Pilota si può cambiare una sola volta, in una finestra dedicata tra la gara 10 e la gara 11.', sl_full_hint: 'Tocca per scegliere — Stagione Completa',
+    sl_trophy_room: 'SALA TROFEI', sl_raced: 'CORSI', sl_won: 'VINTI', sl_trophy_desc: 'Un trofeo per ogni circuito del mondo — rivivi le tue vittorie e scopri quanti ne mancano ancora alla collezione completa.', sl_trophy_hint: 'Tocca per aprire — Sala Trofei',
+    sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETAMENTO', sl_museum_desc: 'Piloti e componenti portati fino in fondo a una stagione, o sostituiti lungo il percorso, restano qui per sempre.', sl_museum_hint: 'Tocca per aprire — Museo Dynasty',
+    sl_garage: 'GARAGE', sl_garage_desc: 'Personalizza la livrea del telaio con pattern sbloccabili completando obiettivi.', sl_garage_soon: '🔒 PROSSIMAMENTE',
+    diff_new_career: 'Nuova Carriera', diff_choose: 'Scegli la difficoltà',
+    diff_subtitle: 'Incide solo sui reroll disponibili nel draft — un tocco e si parte.',
+    diff_last_used: ' · ultima usata', diff_tap_hint: (l)=>`Tocca per avviare — ${l}`,
     pitlane_window: 'Pit Lane · Finestra di Sviluppo', pitlane_headline: 'Scegli come investire prima della prossima gara',
     pitlane_subtitle: 'Nodo roguelike: puoi comprare un upgrade permanente, sostituire un componente tramite scouting, oppure conservare il budget.',
     pitlane_skip: 'Salta — conserva il budget', pitlane_team_now: 'La Tua Scuderia Ora', pitlane_strength: 'FORZA',
@@ -108,6 +120,18 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    naming_title: 'Name your team', naming_optional: 'Optional — if you leave it blank we\'ll use an automatic name (e.g. "Dynasty Racing").',
+    naming_placeholder: 'E.g. Nova Racing Team', naming_inspire: '🎲 Inspire the team', naming_nation: 'Team Nationality',
+    naming_confirm: 'Confirm and start the Draft →',
+    sl_choose: 'Choose the season length', sl_subtitle: 'One tap and you move to choosing difficulty.',
+    sl_quick: 'QUICK SEASON', sl_quick_desc: 'The classic format: 10 Grands Prix, full pit lane (upgrades and scouting, driver included) every race.', sl_quick_hint: 'Tap to choose — Quick Season',
+    sl_full: 'FULL SEASON', sl_full_desc: 'Double the Grands Prix. Component upgrades remain available as always, but the Second Driver can be swapped once, in a dedicated window between race 10 and race 11.', sl_full_hint: 'Tap to choose — Full Season',
+    sl_trophy_room: 'TROPHY ROOM', sl_raced: 'RACED', sl_won: 'WON', sl_trophy_desc: 'A trophy for every circuit in the world — relive your wins and see how many are left for the full collection.', sl_trophy_hint: 'Tap to open — Trophy Room',
+    sl_museum: 'DYNASTY MUSEUM', sl_completion: 'COMPLETION', sl_museum_desc: 'Drivers and components carried through a full season, or replaced along the way, stay here forever.', sl_museum_hint: 'Tap to open — Dynasty Museum',
+    sl_garage: 'GARAGE', sl_garage_desc: 'Customize your chassis livery with patterns unlockable by completing achievements.', sl_garage_soon: '🔒 COMING SOON',
+    diff_new_career: 'New Career', diff_choose: 'Choose difficulty',
+    diff_subtitle: 'Only affects the rerolls available in the draft — one tap and you\'re off.',
+    diff_last_used: ' · last used', diff_tap_hint: (l)=>`Tap to start — ${l}`,
     pitlane_window: 'Pit Lane · Development Window', pitlane_headline: 'Choose how to invest before the next race',
     pitlane_subtitle: 'Roguelike node: you can buy a permanent upgrade, replace a component via scouting, or save your budget.',
     pitlane_skip: 'Skip — save the budget', pitlane_team_now: 'Your Team Right Now', pitlane_strength: 'STRENGTH',
@@ -147,6 +171,18 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    naming_title: 'Ponle nombre a tu escudería', naming_optional: 'Opcional — si lo dejas vacío usaremos un nombre automático (ej. "Dynasty Racing").',
+    naming_placeholder: 'Ej. Nova Racing Team', naming_inspire: '🎲 Inspirar la escudería', naming_nation: 'Nacionalidad de la Escudería',
+    naming_confirm: 'Confirmar y empezar el Draft →',
+    sl_choose: 'Elige la duración de la temporada', sl_subtitle: 'Un toque y pasas a elegir la dificultad.',
+    sl_quick: 'TEMPORADA RÁPIDA', sl_quick_desc: 'El formato clásico: 10 Grandes Premios, pit lane completo (mejoras y scouting, piloto incluido) en cada carrera.', sl_quick_hint: 'Toca para elegir — Temporada Rápida',
+    sl_full: 'TEMPORADA COMPLETA', sl_full_desc: 'El doble de Grandes Premios. Las mejoras de componentes siguen disponibles como siempre, pero el Segundo Piloto se puede cambiar una sola vez, en una ventana dedicada entre la carrera 10 y la 11.', sl_full_hint: 'Toca para elegir — Temporada Completa',
+    sl_trophy_room: 'SALA DE TROFEOS', sl_raced: 'DISPUTADOS', sl_won: 'GANADOS', sl_trophy_desc: 'Un trofeo por cada circuito del mundo — revive tus victorias y descubre cuántos faltan para la colección completa.', sl_trophy_hint: 'Toca para abrir — Sala de Trofeos',
+    sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETADO', sl_museum_desc: 'Pilotos y componentes llevados hasta el final de una temporada, o sustituidos por el camino, se quedan aquí para siempre.', sl_museum_hint: 'Toca para abrir — Museo Dynasty',
+    sl_garage: 'GARAGE', sl_garage_desc: 'Personaliza la librea del chasis con patrones desbloqueables completando logros.', sl_garage_soon: '🔒 PRÓXIMAMENTE',
+    diff_new_career: 'Nueva Carrera', diff_choose: 'Elige la dificultad',
+    diff_subtitle: 'Solo afecta a los rerolls disponibles en el draft — un toque y empiezas.',
+    diff_last_used: ' · última usada', diff_tap_hint: (l)=>`Toca para empezar — ${l}`,
     pitlane_window: 'Pit Lane · Ventana de Desarrollo', pitlane_headline: 'Elige cómo invertir antes de la próxima carrera',
     pitlane_subtitle: 'Nodo roguelike: puedes comprar una mejora permanente, sustituir un componente mediante scouting, o conservar el presupuesto.',
     pitlane_skip: 'Saltar — conserva el presupuesto', pitlane_team_now: 'Tu Escudería Ahora', pitlane_strength: 'FUERZA',
@@ -621,13 +657,31 @@ const START_BUDGET = 20; // milioni
 // --- V0.2: difficoltà e reroll ---
 const DIFFICULTY_REROLLS = { facile:9, medio:6, difficile:3, hardcore:0 };
 const DIFFICULTY_ORDER = ['facile','medio','difficile','hardcore'];
-const DIFFICULTY_LABEL = { facile:'Facile', medio:'Medio', difficile:'Difficile', hardcore:'Hardcore' };
-const DIFFICULTY_DESC = {
+const DIFFICULTY_LABEL_IT = { facile:'Facile', medio:'Medio', difficile:'Difficile', hardcore:'Hardcore' };
+const DIFFICULTY_LABEL_EN = { facile:'Easy', medio:'Medium', difficile:'Hard', hardcore:'Hardcore' };
+const DIFFICULTY_LABEL_ES = { facile:'Fácil', medio:'Medio', difficile:'Difícil', hardcore:'Hardcore' };
+const DIFFICULTY_DESC_IT = {
   facile:'9 reroll nel draft: più margine per rifare le offerte che non ti convincono.',
   medio:'6 reroll nel draft: qualche seconda possibilità, ma le scelte contano davvero.',
   difficile:'Solo 3 reroll nel draft: quasi ogni pesca va accettata così com\'è.',
   hardcore:'Zero reroll: quello che esce, esce. Nessuna seconda possibilità.'
 };
+const DIFFICULTY_DESC_EN = {
+  facile:'9 rerolls in the draft: plenty of room to redo offers that don\'t convince you.',
+  medio:'6 rerolls in the draft: a few second chances, but your choices really matter.',
+  difficile:'Only 3 rerolls in the draft: almost every draw has to be accepted as it is.',
+  hardcore:'Zero rerolls: what you get, you keep. No second chances.'
+};
+const DIFFICULTY_DESC_ES = {
+  facile:'9 rerolls en el draft: más margen para repetir las ofertas que no te convencen.',
+  medio:'6 rerolls en el draft: algunas segundas oportunidades, pero las decisiones cuentan de verdad.',
+  difficile:'Solo 3 rerolls en el draft: casi todas las cartas hay que aceptarlas tal cual salen.',
+  hardcore:'Cero rerolls: lo que sale, sale. Sin segundas oportunidades.'
+};
+function diffLabelSet(){ return currentLang==='en' ? DIFFICULTY_LABEL_EN : (currentLang==='es' ? DIFFICULTY_LABEL_ES : DIFFICULTY_LABEL_IT); }
+function diffDescSet(){ return currentLang==='en' ? DIFFICULTY_DESC_EN : (currentLang==='es' ? DIFFICULTY_DESC_ES : DIFFICULTY_DESC_IT); }
+const DIFFICULTY_LABEL = new Proxy({}, { get:(t,k)=> diffLabelSet()[k] });
+const DIFFICULTY_DESC = new Proxy({}, { get:(t,k)=> diffDescSet()[k] });
 
 // --- V0.2: distribuzione a fasce di rating per il draft (sostituisce l'estrazione sul solo "peso") ---
 // La difficoltà NON tocca questa tabella: vale per tutte le difficoltà allo stesso modo.
@@ -3746,17 +3800,17 @@ function renderNaming(){
   <div class="hero" style="padding:28px 20px 20px;">
     <div class="hero-inner">
       <div class="pill">v0.9.5 · ${DIFFICULTY_LABEL[state.difficulty]}</div>
-      <h1 class="hdr" style="margin-top:10px;font-size:30px;">Dai un nome alla tua scuderia</h1>
-      <div class="tagline" style="margin:8px auto 0;">Facoltativo — se lo lasci vuoto useremo un nome automatico (es. "Dynasty Racing").</div>
+      <h1 class="hdr" style="margin-top:10px;font-size:30px;">${t('naming_title')}</h1>
+      <div class="tagline" style="margin:8px auto 0;">${t('naming_optional')}</div>
     </div>
   </div>
   <div class="panel">
-    <input id="teamNameInput" type="text" maxlength="28" placeholder="Es. Nova Racing Team"
+    <input id="teamNameInput" type="text" maxlength="28" placeholder="${t('naming_placeholder')}"
       style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:15px;background:var(--panel2);
       border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);"
       onkeydown="if(event.key==='Enter'){document.querySelector('[data-action=confirm-team-name]').click();}">
-    <button class="ghost" data-action="inspire-team-name" style="width:100%;margin-top:10px;">🎲 Ispira la scuderia</button>
-    <label class="dim" style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;margin-top:16px;margin-bottom:6px;">Nazione della Scuderia</label>
+    <button class="ghost" data-action="inspire-team-name" style="width:100%;margin-top:10px;">${t('naming_inspire')}</button>
+    <label class="dim" style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;margin-top:16px;margin-bottom:6px;">${t('naming_nation')}</label>
     <div class="nation-select-row">
       <span class="nation-flag-preview" id="teamNationFlagPreview">${flag('Italia')}</span>
       <select id="teamNationSelect"
@@ -3766,7 +3820,7 @@ function renderNaming(){
       </select>
     </div>
   </div>
-  <div class="btnrow"><button class="primary" data-action="confirm-team-name">Conferma e inizia il Draft →</button></div>
+  <div class="btnrow"><button class="primary" data-action="confirm-team-name">${t('naming_confirm')}</button></div>
   `;
   bindActions();
   const inp = document.getElementById('teamNameInput');
@@ -4317,18 +4371,18 @@ function renderDifficulty(){
     const rerolls = DIFFICULTY_REROLLS[d];
     return `
     <div class="card pickable" data-rarity="${rarityLike}" data-action="start-run" data-diff="${d}">
-      <span class="rarity-tag" data-rarity="${rarityLike}">${DIFFICULTY_LABEL[d]}${d===lastUsed?' · ultima usata':''}</span>
+      <span class="rarity-tag" data-rarity="${rarityLike}">${DIFFICULTY_LABEL[d]}${d===lastUsed?t('diff_last_used'):''}</span>
       <div class="card-rating">${rerolls}<span style="font-size:12px;color:var(--dim);"> REROLL</span></div>
       <div class="ability">${DIFFICULTY_DESC[d]}</div>
-      <div class="card-tap-hint">Tocca per avviare — ${DIFFICULTY_LABEL[d]}</div>
+      <div class="card-tap-hint">${t('diff_tap_hint', DIFFICULTY_LABEL[d])}</div>
     </div>`;
   }).join('');
 
   app.innerHTML = `
   <div class="panel">
-    <div class="eyebrow">Nuova Carriera</div>
-    <h2 class="hdr" style="font-size:24px;">Scegli la difficoltà</h2>
-    <div class="dim" style="font-size:12px;margin-top:6px;">Incide solo sui reroll disponibili nel draft — un tocco e si parte.</div>
+    <div class="eyebrow">${t('diff_new_career')}</div>
+    <h2 class="hdr" style="font-size:24px;">${t('diff_choose')}</h2>
+    <div class="dim" style="font-size:12px;margin-top:6px;">${t('diff_subtitle')}</div>
   </div>
   <div class="grid grid-2">${diffCards}</div>
   `;
@@ -4347,51 +4401,51 @@ function renderSeasonLength(){
   const museumPct = totalAll>0 ? Math.round(unlockedAll/totalAll*100) : 0;
   app.innerHTML = `
   <div class="panel">
-    <div class="eyebrow">Nuova Carriera</div>
-    <h2 class="hdr" style="font-size:24px;">Scegli la lunghezza della stagione</h2>
-    <div class="dim" style="font-size:12px;margin-top:6px;">Un tocco e si passa alla scelta della difficoltà.</div>
+    <div class="eyebrow">${t('diff_new_career')}</div>
+    <h2 class="hdr" style="font-size:24px;">${t('sl_choose')}</h2>
+    <div class="dim" style="font-size:12px;margin-top:6px;">${t('sl_subtitle')}</div>
   </div>
   <div class="grid grid-2">
     <div class="card pickable" data-rarity="Rare" data-action="choose-season-length" data-length="10">
-      <span class="rarity-tag" data-rarity="Rare">STAGIONE VELOCE</span>
+      <span class="rarity-tag" data-rarity="Rare">${t('sl_quick')}</span>
       <div class="card-rating">10<span style="font-size:12px;color:var(--dim);"> GARE</span></div>
-      <div class="ability">Il formato classico: 10 Gran Premi, pit-lane completo (upgrade e scouting, pilota incluso) ad ogni gara.</div>
-      <div class="card-tap-hint">Tocca per scegliere — Stagione Veloce</div>
+      <div class="ability">${t('sl_quick_desc')}</div>
+      <div class="card-tap-hint">${t('sl_quick_hint')}</div>
     </div>
     <div class="card pickable" data-rarity="Legendary" data-action="choose-season-length" data-length="20">
-      <span class="rarity-tag" data-rarity="Legendary">STAGIONE COMPLETA</span>
+      <span class="rarity-tag" data-rarity="Legendary">${t('sl_full')}</span>
       <div class="card-rating">20<span style="font-size:12px;color:var(--dim);"> GARE</span></div>
-      <div class="ability">Il doppio dei Gran Premi. Gli upgrade dei componenti restano disponibili come sempre, ma il Secondo Pilota si può cambiare una sola volta, in una finestra dedicata tra la gara 10 e la gara 11.</div>
-      <div class="card-tap-hint">Tocca per scegliere — Stagione Completa</div>
+      <div class="ability">${t('sl_full_desc')}</div>
+      <div class="card-tap-hint">${t('sl_full_hint')}</div>
     </div>
   </div>
   <div class="card pickable trophy-room-card" data-rarity="Legendary" data-action="open-trophy-room">
-    <span class="rarity-tag" data-rarity="Legendary">🏆 SALA TROFEI</span>
+    <span class="rarity-tag" data-rarity="Legendary">🏆 ${t('sl_trophy_room')}</span>
     <div class="trophy-room-card-body">
       <div class="trophy-room-card-stats">
-        <div class="trophy-stat"><div class="trophy-stat-value">${racedCount}/${total}</div><div class="trophy-stat-label">CORSI</div></div>
-        <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${wonCount}/${total}</div><div class="trophy-stat-label">VINTI</div></div>
+        <div class="trophy-stat"><div class="trophy-stat-value">${racedCount}/${total}</div><div class="trophy-stat-label">${t('sl_raced')}</div></div>
+        <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${wonCount}/${total}</div><div class="trophy-stat-label">${t('sl_won')}</div></div>
       </div>
-      <div class="ability">Un trofeo per ogni circuito del mondo — rivivi le tue vittorie e scopri quanti ne mancano ancora alla collezione completa.</div>
+      <div class="ability">${t('sl_trophy_desc')}</div>
     </div>
-    <div class="card-tap-hint">Tocca per aprire — Sala Trofei</div>
+    <div class="card-tap-hint">${t('sl_trophy_hint')}</div>
   </div>
   <div class="card pickable trophy-room-card" data-rarity="Epic" data-action="open-museum">
-    <span class="rarity-tag" data-rarity="Epic">🏛️ MUSEO DYNASTY</span>
+    <span class="rarity-tag" data-rarity="Epic">🏛️ ${t('sl_museum')}</span>
     <div class="trophy-room-card-body">
       <div class="trophy-room-card-stats">
-        <div class="trophy-stat"><div class="trophy-stat-value">${unlockedAll}/${totalAll}</div><div class="trophy-stat-label">COMPLETAMENTO · ${museumPct}%</div></div>
+        <div class="trophy-stat"><div class="trophy-stat-value">${unlockedAll}/${totalAll}</div><div class="trophy-stat-label">${t('sl_completion')} · ${museumPct}%</div></div>
       </div>
-      <div class="ability">Piloti e componenti portati fino in fondo a una stagione, o sostituiti lungo il percorso, restano qui per sempre.</div>
+      <div class="ability">${t('sl_museum_desc')}</div>
     </div>
-    <div class="card-tap-hint">Tocca per aprire — Museo Dynasty</div>
+    <div class="card-tap-hint">${t('sl_museum_hint')}</div>
   </div>
   <div class="card trophy-room-card garage-coming-soon">
-    <span class="rarity-tag" data-rarity="Rare">🎨 GARAGE</span>
+    <span class="rarity-tag" data-rarity="Rare">🎨 ${t('sl_garage')}</span>
     <div class="trophy-room-card-body">
-      <div class="ability">Personalizza la livrea del telaio con pattern sbloccabili completando obiettivi.</div>
+      <div class="ability">${t('sl_garage_desc')}</div>
     </div>
-    <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;">🔒 PROSSIMAMENTE</div>
+    <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;">${t('sl_garage_soon')}</div>
   </div>
   `;
   bindActions();
