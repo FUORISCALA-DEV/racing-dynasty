@@ -61,8 +61,12 @@ function loadLang(){
 }
 let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
+function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLangChosenV1')==='1'; }catch(e){ return false; } }
+function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    settings_sfx_vol_short: 'Effetti Sonori', settings_music_vol_short: 'Musica',
+    menu_home: 'Home', menu_section_game: 'GIOCO', menu_section_progress: 'PROGRESSI', menu_section_info: 'INFO', menu_section_app: 'APP',
     status_retired: 'RITIRATO', status_retired_short: 'RIT', status_box: 'BOX', status_penalty: 'PENALITÀ', status_on_track: 'In pista', status_leader: 'Leader',
     pg_rain_expected: 'Pioggia attesa', pg_rain_risk: (p)=>`Rischio pioggia ${p}%`, pg_dry_track: 'Pista asciutta',
     pg_rating_gap: 'Distacco Rating dal Rivale', pg_main_rival: 'Rivale principale', pg_none_yet: 'Ancora nessuna',
@@ -209,6 +213,8 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    settings_sfx_vol_short: 'Sound Effects', settings_music_vol_short: 'Music',
+    menu_home: 'Home', menu_section_game: 'GAME', menu_section_progress: 'PROGRESS', menu_section_info: 'INFO', menu_section_app: 'APP',
     status_retired: 'RETIRED', status_retired_short: 'DNF', status_box: 'PIT', status_penalty: 'PENALTY', status_on_track: 'On track', status_leader: 'Leader',
     pg_rain_expected: 'Rain expected', pg_rain_risk: (p)=>`Rain risk ${p}%`, pg_dry_track: 'Dry track',
     pg_rating_gap: 'Rating Gap to Rival', pg_main_rival: 'Main rival', pg_none_yet: 'None yet',
@@ -349,6 +355,8 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    settings_sfx_vol_short: 'Efectos de Sonido', settings_music_vol_short: 'Música',
+    menu_home: 'Inicio', menu_section_game: 'JUEGO', menu_section_progress: 'PROGRESO', menu_section_info: 'INFO', menu_section_app: 'APP',
     status_retired: 'RETIRADO', status_retired_short: 'RET', status_box: 'BOX', status_penalty: 'PENALIZACIÓN', status_on_track: 'En pista', status_leader: 'Líder',
     pg_rain_expected: 'Lluvia prevista', pg_rain_risk: (p)=>`Riesgo de lluvia ${p}%`, pg_dry_track: 'Pista seca',
     pg_rating_gap: 'Diferencia de Rating con el Rival', pg_main_rival: 'Rival principal', pg_none_yet: 'Todavía ninguna',
@@ -4013,6 +4021,7 @@ function renderInner(){
   window.scrollTo(0,0);
   if(state.phase==='race_live') return renderRaceLiveInit();
   if(state.phase==='studio-splash') return renderStudioSplash();
+  if(state.phase==='lang-select') return renderLangSelect();
   if(state.phase==='title') return renderTitle();
   if(state.phase==='difficulty') return renderDifficulty();
   if(state.phase==='season-length') return renderSeasonLength();
@@ -4587,7 +4596,7 @@ function checkSeasonEndAchievements(){
 
 
 const SAVE_KEY = 'racingDynastySaveV09';
-const NO_SAVE_PHASES = new Set(['studio-splash','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -4682,9 +4691,13 @@ function renderStudioSplash(){
     if(state.phase!=='studio-splash') return;
     if(root) root.classList.add('leaving');
     setTimeout(()=>{
-      state.phase = 'title';
+      if(!hasLangBeenChosen()){
+        state.phase = 'lang-select';
+      } else {
+        state.phase = 'title';
+        playIntroOnce();
+      }
       render();
-      playIntroOnce();
     }, 280);
   };
   if(root) root.addEventListener('click', advance, { once:true });
@@ -4703,6 +4716,27 @@ function renderStudioSplash(){
     const hint = document.getElementById('splashSkipHint');
     if(hint && state.phase==='studio-splash') hint.classList.add('splash-hint-blink');
   }, 5000);
+}
+
+function renderLangSelect(){
+  app.innerHTML = `
+  <div class="lang-select-screen">
+    <div class="lang-select-title">Choose your language<br><span class="dim" style="font-size:13px;font-weight:400;">Scegli la lingua · Elige tu idioma</span></div>
+    <div class="lang-select-options">
+      <button class="lang-select-card" data-action="pick-first-lang" data-lang-choice="it">
+        <span class="lang-select-flag">🇮🇹</span><span class="lang-select-name">Italiano</span>
+      </button>
+      <button class="lang-select-card" data-action="pick-first-lang" data-lang-choice="en">
+        <span class="lang-select-flag">🇬🇧</span><span class="lang-select-name">English</span>
+      </button>
+      <button class="lang-select-card" data-action="pick-first-lang" data-lang-choice="es">
+        <span class="lang-select-flag">🇪🇸</span><span class="lang-select-name">Español</span>
+      </button>
+    </div>
+    <div class="dim" style="font-size:11px;margin-top:18px;">You can change this anytime in Settings · Puoi cambiarla quando vuoi dalle Impostazioni</div>
+  </div>
+  `;
+  bindActions();
 }
 
 function renderTitle(){
@@ -6679,6 +6713,15 @@ function onAction(e){
     state.phase='draft'; startDraftTurn();
   }
   else if(action==='pick-draft'){ pickDraftTurnOption(el.dataset.id); }
+  else if(action==='pick-first-lang'){
+    currentLang = el.dataset.langChoice;
+    saveLang();
+    markLangChosen();
+    applyStaticMenuTranslations();
+    state.phase = 'title';
+    render();
+    playIntroOnce();
+  }
   else if(action==='reroll-draft'){ rerollDraftTurn(); }
   else if(action==='choose-sponsor'){
     const tier = el.dataset.tier;
@@ -6932,20 +6975,27 @@ function openTrophies(){
   render();
 }
 
+function volumeControlHTML(id, icon, label, enabled, volume01){
+  const level = Math.max(0, Math.min(5, Math.round(volume01*5))); // 0-5 tacche
+  const notches = [1,2,3,4,5].map(n=>
+    `<button type="button" class="vol-notch ${n<=level?'filled':''}" data-vol-id="${id}" data-level="${n}" aria-label="${n*20}%"></button>`
+  ).join('');
+  return `
+  <div class="vol-control">
+    <label class="vol-control-header">
+      <input type="checkbox" class="vol-checkbox" id="${id}EnabledCheck" ${enabled!==false?'checked':''}>
+      <span class="vol-checkbox-box"></span>
+      <span class="vol-control-label">${icon} ${label}</span>
+    </label>
+    <div class="vol-notches" id="${id}Notches">${notches}</div>
+  </div>`;
+}
 function openSettings(){
   closeMenuPanel();
   const body = document.getElementById('sidebarSettingsBody');
   body.innerHTML = `
-    <button type="button" class="menu-item" id="sidebarSfxToggleBtn">🔊 <span>Effetti Sonori: ${audioSettings.sfxEnabled!==false?'Attivi':'Disattivati'}</span></button>
-    <div class="menu-item" style="flex-direction:column;align-items:stretch;gap:6px;cursor:default;">
-      <span>${t('settings_sfx_vol')}: <b id="sfxVolumeLabel">${Math.round(audioSettings.sfxVolume*100)}%</b></span>
-      <input type="range" id="sfxVolumeSlider" min="0" max="100" value="${Math.round(audioSettings.sfxVolume*100)}" style="width:100%;">
-    </div>
-    <button type="button" class="menu-item" id="sidebarMusicToggleBtn">🎵 <span>Musica: ${audioSettings.musicEnabled!==false?'Attiva':'Disattivata'}</span></button>
-    <div class="menu-item" style="flex-direction:column;align-items:stretch;gap:6px;cursor:default;">
-      <span>${t('settings_music_vol')}: <b id="musicVolumeLabel">${Math.round(audioSettings.musicVolume*100)}%</b></span>
-      <input type="range" id="musicVolumeSlider" min="0" max="100" value="${Math.round(audioSettings.musicVolume*100)}" style="width:100%;">
-    </div>
+    ${volumeControlHTML('sfx', '🔊', t('settings_sfx_vol_short'), audioSettings.sfxEnabled, audioSettings.sfxVolume)}
+    ${volumeControlHTML('music', '🎵', t('settings_music_vol_short'), audioSettings.musicEnabled, audioSettings.musicVolume)}
     <div style="margin-bottom:14px;">
       <label class="dim" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:8px;">${t('menu_language')}</label>
       <div style="display:flex;gap:8px;">
@@ -6963,35 +7013,31 @@ function openSettings(){
     ${!isStandaloneApp() ? `<button type="button" class="menu-item" id="sidebarInstallBtn" style="color:var(--legendary);">📲 <span>${t('settings_install')}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarFullResetBtn" style="color:var(--danger);">🗑️ <span>${t('settings_reset')}</span></button>
   `;
-  // V0.9.7.8.3: toggle on/off indipendenti dal volume — utile per silenziare del tutto senza
-  // perdere il livello di volume preferito. La Musica non ha ancora tracce, ma il toggle e il
-  // volume sono gia' pronti per quando arriveranno (nessuna modifica di codice necessaria dopo).
-  document.getElementById('sidebarSfxToggleBtn').addEventListener('click', ()=>{
-    audioSettings.sfxEnabled = audioSettings.sfxEnabled===false ? true : false;
-    saveAudioSettings();
-    openSettings();
-    if(audioSettings.sfxEnabled) playSfx('ui_confirm');
-  });
-  document.getElementById('sidebarMusicToggleBtn').addEventListener('click', ()=>{
-    audioSettings.musicEnabled = audioSettings.musicEnabled===false ? true : false;
-    saveAudioSettings();
-    applyMusicVolumeNow(); // V0.9.7.8.10
-    openSettings();
-  });
-  const sfxSlider = document.getElementById('sfxVolumeSlider');
-  sfxSlider.addEventListener('input', ()=>{
-    audioSettings.sfxVolume = Number(sfxSlider.value)/100;
-    document.getElementById('sfxVolumeLabel').textContent = sfxSlider.value+'%';
-    saveAudioSettings();
-  });
-  sfxSlider.addEventListener('change', ()=> playSfx('ui_confirm')); // un assaggio del volume appena impostato
-  const musicSlider = document.getElementById('musicVolumeSlider');
-  musicSlider.addEventListener('input', ()=>{
-    audioSettings.musicVolume = Number(musicSlider.value)/100;
-    document.getElementById('musicVolumeLabel').textContent = musicSlider.value+'%';
-    saveAudioSettings();
-    applyMusicVolumeNow(); // V0.9.7.8.10
-  });
+  // V0.9.7.8.32: controllo volume unificato (checkbox on/off + 5 tacche), non piu' toggle separato
+  // e slider continuo — piu' semplice da usare, coerente con lo stile "menu fatto bene" richiesto.
+  function wireVolumeControl(id, settingsEnabledKey, settingsVolumeKey, onChangeExtra){
+    const check = document.getElementById(id+'EnabledCheck');
+    check.addEventListener('change', ()=>{
+      audioSettings[settingsEnabledKey] = check.checked;
+      saveAudioSettings();
+      if(onChangeExtra) onChangeExtra();
+      if(check.checked) playSfx('ui_confirm');
+    });
+    document.querySelectorAll(`.vol-notch[data-vol-id="${id}"]`).forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const level = Number(btn.dataset.level);
+        audioSettings[settingsVolumeKey] = level/5;
+        saveAudioSettings();
+        document.querySelectorAll(`.vol-notch[data-vol-id="${id}"]`).forEach(b=>{
+          b.classList.toggle('filled', Number(b.dataset.level)<=level);
+        });
+        if(onChangeExtra) onChangeExtra();
+        if(id==='sfx') playSfx('ui_confirm');
+      });
+    });
+  }
+  wireVolumeControl('sfx', 'sfxEnabled', 'sfxVolume');
+  wireVolumeControl('music', 'musicEnabled', 'musicVolume', applyMusicVolumeNow);
   document.querySelectorAll('.lang-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       currentLang = btn.dataset.langChoice;
@@ -7603,10 +7649,11 @@ function updateSidebarVisibility(){
   updateMenuNewCareerVisibility();
   // V0.9.7.8.12: niente icona menu sopra lo splash FUORISCALA — e' un momento di brand puro
   const toggleBtn = document.getElementById('gameMenuToggleBtn');
-  if(toggleBtn) toggleBtn.style.display = (state && state.phase==='studio-splash') ? 'none' : '';
-  // V0.9.7.8.24: banner promozionale — sempre visibile tranne su splash e titolo
+  const hideMenuOn = new Set(['studio-splash','lang-select']);
+  if(toggleBtn) toggleBtn.style.display = (state && hideMenuOn.has(state.phase)) ? 'none' : '';
+  // V0.9.7.8.24: banner promozionale — sempre visibile tranne su splash, scelta lingua e titolo
   const banner = document.getElementById('promoBanner');
-  const hideBannerOn = new Set(['studio-splash','title']);
+  const hideBannerOn = new Set(['studio-splash','lang-select','title']);
   const showBanner = state && !hideBannerOn.has(state.phase);
   if(banner) banner.style.display = showBanner ? 'flex' : 'none';
   document.body.classList.toggle('has-promo-banner', !!showBanner);
@@ -7617,7 +7664,7 @@ function updateSidebarVisibility(){
 // template — richiamata all'avvio e ad ogni cambio lingua.
 function applyStaticMenuTranslations(){
   const map = {
-    menuNewCareerBtn: 'menu_new_career', menuTrophyBtn: 'menu_trophy_room', menuGuideBtn: 'menu_guide',
+    menuHomeBtn: 'menu_home', menuNewCareerBtn: 'menu_new_career', menuTrophyBtn: 'menu_trophy_room', menuGuideBtn: 'menu_guide',
     menuAchievementsBtn: 'menu_achievements', menuSettingsBtn: 'menu_settings', menuCreditsBtn: 'menu_credits',
   };
   Object.entries(map).forEach(([id, key])=>{
@@ -7626,6 +7673,9 @@ function applyStaticMenuTranslations(){
   });
   const fsLabel = document.getElementById('menuFullscreenLabel');
   if(fsLabel && !document.fullscreenElement) fsLabel.textContent = t('menu_fullscreen');
+  const sectionLabels = document.querySelectorAll('.menu-section-label');
+  const sectionKeys = ['menu_section_game','menu_section_progress','menu_section_info','menu_section_app'];
+  sectionLabels.forEach((el,i)=>{ if(sectionKeys[i]) el.textContent = t(sectionKeys[i]); });
 }
 function initSidebar(){
   document.getElementById('gameMenuToggleBtn').addEventListener('click', toggleMenuPanel);
