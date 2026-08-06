@@ -63,6 +63,19 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    classify_upgrade: 'UPGRADE GARANTITO', classify_opportunity: 'OPPORTUNITÀ', classify_trade: 'SCAMBIO', classify_replacement: 'SOSTITUZIONE',
+    eff_qualifying: 'Qualifica', eff_dry_race: 'Gara asciutta', eff_wet_race: 'Gara bagnata',
+    eff_reliability: 'Affidabilità', eff_fast_circuits: 'Prestazione circuiti veloci', eff_street_circuits: 'Prestazione circuiti cittadini',
+    pc_confirm_title: (l)=>`Conferma Sostituzione — ${l}`, pc_semaforo_title: 'Effetto su Semaforo e Rating Scuderia',
+    pc_before: 'PRIMA', pc_after: 'DOPO', pc_rating: 'RATING',
+    pc_disclaimer: 'Una volta confermato, il componente attuale non può essere recuperato in questa carriera. I dettagli del confronto sono qui sotto.',
+    pc_gain: (n)=>`Incassi: +${n}`, pc_cost: (n)=>`Costo: -${n}`, pc_budget_avail: (n)=>`Budget disponibile: ${n}`,
+    pc_downgrade_note: 'Rating più basso di quello attuale: questo scambio non chiude il turno.',
+    pc_cant_afford: 'Budget insufficiente per questa sostituzione.',
+    pc_confirm_btn: 'Conferma', pc_cancel_btn: 'Annulla', pc_current_vs_proposed: 'Attuale vs Proposto',
+    pc_current: 'ATTUALE', pc_proposed: 'PROPOSTO', pc_current_traits: 'Bonus/Malus/Abilità attuali', pc_proposed_traits: 'Bonus/Malus/Abilità proposti',
+    pc_trait: 'Trait', pc_estimated_effect: 'Effetto Stimato sulla Scuderia', pc_avg_all_circuits: 'MEDIA SU TUTTI I CIRCUITI',
+    pit_rivals_plural: 'Le Tue Rivali', pit_rivals_single: 'La Tua Rivale', pit_quick_ref: 'RIFERIMENTO RAPIDO', pit_strength: 'forza',
     upg_developing: 'Sviluppo in corso…', upg_tap_skip: 'Tocca per saltare',
     upg_failed: 'Sviluppo Fallito', upg_success: 'Sviluppo Riuscito!', upg_risk_taken: (p)=>` · rischio corso: ${p}%`,
     upg_no_gain: 'Nessun guadagno questa volta.', upg_gain_global: (n)=>`+${n} RATING diffuso su tutta la vettura`,
@@ -179,6 +192,19 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    classify_upgrade: 'GUARANTEED UPGRADE', classify_opportunity: 'OPPORTUNITY', classify_trade: 'TRADE-OFF', classify_replacement: 'REPLACEMENT',
+    eff_qualifying: 'Qualifying', eff_dry_race: 'Dry race', eff_wet_race: 'Wet race',
+    eff_reliability: 'Reliability', eff_fast_circuits: 'Performance on fast circuits', eff_street_circuits: 'Performance on street circuits',
+    pc_confirm_title: (l)=>`Confirm Replacement — ${l}`, pc_semaforo_title: 'Effect on Semaphore and Team Rating',
+    pc_before: 'BEFORE', pc_after: 'AFTER', pc_rating: 'RATING',
+    pc_disclaimer: "Once confirmed, the current component can't be recovered in this career. Comparison details are below.",
+    pc_gain: (n)=>`You get: +${n}`, pc_cost: (n)=>`Cost: -${n}`, pc_budget_avail: (n)=>`Available budget: ${n}`,
+    pc_downgrade_note: "Lower rating than the current one: this swap doesn't close the turn.",
+    pc_cant_afford: 'Not enough budget for this replacement.',
+    pc_confirm_btn: 'Confirm', pc_cancel_btn: 'Cancel', pc_current_vs_proposed: 'Current vs Proposed',
+    pc_current: 'CURRENT', pc_proposed: 'PROPOSED', pc_current_traits: 'Current Bonus/Malus/Ability', pc_proposed_traits: 'Proposed Bonus/Malus/Ability',
+    pc_trait: 'Trait', pc_estimated_effect: 'Estimated Effect on Team', pc_avg_all_circuits: 'AVERAGE ACROSS ALL CIRCUITS',
+    pit_rivals_plural: 'Your Rivals', pit_rivals_single: 'Your Rival', pit_quick_ref: 'QUICK REFERENCE', pit_strength: 'strength',
     upg_developing: 'Development in progress…', upg_tap_skip: 'Tap to skip',
     upg_failed: 'Development Failed', upg_success: 'Development Succeeded!', upg_risk_taken: (p)=>` · risk taken: ${p}%`,
     upg_no_gain: 'No gain this time.', upg_gain_global: (n)=>`+${n} RATING spread across the whole car`,
@@ -289,6 +315,19 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    classify_upgrade: 'MEJORA GARANTIZADA', classify_opportunity: 'OPORTUNIDAD', classify_trade: 'INTERCAMBIO', classify_replacement: 'SUSTITUCIÓN',
+    eff_qualifying: 'Clasificación', eff_dry_race: 'Carrera en seco', eff_wet_race: 'Carrera en mojado',
+    eff_reliability: 'Fiabilidad', eff_fast_circuits: 'Rendimiento en circuitos rápidos', eff_street_circuits: 'Rendimiento en circuitos urbanos',
+    pc_confirm_title: (l)=>`Confirmar Sustitución — ${l}`, pc_semaforo_title: 'Efecto en el Semáforo y el Rating de Escudería',
+    pc_before: 'ANTES', pc_after: 'DESPUÉS', pc_rating: 'RATING',
+    pc_disclaimer: 'Una vez confirmado, el componente actual no se puede recuperar en esta carrera. Los detalles de la comparación están abajo.',
+    pc_gain: (n)=>`Ingresas: +${n}`, pc_cost: (n)=>`Coste: -${n}`, pc_budget_avail: (n)=>`Presupuesto disponible: ${n}`,
+    pc_downgrade_note: 'Rating más bajo que el actual: este cambio no cierra el turno.',
+    pc_cant_afford: 'Presupuesto insuficiente para esta sustitución.',
+    pc_confirm_btn: 'Confirmar', pc_cancel_btn: 'Cancelar', pc_current_vs_proposed: 'Actual vs Propuesto',
+    pc_current: 'ACTUAL', pc_proposed: 'PROPUESTO', pc_current_traits: 'Bonus/Malus/Habilidad actuales', pc_proposed_traits: 'Bonus/Malus/Habilidad propuestos',
+    pc_trait: 'Rasgo', pc_estimated_effect: 'Efecto Estimado en la Escudería', pc_avg_all_circuits: 'MEDIA EN TODOS LOS CIRCUITOS',
+    pit_rivals_plural: 'Tus Rivales', pit_rivals_single: 'Tu Rival', pit_quick_ref: 'REFERENCIA RÁPIDA', pit_strength: 'fuerza',
     upg_developing: 'Desarrollo en curso…', upg_tap_skip: 'Toca para saltar',
     upg_failed: 'Desarrollo Fallido', upg_success: '¡Desarrollo Conseguido!', upg_risk_taken: (p)=>` · riesgo asumido: ${p}%`,
     upg_no_gain: 'Sin ganancia esta vez.', upg_gain_global: (n)=>`+${n} RATING repartido en todo el coche`,
@@ -2850,7 +2889,7 @@ function classifyReplacement(catKey, current, candidate){
     else if(goodness<-0.001) worse++;
   });
 
-  if(worse===0 && better>0) return 'UPGRADE GARANTITO';
+  if(worse===0 && better>0) return t('classify_upgrade');
 
   // OPPORTUNITÀ: il vantaggio e' concentrato (solo) sulla statistica situazionale, con un
   // salto netto, mentre il resto della scheda non migliora — va riconosciuta PRIMA dello
@@ -2858,11 +2897,11 @@ function classifyReplacement(catKey, current, candidate){
   if(sit && current[sit]!==undefined && candidate[sit]!==undefined){
     const sitJump = candidate[sit]-current[sit];
     const onlySituationalBetter = betterKeys.length>0 && betterKeys.every(k=>k===sit);
-    if(sitJump>=12 && onlySituationalBetter && candidate.rating<=current.rating) return 'OPPORTUNITÀ';
+    if(sitJump>=12 && onlySituationalBetter && candidate.rating<=current.rating) return t('classify_opportunity');
   }
 
-  if(better>0 && worse>0) return 'SCAMBIO';
-  return 'SOSTITUZIONE';
+  if(better>0 && worse>0) return t('classify_trade');
+  return t('classify_replacement');
 }
 
 // Stima dell'effetto sulla scuderia (spec 0.6 punto 2), calcolata sostituendo davvero
@@ -5469,12 +5508,12 @@ function compareStatTable(catKey, current, candidate){
 
 function effectEstimateHTML(effect){
   const rows = [
-    ['Qualifica', effect.qualifica],
-    ['Gara asciutta', effect.asciutta],
-    ['Gara bagnata', effect.bagnata],
-    ['Affidabilità', effect.affidabilita],
-    ['Prestazione circuiti veloci', effect.veloci],
-    ['Prestazione circuiti cittadini', effect.cittadini]
+    [t('eff_qualifying'), effect.qualifica],
+    [t('eff_dry_race'), effect.asciutta],
+    [t('eff_wet_race'), effect.bagnata],
+    [t('eff_reliability'), effect.affidabilita],
+    [t('eff_fast_circuits'), effect.veloci],
+    [t('eff_street_circuits'), effect.cittadini]
   ];
   return rows.map(([label,val])=>{
     const cls = val>0.05?'cmp-better':(val<-0.05?'cmp-worse':'cmp-same');
@@ -5508,63 +5547,63 @@ function renderPitlaneConfirm(){
   app.innerHTML = `
   ${topbarHTML()}
   <div class="panel">
-    <div class="eyebrow">Conferma Sostituzione — ${pr.catLabel}</div>
+    <div class="eyebrow">${t('pc_confirm_title', pr.catLabel)}</div>
     <h2 class="hdr" style="font-size:24px;">${classification}</h2>
-    <div class="panel-title" style="margin-top:14px;"><h3 class="hdr" style="font-size:13px;">Effetto su Semaforo e Rating Scuderia</h3></div>
+    <div class="panel-title" style="margin-top:14px;"><h3 class="hdr" style="font-size:13px;">${t('pc_semaforo_title')}</h3></div>
     <div class="grid grid-2" style="margin-top:8px;gap:10px;">
       <div class="mini" style="padding:10px;">
-        <div class="role">PRIMA</div>
+        <div class="role">${t('pc_before')}</div>
         <div style="margin:6px 0;">${miniSemaforoHTML(circlesBefore)}</div>
-        <div class="rt">${strengthBefore} RATING</div>
+        <div class="rt">${strengthBefore} ${t('pc_rating')}</div>
       </div>
       <div class="mini" style="padding:10px;">
-        <div class="role">DOPO</div>
+        <div class="role">${t('pc_after')}</div>
         <div style="margin:6px 0;">${miniSemaforoHTML(circlesAfter)}</div>
-        <div class="rt">${strengthAfter} RATING <span style="color:${strengthDeltaColor};font-family:var(--font-mono);">(${strengthDeltaLabel})</span></div>
+        <div class="rt">${strengthAfter} ${t('pc_rating')} <span style="color:${strengthDeltaColor};font-family:var(--font-mono);">(${strengthDeltaLabel})</span></div>
       </div>
     </div>
-    <div class="dim" style="font-size:12px;margin-top:12px;">Una volta confermato, il componente attuale non può essere recuperato in questa carriera. I dettagli del confronto sono qui sotto.</div>
+    <div class="dim" style="font-size:12px;margin-top:12px;">${t('pc_disclaimer')}</div>
     <div style="margin-top:10px;font-size:14px;">
-      <b style="color:${isDowngrade?'var(--ok)':(canAfford?'var(--cyan)':'var(--danger)')};">${isDowngrade?`Incassi: +${fmtM(-price)}`:`Costo: -${fmtM(price)}`}</b>
-      · Budget disponibile: ${fmtM(state.budget)}
+      <b style="color:${isDowngrade?'var(--ok)':(canAfford?'var(--cyan)':'var(--danger)')};">${isDowngrade?t('pc_gain', fmtM(-price)):t('pc_cost', fmtM(price))}</b>
+      · ${t('pc_budget_avail', fmtM(state.budget))}
     </div>
-    ${isDowngrade ? '<div class="dim" style="font-size:12px;color:var(--ok);margin-top:4px;">Rating più basso di quello attuale: questo scambio non chiude il turno.</div>' : ''}
-    ${!canAfford ? '<div class="dim" style="font-size:12px;color:var(--danger);margin-top:4px;">Budget insufficiente per questa sostituzione.</div>' : ''}
+    ${isDowngrade ? `<div class="dim" style="font-size:12px;color:var(--ok);margin-top:4px;">${t('pc_downgrade_note')}</div>` : ''}
+    ${!canAfford ? `<div class="dim" style="font-size:12px;color:var(--danger);margin-top:4px;">${t('pc_cant_afford')}</div>` : ''}
   </div>
   <div class="btnrow">
-    <button class="primary" data-action="confirm-replacement" ${canAfford?'':'disabled'}>Conferma</button>
-    <button class="ghost" data-action="cancel-replacement">Annulla</button>
+    <button class="primary" data-action="confirm-replacement" ${canAfford?'':'disabled'}>${t('pc_confirm_btn')}</button>
+    <button class="ghost" data-action="cancel-replacement">${t('pc_cancel_btn')}</button>
   </div>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">Attuale vs Proposto</h3></div>
+    <div class="panel-title"><h3 class="hdr">${t('pc_current_vs_proposed')}</h3></div>
     <div class="grid grid-2" style="margin-bottom:14px;">
       <div class="mini" data-rarity="${displayRarity(current)||'Common'}" style="padding:12px;">
-        <div class="role">ATTUALE</div><div class="nm">${current.nome}</div><div class="rt">${current.rating} RATING</div>
+        <div class="role">${t('pc_current')}</div><div class="nm">${current.nome}</div><div class="rt">${current.rating} ${t('pc_rating')}</div>
       </div>
       <div class="mini" data-rarity="${displayRarity(candidate)}" style="padding:12px;">
-        <div class="role">PROPOSTO</div><div class="nm">${candidate.nome}</div><div class="rt">${candidate.rating} RATING</div>
+        <div class="role">${t('pc_proposed')}</div><div class="nm">${candidate.nome}</div><div class="rt">${candidate.rating} ${t('pc_rating')}</div>
       </div>
     </div>
     ${compareStatTable(pr.catKey, current, candidate)}
     <div class="grid grid-2" style="margin-top:14px;">
       <div>
-        <div class="tag-line dim" style="margin-bottom:4px;text-transform:uppercase;font-size:10px;">Bonus/Malus/Abilità attuali</div>
+        <div class="tag-line dim" style="margin-bottom:4px;text-transform:uppercase;font-size:10px;">${t('pc_current_traits')}</div>
         ${current.bonus? `<div class="tag-line bonus">▲ ${current.bonus}</div>`:''}
         ${current.malus? `<div class="tag-line malus">▼ ${current.malus}</div>`:''}
         ${current.abilita? `<div class="ability">${current.abilita}</div>`:''}
-        ${current.arch? `<div class="tag-line dim">Trait: ${current.arch}</div>`:''}
+        ${current.arch? `<div class="tag-line dim">${t('pc_trait')}: ${current.arch}</div>`:''}
       </div>
       <div>
-        <div class="tag-line dim" style="margin-bottom:4px;text-transform:uppercase;font-size:10px;">Bonus/Malus/Abilità proposti</div>
+        <div class="tag-line dim" style="margin-bottom:4px;text-transform:uppercase;font-size:10px;">${t('pc_proposed_traits')}</div>
         ${candidate.bonus? `<div class="tag-line bonus">▲ ${candidate.bonus}</div>`:''}
         ${candidate.malus? `<div class="tag-line malus">▼ ${candidate.malus}</div>`:''}
         ${candidate.abilita? `<div class="ability">${candidate.abilita}</div>`:''}
-        ${candidate.arch? `<div class="tag-line dim">Trait: ${candidate.arch}</div>`:''}
+        ${candidate.arch? `<div class="tag-line dim">${t('pc_trait')}: ${candidate.arch}</div>`:''}
       </div>
     </div>
   </div>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">Effetto Stimato sulla Scuderia</h3><span class="dim mono" style="font-size:10px;">MEDIA SU TUTTI I CIRCUITI</span></div>
+    <div class="panel-title"><h3 class="hdr">${t('pc_estimated_effect')}</h3><span class="dim mono" style="font-size:10px;">${t('pc_avg_all_circuits')}</span></div>
     ${effectEstimateHTML(effect)}
   </div>
   `;
@@ -5641,7 +5680,7 @@ function pitlaneRivalsHTML(){
     <div class="rival-mini-small">
       ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1)}
       <div class="rival-mini-name">${teamFlag(id)} ${t.nome}</div>
-      <div class="dim mono" style="font-size:10px;">forza <b style="color:var(--cyan);">${Math.round(aiTeamWeightedStrength(t))}</b> · ${cs.points} pt</div>
+      <div class="dim mono" style="font-size:10px;">${window.t('pit_strength')} <b style="color:var(--cyan);">${Math.round(aiTeamWeightedStrength(t))}</b> · ${cs.points} pt</div>
     </div>
     <div class="rival-mini-small">
       ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2)}
@@ -5651,7 +5690,7 @@ function pitlaneRivalsHTML(){
   }).join('');
   return `
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">${state.rivals.length>1?'Le Tue Rivali':'La Tua Rivale'}</h3><span class="dim mono" style="font-size:10px;">RIFERIMENTO RAPIDO</span></div>
+    <div class="panel-title"><h3 class="hdr">${state.rivals.length>1?window.t('pit_rivals_plural'):window.t('pit_rivals_single')}</h3><span class="dim mono" style="font-size:10px;">${window.t('pit_quick_ref')}</span></div>
     <div class="grid grid-4 rival-mini-grid">${cardsHTML}</div>
   </div>`;
 }
@@ -6535,7 +6574,7 @@ function onAction(e){
     const candidateId = el.dataset.id;
     const options = state.midSeasonSwapOptions[catKey] || [];
     const candidate = options.find(o=>o.id===candidateId);
-    const catLabel = catKey==='pilotMain' ? 'Pilota Principale' : 'Secondo Pilota';
+    const catLabel = catKey==='pilotMain' ? t('mss_pilot_main') : t('mss_pilot_second');
     state.pendingReplacement = { catKey, candidateId, catLabel, options, returnPhase:'midseason-swap' };
     state.pendingReplacementEffect = estimateSquadEffect(catKey, candidate);
     state.phase = 'pitlane_confirm';
