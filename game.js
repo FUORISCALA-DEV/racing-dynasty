@@ -63,6 +63,21 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    expl_retired: 'Ritirato — nessun punto raccolto in questo Gran Premio.',
+    expl_gained: (grid,pos,delta)=>`Partito P${grid}, arrivato P${pos}: <b>+${delta} posizion${delta===1?'e':'i'}</b> guadagnat${delta===1?'a':'e'} in gara.`,
+    expl_lost: (grid,pos,delta)=>`Partito P${grid}, arrivato P${pos}: <b>${delta} posizion${delta===-1?'e':'i'}</b> perse in gara.`,
+    expl_same: (grid)=>`Partito e arrivato P${grid}: nessun cambio di posizione rispetto alla griglia.`,
+    expl_dominant: (area,rating,band)=>`Circuito che richiede soprattutto <b>${area}</b>: la tua è a ${rating} — fascia ${band}.`,
+    expl_band_excellent: 'eccellente', expl_band_good: 'buona', expl_band_average: 'nella media', expl_band_below: 'sotto la media', expl_band_weak: 'debole',
+    expl_rain_changed: 'Meteo cambiato in gara: pioggia arrivata.', expl_rain_wet: 'Gara sul bagnato.',
+    expl_rain_handling: (name,stat)=>`Gestione pioggia di ${name}: ${stat}.`,
+    expl_safety_car: 'Safety Car in gara: griglia compattata, occasione di sorpasso o di difesa a seconda della posizione.',
+    race_result_retired: 'RIT', race_result_retired_full: 'RITIRATO',
+    race_result_you_badge: 'TU', race_result_rival_badge: 'RIVALE', race_result_no_events: 'Nessun evento di rilievo in questo Gran Premio.',
+    race_result_title: (n,tot)=>`Risultato Gran Premio ${n}/${tot}`, race_result_continue: 'Continua →',
+    race_result_why: '❓ Perché sei arrivato così', race_result_finish_order: 'Ordine di Arrivo', race_result_20_drivers: '20 PILOTI',
+    race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Pilota', race_result_th_team: 'Scuderia', race_result_th_points: 'Punti',
+    race_result_event_log: 'Log Eventi di Gara', race_result_show_full_log: (n)=>`Mostra il log completo della gara (${n} eventi)`,
     rival_ahead: (n)=>`+${n} su di loro`, rival_behind: (n)=>`${n} da recuperare`, rival_tied: 'in parità',
     rival_you_badge: 'TU', rival_constructor_points: 'punti costruttori · forza',
     rival_title_initial: '🎯 La Tua Rivalità', rival_title_new: '↗ Nuova Rivalità',
@@ -134,6 +149,21 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    expl_retired: 'Retired — no points scored in this Grand Prix.',
+    expl_gained: (grid,pos,delta)=>`Started P${grid}, finished P${pos}: <b>+${delta} position${delta===1?'':'s'}</b> gained in the race.`,
+    expl_lost: (grid,pos,delta)=>`Started P${grid}, finished P${pos}: <b>${delta} position${delta===-1?'':'s'}</b> lost in the race.`,
+    expl_same: (grid)=>`Started and finished P${grid}: no change of position from the grid.`,
+    expl_dominant: (area,rating,band)=>`Circuit that mainly demands <b>${area}</b>: yours is at ${rating} — ${band} tier.`,
+    expl_band_excellent: 'excellent', expl_band_good: 'good', expl_band_average: 'average', expl_band_below: 'below average', expl_band_weak: 'weak',
+    expl_rain_changed: 'Weather changed during the race: rain arrived.', expl_rain_wet: 'Race in wet conditions.',
+    expl_rain_handling: (name,stat)=>`${name}'s rain handling: ${stat}.`,
+    expl_safety_car: "Safety Car during the race: field bunched up, an opportunity to overtake or defend depending on position.",
+    race_result_retired: 'DNF', race_result_retired_full: 'RETIRED',
+    race_result_you_badge: 'YOU', race_result_rival_badge: 'RIVAL', race_result_no_events: 'No notable events in this Grand Prix.',
+    race_result_title: (n,tot)=>`Grand Prix Result ${n}/${tot}`, race_result_continue: 'Continue →',
+    race_result_why: '❓ Why you finished like this', race_result_finish_order: 'Finishing Order', race_result_20_drivers: '20 DRIVERS',
+    race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Driver', race_result_th_team: 'Team', race_result_th_points: 'Points',
+    race_result_event_log: 'Race Event Log', race_result_show_full_log: (n)=>`Show full race log (${n} events)`,
     rival_ahead: (n)=>`+${n} ahead of them`, rival_behind: (n)=>`${n} to catch up`, rival_tied: 'tied',
     rival_you_badge: 'YOU', rival_constructor_points: 'constructor points · strength',
     rival_title_initial: '🎯 Your Rivalry', rival_title_new: '↗ New Rivalry',
@@ -199,6 +229,21 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    expl_retired: 'Retirado — sin puntos en este Gran Premio.',
+    expl_gained: (grid,pos,delta)=>`Salió P${grid}, terminó P${pos}: <b>+${delta} posición${delta===1?'':'es'}</b> ganada${delta===1?'':'s'} en carrera.`,
+    expl_lost: (grid,pos,delta)=>`Salió P${grid}, terminó P${pos}: <b>${delta} posición${delta===-1?'':'es'}</b> perdida${delta===-1?'':'s'} en carrera.`,
+    expl_same: (grid)=>`Salió y terminó P${grid}: sin cambio de posición respecto a la parrilla.`,
+    expl_dominant: (area,rating,band)=>`Circuito que exige sobre todo <b>${area}</b>: la tuya está en ${rating} — nivel ${band}.`,
+    expl_band_excellent: 'excelente', expl_band_good: 'buena', expl_band_average: 'media', expl_band_below: 'por debajo de la media', expl_band_weak: 'floja',
+    expl_rain_changed: 'El clima cambió en carrera: llegó la lluvia.', expl_rain_wet: 'Carrera en mojado.',
+    expl_rain_handling: (name,stat)=>`Gestión de lluvia de ${name}: ${stat}.`,
+    expl_safety_car: 'Safety Car en carrera: parrilla compactada, ocasión de adelantar o defender según la posición.',
+    race_result_retired: 'RET', race_result_retired_full: 'RETIRADO',
+    race_result_you_badge: 'TÚ', race_result_rival_badge: 'RIVAL', race_result_no_events: 'Sin eventos destacables en este Gran Premio.',
+    race_result_title: (n,tot)=>`Resultado Gran Premio ${n}/${tot}`, race_result_continue: 'Continuar →',
+    race_result_why: '❓ Por qué has terminado así', race_result_finish_order: 'Orden de Llegada', race_result_20_drivers: '20 PILOTOS',
+    race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Piloto', race_result_th_team: 'Escudería', race_result_th_points: 'Puntos',
+    race_result_event_log: 'Registro de Eventos de Carrera', race_result_show_full_log: (n)=>`Mostrar registro completo de la carrera (${n} eventos)`,
     rival_ahead: (n)=>`+${n} por delante`, rival_behind: (n)=>`${n} por recuperar`, rival_tied: 'empatado',
     rival_you_badge: 'TÚ', rival_constructor_points: 'puntos de constructores · fuerza',
     rival_title_initial: '🎯 Tu Rivalidad', rival_title_new: '↗ Nueva Rivalidad',
@@ -2145,7 +2190,7 @@ function buildPhaseLog(t, timeline){
     const evNameLoc = evName(event.nome);
     if(causedDnf){
       dnfCausingEvents.add(slotKey);
-      lines.push({ tone:'neg', sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`${emo} ${L} ${giro} — ${window.t('race_retirement', shortName(e.driverName), e.teamName)}: ${evNameLoc}${e.isPlayerTeam?window.t('race_your_driver_bang'):''}` });
+      lines.push({ tone:'neg', imp:true, sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`${emo} ${L} ${giro} — ${window.t('race_retirement', shortName(e.driverName), e.teamName)}: ${evNameLoc}${e.isPlayerTeam?window.t('race_your_driver_bang'):''}` });
     } else {
       const tone = event.esito==='Positivo' ? 'pos' : (event.esito==='Negativo' ? 'neg' : 'neu');
       // V0.9.7.8.14: suono reale per le azioni di gara del giocatore (eventi tecnici/narrativi
@@ -2156,13 +2201,13 @@ function buildPhaseLog(t, timeline){
 
   entries.forEach(e=>{
     if(timeline.retiredAtPhase[e.slotKey]===t && !dnfCausingEvents.has(e.slotKey)){
-      lines.push({ tone:'neg', sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`🔧 ${L} ${giro} — ${window.t('race_retirement', shortName(e.driverName), e.teamName)}${e.isPlayerTeam?window.t('race_your_driver_bang'):''}` });
+      lines.push({ tone:'neg', imp:true, sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`🔧 ${L} ${giro} — ${window.t('race_retirement', shortName(e.driverName), e.teamName)}${e.isPlayerTeam?window.t('race_your_driver_bang'):''}` });
     }
   });
 
-  if(t===timeline.safetyCarPhase) lines.push({ tone:'neu', sfx:'safety_car', text:`${EMOJI_SAFETYCAR} ${L} ${giro} — ${window.t('race_safety_car_track')}` });
+  if(t===timeline.safetyCarPhase) lines.push({ tone:'neu', imp:true, sfx:'safety_car', text:`${EMOJI_SAFETYCAR} ${L} ${giro} — ${window.t('race_safety_car_track')}` });
   if(timeline.safetyCarPhase!==null && t===timeline.safetyCarPhase+1) lines.push({ tone:'neu', text:`🟢 ${L} ${giro} — ${window.t('race_restart')}` });
-  if(t===timeline.weatherChangePhase) lines.push({ tone:'neu', sfx: timeline.weatherAfter==='Bagnato'?'rain_start':undefined, text:`${timeline.weatherAfter==='Bagnato'?EMOJI_RAIN:'☀️'} ${L} ${giro} — ${window.t('race_weather_change', timeline.weatherAfter==='Bagnato'?window.t('weather_wet'):window.t('weather_dry'))}` });
+  if(t===timeline.weatherChangePhase) lines.push({ tone:'neu', imp:true, sfx: timeline.weatherAfter==='Bagnato'?'rain_start':undefined, text:`${timeline.weatherAfter==='Bagnato'?EMOJI_RAIN:'☀️'} ${L} ${giro} — ${window.t('race_weather_change', timeline.weatherAfter==='Bagnato'?window.t('weather_wet'):window.t('weather_dry'))}` });
   if(timeline.pitByPhase[t] && timeline.pitByPhase[t].size>0){
     const playerPitting = (timeline.pitByPhase[t].has('PLAYER-1') || timeline.pitByPhase[t].has('PLAYER-2'));
     lines.push({ tone:'neu', sfx: playerPitting?'pit_stop':undefined, text:`${EMOJI_TIRE} ${L} ${giro} — ${window.t('race_pit_wave')}` });
@@ -3215,7 +3260,10 @@ function flag(country){
 }
 // versione testuale (emoji), da usare SOLO dove l'HTML non e' permesso: <option>, attributi title/alt, ecc.
 function flagEmoji(country){ return COUNTRY_FLAG[country] || '🏳️'; }
-function displayArea(area){ return area==='Strategia' ? 'Team Principal' : area; }
+function displayArea(area){
+  const map = { 'Motore':t('comp_engine'), 'Telaio':t('comp_chassis'), 'Aerodinamica':t('comp_aero'), 'Gomme':t('comp_tires'), 'Strategia':t('comp_strategist'), 'Piloti':t('comp_driver1') };
+  return map[area] || area;
+}
 function teamFlag(teamId){
   if(teamId==='PLAYER') return state.team && state.team.nation ? flag(state.team.nation) : (state.team && state.team.pilotMain ? flag(state.team.pilotMain.naz) : '');
   const ai = state.aiTeams.find(t=>t.id===teamId);
@@ -5039,12 +5087,12 @@ function raceExplanationHTML(r, slotKey){
   const lines = [];
 
   if(e.dnf){
-    lines.push({ sign:'neg', text:`Ritirato — nessun punto raccolto in questo Gran Premio.` });
+    lines.push({ sign:'neg', text:t('expl_retired') });
   } else {
     const delta = grid - e.pos; // positivo = posizioni guadagnate
-    if(delta > 0) lines.push({ sign:'pos', text:`Partito P${grid}, arrivato P${e.pos}: <b>+${delta} posizion${delta===1?'e':'i'}</b> guadagnat${delta===1?'a':'e'} in gara.` });
-    else if(delta < 0) lines.push({ sign:'neg', text:`Partito P${grid}, arrivato P${e.pos}: <b>${delta} posizion${delta===-1?'e':'i'}</b> perse in gara.` });
-    else lines.push({ sign:'neu', text:`Partito e arrivato P${grid}: nessun cambio di posizione rispetto alla griglia.` });
+    if(delta > 0) lines.push({ sign:'pos', text:t('expl_gained', grid, e.pos, delta) });
+    else if(delta < 0) lines.push({ sign:'neg', text:t('expl_lost', grid, e.pos, delta) });
+    else lines.push({ sign:'neu', text:t('expl_same', grid) });
   }
 
   // componente dominante del circuito, confrontata con la fascia di rating (qualitativa, non un numero a caso)
@@ -5054,9 +5102,9 @@ function raceExplanationHTML(r, slotKey){
     const compRating = isPilotDom
       ? (slotKey==='PLAYER-1' ? state.team.pilotMain.rating : state.team.pilotSecond.rating)
       : state.team[domKey].rating;
-    const band = compRating>=90?'eccellente':compRating>=80?'buona':compRating>=70?'nella media':compRating>=60?'sotto la media':'debole';
+    const band = compRating>=90?t('expl_band_excellent'):compRating>=80?t('expl_band_good'):compRating>=70?t('expl_band_average'):compRating>=60?t('expl_band_below'):t('expl_band_weak');
     const sign = compRating>=80?'pos':compRating>=70?'neu':'neg';
-    lines.push({ sign, text:`Circuito che richiede soprattutto <b>${displayArea(r.circuit.componentedominante)}</b>: la tua è a ${compRating} — fascia ${band}.` });
+    lines.push({ sign, text:t('expl_dominant', displayArea(r.circuit.componentedominante), compRating, band) });
   }
 
   // meteo: se ha piovuto, la gestione pioggia del pilota conta
@@ -5065,12 +5113,12 @@ function raceExplanationHTML(r, slotKey){
     const rainStat = pilot.pioggia;
     const sign = rainStat>=75?'pos':rainStat>=55?'neu':'neg';
     const changed = r.weatherBefore!==r.weatherAfter;
-    lines.push({ sign, text:`${changed?'Meteo cambiato in gara: pioggia arrivata.':'Gara sul bagnato.'} Gestione pioggia di ${pilot.nome.split(' ').pop()}: ${rainStat}.` });
+    lines.push({ sign, text:`${changed?t('expl_rain_changed'):t('expl_rain_wet')} ${t('expl_rain_handling', pilot.nome.split(' ').pop(), rainStat)}` });
   }
 
   // safety car: evento neutro, segnaliamo solo che c'e' stato (senza inventare quanto abbia inciso)
   if(r.safetyCarPhase!=null){
-    lines.push({ sign:'neu', text:`Safety Car in gara: griglia compattata, occasione di sorpasso o di difesa a seconda della posizione.` });
+    lines.push({ sign:'neu', text:t('expl_safety_car') });
   }
 
   return lines.map(l=>`<div class="logline ${l.sign}"><span class="icon">${l.sign==='pos'?'▲':l.sign==='neg'?'▼':'–'}</span><span>${l.text}</span></div>`).join('');
@@ -5081,56 +5129,56 @@ function renderRaceResult(){
   const rows = r.entries.map(e=>{
     const cls = (e.isPlayerTeam ? 'me' : '') + (isRivalTeam(e.teamId)?' rival':'');
     const posCls = e.pos===1?'p1':e.pos===2?'p2':e.pos===3?'p3':'';
-    const evBadge = e.event ? `<span class="badge-event">${e.event.nome}</span>` : '';
-    const rivalBadge = !e.isPlayerTeam && isRivalTeam(e.teamId) ? ' <span class="badge-event rival-badge">RIVALE</span>' : '';
-    return `<tr class="${cls}"><td><span class="pos ${posCls}">${e.dnf?'RIT':'P'+e.pos}</span></td><td class="mono dim">#${e.carNumber}</td><td>${e.driverName}${e.isPlayerTeam?' <span class="badge-event">TU</span>':rivalBadge}${evBadge}</td><td class="dim">${e.teamName}</td><td class="mono">${e.points}</td></tr>`;
+    const evBadge = e.event ? `<span class="badge-event">${evName(e.event.nome)}</span>` : '';
+    const rivalBadge = !e.isPlayerTeam && isRivalTeam(e.teamId) ? ` <span class="badge-event rival-badge">${t('race_result_rival_badge')}</span>` : '';
+    return `<tr class="${cls}"><td><span class="pos ${posCls}">${e.dnf?t('race_result_retired'):'P'+e.pos}</span></td><td class="mono dim">#${e.carNumber}</td><td>${e.driverName}${e.isPlayerTeam?` <span class="badge-event">${t('race_result_you_badge')}</span>`:rivalBadge}${evBadge}</td><td class="dim">${e.teamName}</td><td class="mono">${e.points}</td></tr>`;
   }).join('');
 
-  // V0.9.3.1: log condensato — priorita' ai ritiri, safety car, cambi meteo ed eventi che
-  // coinvolgono i tuoi piloti; il log completo resta comunque disponibile nella tendina sotto.
+  // V0.9.7.8.30 fix: il filtro usava regex su parole italiane ("Ritiro","meteo cambia") che in
+  // EN/ES non esistono piu' nel testo gia' tradotto — ora usa il marcatore imp:true messo alla
+  // fonte in buildPhaseLog, indipendente dalla lingua.
   const fullNm1 = state.team.pilotMain.nome, fullNm2 = state.team.pilotSecond.nome;
   const importantLines = r.fullLog.filter(l =>
-    /Ritiro/.test(l.text) || /SAFETY CAR/.test(l.text) || /meteo cambia/.test(l.text) ||
-    l.text.includes(fullNm1) || l.text.includes(fullNm2)
+    l.imp || l.text.includes(fullNm1) || l.text.includes(fullNm2)
   );
   const highlightLines = importantLines.slice(0, 8);
   const highlightLog = highlightLines.length
     ? highlightLines.map(l=>`<div class="logline ${l.tone}"><span class="icon">${l.tone==='pos'?'▲':l.tone==='neg'?'▼':'–'}</span><span>${l.text}</span></div>`).join('')
-    : `<div class="logline neu"><span class="icon">–</span>Nessun evento di rilievo in questo Gran Premio.</div>`;
+    : `<div class="logline neu"><span class="icon">–</span>${t('race_result_no_events')}</div>`;
   const fullLogHTML = r.fullLog.map(l=>`<div class="logline ${l.tone}"><span class="icon">${l.tone==='pos'?'▲':l.tone==='neg'?'▼':'–'}</span><span>${l.text}</span></div>`).join('');
 
   const p1 = r.entries.find(e=>e.slotKey==='PLAYER-1');
   const p2 = r.entries.find(e=>e.slotKey==='PLAYER-2');
   const nm1 = state.team.pilotMain.nome.split(' ').pop();
   const nm2 = state.team.pilotSecond.nome.split(' ').pop();
-  const headline = `${nm1}: ${p1.dnf?'RITIRATO':'P'+p1.pos} · ${nm2}: ${p2.dnf?'RITIRATO':'P'+p2.pos}`;
+  const headline = `${nm1}: ${p1.dnf?t('race_result_retired_full'):'P'+p1.pos} · ${nm2}: ${p2.dnf?t('race_result_retired_full'):'P'+p2.pos}`;
 
   app.innerHTML = `
   ${topbarHTML()}
   <div class="panel">
-    <div class="eyebrow">Risultato Gran Premio ${state.raceIndex+1}/${state.calendar.length} — ${flag(r.circuit.paese)} ${r.circuit.nome}</div>
+    <div class="eyebrow">${t('race_result_title', state.raceIndex+1, state.calendar.length)} — ${flag(r.circuit.paese)} ${r.circuit.nome}</div>
     <h2 class="hdr" style="font-size:26px;">${headline}</h2>
   </div>
   ${trophyUnlockBannerHTML()}
-  <div class="btnrow"><button class="primary" data-action="continue-to-pitlane">Continua →</button></div>
+  <div class="btnrow"><button class="primary" data-action="continue-to-pitlane">${t('race_result_continue')}</button></div>
   <details class="hub-expand">
-    <summary>❓ Perché sei arrivato così</summary>
+    <summary>${t('race_result_why')}</summary>
     <div class="panel">
-      <div class="panel-title"><h3 class="hdr" style="font-size:15px;">${nm1} — ${p1.dnf?'RITIRATO':'P'+p1.pos}</h3></div>
+      <div class="panel-title"><h3 class="hdr" style="font-size:15px;">${nm1} — ${p1.dnf?t('race_result_retired_full'):'P'+p1.pos}</h3></div>
       ${raceExplanationHTML(r,'PLAYER-1')}
-      <div class="panel-title" style="margin-top:14px;"><h3 class="hdr" style="font-size:15px;">${nm2} — ${p2.dnf?'RITIRATO':'P'+p2.pos}</h3></div>
+      <div class="panel-title" style="margin-top:14px;"><h3 class="hdr" style="font-size:15px;">${nm2} — ${p2.dnf?t('race_result_retired_full'):'P'+p2.pos}</h3></div>
       ${raceExplanationHTML(r,'PLAYER-2')}
     </div>
   </details>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">Ordine di Arrivo</h3><span class="dim mono" style="font-size:11px;">20 PILOTI</span></div>
-    <table><thead><tr><th>Pos</th><th>#</th><th>Pilota</th><th>Scuderia</th><th>Punti</th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="panel-title"><h3 class="hdr">${t('race_result_finish_order')}</h3><span class="dim mono" style="font-size:11px;">${t('race_result_20_drivers')}</span></div>
+    <table><thead><tr><th>${t('race_result_th_pos')}</th><th>${t('race_result_th_num')}</th><th>${t('race_result_th_driver')}</th><th>${t('race_result_th_team')}</th><th>${t('race_result_th_points')}</th></tr></thead><tbody>${rows}</tbody></table>
   </div>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">Log Eventi di Gara</h3></div>
+    <div class="panel-title"><h3 class="hdr">${t('race_result_event_log')}</h3></div>
     ${highlightLog}
     <details class="card-details" style="margin-top:10px;">
-      <summary onclick="event.stopPropagation()">Mostra il log completo della gara (${r.fullLog.length} eventi)</summary>
+      <summary onclick="event.stopPropagation()">${t('race_result_show_full_log', r.fullLog.length)}</summary>
       <div style="margin-top:8px;max-height:340px;overflow-y:auto;">${fullLogHTML}</div>
     </details>
   </div>
