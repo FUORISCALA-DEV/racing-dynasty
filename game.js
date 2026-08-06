@@ -65,6 +65,7 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    sl_races_word: 'GARE',
     settings_sfx_vol_short: 'Effetti Sonori', settings_music_vol_short: 'Musica',
     menu_home: 'Home', menu_section_game: 'GIOCO', menu_section_progress: 'PROGRESSI', menu_section_info: 'INFO', menu_section_app: 'APP',
     status_retired: 'RITIRATO', status_retired_short: 'RIT', status_box: 'BOX', status_penalty: 'PENALITÀ', status_on_track: 'In pista', status_leader: 'Leader',
@@ -213,6 +214,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    sl_races_word: 'RACES',
     settings_sfx_vol_short: 'Sound Effects', settings_music_vol_short: 'Music',
     menu_home: 'Home', menu_section_game: 'GAME', menu_section_progress: 'PROGRESS', menu_section_info: 'INFO', menu_section_app: 'APP',
     status_retired: 'RETIRED', status_retired_short: 'DNF', status_box: 'PIT', status_penalty: 'PENALTY', status_on_track: 'On track', status_leader: 'Leader',
@@ -355,6 +357,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    sl_races_word: 'CARRERAS',
     settings_sfx_vol_short: 'Efectos de Sonido', settings_music_vol_short: 'Música',
     menu_home: 'Inicio', menu_section_game: 'JUEGO', menu_section_progress: 'PROGRESO', menu_section_info: 'INFO', menu_section_app: 'APP',
     status_retired: 'RETIRADO', status_retired_short: 'RET', status_box: 'BOX', status_penalty: 'PENALIZACIÓN', status_on_track: 'En pista', status_leader: 'Líder',
@@ -4817,13 +4820,13 @@ function renderSeasonLength(){
   <div class="grid grid-2">
     <div class="card pickable" data-rarity="Rare" data-action="choose-season-length" data-length="10">
       <span class="rarity-tag" data-rarity="Rare">${t('sl_quick')}</span>
-      <div class="card-rating">10<span style="font-size:12px;color:var(--dim);"> GARE</span></div>
+      <div class="card-rating">10<span style="font-size:12px;color:var(--dim);"> ${t('sl_races_word')}</span></div>
       <div class="ability">${t('sl_quick_desc')}</div>
       <div class="card-tap-hint">${t('sl_quick_hint')}</div>
     </div>
     <div class="card pickable" data-rarity="Legendary" data-action="choose-season-length" data-length="20">
       <span class="rarity-tag" data-rarity="Legendary">${t('sl_full')}</span>
-      <div class="card-rating">20<span style="font-size:12px;color:var(--dim);"> GARE</span></div>
+      <div class="card-rating">20<span style="font-size:12px;color:var(--dim);"> ${t('sl_races_word')}</span></div>
       <div class="ability">${t('sl_full_desc')}</div>
       <div class="card-tap-hint">${t('sl_full_hint')}</div>
     </div>
