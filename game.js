@@ -63,6 +63,10 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    pg_rain_expected: 'Pioggia attesa', pg_rain_risk: (p)=>`Rischio pioggia ${p}%`, pg_dry_track: 'Pista asciutta',
+    pg_rating_gap: 'Distacco Rating dal Rivale', pg_main_rival: 'Rivale principale', pg_none_yet: 'Ancora nessuna',
+    pg_lineup: (team)=>`Schieramento — ${team}`, pg_team_rating: 'Rating Squadra', pg_weather_forecast: 'Meteo Previsto',
+    pg_go_to_race: 'Vai alla Gara →', pg_details_toggle: '🔍 Dettagli — componenti, statistiche, griglia completa',
     cat_aero_pack: 'Pacchetto Aerodinamico', cat_tire_supplier: 'Fornitore Gomme',
     pcard_guaranteed: 'UPGRADE GARANTITO', pcard_development: 'SVILUPPO', pcard_cost: 'Costo', pcard_no_risk: 'Nessun rischio',
     pcard_insufficient_budget: 'Budget insufficiente', pcard_tap_buy: 'Tocca per acquistare',
@@ -204,6 +208,10 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    pg_rain_expected: 'Rain expected', pg_rain_risk: (p)=>`Rain risk ${p}%`, pg_dry_track: 'Dry track',
+    pg_rating_gap: 'Rating Gap to Rival', pg_main_rival: 'Main rival', pg_none_yet: 'None yet',
+    pg_lineup: (team)=>`Lineup — ${team}`, pg_team_rating: 'Team Rating', pg_weather_forecast: 'Weather Forecast',
+    pg_go_to_race: 'Go to Race →', pg_details_toggle: '🔍 Details — components, stats, full grid',
     cat_aero_pack: 'Aero Package', cat_tire_supplier: 'Tyre Supplier',
     pcard_guaranteed: 'GUARANTEED UPGRADE', pcard_development: 'DEVELOPMENT', pcard_cost: 'Cost', pcard_no_risk: 'No risk',
     pcard_insufficient_budget: 'Insufficient budget', pcard_tap_buy: 'Tap to buy',
@@ -339,6 +347,10 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    pg_rain_expected: 'Lluvia prevista', pg_rain_risk: (p)=>`Riesgo de lluvia ${p}%`, pg_dry_track: 'Pista seca',
+    pg_rating_gap: 'Diferencia de Rating con el Rival', pg_main_rival: 'Rival principal', pg_none_yet: 'Todavía ninguna',
+    pg_lineup: (team)=>`Alineación — ${team}`, pg_team_rating: 'Rating del Equipo', pg_weather_forecast: 'Previsión Meteorológica',
+    pg_go_to_race: 'Ir a la Carrera →', pg_details_toggle: '🔍 Detalles — componentes, estadísticas, parrilla completa',
     cat_aero_pack: 'Paquete Aerodinámico', cat_tire_supplier: 'Proveedor de Neumáticos',
     pcard_guaranteed: 'MEJORA GARANTIZADA', pcard_development: 'DESARROLLO', pcard_cost: 'Coste', pcard_no_risk: 'Sin riesgo',
     pcard_insufficient_budget: 'Presupuesto insuficiente', pcard_tap_buy: 'Toca para comprar',
@@ -3769,7 +3781,7 @@ function renderPregara(){
   const teamRating = Math.round(computeTeamStrength(t));
   const weatherPct = circuit.probpioggia||0;
   const isWetForecast = circuit.clima==='Piovoso';
-  const weatherLabel = isWetForecast ? 'Pioggia attesa' : (weatherPct>=40 ? `Rischio pioggia ${weatherPct}%` : 'Pista asciutta');
+  const weatherLabel = isWetForecast ? window.t('pg_rain_expected') : (weatherPct>=40 ? window.t('pg_rain_risk', weatherPct) : window.t('pg_dry_track'));
   const weatherIcon = isWetForecast||weatherPct>=40 ? '🌧️' : '☀️';
   const mainRivalId = (state.rivals||[])[0];
   const mainRivalTeam = mainRivalId ? state.aiTeams.find(x=>x.id===mainRivalId) : null;
@@ -3778,44 +3790,44 @@ function renderPregara(){
         const gapColor = gap>=0 ? '#4CD97B' : 'var(--danger)';
         return `<div class="pregara-decisive-row">
           <div class="pregara-decisive-icon">⚔️</div>
-          <div class="pregara-decisive-text"><div class="pregara-decisive-label">Distacco Rating dal Rivale</div><div class="pregara-decisive-sublabel">${mainRivalTeam.nome}</div></div>
+          <div class="pregara-decisive-text"><div class="pregara-decisive-label">${window.t('pg_rating_gap')}</div><div class="pregara-decisive-sublabel">${mainRivalTeam.nome}</div></div>
           <div class="pregara-decisive-value" style="color:${gapColor};">${gap>=0?'+':''}${gap} <span style="font-size:12px;font-weight:700;">pt</span></div>
         </div>`;
       })()
     : `<div class="pregara-decisive-row">
         <div class="pregara-decisive-icon">⚔️</div>
-        <div class="pregara-decisive-text"><div class="pregara-decisive-label">Rivale principale</div></div>
-        <div class="pregara-decisive-value dim" style="font-size:13px;">Ancora nessuna</div>
+        <div class="pregara-decisive-text"><div class="pregara-decisive-label">${window.t('pg_main_rival')}</div></div>
+        <div class="pregara-decisive-value dim" style="font-size:13px;">${window.t('pg_none_yet')}</div>
       </div>`;
 
   app.innerHTML = `
   <div class="pregara-screen">
     ${topbarHTML()}
     <div class="panel">
-      <div class="eyebrow">Schieramento — ${teamFlag('PLAYER')} ${teamDisplayName()}</div>
+      <div class="eyebrow">${window.t('pg_lineup', teamFlag('PLAYER')+' '+teamDisplayName())}</div>
       <h2 class="hdr" style="font-size:24px;">${flag(circuit.paese)} ${circuit.nome} ${circuitStatusBadgeHTML(circuit.nome)}</h2>
     </div>
     <div class="panel pregara-decisive-panel">
       <div class="pregara-decisive-row">
         <div class="pregara-decisive-icon">📊</div>
-        <div class="pregara-decisive-text"><div class="pregara-decisive-label">Rating Squadra</div></div>
+        <div class="pregara-decisive-text"><div class="pregara-decisive-label">${window.t('pg_team_rating')}</div></div>
         <div class="pregara-decisive-value">${teamRating}</div>
       </div>
       <div class="pregara-decisive-row">
         <div class="pregara-decisive-icon">${weatherIcon}</div>
-        <div class="pregara-decisive-text"><div class="pregara-decisive-label">Meteo Previsto</div></div>
+        <div class="pregara-decisive-text"><div class="pregara-decisive-label">${window.t('pg_weather_forecast')}</div></div>
         <div class="pregara-decisive-value" style="font-size:16px;">${weatherLabel}</div>
       </div>
       ${rivalRowHTML}
     </div>
-    <div class="btnrow"><button class="primary" data-action="start-race-live">Vai alla Gara →</button></div>
+    <div class="btnrow"><button class="primary" data-action="start-race-live">${window.t('pg_go_to_race')}</button></div>
     <div class="grid grid-2 pregara-grid">
       ${pregaraCarPanelHTML(t.pilotMain, carNum1, compShared, null)}
       ${pregaraCarPanelHTML(t.pilotSecond, carNum2, compShared, null)}
     </div>
     <div class="panel">
       <button type="button" class="pregara-accordion-toggle" id="pregaraDetailsToggle">
-        <span>🔍 Dettagli — componenti, statistiche, griglia completa</span>
+        <span>${window.t('pg_details_toggle')}</span>
         <span id="pregaraDetailsChevron">▾</span>
       </button>
       <div id="pregaraDetailsBody" style="display:none;">
