@@ -63,6 +63,15 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    museum_title: '🏛️ Museo Dynasty', museum_tagline: 'Ogni pilota e componente portato fino in fondo a una stagione, o sostituito lungo il percorso, resta qui per sempre.',
+    museum_completion: 'COMPLETAMENTO', museum_back: '← Torna Indietro', museum_drivers: 'Piloti', museum_components: 'Componenti',
+    museum_no_drivers: 'Nessun pilota ancora sbloccato: portane uno fino a fine stagione, o sostituiscilo, per iniziare la collezione.',
+    museum_no_components: 'Nessun componente ancora sbloccato.',
+    tr_title: '🏆 Sala Trofei', tr_tagline: 'Un trofeo per ogni circuito — oro se vinto, grigio se corso, nascosto se non ancora visto.',
+    tr_raced: 'CIRCUITI CORSI', tr_won: 'CIRCUITI VINTI', tr_share: '📤 Condividi Sala Trofei', tr_museum_btn: '🏛️ Museo Dynasty', tr_back: '← Torna Indietro',
+    mss_eyebrow: (r,tot)=>`🏁 MID SEASON DRAFT — Gara ${r}/${tot}`, mss_title: "L'unica finestra di mercato piloti della stagione",
+    mss_subtitle: "Puoi sostituire nessuno, uno solo, o entrambi i piloti: la scelta è indipendente per ciascun sedile e resta valida fino all'ultima gara. Nessun rischio: se paghi il prezzo di scouting, ottieni il pilota. Da qui in poi, per il resto della stagione, i piloti restano fissi — lo sviluppo componenti riprende regolarmente dalla prossima pit-lane.",
+    mss_pilot_main: 'Pilota Principale', mss_pilot_second: 'Secondo Pilota', mss_confirm: 'Conferma Scelte e Prosegui →',
     rcs_beat_single: (n)=>`Hai battuto la tua rivale, ${n}.`, rcs_lost_single: (n)=>`${n} ti ha battuto in classifica.`,
     rcs_tied: 'Hai chiuso in parità con la tua rivale.', rcs_beat_all: (n)=>`Hai battuto tutte le tue rivali (${n}).`,
     rcs_lost_all: (n)=>`Le tue rivali ti hanno battuto tutte (${n}).`, rcs_mixed: (b,l)=>`Hai battuto ${b}, ma perso da ${l}.`,
@@ -165,6 +174,15 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    museum_title: '🏛️ Dynasty Museum', museum_tagline: 'Every driver and component carried through to the end of a season, or replaced along the way, stays here forever.',
+    museum_completion: 'COMPLETION', museum_back: '← Back', museum_drivers: 'Drivers', museum_components: 'Components',
+    museum_no_drivers: "No drivers unlocked yet: carry one to the end of a season, or replace it, to start the collection.",
+    museum_no_components: 'No components unlocked yet.',
+    tr_title: '🏆 Trophy Room', tr_tagline: 'A trophy for every circuit — gold if won, gray if raced, hidden if not seen yet.',
+    tr_raced: 'CIRCUITS RACED', tr_won: 'CIRCUITS WON', tr_share: '📤 Share Trophy Room', tr_museum_btn: '🏛️ Dynasty Museum', tr_back: '← Back',
+    mss_eyebrow: (r,tot)=>`🏁 MID SEASON DRAFT — Race ${r}/${tot}`, mss_title: "The season's only driver market window",
+    mss_subtitle: "You can replace none, just one, or both drivers: the choice is independent for each seat and stays valid until the last race. No risk: if you pay the scouting price, you get the driver. From here on, for the rest of the season, drivers are fixed — component development resumes normally from the next pit lane.",
+    mss_pilot_main: 'Main Driver', mss_pilot_second: 'Second Driver', mss_confirm: 'Confirm Choices and Continue →',
     rcs_beat_single: (n)=>`You beat your rival, ${n}.`, rcs_lost_single: (n)=>`${n} beat you in the standings.`,
     rcs_tied: 'You finished tied with your rival.', rcs_beat_all: (n)=>`You beat all your rivals (${n}).`,
     rcs_lost_all: (n)=>`Your rivals all beat you (${n}).`, rcs_mixed: (b,l)=>`You beat ${b}, but lost to ${l}.`,
@@ -261,6 +279,15 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    museum_title: '🏛️ Museo Dynasty', museum_tagline: 'Cada piloto y componente llevado hasta el final de una temporada, o sustituido por el camino, se queda aquí para siempre.',
+    museum_completion: 'COMPLETADO', museum_back: '← Volver', museum_drivers: 'Pilotos', museum_components: 'Componentes',
+    museum_no_drivers: 'Todavía no has desbloqueado ningún piloto: llévalo hasta el final de una temporada, o sustitúyelo, para empezar la colección.',
+    museum_no_components: 'Todavía no has desbloqueado ningún componente.',
+    tr_title: '🏆 Sala de Trofeos', tr_tagline: 'Un trofeo por cada circuito — dorado si ganado, gris si disputado, oculto si aún no visto.',
+    tr_raced: 'CIRCUITOS DISPUTADOS', tr_won: 'CIRCUITOS GANADOS', tr_share: '📤 Compartir Sala de Trofeos', tr_museum_btn: '🏛️ Museo Dynasty', tr_back: '← Volver',
+    mss_eyebrow: (r,tot)=>`🏁 MID SEASON DRAFT — Carrera ${r}/${tot}`, mss_title: 'La única ventana de mercado de pilotos de la temporada',
+    mss_subtitle: 'Puedes sustituir a ninguno, a uno solo, o a ambos pilotos: la elección es independiente para cada asiento y sigue siendo válida hasta la última carrera. Sin riesgo: si pagas el precio de scouting, obtienes al piloto. A partir de aquí, durante el resto de la temporada, los pilotos quedan fijos — el desarrollo de componentes se reanuda con normalidad desde el próximo pit lane.',
+    mss_pilot_main: 'Piloto Principal', mss_pilot_second: 'Segundo Piloto', mss_confirm: 'Confirmar Elecciones y Continuar →',
     rcs_beat_single: (n)=>`Has vencido a tu rival, ${n}.`, rcs_lost_single: (n)=>`${n} te ha vencido en la clasificación.`,
     rcs_tied: 'Has terminado empatado con tu rival.', rcs_beat_all: (n)=>`Has vencido a todas tus rivales (${n}).`,
     rcs_lost_all: (n)=>`Tus rivales te han vencido a todas (${n}).`, rcs_mixed: (b,l)=>`Has vencido a ${b}, pero has perdido contra ${l}.`,
@@ -3269,13 +3296,13 @@ function renderMidseasonSwap(){
   app.innerHTML = `
   ${topbarHTML()}
   <div class="panel">
-    <div class="eyebrow">🏁 MID SEASON DRAFT — Gara ${state.raceIndex+1}/${state.calendar.length}</div>
-    <h2 class="hdr" style="font-size:24px;">L'unica finestra di mercato piloti della stagione</h2>
-    <div class="dim" style="font-size:12px;margin-top:6px;">Puoi sostituire nessuno, uno solo, o entrambi i piloti: la scelta è indipendente per ciascun sedile e resta valida fino all'ultima gara. Nessun rischio: se paghi il prezzo di scouting, ottieni il pilota. Da qui in poi, per il resto della stagione, i piloti restano fissi — lo sviluppo componenti riprende regolarmente dalla prossima pit-lane.</div>
+    <div class="eyebrow">${t('mss_eyebrow', state.raceIndex+1, state.calendar.length)}</div>
+    <h2 class="hdr" style="font-size:24px;">${t('mss_title')}</h2>
+    <div class="dim" style="font-size:12px;margin-top:6px;">${t('mss_subtitle')}</div>
   </div>
-  ${pilotGroupHTML('pilotMain', 'Pilota Principale')}
-  ${pilotGroupHTML('pilotSecond', 'Secondo Pilota')}
-  <div class="btnrow" style="margin-top:16px;"><button class="primary" data-action="skip-midseason-swap">Conferma Scelte e Prosegui →</button></div>
+  ${pilotGroupHTML('pilotMain', t('mss_pilot_main'))}
+  ${pilotGroupHTML('pilotSecond', t('mss_pilot_second'))}
+  <div class="btnrow" style="margin-top:16px;"><button class="primary" data-action="skip-midseason-swap">${t('mss_confirm')}</button></div>
   `;
   bindActions();
 }
@@ -5670,23 +5697,23 @@ function renderMuseumDynasty(){
   app.innerHTML = `
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
-      <h1 class="hdr" style="font-size:30px;">🏛️ Museo Dynasty</h1>
-      <div class="tagline">Ogni pilota e componente portato fino in fondo a una stagione, o sostituito lungo il percorso, resta qui per sempre.</div>
+      <h1 class="hdr" style="font-size:30px;">${t('museum_title')}</h1>
+      <div class="tagline">${t('museum_tagline')}</div>
     </div>
   </div>
   <div class="panel">
     <div class="trophy-stats-row">
-      <div class="trophy-stat"><div class="trophy-stat-value">${unlockedAll}/${totalAll}</div><div class="trophy-stat-label">COMPLETAMENTO · ${pct}%</div></div>
+      <div class="trophy-stat"><div class="trophy-stat-value">${unlockedAll}/${totalAll}</div><div class="trophy-stat-label">${t('museum_completion')} · ${pct}%</div></div>
     </div>
-    <div class="btnrow"><button class="primary" data-action="close-museum">← Torna Indietro</button></div>
+    <div class="btnrow"><button class="primary" data-action="close-museum">${t('museum_back')}</button></div>
   </div>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">Piloti</h3><span class="dim mono" style="font-size:11px;">${unlockedPiloti}/${totalPiloti}</span></div>
-    <div class="museum-grid">${pilotCards || '<div class="dim" style="font-size:13px;">Nessun pilota ancora sbloccato: portane uno fino a fine stagione, o sostituiscilo, per iniziare la collezione.</div>'}</div>
+    <div class="panel-title"><h3 class="hdr">${t('museum_drivers')}</h3><span class="dim mono" style="font-size:11px;">${unlockedPiloti}/${totalPiloti}</span></div>
+    <div class="museum-grid">${pilotCards || `<div class="dim" style="font-size:13px;">${t('museum_no_drivers')}</div>`}</div>
   </div>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">Componenti</h3><span class="dim mono" style="font-size:11px;">${unlockedComponenti}/${totalComponenti}</span></div>
-    <div class="museum-grid">${compCards || '<div class="dim" style="font-size:13px;">Nessun componente ancora sbloccato.</div>'}</div>
+    <div class="panel-title"><h3 class="hdr">${t('museum_components')}</h3><span class="dim mono" style="font-size:11px;">${unlockedComponenti}/${totalComponenti}</span></div>
+    <div class="museum-grid">${compCards || `<div class="dim" style="font-size:13px;">${t('museum_no_components')}</div>`}</div>
   </div>
   `;
   bindActions();
@@ -5704,19 +5731,19 @@ function renderTrophyRoom(){
   app.innerHTML = `
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
-      <h1 class="hdr" style="font-size:30px;">🏆 Sala Trofei</h1>
-      <div class="tagline">Un trofeo per ogni circuito — oro se vinto, grigio se corso, nascosto se non ancora visto.</div>
+      <h1 class="hdr" style="font-size:30px;">${t('tr_title')}</h1>
+      <div class="tagline">${t('tr_tagline')}</div>
     </div>
   </div>
   <div class="panel">
     <div class="trophy-stats-row">
-      <div class="trophy-stat"><div class="trophy-stat-value">${racedCount}/${total}</div><div class="trophy-stat-label">CIRCUITI CORSI · ${racedPct}%</div></div>
-      <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${wonCount}/${total}</div><div class="trophy-stat-label">CIRCUITI VINTI · ${wonPct}%</div></div>
+      <div class="trophy-stat"><div class="trophy-stat-value">${racedCount}/${total}</div><div class="trophy-stat-label">${t('tr_raced')} · ${racedPct}%</div></div>
+      <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${wonCount}/${total}</div><div class="trophy-stat-label">${t('tr_won')} · ${wonPct}%</div></div>
     </div>
     <div class="btnrow">
-      <button class="ghost" data-action="share-trophy-room">📤 Condividi Sala Trofei</button>
-      <button class="ghost" data-action="open-museum">🏛️ Museo Dynasty</button>
-      <button class="primary" data-action="close-trophy-room">← Torna Indietro</button>
+      <button class="ghost" data-action="share-trophy-room">${t('tr_share')}</button>
+      <button class="ghost" data-action="open-museum">${t('tr_museum_btn')}</button>
+      <button class="primary" data-action="close-trophy-room">${t('tr_back')}</button>
     </div>
   </div>
   <div class="panel">
