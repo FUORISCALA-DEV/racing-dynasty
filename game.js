@@ -63,6 +63,22 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    rcs_beat_single: (n)=>`Hai battuto la tua rivale, ${n}.`, rcs_lost_single: (n)=>`${n} ti ha battuto in classifica.`,
+    rcs_tied: 'Hai chiuso in parità con la tua rivale.', rcs_beat_all: (n)=>`Hai battuto tutte le tue rivali (${n}).`,
+    rcs_lost_all: (n)=>`Le tue rivali ti hanno battuto tutte (${n}).`, rcs_mixed: (b,l)=>`Hai battuto ${b}, ma perso da ${l}.`,
+    se_doppietta_pill: 'DOPPIETTA', se_doppietta_title: '🏆🏆 DOPPIO TITOLO MONDIALE',
+    se_driver_champ_pill: 'CAMPIONE PILOTI', se_driver_champ_title: '🏆 CAMPIONE DEL MONDO PILOTI',
+    se_constr_champ_pill: 'CAMPIONE COSTRUTTORI', se_constr_champ_title: '🏆 CAMPIONE DEL MONDO COSTRUTTORI',
+    se_end_pill: 'FINE STAGIONE', se_end_top3: (n,p)=>`Complimenti ${n} ha chiuso in P${p}`, se_end_other: (n,p)=>`${n} chiude la stagione in P${p}`,
+    se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} chiude la stagione con ${pts} punti complessivi, ${wins} vittorie, ${pod} podi e ${dnf} ritiri su ${tot} gare. Budget residuo: ${budget}.`,
+    se_new_career: 'Nuova Carriera', se_share: '📤 Condividi Risultato', se_your_drivers: 'I Tuoi Piloti',
+    se_pilot1: (n)=>`Pilota #1 — ${n}`, se_pilot2: (n)=>`Pilota #2 — ${n}`, se_drivers_pos: (p)=>`Posizione Piloti: P${p}`,
+    se_stats: (pts,wins,pod,dnf)=>`${pts} punti · ${wins} vittorie · ${pod} podi · ${dnf} ritiri`,
+    se_team_constr_pos: (team,pos)=>`Scuderia <b>${team}</b> — Posizione Costruttori: <b style="color:var(--cyan);">P${pos}</b>`,
+    se_final_drivers: 'Classifica Piloti Finale', se_final_constr: 'Classifica Costruttori Finale', se_champion: 'CAMPIONE',
+    se_th_pos: 'Pos', se_th_driver: 'Pilota', se_th_team: 'Scuderia', se_th_points: 'Punti',
+    se_you_badge: 'TU', se_ex_badge: 'EX', se_rival_badge: 'RIVALE',
+    se_footer: 'Ogni nuova run genera un nuovo draft di piloti e componenti — la stagione in corso viene salvata automaticamente.',
     expl_retired: 'Ritirato — nessun punto raccolto in questo Gran Premio.',
     expl_gained: (grid,pos,delta)=>`Partito P${grid}, arrivato P${pos}: <b>+${delta} posizion${delta===1?'e':'i'}</b> guadagnat${delta===1?'a':'e'} in gara.`,
     expl_lost: (grid,pos,delta)=>`Partito P${grid}, arrivato P${pos}: <b>${delta} posizion${delta===-1?'e':'i'}</b> perse in gara.`,
@@ -149,6 +165,22 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    rcs_beat_single: (n)=>`You beat your rival, ${n}.`, rcs_lost_single: (n)=>`${n} beat you in the standings.`,
+    rcs_tied: 'You finished tied with your rival.', rcs_beat_all: (n)=>`You beat all your rivals (${n}).`,
+    rcs_lost_all: (n)=>`Your rivals all beat you (${n}).`, rcs_mixed: (b,l)=>`You beat ${b}, but lost to ${l}.`,
+    se_doppietta_pill: 'GRAND SLAM', se_doppietta_title: '🏆🏆 DOUBLE WORLD TITLE',
+    se_driver_champ_pill: 'DRIVERS\' CHAMPION', se_driver_champ_title: "🏆 DRIVERS' WORLD CHAMPION",
+    se_constr_champ_pill: 'CONSTRUCTORS\' CHAMPION', se_constr_champ_title: "🏆 CONSTRUCTORS' WORLD CHAMPION",
+    se_end_pill: 'SEASON END', se_end_top3: (n,p)=>`Congratulations, ${n} finished P${p}`, se_end_other: (n,p)=>`${n} closes the season in P${p}`,
+    se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} closes the season with ${pts} total points, ${wins} wins, ${pod} podiums and ${dnf} retirements across ${tot} races. Remaining budget: ${budget}.`,
+    se_new_career: 'New Career', se_share: '📤 Share Result', se_your_drivers: 'Your Drivers',
+    se_pilot1: (n)=>`Driver #1 — ${n}`, se_pilot2: (n)=>`Driver #2 — ${n}`, se_drivers_pos: (p)=>`Drivers' Position: P${p}`,
+    se_stats: (pts,wins,pod,dnf)=>`${pts} points · ${wins} wins · ${pod} podiums · ${dnf} retirements`,
+    se_team_constr_pos: (team,pos)=>`Team <b>${team}</b> — Constructors' Position: <b style="color:var(--cyan);">P${pos}</b>`,
+    se_final_drivers: 'Final Drivers\' Standings', se_final_constr: "Final Constructors' Standings", se_champion: 'CHAMPION',
+    se_th_pos: 'Pos', se_th_driver: 'Driver', se_th_team: 'Team', se_th_points: 'Points',
+    se_you_badge: 'YOU', se_ex_badge: 'EX', se_rival_badge: 'RIVAL',
+    se_footer: 'Every new run generates a new draft of drivers and components — the current season is saved automatically.',
     expl_retired: 'Retired — no points scored in this Grand Prix.',
     expl_gained: (grid,pos,delta)=>`Started P${grid}, finished P${pos}: <b>+${delta} position${delta===1?'':'s'}</b> gained in the race.`,
     expl_lost: (grid,pos,delta)=>`Started P${grid}, finished P${pos}: <b>${delta} position${delta===-1?'':'s'}</b> lost in the race.`,
@@ -229,6 +261,22 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    rcs_beat_single: (n)=>`Has vencido a tu rival, ${n}.`, rcs_lost_single: (n)=>`${n} te ha vencido en la clasificación.`,
+    rcs_tied: 'Has terminado empatado con tu rival.', rcs_beat_all: (n)=>`Has vencido a todas tus rivales (${n}).`,
+    rcs_lost_all: (n)=>`Tus rivales te han vencido a todas (${n}).`, rcs_mixed: (b,l)=>`Has vencido a ${b}, pero has perdido contra ${l}.`,
+    se_doppietta_pill: 'GRAN SLAM', se_doppietta_title: '🏆🏆 DOBLE TÍTULO MUNDIAL',
+    se_driver_champ_pill: 'CAMPEÓN DE PILOTOS', se_driver_champ_title: '🏆 CAMPEÓN DEL MUNDO DE PILOTOS',
+    se_constr_champ_pill: 'CAMPEÓN DE CONSTRUCTORES', se_constr_champ_title: '🏆 CAMPEÓN DEL MUNDO DE CONSTRUCTORES',
+    se_end_pill: 'FIN DE TEMPORADA', se_end_top3: (n,p)=>`Enhorabuena, ${n} ha terminado P${p}`, se_end_other: (n,p)=>`${n} cierra la temporada en P${p}`,
+    se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} cierra la temporada con ${pts} puntos totales, ${wins} victorias, ${pod} podios y ${dnf} retiros en ${tot} carreras. Presupuesto restante: ${budget}.`,
+    se_new_career: 'Nueva Carrera', se_share: '📤 Compartir Resultado', se_your_drivers: 'Tus Pilotos',
+    se_pilot1: (n)=>`Piloto #1 — ${n}`, se_pilot2: (n)=>`Piloto #2 — ${n}`, se_drivers_pos: (p)=>`Posición de Pilotos: P${p}`,
+    se_stats: (pts,wins,pod,dnf)=>`${pts} puntos · ${wins} victorias · ${pod} podios · ${dnf} retiros`,
+    se_team_constr_pos: (team,pos)=>`Escudería <b>${team}</b> — Posición de Constructores: <b style="color:var(--cyan);">P${pos}</b>`,
+    se_final_drivers: 'Clasificación Final de Pilotos', se_final_constr: 'Clasificación Final de Constructores', se_champion: 'CAMPEÓN',
+    se_th_pos: 'Pos', se_th_driver: 'Piloto', se_th_team: 'Escudería', se_th_points: 'Puntos',
+    se_you_badge: 'TÚ', se_ex_badge: 'EX', se_rival_badge: 'RIVAL',
+    se_footer: 'Cada nueva run genera un nuevo draft de pilotos y componentes — la temporada en curso se guarda automáticamente.',
     expl_retired: 'Retirado — sin puntos en este Gran Premio.',
     expl_gained: (grid,pos,delta)=>`Salió P${grid}, terminó P${pos}: <b>+${delta} posición${delta===1?'':'es'}</b> ganada${delta===1?'':'s'} en carrera.`,
     expl_lost: (grid,pos,delta)=>`Salió P${grid}, terminó P${pos}: <b>${delta} posición${delta===-1?'':'es'}</b> perdida${delta===-1?'':'s'} en carrera.`,
@@ -6211,13 +6259,13 @@ function rivalComparisonSentence(){
     else if(myPoints < rPoints) lost.push(rTeam.nome);
   });
   if(state.rivals.length===1){
-    if(beaten.length) return `Hai battuto la tua rivale, ${beaten[0]}.`;
-    if(lost.length) return `${lost[0]} ti ha battuto in classifica.`;
-    return `Hai chiuso in parità con la tua rivale.`;
+    if(beaten.length) return t('rcs_beat_single', beaten[0]);
+    if(lost.length) return t('rcs_lost_single', lost[0]);
+    return t('rcs_tied');
   }
-  if(beaten.length && !lost.length) return `Hai battuto tutte le tue rivali (${beaten.join(', ')}).`;
-  if(lost.length && !beaten.length) return `Le tue rivali ti hanno battuto tutte (${lost.join(', ')}).`;
-  if(beaten.length && lost.length) return `Hai battuto ${beaten.join(', ')}, ma perso da ${lost.join(', ')}.`;
+  if(beaten.length && !lost.length) return t('rcs_beat_all', beaten.join(', '));
+  if(lost.length && !beaten.length) return t('rcs_lost_all', lost.join(', '));
+  if(beaten.length && lost.length) return t('rcs_mixed', beaten.join(', '), lost.join(', '));
   return '';
 }
 
@@ -6240,16 +6288,14 @@ function renderSeasonEnd(){
   const isConstructorChamp = constructorChamp.isPlayerTeam;
 
   let pillText, heroTitle;
-  if(isDriverChamp && isConstructorChamp){ pillText='DOPPIETTA'; heroTitle='🏆🏆 DOPPIO TITOLO MONDIALE'; }
-  else if(isDriverChamp){ pillText='CAMPIONE PILOTI'; heroTitle='🏆 CAMPIONE DEL MONDO PILOTI'; }
-  else if(isConstructorChamp){ pillText='CAMPIONE COSTRUTTORI'; heroTitle='🏆 CAMPIONE DEL MONDO COSTRUTTORI'; }
+  if(isDriverChamp && isConstructorChamp){ pillText=t('se_doppietta_pill'); heroTitle=t('se_doppietta_title'); }
+  else if(isDriverChamp){ pillText=t('se_driver_champ_pill'); heroTitle=t('se_driver_champ_title'); }
+  else if(isConstructorChamp){ pillText=t('se_constr_champ_pill'); heroTitle=t('se_constr_champ_title'); }
   else {
-    pillText='FINE STAGIONE';
+    pillText=t('se_end_pill');
     const bestPos = Math.min(p1Pos,p2Pos);
     const bestPilotName = (p1Pos<=p2Pos ? state.team.pilotMain : state.team.pilotSecond).nome;
-    heroTitle = bestPos<=3
-      ? `Complimenti ${bestPilotName} ha chiuso in P${bestPos}`
-      : `${bestPilotName} chiude la stagione in P${bestPos}`;
+    heroTitle = bestPos<=3 ? t('se_end_top3', bestPilotName, bestPos) : t('se_end_other', bestPilotName, bestPos);
   }
 
   // V0.9.7.8: fix bug segnalato da Gio — i totali ora includono anche le statistiche di eventuali
@@ -6259,15 +6305,15 @@ function renderSeasonEnd(){
   const driverRows = dstd.map((d,i)=>{
     const cls = (d.isPlayerTeam ? (d.isFormer?'me former':'me') : '') + (isRivalTeam(d.teamId)?' rival':'');
     const posCls = i===0?'p1':i===1?'p2':i===2?'p3':'';
-    const badge = d.isPlayerTeam ? ` <span class="badge-event ${d.isFormer?'ex':''}">${d.isFormer?'EX':'TU'}</span>` : (isRivalTeam(d.teamId)?' <span class="badge-event rival-badge">RIVALE</span>':'');
+    const badge = d.isPlayerTeam ? ` <span class="badge-event ${d.isFormer?'ex':''}">${d.isFormer?t('se_ex_badge'):t('se_you_badge')}</span>` : (isRivalTeam(d.teamId)?` <span class="badge-event rival-badge">${t('se_rival_badge')}</span>`:'');
     return `<tr class="${cls}"><td><span class="pos ${posCls}">P${i+1}</span></td><td>${d.naz?flag(d.naz)+' ':''}${d.nome}${badge}</td><td class="dim">${d.teamNome}</td><td class="mono">${d.points}</td><td class="mono dim">${d.wins}V</td></tr>`;
   }).join('');
 
   const constructorRows = cstd.map((c,i)=>{
     const cls = (c.isPlayerTeam ? 'me' : '') + (isRivalTeam(c.teamId)?' rival':'');
     const posCls = i===0?'p1':i===1?'p2':i===2?'p3':'';
-    const rivalBadge = !c.isPlayerTeam && isRivalTeam(c.teamId) ? ' <span class="badge-event rival-badge">RIVALE</span>' : '';
-    return `<tr class="${cls}"><td><span class="pos ${posCls}">P${i+1}</span></td><td>${teamFlag(c.teamId)} ${c.nome}${c.isPlayerTeam?' <span class="badge-event">TU</span>':rivalBadge}</td><td class="mono">${c.points}</td></tr>`;
+    const rivalBadge = !c.isPlayerTeam && isRivalTeam(c.teamId) ? ` <span class="badge-event rival-badge">${t('se_rival_badge')}</span>` : '';
+    return `<tr class="${cls}"><td><span class="pos ${posCls}">P${i+1}</span></td><td>${teamFlag(c.teamId)} ${c.nome}${c.isPlayerTeam?` <span class="badge-event">${t('se_you_badge')}</span>`:rivalBadge}</td><td class="mono">${c.points}</td></tr>`;
   }).join('');
 
   const champPilotRating = isDriverChamp
@@ -6281,42 +6327,42 @@ function renderSeasonEnd(){
     <div class="hero-inner">
       <div class="pill">${pillText}</div>
       <h1 class="hdr" style="margin-top:14px;font-size:38px;">${heroTitle}</h1>
-      <div class="tagline">${teamDisplayName()} chiude la stagione con ${totalPoints} punti complessivi, ${totalWins} vittorie, ${totalPodiums} podi e ${totalDnfs} ritiri su ${state.calendar.length} gare. Budget residuo: ${fmtM(state.budget)}.</div>
+      <div class="tagline">${t('se_summary', teamDisplayName(), totalPoints, totalWins, totalPodiums, totalDnfs, state.calendar.length, fmtM(state.budget))}</div>
       <div class="tagline" style="margin-top:6px;">${rivalComparisonSentence()}</div>
       <div class="btnrow" style="justify-content:center;">
-        <button class="primary" data-action="back-to-title">Nuova Carriera</button>
-        <button class="ghost" data-action="share-result-card">📤 Condividi Risultato</button>
+        <button class="primary" data-action="back-to-title">${t('se_new_career')}</button>
+        <button class="ghost" data-action="share-result-card">${t('se_share')}</button>
       </div>
     </div>
   </div>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">I Tuoi Piloti</h3></div>
+    <div class="panel-title"><h3 class="hdr">${t('se_your_drivers')}</h3></div>
     <div class="grid grid-2">
       <div class="mini" data-rarity="${displayRarity(state.team.pilotMain)}" style="padding:14px;">
-        <div class="role">Pilota #1 — ${state.team.pilotMain.nome}</div>
-        <div class="nm">Posizione Piloti: P${p1Pos}</div>
-        <div class="rt">${p1.points} punti · ${p1.wins} vittorie · ${p1.podiums} podi · ${p1.dnfs} ritiri</div>
+        <div class="role">${t('se_pilot1', state.team.pilotMain.nome)}</div>
+        <div class="nm">${t('se_drivers_pos', p1Pos)}</div>
+        <div class="rt">${t('se_stats', p1.points, p1.wins, p1.podiums, p1.dnfs)}</div>
       </div>
       <div class="mini" data-rarity="${displayRarity(state.team.pilotSecond)}" style="padding:14px;">
-        <div class="role">Pilota #2 — ${state.team.pilotSecond.nome}</div>
-        <div class="nm">Posizione Piloti: P${p2Pos}</div>
-        <div class="rt">${p2.points} punti · ${p2.wins} vittorie · ${p2.podiums} podi · ${p2.dnfs} ritiri</div>
+        <div class="role">${t('se_pilot2', state.team.pilotSecond.nome)}</div>
+        <div class="nm">${t('se_drivers_pos', p2Pos)}</div>
+        <div class="rt">${t('se_stats', p2.points, p2.wins, p2.podiums, p2.dnfs)}</div>
       </div>
     </div>
-    <div class="tag-line" style="margin-top:12px;">Scuderia <b>${teamDisplayName()}</b> — Posizione Costruttori: <b style="color:var(--cyan);">P${constructorPos}</b></div>
+    <div class="tag-line" style="margin-top:12px;">${t('se_team_constr_pos', teamDisplayName(), constructorPos)}</div>
   </div>
   <div class="grid grid-2">
     <div class="panel">
-      <div class="panel-title"><h3 class="hdr">Classifica Piloti Finale</h3><span class="dim mono" style="font-size:11px;">CAMPIONE: ${driverChamp.nome}</span></div>
-      <table><thead><tr><th>Pos</th><th>Pilota</th><th>Scuderia</th><th>Punti</th><th></th></tr></thead><tbody>${driverRows}</tbody></table>
+      <div class="panel-title"><h3 class="hdr">${t('se_final_drivers')}</h3><span class="dim mono" style="font-size:11px;">${t('se_champion')}: ${driverChamp.nome}</span></div>
+      <table><thead><tr><th>${t('se_th_pos')}</th><th>${t('se_th_driver')}</th><th>${t('se_th_team')}</th><th>${t('se_th_points')}</th><th></th></tr></thead><tbody>${driverRows}</tbody></table>
     </div>
     <div class="panel">
-      <div class="panel-title"><h3 class="hdr">Classifica Costruttori Finale</h3><span class="dim mono" style="font-size:11px;">CAMPIONE: ${constructorChamp.nome}</span></div>
-      <table><thead><tr><th>Pos</th><th>Scuderia</th><th>Punti</th></tr></thead><tbody>${constructorRows}</tbody></table>
+      <div class="panel-title"><h3 class="hdr">${t('se_final_constr')}</h3><span class="dim mono" style="font-size:11px;">${t('se_champion')}: ${constructorChamp.nome}</span></div>
+      <table><thead><tr><th>${t('se_th_pos')}</th><th>${t('se_th_team')}</th><th>${t('se_th_points')}</th></tr></thead><tbody>${constructorRows}</tbody></table>
     </div>
   </div>
   ${seasonTrophiesPanelHTML()}
-  <div class="footer-note">Ogni nuova run genera un nuovo draft di piloti e componenti — la stagione in corso viene salvata automaticamente.</div>
+  <div class="footer-note">${t('se_footer')}</div>
   `;
   bindActions();
   if(isDriverChamp || isConstructorChamp){
