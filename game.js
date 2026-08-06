@@ -9,6 +9,10 @@
 // con una XHR SINCRONA (unica eccezione, deliberata) cosi' il resto del file — migliaia di righe
 // che oggi si aspettano DATA gia' popolato — non deve cambiare. Richiede di essere servito via
 // http(s) (anche in locale), NON funziona aprendo il file direttamente col doppio click.
+// V0.9.7.8.33: numero di versione mostrato al giocatore, centralizzato in un unico punto —
+// prima era scritto a mano in 3 punti diversi e si era disallineato (mostrava ancora v0.9.5
+// nonostante decine di aggiornamenti successivi). Aggiornare SOLO qui d'ora in poi.
+const GAME_VERSION = 'v0.9.7.8.33';
 const DATA = (function(){
   const xhr = new XMLHttpRequest();
   xhr.open('GET', 'data/data.json', false);
@@ -65,6 +69,7 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    splash_presents: 'FUORISCALA presenta', splash_tap_continue: 'tocca per continuare',
     sl_races_word: 'GARE',
     settings_sfx_vol_short: 'Effetti Sonori', settings_music_vol_short: 'Musica',
     menu_home: 'Home', menu_section_game: 'GIOCO', menu_section_progress: 'PROGRESSI', menu_section_info: 'INFO', menu_section_app: 'APP',
@@ -214,6 +219,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    splash_presents: 'FUORISCALA presents', splash_tap_continue: 'tap to continue',
     sl_races_word: 'RACES',
     settings_sfx_vol_short: 'Sound Effects', settings_music_vol_short: 'Music',
     menu_home: 'Home', menu_section_game: 'GAME', menu_section_progress: 'PROGRESS', menu_section_info: 'INFO', menu_section_app: 'APP',
@@ -357,6 +363,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    splash_presents: 'FUORISCALA presenta', splash_tap_continue: 'toca para continuar',
     sl_races_word: 'CARRERAS',
     settings_sfx_vol_short: 'Efectos de Sonido', settings_music_vol_short: 'Música',
     menu_home: 'Inicio', menu_section_game: 'JUEGO', menu_section_progress: 'PROGRESO', menu_section_info: 'INFO', menu_section_app: 'APP',
@@ -601,6 +608,97 @@ const EVENT_NAME_ES = {
 function evName(nomeIt){
   if(currentLang==='en') return EVENT_NAME_EN[nomeIt] || nomeIt;
   if(currentLang==='es') return EVENT_NAME_ES[nomeIt] || nomeIt;
+  return nomeIt;
+}
+
+// V0.9.7.8.33: nomi delle 39 nazioni usate nel gioco (piloti, circuiti, scelta scuderia) —
+// tradotti EN/ES. Le chiavi restano SEMPRE in italiano (sono valori dato, usati per confronti
+// e come 'value' nei form) — questa e' solo la funzione che sceglie il testo da MOSTRARE.
+const NATION_NAME_EN = {
+  'Argentina': 'Argentina',
+  'Australia': 'Australia',
+  'Austria': 'Austria',
+  'Belgio': 'Belgium',
+  'Brasile': 'Brazil',
+  'Canada': 'Canada',
+  'Cile': 'Chile',
+  'Cina': 'China',
+  'Colombia': 'Colombia',
+  'Corea del Sud': 'South Korea',
+  'Croazia': 'Croatia',
+  'Danimarca': 'Denmark',
+  'Emirati Arabi Uniti': 'United Arab Emirates',
+  'Finlandia': 'Finland',
+  'Francia': 'France',
+  'Germania': 'Germany',
+  'Giappone': 'Japan',
+  'Grecia': 'Greece',
+  'India': 'India',
+  'Italia': 'Italy',
+  'Marocco': 'Morocco',
+  'Messico': 'Mexico',
+  'Norvegia': 'Norway',
+  'Nuova Zelanda': 'New Zealand',
+  'Paesi Bassi': 'Netherlands',
+  'Polonia': 'Poland',
+  'Portogallo': 'Portugal',
+  'Regno Unito': 'United Kingdom',
+  'Romania': 'Romania',
+  'Sconosciuta': 'Unknown',
+  'Serbia': 'Serbia',
+  'Spagna': 'Spain',
+  'Stati Uniti': 'United States',
+  'Sudafrica': 'South Africa',
+  'Svezia': 'Sweden',
+  'Svizzera': 'Switzerland',
+  'Thailandia': 'Thailand',
+  'Turchia': 'Turkey',
+  'Ungheria': 'Hungary',
+};
+const NATION_NAME_ES = {
+  'Argentina': 'Argentina',
+  'Australia': 'Australia',
+  'Austria': 'Austria',
+  'Belgio': 'Bélgica',
+  'Brasile': 'Brasil',
+  'Canada': 'Canadá',
+  'Cile': 'Chile',
+  'Cina': 'China',
+  'Colombia': 'Colombia',
+  'Corea del Sud': 'Corea del Sur',
+  'Croazia': 'Croacia',
+  'Danimarca': 'Dinamarca',
+  'Emirati Arabi Uniti': 'Emiratos Árabes Unidos',
+  'Finlandia': 'Finlandia',
+  'Francia': 'Francia',
+  'Germania': 'Alemania',
+  'Giappone': 'Japón',
+  'Grecia': 'Grecia',
+  'India': 'India',
+  'Italia': 'Italia',
+  'Marocco': 'Marruecos',
+  'Messico': 'México',
+  'Norvegia': 'Noruega',
+  'Nuova Zelanda': 'Nueva Zelanda',
+  'Paesi Bassi': 'Países Bajos',
+  'Polonia': 'Polonia',
+  'Portogallo': 'Portugal',
+  'Regno Unito': 'Reino Unido',
+  'Romania': 'Rumanía',
+  'Sconosciuta': 'Desconocida',
+  'Serbia': 'Serbia',
+  'Spagna': 'España',
+  'Stati Uniti': 'Estados Unidos',
+  'Sudafrica': 'Sudáfrica',
+  'Svezia': 'Suecia',
+  'Svizzera': 'Suiza',
+  'Thailandia': 'Tailandia',
+  'Turchia': 'Turquía',
+  'Ungheria': 'Hungría',
+};
+function nationLabel(nomeIt){
+  if(currentLang==='en') return NATION_NAME_EN[nomeIt] || nomeIt;
+  if(currentLang==='es') return NATION_NAME_ES[nomeIt] || nomeIt;
   return nomeIt;
 }
 function saveAudioSettings(){
@@ -2963,7 +3061,7 @@ function renderRaceLiveInit(){
     </div>
     <div class="panel live-log-panel">
       <div class="panel-title"><h3 class="hdr">Log Gara</h3></div>
-      <div class="dim" style="font-size:12px;margin-bottom:8px;">${timeline.circuit.paese} · ${timeline.circuit.tipo} · Componente dominante: ${displayArea(timeline.circuit.componentedominante)}</div>
+      <div class="dim" style="font-size:12px;margin-bottom:8px;">${nationLabel(timeline.circuit.paese)} · ${timeline.circuit.tipo} · Componente dominante: ${displayArea(timeline.circuit.componentedominante)}</div>
       <div class="live-log" id="liveLog">${logHTML}</div>
     </div>
   </div>
@@ -3551,7 +3649,7 @@ const GOAT_HELMET_FERRARI_SRC = 'assets/goat/goat-helmet-ferrari.png'; // V0.9.7
 // che non puo' contenere immagini - per quel caso specifico vedi flagEmoji() sotto).
 function flag(country){
   if(!country) return '<span class="flag-ico flag-ico-unknown" aria-hidden="true">🏳️</span>';
-  return `<img class="flag-ico" src="assets/flags/${slugify(country)}.svg" alt="" title="${country}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'flag-ico flag-ico-unknown',textContent:'🏳️'}))">`;
+  return `<img class="flag-ico" src="assets/flags/${slugify(country)}.svg" alt="" title="${nationLabel(country)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'flag-ico flag-ico-unknown',textContent:'🏳️'}))">`;
 }
 // versione testuale (emoji), da usare SOLO dove l'HTML non e' permesso: <option>, attributi title/alt, ecc.
 function flagEmoji(country){ return COUNTRY_FLAG[country] || '🏳️'; }
@@ -4061,7 +4159,7 @@ function topbarHTML(){
     : '';
   return `
   <div class="topbar">
-    <div class="brand hdr">RACING DYNASTY<small>Roguelike GP Manager — v0.9.5 · ${DIFFICULTY_LABEL[state.difficulty]}</small></div>
+    <div class="brand hdr">RACING DYNASTY<small>Roguelike GP Manager — ${GAME_VERSION} · ${DIFFICULTY_LABEL[state.difficulty]}</small></div>
     <div class="hud">
       <div class="hud-item"><div class="hud-label">${t('hud_reroll')}</div><div class="hud-value">${state.rerollsLeft}/${state.rerollsTotal}</div></div>
       <div class="hud-item"><div class="hud-label">${t('hud_budget')}</div><div class="hud-value amber">${fmtM(state.budget)}</div></div>
@@ -4181,12 +4279,12 @@ const TEAM_INSPIRATION = [
   {nome:'Summit Works', naz:'Germania'},
 ];
 function renderNaming(){
-  const nationOptions = Object.keys(COUNTRY_FLAG).filter(c=>c!=='Sconosciuta').sort((a,b)=>a.localeCompare(b,'it'))
-    .map(c=> `<option value="${c}" ${c==='Italia'?'selected':''}>${c}</option>`).join('');
+  const nationOptions = Object.keys(COUNTRY_FLAG).filter(c=>c!=='Sconosciuta').sort((a,b)=>nationLabel(a).localeCompare(nationLabel(b)))
+    .map(c=> `<option value="${c}" ${c==='Italia'?'selected':''}>${nationLabel(c)}</option>`).join('');
   app.innerHTML = `
   <div class="hero" style="padding:28px 20px 20px;">
     <div class="hero-inner">
-      <div class="pill">v0.9.5 · ${DIFFICULTY_LABEL[state.difficulty]}</div>
+      <div class="pill">${GAME_VERSION} · ${DIFFICULTY_LABEL[state.difficulty]}</div>
       <h1 class="hdr" style="margin-top:10px;font-size:30px;">${t('naming_title')}</h1>
       <div class="tagline" style="margin:8px auto 0;">${t('naming_optional')}</div>
     </div>
@@ -4685,8 +4783,8 @@ function renderStudioSplash(){
       <div class="studio-splash-scale-label" id="splashScaleLabel">SCALE 1:1</div>
       <img class="studio-splash-logo" id="splashLogoImg" src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA">
     </div>
-    <div class="studio-splash-tagline" id="splashTagline">FUORISCALA presenta</div>
-    <div class="studio-splash-skip" id="splashSkipHint">tocca per continuare</div>
+    <div class="studio-splash-tagline" id="splashTagline">${t('splash_presents')}</div>
+    <div class="studio-splash-skip" id="splashSkipHint">${t('splash_tap_continue')}</div>
   </div>
   `;
   const root = document.getElementById('studioSplashRoot');
@@ -4769,7 +4867,7 @@ function renderTitle(){
         <img src="${LOGO_DATA_URI}" alt="Racing Dynasty" class="title-logo">
       </div>
       <div class="tagline title-cta">${t('title_cta')}<b class="heartbeat">${t('title_cta_bold')}</b></div>
-      <div class="pill" style="margin-top:12px;">v0.9.5 · DATABASE V1 · 250 PILOTI · 830+ COMPONENTI</div>
+      <div class="pill" style="margin-top:12px;">${GAME_VERSION} · DATABASE V1 · 250 PILOTI · 830+ COMPONENTI</div>
     </div>
   </div>
   `;
@@ -5263,7 +5361,7 @@ function renderHub(){
     <div>
       <div class="eyebrow">${window.t('hub_next_gp')}</div>
       <h2 class="hdr" style="font-size:26px;">${flag(circuit.paese)} ${circuit.nome} ${circuitStatusBadgeHTML(circuit.nome)}</h2>
-      <div class="dim" style="font-size:13px;margin-top:4px;">${circuit.paese} · ${circuit.tipo} · ${circuit.lunghezza}km/giro · ${circuit.giri} giri · ${(circuit.lunghezza*circuit.giri).toFixed(0)}km totali · ${window.t('hub_weather')} ${circuit.clima}</div>
+      <div class="dim" style="font-size:13px;margin-top:4px;">${nationLabel(circuit.paese)} · ${circuit.tipo} · ${circuit.lunghezza}km/giro · ${circuit.giri} giri · ${(circuit.lunghezza*circuit.giri).toFixed(0)}km totali · ${window.t('hub_weather')} ${circuit.clima}</div>
       <div style="margin-top:8px;font-size:12px;" class="dim">${window.t('hub_dominant_component')}: <b style="color:var(--cyan);">${displayArea(circuit.componentedominante)}</b> · ${window.t('hub_special_event')}: ${circuit.eventospeciale}</div>
     </div>
     <div class="circuit-stats">
