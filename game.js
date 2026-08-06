@@ -63,6 +63,18 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    cat_aero_pack: 'Pacchetto Aerodinamico', cat_tire_supplier: 'Fornitore Gomme',
+    pcard_guaranteed: 'UPGRADE GARANTITO', pcard_development: 'SVILUPPO', pcard_cost: 'Costo', pcard_no_risk: 'Nessun rischio',
+    pcard_insufficient_budget: 'Budget insufficiente', pcard_tap_buy: 'Tocca per acquistare',
+    pcard_frozen: (max)=>`Budget insufficiente — nemmeno l'investimento minimo (rischio ${max}%) è alla tua portata ora.`,
+    pcard_invest_cost: 'Costo', pcard_slider_hint: '← più economico, più rischio &nbsp;·&nbsp; più sicuro, più caro →',
+    pcard_if_fails: (m)=>`Se fallisce: ${m}`, pcard_more_info: 'Più info', pcard_dev_area: (a)=>`Area di sviluppo: ${a}`,
+    pcard_duration: (d)=>`Durata effetto: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`Il rischio va sempre da ${max}% (investimento minimo, più economico) a ${min}% (investimento massimo, mai a zero)${hasMalus?'. In caso di fallimento potrebbe applicarsi un malus':''}.`,
+    pcard_confirm_invest: 'Conferma Investimento',
+    pcard_mentality: 'Mentalità', pcard_type: 'Tipologia', pcard_in_use: 'In uso ora',
+    pcard_scouting_title: (l)=>`Scouting Libero — ${l}`, pcard_scouting_hint: 'Confronta con quello che hai già in squadra: un tocco apre il confronto dettagliato prima di confermare.',
+    pcard_scouting_note: (k)=>`<b style="color:var(--text);">Le sostituzioni che abbassano il rating non chiudono il turno</b> — puoi farne più di una, se disponibile. Il semicerchio indica la ${k} del pezzo — passa il mouse per il nome. Le righe verdi ti danno un bonus sinergia se le scegli.`,
+    pcard_synergy_plus: (l)=>`+ Sinergia ${l}`, pcard_synergy_plus_short: (l)=>`+ ${l}`, pcard_synergy_minus: (l)=>`− Sinergia ${l}`, pcard_synergy_minus_short: (l)=>`− ${l}`,
     classify_upgrade: 'UPGRADE GARANTITO', classify_opportunity: 'OPPORTUNITÀ', classify_trade: 'SCAMBIO', classify_replacement: 'SOSTITUZIONE',
     eff_qualifying: 'Qualifica', eff_dry_race: 'Gara asciutta', eff_wet_race: 'Gara bagnata',
     eff_reliability: 'Affidabilità', eff_fast_circuits: 'Prestazione circuiti veloci', eff_street_circuits: 'Prestazione circuiti cittadini',
@@ -192,6 +204,18 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    cat_aero_pack: 'Aero Package', cat_tire_supplier: 'Tyre Supplier',
+    pcard_guaranteed: 'GUARANTEED UPGRADE', pcard_development: 'DEVELOPMENT', pcard_cost: 'Cost', pcard_no_risk: 'No risk',
+    pcard_insufficient_budget: 'Insufficient budget', pcard_tap_buy: 'Tap to buy',
+    pcard_frozen: (max)=>`Insufficient budget — not even the minimum investment (${max}% risk) is within reach right now.`,
+    pcard_invest_cost: 'Cost', pcard_slider_hint: '← cheaper, more risk &nbsp;·&nbsp; safer, more expensive →',
+    pcard_if_fails: (m)=>`If it fails: ${m}`, pcard_more_info: 'More info', pcard_dev_area: (a)=>`Development area: ${a}`,
+    pcard_duration: (d)=>`Effect duration: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`Risk always ranges from ${max}% (minimum investment, cheaper) to ${min}% (maximum investment, never zero)${hasMalus?'. On failure a malus may apply':''}.`,
+    pcard_confirm_invest: 'Confirm Investment',
+    pcard_mentality: 'Mentality', pcard_type: 'Type', pcard_in_use: 'Currently in use',
+    pcard_scouting_title: (l)=>`Free Scouting — ${l}`, pcard_scouting_hint: 'Compare with what you already have on the team: a tap opens the detailed comparison before confirming.',
+    pcard_scouting_note: (k)=>`<b style="color:var(--text);">Replacements that lower the rating don't close the turn</b> — you can make more than one, if available. The half-circle shows the piece's ${k} — hover for the name. Green rows give you a synergy bonus if you pick them.`,
+    pcard_synergy_plus: (l)=>`+ ${l} Synergy`, pcard_synergy_plus_short: (l)=>`+ ${l}`, pcard_synergy_minus: (l)=>`− ${l} Synergy`, pcard_synergy_minus_short: (l)=>`− ${l}`,
     classify_upgrade: 'GUARANTEED UPGRADE', classify_opportunity: 'OPPORTUNITY', classify_trade: 'TRADE-OFF', classify_replacement: 'REPLACEMENT',
     eff_qualifying: 'Qualifying', eff_dry_race: 'Dry race', eff_wet_race: 'Wet race',
     eff_reliability: 'Reliability', eff_fast_circuits: 'Performance on fast circuits', eff_street_circuits: 'Performance on street circuits',
@@ -315,6 +339,18 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    cat_aero_pack: 'Paquete Aerodinámico', cat_tire_supplier: 'Proveedor de Neumáticos',
+    pcard_guaranteed: 'MEJORA GARANTIZADA', pcard_development: 'DESARROLLO', pcard_cost: 'Coste', pcard_no_risk: 'Sin riesgo',
+    pcard_insufficient_budget: 'Presupuesto insuficiente', pcard_tap_buy: 'Toca para comprar',
+    pcard_frozen: (max)=>`Presupuesto insuficiente — ni siquiera la inversión mínima (riesgo ${max}%) está a tu alcance ahora.`,
+    pcard_invest_cost: 'Coste', pcard_slider_hint: '← más económico, más riesgo &nbsp;·&nbsp; más seguro, más caro →',
+    pcard_if_fails: (m)=>`Si falla: ${m}`, pcard_more_info: 'Más información', pcard_dev_area: (a)=>`Área de desarrollo: ${a}`,
+    pcard_duration: (d)=>`Duración del efecto: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`El riesgo siempre va del ${max}% (inversión mínima, más económica) al ${min}% (inversión máxima, nunca cero)${hasMalus?'. Si falla podría aplicarse un malus':''}.`,
+    pcard_confirm_invest: 'Confirmar Inversión',
+    pcard_mentality: 'Mentalidad', pcard_type: 'Tipología', pcard_in_use: 'En uso ahora',
+    pcard_scouting_title: (l)=>`Scouting Libre — ${l}`, pcard_scouting_hint: 'Compara con lo que ya tienes en el equipo: un toque abre la comparación detallada antes de confirmar.',
+    pcard_scouting_note: (k)=>`<b style="color:var(--text);">Las sustituciones que bajan el rating no cierran el turno</b> — puedes hacer más de una, si hay disponibles. El semicírculo indica la ${k} de la pieza — pasa el ratón para ver el nombre. Las filas verdes te dan un bonus de sinergia si las eliges.`,
+    pcard_synergy_plus: (l)=>`+ Sinergia ${l}`, pcard_synergy_plus_short: (l)=>`+ ${l}`, pcard_synergy_minus: (l)=>`− Sinergia ${l}`, pcard_synergy_minus_short: (l)=>`− ${l}`,
     classify_upgrade: 'MEJORA GARANTIZADA', classify_opportunity: 'OPORTUNIDAD', classify_trade: 'INTERCAMBIO', classify_replacement: 'SUSTITUCIÓN',
     eff_qualifying: 'Clasificación', eff_dry_race: 'Carrera en seco', eff_wet_race: 'Carrera en mojado',
     eff_reliability: 'Fiabilidad', eff_fast_circuits: 'Rendimiento en circuitos rápidos', eff_street_circuits: 'Rendimiento en circuitos urbanos',
@@ -1292,12 +1328,17 @@ function newRun(difficulty, seasonLength){
 // V0.9.4.2.2: definizioni delle 5 categorie "componente" (il Pilota e' gestito a parte, resta aperto
 // finche' non se ne scelgono 2 in totale, indipendentemente da quando capitano nei vari turni).
 const DRAFT_CATEGORY_DEFS = {
-  motore:   { label:'Motore', pool:DATA.motori, role:'Power Unit' },
-  telaio:   { label:'Telaio', pool:DATA.telai, role:'Chassis' },
-  aero:     { label:'Pacchetto Aerodinamico', pool:DATA.aero, role:'Aero' },
-  gomme:    { label:'Fornitore Gomme', pool:DATA.gomme, role:'Tyres' },
-  stratega: { label:'Team Principal', pool:DATA.strategi, role:'Team Principal' }
+  motore:   { pool:DATA.motori, role:'Power Unit' },
+  telaio:   { pool:DATA.telai, role:'Chassis' },
+  aero:     { pool:DATA.aero, role:'Aero' },
+  gomme:    { pool:DATA.gomme, role:'Tyres' },
+  stratega: { pool:DATA.strategi, role:'Team Principal' }
 };
+Object.defineProperty(DRAFT_CATEGORY_DEFS.motore, 'label', { get: ()=> t('comp_engine') });
+Object.defineProperty(DRAFT_CATEGORY_DEFS.telaio, 'label', { get: ()=> t('comp_chassis') });
+Object.defineProperty(DRAFT_CATEGORY_DEFS.aero, 'label', { get: ()=> t('cat_aero_pack') });
+Object.defineProperty(DRAFT_CATEGORY_DEFS.gomme, 'label', { get: ()=> t('cat_tire_supplier') });
+Object.defineProperty(DRAFT_CATEGORY_DEFS.stratega, 'label', { get: ()=> t('comp_strategist') });
 const DRAFT_TOTAL_PICKS = 7; // 2 piloti + 5 componenti
 
 function startDraftTurn(){
@@ -5359,7 +5400,7 @@ function pitlaneCardHTML(node, idx){
     const u = node.data;
     const isGuaranteed = u.probfallimento===0;
     const rarityLike = u.tier==='Legendary'?'Legendary':u.tier==='Elite'?'Epic':u.tier==='Avanzato'?'Rare':'Common';
-    const typeLabel = isGuaranteed ? 'UPGRADE GARANTITO' : 'SVILUPPO';
+    const typeLabel = isGuaranteed ? t('pcard_guaranteed') : t('pcard_development');
     const info = upgradeTargetInfo(u);
 
     if(isGuaranteed){
@@ -5372,9 +5413,9 @@ function pitlaneCardHTML(node, idx){
         <span class="rarity-tag" data-rarity="${rarityLike}">${u.tier}</span>
         <div class="card-name">${u.nome}</div>
         <div class="dev-target"><span class="dev-area">${info.label}</span><span class="dev-change mono">${info.change}</span></div>
-        <div class="dev-meta"><span class="dev-cost">Costo <b class="mono">${fmtM(costoM)}</b></span><span class="dev-risk risk-none">Nessun rischio</span></div>
-        ${!afford? `<div class="tag-line malus">Budget insufficiente</div>`:''}
-        <div class="card-tap-hint">${afford?'Tocca per acquistare':''}</div>
+        <div class="dev-meta"><span class="dev-cost">${t('pcard_cost')} <b class="mono">${fmtM(costoM)}</b></span><span class="dev-risk risk-none">${t('pcard_no_risk')}</span></div>
+        ${!afford? `<div class="tag-line malus">${t('pcard_insufficient_budget')}</div>`:''}
+        <div class="card-tap-hint">${afford?t('pcard_tap_buy'):''}</div>
       </div>`;
     }
 
@@ -5396,31 +5437,31 @@ function pitlaneCardHTML(node, idx){
         <span class="dev-change mono">${info.change}</span>
       </div>
       ${frozen ? `
-      <div class="tag-line malus">Budget insufficiente — nemmeno l'investimento minimo (rischio ${RISK_MAX}%) è alla tua portata ora.</div>
+      <div class="tag-line malus">${t('pcard_frozen', RISK_MAX)}</div>
       ` : `
       <div class="invest-row">
         <input type="range" class="invest-slider" min="0" max="100" value="${Math.floor(defaultT*100)}" step="1"
           data-idx="${idx}" data-base-cost="${u.costo}" data-t0="${t0}" data-max-t="${maxT}">
         <div class="invest-readout">
-          <span>Costo <b class="mono" id="investCost-${idx}">${fmtM(defaultCostM)}</b></span>
+          <span>${t('pcard_invest_cost')} <b class="mono" id="investCost-${idx}">${fmtM(defaultCostM)}</b></span>
           <span class="dev-risk ${risk.cls}" id="investRisk-${idx}">${risk.label} · ${defaultRisk}%</span>
         </div>
-        <div class="dim" style="font-size:10px;margin-top:2px;">← più economico, più rischio &nbsp;·&nbsp; più sicuro, più caro →</div>
+        <div class="dim" style="font-size:10px;margin-top:2px;">${t('pcard_slider_hint')}</div>
       </div>
       `}
-      ${u.malus? `<div class="tag-line malus">Se fallisce: ${u.malus}</div>`:''}
+      ${u.malus? `<div class="tag-line malus">${t('pcard_if_fails', u.malus)}</div>`:''}
       <details class="card-details">
-        <summary onclick="event.stopPropagation()">Più info</summary>
-        <div class="tag-line dim">Area di sviluppo: ${displayArea(u.area)}</div>
-        ${u.durata? `<div class="tag-line dim">Durata effetto: ${u.durata}</div>`:''}
-        <div class="tag-line dim">Il rischio va sempre da ${RISK_MAX}% (investimento minimo, più economico) a ${RISK_MIN}% (investimento massimo, mai a zero)${u.malus?'. In caso di fallimento potrebbe applicarsi un malus':''}.</div>
+        <summary onclick="event.stopPropagation()">${t('pcard_more_info')}</summary>
+        <div class="tag-line dim">${t('pcard_dev_area', displayArea(u.area))}</div>
+        ${u.durata? `<div class="tag-line dim">${t('pcard_duration', u.durata)}</div>`:''}
+        <div class="tag-line dim">${t('pcard_risk_range', RISK_MIN, RISK_MAX, !!u.malus)}</div>
       </details>
-      ${!frozen ? `<button class="primary" style="width:100%;margin-top:10px;" data-action="confirm-upgrade-invest" data-idx="${idx}">Conferma Investimento</button>` : ''}
+      ${!frozen ? `<button class="primary" style="width:100%;margin-top:10px;" data-action="confirm-upgrade-invest" data-idx="${idx}">${t('pcard_confirm_invest')}</button>` : ''}
     </div>`;
   } else {
     const current = state.team[node.catKey];
     const isPilotCat = node.catKey==='pilotMain' || node.catKey==='pilotSecond';
-    const kindLabel = isPilotCat ? 'Mentalità' : 'Tipologia';
+    const kindLabel = isPilotCat ? t('pcard_mentality') : t('pcard_type');
 
     // la sinergia attuale (se il pezzo che stiamo per sostituire fa gia' parte di una coppia attiva)
     const currentPairs = activeSynergyPairs();
@@ -5430,8 +5471,8 @@ function pitlaneCardHTML(node, idx){
     function synHalfBadge(item, roleLabel){
       if(!item || !item.sinergia) return `<div class="syn-half-badge"><div class="sem-half" style="background:rgba(255,255,255,0.06);"></div><div class="sem-half" style="background:rgba(255,255,255,0.06);"></div></div>`;
       const m = MENTALITA_DEFS[item.sinergia];
-      const kl = (roleLabel==='Pilota #1'||roleLabel==='Pilota #2') ? 'Mentalità' : 'Tipologia';
-      return `<div class="syn-half-badge" title="${roleLabel} (${item.nome}) · ${kl}: ${m.label}"><div class="sem-half" style="background:${m.color};"></div><div class="sem-half" style="background:rgba(255,255,255,0.05);"></div></div>`;
+      const kl = isPilotCat ? t('pcard_mentality') : t('pcard_type');
+      return `<div class="syn-half-badge" title="${roleLabel} (${item.nome}) · ${kl}: ${mentaLabel(item.sinergia)}"><div class="sem-half" style="background:${m.color};"></div><div class="sem-half" style="background:rgba(255,255,255,0.05);"></div></div>`;
     }
 
     const currentRow = `
@@ -5439,7 +5480,7 @@ function pitlaneCardHTML(node, idx){
         ${synHalfBadge(current, node.catLabel)}
         <div class="scout-rating-box">${current.rating}</div>
         <div class="scout-mid">
-          <div class="scout-tag">In uso ora</div>
+          <div class="scout-tag">${t('pcard_in_use')}</div>
           <div class="scout-name">${current.nome}</div>
           <div class="scout-arch">${current.arch||''}</div>
         </div>
@@ -5458,13 +5499,13 @@ function pitlaneCardHTML(node, idx){
       if(wouldGain && !wouldLose){
         rowCls = 'card-synergy-gain';
         rowStyle = `style="--syn-glow:${MENTALITA_DEFS[o.sinergia].color};"`;
-        boostLabel = `<div class="scout-boost-label" style="color:${MENTALITA_DEFS[o.sinergia].color};">+ Sinergia ${MENTALITA_DEFS[o.sinergia].label}</div>`;
+        boostLabel = `<div class="scout-boost-label" style="color:${MENTALITA_DEFS[o.sinergia].color};">${t('pcard_synergy_plus', mentaLabel(o.sinergia))}</div>`;
       } else if(wouldGain && wouldLose){
         rowCls = 'card-synergy-mixed';
         rowStyle = `style="--syn-glow:${MENTALITA_DEFS[o.sinergia].color};"`;
-        boostLabel = `<div class="scout-boost-label" style="color:${MENTALITA_DEFS[o.sinergia].color};">+ ${MENTALITA_DEFS[o.sinergia].label}</div><div class="scout-boost-label" style="color:var(--danger);">− ${MENTALITA_DEFS[current.sinergia].label}</div>`;
+        boostLabel = `<div class="scout-boost-label" style="color:${MENTALITA_DEFS[o.sinergia].color};">${t('pcard_synergy_plus_short', mentaLabel(o.sinergia))}</div><div class="scout-boost-label" style="color:var(--danger);">${t('pcard_synergy_minus_short', mentaLabel(current.sinergia))}</div>`;
       } else if(wouldLose){
-        boostLabel = `<div class="scout-boost-label" style="color:var(--danger);">− Sinergia ${MENTALITA_DEFS[current.sinergia].label}</div>`;
+        boostLabel = `<div class="scout-boost-label" style="color:var(--danger);">${t('pcard_synergy_minus', mentaLabel(current.sinergia))}</div>`;
       }
 
       return `
@@ -5483,9 +5524,9 @@ function pitlaneCardHTML(node, idx){
       </div>`;
     }).join('');
     return `<div class="panel" style="grid-column:1/-1;">
-      <div class="eyebrow" style="font-size:14px;">Scouting Libero — ${node.catLabel}</div>
-      <div class="dim" style="font-size:14px;margin:8px 0;line-height:1.5;">Confronta con quello che hai già in squadra: un tocco apre il confronto dettagliato prima di confermare.</div>
-      <div class="dim" style="font-size:14px;margin-bottom:14px;line-height:1.5;"><b style="color:var(--text);">Le sostituzioni che abbassano il rating non chiudono il turno</b> — puoi farne più di una, se disponibile. Il semicerchio indica la ${kindLabel.toLowerCase()} del pezzo — passa il mouse per il nome. Le righe verdi ti danno un bonus sinergia se le scegli.</div>
+      <div class="eyebrow" style="font-size:14px;">${t('pcard_scouting_title', node.catLabel)}</div>
+      <div class="dim" style="font-size:14px;margin:8px 0;line-height:1.5;">${t('pcard_scouting_hint')}</div>
+      <div class="dim" style="font-size:14px;margin-bottom:14px;line-height:1.5;">${t('pcard_scouting_note', kindLabel.toLowerCase())}</div>
       ${currentRow}
       ${opts}
     </div>`;
