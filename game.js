@@ -63,6 +63,7 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    status_retired: 'RITIRATO', status_retired_short: 'RIT', status_box: 'BOX', status_penalty: 'PENALITÀ', status_on_track: 'In pista', status_leader: 'Leader',
     pg_rain_expected: 'Pioggia attesa', pg_rain_risk: (p)=>`Rischio pioggia ${p}%`, pg_dry_track: 'Pista asciutta',
     pg_rating_gap: 'Distacco Rating dal Rivale', pg_main_rival: 'Rivale principale', pg_none_yet: 'Ancora nessuna',
     pg_lineup: (team)=>`Schieramento — ${team}`, pg_team_rating: 'Rating Squadra', pg_weather_forecast: 'Meteo Previsto',
@@ -208,6 +209,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    status_retired: 'RETIRED', status_retired_short: 'DNF', status_box: 'PIT', status_penalty: 'PENALTY', status_on_track: 'On track', status_leader: 'Leader',
     pg_rain_expected: 'Rain expected', pg_rain_risk: (p)=>`Rain risk ${p}%`, pg_dry_track: 'Dry track',
     pg_rating_gap: 'Rating Gap to Rival', pg_main_rival: 'Main rival', pg_none_yet: 'None yet',
     pg_lineup: (team)=>`Lineup — ${team}`, pg_team_rating: 'Team Rating', pg_weather_forecast: 'Weather Forecast',
@@ -347,6 +349,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    status_retired: 'RETIRADO', status_retired_short: 'RET', status_box: 'BOX', status_penalty: 'PENALIZACIÓN', status_on_track: 'En pista', status_leader: 'Líder',
     pg_rain_expected: 'Lluvia prevista', pg_rain_risk: (p)=>`Riesgo de lluvia ${p}%`, pg_dry_track: 'Pista seca',
     pg_rating_gap: 'Diferencia de Rating con el Rival', pg_main_rival: 'Rival principal', pg_none_yet: 'Todavía ninguna',
     pg_lineup: (team)=>`Alineación — ${team}`, pg_team_rating: 'Rating del Equipo', pg_weather_forecast: 'Previsión Meteorológica',
@@ -2355,6 +2358,12 @@ function statusFor(slotKey, t, timeline){
   if(timeline.penaltyByPhase[t] && timeline.penaltyByPhase[t].has(slotKey)) return 'PENALITÀ';
   return 'In pista';
 }
+// V0.9.7.8.31: statusFor() resta sempre in italiano internamente (usato per confronti diretti
+// altrove nel codice) — questa funzione traduce SOLO per la visualizzazione a schermo.
+function statusLabel(raw){
+  const map = { 'RITIRATO':window.t('status_retired'), 'BOX':window.t('status_box'), 'PENALITÀ':window.t('status_penalty'), 'In pista':window.t('status_on_track') };
+  return map[raw] || raw;
+}
 
 function buildPhaseLog(t, timeline){
   const lines = [];
@@ -2859,12 +2868,13 @@ function computeLiveRows(){
     const e = byKey[key];
     const prevIdx = prevOrder.indexOf(key);
     const delta = prevIdx>=0 ? (prevIdx - i) : 0;
-    let status = statusFor(key, t, timeline);
+    const statusRaw = statusFor(key, t, timeline); // V0.9.7.8.31: valore interno, mai tradotto, usato solo per confronti
+    let status = statusLabel(statusRaw);
     if(isFinalPhase){
-      status = status==='RITIRATO' ? 'RIT' : '🏁';
+      status = statusRaw==='RITIRATO' ? window.t('status_retired_short') : '🏁';
     }
-    const gap = i===0 ? 'Leader' : ((status==='RITIRATO'||status==='RIT') ? '—' : '+'+(i*0.55 + (i%3)*0.2).toFixed(1)+'s');
-    return { key, index:i, pos:i+1, carNumber:e.carNumber, driverName:e.driverName, teamName:e.teamName, teamId:e.teamId, isPlayerTeam:e.isPlayerTeam, status, gap, delta };
+    const gap = i===0 ? window.t('status_leader') : ((statusRaw==='RITIRATO') ? '—' : '+'+(i*0.55 + (i%3)*0.2).toFixed(1)+'s');
+    return { key, index:i, pos:i+1, carNumber:e.carNumber, driverName:e.driverName, teamName:e.teamName, teamId:e.teamId, isPlayerTeam:e.isPlayerTeam, status, statusRaw, gap, delta };
   });
 }
 
@@ -2898,7 +2908,7 @@ function renderRaceLiveInit(){
   const leader = rows[0];
 
   const rowsHTML = rows.map(r=>`
-    <div class="live-row ${r.isPlayerTeam?'player':''} ${r.status==='RITIRATO'?'dnf':''} ${!r.isPlayerTeam && state.rivals && state.rivals.includes(r.teamId)?'rival':''}" id="row-${r.key}" style="top:${r.index*ROW_H}px;">
+    <div class="live-row ${r.isPlayerTeam?'player':''} ${r.statusRaw==='RITIRATO'?'dnf':''} ${!r.isPlayerTeam && state.rivals && state.rivals.includes(r.teamId)?'rival':''}" id="row-${r.key}" style="top:${r.index*ROW_H}px;">
       <span class="lr-pos">P${r.pos}</span>
       <span class="lr-num mono">#${r.carNumber}</span>
       <span class="lr-name">${shortName(r.driverName)}${r.isPlayerTeam?' <b class="lr-tu">TU</b>':''}</span>
@@ -2980,7 +2990,7 @@ function updateLiveBoard(){
     let row = document.getElementById('row-'+r.key);
     if(!row) return;
     row.style.top = (r.index*ROW_H)+'px';
-    row.className = `live-row ${r.isPlayerTeam?'player':''} ${r.status==='RITIRATO'?'dnf':''} ${!r.isPlayerTeam && state.rivals && state.rivals.includes(r.teamId)?'rival':''}`;
+    row.className = `live-row ${r.isPlayerTeam?'player':''} ${r.statusRaw==='RITIRATO'?'dnf':''} ${!r.isPlayerTeam && state.rivals && state.rivals.includes(r.teamId)?'rival':''}`;
     row.querySelector('.lr-pos').textContent = 'P'+r.pos;
     row.querySelector('.lr-gap').textContent = r.gap;
     row.querySelector('.lr-status').textContent = r.status;
