@@ -63,6 +63,11 @@ let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 const I18N = {
   it: {
+    upg_developing: 'Sviluppo in corso…', upg_tap_skip: 'Tocca per saltare',
+    upg_failed: 'Sviluppo Fallito', upg_success: 'Sviluppo Riuscito!', upg_risk_taken: (p)=>` · rischio corso: ${p}%`,
+    upg_no_gain: 'Nessun guadagno questa volta.', upg_gain_global: (n)=>`+${n} RATING diffuso su tutta la vettura`,
+    upg_gain_area: (n,a)=>`+${n} RATING su ${a}`, upg_continue: 'Continua →',
+    upcoming_title: 'Prossimi Circuiti', upcoming_most_useful: 'COMPONENTE PIÙ UTILE', upcoming_next: 'PROSSIMA', upcoming_race: (n)=>`GARA ${n}`,
     museum_title: '🏛️ Museo Dynasty', museum_tagline: 'Ogni pilota e componente portato fino in fondo a una stagione, o sostituito lungo il percorso, resta qui per sempre.',
     museum_completion: 'COMPLETAMENTO', museum_back: '← Torna Indietro', museum_drivers: 'Piloti', museum_components: 'Componenti',
     museum_no_drivers: 'Nessun pilota ancora sbloccato: portane uno fino a fine stagione, o sostituiscilo, per iniziare la collezione.',
@@ -174,6 +179,11 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    upg_developing: 'Development in progress…', upg_tap_skip: 'Tap to skip',
+    upg_failed: 'Development Failed', upg_success: 'Development Succeeded!', upg_risk_taken: (p)=>` · risk taken: ${p}%`,
+    upg_no_gain: 'No gain this time.', upg_gain_global: (n)=>`+${n} RATING spread across the whole car`,
+    upg_gain_area: (n,a)=>`+${n} RATING on ${a}`, upg_continue: 'Continue →',
+    upcoming_title: 'Upcoming Circuits', upcoming_most_useful: 'MOST USEFUL COMPONENT', upcoming_next: 'NEXT', upcoming_race: (n)=>`RACE ${n}`,
     museum_title: '🏛️ Dynasty Museum', museum_tagline: 'Every driver and component carried through to the end of a season, or replaced along the way, stays here forever.',
     museum_completion: 'COMPLETION', museum_back: '← Back', museum_drivers: 'Drivers', museum_components: 'Components',
     museum_no_drivers: "No drivers unlocked yet: carry one to the end of a season, or replace it, to start the collection.",
@@ -279,6 +289,11 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    upg_developing: 'Desarrollo en curso…', upg_tap_skip: 'Toca para saltar',
+    upg_failed: 'Desarrollo Fallido', upg_success: '¡Desarrollo Conseguido!', upg_risk_taken: (p)=>` · riesgo asumido: ${p}%`,
+    upg_no_gain: 'Sin ganancia esta vez.', upg_gain_global: (n)=>`+${n} RATING repartido en todo el coche`,
+    upg_gain_area: (n,a)=>`+${n} RATING en ${a}`, upg_continue: 'Continuar →',
+    upcoming_title: 'Próximos Circuitos', upcoming_most_useful: 'COMPONENTE MÁS ÚTIL', upcoming_next: 'PRÓXIMA', upcoming_race: (n)=>`CARRERA ${n}`,
     museum_title: '🏛️ Museo Dynasty', museum_tagline: 'Cada piloto y componente llevado hasta el final de una temporada, o sustituido por el camino, se queda aquí para siempre.',
     museum_completion: 'COMPLETADO', museum_back: '← Volver', museum_drivers: 'Pilotos', museum_components: 'Componentes',
     museum_no_drivers: 'Todavía no has desbloqueado ningún piloto: llévalo hasta el final de una temporada, o sustitúyelo, para empezar la colección.',
@@ -5565,9 +5580,9 @@ function renderUpgradeSuspense(){
       <div class="suspense-cell"></div><div class="suspense-cell"></div><div class="suspense-cell"></div>
       <div class="suspense-cell"></div><div class="suspense-cell"></div>
     </div>
-    <div class="suspense-title">Sviluppo in corso…</div>
+    <div class="suspense-title">${t('upg_developing')}</div>
     <div class="suspense-sub dim">${u.nome}</div>
-    <div class="dim" style="font-size:11px;margin-top:18px;">Tocca per saltare</div>
+    <div class="dim" style="font-size:11px;margin-top:18px;">${t('upg_tap_skip')}</div>
   </div>
   `;
   bindActions();
@@ -5576,19 +5591,19 @@ function renderUpgradeSuspense(){
 function renderUpgradeResult(){
   const u = state.pendingUpgradeReveal;
   const icon = u.failed ? '❌' : '✅';
-  const title = u.failed ? 'Sviluppo Fallito' : 'Sviluppo Riuscito!';
+  const title = u.failed ? t('upg_failed') : t('upg_success');
   const cls = u.failed ? 'result-fail' : 'result-ok';
   app.innerHTML = `
   ${topbarHTML()}
   <div class="suspense-screen ${cls}">
     <div class="result-icon">${icon}</div>
     <div class="suspense-title">${title}</div>
-    <div class="suspense-sub dim">${u.nome}${u.riskPct!==undefined?` · rischio corso: ${u.riskPct}%`:''}</div>
+    <div class="suspense-sub dim">${u.nome}${u.riskPct!==undefined?t('upg_risk_taken', u.riskPct):''}</div>
     ${u.failed
-      ? `<div class="tag-line malus" style="margin-top:10px;font-size:13px;">${u.malus || 'Nessun guadagno questa volta.'}</div>`
-      : `<div class="tag-line bonus" style="margin-top:10px;font-size:13px;">${u.area==='Globale' ? `+${Math.round(u.guadagno/3)} RATING diffuso su tutta la vettura` : `+${u.guadagno} RATING su ${displayArea(u.area)}`}</div>`}
+      ? `<div class="tag-line malus" style="margin-top:10px;font-size:13px;">${u.malus || t('upg_no_gain')}</div>`
+      : `<div class="tag-line bonus" style="margin-top:10px;font-size:13px;">${u.area==='Globale' ? t('upg_gain_global', Math.round(u.guadagno/3)) : t('upg_gain_area', u.guadagno, displayArea(u.area))}</div>`}
   </div>
-  <div class="btnrow" style="justify-content:center;"><button class="primary" data-action="continue-upgrade-result">Continua →</button></div>
+  <div class="btnrow" style="justify-content:center;"><button class="primary" data-action="continue-upgrade-result">${t('upg_continue')}</button></div>
   `;
   bindActions();
 }
@@ -5600,7 +5615,7 @@ function upcomingCircuitsHTML(){
   const rows = upcoming.map((c,i)=>{
     const isNext = i===0;
     return `<div class="upcoming-row ${isNext?'next':''}">
-      <span class="mono dim" style="min-width:56px;">${isNext?'PROSSIMA':'GARA '+(state.raceIndex+1+i)}</span>
+      <span class="mono dim" style="min-width:56px;">${isNext?t('upcoming_next'):t('upcoming_race', state.raceIndex+1+i)}</span>
       <span class="upcoming-name">${flag(c.paese)} ${c.nome}</span>
       <span class="dim" style="font-size:11px;">${c.tipo}</span>
       <span class="upcoming-dom" style="color:var(--cyan);">${displayArea(c.componentedominante)}</span>
@@ -5608,7 +5623,7 @@ function upcomingCircuitsHTML(){
   }).join('');
   return `
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">Prossimi Circuiti</h3><span class="dim mono" style="font-size:10px;">COMPONENTE PIÙ UTILE</span></div>
+    <div class="panel-title"><h3 class="hdr">${t('upcoming_title')}</h3><span class="dim mono" style="font-size:10px;">${t('upcoming_most_useful')}</span></div>
     <div class="upcoming-list">${rows}</div>
   </div>`;
 }
