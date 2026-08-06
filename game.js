@@ -2533,7 +2533,95 @@ function computeLiveDecisions(timeline){
   return unique.slice(0,2);
 }
 
-const LIVE_DECISION_INFO = {
+const LIVE_DECISION_INFO_EN = {
+  weather: { title:'The weather is changing', question:"Track conditions are changing right now. What do you do?",
+    choices:[
+      { key:'box', label:'🛞 Change tires now', desc:'Safe, but you lose a few positions in the pits.' },
+      { key:'stay', label:'⏳ Stay out one more lap', desc:'Risky, but you gain if the weather helps you.' },
+      { key:'splitstrategy', label:'🔀 Split strategies', desc:'One driver pits, the other stays out: cover both options.' },
+    ]},
+  safetycar: { title:'Safety Car on track', question:'The field bunches up. Do you take advantage?',
+    choices:[
+      { key:'box', label:'🔧 Pit now', desc:'Nearly free stop, but you lose a few positions in traffic.' },
+      { key:'stay', label:'🚦 Stay out', desc:"Keep your position, but you'll have to stop later under normal conditions." },
+      { key:'restart', label:'⚡ Aggressive restart', desc:'Risk it all at the restart to gain positions immediately.' },
+    ]},
+  pit: { title:'Pit window', question:'When do you want to stop?',
+    choices:[
+      { key:'early', label:'⏪ Pit early', desc:"Fresh tires right away, but you'll have to manage them longer." },
+      { key:'late',  label:'⏩ Delay the stop', desc:'Stay out longer, risking wear.' },
+    ]},
+  aggression: { title:'Mid-race', question:'How do you want to approach this phase?',
+    choices:[
+      { key:'aggressive', label:'🔥 Push', desc:'More chances to overtake, but more risk and wear.' },
+      { key:'safe',       label:'🛡️ Manage', desc:'Safer, but you stay where you are.' },
+    ]},
+  teamorders: { title:'Team orders', question:'Your two drivers are close in the standings. What do you do?',
+    choices:[
+      { key:'hold', label:'🤝 Hold position', desc:'No internal fight: safe, but no gain.' },
+      { key:'free', label:'⚔️ Let them race', desc:'Guaranteed show, but risk they damage each other.' },
+    ]},
+  defend: { title:'A rival attacks you', question:"You've got an opponent behind you. How do you respond?",
+    choices:[
+      { key:'defend',  label:'🛑 Defend firmly', desc:'Hold your position, but risk contact.' },
+      { key:'letpass', label:'🟢 Let them by cleanly', desc:'Lose a position, but the race stays clean.' },
+    ]},
+  enginemode: { title:'Engine mode', question:'Do you want to push the engine beyond normal limits?',
+    choices:[
+      { key:'push', label:'⚙️ Push mode', desc:'More pace, but more risk of failure.' },
+      { key:'save', label:'🔋 Conservative mode', desc:'Engine stays safe, but less performance.' },
+    ]},
+  mechanical: { title:'Mechanical alarm', question:'A component is showing signs of failure. What do you do?',
+    choices:[
+      { key:'nurse', label:'🩹 Nurse it carefully', desc:'Lose pace, but reduce retirement risk.' },
+      { key:'push',  label:'🔥 Keep pushing', desc:'No compromise, but you risk retiring.' },
+    ]},
+};
+const LIVE_DECISION_INFO_ES = {
+  weather: { title:'El clima está cambiando', question:'Las condiciones de pista cambian justo ahora. ¿Qué haces?',
+    choices:[
+      { key:'box', label:'🛞 Cambia neumáticos ya', desc:'Seguro, pero pierdes algunas posiciones en boxes.' },
+      { key:'stay', label:'⏳ Sigue una vuelta más', desc:'Arriesgas, pero ganas si el clima te ayuda.' },
+      { key:'splitstrategy', label:'🔀 Divide las estrategias', desc:'Un piloto entra, el otro sigue fuera: cubres ambas opciones.' },
+    ]},
+  safetycar: { title:'Safety Car en pista', question:'El pelotón se compacta. ¿Lo aprovechas?',
+    choices:[
+      { key:'box', label:'🔧 Entra a boxes', desc:'Parada casi gratis, pero pierdes algunas posiciones en el tráfico.' },
+      { key:'stay', label:'🚦 Sigue en pista', desc:'Mantienes la posición, pero tendrás que parar después en condiciones normales.' },
+      { key:'restart', label:'⚡ Reinicio agresivo', desc:'Arriesgas todo en la reanudación para ganar posiciones de inmediato.' },
+    ]},
+  pit: { title:'Ventana de parada', question:'¿Cuándo quieres parar en boxes?',
+    choices:[
+      { key:'early', label:'⏪ Adelanta la parada', desc:'Neumáticos frescos ya, pero tendrás que gestionarlos más tiempo.' },
+      { key:'late',  label:'⏩ Retrasa la parada', desc:'Sigues más tiempo en pista, arriesgando el desgaste.' },
+    ]},
+  aggression: { title:'Mitad de carrera', question:'¿Cómo quieres afrontar esta fase?',
+    choices:[
+      { key:'aggressive', label:'🔥 Aprieta', desc:'Más posibilidades de adelantar, pero más riesgo y desgaste.' },
+      { key:'safe',       label:'🛡️ Gestiona', desc:'Más seguro, pero te quedas donde estás.' },
+    ]},
+  teamorders: { title:'Órdenes de equipo', question:'Tus dos pilotos están cerca en la clasificación. ¿Qué haces?',
+    choices:[
+      { key:'hold', label:'🤝 Mantén la posición', desc:'Sin lucha interna: seguro, pero sin ganancia.' },
+      { key:'free', label:'⚔️ Déjalos luchar libremente', desc:'Espectáculo garantizado, pero riesgo de que se dañen entre ellos.' },
+    ]},
+  defend: { title:'Un rival te ataca', question:'Tienes un adversario detrás. ¿Cómo respondes?',
+    choices:[
+      { key:'defend',  label:'🛑 Defiende con decisión', desc:'Mantienes la posición, pero arriesgas un contacto.' },
+      { key:'letpass', label:'🟢 Déjalo pasar limpio', desc:'Pierdes una posición, pero la carrera sigue limpia.' },
+    ]},
+  enginemode: { title:'Modo motor', question:'¿Quieres exprimir el motor más de lo normal?',
+    choices:[
+      { key:'push', label:'⚙️ Modo empuje', desc:'Más ritmo, pero más riesgo de avería.' },
+      { key:'save', label:'🔋 Modo conservador', desc:'Motor a salvo, pero menos rendimiento.' },
+    ]},
+  mechanical: { title:'Alarma mecánica', question:'Un componente muestra señales de fallo. ¿Qué haces?',
+    choices:[
+      { key:'nurse', label:'🩹 Gestiona con cautela', desc:'Pierdes ritmo, pero reduces el riesgo de retirada.' },
+      { key:'push',  label:'🔥 Sigue apretando', desc:'Sin concesiones, pero arriesgas la retirada.' },
+    ]},
+};
+const LIVE_DECISION_INFO_IT_BASE = {
   weather: { title:'Il meteo sta cambiando', question:'Le condizioni di pista cambiano proprio ora. Che fai?',
     choices:[
       { key:'box', label:'🛞 Cambia gomme subito', desc:'Sicuro, ma perdi qualche posizione ai box.' },
@@ -2577,6 +2665,10 @@ const LIVE_DECISION_INFO = {
       { key:'push',  label:'🔥 Continua a spingere', desc:'Nessun compromesso, ma rischi il ritiro.' },
     ]},
 };
+const LIVE_DECISION_INFO = new Proxy({}, { get:(t,k)=> {
+  const src = currentLang==='en' ? LIVE_DECISION_INFO_EN : (currentLang==='es' ? LIVE_DECISION_INFO_ES : LIVE_DECISION_INFO_IT_BASE);
+  return src[k];
+}});
 
 function decisionShiftFn(choiceKey){
   switch(choiceKey){
