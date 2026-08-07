@@ -404,6 +404,19 @@ tr.cmp-same td:nth-child(3),tr.cmp-same td:nth-child(4){color:var(--dim);}
 .dot.done{background:var(--panel2);border-color:var(--cyan);color:var(--cyan);}
 .dot.now{background:var(--amber);border-color:var(--amber);color:#140900;}
 
+/* V0.9.7.8.34: blocco promo FUORISCALA a fine stagione — palette ufficiale del brand (carbon/signal),
+   non il tema del gioco, cosi' si nota subito come qualcosa di diverso dal resto dell'interfaccia. */
+.season-end-fs-promo{ background:#0D0D0F; border:1px solid #2A2A2E; padding:0; overflow:hidden; }
+.season-end-fs-link{
+  display:flex; align-items:center; gap:16px; padding:20px; text-decoration:none;
+  transition:background .15s;
+}
+.season-end-fs-link:hover, .season-end-fs-link:active{ background:rgba(229,71,50,0.06); }
+.season-end-fs-logo{ width:64px; flex-shrink:0; opacity:0.95; }
+.season-end-fs-text{ flex:1; min-width:0; }
+.season-end-fs-title{ font-size:16px; font-weight:800; color:#F3F0E8; margin-bottom:4px; }
+.season-end-fs-body{ font-size:12.5px; color:#8B8D91; line-height:1.5; margin-bottom:10px; }
+.season-end-fs-cta{ font-size:12.5px; font-weight:800; color:#E54732; }
 .footer-note{font-size:11px;color:var(--dim);text-align:center;margin-top:30px;line-height:1.7;}
 .badge-event{display:inline-block;font-family:var(--font-mono);font-size:10px;padding:2px 6px;border-radius:3px;
   background:rgba(255,106,26,0.15);color:var(--amber);margin-left:6px;}

@@ -69,6 +69,14 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    se_fs_title: "Ti sta piacendo?", se_fs_body: "Questo è il primo gioco di FUORISCALA, uno studio indipendente piccolo piccolo. Passa a trovarci — un click, zero impegno, e ci aiuti a fare il prossimo.",
+    se_fs_cta: "Scopri FUORISCALA ↗",
+    share_trophy_title: '🏆 SALA TROFEI', share_trophy_stats: (r,t,w)=>`${r}/${t} circuiti corsi  ·  ${w}/${t} vinti`,
+    share_world_champion: 'CAMPIONE DEL MONDO', share_drivers_title: (team)=>`${team} — Titolo Piloti`,
+    share_season_over: (pos)=>`Stagione conclusa — P${pos} Costruttori`, share_full_season: 'Stagione Completa (20 gare)',
+    share_quick_season: 'Stagione Veloce (10 gare)', share_manager_tag: 'ROGUELIKE GP MANAGER',
+    share_wins: (n)=>`${n} vittorie`, share_podiums: (n)=>`${n} podi`, share_points: (n)=>`${n} punti`,
+    share_dnfs: (n)=>`${n} ritiri`, share_champion_line: (n)=>`${n}, Campione`, share_beat_me: 'PROVA A BATTERMI',
     splash_presents: 'FUORISCALA presenta', splash_tap_continue: 'tocca per continuare',
     sl_races_word: 'GARE',
     settings_sfx_vol_short: 'Effetti Sonori', settings_music_vol_short: 'Musica',
@@ -219,6 +227,14 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    se_fs_title: "Enjoying it?", se_fs_body: "This is FUORISCALA's first game, a tiny independent studio. Come say hi — one click, zero commitment, and it helps us make the next one.",
+    se_fs_cta: "Discover FUORISCALA ↗",
+    share_trophy_title: '🏆 TROPHY ROOM', share_trophy_stats: (r,t,w)=>`${r}/${t} circuits raced  ·  ${w}/${t} won`,
+    share_world_champion: 'WORLD CHAMPION', share_drivers_title: (team)=>`${team} — Drivers' Title`,
+    share_season_over: (pos)=>`Season over — P${pos} Constructors`, share_full_season: 'Full Season (20 races)',
+    share_quick_season: 'Quick Season (10 races)', share_manager_tag: 'ROGUELIKE GP MANAGER',
+    share_wins: (n)=>`${n} wins`, share_podiums: (n)=>`${n} podiums`, share_points: (n)=>`${n} points`,
+    share_dnfs: (n)=>`${n} retirements`, share_champion_line: (n)=>`${n}, Champion`, share_beat_me: 'TRY TO BEAT ME',
     splash_presents: 'FUORISCALA presents', splash_tap_continue: 'tap to continue',
     sl_races_word: 'RACES',
     settings_sfx_vol_short: 'Sound Effects', settings_music_vol_short: 'Music',
@@ -363,6 +379,14 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    se_fs_title: "¿Te está gustando?", se_fs_body: "Este es el primer juego de FUORISCALA, un estudio independiente muy pequeño. Pásate a vernos — un clic, cero compromiso, y nos ayudas a hacer el próximo.",
+    se_fs_cta: "Descubre FUORISCALA ↗",
+    share_trophy_title: '🏆 SALA DE TROFEOS', share_trophy_stats: (r,t,w)=>`${r}/${t} circuitos disputados  ·  ${w}/${t} ganados`,
+    share_world_champion: 'CAMPEÓN DEL MUNDO', share_drivers_title: (team)=>`${team} — Título de Pilotos`,
+    share_season_over: (pos)=>`Temporada terminada — P${pos} Constructores`, share_full_season: 'Temporada Completa (20 carreras)',
+    share_quick_season: 'Temporada Rápida (10 carreras)', share_manager_tag: 'ROGUELIKE GP MANAGER',
+    share_wins: (n)=>`${n} victorias`, share_podiums: (n)=>`${n} podios`, share_points: (n)=>`${n} puntos`,
+    share_dnfs: (n)=>`${n} retiros`, share_champion_line: (n)=>`${n}, Campeón`, share_beat_me: 'INTENTA VENCERME',
     splash_presents: 'FUORISCALA presenta', splash_tap_continue: 'toca para continuar',
     sl_races_word: 'CARRERAS',
     settings_sfx_vol_short: 'Efectos de Sonido', settings_music_vol_short: 'Música',
@@ -6340,9 +6364,9 @@ async function buildShareCardCanvas(){
   const band = ratingBandKey(bestDriverRating);
 
   let title, subtitle;
-  if(isDriverChamp){ title = 'CAMPIONE DEL MONDO'; subtitle = `${teamDisplayName()} — Titolo Piloti`; }
-  else { title = teamDisplayName().toUpperCase(); subtitle = `Stagione conclusa — P${constructorPos} Costruttori`; }
-  const metaLine = `${state.seasonLength===20?'Stagione Completa (20 gare)':'Stagione Veloce (10 gare)'}  ·  Difficoltà ${DIFFICULTY_LABEL[state.difficulty]}`;
+  if(isDriverChamp){ title = t('share_world_champion'); subtitle = t('share_drivers_title', teamDisplayName()); }
+  else { title = teamDisplayName().toUpperCase(); subtitle = t('share_season_over', constructorPos); }
+  const metaLine = `${state.seasonLength===20?t('share_full_season'):t('share_quick_season')}  ·  ${DIFFICULTY_LABEL[state.difficulty]}`;
 
   const poseNum = isDriverChamp ? 1 : (2+Math.floor(rnd()*4)); // 2..5, mai la 1 se non hai vinto il titolo
   // V0.9.7.5: THE GOAT ha una posa dedicata (casco/tuta rosso Ferrari) al posto del generico Immortal viola
@@ -6352,8 +6376,8 @@ async function buildShareCardCanvas(){
   const accent = isGoatChamp ? '#FF1801' : CAR_RARITY_COLOR[band];
 
   const statsLines = isDriverChamp
-    ? [`${totalWins} vittorie`, `${totalPodiums} podi`, `${totalPoints} punti`, `${driverChamp.nome}, Campione`]
-    : [`${totalWins} vittorie`, `${totalPodiums} podi`, `${totalPoints} punti`, `${totalDnfs} ritiri`];
+    ? [t('share_wins', totalWins), t('share_podiums', totalPodiums), t('share_points', totalPoints), t('share_champion_line', driverChamp.nome)]
+    : [t('share_wins', totalWins), t('share_podiums', totalPodiums), t('share_points', totalPoints), t('share_dnfs', totalDnfs)];
 
   const [logoImg, poseImg] = await Promise.all([loadImg(LOGO_DATA_URI), loadImg(poseSrc)]);
 
@@ -6387,7 +6411,7 @@ async function buildShareCardCanvas(){
 
   ctx.drawImage(logoImg, (W-logoW)/2, logoY, logoW, logoH);
   ctx.fillStyle = '#96969e'; ctx.font = '21px -apple-system,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('ROGUELIKE GP MANAGER', W/2, subY+18);
+  ctx.fillText(t('share_manager_tag'), W/2, subY+18);
   ctx.textAlign='left';
   ctx.strokeStyle = '#34363a'; ctx.beginPath(); ctx.moveTo(50,subY+38); ctx.lineTo(W-50,subY+38); ctx.stroke();
 
@@ -6423,7 +6447,7 @@ async function buildShareCardCanvas(){
   ctx.fillStyle = accent+'20'; ctx.fillRect(30, boxY0, W-60, boxY1-boxY0);
   ctx.strokeStyle = accent; ctx.lineWidth = 3; ctx.strokeRect(30, boxY0, W-60, boxY1-boxY0);
   ctx.fillStyle = accent; ctx.font = '900 30px -apple-system,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('PROVA A BATTERMI', W/2, boxY0+58);
+  ctx.fillText(t('share_beat_me'), W/2, boxY0+58);
   ctx.textAlign='left';
 
   // coriandoli statici, solo per il titolo piloti
@@ -6476,9 +6500,9 @@ async function buildTrophyRoomCanvas(){
 
   ctx.drawImage(logoImg, (W-logoW)/2, logoY, logoW, logoH);
   ctx.fillStyle = '#F7B800'; ctx.font = '900 34px -apple-system,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('🏆 SALA TROFEI', W/2, titleY);
+  ctx.fillText(t('share_trophy_title'), W/2, titleY);
   ctx.fillStyle = '#c8c8ce'; ctx.font = '20px -apple-system,sans-serif';
-  ctx.fillText(`${racedCount}/${total} circuiti corsi  ·  ${wonCount}/${total} vinti`, W/2, statsY);
+  ctx.fillText(t('share_trophy_stats', racedCount, total, wonCount), W/2, statsY);
   ctx.textAlign='left';
 
   const gridX = (W-gridW)/2;
@@ -6733,6 +6757,16 @@ function renderSeasonEnd(){
     </div>
   </div>
   ${seasonTrophiesPanelHTML()}
+  <div class="panel season-end-fs-promo">
+    <a href="https://fuoriscala-dev.github.io/FUORISCALA.SITOWEB/" target="_blank" rel="noopener" class="season-end-fs-link">
+      <img src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA" class="season-end-fs-logo">
+      <div class="season-end-fs-text">
+        <div class="season-end-fs-title">${t('se_fs_title')}</div>
+        <div class="season-end-fs-body">${t('se_fs_body')}</div>
+        <div class="season-end-fs-cta">${t('se_fs_cta')}</div>
+      </div>
+    </a>
+  </div>
   <div class="footer-note">${t('se_footer')}</div>
   `;
   bindActions();
