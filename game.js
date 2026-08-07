@@ -856,10 +856,19 @@ function playSfx(name, intensity){
    TRANNE la primissima volta in assoluto che il gioco viene aperto in questa sessione: quella parte
    dall'inizio, come richiesto.
    ============================================================ */
+// V0.9.7.8.36: la zona 'other' ora ha DUE tracce (Velvet Grid / Pit Lane Pulse) invece di una sola.
+// Scelta casuale tra le due ad ogni "vero avvio" (non ad ogni crossfade — se si resta nella stessa
+// zona, la traccia gia' in corso continua) — TRANNE il primissimo avvio in assoluto del gioco in
+// questa sessione, che e' SEMPRE Pit Lane Pulse, come richiesto esplicitamente.
+const MUSIC_TRACKS_OTHER = ['audio/velvet-grid.mp3', 'audio/pit-lane-pulse.mp3'];
 const MUSIC_TRACKS = {
   race: 'audio/lap-timer-drift.mp3',
-  other: 'audio/pit-lane-drift.mp3',
+  other: null, // scelto dinamicamente da pickOtherTrack(), vedi sotto
 };
+function pickOtherTrack(){
+  if(__musicIsVeryFirstPlay) return 'audio/pit-lane-pulse.mp3';
+  return MUSIC_TRACKS_OTHER[Math.floor(rnd()*MUSIC_TRACKS_OTHER.length)];
+}
 const __musicAudioEls = { race:null, other:null };
 let __musicCurrentZone = null;        // 'race' | 'other' | null (silenzio)
 let __musicIsVeryFirstPlay = true;    // solo il primissimo avvio in assoluto parte da 0
@@ -867,8 +876,9 @@ let __musicFadeTimer = null;
 
 function getMusicAudioEl(zone){
   if(__musicAudioEls[zone]) return __musicAudioEls[zone];
-  if(!MUSIC_TRACKS[zone]) return null;
-  const el = new Audio(MUSIC_TRACKS[zone]);
+  const src = zone==='other' ? pickOtherTrack() : MUSIC_TRACKS[zone];
+  if(!src) return null;
+  const el = new Audio(src);
   el.loop = true;
   el.volume = 0;
   __musicAudioEls[zone] = el;
@@ -893,6 +903,17 @@ function crossfadeMusicTo(zone){
   const nextEl = zone ? getMusicAudioEl(zone) : null;
   if(nextEl && targetVol>0){
     if(nextEl.paused){
+      // V0.9.7.8.36: ad ogni VERO riavvio della zona 'other' (non ad ogni crossfade — se la zona
+      // era gia' in pausa vuol dire che stiamo ripartendo da capo, non continuando) ri-scegliamo
+      // quale delle due tracce suonare. Il primissimo avvio in assoluto e' sempre Pit Lane Pulse
+      // (pickOtherTrack() lo garantisce), i successivi sono casuali tra le due.
+      if(zone==='other'){
+        const chosenSrc = pickOtherTrack();
+        if(!nextEl.src || !nextEl.src.endsWith(chosenSrc.replace('audio/',''))){
+          nextEl.src = chosenSrc;
+          nextEl.load();
+        }
+      }
       const startPlayback = ()=>{
         try{
           if(!__musicIsVeryFirstPlay && nextEl.duration && isFinite(nextEl.duration)){
