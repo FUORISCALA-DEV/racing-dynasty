@@ -69,6 +69,8 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    draft_founding: 'Fondazione scuderia',
+    promo_banner_tagline: 'Piccolo studio, giochi fuori misura', promo_banner_cta: 'Scopri di più ↗',
     se_fs_title: "Ti sta piacendo?", se_fs_body: "Questo è il primo gioco di FUORISCALA, uno studio indipendente piccolo piccolo. Passa a trovarci — un click, zero impegno, e ci aiuti a fare il prossimo.",
     se_fs_cta: "Scopri FUORISCALA ↗",
     share_trophy_title: '🏆 SALA TROFEI', share_trophy_stats: (r,t,w)=>`${r}/${t} circuiti corsi  ·  ${w}/${t} vinti`,
@@ -227,6 +229,8 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    draft_founding: 'Team founding',
+    promo_banner_tagline: 'Small studio, outsized games', promo_banner_cta: 'Learn more ↗',
     se_fs_title: "Enjoying it?", se_fs_body: "This is FUORISCALA's first game, a tiny independent studio. Come say hi — one click, zero commitment, and it helps us make the next one.",
     se_fs_cta: "Discover FUORISCALA ↗",
     share_trophy_title: '🏆 TROPHY ROOM', share_trophy_stats: (r,t,w)=>`${r}/${t} circuits raced  ·  ${w}/${t} won`,
@@ -379,6 +383,8 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    draft_founding: 'Fundación de la escudería',
+    promo_banner_tagline: 'Estudio pequeño, juegos fuera de escala', promo_banner_cta: 'Saber más ↗',
     se_fs_title: "¿Te está gustando?", se_fs_body: "Este es el primer juego de FUORISCALA, un estudio independiente muy pequeño. Pásate a vernos — un clic, cero compromiso, y nos ayudas a hacer el próximo.",
     se_fs_cta: "Descubre FUORISCALA ↗",
     share_trophy_title: '🏆 SALA DE TROFEOS', share_trophy_stats: (r,t,w)=>`${r}/${t} circuitos disputados  ·  ${w}/${t} ganados`,
@@ -5145,7 +5151,7 @@ function renderDraft(){
 
   app.innerHTML = `
   <div class="topbar">
-    <div class="brand hdr">RACING DYNASTY<small>Fondazione scuderia — Draft ${state.draftPicksDone+1}/${DRAFT_TOTAL_PICKS} · ${DIFFICULTY_LABEL[state.difficulty]}</small></div>
+    <div class="brand hdr">RACING DYNASTY<small>${t('draft_founding')} — Draft ${state.draftPicksDone+1}/${DRAFT_TOTAL_PICKS} · ${DIFFICULTY_LABEL[state.difficulty]}</small></div>
   </div>
   <div class="panel">
     <div class="eyebrow">${t('draft_choose_one')}</div>
@@ -7852,6 +7858,12 @@ function applyStaticMenuTranslations(){
   const sectionLabels = document.querySelectorAll('.menu-section-label');
   const sectionKeys = ['menu_section_game','menu_section_progress','menu_section_info','menu_section_app'];
   sectionLabels.forEach((el,i)=>{ if(sectionKeys[i]) el.textContent = t(sectionKeys[i]); });
+  // V0.9.7.8.37 fix: il banner promozionale era markup statico, ignorava sempre la lingua scelta —
+  // trovato durante un controllo a campione su piu' schermate in inglese.
+  const promoTagline = document.getElementById('promoBannerTagline');
+  if(promoTagline) promoTagline.textContent = t('promo_banner_tagline');
+  const promoCta = document.getElementById('promoBannerCta');
+  if(promoCta) promoCta.textContent = t('promo_banner_cta');
 }
 function initSidebar(){
   document.getElementById('gameMenuToggleBtn').addEventListener('click', toggleMenuPanel);
