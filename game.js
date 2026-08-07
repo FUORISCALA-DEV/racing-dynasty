@@ -2629,7 +2629,7 @@ function beginRaceWithLights(){
   // V0.9.7.8.39: tempi ricalibrati sui delay REALI misurati nell'audio F1 fornito da Gio — non
   // piu' 480ms fissi (che risultavano quasi il doppio piu' veloci del vero e "immangiabili").
   // Delay tra un'accensione e la successiva: luce1->2, 2->3, 3->4, 4->5, 5->via.
-  const LIGHT_DELAYS = [826, 1000, 1007, 998, 999];
+  const LIGHT_DELAYS = [640, 750, 755, 750, 750]; // ~25% più veloce dell'audio esatto, resta comunque naturale
   let i = 0;
   function tick(){
     if(state.phase!=='start_lights') return;
