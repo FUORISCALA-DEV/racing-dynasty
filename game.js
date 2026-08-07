@@ -69,6 +69,7 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    sl_go_msg: 'VIA!!', sl_ready_msg: 'Pronti...', sl_lighting_msg: 'Si accendono le luci…',
     menu_exit_fullscreen: 'Esci da Schermo Intero',
     draft_founding: 'Fondazione scuderia',
     promo_banner_tagline: 'Piccolo studio, giochi fuori misura', promo_banner_cta: 'Scopri di più ↗',
@@ -230,6 +231,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    sl_go_msg: 'GO!!', sl_ready_msg: 'Ready...', sl_lighting_msg: 'Lights coming on…',
     menu_exit_fullscreen: 'Exit Fullscreen',
     draft_founding: 'Team founding',
     promo_banner_tagline: 'Small studio, outsized games', promo_banner_cta: 'Learn more ↗',
@@ -385,6 +387,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    sl_go_msg: '¡VAMOS!!', sl_ready_msg: 'Listos...', sl_lighting_msg: 'Se encienden las luces…',
     menu_exit_fullscreen: 'Salir de Pantalla Completa',
     draft_founding: 'Fundación de la escudería',
     promo_banner_tagline: 'Estudio pequeño, juegos fuera de escala', promo_banner_cta: 'Saber más ↗',
@@ -2623,21 +2626,23 @@ function beginRaceWithLights(){
   state.phase = 'start_lights';
   state.startLights = { lit:0, off:false };
   render();
+  // V0.9.7.8.39: tempi ricalibrati sui delay REALI misurati nell'audio F1 fornito da Gio — non
+  // piu' 480ms fissi (che risultavano quasi il doppio piu' veloci del vero e "immangiabili").
+  // Delay tra un'accensione e la successiva: luce1->2, 2->3, 3->4, 4->5, 5->via.
+  const LIGHT_DELAYS = [826, 1000, 1007, 998, 999];
   let i = 0;
   function tick(){
-    i++;
     if(state.phase!=='start_lights') return;
-    if(i<=5){
+    if(i<5){
+      i++;
       state.startLights.lit = i;
       render();
-      playRealSfx('audio/sfx_lights_ignite.mp3'); // V0.9.7.8.35: un "clic" ad ogni luce che si accende
-      window._lightsTimer = setTimeout(tick, 480);
-    } else if(i===6){
-      window._lightsTimer = setTimeout(tick, 750);
+      playRealSfx('audio/sfx_lights_ignite.mp3'); // un "clic" ad ogni luce che si accende
+      window._lightsTimer = setTimeout(tick, LIGHT_DELAYS[i-1]);
     } else {
       state.startLights.off = true;
       render();
-      playRealSfx('audio/sfx_lights_go.mp3'); // V0.9.7.8.35: il "via!" vero, allo spegnimento
+      playRealSfx('audio/sfx_lights_go.mp3'); // il "via!" vero, allo spegnimento
       window._lightsTimer = setTimeout(()=>{
         const { timeline } = simulateFullRace();
         startLiveRace(timeline);
@@ -2657,7 +2662,7 @@ function renderStartLights(){
   for(let i=0;i<5;i++){
     dots.push(`<div class="f1-light ${(!sl.off && i<sl.lit)?'lit':''}"></div>`);
   }
-  const msg = sl.off ? 'VIA!!' : (sl.lit>=5 ? 'Pronti...' : 'Si accendono le luci…');
+  const msg = sl.off ? t('sl_go_msg') : (sl.lit>=5 ? t('sl_ready_msg') : t('sl_lighting_msg'));
   app.innerHTML = `
   ${topbarHTML()}
   <div class="suspense-screen pickable" data-action="skip-start-lights">
