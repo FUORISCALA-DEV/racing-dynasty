@@ -69,6 +69,7 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    menu_exit_fullscreen: 'Esci da Schermo Intero',
     draft_founding: 'Fondazione scuderia',
     promo_banner_tagline: 'Piccolo studio, giochi fuori misura', promo_banner_cta: 'Scopri di più ↗',
     se_fs_title: "Ti sta piacendo?", se_fs_body: "Questo è il primo gioco di FUORISCALA, uno studio indipendente piccolo piccolo. Passa a trovarci — un click, zero impegno, e ci aiuti a fare il prossimo.",
@@ -229,6 +230,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    menu_exit_fullscreen: 'Exit Fullscreen',
     draft_founding: 'Team founding',
     promo_banner_tagline: 'Small studio, outsized games', promo_banner_cta: 'Learn more ↗',
     se_fs_title: "Enjoying it?", se_fs_body: "This is FUORISCALA's first game, a tiny independent studio. Come say hi — one click, zero commitment, and it helps us make the next one.",
@@ -383,6 +385,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    menu_exit_fullscreen: 'Salir de Pantalla Completa',
     draft_founding: 'Fundación de la escudería',
     promo_banner_tagline: 'Estudio pequeño, juegos fuera de escala', promo_banner_cta: 'Saber más ↗',
     se_fs_title: "¿Te está gustando?", se_fs_body: "Este es el primer juego de FUORISCALA, un estudio independiente muy pequeño. Pásate a vernos — un clic, cero compromiso, y nos ayudas a hacer el próximo.",
@@ -3476,7 +3479,6 @@ function applyUpgrade(upg, investT){
   const riskPct = isGuaranteed ? 0 : investedRisk(investT);
   const failed = isGuaranteed ? false : (rnd()*100 < riskPct);
   if(failed) unlockAchievement('si-impara-perdendo'); // V0.9.7.9
-  playSfx(failed ? 'upgrade_fail' : 'upgrade_success'); // V0.9.7.8.2
   const areaMap = {'Piloti':'pilotMain','Motore':'motore','Telaio':'telaio','Aerodinamica':'aero','Gomme':'gomme','Strategia':'stratega'};
   let areaLabel = upg.area;
   if(upg.area==='Globale'){
@@ -3507,6 +3509,7 @@ function applyUpgrade(upg, investT){
   window._upgradeSuspenseTimer = setTimeout(()=>{
     if(state.phase!=='upgrade_suspense') return;
     state.phase = 'upgrade_result';
+    playSfx(state.pendingUpgradeReveal.failed ? 'upgrade_fail' : 'upgrade_success'); // V0.9.7.8.38: spostato qui, al momento della vera rivelazione
     render();
   }, 1900);
 }
@@ -3514,6 +3517,7 @@ function applyUpgrade(upg, investT){
 function skipUpgradeSuspense(){
   if(window._upgradeSuspenseTimer) clearTimeout(window._upgradeSuspenseTimer);
   state.phase = 'upgrade_result';
+  playSfx(state.pendingUpgradeReveal.failed ? 'upgrade_fail' : 'upgrade_success'); // V0.9.7.8.38
   render();
 }
 
@@ -7814,7 +7818,7 @@ function toggleFullscreen(){
 function updateMenuFullscreenLabel(){
   const label = document.getElementById('menuFullscreenLabel');
   if(!label) return;
-  label.textContent = document.fullscreenElement ? 'Esci da Schermo Intero' : 'Schermo Intero';
+  label.textContent = document.fullscreenElement ? t('menu_exit_fullscreen') : t('menu_fullscreen');
 }
 
 document.addEventListener('fullscreenchange', updateMenuFullscreenLabel);
@@ -7853,8 +7857,7 @@ function applyStaticMenuTranslations(){
     const el = document.getElementById(id);
     if(el){ const span = el.querySelector('span'); if(span) span.textContent = t(key); }
   });
-  const fsLabel = document.getElementById('menuFullscreenLabel');
-  if(fsLabel && !document.fullscreenElement) fsLabel.textContent = t('menu_fullscreen');
+  updateMenuFullscreenLabel();
   const sectionLabels = document.querySelectorAll('.menu-section-label');
   const sectionKeys = ['menu_section_game','menu_section_progress','menu_section_info','menu_section_app'];
   sectionLabels.forEach((el,i)=>{ if(sectionKeys[i]) el.textContent = t(sectionKeys[i]); });
