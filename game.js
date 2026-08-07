@@ -815,10 +815,29 @@ function triggerTensionHaptic(){
   if(audioSettings.hapticEnabled===false) return;
   if(navigator.vibrate){ try{ navigator.vibrate([12,40,12,40,20]); }catch(e){ /* ignorato */ } }
 }
+// V0.9.7.8.35: 12 dei 18 placeholder sostituiti con file audio veri. 'lights_out' e' escluso di
+// proposito: ha una sua timing dedicata (5 accensioni + 1 scatto finale), gestita direttamente in
+// beginRaceWithLights(), non un singolo suono unico. I restanti 5 (overtake/overtaken/pit_stop/
+// dnf_crash/safety_car) restano sintetizzati per scelta esplicita di Gio, per ora.
+const REAL_SFX_FILES = {
+  ui_click: 'audio/sfx_ui_click.mp3',
+  ui_confirm: 'audio/sfx_ui_confirm.mp3',
+  error_disabled: 'audio/sfx_error_disabled.mp3',
+  notify_generic: 'audio/sfx_notify_generic.mp3',
+  draft_reveal: 'audio/sfx_draft_reveal.mp3',
+  upgrade_success: 'audio/sfx_upgrade_success.mp3',
+  upgrade_fail: 'audio/sfx_upgrade_fail.mp3',
+  rain_start: 'audio/sfx_rain_start.mp3',
+  checkered_flag: 'audio/sfx_checkered_flag.mp3',
+  rival_beaten: 'audio/sfx_rival_beaten.mp3',
+  podium: 'audio/sfx_podium.mp3',
+  victory_fanfare: 'audio/sfx_victory_fanfare.mp3',
+};
 function playSfx(name, intensity){
   if(__suppressSfx) return;
   if(audioSettings.sfxEnabled===false) return;
   if((audioSettings.sfxVolume||0) <= 0) return;
+  if(REAL_SFX_FILES[name]){ playRealSfx(REAL_SFX_FILES[name]); return; }
   const ctx = getAudioCtx();
   if(!ctx || ctx.state==='suspended') return;
   const synth = SFX_SYNTH[name];
@@ -2574,7 +2593,6 @@ function beginRaceWithLights(){
   state.phase = 'start_lights';
   state.startLights = { lit:0, off:false };
   render();
-  playSfx('lights_out'); // V0.9.7.8.2: la sequenza (5 beep + whoosh) e' gia' temporizzata dentro il synth
   let i = 0;
   function tick(){
     i++;
@@ -2582,12 +2600,14 @@ function beginRaceWithLights(){
     if(i<=5){
       state.startLights.lit = i;
       render();
+      playRealSfx('audio/sfx_lights_ignite.mp3'); // V0.9.7.8.35: un "clic" ad ogni luce che si accende
       window._lightsTimer = setTimeout(tick, 480);
     } else if(i===6){
       window._lightsTimer = setTimeout(tick, 750);
     } else {
       state.startLights.off = true;
       render();
+      playRealSfx('audio/sfx_lights_go.mp3'); // V0.9.7.8.35: il "via!" vero, allo spegnimento
       window._lightsTimer = setTimeout(()=>{
         const { timeline } = simulateFullRace();
         startLiveRace(timeline);
