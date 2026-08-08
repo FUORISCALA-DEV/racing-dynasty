@@ -69,6 +69,7 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    se_visit_trophy_room: '🏆 Visita la Sala Trofei',
     dact_eyebrow: 'Tra una gara e l\'altra', dact_title: 'Cosa fai prima della prossima gara?', dact_subtitle: 'Scegline una: ognuna ha effetti diversi.',
     dact_training: 'Allenamento', dact_training_desc: 'Focus sulla crescita personale. Avvicina il prossimo punto Rating, nessun effetto su Fama o Reputazione.',
     dact_simulator: 'Simulatore e Analisi Dati', dact_simulator_desc: 'Lavori con gli ingegneri: avvicina il prossimo punto Rating e migliora leggermente la Reputazione.',
@@ -102,7 +103,7 @@ const I18N = {
     dse_final_pos: (p)=>`Posizione finale in campionato: P${p}`, dse_points: (n)=>`Punti totali: ${n}`,
     dse_footer: 'Schermata temporanea — non ancora salva prestigio/età reali.',
     back_to_mode_select: '← Torna al Bivio', museum_shared_tag: 'condiviso tra le modalità',
-    mode_select_title: 'Che tipo di carriera vuoi?', mode_select_subtitle: 'Due modalità completamente separate — puoi avere entrambe in corso allo stesso tempo.',
+    mode_select_title: 'Seleziona la modalità', mode_select_subtitle: 'Due modalità completamente separate — puoi avere entrambe in corso allo stesso tempo.',
     mode_select_team: 'Stagione Scuderia', mode_select_team_desc: 'Gestisci una scuderia intera: piloti, componenti, budget. La modalità classica.', mode_select_team_hint: 'Tocca per scegliere — Stagione Scuderia',
     mode_select_driver: 'Carriera Pilota', mode_select_driver_desc: 'Sei un pilota solo, dal debutto in Kart al ritiro. Cresci, firmi contratti, costruisci un palmarès.', mode_select_driver_hint: 'Tocca per scegliere — Carriera Pilota',
     dc_pick_profile: 'Tocca per scegliere', dc_title: 'Crea il tuo pilota', dc_subtitle: 'Parti dal Kart, a 18 anni, con tutto ancora da dimostrare.',
@@ -250,7 +251,7 @@ const I18N = {
     title_continue: '▶ Continua Stagione', title_new: 'Nuova Stagione', title_delete: '🗑 Cancella Salvataggio',
     title_cta: '🏁 Scegli la tua sfida e scendi in pista — ', title_cta_bold: 'premi per iniziare',
     // Menu laterale
-    menu_new_career: 'Nuova Carriera', menu_trophy_room: 'Sala Trofei', menu_guide: 'Guida',
+    menu_new_career: 'Nuova Carriera', menu_trophy_room: 'Sala Trofei — Scuderia', menu_driver_trophy_room: 'Sala Trofei — Pilota', menu_museum: 'Museo Dynasty', menu_guide: 'Guida',
     menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti',
     menu_fullscreen: 'Schermo Intero', menu_language: 'Lingua',
     // Impostazioni comuni
@@ -274,6 +275,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    se_visit_trophy_room: '🏆 Visit the Trophy Room',
     dact_eyebrow: 'Between races', dact_title: 'What do you do before the next race?', dact_subtitle: "Pick one: each has different effects.",
     dact_training: 'Training', dact_training_desc: "Focus on personal growth. Moves you closer to the next Rating point, no effect on Fame or Reputation.",
     dact_simulator: 'Simulator and Data Analysis', dact_simulator_desc: "You work with the engineers: closer to the next Rating point and a small Reputation boost.",
@@ -307,7 +309,7 @@ const I18N = {
     dse_final_pos: (p)=>`Final championship position: P${p}`, dse_points: (n)=>`Total points: ${n}`,
     dse_footer: 'Temporary screen — does not yet save real prestige/age.',
     back_to_mode_select: '← Back to Selection', museum_shared_tag: 'shared across modes',
-    mode_select_title: 'What kind of career do you want?', mode_select_subtitle: 'Two completely separate modes — you can have both in progress at the same time.',
+    mode_select_title: 'Select mode', mode_select_subtitle: 'Two completely separate modes — you can have both in progress at the same time.',
     mode_select_team: 'Team Career', mode_select_team_desc: 'Manage an entire team: drivers, components, budget. The classic mode.', mode_select_team_hint: 'Tap to choose — Team Career',
     mode_select_driver: 'Driver Career', mode_select_driver_desc: 'You are a single driver, from your Kart debut to retirement. Grow, sign contracts, build a legacy.', mode_select_driver_hint: 'Tap to choose — Driver Career',
     dc_pick_profile: 'Tap to choose', dc_title: 'Create your driver', dc_subtitle: 'You start in Kart, at 18, with everything still to prove.',
@@ -453,7 +455,7 @@ const I18N = {
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
     title_continue: '▶ Continue Season', title_new: 'New Season', title_delete: '🗑 Delete Save',
     title_cta: '🏁 Choose your challenge and hit the track — ', title_cta_bold: 'tap to start',
-    menu_new_career: 'New Career', menu_trophy_room: 'Trophy Room', menu_guide: 'Guide',
+    menu_new_career: 'New Career', menu_trophy_room: 'Trophy Room — Team', menu_driver_trophy_room: 'Trophy Room — Driver', menu_museum: 'Dynasty Museum', menu_guide: 'Guide',
     menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits',
     menu_fullscreen: 'Fullscreen', menu_language: 'Language',
     settings_title: '⚙️ Settings', settings_sfx_vol: 'Sound Effects Volume', settings_music_vol: 'Music Volume',
@@ -473,6 +475,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    se_visit_trophy_room: '🏆 Visita la Sala de Trofeos',
     dact_eyebrow: 'Entre carreras', dact_title: '¿Qué haces antes de la próxima carrera?', dact_subtitle: 'Elige una: cada una tiene efectos distintos.',
     dact_training: 'Entrenamiento', dact_training_desc: 'Enfoque en el crecimiento personal. Te acerca al próximo punto de Rating, sin efecto en Fama o Reputación.',
     dact_simulator: 'Simulador y Análisis de Datos', dact_simulator_desc: 'Trabajas con los ingenieros: te acerca al próximo punto de Rating y mejora ligeramente la Reputación.',
@@ -506,7 +509,7 @@ const I18N = {
     dse_final_pos: (p)=>`Posición final en el campeonato: P${p}`, dse_points: (n)=>`Puntos totales: ${n}`,
     dse_footer: 'Pantalla temporal — todavía no guarda prestigio/edad reales.',
     back_to_mode_select: '← Volver a la Selección', museum_shared_tag: 'compartido entre modos',
-    mode_select_title: '¿Qué tipo de carrera quieres?', mode_select_subtitle: 'Dos modos completamente separados — puedes tener ambos en curso al mismo tiempo.',
+    mode_select_title: 'Selecciona el modo', mode_select_subtitle: 'Dos modos completamente separados — puedes tener ambos en curso al mismo tiempo.',
     mode_select_team: 'Carrera de Escudería', mode_select_team_desc: 'Gestiona una escudería entera: pilotos, componentes, presupuesto. El modo clásico.', mode_select_team_hint: 'Toca para elegir — Carrera de Escudería',
     mode_select_driver: 'Carrera de Piloto', mode_select_driver_desc: 'Eres un solo piloto, desde tu debut en Kart hasta el retiro. Creces, firmas contratos, construyes un palmarés.', mode_select_driver_hint: 'Toca para elegir — Carrera de Piloto',
     dc_pick_profile: 'Toca para elegir', dc_title: 'Crea tu piloto', dc_subtitle: 'Empiezas en Kart, a los 18 años, con todo por demostrar.',
@@ -652,7 +655,7 @@ const I18N = {
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
     title_continue: '▶ Continuar Temporada', title_new: 'Nueva Temporada', title_delete: '🗑 Borrar Partida',
     title_cta: '🏁 Elige tu desafío y sal a pista — ', title_cta_bold: 'toca para empezar',
-    menu_new_career: 'Nueva Carrera', menu_trophy_room: 'Sala de Trofeos', menu_guide: 'Guía',
+    menu_new_career: 'Nueva Carrera', menu_trophy_room: 'Sala de Trofeos — Escudería', menu_driver_trophy_room: 'Sala de Trofeos — Piloto', menu_museum: 'Museo Dynasty', menu_guide: 'Guía',
     menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos',
     menu_fullscreen: 'Pantalla Completa', menu_language: 'Idioma',
     settings_title: '⚙️ Ajustes', settings_sfx_vol: 'Volumen de Efectos', settings_music_vol: 'Volumen de Música',
@@ -1945,6 +1948,7 @@ function renderDriverSeasonEnd(){
     ${s.evolution.retrocessi.length ? `<div class="tag-line malus" style="font-size:14px;">${t('dse2_relegated', s.evolution.retrocessi.join(', '))}</div>` : ''}
   </div>
   <div class="btnrow"><button class="primary" data-action="start-next-driver-season">${t('dse2_continue')}</button></div>
+  <div class="btnrow"><button class="ghost" data-action="open-driver-trophy-room">${t('se_visit_trophy_room')}</button></div>
   <div class="btnrow"><button class="ghost" data-action="go-to-mode-select">${t('back_to_mode_select')}</button></div>
   `;
   bindActions();
@@ -4954,65 +4958,22 @@ const TEAM_INSPIRATION = [
   {nome:'Summit Works', naz:'Germania'},
 ];
 function renderModeSelect(){
-  const circuits = DATA.circuiti;
-  const total = circuits.length;
-  const racedCount = circuits.filter(c=> trophyData[c.nome] && trophyData[c.nome].raced>0).length;
-  const wonCount = circuits.filter(c=> trophyData[c.nome] && trophyData[c.nome].won>0).length;
-  const driverRacedCount = circuits.filter(c=> driverTrophyData[c.nome] && driverTrophyData[c.nome].raced>0).length;
-  const driverWonCount = circuits.filter(c=> driverTrophyData[c.nome] && driverTrophyData[c.nome].won>0).length;
-  const totalPiloti = DATA.piloti.length;
-  const totalComponenti = DATA.motori.length + DATA.telai.length + DATA.aero.length + DATA.gomme.length + DATA.strategi.length;
-  const unlockedAll = Object.keys(museumData.piloti).length + Object.keys(museumData.componenti).length;
-  const totalAll = totalPiloti + totalComponenti;
-  const museumPct = totalAll>0 ? Math.round(unlockedAll/totalAll*100) : 0;
-
   app.innerHTML = `
   <div class="panel">
     <div class="eyebrow">${t('diff_new_career')}</div>
     <h2 class="hdr" style="font-size:26px;">${t('mode_select_title')}</h2>
-    <div class="dim" style="font-size:15px;margin-top:6px;">${t('mode_select_subtitle')}</div>
   </div>
-  <div class="grid grid-2">
+  <div class="grid grid-2 mode-select-grid">
     <div class="card pickable" data-rarity="Rare" data-action="go-to-season-length">
       <span class="rarity-tag" data-rarity="Rare">🏎️ ${t('mode_select_team')}</span>
-      <div class="ability" style="font-size:14px;margin-top:8px;">${t('mode_select_team_desc')}</div>
-      <div class="card-tap-hint">${t('mode_select_team_hint')}</div>
+      <div class="ability" style="font-size:13px;margin-top:8px;">${t('mode_select_team_desc')}</div>
+      <div class="card-tap-hint" style="font-size:11px;">${t('mode_select_team_hint')}</div>
     </div>
-    <div class="card pickable" data-rarity="Legendary" data-action="request-password-gate" data-gate-for="driver-creation">
+    <div class="card pickable garage-coming-soon" data-rarity="Legendary" data-action="request-password-gate" data-gate-for="driver-creation">
       <span class="rarity-tag" data-rarity="Legendary">🏁 ${t('mode_select_driver')}</span>
-      <div class="ability" style="font-size:14px;margin-top:8px;">${t('mode_select_driver_desc')}</div>
-      <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;">${t('sl_garage_soon')}</div>
+      <div class="ability" style="font-size:13px;margin-top:8px;">${t('mode_select_driver_desc')}</div>
+      <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;font-size:11px;">${t('sl_garage_soon')}</div>
     </div>
-  </div>
-  <div class="card pickable trophy-room-card" data-rarity="Legendary" data-action="open-trophy-room">
-    <span class="rarity-tag" data-rarity="Legendary">🏆 ${t('sl_trophy_room')} — ${t('mode_select_team')}</span>
-    <div class="trophy-room-card-body">
-      <div class="trophy-room-card-stats">
-        <div class="trophy-stat"><div class="trophy-stat-value">${racedCount}/${total}</div><div class="trophy-stat-label">${t('sl_raced')}</div></div>
-        <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${wonCount}/${total}</div><div class="trophy-stat-label">${t('sl_won')}</div></div>
-      </div>
-    </div>
-    <div class="card-tap-hint">${t('sl_trophy_hint')}</div>
-  </div>
-  <div class="card pickable trophy-room-card" data-rarity="Legendary" data-action="open-driver-trophy-room">
-    <span class="rarity-tag" data-rarity="Legendary">🏆 ${t('sl_trophy_room')} — ${t('mode_select_driver')}</span>
-    <div class="trophy-room-card-body">
-      <div class="trophy-room-card-stats">
-        <div class="trophy-stat"><div class="trophy-stat-value">${driverRacedCount}/${total}</div><div class="trophy-stat-label">${t('sl_raced')}</div></div>
-        <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${driverWonCount}/${total}</div><div class="trophy-stat-label">${t('sl_won')}</div></div>
-      </div>
-    </div>
-    <div class="card-tap-hint">${t('sl_trophy_hint')}</div>
-  </div>
-  <div class="card pickable trophy-room-card" data-rarity="Epic" data-action="open-museum">
-    <span class="rarity-tag" data-rarity="Epic">🏛️ ${t('sl_museum')} <span class="dim" style="font-size:13px;font-weight:700;">· ${t('museum_shared_tag')}</span></span>
-    <div class="trophy-room-card-body">
-      <div class="trophy-room-card-stats">
-        <div class="trophy-stat"><div class="trophy-stat-value">${unlockedAll}/${totalAll}</div><div class="trophy-stat-label">${t('sl_completion')} · ${museumPct}%</div></div>
-      </div>
-      <div class="ability" style="font-size:14px;">${t('sl_museum_desc')}</div>
-    </div>
-    <div class="card-tap-hint">${t('sl_museum_hint')}</div>
   </div>
   `;
   bindActions();
@@ -7074,10 +7035,6 @@ function renderGarage(){
       ${garageBandSelectHTML('Gomme','gommeBand')}
       ${garageBandSelectHTML('Casco (pilota)','helmetBand')}
     </div>
-    <div style="margin-top:14px;">
-      <label class="dim" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:8px;">Colore pattern</label>
-      ${garageColorPickerHTML()}
-    </div>
   </div>
   <div class="panel">
     <div class="panel-title"><h3 class="hdr">Pattern (${liveryData.unlockedPatternIds.length}/${LIVERY_PATTERNS.length} sbloccati)</h3></div>
@@ -7095,19 +7052,6 @@ function renderGarage(){
   </div>
   `;
   bindActions();
-  const hueSlider = document.getElementById('hueSlider');
-  const satSlider = document.getElementById('satSlider');
-  const lightSlider = document.getElementById('lightSlider');
-  if(hueSlider && satSlider && lightSlider){
-    const onColorChange = ()=>{
-      liveryData.selectedColor = hslToHex(Number(hueSlider.value), Number(satSlider.value), Number(lightSlider.value));
-      saveLiveryData();
-      renderGarage();
-    };
-    hueSlider.addEventListener('input', onColorChange);
-    satSlider.addEventListener('input', onColorChange);
-    lightSlider.addEventListener('input', onColorChange);
-  }
   document.querySelectorAll('.garage-band-select').forEach(sel=>{
     sel.addEventListener('change', ()=>{
       garageSandbox[sel.dataset.part] = sel.value;
@@ -7570,6 +7514,7 @@ function renderSeasonEnd(){
       <div class="btnrow" style="justify-content:center;">
         <button class="primary" data-action="back-to-title">${t('se_new_career')}</button>
         <button class="ghost" data-action="share-result-card">${t('se_share')}</button>
+        <button class="ghost" data-action="open-trophy-room">${t('se_visit_trophy_room')}</button>
       </div>
     </div>
   </div>
@@ -8008,7 +7953,6 @@ function proceedToGatedContent(target){
   }
 }
 function openPasswordGate(target){
-  if(isDevContentUnlocked()){ proceedToGatedContent(target); return; }
   const panel = document.getElementById('passwordGatePanel');
   const input = document.getElementById('passwordGateInput');
   const errorEl = document.getElementById('passwordGateError');
@@ -8025,7 +7969,6 @@ function openPasswordGate(target){
   }
   function onSubmit(){
     if(input.value===DEV_UNLOCK_PASSWORD){
-      markDevContentUnlocked();
       cleanup();
       proceedToGatedContent(target);
     } else {
@@ -8098,6 +8041,22 @@ function openTrophies(){
   closeMenuPanel();
   trophyRoomPreviousPhase = state.phase;
   state.phase = 'trophy-room';
+  pushBackGuard();
+  render();
+}
+
+function openDriverTrophies(){
+  closeMenuPanel();
+  trophyRoomPreviousPhase = state.phase;
+  state.phase = 'driver-trophy-room';
+  pushBackGuard();
+  render();
+}
+
+function openMuseumFromMenu(){
+  closeMenuPanel();
+  museumPreviousPhase = state.phase;
+  state.phase = 'museum-dynasty';
   pushBackGuard();
   render();
 }
@@ -8793,6 +8752,7 @@ function applyStaticMenuTranslations(){
   const map = {
     menuHomeBtn: 'menu_home', menuNewCareerBtn: 'menu_new_career', menuTrophyBtn: 'menu_trophy_room', menuGuideBtn: 'menu_guide',
     menuAchievementsBtn: 'menu_achievements', menuSettingsBtn: 'menu_settings', menuCreditsBtn: 'menu_credits',
+    menuDriverTrophyBtn: 'menu_driver_trophy_room', menuMuseumBtn: 'menu_museum',
   };
   Object.entries(map).forEach(([id, key])=>{
     const el = document.getElementById(id);
@@ -8819,6 +8779,10 @@ function initSidebar(){
   document.getElementById('menuHomeBtn').addEventListener('click', goHome);
   document.getElementById('menuNewCareerBtn').addEventListener('click', newCareer);
   document.getElementById('menuTrophyBtn').addEventListener('click', openTrophies);
+  const driverTrophyBtn = document.getElementById('menuDriverTrophyBtn');
+  if(driverTrophyBtn) driverTrophyBtn.addEventListener('click', openDriverTrophies);
+  const museumBtn = document.getElementById('menuMuseumBtn');
+  if(museumBtn) museumBtn.addEventListener('click', openMuseumFromMenu);
   const guideBtn = document.getElementById('menuGuideBtn');
   if(guideBtn) guideBtn.addEventListener('click', openGuide);
   const achBtn = document.getElementById('menuAchievementsBtn');
