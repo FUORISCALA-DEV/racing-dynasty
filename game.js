@@ -69,6 +69,16 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    mode_select_title: 'Che tipo di carriera vuoi?', mode_select_subtitle: 'Due modalità completamente separate — puoi avere entrambe in corso allo stesso tempo.',
+    mode_select_team: 'Carriera Scuderia', mode_select_team_desc: 'Gestisci una scuderia intera: piloti, componenti, budget. La modalità classica.', mode_select_team_hint: 'Tocca per scegliere — Carriera Scuderia',
+    mode_select_driver: 'Carriera Pilota', mode_select_driver_desc: 'Sei un pilota solo, dal debutto in Kart al ritiro. Cresci, firmi contratti, costruisci un palmarès.', mode_select_driver_hint: 'Tocca per scegliere — Carriera Pilota',
+    dc_pick_profile: 'Tocca per scegliere', dc_title: 'Crea il tuo pilota', dc_subtitle: 'Parti dal Kart, a 18 anni, con tutto ancora da dimostrare.',
+    dc_name_placeholder: 'Es. Nome Cognome', dc_profile_eyebrow: 'Scegli il tuo profilo di partenza',
+    dc_profile_subtitle: `Archetipo e mentalità abbinati — parti "acerbo" in questo stile, l'effetto pieno arriva rafforzandolo in gara.`,
+    dc_confirm: 'Conferma e debutta →', dc_default_name: 'Pilota Senza Nome',
+    dc_done_title: 'Pilota creato', dc_done_subtitle: 'Punto 2 completato — da qui in poi serve l\'Hub vero (punto 3).',
+    dc_done_world_info: (n)=>`Il mondo delle 30 scuderie è pronto: ${n} in Kart, 10 in Serie Minore, 10 in Serie Elite, ognuna con una storia simulata alle spalle.`,
+    dc_done_footer: 'Schermata temporanea di verifica — non ancora giocabile oltre questo punto.',
     sl_go_msg: 'VIA!!', sl_ready_msg: 'Pronti...', sl_lighting_msg: 'Si accendono le luci…',
     menu_exit_fullscreen: 'Esci da Schermo Intero',
     draft_founding: 'Fondazione scuderia',
@@ -231,6 +241,16 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    mode_select_title: 'What kind of career do you want?', mode_select_subtitle: 'Two completely separate modes — you can have both in progress at the same time.',
+    mode_select_team: 'Team Career', mode_select_team_desc: 'Manage an entire team: drivers, components, budget. The classic mode.', mode_select_team_hint: 'Tap to choose — Team Career',
+    mode_select_driver: 'Driver Career', mode_select_driver_desc: 'You are a single driver, from your Kart debut to retirement. Grow, sign contracts, build a legacy.', mode_select_driver_hint: 'Tap to choose — Driver Career',
+    dc_pick_profile: 'Tap to choose', dc_title: 'Create your driver', dc_subtitle: 'You start in Kart, at 18, with everything still to prove.',
+    dc_name_placeholder: 'E.g. First Last', dc_profile_eyebrow: 'Choose your starting profile',
+    dc_profile_subtitle: 'Archetype and mentality paired together — you start "green" in this style, full effect comes from strengthening it in races.',
+    dc_confirm: 'Confirm and debut →', dc_default_name: 'Unnamed Driver',
+    dc_done_title: 'Driver created', dc_done_subtitle: "Step 2 complete — from here on the real Hub (step 3) is needed.",
+    dc_done_world_info: (n)=>`The world of 30 teams is ready: ${n} in Kart, 10 in Minor Series, 10 in Elite Series, each with a simulated history behind it.`,
+    dc_done_footer: 'Temporary verification screen — not yet playable beyond this point.',
     sl_go_msg: 'GO!!', sl_ready_msg: 'Ready...', sl_lighting_msg: 'Lights coming on…',
     menu_exit_fullscreen: 'Exit Fullscreen',
     draft_founding: 'Team founding',
@@ -387,6 +407,16 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    mode_select_title: '¿Qué tipo de carrera quieres?', mode_select_subtitle: 'Dos modos completamente separados — puedes tener ambos en curso al mismo tiempo.',
+    mode_select_team: 'Carrera de Escudería', mode_select_team_desc: 'Gestiona una escudería entera: pilotos, componentes, presupuesto. El modo clásico.', mode_select_team_hint: 'Toca para elegir — Carrera de Escudería',
+    mode_select_driver: 'Carrera de Piloto', mode_select_driver_desc: 'Eres un solo piloto, desde tu debut en Kart hasta el retiro. Creces, firmas contratos, construyes un palmarés.', mode_select_driver_hint: 'Toca para elegir — Carrera de Piloto',
+    dc_pick_profile: 'Toca para elegir', dc_title: 'Crea tu piloto', dc_subtitle: 'Empiezas en Kart, a los 18 años, con todo por demostrar.',
+    dc_name_placeholder: 'Ej. Nombre Apellido', dc_profile_eyebrow: 'Elige tu perfil de partida',
+    dc_profile_subtitle: 'Arquetipo y mentalidad combinados — empiezas "verde" en este estilo, el efecto completo llega reforzándolo en carrera.',
+    dc_confirm: 'Confirmar y debutar →', dc_default_name: 'Piloto Sin Nombre',
+    dc_done_title: 'Piloto creado', dc_done_subtitle: 'Paso 2 completado — a partir de aquí hace falta el Hub real (paso 3).',
+    dc_done_world_info: (n)=>`El mundo de las 30 escuderías está listo: ${n} en Kart, 10 en Serie Menor, 10 en Serie Élite, cada una con una historia simulada detrás.`,
+    dc_done_footer: 'Pantalla de verificación temporal — todavía no jugable más allá de este punto.',
     sl_go_msg: '¡VAMOS!!', sl_ready_msg: 'Listos...', sl_lighting_msg: 'Se encienden las luces…',
     menu_exit_fullscreen: 'Salir de Pantalla Completa',
     draft_founding: 'Fundación de la escudería',
@@ -1168,6 +1198,7 @@ const SITUATIONAL_STAT = { gomme:'bagnato', aero:'pioggia', stratega:'safetycar'
 const CATEGORY_POOL = { motore:DATA.motori, telaio:DATA.telai, aero:DATA.aero, gomme:DATA.gomme, stratega:DATA.strategi, pilotSecond:DATA.piloti };
 
 let state = null;
+let driverCareerState = null; // V0.9.7.9: stato Carriera Pilota, separato e indipendente da 'state'
 const app = document.getElementById('app');
 
 /* ---------------- utilities ---------------- */
@@ -1540,6 +1571,55 @@ Object.defineProperty(DRAFT_CATEGORY_DEFS.aero, 'label', { get: ()=> t('cat_aero
 Object.defineProperty(DRAFT_CATEGORY_DEFS.gomme, 'label', { get: ()=> t('cat_tire_supplier') });
 Object.defineProperty(DRAFT_CATEGORY_DEFS.stratega, 'label', { get: ()=> t('comp_strategist') });
 const DRAFT_TOTAL_PICKS = 7; // 2 piloti + 5 componenti
+
+// ============================================================
+// V0.9.7.9.1 — CARRIERA PILOTA (punto 1/8): tiering scuderie + prestigio simulato
+// Modalita' parallela a Carriera Scuderia, salvataggio e stato completamente separati.
+// ============================================================
+
+// 3 Serie da 10 scuderie ciascuna, divise per ratingbase (forza strutturale, non cambia in game).
+// Il Kart e' una fascia FISSA: le scuderie li' non salgono mai come organizzazione, solo il
+// pilota (il giocatore) puo' uscirne individualmente con un'offerta migliore.
+function computeDriverCareerTiers(){
+  const sorted = [...DATA.scuderie].sort((a,b)=> b.ratingbase - a.ratingbase);
+  const tiers = {};
+  sorted.forEach((s,i)=>{
+    tiers[s.id] = i<10 ? 'elite' : (i<20 ? 'minore' : 'kart');
+  });
+  return tiers;
+}
+
+// Una "stagione finta": un punteggio per scuderia (forza base + variazione casuale, rappresenta
+// un'annata piu' o meno fortunata), usato SOLO per costruire prestigio storico — non e' la
+// simulazione gara-per-gara completa (troppo lenta e inutile per uno sfondo che il giocatore
+// non guarda direttamente).
+function simulateFakeSeasonStandings(teamIds){
+  return teamIds.map(id=>{
+    const s = DATA.scuderie.find(x=>x.id===id);
+    const score = s.ratingbase + (rnd()-0.5)*30;
+    return { id, score };
+  }).sort((a,b)=> b.score-a.score);
+}
+
+// Prestigio iniziale: 3 stagioni finte simulate su TUTTE e 30 le scuderie insieme (indipendente
+// dalla Serie attuale — anche una scuderia oggi in Kart puo' aver avuto un passato migliore).
+// Punti prestigio per piazzamento: 1a posizione vale 30, ultima vale 1.
+const DRIVER_CAREER_FAKE_SEASONS = 3;
+function initTeamPrestige(){
+  const prestige = {};
+  DATA.scuderie.forEach(s=> prestige[s.id] = 0);
+  for(let i=0;i<DRIVER_CAREER_FAKE_SEASONS;i++){
+    const standings = simulateFakeSeasonStandings(DATA.scuderie.map(s=>s.id));
+    standings.forEach((entry, pos)=>{ prestige[entry.id] += (30 - pos); });
+  }
+  return prestige;
+}
+
+// Punto d'ingresso: costruisce tiers + prestigio insieme, pronto per essere salvato nello stato
+// di una nuova Carriera Pilota.
+function initDriverCareerWorld(){
+  return { tiers: computeDriverCareerTiers(), prestige: initTeamPrestige() };
+}
 
 function startDraftTurn(){
   state.draftTurnOffers = {};
@@ -4207,6 +4287,9 @@ function renderInner(){
   if(state.phase==='difficulty') return renderDifficulty();
   if(state.phase==='season-length') return renderSeasonLength();
   if(state.phase==='naming') return renderNaming();
+  if(state.phase==='mode-select') return renderModeSelect();
+  if(state.phase==='driver-creation') return renderDriverCreation();
+  if(state.phase==='driver-creation-done') return renderDriverCreationDone();
   if(state.phase==='draft') return renderDraft();
   if(state.phase==='hub') return renderHub();
   if(state.phase==='pregara') return renderPregara();
@@ -4358,6 +4441,124 @@ const TEAM_INSPIRATION = [
   {nome:'Basalt Velocity', naz:'Italia'},
   {nome:'Summit Works', naz:'Germania'},
 ];
+function renderModeSelect(){
+  app.innerHTML = `
+  <div class="panel">
+    <div class="eyebrow">${t('diff_new_career')}</div>
+    <h2 class="hdr" style="font-size:24px;">${t('mode_select_title')}</h2>
+    <div class="dim" style="font-size:12px;margin-top:6px;">${t('mode_select_subtitle')}</div>
+  </div>
+  <div class="card pickable" data-rarity="Rare" data-action="go-to-season-length">
+    <span class="rarity-tag" data-rarity="Rare">🏎️ ${t('mode_select_team')}</span>
+    <div class="ability">${t('mode_select_team_desc')}</div>
+    <div class="card-tap-hint">${t('mode_select_team_hint')}</div>
+  </div>
+  <div class="card pickable" data-rarity="Legendary" data-action="go-to-driver-creation">
+    <span class="rarity-tag" data-rarity="Legendary">🏁 ${t('mode_select_driver')}</span>
+    <div class="ability">${t('mode_select_driver_desc')}</div>
+    <div class="card-tap-hint">${t('mode_select_driver_hint')}</div>
+  </div>
+  `;
+  bindActions();
+}
+
+// ============================================================
+// V0.9.7.9.2 — CARRIERA PILOTA (punto 2/8): creazione pilota
+// ============================================================
+
+// 3 proposte casuali (archetipo + mentalita' abbinati), il giocatore ne sceglie una intera.
+// Parte "acerba": in gara avra' l'effetto pieno dell'archetipo solo dopo essersi rafforzato
+// giocando in modo coerente (vedi punto 7 del progetto — non ancora implementato qui).
+function rollDriverStarterProfiles(){
+  const archKeys = Object.keys(TRAIT_TABLE);
+  const mentaKeys = Object.keys(MENTALITA_DEFS);
+  const usedArch = new Set();
+  const profiles = [];
+  while(profiles.length<3){
+    const arch = archKeys[Math.floor(rnd()*archKeys.length)];
+    if(usedArch.has(arch)) continue;
+    usedArch.add(arch);
+    const menta = mentaKeys[Math.floor(rnd()*mentaKeys.length)];
+    profiles.push({ arch, menta });
+  }
+  return profiles;
+}
+
+function renderDriverCreation(){
+  if(!window.__driverProfiles) window.__driverProfiles = rollDriverStarterProfiles();
+  const profiles = window.__driverProfiles;
+  const nationOptions = Object.keys(COUNTRY_FLAG).filter(c=>c!=='Sconosciuta').sort((a,b)=>nationLabel(a).localeCompare(nationLabel(b)))
+    .map(c=> `<option value="${c}" ${c==='Italia'?'selected':''}>${nationLabel(c)}</option>`).join('');
+
+  const profileCards = profiles.map((p,i)=>{
+    const m = MENTALITA_DEFS[p.menta];
+    return `
+    <div class="card pickable driver-profile-card ${window.__driverProfileChoice===i?'selected':''}" data-action="pick-driver-profile" data-idx="${i}" data-rarity="Rare">
+      <span class="rarity-tag" data-rarity="Rare">${p.arch}</span>
+      <div class="tag-line" style="margin-top:6px;"><span class="syn-half-badge" style="display:inline-flex;vertical-align:middle;"><span class="sem-half" style="background:${m.color};width:9px;height:18px;display:inline-block;border-radius:9px 0 0 9px;"></span><span class="sem-half" style="background:${m.color};width:9px;height:18px;display:inline-block;border-radius:0 9px 9px 0;"></span></span> ${mentaLabel(p.menta)}</div>
+      <div class="card-tap-hint">${t('dc_pick_profile')}</div>
+    </div>`;
+  }).join('');
+
+  app.innerHTML = `
+  <div class="hero" style="padding:28px 20px 20px;">
+    <div class="hero-inner">
+      <div class="pill">${GAME_VERSION} · ${t('mode_select_driver')}</div>
+      <h1 class="hdr" style="margin-top:10px;font-size:28px;">${t('dc_title')}</h1>
+      <div class="tagline" style="margin:8px auto 0;">${t('dc_subtitle')}</div>
+    </div>
+  </div>
+  <div class="panel">
+    <input id="driverNameInput" type="text" maxlength="28" placeholder="${t('dc_name_placeholder')}"
+      style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:15px;background:var(--panel2);
+      border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);">
+    <label class="dim" style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;margin-top:16px;margin-bottom:6px;">${t('naming_nation')}</label>
+    <div class="nation-select-row">
+      <span class="nation-flag-preview" id="driverNationFlagPreview">${flag('Italia')}</span>
+      <select id="driverNationSelect"
+        style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:15px;background:var(--panel2);
+        border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);">
+        ${nationOptions}
+      </select>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="eyebrow">${t('dc_profile_eyebrow')}</div>
+    <div class="dim" style="font-size:12px;margin:4px 0 12px;">${t('dc_profile_subtitle')}</div>
+    <div class="grid grid-3">${profileCards}</div>
+  </div>
+  <div class="btnrow"><button class="primary" data-action="confirm-driver-creation" ${window.__driverProfileChoice===undefined?'disabled':''}>${t('dc_confirm')}</button></div>
+  `;
+  bindActions();
+  const nationSel = document.getElementById('driverNationSelect');
+  nationSel.addEventListener('change', ()=>{
+    document.getElementById('driverNationFlagPreview').innerHTML = flag(nationSel.value);
+  });
+}
+
+// V0.9.7.9.2: schermata di conferma minimale — prova che il punto 2 funziona, l'Hub vero
+// (dove si gioca davvero) e' il punto 3, non ancora costruito.
+function renderDriverCreationDone(){
+  const d = driverCareerState.driver;
+  const teamsInKart = Object.entries(driverCareerState.world.tiers).filter(([id,tier])=>tier==='kart').length;
+  app.innerHTML = `
+  <div class="hero" style="padding:28px 20px 20px;">
+    <div class="hero-inner">
+      <div class="pill">${GAME_VERSION} · ${t('mode_select_driver')}</div>
+      <h1 class="hdr" style="margin-top:10px;font-size:26px;">${t('dc_done_title')}</h1>
+      <div class="tagline" style="margin:8px auto 0;">${t('dc_done_subtitle')}</div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><h3 class="hdr">${flag(d.naz)} ${d.nome}</h3><span class="dim mono" style="font-size:11px;">${d.eta} · ${d.rating} RATING</span></div>
+    <div class="tag-line dim" style="margin-top:6px;">${d.arch} · ${mentaLabel(d.sinergia)}</div>
+    <div class="dim" style="font-size:12px;margin-top:10px;">${t('dc_done_world_info', teamsInKart)}</div>
+  </div>
+  <div class="footer-note">${t('dc_done_footer')}</div>
+  `;
+  bindActions();
+}
+
 function renderNaming(){
   const nationOptions = Object.keys(COUNTRY_FLAG).filter(c=>c!=='Sconosciuta').sort((a,b)=>nationLabel(a).localeCompare(nationLabel(b)))
     .map(c=> `<option value="${c}" ${c==='Italia'?'selected':''}>${nationLabel(c)}</option>`).join('');
@@ -4941,7 +5142,7 @@ function renderTitle(){
     return;
   }
   app.innerHTML = `
-  <div class="hero title-hero pickable" data-action="go-to-season-length" style="padding:26px 20px 22px;">
+  <div class="hero title-hero pickable" data-action="go-to-mode-select" style="padding:26px 20px 22px;">
     <div class="hero-inner">
       <div class="title-logo-wrap">
         <img src="${LOGO_DATA_URI}" alt="Racing Dynasty" class="title-logo">
@@ -6868,6 +7069,44 @@ function onAction(e){
   if(!NO_GENERIC_SFX_ACTIONS.has(action)) playSfx(CONFIRM_SFX_ACTIONS.has(action) ? 'ui_confirm' : 'ui_click');
   triggerHaptic();
   if(action==='go-to-season-length'){ state.phase='season-length'; render(); }
+  else if(action==='go-to-mode-select'){ state.phase='mode-select'; render(); }
+  else if(action==='go-to-driver-creation'){
+    window.__driverProfiles = rollDriverStarterProfiles();
+    window.__driverProfileChoice = undefined;
+    state.phase = 'driver-creation';
+    render();
+  }
+  else if(action==='pick-driver-profile'){
+    window.__driverProfileChoice = Number(el.dataset.idx);
+    document.querySelectorAll('.driver-profile-card').forEach(c=> c.classList.remove('selected'));
+    el.classList.add('selected');
+    const confirmBtn = document.querySelector('[data-action="confirm-driver-creation"]');
+    if(confirmBtn) confirmBtn.disabled = false;
+  }
+  else if(action==='confirm-driver-creation'){
+    if(window.__driverProfileChoice===undefined) return;
+    const name = document.getElementById('driverNameInput').value.trim() || t('dc_default_name');
+    const nation = document.getElementById('driverNationSelect').value;
+    const profile = window.__driverProfiles[window.__driverProfileChoice];
+    const newDriver = {
+      nome: name, naz: nation, eta: 18,
+      qualifica: 38+Math.round(rnd()*10), sorpassi: 38+Math.round(rnd()*10), pioggia: 38+Math.round(rnd()*10),
+      costanza: 38+Math.round(rnd()*10), pressione: 38+Math.round(rnd()*10), aggressivita: 38+Math.round(rnd()*10),
+      partenza: 38+Math.round(rnd()*10), ultimigiri: 38+Math.round(rnd()*10), gestionegomme: 38+Math.round(rnd()*10),
+      affidabilita: 38+Math.round(rnd()*10),
+      arch: profile.arch, sinergia: profile.menta, archStrength: 0.2, // V0.9.7.9.2: 20% dell'effetto pieno, si rafforza giocando (punto 7, non ancora fatto)
+      prestigio: 0,
+    };
+    newDriver.rating = Math.round((newDriver.qualifica+newDriver.sorpassi+newDriver.pioggia+newDriver.costanza+newDriver.pressione+newDriver.aggressivita+newDriver.partenza+newDriver.ultimigiri+newDriver.gestionegomme+newDriver.affidabilita)/10);
+    driverCareerState = {
+      driver: newDriver,
+      world: initDriverCareerWorld(),
+      currentTeamId: null, // assegnato al punto 3 (Hub + prima stagione)
+    };
+    // punto 2 termina qui: schermata di conferma minimale, l'Hub vero e proprio e' il punto 3
+    state.phase = 'driver-creation-done';
+    render();
+  }
   else if(action==='choose-season-length'){
     state.selectedSeasonLength = parseInt(el.dataset.length,10)===20 ? 20 : 10;
     state.phase='difficulty';
