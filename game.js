@@ -4241,7 +4241,7 @@ function render(){
   if(typeof updateSidebarVisibility==='function') updateSidebarVisibility();
   showGoatRevealIfPending();
   updateMusicForCurrentPhase(); // V0.9.7.8.10
-  if(state && state.phase!=='title') fadeOutIntroCarAudioIfNeeded(); // V0.9.7.8.15
+  if(state && state.phase!=='title'){ fadeOutIntroCarAudioIfNeeded(); removeIntroOverlayIfPresent(); } // V0.9.7.8.15 + V0.9.7.9.4
   saveGame();
 }
 // V0.9.7.6: rivelazione speciale quando THE GOAT entra in squadra (draft o scouting) — overlay a
@@ -7421,6 +7421,15 @@ function fadeOutIntroCarAudioIfNeeded(){
     el.volume = Math.max(0, startVol * (1 - i/steps));
     if(i>=steps){ clearInterval(timer); el.pause(); }
   }, stepMs);
+}
+// V0.9.7.9.4 fix: l'overlay visivo (fumo + auto) viveva fuori dal ciclo di render normale, con un
+// suo timer indipendente di 2.6s per auto-rimuoversi. Se si lasciava il titolo troppo in fretta
+// (es. bivio Carriera Pilota/Scuderia cliccato subito dopo "premi per iniziare"), la schermata
+// nuova si caricava sotto ma l'overlay restava sopra fino alla scadenza del suo timer, coprendo
+// tutto e sembrando uno schermo vuoto. Ora lo rimuoviamo subito, non aspettiamo piu' il timer.
+function removeIntroOverlayIfPresent(){
+  const overlay = document.getElementById('introOverlay');
+  if(overlay) overlay.remove();
 }
 
 /* ==================== V0.9.4.2.8: icona hamburger + pannello menu — logica ====================
