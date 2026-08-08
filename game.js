@@ -69,6 +69,18 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    dact_eyebrow: 'Tra una gara e l\'altra', dact_title: 'Cosa fai prima della prossima gara?', dact_subtitle: 'Scegline una: ognuna ha effetti diversi.',
+    dact_training: 'Allenamento', dact_training_desc: 'Focus sulla crescita personale. Avvicina il prossimo punto Rating, nessun effetto su Fama o Reputazione.',
+    dact_simulator: 'Simulatore e Analisi Dati', dact_simulator_desc: 'Lavori con gli ingegneri: avvicina il prossimo punto Rating e migliora leggermente la Reputazione.',
+    dact_media: 'Evento Media', dact_media_desc: 'Interviste, foto, sponsor. Grande spinta alla Fama, ma togli tempo alla preparazione tecnica.',
+    dact_team_event: 'Evento con la Squadra', dact_team_event_desc: 'Passi tempo con meccanici e ingegneri. Migliora la Reputazione e allenta la tensione col compagno.',
+    dact_interview: 'Intervista Provocatoria', dact_interview_desc: 'Dichiarazioni forti, grande visibilità mediatica. Rischioso: può ritorcersi contro reputazione e rapporto col compagno.',
+    dact_progress: (n)=>`Progresso verso il prossimo Rating: ${n}/100`,
+    dactr_rating_up: (r)=>`⬆️ Rating salito a ${r}!`, dactr_progress: (n)=>`Progresso verso il prossimo Rating: ${n}/100`,
+    dactr_fama: (n)=>`+${n} Fama`, dactr_reputazione_up: (n)=>`+${n} Reputazione`, dactr_reputazione_down: (n)=>`-${n} Reputazione`,
+    dactr_rivalry_down: 'La tensione col compagno si allenta.', dactr_rivalry_up: 'La tensione col compagno cresce.',
+    dactr_backfired: "L'intervista ha fatto discutere più del previsto — non tutti l'hanno presa bene.",
+    dactr_continue: 'Vai all\'Hub →',
     dh_rating: 'RATING', dh_fama: 'FAMA', dh_reputazione: 'REPUTAZIONE',
     dh_teammate_title: 'Tu vs Compagno di Squadra', dh_you: 'TU', dh_teammate: 'COMPAGNO',
     dh_rivalry_low: 'rivalità bassa', dh_rivalry_mid: 'rivalità in crescita', dh_rivalry_high: 'rivalità accesa',
@@ -262,6 +274,18 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    dact_eyebrow: 'Between races', dact_title: 'What do you do before the next race?', dact_subtitle: "Pick one: each has different effects.",
+    dact_training: 'Training', dact_training_desc: "Focus on personal growth. Moves you closer to the next Rating point, no effect on Fame or Reputation.",
+    dact_simulator: 'Simulator and Data Analysis', dact_simulator_desc: "You work with the engineers: closer to the next Rating point and a small Reputation boost.",
+    dact_media: 'Media Event', dact_media_desc: "Interviews, photos, sponsors. Big boost to Fame, but takes time away from technical preparation.",
+    dact_team_event: 'Team Event', dact_team_event_desc: "You spend time with mechanics and engineers. Improves Reputation and eases tension with your teammate.",
+    dact_interview: 'Provocative Interview', dact_interview_desc: "Bold statements, big media visibility. Risky: can backfire on your reputation and relationship with your teammate.",
+    dact_progress: (n)=>`Progress toward next Rating point: ${n}/100`,
+    dactr_rating_up: (r)=>`⬆️ Rating went up to ${r}!`, dactr_progress: (n)=>`Progress toward next Rating point: ${n}/100`,
+    dactr_fama: (n)=>`+${n} Fame`, dactr_reputazione_up: (n)=>`+${n} Reputation`, dactr_reputazione_down: (n)=>`-${n} Reputation`,
+    dactr_rivalry_down: 'Tension with your teammate eases.', dactr_rivalry_up: 'Tension with your teammate grows.',
+    dactr_backfired: "The interview stirred up more than expected — not everyone took it well.",
+    dactr_continue: 'Go to Hub →',
     dh_rating: 'RATING', dh_fama: 'FAME', dh_reputazione: 'REPUTATION',
     dh_teammate_title: 'You vs Teammate', dh_you: 'YOU', dh_teammate: 'TEAMMATE',
     dh_rivalry_low: 'low rivalry', dh_rivalry_mid: 'growing rivalry', dh_rivalry_high: 'fierce rivalry',
@@ -449,6 +473,18 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    dact_eyebrow: 'Entre carreras', dact_title: '¿Qué haces antes de la próxima carrera?', dact_subtitle: 'Elige una: cada una tiene efectos distintos.',
+    dact_training: 'Entrenamiento', dact_training_desc: 'Enfoque en el crecimiento personal. Te acerca al próximo punto de Rating, sin efecto en Fama o Reputación.',
+    dact_simulator: 'Simulador y Análisis de Datos', dact_simulator_desc: 'Trabajas con los ingenieros: te acerca al próximo punto de Rating y mejora ligeramente la Reputación.',
+    dact_media: 'Evento Mediático', dact_media_desc: 'Entrevistas, fotos, patrocinadores. Gran impulso a la Fama, pero resta tiempo a la preparación técnica.',
+    dact_team_event: 'Evento con el Equipo', dact_team_event_desc: 'Pasas tiempo con mecánicos e ingenieros. Mejora la Reputación y alivia la tensión con tu compañero.',
+    dact_interview: 'Entrevista Provocativa', dact_interview_desc: 'Declaraciones fuertes, gran visibilidad mediática. Arriesgado: puede volverse en contra de tu reputación y relación con tu compañero.',
+    dact_progress: (n)=>`Progreso hacia el próximo Rating: ${n}/100`,
+    dactr_rating_up: (r)=>`⬆️ ¡Rating subió a ${r}!`, dactr_progress: (n)=>`Progreso hacia el próximo Rating: ${n}/100`,
+    dactr_fama: (n)=>`+${n} Fama`, dactr_reputazione_up: (n)=>`+${n} Reputación`, dactr_reputazione_down: (n)=>`-${n} Reputación`,
+    dactr_rivalry_down: 'La tensión con tu compañero se alivia.', dactr_rivalry_up: 'La tensión con tu compañero crece.',
+    dactr_backfired: 'La entrevista dio más que hablar de lo esperado — no a todos les sentó bien.',
+    dactr_continue: 'Ir al Hub →',
     dh_rating: 'RATING', dh_fama: 'FAMA', dh_reputazione: 'REPUTACIÓN',
     dh_teammate_title: 'Tú vs Compañero de Equipo', dh_you: 'TÚ', dh_teammate: 'COMPAÑERO',
     dh_rivalry_low: 'rivalidad baja', dh_rivalry_mid: 'rivalidad creciente', dh_rivalry_high: 'rivalidad intensa',
@@ -4135,9 +4171,114 @@ function goToDriverHubOrSeasonEnd(){
     finalizeDriverCareerSeason();
   } else {
     state.raceIndex++;
-    state.phase = 'driver-hub';
+    state.phase = 'driver-activity';
     render();
   }
+}
+
+// ============================================================
+// V0.9.7.9.10 — CARRIERA PILOTA: attività tra una gara e l'altra (documento design, punto 10)
+// Poche opportunità con trade-off chiari, nessuna barra "energia" — solo effetti diretti.
+// Il Rating non sale mai di colpo: si accumula progresso interno (ratingProgress) e scatta un
+// punto quando arriva a 100, cosi' non basta cliccare "allenati" ripetutamente per diventare
+// un fenomeno (documento design, sezione 2).
+// ============================================================
+const DRIVER_ACTIVITIES = ['training','simulator','media','team-event','interview'];
+function applyDriverActivity(activityId){
+  const d = driverCareerState.driver;
+  d.ratingProgress = d.ratingProgress || 0;
+  let outcome = { activityId };
+  if(activityId==='training'){
+    const gain = 15+Math.round(rnd()*10);
+    d.ratingProgress += gain;
+    outcome.ratingProgressGain = gain;
+  } else if(activityId==='simulator'){
+    const gain = 10+Math.round(rnd()*8);
+    d.ratingProgress += gain;
+    d.reputazione = Math.min(100, d.reputazione+2);
+    outcome.ratingProgressGain = gain; outcome.reputazioneGain = 2;
+  } else if(activityId==='media'){
+    const gain = 8+Math.round(rnd()*5);
+    d.fama = Math.min(100, d.fama+gain);
+    outcome.famaGain = gain;
+  } else if(activityId==='team-event'){
+    d.reputazione = Math.min(100, d.reputazione+4);
+    const rivBefore = driverCareerState.teammateRivalry||0;
+    driverCareerState.teammateRivalry = Math.max(0, rivBefore-5);
+    outcome.reputazioneGain = 4; outcome.rivalryChange = -Math.min(5, rivBefore);
+  } else if(activityId==='interview'){
+    const gain = 10+Math.round(rnd()*6);
+    d.fama = Math.min(100, d.fama+gain);
+    outcome.famaGain = gain;
+    outcome.backfired = rnd() < 0.4;
+    if(outcome.backfired){
+      d.reputazione = Math.max(0, d.reputazione-4);
+      driverCareerState.teammateRivalry = Math.min(100, (driverCareerState.teammateRivalry||0)+6);
+      outcome.reputazioneGain = -4; outcome.rivalryChange = 6;
+    }
+  }
+  let ratingUps = 0;
+  while(d.ratingProgress >= 100){ d.ratingProgress -= 100; d.rating = Math.min(99, d.rating+1); ratingUps++; }
+  outcome.ratingUp = ratingUps>0;
+  return outcome;
+}
+
+function renderDriverActivity(){
+  const d = driverCareerState.driver;
+  app.innerHTML = `
+  <div class="panel">
+    <div class="eyebrow">${t('dact_eyebrow')}</div>
+    <h2 class="hdr" style="font-size:22px;">${t('dact_title')}</h2>
+    <div class="dim" style="font-size:12px;margin-top:6px;">${t('dact_subtitle')}</div>
+  </div>
+  <div class="grid grid-2">
+    <div class="card pickable" data-rarity="Common" data-action="pick-driver-activity" data-activity="training">
+      <span class="rarity-tag" data-rarity="Common">🏋️ ${t('dact_training')}</span>
+      <div class="ability">${t('dact_training_desc')}</div>
+    </div>
+    <div class="card pickable" data-rarity="Rare" data-action="pick-driver-activity" data-activity="simulator">
+      <span class="rarity-tag" data-rarity="Rare">💻 ${t('dact_simulator')}</span>
+      <div class="ability">${t('dact_simulator_desc')}</div>
+    </div>
+    <div class="card pickable" data-rarity="Epic" data-action="pick-driver-activity" data-activity="media">
+      <span class="rarity-tag" data-rarity="Epic">📸 ${t('dact_media')}</span>
+      <div class="ability">${t('dact_media_desc')}</div>
+    </div>
+    <div class="card pickable" data-rarity="Rare" data-action="pick-driver-activity" data-activity="team-event">
+      <span class="rarity-tag" data-rarity="Rare">🤝 ${t('dact_team_event')}</span>
+      <div class="ability">${t('dact_team_event_desc')}</div>
+    </div>
+  </div>
+  <div class="card pickable" data-rarity="Legendary" data-action="pick-driver-activity" data-activity="interview">
+    <span class="rarity-tag" data-rarity="Legendary">🎤 ${t('dact_interview')}</span>
+    <div class="ability">${t('dact_interview_desc')}</div>
+  </div>
+  <div class="dim mono" style="font-size:10.5px;text-align:center;margin-top:10px;">${t('dact_progress', d.ratingProgress||0)}</div>
+  `;
+  bindActions();
+}
+
+function renderDriverActivityResult(outcome){
+  const d = driverCareerState.driver;
+  const lines = [];
+  if(outcome.ratingUp) lines.push({cls:'bonus', text:t('dactr_rating_up', d.rating)});
+  else if(outcome.ratingProgressGain) lines.push({cls:'dim', text:t('dactr_progress', d.ratingProgress)});
+  if(outcome.famaGain) lines.push({cls:'bonus', text:t('dactr_fama', outcome.famaGain)});
+  if(outcome.reputazioneGain>0) lines.push({cls:'bonus', text:t('dactr_reputazione_up', outcome.reputazioneGain)});
+  if(outcome.reputazioneGain<0) lines.push({cls:'malus', text:t('dactr_reputazione_down', -outcome.reputazioneGain)});
+  if(outcome.rivalryChange<0) lines.push({cls:'bonus', text:t('dactr_rivalry_down')});
+  if(outcome.rivalryChange>0) lines.push({cls:'malus', text:t('dactr_rivalry_up')});
+  const backfiredNote = outcome.backfired ? `<div class="tag-line malus" style="margin-top:8px;">${t('dactr_backfired')}</div>` : '';
+  app.innerHTML = `
+  ${topbarHTML()}
+  <div class="panel">
+    <div class="panel-title"><h3 class="hdr">${t('dact_'+outcome.activityId.replace('-','_'))}</h3></div>
+    ${lines.map(l=>`<div class="tag-line ${l.cls}">${l.text}</div>`).join('')}
+    ${backfiredNote}
+  </div>
+  <div class="btnrow"><button class="primary" data-action="continue-to-driver-hub">${t('dactr_continue')}</button></div>
+  `;
+  bindActions();
 }
 
 function goToPitlaneOrEnd(){
@@ -4656,6 +4797,8 @@ function renderInner(){
   if(state.phase==='driver-creation') return renderDriverCreation();
   if(state.phase==='driver-creation-done') return renderDriverCreationDone();
   if(state.phase==='driver-hub') return renderDriverHub();
+  if(state.phase==='driver-activity') return renderDriverActivity();
+  if(state.phase==='driver-activity-result') return renderDriverActivityResult(window.__lastDriverActivityOutcome);
   if(state.phase==='driver-season-end') return renderDriverSeasonEnd();
   if(state.phase==='driver-retirement') return renderDriverRetirement();
   if(state.phase==='draft') return renderDraft();
@@ -5414,7 +5557,7 @@ function checkSeasonEndAchievements(){
 
 
 const SAVE_KEY = 'racingDynastySaveV09';
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -7514,6 +7657,16 @@ function onAction(e){
   if(action==='go-to-season-length'){ state.phase='season-length'; render(); }
   else if(action==='start-driver-career-season'){
     startDriverCareerSeason();
+  }
+  else if(action==='pick-driver-activity'){
+    const outcome = applyDriverActivity(el.dataset.activity);
+    window.__lastDriverActivityOutcome = outcome;
+    state.phase = 'driver-activity-result';
+    render();
+  }
+  else if(action==='continue-to-driver-hub'){
+    state.phase = 'driver-hub';
+    render();
   }
   else if(action==='start-next-driver-season'){
     startNextDriverCareerSeason();
