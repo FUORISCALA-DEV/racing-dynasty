@@ -1933,16 +1933,16 @@ function renderDriverSeasonEnd(){
     </div>
   </div>
   <div class="panel">
-    <div class="tag-line">${t('dse2_final_pos', s.finalPos)}</div>
-    <div class="tag-line">${t('dse2_stats', s.stats.points, s.stats.wins, s.stats.podiums)}</div>
-    <div class="tag-line bonus" style="margin-top:8px;">${t('dse2_prestige_gained', s.prestigeGained)}</div>
-    <div class="tag-line dim">${t('dse2_prestige_total', d.prestigio)}</div>
-    <div class="tag-line dim" style="margin-top:8px;">${t('dse2_new_age', d.eta)}</div>
+    <div class="tag-line" style="font-size:14px;">${t('dse2_final_pos', s.finalPos)}</div>
+    <div class="tag-line" style="font-size:14px;">${t('dse2_stats', s.stats.points, s.stats.wins, s.stats.podiums)}</div>
+    <div class="tag-line bonus" style="font-size:14px;" style="margin-top:8px;">${t('dse2_prestige_gained', s.prestigeGained)}</div>
+    <div class="tag-line dim" style="font-size:14px;">${t('dse2_prestige_total', d.prestigio)}</div>
+    <div class="tag-line dim" style="font-size:14px;" style="margin-top:8px;">${t('dse2_new_age', d.eta)}</div>
   </div>
   <div class="panel">
     <div class="panel-title"><h3 class="hdr" style="font-size:15px;">${t('dse2_world_title')}</h3></div>
-    ${s.evolution.promossi.length ? `<div class="tag-line bonus">${t('dse2_promoted', s.evolution.promossi.join(', '))}</div>` : ''}
-    ${s.evolution.retrocessi.length ? `<div class="tag-line malus">${t('dse2_relegated', s.evolution.retrocessi.join(', '))}</div>` : ''}
+    ${s.evolution.promossi.length ? `<div class="tag-line bonus" style="font-size:14px;">${t('dse2_promoted', s.evolution.promossi.join(', '))}</div>` : ''}
+    ${s.evolution.retrocessi.length ? `<div class="tag-line malus" style="font-size:14px;">${t('dse2_relegated', s.evolution.retrocessi.join(', '))}</div>` : ''}
   </div>
   <div class="btnrow"><button class="primary" data-action="start-next-driver-season">${t('dse2_continue')}</button></div>
   <div class="btnrow"><button class="ghost" data-action="go-to-mode-select">${t('back_to_mode_select')}</button></div>
@@ -1965,7 +1965,7 @@ function renderDriverRetirement(){
     <div class="panel-title"><h3 class="hdr">${t('dret_final_prestige')}</h3></div>
     <div class="card-rating" style="text-align:center;">${d.prestigio}</div>
   </div>
-  <div class="footer-note">${t('dret_footer')}</div>
+  <div class="footer-note" style="font-size:12.5px;">${t('dret_footer')}</div>
   <div class="btnrow"><button class="ghost" data-action="go-to-mode-select">${t('back_to_mode_select')}</button></div>
   `;
   bindActions();
@@ -1988,15 +1988,15 @@ function renderDriverHub(){
   <div class="panel">
     <div class="eyebrow">${flag(d.naz)} ${d.nome} · ${d.eta} ${t('dh_years_old')}</div>
     <h2 class="hdr" style="font-size:22px;">${myTeam.customName}</h2>
-    <div class="dim" style="font-size:12px;margin-top:6px;">${d.arch} · ${mentaLabel(d.sinergia)} · ${t('dh_tier_label')}: ${t(tierKey)}</div>
+    <div class="dim" style="font-size:14.5px;margin-top:6px;">${d.arch} · ${mentaLabel(d.sinergia)} · ${t('dh_tier_label')}: ${t(tierKey)}</div>
   </div>
   <div class="hub-quick-stats">
-    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:var(--cyan);">${d.rating}</div><div class="hub-quick-label">${t('dh_rating')}</div></div>
-    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:var(--legendary);">${d.fama}</div><div class="hub-quick-label">${t('dh_fama')}</div></div>
-    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:#4CD97B;">${d.reputazione}</div><div class="hub-quick-label">${t('dh_reputazione')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:var(--cyan);">${d.rating}</div><div class="hub-quick-label" style="font-size:11.5px;" style="font-size:11.5px;">${t('dh_rating')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:var(--legendary);">${d.fama}</div><div class="hub-quick-label" style="font-size:11.5px;" style="font-size:11.5px;">${t('dh_fama')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:#4CD97B;">${d.reputazione}</div><div class="hub-quick-label" style="font-size:11.5px;" style="font-size:11.5px;">${t('dh_reputazione')}</div></div>
   </div>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr" style="font-size:14px;">${t('dh_teammate_title')}</h3><span class="dim mono" style="font-size:10px;">${rivalryLabel}</span></div>
+    <div class="panel-title"><h3 class="hdr" style="font-size:14px;">${t('dh_teammate_title')}</h3><span class="dim mono" style="font-size:15px;">${rivalryLabel}</span></div>
     <div class="grid grid-2" style="gap:10px;">
       <div class="mini" style="padding:10px;">
         <div class="role">${t('dh_you')}</div>
@@ -2011,15 +2011,15 @@ function renderDriverHub(){
     </div>
   </div>
   <div class="hub-quick-stats">
-    <div class="hub-quick-stat"><div class="hub-quick-val">P${(function(){ const arr=Object.values(state.driverStandings).slice().sort((a,b)=>b.points-a.points); const i=arr.indexOf(state.driverStandings['PLAYER-1']); return i>=0?i+1:'-'; })()}</div><div class="hub-quick-label">${t('dh_pos_standings')}</div></div>
-    <div class="hub-quick-stat"><div class="hub-quick-val">${state.raceIndex+1}/${state.calendar.length}</div><div class="hub-quick-label">${t('hud_race')}</div></div>
-    <div class="hub-quick-stat"><div class="hub-quick-val">${d.prestigio||0}</div><div class="hub-quick-label">${t('dh_prestige')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val">P${(function(){ const arr=Object.values(state.driverStandings).slice().sort((a,b)=>b.points-a.points); const i=arr.indexOf(state.driverStandings['PLAYER-1']); return i>=0?i+1:'-'; })()}</div><div class="hub-quick-label" style="font-size:11.5px;" style="font-size:11.5px;">${t('dh_pos_standings')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val">${state.raceIndex+1}/${state.calendar.length}</div><div class="hub-quick-label" style="font-size:11.5px;" style="font-size:11.5px;">${t('hud_race')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val">${d.prestigio||0}</div><div class="hub-quick-label" style="font-size:11.5px;" style="font-size:11.5px;">${t('dh_prestige')}</div></div>
   </div>
   <div class="circuit-banner">
     <div>
       <div class="eyebrow">${t('hub_next_gp')}</div>
       <h2 class="hdr" style="font-size:24px;">${flag(circuit.paese)} ${circuit.nome}</h2>
-      <div class="dim" style="font-size:13px;margin-top:4px;">${nationLabel(circuit.paese)} · ${circuit.tipo} · ${t('hub_weather')} ${circuit.clima}</div>
+      <div class="dim" style="font-size:15px;margin-top:4px;">${nationLabel(circuit.paese)} · ${circuit.tipo} · ${t('hub_weather')} ${circuit.clima}</div>
     </div>
   </div>
   <div class="btnrow"><button class="primary" data-action="run-race">${t('hub_go_to_gp')}</button></div>
@@ -4229,31 +4229,31 @@ function renderDriverActivity(){
   <div class="panel">
     <div class="eyebrow">${t('dact_eyebrow')}</div>
     <h2 class="hdr" style="font-size:22px;">${t('dact_title')}</h2>
-    <div class="dim" style="font-size:12px;margin-top:6px;">${t('dact_subtitle')}</div>
+    <div class="dim" style="font-size:14.5px;margin-top:6px;">${t('dact_subtitle')}</div>
   </div>
   <div class="grid grid-2">
     <div class="card pickable" data-rarity="Common" data-action="pick-driver-activity" data-activity="training">
       <span class="rarity-tag" data-rarity="Common">🏋️ ${t('dact_training')}</span>
-      <div class="ability">${t('dact_training_desc')}</div>
+      <div class="ability" style="font-size:14px;">${t('dact_training_desc')}</div>
     </div>
     <div class="card pickable" data-rarity="Rare" data-action="pick-driver-activity" data-activity="simulator">
       <span class="rarity-tag" data-rarity="Rare">💻 ${t('dact_simulator')}</span>
-      <div class="ability">${t('dact_simulator_desc')}</div>
+      <div class="ability" style="font-size:14px;">${t('dact_simulator_desc')}</div>
     </div>
     <div class="card pickable" data-rarity="Epic" data-action="pick-driver-activity" data-activity="media">
       <span class="rarity-tag" data-rarity="Epic">📸 ${t('dact_media')}</span>
-      <div class="ability">${t('dact_media_desc')}</div>
+      <div class="ability" style="font-size:14px;">${t('dact_media_desc')}</div>
     </div>
     <div class="card pickable" data-rarity="Rare" data-action="pick-driver-activity" data-activity="team-event">
       <span class="rarity-tag" data-rarity="Rare">🤝 ${t('dact_team_event')}</span>
-      <div class="ability">${t('dact_team_event_desc')}</div>
+      <div class="ability" style="font-size:14px;">${t('dact_team_event_desc')}</div>
     </div>
   </div>
   <div class="card pickable" data-rarity="Legendary" data-action="pick-driver-activity" data-activity="interview">
     <span class="rarity-tag" data-rarity="Legendary">🎤 ${t('dact_interview')}</span>
-    <div class="ability">${t('dact_interview_desc')}</div>
+    <div class="ability" style="font-size:14px;">${t('dact_interview_desc')}</div>
   </div>
-  <div class="dim mono" style="font-size:10.5px;text-align:center;margin-top:10px;">${t('dact_progress', d.ratingProgress||0)}</div>
+  <div class="dim mono" style="font-size:13px;text-align:center;margin-top:10px;">${t('dact_progress', d.ratingProgress||0)}</div>
   `;
   bindActions();
 }
@@ -4268,12 +4268,12 @@ function renderDriverActivityResult(outcome){
   if(outcome.reputazioneGain<0) lines.push({cls:'malus', text:t('dactr_reputazione_down', -outcome.reputazioneGain)});
   if(outcome.rivalryChange<0) lines.push({cls:'bonus', text:t('dactr_rivalry_down')});
   if(outcome.rivalryChange>0) lines.push({cls:'malus', text:t('dactr_rivalry_up')});
-  const backfiredNote = outcome.backfired ? `<div class="tag-line malus" style="margin-top:8px;">${t('dactr_backfired')}</div>` : '';
+  const backfiredNote = outcome.backfired ? `<div class="tag-line malus" style="font-size:14px;" style="margin-top:8px;">${t('dactr_backfired')}</div>` : '';
   app.innerHTML = `
   ${topbarHTML()}
   <div class="panel">
     <div class="panel-title"><h3 class="hdr">${t('dact_'+outcome.activityId.replace('-','_'))}</h3></div>
-    ${lines.map(l=>`<div class="tag-line ${l.cls}">${l.text}</div>`).join('')}
+    ${lines.map(l=>`<div class="tag-line ${l.cls}" style="font-size:14px;">${l.text}</div>`).join('')}
     ${backfiredNote}
   </div>
   <div class="btnrow"><button class="primary" data-action="continue-to-driver-hub">${t('dactr_continue')}</button></div>
@@ -4970,7 +4970,7 @@ function renderModeSelect(){
   <div class="panel">
     <div class="eyebrow">${t('diff_new_career')}</div>
     <h2 class="hdr" style="font-size:26px;">${t('mode_select_title')}</h2>
-    <div class="dim" style="font-size:13px;margin-top:6px;">${t('mode_select_subtitle')}</div>
+    <div class="dim" style="font-size:15px;margin-top:6px;">${t('mode_select_subtitle')}</div>
   </div>
   <div class="grid grid-2">
     <div class="card pickable" data-rarity="Rare" data-action="go-to-season-length">
@@ -5005,12 +5005,12 @@ function renderModeSelect(){
     <div class="card-tap-hint">${t('sl_trophy_hint')}</div>
   </div>
   <div class="card pickable trophy-room-card" data-rarity="Epic" data-action="open-museum">
-    <span class="rarity-tag" data-rarity="Epic">🏛️ ${t('sl_museum')} <span class="dim" style="font-size:9.5px;font-weight:700;">· ${t('museum_shared_tag')}</span></span>
+    <span class="rarity-tag" data-rarity="Epic">🏛️ ${t('sl_museum')} <span class="dim" style="font-size:13px;font-weight:700;">· ${t('museum_shared_tag')}</span></span>
     <div class="trophy-room-card-body">
       <div class="trophy-room-card-stats">
         <div class="trophy-stat"><div class="trophy-stat-value">${unlockedAll}/${totalAll}</div><div class="trophy-stat-label">${t('sl_completion')} · ${museumPct}%</div></div>
       </div>
-      <div class="ability">${t('sl_museum_desc')}</div>
+      <div class="ability" style="font-size:14px;">${t('sl_museum_desc')}</div>
     </div>
     <div class="card-tap-hint">${t('sl_museum_hint')}</div>
   </div>
@@ -5051,7 +5051,7 @@ function renderDriverCreation(){
     return `
     <div class="card pickable driver-profile-card ${window.__driverProfileChoice===i?'selected':''}" data-action="pick-driver-profile" data-idx="${i}" data-rarity="Rare">
       <span class="rarity-tag" data-rarity="Rare">${p.arch}</span>
-      <div class="tag-line" style="margin-top:6px;"><span class="syn-half-badge" style="display:inline-flex;vertical-align:middle;"><span class="sem-half" style="background:${m.color};width:9px;height:18px;display:inline-block;border-radius:9px 0 0 9px;"></span><span class="sem-half" style="background:${m.color};width:9px;height:18px;display:inline-block;border-radius:0 9px 9px 0;"></span></span> ${mentaLabel(p.menta)}</div>
+      <div class="tag-line" style="font-size:14px;" style="margin-top:6px;"><span class="syn-half-badge" style="display:inline-flex;vertical-align:middle;"><span class="sem-half" style="background:${m.color};width:9px;height:18px;display:inline-block;border-radius:9px 0 0 9px;"></span><span class="sem-half" style="background:${m.color};width:9px;height:18px;display:inline-block;border-radius:0 9px 9px 0;"></span></span> ${mentaLabel(p.menta)}</div>
       <div class="card-tap-hint">${t('dc_pick_profile')}</div>
     </div>`;
   }).join('');
@@ -5068,7 +5068,7 @@ function renderDriverCreation(){
     <input id="driverNameInput" type="text" maxlength="28" placeholder="${t('dc_name_placeholder')}"
       style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:15px;background:var(--panel2);
       border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);">
-    <label class="dim" style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;margin-top:16px;margin-bottom:6px;">${t('naming_nation')}</label>
+    <label class="dim" style="display:block;font-size:13.5px;text-transform:uppercase;letter-spacing:0.05em;margin-top:16px;margin-bottom:6px;">${t('naming_nation')}</label>
     <div class="nation-select-row">
       <span class="nation-flag-preview" id="driverNationFlagPreview">${flag('Italia')}</span>
       <select id="driverNationSelect"
@@ -5080,7 +5080,7 @@ function renderDriverCreation(){
   </div>
   <div class="panel">
     <div class="eyebrow">${t('dc_profile_eyebrow')}</div>
-    <div class="dim" style="font-size:12px;margin:4px 0 12px;">${t('dc_profile_subtitle')}</div>
+    <div class="dim" style="font-size:14.5px;margin:4px 0 12px;">${t('dc_profile_subtitle')}</div>
     <div class="grid grid-3">${profileCards}</div>
   </div>
   <div class="btnrow"><button class="primary" data-action="confirm-driver-creation" ${window.__driverProfileChoice===undefined?'disabled':''}>${t('dc_confirm')}</button></div>
@@ -5107,12 +5107,12 @@ function renderDriverCreationDone(){
     </div>
   </div>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">${flag(d.naz)} ${d.nome}</h3><span class="dim mono" style="font-size:11px;">${d.eta} · ${d.rating} RATING</span></div>
-    <div class="tag-line dim" style="margin-top:6px;">${d.arch} · ${mentaLabel(d.sinergia)}</div>
-    <div class="dim" style="font-size:12px;margin-top:10px;">${t('dc_done_world_info', teamsInKart)}</div>
+    <div class="panel-title"><h3 class="hdr">${flag(d.naz)} ${d.nome}</h3><span class="dim mono" style="font-size:13.5px;">${d.eta} · ${d.rating} RATING</span></div>
+    <div class="tag-line dim" style="font-size:14px;" style="margin-top:6px;">${d.arch} · ${mentaLabel(d.sinergia)}</div>
+    <div class="dim" style="font-size:14.5px;margin-top:10px;">${t('dc_done_world_info', teamsInKart)}</div>
   </div>
   <div class="btnrow"><button class="primary" data-action="start-driver-career-season">${t('dc_done_start')}</button></div>
-  <div class="footer-note">${t('dc_done_footer')}</div>
+  <div class="footer-note" style="font-size:12.5px;" style="font-size:12.5px;">${t('dc_done_footer')}</div>
   `;
   bindActions();
 }
