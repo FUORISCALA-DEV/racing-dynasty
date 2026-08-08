@@ -69,6 +69,7 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    back_to_mode_select: '← Torna al Bivio', museum_shared_tag: 'condiviso tra le modalità',
     mode_select_title: 'Che tipo di carriera vuoi?', mode_select_subtitle: 'Due modalità completamente separate — puoi avere entrambe in corso allo stesso tempo.',
     mode_select_team: 'Carriera Scuderia', mode_select_team_desc: 'Gestisci una scuderia intera: piloti, componenti, budget. La modalità classica.', mode_select_team_hint: 'Tocca per scegliere — Carriera Scuderia',
     mode_select_driver: 'Carriera Pilota', mode_select_driver_desc: 'Sei un pilota solo, dal debutto in Kart al ritiro. Cresci, firmi contratti, costruisci un palmarès.', mode_select_driver_hint: 'Tocca per scegliere — Carriera Pilota',
@@ -241,6 +242,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    back_to_mode_select: '← Back to Selection', museum_shared_tag: 'shared across modes',
     mode_select_title: 'What kind of career do you want?', mode_select_subtitle: 'Two completely separate modes — you can have both in progress at the same time.',
     mode_select_team: 'Team Career', mode_select_team_desc: 'Manage an entire team: drivers, components, budget. The classic mode.', mode_select_team_hint: 'Tap to choose — Team Career',
     mode_select_driver: 'Driver Career', mode_select_driver_desc: 'You are a single driver, from your Kart debut to retirement. Grow, sign contracts, build a legacy.', mode_select_driver_hint: 'Tap to choose — Driver Career',
@@ -407,6 +409,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    back_to_mode_select: '← Volver a la Selección', museum_shared_tag: 'compartido entre modos',
     mode_select_title: '¿Qué tipo de carrera quieres?', mode_select_subtitle: 'Dos modos completamente separados — puedes tener ambos en curso al mismo tiempo.',
     mode_select_team: 'Carrera de Escudería', mode_select_team_desc: 'Gestiona una escudería entera: pilotos, componentes, presupuesto. El modo clásico.', mode_select_team_hint: 'Toca para elegir — Carrera de Escudería',
     mode_select_driver: 'Carrera de Piloto', mode_select_driver_desc: 'Eres un solo piloto, desde tu debut en Kart hasta el retiro. Creces, firmas contratos, construyes un palmarés.', mode_select_driver_hint: 'Toca para elegir — Carrera de Piloto',
@@ -4297,6 +4300,7 @@ function renderInner(){
   if(state.phase==='pitlane') return renderPitlane();
   if(state.phase==='rival-announce') return renderRivalAnnounce();
   if(state.phase==='trophy-room') return renderTrophyRoom();
+  if(state.phase==='driver-trophy-room') return renderDriverTrophyRoom();
   if(state.phase==='museum-dynasty') return renderMuseumDynasty();
   if(state.phase==='garage') return renderGarage();
   if(state.phase==='sponsor-choice') return renderSponsorChoice();
@@ -4442,21 +4446,65 @@ const TEAM_INSPIRATION = [
   {nome:'Summit Works', naz:'Germania'},
 ];
 function renderModeSelect(){
+  const circuits = DATA.circuiti;
+  const total = circuits.length;
+  const racedCount = circuits.filter(c=> trophyData[c.nome] && trophyData[c.nome].raced>0).length;
+  const wonCount = circuits.filter(c=> trophyData[c.nome] && trophyData[c.nome].won>0).length;
+  const driverRacedCount = circuits.filter(c=> driverTrophyData[c.nome] && driverTrophyData[c.nome].raced>0).length;
+  const driverWonCount = circuits.filter(c=> driverTrophyData[c.nome] && driverTrophyData[c.nome].won>0).length;
+  const totalPiloti = DATA.piloti.length;
+  const totalComponenti = DATA.motori.length + DATA.telai.length + DATA.aero.length + DATA.gomme.length + DATA.strategi.length;
+  const unlockedAll = Object.keys(museumData.piloti).length + Object.keys(museumData.componenti).length;
+  const totalAll = totalPiloti + totalComponenti;
+  const museumPct = totalAll>0 ? Math.round(unlockedAll/totalAll*100) : 0;
+
   app.innerHTML = `
   <div class="panel">
     <div class="eyebrow">${t('diff_new_career')}</div>
-    <h2 class="hdr" style="font-size:24px;">${t('mode_select_title')}</h2>
-    <div class="dim" style="font-size:12px;margin-top:6px;">${t('mode_select_subtitle')}</div>
+    <h2 class="hdr" style="font-size:26px;">${t('mode_select_title')}</h2>
+    <div class="dim" style="font-size:13px;margin-top:6px;">${t('mode_select_subtitle')}</div>
   </div>
-  <div class="card pickable" data-rarity="Rare" data-action="go-to-season-length">
-    <span class="rarity-tag" data-rarity="Rare">🏎️ ${t('mode_select_team')}</span>
-    <div class="ability">${t('mode_select_team_desc')}</div>
-    <div class="card-tap-hint">${t('mode_select_team_hint')}</div>
+  <div class="grid grid-2">
+    <div class="card pickable" data-rarity="Rare" data-action="go-to-season-length">
+      <span class="rarity-tag" data-rarity="Rare">🏎️ ${t('mode_select_team')}</span>
+      <div class="ability" style="font-size:14px;margin-top:8px;">${t('mode_select_team_desc')}</div>
+      <div class="card-tap-hint">${t('mode_select_team_hint')}</div>
+    </div>
+    <div class="card pickable" data-rarity="Legendary" data-action="go-to-driver-creation">
+      <span class="rarity-tag" data-rarity="Legendary">🏁 ${t('mode_select_driver')}</span>
+      <div class="ability" style="font-size:14px;margin-top:8px;">${t('mode_select_driver_desc')}</div>
+      <div class="card-tap-hint">${t('mode_select_driver_hint')}</div>
+    </div>
   </div>
-  <div class="card pickable" data-rarity="Legendary" data-action="go-to-driver-creation">
-    <span class="rarity-tag" data-rarity="Legendary">🏁 ${t('mode_select_driver')}</span>
-    <div class="ability">${t('mode_select_driver_desc')}</div>
-    <div class="card-tap-hint">${t('mode_select_driver_hint')}</div>
+  <div class="card pickable trophy-room-card" data-rarity="Legendary" data-action="open-trophy-room">
+    <span class="rarity-tag" data-rarity="Legendary">🏆 ${t('sl_trophy_room')} — ${t('mode_select_team')}</span>
+    <div class="trophy-room-card-body">
+      <div class="trophy-room-card-stats">
+        <div class="trophy-stat"><div class="trophy-stat-value">${racedCount}/${total}</div><div class="trophy-stat-label">${t('sl_raced')}</div></div>
+        <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${wonCount}/${total}</div><div class="trophy-stat-label">${t('sl_won')}</div></div>
+      </div>
+    </div>
+    <div class="card-tap-hint">${t('sl_trophy_hint')}</div>
+  </div>
+  <div class="card pickable trophy-room-card" data-rarity="Legendary" data-action="open-driver-trophy-room">
+    <span class="rarity-tag" data-rarity="Legendary">🏆 ${t('sl_trophy_room')} — ${t('mode_select_driver')}</span>
+    <div class="trophy-room-card-body">
+      <div class="trophy-room-card-stats">
+        <div class="trophy-stat"><div class="trophy-stat-value">${driverRacedCount}/${total}</div><div class="trophy-stat-label">${t('sl_raced')}</div></div>
+        <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${driverWonCount}/${total}</div><div class="trophy-stat-label">${t('sl_won')}</div></div>
+      </div>
+    </div>
+    <div class="card-tap-hint">${t('sl_trophy_hint')}</div>
+  </div>
+  <div class="card pickable trophy-room-card" data-rarity="Epic" data-action="open-museum">
+    <span class="rarity-tag" data-rarity="Epic">🏛️ ${t('sl_museum')} <span class="dim" style="font-size:9.5px;font-weight:700;">· ${t('museum_shared_tag')}</span></span>
+    <div class="trophy-room-card-body">
+      <div class="trophy-room-card-stats">
+        <div class="trophy-stat"><div class="trophy-stat-value">${unlockedAll}/${totalAll}</div><div class="trophy-stat-label">${t('sl_completion')} · ${museumPct}%</div></div>
+      </div>
+      <div class="ability">${t('sl_museum_desc')}</div>
+    </div>
+    <div class="card-tap-hint">${t('sl_museum_hint')}</div>
   </div>
   `;
   bindActions();
@@ -4528,6 +4576,7 @@ function renderDriverCreation(){
     <div class="grid grid-3">${profileCards}</div>
   </div>
   <div class="btnrow"><button class="primary" data-action="confirm-driver-creation" ${window.__driverProfileChoice===undefined?'disabled':''}>${t('dc_confirm')}</button></div>
+  <div class="btnrow"><button class="ghost" data-action="go-to-mode-select">${t('back_to_mode_select')}</button></div>
   `;
   bindActions();
   const nationSel = document.getElementById('driverNationSelect');
@@ -4686,6 +4735,27 @@ function recordCircuitResult(circuitName, won){
   saveTrophyData();
 }
 let trophyData = loadTrophyData(); // caricato una sola volta all'avvio, prima di qualunque carriera
+
+// V0.9.7.9.3: Sala Trofei della Carriera Pilota — separata da quella di Carriera Scuderia (dati
+// diversi, chiave di salvataggio diversa), come richiesto esplicitamente. Il Museo Dynasty invece
+// resta condiviso tra le due modalita' (usa museumData, gia' esistente, senza modifiche).
+const DRIVER_TROPHY_SAVE_KEY = 'racingDynastyDriverTrophiesV1';
+function loadDriverTrophyData(){
+  try{
+    const raw = localStorage.getItem(DRIVER_TROPHY_SAVE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveDriverTrophyData(){
+  try{ localStorage.setItem(DRIVER_TROPHY_SAVE_KEY, JSON.stringify(driverTrophyData)); }catch(e){ /* ignorato */ }
+}
+function recordDriverCircuitResult(circuitName, won){
+  if(!driverTrophyData[circuitName]) driverTrophyData[circuitName] = { raced:0, won:0 };
+  driverTrophyData[circuitName].raced++;
+  if(won) driverTrophyData[circuitName].won++;
+  saveDriverTrophyData();
+}
+let driverTrophyData = loadDriverTrophyData();
 
 /* ---------------- V0.9.7: obiettivi/achievement ----------------
    15 obiettivi in 4 categorie, persistenti tra carriere (stesso pattern di museo/trofei).
@@ -4978,7 +5048,7 @@ function checkSeasonEndAchievements(){
 
 
 const SAVE_KEY = 'racingDynastySaveV09';
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -5181,15 +5251,6 @@ function renderDifficulty(){
 }
 
 function renderSeasonLength(){
-  const circuits = DATA.circuiti;
-  const total = circuits.length;
-  const racedCount = circuits.filter(c=> trophyData[c.nome] && trophyData[c.nome].raced>0).length;
-  const wonCount = circuits.filter(c=> trophyData[c.nome] && trophyData[c.nome].won>0).length;
-  const totalPiloti = DATA.piloti.length;
-  const totalComponenti = DATA.motori.length + DATA.telai.length + DATA.aero.length + DATA.gomme.length + DATA.strategi.length;
-  const unlockedAll = Object.keys(museumData.piloti).length + Object.keys(museumData.componenti).length;
-  const totalAll = totalPiloti + totalComponenti;
-  const museumPct = totalAll>0 ? Math.round(unlockedAll/totalAll*100) : 0;
   app.innerHTML = `
   <div class="panel">
     <div class="eyebrow">${t('diff_new_career')}</div>
@@ -5210,27 +5271,6 @@ function renderSeasonLength(){
       <div class="card-tap-hint">${t('sl_full_hint')}</div>
     </div>
   </div>
-  <div class="card pickable trophy-room-card" data-rarity="Legendary" data-action="open-trophy-room">
-    <span class="rarity-tag" data-rarity="Legendary">🏆 ${t('sl_trophy_room')}</span>
-    <div class="trophy-room-card-body">
-      <div class="trophy-room-card-stats">
-        <div class="trophy-stat"><div class="trophy-stat-value">${racedCount}/${total}</div><div class="trophy-stat-label">${t('sl_raced')}</div></div>
-        <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${wonCount}/${total}</div><div class="trophy-stat-label">${t('sl_won')}</div></div>
-      </div>
-      <div class="ability">${t('sl_trophy_desc')}</div>
-    </div>
-    <div class="card-tap-hint">${t('sl_trophy_hint')}</div>
-  </div>
-  <div class="card pickable trophy-room-card" data-rarity="Epic" data-action="open-museum">
-    <span class="rarity-tag" data-rarity="Epic">🏛️ ${t('sl_museum')}</span>
-    <div class="trophy-room-card-body">
-      <div class="trophy-room-card-stats">
-        <div class="trophy-stat"><div class="trophy-stat-value">${unlockedAll}/${totalAll}</div><div class="trophy-stat-label">${t('sl_completion')} · ${museumPct}%</div></div>
-      </div>
-      <div class="ability">${t('sl_museum_desc')}</div>
-    </div>
-    <div class="card-tap-hint">${t('sl_museum_hint')}</div>
-  </div>
   <div class="card trophy-room-card garage-coming-soon">
     <span class="rarity-tag" data-rarity="Rare">🎨 ${t('sl_garage')}</span>
     <div class="trophy-room-card-body">
@@ -5238,6 +5278,7 @@ function renderSeasonLength(){
     </div>
     <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;">${t('sl_garage_soon')}</div>
   </div>
+  <div class="btnrow"><button class="ghost" data-action="go-to-mode-select">${t('back_to_mode_select')}</button></div>
   `;
   bindActions();
 }
@@ -6275,8 +6316,9 @@ function circuitStatusBadgeHTML(circuitName){
 }
 
 // V0.9.4: Sala Trofei — accessibile dalla schermata scelta stagione e dal menu, persiste tra le carriere
-function trophyCellHTML(circuit){
-  const td = trophyData[circuit.nome] || { raced:0, won:0 };
+function trophyCellHTML(circuit, dataSource){
+  const src = dataSource || trophyData;
+  const td = src[circuit.nome] || { raced:0, won:0 };
   const circuitSlug = slugify(circuit.nome);
   const shortName = circuit.nome.replace(' Grand Prix','');
   if(td.won>0){
@@ -6351,7 +6393,7 @@ function renderTrophyRoom(){
   const wonCount = circuits.filter(c=> trophyData[c.nome] && trophyData[c.nome].won>0).length;
   const racedPct = Math.round(racedCount/total*100);
   const wonPct = Math.round(wonCount/total*100);
-  const cardsHTML = circuits.map(trophyCellHTML).join('');
+  const cardsHTML = circuits.map(c=>trophyCellHTML(c, trophyData)).join('');
 
   app.innerHTML = `
   <div class="hero" style="padding:26px 20px 20px;">
@@ -6369,6 +6411,40 @@ function renderTrophyRoom(){
       <button class="ghost" data-action="share-trophy-room">${t('tr_share')}</button>
       <button class="ghost" data-action="open-museum">${t('tr_museum_btn')}</button>
       <button class="primary" data-action="close-trophy-room">${t('tr_back')}</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="trophy-grid">${cardsHTML}</div>
+  </div>
+  `;
+  bindActions();
+}
+
+// V0.9.7.9.3: Sala Trofei della Carriera Pilota — stesso markup/stile, dati e chiave di ritorno diversi.
+function renderDriverTrophyRoom(){
+  const circuits = DATA.circuiti;
+  const total = circuits.length;
+  const racedCount = circuits.filter(c=> driverTrophyData[c.nome] && driverTrophyData[c.nome].raced>0).length;
+  const wonCount = circuits.filter(c=> driverTrophyData[c.nome] && driverTrophyData[c.nome].won>0).length;
+  const racedPct = Math.round(racedCount/total*100);
+  const wonPct = Math.round(wonCount/total*100);
+  const cardsHTML = circuits.map(c=>trophyCellHTML(c, driverTrophyData)).join('');
+
+  app.innerHTML = `
+  <div class="hero" style="padding:26px 20px 20px;">
+    <div class="hero-inner">
+      <h1 class="hdr" style="font-size:30px;">🏁 ${t('mode_select_driver')}</h1>
+      <div class="tagline">${t('tr_tagline')}</div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="trophy-stats-row">
+      <div class="trophy-stat"><div class="trophy-stat-value">${racedCount}/${total}</div><div class="trophy-stat-label">${t('tr_raced')} · ${racedPct}%</div></div>
+      <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${wonCount}/${total}</div><div class="trophy-stat-label">${t('tr_won')} · ${wonPct}%</div></div>
+    </div>
+    <div class="btnrow">
+      <button class="ghost" data-action="open-museum">${t('tr_museum_btn')}</button>
+      <button class="primary" data-action="close-driver-trophy-room">${t('tr_back')}</button>
     </div>
   </div>
   <div class="panel">
@@ -7256,6 +7332,16 @@ function onAction(e){
     render();
   }
   else if(action==='close-trophy-room'){
+    state.phase = trophyRoomPreviousPhase || 'title';
+    render();
+  }
+  else if(action==='open-driver-trophy-room'){
+    trophyRoomPreviousPhase = state.phase;
+    state.phase = 'driver-trophy-room';
+    pushBackGuard();
+    render();
+  }
+  else if(action==='close-driver-trophy-room'){
     state.phase = trophyRoomPreviousPhase || 'title';
     render();
   }
