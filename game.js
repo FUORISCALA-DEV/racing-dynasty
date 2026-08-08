@@ -69,6 +69,9 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    dh_rating: 'RATING', dh_fama: 'FAMA', dh_reputazione: 'REPUTAZIONE',
+    dh_teammate_title: 'Tu vs Compagno di Squadra', dh_you: 'TU', dh_teammate: 'COMPAGNO',
+    dh_rivalry_low: 'rivalità bassa', dh_rivalry_mid: 'rivalità in crescita', dh_rivalry_high: 'rivalità accesa',
     dse2_title: '🏁 Stagione conclusa', dse2_final_pos: (p)=>`Posizione finale: P${p}`,
     dse2_stats: (pts,w,pod)=>`${pts} punti · ${w} vittorie · ${pod} podi`,
     dse2_prestige_gained: (n)=>`+${n} punti prestigio guadagnati`, dse2_prestige_total: (n)=>`Prestigio totale: ${n}`,
@@ -259,6 +262,9 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    dh_rating: 'RATING', dh_fama: 'FAME', dh_reputazione: 'REPUTATION',
+    dh_teammate_title: 'You vs Teammate', dh_you: 'YOU', dh_teammate: 'TEAMMATE',
+    dh_rivalry_low: 'low rivalry', dh_rivalry_mid: 'growing rivalry', dh_rivalry_high: 'fierce rivalry',
     dse2_title: '🏁 Season over', dse2_final_pos: (p)=>`Final position: P${p}`,
     dse2_stats: (pts,w,pod)=>`${pts} points · ${w} wins · ${pod} podiums`,
     dse2_prestige_gained: (n)=>`+${n} prestige points earned`, dse2_prestige_total: (n)=>`Total prestige: ${n}`,
@@ -443,6 +449,9 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    dh_rating: 'RATING', dh_fama: 'FAMA', dh_reputazione: 'REPUTACIÓN',
+    dh_teammate_title: 'Tú vs Compañero de Equipo', dh_you: 'TÚ', dh_teammate: 'COMPAÑERO',
+    dh_rivalry_low: 'rivalidad baja', dh_rivalry_mid: 'rivalidad creciente', dh_rivalry_high: 'rivalidad intensa',
     dse2_title: '🏁 Temporada terminada', dse2_final_pos: (p)=>`Posición final: P${p}`,
     dse2_stats: (pts,w,pod)=>`${pts} puntos · ${w} victorias · ${pod} podios`,
     dse2_prestige_gained: (n)=>`+${n} puntos de prestigio ganados`, dse2_prestige_total: (n)=>`Prestigio total: ${n}`,
@@ -1932,6 +1941,10 @@ function renderDriverHub(){
   const myTeam = state.team;
   const circuit = state.calendar[state.raceIndex];
   const tierKey = { kart:'dh_tier_kart', minore:'dh_tier_minore', elite:'dh_tier_elite' }[driverCareerState.currentTier] || 'dh_tier_kart';
+  const myStats = state.driverStandings['PLAYER-1'];
+  const mateStats = state.driverStandings['PLAYER-2'];
+  const rivalry = driverCareerState.teammateRivalry || 0;
+  const rivalryLabel = rivalry>=70 ? t('dh_rivalry_high') : rivalry>=35 ? t('dh_rivalry_mid') : t('dh_rivalry_low');
   app.innerHTML = `
   <div class="topbar">
     <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_driver')} — ${GAME_VERSION}</small></div>
@@ -1939,12 +1952,32 @@ function renderDriverHub(){
   <div class="panel">
     <div class="eyebrow">${flag(d.naz)} ${d.nome} · ${d.eta} ${t('dh_years_old')}</div>
     <h2 class="hdr" style="font-size:22px;">${myTeam.customName}</h2>
-    <div class="dim" style="font-size:12px;margin-top:6px;">${d.arch} · ${mentaLabel(d.sinergia)} · ${d.rating} RATING · ${t('dh_tier_label')}: ${t(tierKey)}</div>
+    <div class="dim" style="font-size:12px;margin-top:6px;">${d.arch} · ${mentaLabel(d.sinergia)} · ${t('dh_tier_label')}: ${t(tierKey)}</div>
   </div>
   <div class="hub-quick-stats">
-    <div class="hub-quick-stat"><div class="hub-quick-val">${d.prestigio||0}</div><div class="hub-quick-label">${t('dh_prestige')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:var(--cyan);">${d.rating}</div><div class="hub-quick-label">${t('dh_rating')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:var(--legendary);">${d.fama}</div><div class="hub-quick-label">${t('dh_fama')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val" style="color:#4CD97B;">${d.reputazione}</div><div class="hub-quick-label">${t('dh_reputazione')}</div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><h3 class="hdr" style="font-size:14px;">${t('dh_teammate_title')}</h3><span class="dim mono" style="font-size:10px;">${rivalryLabel}</span></div>
+    <div class="grid grid-2" style="gap:10px;">
+      <div class="mini" style="padding:10px;">
+        <div class="role">${t('dh_you')}</div>
+        <div class="nm">${d.nome.split(' ').pop()}</div>
+        <div class="rt">${myStats.points} pt · ${myStats.wins}V · ${myStats.podiums}P</div>
+      </div>
+      <div class="mini" style="padding:10px;">
+        <div class="role">${t('dh_teammate')}</div>
+        <div class="nm">${myTeam.pilotSecond.nome.split(' ').pop()}</div>
+        <div class="rt">${mateStats.points} pt · ${mateStats.wins}V · ${mateStats.podiums}P</div>
+      </div>
+    </div>
+  </div>
+  <div class="hub-quick-stats">
     <div class="hub-quick-stat"><div class="hub-quick-val">P${(function(){ const arr=Object.values(state.driverStandings).slice().sort((a,b)=>b.points-a.points); const i=arr.indexOf(state.driverStandings['PLAYER-1']); return i>=0?i+1:'-'; })()}</div><div class="hub-quick-label">${t('dh_pos_standings')}</div></div>
     <div class="hub-quick-stat"><div class="hub-quick-val">${state.raceIndex+1}/${state.calendar.length}</div><div class="hub-quick-label">${t('hud_race')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val">${d.prestigio||0}</div><div class="hub-quick-label">${t('dh_prestige')}</div></div>
   </div>
   <div class="circuit-banner">
     <div>
@@ -3308,9 +3341,12 @@ function decisionShiftFn(choiceKey){
 function applyLiveDecision(type, choiceKey){
   const timeline = state.live.timeline;
   const t = state.live.phaseIndex;
+  // V0.9.7.9.9: in Carriera Pilota le decisioni sono PERSONALI del pilota, non ordini di scuderia
+  // che coinvolgono entrambe le vetture — il compagno di scuderia e' un'IA indipendente.
+  const affectedSlots = state.isDriverCareer ? ['PLAYER-1'] : ['PLAYER-1','PLAYER-2'];
   if(choiceKey==='splitstrategy'){
     const fns = { 'PLAYER-1': decisionShiftFn('box'), 'PLAYER-2': decisionShiftFn('stay') };
-    ['PLAYER-1','PLAYER-2'].forEach(slotKey=>{
+    (state.isDriverCareer ? ['PLAYER-1'] : ['PLAYER-1','PLAYER-2']).forEach(slotKey=>{
       if(timeline.retiredAtPhase[slotKey]!==null) return;
       for(let phase=t+1; phase<PHASES.length; phase++){
         const order = timeline.phaseOrders[phase];
@@ -3325,7 +3361,7 @@ function applyLiveDecision(type, choiceKey){
     return;
   }
   const shiftFn = decisionShiftFn(choiceKey);
-  ['PLAYER-1','PLAYER-2'].forEach(slotKey=>{
+  affectedSlots.forEach(slotKey=>{
     if(timeline.retiredAtPhase[slotKey]!==null) return; // gia' ritirato: la scelta non ha piu' effetto
     for(let phase=t+1; phase<PHASES.length; phase++){
       const order = timeline.phaseOrders[phase];
@@ -3340,10 +3376,37 @@ function applyLiveDecision(type, choiceKey){
   });
 }
 
+// V0.9.7.9.9: conseguenze personali (Fama/Reputazione/Rivalità col compagno) sopra il sistema di
+// decisioni GIA' esistente — nessun secondo motore, solo un livello di significato aggiunto quando
+// si gioca in Carriera Pilota. Le scelte "audaci" scalano con il Rating: un pilota fortissimo ha
+// più probabilità di trasformare un rischio in un successo (spec punto 8/9 del documento di design).
+const DRIVER_DECISION_CONSEQUENCES = {
+  weather: { box:{fama:0,reputazione:1}, stay:{fama:2,reputazione:0}, splitstrategy:{fama:1,reputazione:0} },
+  safetycar: { box:{fama:0,reputazione:1}, stay:{fama:1,reputazione:0}, restart:{fama:2,reputazione:-1} },
+  pit: { early:{fama:0,reputazione:1}, late:{fama:1,reputazione:0} },
+  aggression: { aggressive:{fama:3,reputazione:-1}, safe:{fama:0,reputazione:2} },
+  teamorders: { hold:{fama:0,reputazione:3,rivalry:-2}, free:{fama:2,reputazione:-1,rivalry:3} },
+  defend: { defend:{fama:2,reputazione:0}, letpass:{fama:-1,reputazione:2} },
+  enginemode: { push:{fama:1,reputazione:0}, save:{fama:0,reputazione:1} },
+  mechanical: { nurse:{fama:0,reputazione:2}, push:{fama:2,reputazione:-1} },
+};
+function applyDriverCareerDecisionConsequences(type, choiceKey){
+  if(!state.isDriverCareer) return;
+  const delta = (DRIVER_DECISION_CONSEQUENCES[type]||{})[choiceKey];
+  if(!delta) return;
+  const d = driverCareerState.driver;
+  const ratingFactor = 0.6 + (d.rating/100)*0.8; // rating basso: 0.6x — rating alto: fino a 1.4x
+  const famaDelta = delta.fama>0 ? Math.round(delta.fama*ratingFactor) : (delta.fama||0);
+  d.fama = Math.max(0, Math.min(100, d.fama + famaDelta));
+  d.reputazione = Math.max(0, Math.min(100, d.reputazione + (delta.reputazione||0)));
+  if(delta.rivalry) driverCareerState.teammateRivalry = Math.max(0, Math.min(100, (driverCareerState.teammateRivalry||0) + delta.rivalry));
+}
+
 function resolveLiveDecision(choiceKey){
   const dec = state.live.activeDecision;
   if(!dec) return;
   applyLiveDecision(dec.type, choiceKey);
+  applyDriverCareerDecisionConsequences(dec.type, choiceKey);
   state.live.resolvedDecisions.push(dec.phase);
   state.live.activeDecision = null;
   state.live.decisionDeadline = null;
@@ -3445,6 +3508,7 @@ function resolveLiveDecisionSilent(choiceKey){
   const dec = state.live.activeDecision;
   if(!dec) return;
   applyLiveDecision(dec.type, choiceKey);
+  applyDriverCareerDecisionConsequences(dec.type, choiceKey);
   state.live.resolvedDecisions.push(dec.phase);
   state.live.activeDecision = null;
   state.live.paused = false;
@@ -7485,6 +7549,10 @@ function onAction(e){
       affidabilita: 38+Math.round(rnd()*10),
       arch: profile.arch, sinergia: profile.menta, archStrength: 0.2, // V0.9.7.9.2: 20% dell'effetto pieno, si rafforza giocando (punto 7, non ancora fatto)
       prestigio: 0,
+      // V0.9.7.9.9: le tre colonne portanti richieste — Rating (forza reale) separato da
+      // Reputazione (rispetto nel paddock, parte neutra) e Fama (notorieta' pubblica, parte bassa:
+      // un rookie sconosciuto). Non sono la stessa cosa: si possono muovere in direzioni opposte.
+      reputazione: 50, fama: 5,
     };
     newDriver.rating = Math.round((newDriver.qualifica+newDriver.sorpassi+newDriver.pioggia+newDriver.costanza+newDriver.pressione+newDriver.aggressivita+newDriver.partenza+newDriver.ultimigiri+newDriver.gestionegomme+newDriver.affidabilita)/10);
     driverCareerState = {
@@ -7492,6 +7560,7 @@ function onAction(e){
       world: initDriverCareerWorld(),
       currentTeamId: null,
       currentTier: 'kart', // V0.9.7.9.3: si debutta sempre in Kart
+      teammateRivalry: 0, // V0.9.7.9.9: 0-100, cresce con scontri/insubordinazioni, cala con collaborazione
     };
     // punto 2 termina qui: schermata di conferma minimale, l'Hub vero e proprio e' il punto 3
     state.phase = 'driver-creation-done';
