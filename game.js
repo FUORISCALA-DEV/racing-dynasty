@@ -4213,70 +4213,15 @@ const RATING_BANDS_ORDER = ['debole','discreto','intermedio','ottimo','eccellent
 // 'source-atop' (quindi tutto cio' che disegniamo appare SOLO dove il telaio e' gia' opaco) e le
 // dimensioni W,H del canvas (= dimensioni native dell'asset telaio, niente scaling qui).
 const LIVERY_PATTERNS = [
-  { id:'scacchiera', nome:'Scacchiera', achievementId:'prima-vittoria', draw:(ctx,W,H)=>{
-    const cell = H/6;
-    for(let yi=0; yi<7; yi++) for(let xi=0; xi<Math.ceil(W/cell)+2; xi++){
-      if((xi+yi)%2===0) ctx.fillRect(xi*cell, yi*cell, cell, cell);
-    }
-  }},
-  { id:'pois', nome:'Pois', achievementId:'underdog', draw:(ctx,W,H)=>{
-    const step = H*0.32, r = H*0.11;
-    for(let y=step*0.4; y<H+step; y+=step){
-      for(let x=step*0.4; x<W+step; x+=step){
-        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
-      }
-    }
-  }},
-  { id:'strisce-centrali', nome:'Strisce Centrali', achievementId:'sul-podio', draw:(ctx,W,H)=>{
-    const sw = W*0.09, cx = W/2;
-    ctx.fillRect(cx-sw*1.6, 0, sw*1.1, H);
-    ctx.fillRect(cx+sw*0.5, 0, sw*1.1, H);
-  }},
-  { id:'meta-e-meta', nome:'Metà e Metà', achievementId:'domatore-del-caos', draw:(ctx,W,H)=>{
-    ctx.fillRect(W*0.52, 0, W*0.48, H);
-  }},
-  { id:'diagonali', nome:'Diagonali Veloci', achievementId:'la-grande-rimonta', draw:(ctx,W,H)=>{
-    const step = W*0.11;
-    for(let x=-H; x<W; x+=step){
-      ctx.beginPath();
-      ctx.moveTo(x,0); ctx.lineTo(x+step*0.55,0);
-      ctx.lineTo(x+step*0.55-H*0.6,H); ctx.lineTo(x-H*0.6,H);
-      ctx.closePath(); ctx.fill();
-    }
-  }},
-  { id:'frecce', nome:'Frecce Racing', achievementId:'ripartenza-perfetta', draw:(ctx,W,H)=>{
-    const step = W*0.16;
-    for(let x=0; x<W+step; x+=step){
-      ctx.beginPath();
-      ctx.moveTo(x,0); ctx.lineTo(x+step*0.4,H*0.5); ctx.lineTo(x,H); ctx.lineTo(x-step*0.35,H*0.5);
-      ctx.closePath(); ctx.fill();
-    }
-  }},
-  { id:'fiamma', nome:'Fiamma', achievementId:'leggenda-al-volante', draw:(ctx,W,H)=>{
-    ctx.beginPath();
-    let first=true;
-    for(let t=0;t<=100;t+=4){ const tt=t/100; const x=W*0.15+tt*W*0.75; const y=H*0.5+Math.sin(tt*Math.PI)*H*0.42*(1-tt*0.3);
-      if(first){ctx.moveTo(x,y); first=false;} else ctx.lineTo(x,y); }
-    for(let t=100;t>=0;t-=4){ const tt=t/100; const x=W*0.15+tt*W*0.75; const y=H*0.5-Math.sin(tt*Math.PI)*H*0.18*(1-tt*0.5);
-      ctx.lineTo(x,y); }
-    ctx.closePath(); ctx.fill();
-  }},
-  { id:'contorno-spesso', nome:'Contorno Spesso', achievementId:'collezionista-assoluto', draw:(ctx,W,H,srcCanvas)=>{
-    // bordo spesso: disegna il telaio dilatato (piu' volte spostato di 1px in ogni direzione) in bianco,
-    // cosi' resta visibile solo il contorno una volta ri-clippato dal source-atop del chiamante
-    const off = Math.max(1, Math.round(H*0.05));
-    for(let dx=-off; dx<=off; dx++) for(let dy=-off; dy<=off; dy++){
-      if(dx===0 && dy===0) continue;
-      ctx.drawImage(srcCanvas, dx, dy);
-    }
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.drawImage(srcCanvas, 0, 0);
-    ctx.globalCompositeOperation = 'source-atop';
-  }},
-  { id:'striscia-laterale', nome:'Doppia Striscia Laterale', achievementId:'senza-rete-di-sicurezza', draw:(ctx,W,H)=>{
-    ctx.fillRect(0, H*0.32, W, H*0.09);
-    ctx.fillRect(0, H*0.52, W, H*0.09);
-  }},
+  { id:'phoenix-works', nome:'Phoenix Works', achievementId:'prima-vittoria', liveryImg:'assets/team-liveries/phoenix-works.webp' },
+  { id:'titan-dynamics', nome:'Titan Dynamics', achievementId:'underdog', liveryImg:'assets/team-liveries/titan-dynamics.webp' },
+  { id:'valkyrie-gp', nome:'Valkyrie GP', achievementId:'sul-podio', liveryImg:'assets/team-liveries/valkyrie-gp.webp' },
+  { id:'aurora-works', nome:'Aurora Works', achievementId:'domatore-del-caos', liveryImg:'assets/team-liveries/aurora-works.webp' },
+  { id:'pegasus-racing', nome:'Pegasus Racing', achievementId:'la-grande-rimonta', liveryImg:'assets/team-liveries/pegasus-racing.webp' },
+  { id:'dragon-gp', nome:'Dragon GP', achievementId:'ripartenza-perfetta', liveryImg:'assets/team-liveries/dragon-gp.webp' },
+  { id:'nova-performance', nome:'Nova Performance', achievementId:'leggenda-al-volante', liveryImg:'assets/team-liveries/nova-performance.webp' },
+  { id:'apex-dynamics', nome:'Apex Dynamics', achievementId:'collezionista-assoluto', liveryImg:'assets/team-liveries/apex-dynamics.webp' },
+  { id:'orion-motorsport', nome:'Orion Motorsport', achievementId:'senza-rete-di-sicurezza', liveryImg:'assets/team-liveries/orion-motorsport.webp' },
   { id:'fulmine', nome:'Fulmine', achievementId:'il-mito-assoluto', draw:(ctx,W,H)=>{
     ctx.beginPath();
     ctx.moveTo(W*0.62,0); ctx.lineTo(W*0.42,H*0.45); ctx.lineTo(W*0.55,H*0.45); ctx.lineTo(W*0.35,H);
@@ -4304,11 +4249,14 @@ function isLiveryPatternUnlocked(id){ return liveryData.unlockedPatternIds.inclu
 // operazioni su canvas minuscoli (139x43), costano nulla, non serve pre-generarle tutte all'avvio.
 const __liveryCanvasCache = {}; // key: `${patternId}:${band}:${color}` -> dataURL
 function getPatternedChassisSrc(band, patternId, color){
+  const pattern = findLiveryPattern(patternId);
+  if(!pattern) return carLayerSrc(band,'chassis');
+  // V0.9.7.9.8: le livree vere (fornite come immagini complete) sostituiscono il telaio di netto,
+  // niente piu' colorazione via canvas — sono gia' pronte, restituite subito, senza salto visivo.
+  if(pattern.liveryImg) return pattern.liveryImg;
   const col = color || liveryData.selectedColor || '#FFFFFF';
   const key = patternId+':'+band+':'+col;
   if(__liveryCanvasCache[key]) return __liveryCanvasCache[key];
-  const pattern = findLiveryPattern(patternId);
-  if(!pattern) return carLayerSrc(band,'chassis');
   // V0.9.7.8.11: con percorsi file (non piu' data-URI) il caricamento dell'immagine e' VERAMENTE
   // asincrono — non possiamo piu' contare su naturalWidth gia' pronto in sincrono. Ritorniamo subito
   // il telaio semplice (nessun salto visivo grave, e' solo per un istante) e disegniamo il pattern
@@ -4389,7 +4337,9 @@ function carVisualHTML(pilot, comp, carNumber, previewPatternId, previewColor){
   // (non ancora salvati), altrimenti il pattern gia' applicato in modo permanente da liveryData.
   const activePatternId = previewPatternId!==undefined ? previewPatternId : liveryData.selectedPatternId;
   const activeColor = previewColor!==undefined ? previewColor : liveryData.selectedColor;
+  const activePattern = activePatternId ? findLiveryPattern(activePatternId) : null;
   const chassisSrc = activePatternId ? getPatternedChassisSrc(chassisBand, activePatternId, activeColor) : carLayerSrc(chassisBand,'chassis');
+  const hideNumber = !!(activePattern && activePattern.liveryImg); // V0.9.7.9.8: la livrea copre anche il numero
 
   return `
   <div class="car-canvas">
@@ -4397,10 +4347,10 @@ function carVisualHTML(pilot, comp, carNumber, previewPatternId, previewColor){
     <img class="car-layer" src="${carLayerSrc(aeroBand,'aero')}" alt="">
     <img class="car-layer" src="${carLayerSrc(tiresBand,'tires')}" alt="">
     <img class="car-layer" src="${helmetSrc}" alt="">
-    <div class="car-number-wrap">
+    ${hideNumber ? '' : `<div class="car-number-wrap">
       <div class="car-number-plate"></div>
       <div class="car-number-digits">${digitsHTML}</div>
-    </div>
+    </div>`}
   </div>`;
 }
 
