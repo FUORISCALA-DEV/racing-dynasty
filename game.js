@@ -69,6 +69,13 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    dc_done_start: 'Inizia la Stagione →',
+    dh_years_old: 'anni', dh_tier_label: 'Serie', dh_tier_kart: 'Kart', dh_tier_minore: 'Minore', dh_tier_elite: 'Elite',
+    dh_prestige: 'Prestigio', dh_pos_standings: 'Pos. Classifica', dh_quit: 'Esci dalla Carriera Pilota',
+    dh_quit_confirm: 'Vuoi davvero uscire? La stagione in corso andrà persa (il salvataggio automatico arriva al punto 4).',
+    dse_title: 'Stagione conclusa', dse_subtitle: 'Verifica punto 3 completata — il punto 4 (prestigio/età/contratti) gestirà questo momento per davvero.',
+    dse_final_pos: (p)=>`Posizione finale in campionato: P${p}`, dse_points: (n)=>`Punti totali: ${n}`,
+    dse_footer: 'Schermata temporanea — non ancora salva prestigio/età reali.',
     back_to_mode_select: '← Torna al Bivio', museum_shared_tag: 'condiviso tra le modalità',
     mode_select_title: 'Che tipo di carriera vuoi?', mode_select_subtitle: 'Due modalità completamente separate — puoi avere entrambe in corso allo stesso tempo.',
     mode_select_team: 'Carriera Scuderia', mode_select_team_desc: 'Gestisci una scuderia intera: piloti, componenti, budget. La modalità classica.', mode_select_team_hint: 'Tocca per scegliere — Carriera Scuderia',
@@ -242,6 +249,13 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    dc_done_start: 'Start the Season →',
+    dh_years_old: 'years old', dh_tier_label: 'Series', dh_tier_kart: 'Kart', dh_tier_minore: 'Minor', dh_tier_elite: 'Elite',
+    dh_prestige: 'Prestige', dh_pos_standings: 'Standings Pos.', dh_quit: 'Quit Driver Career',
+    dh_quit_confirm: "Do you really want to quit? The current season will be lost (autosave arrives at step 4).",
+    dse_title: 'Season over', dse_subtitle: 'Step 3 verification complete — step 4 (prestige/age/contracts) will handle this moment for real.',
+    dse_final_pos: (p)=>`Final championship position: P${p}`, dse_points: (n)=>`Total points: ${n}`,
+    dse_footer: 'Temporary screen — does not yet save real prestige/age.',
     back_to_mode_select: '← Back to Selection', museum_shared_tag: 'shared across modes',
     mode_select_title: 'What kind of career do you want?', mode_select_subtitle: 'Two completely separate modes — you can have both in progress at the same time.',
     mode_select_team: 'Team Career', mode_select_team_desc: 'Manage an entire team: drivers, components, budget. The classic mode.', mode_select_team_hint: 'Tap to choose — Team Career',
@@ -409,6 +423,13 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    dc_done_start: 'Empezar la Temporada →',
+    dh_years_old: 'años', dh_tier_label: 'Serie', dh_tier_kart: 'Kart', dh_tier_minore: 'Menor', dh_tier_elite: 'Élite',
+    dh_prestige: 'Prestigio', dh_pos_standings: 'Pos. Clasificación', dh_quit: 'Salir de Carrera de Piloto',
+    dh_quit_confirm: '¿Seguro que quieres salir? La temporada en curso se perderá (el autoguardado llega en el paso 4).',
+    dse_title: 'Temporada terminada', dse_subtitle: 'Verificación del paso 3 completa — el paso 4 (prestigio/edad/contratos) gestionará este momento de verdad.',
+    dse_final_pos: (p)=>`Posición final en el campeonato: P${p}`, dse_points: (n)=>`Puntos totales: ${n}`,
+    dse_footer: 'Pantalla temporal — todavía no guarda prestigio/edad reales.',
     back_to_mode_select: '← Volver a la Selección', museum_shared_tag: 'compartido entre modos',
     mode_select_title: '¿Qué tipo de carrera quieres?', mode_select_subtitle: 'Dos modos completamente separados — puedes tener ambos en curso al mismo tiempo.',
     mode_select_team: 'Carrera de Escudería', mode_select_team_desc: 'Gestiona una escudería entera: pilotos, componentes, presupuesto. El modo clásico.', mode_select_team_hint: 'Toca para elegir — Carrera de Escudería',
@@ -1622,6 +1643,170 @@ function initTeamPrestige(){
 // di una nuova Carriera Pilota.
 function initDriverCareerWorld(){
   return { tiers: computeDriverCareerTiers(), prestige: initTeamPrestige() };
+}
+
+// ============================================================
+// V0.9.7.9.5 — CARRIERA PILOTA (punto 3/8): Hub + stagione giocabile
+// Riusa quasi verbatim il motore di simulazione di Carriera Scuderia (simulateFullRace,
+// renderPregara, renderRaceLiveInit, renderRaceResult) costruendo un oggetto 'state' compatibile
+// — stessa forma (team/grid/aiTeams/calendar/driverStandings), dati diversi. Le due modalita'
+// restano completamente separate nei salvataggi, ma condividono lo stesso motore di gara a runtime.
+const DRIVER_CAREER_TIER_DRAWS = { kart:1, minore:2, elite:4 };
+
+// Assegna il giocatore a UNA scuderia scelta a caso nella Serie indicata, genera il compagno di
+// scuderia e i 5 componenti condivisi, scalati per forza in base al livello (stesso meccanismo
+// "pesca N, scegli il migliore" gia' usato per le scuderie IA di Carriera Scuderia).
+function assignDriverCareerTeam(tierName, usedIds){
+  const teamIds = Object.keys(driverCareerState.world.tiers).filter(id=> driverCareerState.world.tiers[id]===tierName);
+  const teamId = teamIds[Math.floor(rnd()*teamIds.length)];
+  const teamData = DATA.scuderie.find(s=>s.id===teamId);
+  const n = DRIVER_CAREER_TIER_DRAWS[tierName] || 2;
+
+  const teammate = pickBestOfNDistinct(DATA.piloti.filter(p=>p.rating<100), n, usedIds);
+  usedIds.add(teammate.id);
+
+  const components = {
+    motore: pickBestOfNDistinct(DATA.motori.filter(x=>x.rating<100), n, usedIds),
+    telaio: pickBestOfNDistinct(DATA.telai.filter(x=>x.rating<100), n, usedIds),
+    aero: pickBestOfNDistinct(DATA.aero.filter(x=>x.rating<100), n, usedIds),
+    gomme: pickBestOfNDistinct(DATA.gomme.filter(x=>x.rating<100), n, usedIds),
+    stratega: pickBestOfNDistinct(DATA.strategi.filter(x=>x.rating<100), n, usedIds),
+  };
+  return { teamId, teamData, teammate, components };
+}
+
+// Griglia di 20 slot: le 10 scuderie della Serie del giocatore, 2 piloti ciascuna — stessa forma
+// dati di state.grid in Carriera Scuderia (buildAIGrid), ma scoped alla Serie invece che a un
+// campione casuale di 9 scuderie su 30.
+function buildDriverCareerGrid(tierName, playerAssignment, usedIds){
+  const teamIds = Object.keys(driverCareerState.world.tiers).filter(id=> driverCareerState.world.tiers[id]===tierName);
+  const n = DRIVER_CAREER_TIER_DRAWS[tierName] || 2;
+  const aiTeams = teamIds.filter(id=>id!==playerAssignment.teamId).map(id=>{
+    const teamData = DATA.scuderie.find(s=>s.id===id);
+    const d1 = pickBestOfNDistinct(DATA.piloti.filter(p=>p.rating<100), n, usedIds); usedIds.add(d1.id);
+    const d2 = pickBestOfNDistinct(DATA.piloti.filter(p=>p.rating<100), n, usedIds); usedIds.add(d2.id);
+    const components = {
+      motore: pickBestOfNDistinct(DATA.motori.filter(x=>x.rating<100), n, usedIds),
+      telaio: pickBestOfNDistinct(DATA.telai.filter(x=>x.rating<100), n, usedIds),
+      aero: pickBestOfNDistinct(DATA.aero.filter(x=>x.rating<100), n, usedIds),
+      gomme: pickBestOfNDistinct(DATA.gomme.filter(x=>x.rating<100), n, usedIds),
+      stratega: pickBestOfNDistinct(DATA.strategi.filter(x=>x.rating<100), n, usedIds),
+    };
+    const t = { ...teamData, id, drivers:[d1,d2], components, tier: tierName };
+    applyAITeamSynergyBonuses(t);
+    return t;
+  });
+
+  const grid = [];
+  let carNum = 1;
+  grid.push({ slotKey:'PLAYER-1', teamId:'PLAYER', teamName:playerAssignment.teamData.nome, isPlayerTeam:true, role:'pilotMain', carNumber:carNum++ });
+  grid.push({ slotKey:'PLAYER-2', teamId:'PLAYER', teamName:playerAssignment.teamData.nome, isPlayerTeam:true, role:'pilotSecond', carNumber:carNum++ });
+  aiTeams.forEach(t=>{
+    grid.push({ slotKey:t.id+'-1', teamId:t.id, teamName:t.nome, isPlayerTeam:false, role:0, carNumber:carNum++ });
+    grid.push({ slotKey:t.id+'-2', teamId:t.id, teamName:t.nome, isPlayerTeam:false, role:1, carNumber:carNum++ });
+  });
+  return { grid, aiTeams };
+}
+
+// Costruisce lo state compatibile con Carriera Scuderia per una stagione di Carriera Pilota.
+// Stagione fissa a 10 gare (formato Veloce) — piu' semplice per iniziare, si puo' rivedere.
+const DRIVER_CAREER_SEASON_LENGTH = 10;
+function startDriverCareerSeason(){
+  const usedIds = new Set();
+  const tierName = driverCareerState.currentTier || 'kart';
+  const playerAssignment = assignDriverCareerTeam(tierName, usedIds);
+  const { grid, aiTeams } = buildDriverCareerGrid(tierName, playerAssignment, usedIds);
+
+  const shuffledCircuits = DATA.circuiti.slice().sort(()=>rnd()-0.5).slice(0,DRIVER_CAREER_SEASON_LENGTH)
+    .map(c=> ({ ...c, giri: computeRaceLaps(c) }));
+
+  driverCareerState.currentTeamId = playerAssignment.teamId;
+
+  state = {
+    phase: 'driver-hub',
+    isDriverCareer: true, // V0.9.7.9.5: distingue questo state da una normale Carriera Scuderia
+    difficulty: 'medio', // usato solo per DIFFICULTY_LABEL nella topbar, non incide sui rerolls (qui non ce ne sono)
+    seasonLength: DRIVER_CAREER_SEASON_LENGTH,
+    raceIndex: 0,
+    calendar: shuffledCircuits,
+    aiTeams,
+    team: {
+      pilotMain: driverCareerState.driver, pilotSecond: playerAssignment.teammate,
+      motore: playerAssignment.components.motore, telaio: playerAssignment.components.telaio,
+      aero: playerAssignment.components.aero, gomme: playerAssignment.components.gomme, stratega: playerAssignment.components.stratega,
+      customName: playerAssignment.teamData.nome, nation: playerAssignment.teamData.paese,
+    },
+    grid,
+    driverStandings: {}, exCounter: 0, constructorStandings: {},
+    resultsByRace: [], log: [], lastRaceResult: null,
+    rivals: [], rivalHistory: [], pendingRivalNotice: null, recentlyDroppedRivals: [], rivalCooldownUntilRace: 0,
+    seasonTrophiesWon: [], lastTrophyUnlock: null, trophyUnlockDismissed: true,
+    playerRaceWinsCount: 0, everFinishedOffPodium: false, everLostLeadInFinalPhase: false, goatMalusTriggeredThisSeason: false,
+    everLedDriverStandingsP1: false, playerInvestedLastRace: false,
+    sponsor: null, sponsorOffers: null, pendingPostSponsorPhase: null,
+    budget: 0, pendingPitlane: null, pendingQualifying: null,
+  };
+  grid.forEach(slot=>{ state.driverStandings[slot.slotKey] = { points:0, wins:0, podiums:0, dnfs:0 }; });
+  [...aiTeams.map(t=>t.id), 'PLAYER'].forEach(id=>{ state.constructorStandings[id] = { points:0 }; });
+
+  render();
+}
+
+// V0.9.7.9.5: schermata di verifica fine stagione — prova che la stagione intera e' giocabile
+// dall'inizio alla fine. Il vero punto 4 (prestigio/eta'/contratti/promozioni) non e' ancora fatto.
+function renderDriverSeasonEndPlaceholder(){
+  const d = driverCareerState.driver;
+  const arr = Object.values(state.driverStandings).slice().sort((a,b)=>b.points-a.points);
+  const myPos = arr.indexOf(state.driverStandings['PLAYER-1']) + 1;
+  app.innerHTML = `
+  <div class="hero" style="padding:26px 20px 20px;">
+    <div class="hero-inner">
+      <h1 class="hdr" style="font-size:26px;">${t('dse_title')}</h1>
+      <div class="tagline">${t('dse_subtitle')}</div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><h3 class="hdr">${flag(d.naz)} ${d.nome}</h3></div>
+    <div class="tag-line">${t('dse_final_pos', myPos)}</div>
+    <div class="tag-line">${t('dse_points', state.driverStandings['PLAYER-1'].points)}</div>
+  </div>
+  <div class="footer-note">${t('dse_footer')}</div>
+  <div class="btnrow"><button class="ghost" data-action="go-to-mode-select">${t('back_to_mode_select')}</button></div>
+  `;
+  bindActions();
+}
+
+// V0.9.7.9.5: schermata Hub della Carriera Pilota — mostra pilota, scuderia attuale, prossima gara.
+function renderDriverHub(){
+  const d = driverCareerState.driver;
+  const myTeam = state.team;
+  const circuit = state.calendar[state.raceIndex];
+  const tierKey = { kart:'dh_tier_kart', minore:'dh_tier_minore', elite:'dh_tier_elite' }[driverCareerState.currentTier] || 'dh_tier_kart';
+  app.innerHTML = `
+  <div class="topbar">
+    <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_driver')} — ${GAME_VERSION}</small></div>
+  </div>
+  <div class="panel">
+    <div class="eyebrow">${flag(d.naz)} ${d.nome} · ${d.eta} ${t('dh_years_old')}</div>
+    <h2 class="hdr" style="font-size:22px;">${myTeam.customName}</h2>
+    <div class="dim" style="font-size:12px;margin-top:6px;">${d.arch} · ${mentaLabel(d.sinergia)} · ${d.rating} RATING · ${t('dh_tier_label')}: ${t(tierKey)}</div>
+  </div>
+  <div class="hub-quick-stats">
+    <div class="hub-quick-stat"><div class="hub-quick-val">${d.prestigio||0}</div><div class="hub-quick-label">${t('dh_prestige')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val">P${(function(){ const arr=Object.values(state.driverStandings).slice().sort((a,b)=>b.points-a.points); const i=arr.indexOf(state.driverStandings['PLAYER-1']); return i>=0?i+1:'-'; })()}</div><div class="hub-quick-label">${t('dh_pos_standings')}</div></div>
+    <div class="hub-quick-stat"><div class="hub-quick-val">${state.raceIndex+1}/${state.calendar.length}</div><div class="hub-quick-label">${t('hud_race')}</div></div>
+  </div>
+  <div class="circuit-banner">
+    <div>
+      <div class="eyebrow">${t('hub_next_gp')}</div>
+      <h2 class="hdr" style="font-size:24px;">${flag(circuit.paese)} ${circuit.nome}</h2>
+      <div class="dim" style="font-size:13px;margin-top:4px;">${nationLabel(circuit.paese)} · ${circuit.tipo} · ${t('hub_weather')} ${circuit.clima}</div>
+    </div>
+  </div>
+  <div class="btnrow"><button class="primary" data-action="run-race">${t('hub_go_to_gp')}</button></div>
+  <div class="btnrow"><button class="ghost" data-action="quit-driver-career">${t('dh_quit')}</button></div>
+  `;
+  bindActions();
 }
 
 function startDraftTurn(){
@@ -3728,6 +3913,20 @@ function advanceAfterPitlane(){
   render();
 }
 
+// V0.9.7.9.5: dopo una gara di Carriera Pilota si torna all'Hub, non al Pit Lane (il giocatore
+// non gestisce componenti). Fine stagione (punto 4: prestigio/invecchiamento/contratti/promozioni)
+// non ancora costruita — per ora solo un messaggio di verifica.
+function goToDriverHubOrSeasonEnd(){
+  if(state.raceIndex+1 >= state.calendar.length){
+    state.phase = 'driver-season-end-placeholder';
+    render();
+  } else {
+    state.raceIndex++;
+    state.phase = 'driver-hub';
+    render();
+  }
+}
+
 function goToPitlaneOrEnd(){
   if(state.raceIndex+1 >= state.calendar.length){
     advanceAfterPitlane();
@@ -4293,6 +4492,8 @@ function renderInner(){
   if(state.phase==='mode-select') return renderModeSelect();
   if(state.phase==='driver-creation') return renderDriverCreation();
   if(state.phase==='driver-creation-done') return renderDriverCreationDone();
+  if(state.phase==='driver-hub') return renderDriverHub();
+  if(state.phase==='driver-season-end-placeholder') return renderDriverSeasonEndPlaceholder();
   if(state.phase==='draft') return renderDraft();
   if(state.phase==='hub') return renderHub();
   if(state.phase==='pregara') return renderPregara();
@@ -4603,6 +4804,7 @@ function renderDriverCreationDone(){
     <div class="tag-line dim" style="margin-top:6px;">${d.arch} · ${mentaLabel(d.sinergia)}</div>
     <div class="dim" style="font-size:12px;margin-top:10px;">${t('dc_done_world_info', teamsInKart)}</div>
   </div>
+  <div class="btnrow"><button class="primary" data-action="start-driver-career-season">${t('dc_done_start')}</button></div>
   <div class="footer-note">${t('dc_done_footer')}</div>
   `;
   bindActions();
@@ -5048,10 +5250,11 @@ function checkSeasonEndAchievements(){
 
 
 const SAVE_KEY = 'racingDynastySaveV09';
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end-placeholder']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
+    if(state.isDriverCareer) return; // V0.9.7.9.5: mai sovrascrivere il salvataggio Carriera Scuderia — salvataggio dedicato non ancora costruito (punto 4+)
     if(state.phase==='season_end'){ deleteSave(); return; }
     const snapshot = { ...state, live: null, usedIds: Array.from(state.usedIds||[]) };
     localStorage.setItem(SAVE_KEY, JSON.stringify({ saveVersion:'0.9', savedAt: Date.now(), state: snapshot }));
@@ -7145,6 +7348,16 @@ function onAction(e){
   if(!NO_GENERIC_SFX_ACTIONS.has(action)) playSfx(CONFIRM_SFX_ACTIONS.has(action) ? 'ui_confirm' : 'ui_click');
   triggerHaptic();
   if(action==='go-to-season-length'){ state.phase='season-length'; render(); }
+  else if(action==='start-driver-career-season'){
+    startDriverCareerSeason();
+  }
+  else if(action==='quit-driver-career'){
+    gameConfirm(t('dh_quit_confirm'), ()=>{
+      driverCareerState = null;
+      state = { phase:'title' };
+      render();
+    }, t('dh_quit'));
+  }
   else if(action==='go-to-mode-select'){ state.phase='mode-select'; render(); }
   else if(action==='go-to-driver-creation'){
     window.__driverProfiles = rollDriverStarterProfiles();
@@ -7177,7 +7390,8 @@ function onAction(e){
     driverCareerState = {
       driver: newDriver,
       world: initDriverCareerWorld(),
-      currentTeamId: null, // assegnato al punto 3 (Hub + prima stagione)
+      currentTeamId: null,
+      currentTier: 'kart', // V0.9.7.9.3: si debutta sempre in Kart
     };
     // punto 2 termina qui: schermata di conferma minimale, l'Hub vero e proprio e' il punto 3
     state.phase = 'driver-creation-done';
@@ -7248,7 +7462,10 @@ function onAction(e){
   else if(action==='speed-live'){ toggleSpeedLive(); }
   else if(action==='skip-live'){ skipLiveRace(); }
   else if(action==='resolve-live-decision'){ resolveLiveDecision(el.dataset.choice); }
-  else if(action==='continue-to-pitlane'){ goToPitlaneOrEnd(); }
+  else if(action==='continue-to-pitlane'){
+    if(state.isDriverCareer) goToDriverHubOrSeasonEnd();
+    else goToPitlaneOrEnd();
+  }
   else if(action==='dismiss-trophy-unlock'){ state.trophyUnlockDismissed = true; render(); }
   else if(action==='confirm-upgrade-invest'){
     const idx = el.dataset.idx;
