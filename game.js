@@ -4960,19 +4960,21 @@ const TEAM_INSPIRATION = [
 function renderModeSelect(){
   app.innerHTML = `
   <div class="panel">
-    <div class="eyebrow">${t('diff_new_career')}</div>
-    <h2 class="hdr" style="font-size:26px;">${t('mode_select_title')}</h2>
+    <div class="eyebrow" style="font-size:14px;">${t('diff_new_career')}</div>
+    <h2 class="hdr" style="font-size:27px;">${t('mode_select_title')}</h2>
   </div>
   <div class="grid grid-2 mode-select-grid">
-    <div class="card pickable" data-rarity="Rare" data-action="go-to-season-length">
-      <span class="rarity-tag" data-rarity="Rare">🏎️ ${t('mode_select_team')}</span>
-      <div class="ability" style="font-size:13px;margin-top:8px;">${t('mode_select_team_desc')}</div>
-      <div class="card-tap-hint" style="font-size:11px;">${t('mode_select_team_hint')}</div>
+    <div class="card pickable mode-select-card" data-rarity="Rare" data-action="go-to-season-length">
+      <img class="mode-select-img" src="assets/mode-select/team-season.webp" alt="">
+      <span class="rarity-tag" data-rarity="Rare" style="font-size:11.5px;">🏎️ ${t('mode_select_team')}</span>
+      <div class="ability" style="font-size:14px;margin-top:8px;">${t('mode_select_team_desc')}</div>
+      <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_team_hint')}</div>
     </div>
-    <div class="card pickable garage-coming-soon" data-rarity="Legendary" data-action="request-password-gate" data-gate-for="driver-creation">
-      <span class="rarity-tag" data-rarity="Legendary">🏁 ${t('mode_select_driver')}</span>
-      <div class="ability" style="font-size:13px;margin-top:8px;">${t('mode_select_driver_desc')}</div>
-      <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;font-size:11px;">${t('sl_garage_soon')}</div>
+    <div class="card pickable garage-coming-soon mode-select-card" data-rarity="Legendary" data-action="request-password-gate" data-gate-for="driver-creation">
+      <img class="mode-select-img" src="assets/mode-select/driver-career.webp" alt="">
+      <span class="rarity-tag" data-rarity="Legendary" style="font-size:11.5px;">🏁 ${t('mode_select_driver')}</span>
+      <div class="ability" style="font-size:14px;margin-top:8px;">${t('mode_select_driver_desc')}</div>
+      <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;font-size:12px;">${t('sl_garage_soon')}</div>
     </div>
   </div>
   `;
