@@ -1670,6 +1670,26 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
   </div>
 </div>
 
+<!-- V0.9.7.9.6: blocco password per contenuti non ancora pronti al pubblico (Carriera Pilota, Garage) -->
+<div id="passwordGatePanel" class="sidebar-settings-overlay" style="display:none;">
+  <div class="sidebar-settings-window">
+    <div class="sidebar-settings-title">
+      <span id="passwordGateTitle">🔒 Area riservata</span>
+    </div>
+    <div class="sidebar-settings-body" style="padding:16px;">
+      <div id="passwordGateMessage" class="dim" style="font-size:14px;line-height:1.5;margin-bottom:14px;"></div>
+      <input type="password" id="passwordGateInput" inputmode="numeric" maxlength="12"
+        style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:16px;background:var(--panel2);
+        border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);letter-spacing:0.1em;text-align:center;">
+      <div id="passwordGateError" class="dim" style="font-size:12px;color:var(--danger);margin-top:8px;height:16px;"></div>
+      <div class="btnrow" style="margin-top:10px;">
+        <button type="button" class="primary" id="passwordGateSubmitBtn">Sblocca</button>
+        <button type="button" class="ghost" id="passwordGateCancelBtn">Annulla</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="game.js"></script>
 <script>
 if("serviceWorker" in navigator){

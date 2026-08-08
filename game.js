@@ -69,6 +69,8 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    gate_message: 'Contenuto ancora in lavorazione, non visibile al pubblico. Inserisci il codice per continuare.',
+    gate_wrong_password: 'Codice errato.',
     dc_done_start: 'Inizia la Stagione →',
     dh_years_old: 'anni', dh_tier_label: 'Serie', dh_tier_kart: 'Kart', dh_tier_minore: 'Minore', dh_tier_elite: 'Elite',
     dh_prestige: 'Prestigio', dh_pos_standings: 'Pos. Classifica', dh_quit: 'Esci dalla Carriera Pilota',
@@ -78,7 +80,7 @@ const I18N = {
     dse_footer: 'Schermata temporanea — non ancora salva prestigio/età reali.',
     back_to_mode_select: '← Torna al Bivio', museum_shared_tag: 'condiviso tra le modalità',
     mode_select_title: 'Che tipo di carriera vuoi?', mode_select_subtitle: 'Due modalità completamente separate — puoi avere entrambe in corso allo stesso tempo.',
-    mode_select_team: 'Carriera Scuderia', mode_select_team_desc: 'Gestisci una scuderia intera: piloti, componenti, budget. La modalità classica.', mode_select_team_hint: 'Tocca per scegliere — Carriera Scuderia',
+    mode_select_team: 'Stagione Scuderia', mode_select_team_desc: 'Gestisci una scuderia intera: piloti, componenti, budget. La modalità classica.', mode_select_team_hint: 'Tocca per scegliere — Stagione Scuderia',
     mode_select_driver: 'Carriera Pilota', mode_select_driver_desc: 'Sei un pilota solo, dal debutto in Kart al ritiro. Cresci, firmi contratti, costruisci un palmarès.', mode_select_driver_hint: 'Tocca per scegliere — Carriera Pilota',
     dc_pick_profile: 'Tocca per scegliere', dc_title: 'Crea il tuo pilota', dc_subtitle: 'Parti dal Kart, a 18 anni, con tutto ancora da dimostrare.',
     dc_name_placeholder: 'Es. Nome Cognome', dc_profile_eyebrow: 'Scegli il tuo profilo di partenza',
@@ -249,6 +251,8 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    gate_message: 'Content still in development, not public yet. Enter the code to continue.',
+    gate_wrong_password: 'Wrong code.',
     dc_done_start: 'Start the Season →',
     dh_years_old: 'years old', dh_tier_label: 'Series', dh_tier_kart: 'Kart', dh_tier_minore: 'Minor', dh_tier_elite: 'Elite',
     dh_prestige: 'Prestige', dh_pos_standings: 'Standings Pos.', dh_quit: 'Quit Driver Career',
@@ -423,6 +427,8 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    gate_message: 'Contenido todavía en desarrollo, no visible al público. Introduce el código para continuar.',
+    gate_wrong_password: 'Código incorrecto.',
     dc_done_start: 'Empezar la Temporada →',
     dh_years_old: 'años', dh_tier_label: 'Serie', dh_tier_kart: 'Kart', dh_tier_minore: 'Menor', dh_tier_elite: 'Élite',
     dh_prestige: 'Prestigio', dh_pos_standings: 'Pos. Clasificación', dh_quit: 'Salir de Carrera de Piloto',
@@ -4671,10 +4677,10 @@ function renderModeSelect(){
       <div class="ability" style="font-size:14px;margin-top:8px;">${t('mode_select_team_desc')}</div>
       <div class="card-tap-hint">${t('mode_select_team_hint')}</div>
     </div>
-    <div class="card pickable" data-rarity="Legendary" data-action="go-to-driver-creation">
+    <div class="card pickable" data-rarity="Legendary" data-action="request-password-gate" data-gate-for="driver-creation">
       <span class="rarity-tag" data-rarity="Legendary">🏁 ${t('mode_select_driver')}</span>
       <div class="ability" style="font-size:14px;margin-top:8px;">${t('mode_select_driver_desc')}</div>
-      <div class="card-tap-hint">${t('mode_select_driver_hint')}</div>
+      <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;">${t('sl_garage_soon')}</div>
     </div>
   </div>
   <div class="card pickable trophy-room-card" data-rarity="Legendary" data-action="open-trophy-room">
@@ -5474,7 +5480,7 @@ function renderSeasonLength(){
       <div class="card-tap-hint">${t('sl_full_hint')}</div>
     </div>
   </div>
-  <div class="card trophy-room-card garage-coming-soon">
+  <div class="card pickable trophy-room-card garage-coming-soon" data-action="request-password-gate" data-gate-for="garage">
     <span class="rarity-tag" data-rarity="Rare">🎨 ${t('sl_garage')}</span>
     <div class="trophy-room-card-body">
       <div class="ability">${t('sl_garage_desc')}</div>
@@ -7359,11 +7365,8 @@ function onAction(e){
     }, t('dh_quit'));
   }
   else if(action==='go-to-mode-select'){ state.phase='mode-select'; render(); }
-  else if(action==='go-to-driver-creation'){
-    window.__driverProfiles = rollDriverStarterProfiles();
-    window.__driverProfileChoice = undefined;
-    state.phase = 'driver-creation';
-    render();
+  else if(action==='request-password-gate'){
+    openPasswordGate(el.dataset.gateFor);
   }
   else if(action==='pick-driver-profile'){
     window.__driverProfileChoice = Number(el.dataset.idx);
@@ -7659,6 +7662,69 @@ function closeMenuPanel(){
 
 // V0.9.4.4: sostituisce window.confirm() — su mobile il dialogo nativo del browser
 // faceva uscire dalla modalita' schermo intero. Questa resta interna al gioco.
+// V0.9.7.9.6: blocco password per contenuti non ancora pronti al pubblico (Carriera Pilota, Garage).
+// Una volta sbloccato su un dispositivo resta sbloccato li' (localStorage) — non richiede la
+// password ad ogni visita, serve solo a bloccare chi non e' del team la prima volta.
+const DEV_UNLOCK_KEY = 'racingDynastyDevUnlockV1';
+const DEV_UNLOCK_PASSWORD = '5813';
+function isDevContentUnlocked(){
+  try{ return localStorage.getItem(DEV_UNLOCK_KEY)==='1'; }catch(e){ return false; }
+}
+function markDevContentUnlocked(){
+  try{ localStorage.setItem(DEV_UNLOCK_KEY,'1'); }catch(e){}
+}
+function proceedToGatedContent(target){
+  if(target==='driver-creation'){
+    window.__driverProfiles = rollDriverStarterProfiles();
+    window.__driverProfileChoice = undefined;
+    state.phase = 'driver-creation';
+    render();
+  } else if(target==='garage'){
+    museumPreviousPhase = state.phase;
+    garageSandbox = { motoreBand:'ottimo', telaioBand:'ottimo', aeroBand:'ottimo', gommeBand:'ottimo', helmetBand:'ottimo' };
+    garagePreviewPatternId = undefined;
+    state.phase = 'garage';
+    pushBackGuard();
+    render();
+  }
+}
+function openPasswordGate(target){
+  if(isDevContentUnlocked()){ proceedToGatedContent(target); return; }
+  const panel = document.getElementById('passwordGatePanel');
+  const input = document.getElementById('passwordGateInput');
+  const errorEl = document.getElementById('passwordGateError');
+  const submitBtn = document.getElementById('passwordGateSubmitBtn');
+  const cancelBtn = document.getElementById('passwordGateCancelBtn');
+  document.getElementById('passwordGateMessage').textContent = t('gate_message');
+  input.value = '';
+  errorEl.textContent = '';
+  function cleanup(){
+    panel.style.display = 'none';
+    submitBtn.removeEventListener('click', onSubmit);
+    cancelBtn.removeEventListener('click', onCancel);
+    input.removeEventListener('keydown', onKeydown);
+  }
+  function onSubmit(){
+    if(input.value===DEV_UNLOCK_PASSWORD){
+      markDevContentUnlocked();
+      cleanup();
+      proceedToGatedContent(target);
+    } else {
+      errorEl.textContent = t('gate_wrong_password');
+      input.value = '';
+      input.focus();
+    }
+  }
+  function onCancel(){ cleanup(); }
+  function onKeydown(e){ if(e.key==='Enter') onSubmit(); }
+  submitBtn.addEventListener('click', onSubmit);
+  cancelBtn.addEventListener('click', onCancel);
+  input.addEventListener('keydown', onKeydown);
+  panel.style.display = 'flex';
+  pushBackGuard();
+  setTimeout(()=> input.focus(), 50);
+}
+
 function gameConfirm(message, onConfirm, title){
   document.getElementById('gameConfirmTitle').textContent = title || 'Conferma';
   document.getElementById('gameConfirmMessage').textContent = message;
