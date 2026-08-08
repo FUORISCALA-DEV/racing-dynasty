@@ -550,6 +550,7 @@ tr.former td:first-child{border-left-color:var(--dim);}
 }
 .car-layer{
   position:absolute; top:0; left:0; width:100%; height:100%;
+  object-fit:contain; /* V0.9.7.9.11 fix: senza questo, un'immagine con proporzioni diverse dal 503:130 atteso viene stirata per riempire il contenitore invece di adattarsi mantenendo le proporzioni vere */
   image-rendering:pixelated; image-rendering:crisp-edges; z-index:1;
 }
 .car-number-wrap{
