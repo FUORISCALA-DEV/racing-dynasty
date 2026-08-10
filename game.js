@@ -3870,6 +3870,18 @@ function resolveLiveDecision(choiceKey){
     if(!state.live || !state.live.pendingReveal) return;
     state.live.pendingReveal.stage = 'settled';
     render();
+    // V0.9.7.9.21: suono di esito proprio nel momento in cui il ballottaggio si ferma sulla
+    // risposta vera — successo se guadagni posizioni, fallimento se ne perdi. Se i due piloti
+    // hanno esiti opposti (capita, tirano indipendenti), suonano entrambi con un piccolo scarto
+    // cosi' si sentono distinti invece di sovrapporsi.
+    const outcomeTypes = Object.values(outcomes).map(o=>{
+      const label = o.buckets[o.bucketIdx].label;
+      return label.startsWith('gain') ? 'gain' : label.startsWith('lose') ? 'lose' : 'hold';
+    });
+    const hasGain = outcomeTypes.includes('gain');
+    const hasLose = outcomeTypes.includes('lose');
+    if(hasGain) playSfx('upgrade_success');
+    if(hasLose) setTimeout(()=> playSfx('upgrade_fail'), hasGain ? 180 : 0);
     setTimeout(()=>{
       if(!state.live) return;
       state.live.pendingReveal = null;
