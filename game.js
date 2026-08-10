@@ -69,6 +69,12 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    dact_devreq: 'Richiedi Sviluppo Mirato', dact_devreq_desc: 'Chiedi alla squadra di sviluppare la vettura intorno alle tue caratteristiche — disponibile solo con abbastanza peso nella scuderia.',
+    dactr_devreq: (stat,n)=>`+${n} ${stat} — la squadra ha sviluppato la vettura intorno a te`,
+    stat_qualifica: 'Qualifica', stat_sorpassi: 'Sorpassi', stat_pioggia: 'Pioggia', stat_costanza: 'Costanza',
+    stat_pressione: 'Sotto Pressione', stat_aggressivita: 'Aggressività', stat_partenza: 'Partenza',
+    stat_ultimigiri: 'Ultimi Giri', stat_gestionegomme: 'Gestione Gomme', stat_affidabilita: 'Affidabilità',
+    dh_status_rookie: 'Rookie della squadra', dh_status_second: 'Seconda guida', dh_status_parity: 'Parità con il compagno', dh_status_leader: 'Prima guida — la squadra costruisce su di te',
     dcon_title: 'Situazione contrattuale', dcon_market_score: (n)=>`Valore di mercato: ${n}`,
     dcon_renew: 'Rinnova', dcon_released: (team)=>`${team} non ti rinnova per la prossima stagione.`,
     dcon_offer: 'Offerta ricevuta', dcon_promotion: 'promozione', dcon_pick: 'Tocca per scegliere',
@@ -279,6 +285,12 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    dact_devreq: 'Request Targeted Development', dact_devreq_desc: "Ask the team to develop the car around your strengths — only available with enough standing in the team.",
+    dactr_devreq: (stat,n)=>`+${n} ${stat} — the team developed the car around you`,
+    stat_qualifica: 'Qualifying', stat_sorpassi: 'Overtaking', stat_pioggia: 'Rain', stat_costanza: 'Consistency',
+    stat_pressione: 'Under Pressure', stat_aggressivita: 'Aggression', stat_partenza: 'Start',
+    stat_ultimigiri: 'Late Race', stat_gestionegomme: 'Tire Management', stat_affidabilita: 'Reliability',
+    dh_status_rookie: 'Team rookie', dh_status_second: 'Second driver', dh_status_parity: 'On par with your teammate', dh_status_leader: "Team leader — the team is building around you",
     dcon_title: 'Contract situation', dcon_market_score: (n)=>`Market value: ${n}`,
     dcon_renew: 'Renew', dcon_released: (team)=>`${team} won't renew you for next season.`,
     dcon_offer: 'Offer received', dcon_promotion: 'promotion', dcon_pick: 'Tap to choose',
@@ -483,6 +495,12 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    dact_devreq: 'Solicitar Desarrollo Dirigido', dact_devreq_desc: 'Pide al equipo que desarrolle el coche en torno a tus puntos fuertes — disponible solo con suficiente peso en el equipo.',
+    dactr_devreq: (stat,n)=>`+${n} ${stat} — el equipo desarrolló el coche en torno a ti`,
+    stat_qualifica: 'Clasificación', stat_sorpassi: 'Adelantamientos', stat_pioggia: 'Lluvia', stat_costanza: 'Constancia',
+    stat_pressione: 'Bajo Presión', stat_aggressivita: 'Agresividad', stat_partenza: 'Salida',
+    stat_ultimigiri: 'Últimas Vueltas', stat_gestionegomme: 'Gestión de Neumáticos', stat_affidabilita: 'Fiabilidad',
+    dh_status_rookie: 'Novato del equipo', dh_status_second: 'Segundo piloto', dh_status_parity: 'A la par con tu compañero', dh_status_leader: 'Piloto líder — el equipo construye en torno a ti',
     dcon_title: 'Situación contractual', dcon_market_score: (n)=>`Valor de mercado: ${n}`,
     dcon_renew: 'Renovar', dcon_released: (team)=>`${team} no te renueva para la próxima temporada.`,
     dcon_offer: 'Oferta recibida', dcon_promotion: 'ascenso', dcon_pick: 'Toca para elegir',
@@ -2071,6 +2089,22 @@ function renderDriverRetirement(){
 }
 
 // V0.9.7.9.5: schermata Hub della Carriera Pilota — mostra pilota, scuderia attuale, prossima gara.
+// V0.9.7.9.14 — CARRIERA PILOTA: status gerarchico nella scuderia (documento design, punto 4).
+// Non e' una barra a se': e' DERIVATO da Rating/risultati/Reputazione rispetto al compagno, come
+// richiesto esplicitamente ("non voglio un'altra barra da grindare"). Ricalcolato ad ogni Hub.
+function computeDriverTeamStatus(){
+  const d = driverCareerState.driver;
+  const myStats = state.driverStandings['PLAYER-1'];
+  const mateStats = state.driverStandings['PLAYER-2'];
+  const ratingDiff = d.rating - (state.team.pilotSecond.rating||d.rating);
+  const pointsDiff = myStats.points - mateStats.points;
+  const score = ratingDiff*1.5 + pointsDiff*0.5 + (d.reputazione-50)*0.3;
+  if(score>=25) return 'leader';
+  if(score>=8) return 'parity';
+  if(score>=-10) return 'second';
+  return 'rookie';
+}
+
 function renderDriverHub(){
   const d = driverCareerState.driver;
   const myTeam = state.team;
@@ -2080,6 +2114,9 @@ function renderDriverHub(){
   const mateStats = state.driverStandings['PLAYER-2'];
   const rivalry = driverCareerState.teammateRivalry || 0;
   const rivalryLabel = rivalry>=70 ? t('dh_rivalry_high') : rivalry>=35 ? t('dh_rivalry_mid') : t('dh_rivalry_low');
+  const teamStatus = computeDriverTeamStatus();
+  const statusKey = { rookie:'dh_status_rookie', second:'dh_status_second', parity:'dh_status_parity', leader:'dh_status_leader' }[teamStatus];
+  const statusColor = { rookie:'var(--dim)', second:'#8FA6C2', parity:'var(--cyan)', leader:'var(--legendary)' }[teamStatus];
   app.innerHTML = `
   <div class="topbar">
     <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_driver')} — ${GAME_VERSION}</small></div>
@@ -2088,6 +2125,7 @@ function renderDriverHub(){
     <div class="eyebrow">${flag(d.naz)} ${d.nome} · ${d.eta} ${t('dh_years_old')}</div>
     <h2 class="hdr" style="font-size:22px;">${myTeam.customName}</h2>
     <div class="dim" style="font-size:14.5px;margin-top:6px;">${d.arch} · ${mentaLabel(d.sinergia)} · ${t('dh_tier_label')}: ${t(tierKey)}</div>
+    <div style="margin-top:8px;font-size:13px;font-weight:800;color:${statusColor};">★ ${t(statusKey)}</div>
   </div>
   <div class="hub-quick-stats">
     <div class="hub-quick-stat"><div class="hub-quick-val" style="color:var(--cyan);">${d.rating}</div><div class="hub-quick-label" style="font-size:11.5px;" style="font-size:11.5px;">${t('dh_rating')}</div></div>
@@ -4361,6 +4399,15 @@ function applyDriverActivity(activityId){
       driverCareerState.teammateRivalry = Math.min(100, (driverCareerState.teammateRivalry||0)+6);
       outcome.reputazioneGain = -4; outcome.rivalryChange = 6;
     }
+  } else if(activityId==='development-request'){
+    // V0.9.7.9.14: voce in capitolo concreta quando lo status e' alto (documento design, punto 5) —
+    // "chiedere che lo sviluppo favorisca certe caratteristiche della vettura". La squadra sviluppa
+    // intorno alle tue preferenze: una statistica a scelta casuale migliora un po'.
+    const statKeys = ['qualifica','sorpassi','pioggia','costanza','pressione','aggressivita','partenza','ultimigiri','gestionegomme','affidabilita'];
+    const key = statKeys[Math.floor(rnd()*statKeys.length)];
+    const gain = 2+Math.round(rnd()*2);
+    d[key] = Math.min(99, d[key]+gain);
+    outcome.devStatKey = key; outcome.devStatGain = gain;
   }
   let ratingUps = 0;
   while(d.ratingProgress >= 100){ d.ratingProgress -= 100; d.rating = Math.min(99, d.rating+1); ratingUps++; }
@@ -4370,6 +4417,13 @@ function applyDriverActivity(activityId){
 
 function renderDriverActivity(){
   const d = driverCareerState.driver;
+  const teamStatus = computeDriverTeamStatus();
+  const hasInfluence = teamStatus==='parity' || teamStatus==='leader';
+  const influenceCard = hasInfluence ? `
+  <div class="card pickable" data-rarity="Legendary" data-action="pick-driver-activity" data-activity="development-request">
+    <span class="rarity-tag" data-rarity="Legendary">🔧 ${t('dact_devreq')}</span>
+    <div class="ability" style="font-size:14px;">${t('dact_devreq_desc')}</div>
+  </div>` : '';
   app.innerHTML = `
   <div class="panel">
     <div class="eyebrow">${t('dact_eyebrow')}</div>
@@ -4398,6 +4452,7 @@ function renderDriverActivity(){
     <span class="rarity-tag" data-rarity="Legendary">🎤 ${t('dact_interview')}</span>
     <div class="ability" style="font-size:14px;">${t('dact_interview_desc')}</div>
   </div>
+  ${influenceCard}
   <div class="dim mono" style="font-size:13px;text-align:center;margin-top:10px;">${t('dact_progress', d.ratingProgress||0)}</div>
   `;
   bindActions();
@@ -4413,6 +4468,7 @@ function renderDriverActivityResult(outcome){
   if(outcome.reputazioneGain<0) lines.push({cls:'malus', text:t('dactr_reputazione_down', -outcome.reputazioneGain)});
   if(outcome.rivalryChange<0) lines.push({cls:'bonus', text:t('dactr_rivalry_down')});
   if(outcome.rivalryChange>0) lines.push({cls:'malus', text:t('dactr_rivalry_up')});
+  if(outcome.devStatKey) lines.push({cls:'bonus', text:t('dactr_devreq', t('stat_'+outcome.devStatKey), outcome.devStatGain)});
   const backfiredNote = outcome.backfired ? `<div class="tag-line malus" style="font-size:14px;" style="margin-top:8px;">${t('dactr_backfired')}</div>` : '';
   app.innerHTML = `
   ${topbarHTML()}
