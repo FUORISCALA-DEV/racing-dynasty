@@ -144,8 +144,11 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .mode-select-card{ padding:0; overflow:hidden; position:relative; min-height:480px; border-top:none; }
 .mode-select-card[data-rarity="Rare"]{ border-top:none; box-shadow:inset 0 0 0 1px var(--common); }
 .mode-select-bg-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 15%; z-index:0; }
-.mode-select-top{ position:relative; z-index:2; padding:12px 12px 0; }
-.mode-select-top .rarity-tag{ background:rgba(10,10,14,0.72); backdrop-filter:blur(2px); }
+.mode-select-top{
+  position:relative; z-index:2; padding:12px 12px 20px;
+  background:linear-gradient(to bottom, rgba(8,8,11,0.85) 0%, rgba(8,8,11,0.55) 55%, transparent 100%);
+}
+.mode-select-top .rarity-tag{ background:rgba(8,8,11,0.9); box-shadow:0 1px 4px rgba(0,0,0,0.4); }
 .mode-select-bottom-scrim{
   position:absolute; left:0; right:0; bottom:0; z-index:2; padding:28px 14px 14px;
   background:linear-gradient(to top, rgba(8,8,11,0.97) 0%, rgba(8,8,11,0.88) 45%, rgba(8,8,11,0.35) 80%, transparent 100%);
