@@ -69,6 +69,14 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    mev_eyebrow: 'Punto stampa', mev_teammate_incident: (mate)=>`I giornalisti ti chiedono se ${mate} abbia superato il limite nel contatto di ieri.`,
+    mev_defend: 'Difendilo pubblicamente', mev_diplomatic: 'Risposta diplomatica, senza sbilanciarti', mev_accuse: 'Dì chiaramente che ha esagerato',
+    mev_title_ambitions: ()=>'Un giornalista ti chiede se punti al titolo quest\'anno.',
+    mev_humble: 'Restiamo con i piedi per terra', mev_confident: 'Sì, puntiamo dritti al titolo', mev_deflect: 'Preferisco parlare di gara in gara',
+    mev_team_orders_question: ()=>'Ti chiedono cosa pensi degli ordini di scuderia in generale.',
+    mev_loyal: 'La squadra viene prima di tutto', mev_competitive: 'In pista si corre, punto', mev_neutral: 'Dipende dalla situazione',
+    mev_rival_team_praise: ()=>'Un giornalista ti chiede un commento sulla scuderia rivale di quest\'anno.',
+    mev_respect: 'Meritano rispetto, sono forti', mev_dismissive: 'Non li temo affatto', mev_focus: 'Penso solo a noi',
     dact_devreq: 'Richiedi Sviluppo Mirato', dact_devreq_desc: 'Chiedi alla squadra di sviluppare la vettura intorno alle tue caratteristiche — disponibile solo con abbastanza peso nella scuderia.',
     dactr_devreq: (stat,n)=>`+${n} ${stat} — la squadra ha sviluppato la vettura intorno a te`,
     stat_qualifica: 'Qualifica', stat_sorpassi: 'Sorpassi', stat_pioggia: 'Pioggia', stat_costanza: 'Costanza',
@@ -285,6 +293,14 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    mev_eyebrow: 'Press conference', mev_teammate_incident: (mate)=>`Reporters ask if ${mate} went over the limit in yesterday's contact.`,
+    mev_defend: 'Defend him publicly', mev_diplomatic: 'Give a diplomatic, neutral answer', mev_accuse: 'Say clearly he overdid it',
+    mev_title_ambitions: ()=>'A reporter asks if you\'re targeting the title this year.',
+    mev_humble: "Let's stay grounded", mev_confident: "Yes, we're going straight for the title", mev_deflect: "I'd rather talk race by race",
+    mev_team_orders_question: ()=>'They ask what you think about team orders in general.',
+    mev_loyal: 'The team comes first', mev_competitive: "We're racers, full stop", mev_neutral: 'It depends on the situation',
+    mev_rival_team_praise: ()=>"A reporter asks for a comment on this year's rival team.",
+    mev_respect: "They deserve respect, they're strong", mev_dismissive: "I don't fear them at all", mev_focus: 'I only think about us',
     dact_devreq: 'Request Targeted Development', dact_devreq_desc: "Ask the team to develop the car around your strengths — only available with enough standing in the team.",
     dactr_devreq: (stat,n)=>`+${n} ${stat} — the team developed the car around you`,
     stat_qualifica: 'Qualifying', stat_sorpassi: 'Overtaking', stat_pioggia: 'Rain', stat_costanza: 'Consistency',
@@ -495,6 +511,14 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    mev_eyebrow: 'Rueda de prensa', mev_teammate_incident: (mate)=>`Los periodistas te preguntan si ${mate} se pasó de la raya en el contacto de ayer.`,
+    mev_defend: 'Defiéndelo públicamente', mev_diplomatic: 'Respuesta diplomática, sin mojarte', mev_accuse: 'Di claramente que exageró',
+    mev_title_ambitions: ()=>'Un periodista te pregunta si vas a por el título este año.',
+    mev_humble: 'Mantengamos los pies en el suelo', mev_confident: 'Sí, vamos directos al título', mev_deflect: 'Prefiero hablar carrera a carrera',
+    mev_team_orders_question: ()=>'Te preguntan qué piensas de las órdenes de equipo en general.',
+    mev_loyal: 'El equipo va primero', mev_competitive: 'En pista se compite, punto', mev_neutral: 'Depende de la situación',
+    mev_rival_team_praise: ()=>'Un periodista te pide un comentario sobre el equipo rival de este año.',
+    mev_respect: 'Merecen respeto, son fuertes', mev_dismissive: 'No les temo en absoluto', mev_focus: 'Solo pienso en nosotros',
     dact_devreq: 'Solicitar Desarrollo Dirigido', dact_devreq_desc: 'Pide al equipo que desarrolle el coche en torno a tus puntos fuertes — disponible solo con suficiente peso en el equipo.',
     dactr_devreq: (stat,n)=>`+${n} ${stat} — el equipo desarrolló el coche en torno a ti`,
     stat_qualifica: 'Clasificación', stat_sorpassi: 'Adelantamientos', stat_pioggia: 'Lluvia', stat_costanza: 'Constancia',
@@ -4415,6 +4439,69 @@ function applyDriverActivity(activityId){
   return outcome;
 }
 
+// V0.9.7.9.15 — CARRIERA PILOTA: eventi media narrativi (documento design, punto 12). Invece del
+// solito effetto piatto, Evento Media/Intervista aprono a volte una situazione con battute vere e
+// 3 scelte diverse — non sempre la stessa morale ("bravo ragazzo" non e' sempre la scelta giusta).
+const MEDIA_EVENT_SCENARIOS = [
+  { id:'teammate_incident', promptKey:'mev_teammate_incident',
+    choices:[
+      { key:'defend', labelKey:'mev_defend', fama:2, reputazione:4, rivalry:-6 },
+      { key:'diplomatic', labelKey:'mev_diplomatic', fama:3, reputazione:1, rivalry:0 },
+      { key:'accuse', labelKey:'mev_accuse', fama:9, reputazione:-5, rivalry:10 },
+    ]},
+  { id:'title_ambitions', promptKey:'mev_title_ambitions',
+    choices:[
+      { key:'humble', labelKey:'mev_humble', fama:1, reputazione:3, rivalry:0 },
+      { key:'confident', labelKey:'mev_confident', fama:7, reputazione:-1, rivalry:0 },
+      { key:'deflect', labelKey:'mev_deflect', fama:0, reputazione:2, rivalry:0 },
+    ]},
+  { id:'team_orders_question', promptKey:'mev_team_orders_question',
+    choices:[
+      { key:'loyal', labelKey:'mev_loyal', fama:0, reputazione:5, rivalry:-2 },
+      { key:'competitive', labelKey:'mev_competitive', fama:6, reputazione:-2, rivalry:3 },
+      { key:'neutral', labelKey:'mev_neutral', fama:2, reputazione:1, rivalry:0 },
+    ]},
+  { id:'rival_team_praise', promptKey:'mev_rival_team_praise',
+    choices:[
+      { key:'respect', labelKey:'mev_respect', fama:1, reputazione:4, rivalry:0 },
+      { key:'dismissive', labelKey:'mev_dismissive', fama:8, reputazione:-3, rivalry:0 },
+      { key:'focus', labelKey:'mev_focus', fama:1, reputazione:2, rivalry:0 },
+    ]},
+];
+function openDriverMediaEvent(activityId){
+  const scenario = MEDIA_EVENT_SCENARIOS[Math.floor(rnd()*MEDIA_EVENT_SCENARIOS.length)];
+  window.__activeMediaEvent = { scenario, activityId };
+  state.phase = 'driver-media-event';
+  render();
+}
+function applyDriverMediaEventChoice(choiceIdx){
+  const { scenario, activityId } = window.__activeMediaEvent;
+  const choice = scenario.choices[choiceIdx];
+  const d = driverCareerState.driver;
+  const ratingFactor = 0.6 + (d.rating/100)*0.8;
+  const famaGain = choice.fama>0 ? Math.round(choice.fama*ratingFactor) : choice.fama;
+  d.fama = Math.max(0, Math.min(100, d.fama+famaGain));
+  d.reputazione = Math.max(0, Math.min(100, d.reputazione+(choice.reputazione||0)));
+  if(choice.rivalry) driverCareerState.teammateRivalry = Math.max(0, Math.min(100, (driverCareerState.teammateRivalry||0)+choice.rivalry));
+  return { activityId, famaGain, reputazioneGain: choice.reputazione||0, rivalryChange: choice.rivalry||0, isMediaScenario:true };
+}
+function renderDriverMediaEvent(){
+  const { scenario } = window.__activeMediaEvent;
+  const mateName = state.team.pilotSecond.nome;
+  const choicesHTML = scenario.choices.map((c,i)=>`
+    <div class="card pickable" data-rarity="Rare" data-action="pick-media-event-choice" data-choice-idx="${i}">
+      <div class="ability" style="font-size:15px;border-top:none;padding-top:0;margin-top:0;">${t(c.labelKey)}</div>
+    </div>`).join('');
+  app.innerHTML = `
+  <div class="panel">
+    <div class="eyebrow">🎙️ ${t('mev_eyebrow')}</div>
+    <h2 class="hdr" style="font-size:19px;line-height:1.4;">${t(scenario.promptKey, mateName)}</h2>
+  </div>
+  ${choicesHTML}
+  `;
+  bindActions();
+}
+
 function renderDriverActivity(){
   const d = driverCareerState.driver;
   const teamStatus = computeDriverTeamStatus();
@@ -4471,7 +4558,9 @@ function renderDriverActivityResult(outcome){
   if(outcome.devStatKey) lines.push({cls:'bonus', text:t('dactr_devreq', t('stat_'+outcome.devStatKey), outcome.devStatGain)});
   const backfiredNote = outcome.backfired ? `<div class="tag-line malus" style="font-size:14px;" style="margin-top:8px;">${t('dactr_backfired')}</div>` : '';
   app.innerHTML = `
-  ${topbarHTML()}
+  <div class="topbar">
+    <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_driver')} — ${GAME_VERSION}</small></div>
+  </div>
   <div class="panel">
     <div class="panel-title"><h3 class="hdr">${t('dact_'+outcome.activityId.replace('-','_'))}</h3></div>
     ${lines.map(l=>`<div class="tag-line ${l.cls}" style="font-size:14px;">${l.text}</div>`).join('')}
@@ -4999,6 +5088,7 @@ function renderInner(){
   if(state.phase==='driver-creation-done') return renderDriverCreationDone();
   if(state.phase==='driver-hub') return renderDriverHub();
   if(state.phase==='driver-activity') return renderDriverActivity();
+  if(state.phase==='driver-media-event') return renderDriverMediaEvent();
   if(state.phase==='driver-activity-result') return renderDriverActivityResult(window.__lastDriverActivityOutcome);
   if(state.phase==='driver-season-end') return renderDriverSeasonEnd();
   if(state.phase==='driver-contract') return renderDriverContract();
@@ -5726,7 +5816,7 @@ function checkSeasonEndAchievements(){
 
 
 const SAVE_KEY = 'racingDynastySaveV09';
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -7812,7 +7902,18 @@ function onAction(e){
     startDriverCareerSeason();
   }
   else if(action==='pick-driver-activity'){
-    const outcome = applyDriverActivity(el.dataset.activity);
+    const activity = el.dataset.activity;
+    if(activity==='media' || activity==='interview'){
+      openDriverMediaEvent(activity);
+      return;
+    }
+    const outcome = applyDriverActivity(activity);
+    window.__lastDriverActivityOutcome = outcome;
+    state.phase = 'driver-activity-result';
+    render();
+  }
+  else if(action==='pick-media-event-choice'){
+    const outcome = applyDriverMediaEventChoice(Number(el.dataset.choiceIdx));
     window.__lastDriverActivityOutcome = outcome;
     state.phase = 'driver-activity-result';
     render();
