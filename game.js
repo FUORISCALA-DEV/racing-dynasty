@@ -4867,16 +4867,72 @@ const RATING_BANDS_ORDER = ['debole','discreto','intermedio','ottimo','eccellent
 // Ogni draw fn riceve un CanvasRenderingContext2D gia' preparato con globalCompositeOperation
 // 'source-atop' (quindi tutto cio' che disegniamo appare SOLO dove il telaio e' gia' opaco) e le
 // dimensioni W,H del canvas (= dimensioni native dell'asset telaio, niente scaling qui).
-const LIVERY_PATTERNS = [
-  { id:'phoenix-works', nome:'Phoenix Works', achievementId:'prima-vittoria', liveryImg:'assets/team-liveries/phoenix-works.webp' },
-  { id:'titan-dynamics', nome:'Titan Dynamics', achievementId:'underdog', liveryImg:'assets/team-liveries/titan-dynamics.webp' },
-  { id:'valkyrie-gp', nome:'Valkyrie GP', achievementId:'sul-podio', liveryImg:'assets/team-liveries/valkyrie-gp.webp' },
-  { id:'aurora-works', nome:'Aurora Works', achievementId:'domatore-del-caos', liveryImg:'assets/team-liveries/aurora-works.webp' },
-  { id:'pegasus-racing', nome:'Pegasus Racing', achievementId:'la-grande-rimonta', liveryImg:'assets/team-liveries/pegasus-racing.webp' },
-  { id:'dragon-gp', nome:'Dragon GP', achievementId:'ripartenza-perfetta', liveryImg:'assets/team-liveries/dragon-gp.webp' },
-  { id:'nova-performance', nome:'Nova Performance', achievementId:'leggenda-al-volante', liveryImg:'assets/team-liveries/nova-performance.webp' },
-  { id:'apex-dynamics', nome:'Apex Dynamics', achievementId:'collezionista-assoluto', liveryImg:'assets/team-liveries/apex-dynamics.webp' },
-  { id:'orion-motorsport', nome:'Orion Motorsport', achievementId:'senza-rete-di-sicurezza', liveryImg:'assets/team-liveries/orion-motorsport.webp' },
+// V0.9.7.9.18: due categorie separate, come richiesto — Arcade Classic (10 pattern procedurali,
+// gli originali di prima) e Livree Scuderie (le 30 scuderie vere del gioco, sbloccabili una per
+// una). Ogni pattern ha il suo obiettivo di sblocco, mai duplicato tra le due categorie.
+const ARCADE_CLASSIC_PATTERNS = [
+  { id:'scacchiera', nome:'Scacchiera', achievementId:'prima-vittoria', draw:(ctx,W,H)=>{
+    const cell = H/6;
+    for(let yi=0; yi<7; yi++) for(let xi=0; xi<Math.ceil(W/cell)+2; xi++){
+      if((xi+yi)%2===0) ctx.fillRect(xi*cell, yi*cell, cell, cell);
+    }
+  }},
+  { id:'pois', nome:'Pois', achievementId:'underdog', draw:(ctx,W,H)=>{
+    const step = H*0.32, r = H*0.11;
+    for(let y=step*0.4; y<H+step; y+=step){
+      for(let x=step*0.4; x<W+step; x+=step){
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+      }
+    }
+  }},
+  { id:'strisce-centrali', nome:'Strisce Centrali', achievementId:'sul-podio', draw:(ctx,W,H)=>{
+    const sw = W*0.09, cx = W/2;
+    ctx.fillRect(cx-sw*1.6, 0, sw*1.1, H);
+    ctx.fillRect(cx+sw*0.5, 0, sw*1.1, H);
+  }},
+  { id:'meta-e-meta', nome:'Metà e Metà', achievementId:'domatore-del-caos', draw:(ctx,W,H)=>{
+    ctx.fillRect(W*0.52, 0, W*0.48, H);
+  }},
+  { id:'diagonali', nome:'Diagonali Veloci', achievementId:'la-grande-rimonta', draw:(ctx,W,H)=>{
+    const step = W*0.11;
+    for(let x=-H; x<W; x+=step){
+      ctx.beginPath();
+      ctx.moveTo(x,0); ctx.lineTo(x+step*0.55,0);
+      ctx.lineTo(x+step*0.55-H*0.6,H); ctx.lineTo(x-H*0.6,H);
+      ctx.closePath(); ctx.fill();
+    }
+  }},
+  { id:'frecce', nome:'Frecce Racing', achievementId:'ripartenza-perfetta', draw:(ctx,W,H)=>{
+    const step = W*0.16;
+    for(let x=0; x<W+step; x+=step){
+      ctx.beginPath();
+      ctx.moveTo(x,0); ctx.lineTo(x+step*0.4,H*0.5); ctx.lineTo(x,H); ctx.lineTo(x-step*0.35,H*0.5);
+      ctx.closePath(); ctx.fill();
+    }
+  }},
+  { id:'fiamma', nome:'Fiamma', achievementId:'leggenda-al-volante', draw:(ctx,W,H)=>{
+    ctx.beginPath();
+    let first=true;
+    for(let t=0;t<=100;t+=4){ const tt=t/100; const x=W*0.15+tt*W*0.75; const y=H*0.5+Math.sin(tt*Math.PI)*H*0.42*(1-tt*0.3);
+      if(first){ctx.moveTo(x,y); first=false;} else ctx.lineTo(x,y); }
+    for(let t=100;t>=0;t-=4){ const tt=t/100; const x=W*0.15+tt*W*0.75; const y=H*0.5-Math.sin(tt*Math.PI)*H*0.18*(1-tt*0.5);
+      ctx.lineTo(x,y); }
+    ctx.closePath(); ctx.fill();
+  }},
+  { id:'contorno-spesso', nome:'Contorno Spesso', achievementId:'collezionista-assoluto', draw:(ctx,W,H,srcCanvas)=>{
+    const off = Math.max(1, Math.round(H*0.05));
+    for(let dx=-off; dx<=off; dx++) for(let dy=-off; dy<=off; dy++){
+      if(dx===0 && dy===0) continue;
+      ctx.drawImage(srcCanvas, dx, dy);
+    }
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.drawImage(srcCanvas, 0, 0);
+    ctx.globalCompositeOperation = 'source-atop';
+  }},
+  { id:'striscia-laterale', nome:'Doppia Striscia Laterale', achievementId:'senza-rete-di-sicurezza', draw:(ctx,W,H)=>{
+    ctx.fillRect(0, H*0.32, W, H*0.09);
+    ctx.fillRect(0, H*0.52, W, H*0.09);
+  }},
   { id:'fulmine', nome:'Fulmine', achievementId:'il-mito-assoluto', draw:(ctx,W,H)=>{
     ctx.beginPath();
     ctx.moveTo(W*0.62,0); ctx.lineTo(W*0.42,H*0.45); ctx.lineTo(W*0.55,H*0.45); ctx.lineTo(W*0.35,H);
@@ -4884,6 +4940,41 @@ const LIVERY_PATTERNS = [
     ctx.closePath(); ctx.fill();
   }},
 ];
+
+// Livree Scuderie: le 30 scuderie vere del database, tutte e 30 completate.
+const TEAM_LIVERY_PATTERNS = [
+  { id:'phoenix-works', nome:'Phoenix Works', achievementId:'debutto', liveryImg:'assets/team-liveries/phoenix-works.webp' },
+  { id:'titan-dynamics', nome:'Titan Dynamics', achievementId:'primo-giorno', liveryImg:'assets/team-liveries/titan-dynamics.webp' },
+  { id:'valkyrie-gp', nome:'Valkyrie GP', achievementId:'nuovo-volto', liveryImg:'assets/team-liveries/valkyrie-gp.webp' },
+  { id:'aurora-works', nome:'Aurora Works', achievementId:'prima-scintilla', liveryImg:'assets/team-liveries/aurora-works.webp' },
+  { id:'pegasus-racing', nome:'Pegasus Racing', achievementId:'primo-cimelio', liveryImg:'assets/team-liveries/pegasus-racing.webp' },
+  { id:'dragon-gp', nome:'Dragon GP', achievementId:'partecipazione-onesta', liveryImg:'assets/team-liveries/dragon-gp.webp' },
+  { id:'nova-performance', nome:'Nova Performance', achievementId:'fedele-alla-linea-di-partenza', liveryImg:'assets/team-liveries/nova-performance.webp' },
+  { id:'apex-dynamics', nome:'Apex Dynamics', achievementId:'con-quello-che-c-e', liveryImg:'assets/team-liveries/apex-dynamics.webp' },
+  { id:'orion-motorsport', nome:'Orion Motorsport', achievementId:'cenerentola', liveryImg:'assets/team-liveries/orion-motorsport.webp' },
+  { id:'nebula-gp', nome:'Nebula GP', achievementId:'seconda-occasione', liveryImg:'assets/team-liveries/nebula-gp.webp' },
+  { id:'tempest-formula', nome:'Tempest Formula', achievementId:'rivincita', liveryImg:'assets/team-liveries/tempest-formula.webp' },
+  { id:'helios-performance', nome:'Helios Performance', achievementId:'costanza-chirurgica', liveryImg:'assets/team-liveries/helios-performance.webp' },
+  { id:'atlas-formula', nome:'Atlas Formula', achievementId:'coro-a-due-voci', liveryImg:'assets/team-liveries/atlas-formula.webp' },
+  { id:'vector-performance', nome:'Vector Performance', achievementId:'lavoro-di-squadra', liveryImg:'assets/team-liveries/vector-performance.webp' },
+  { id:'quantum-performance', nome:'Quantum Performance', achievementId:'scintilla-collettiva', liveryImg:'assets/team-liveries/quantum-performance.webp' },
+  { id:'zenith-formula', nome:'Zenith Formula', achievementId:'risonanza-totale', liveryImg:'assets/team-liveries/zenith-formula.webp' },
+  { id:'vortex-dynamics', nome:'Vortex Dynamics', achievementId:'anima-della-scuderia', liveryImg:'assets/team-liveries/vortex-dynamics.webp' },
+  { id:'eclipse-motorsport', nome:'Eclipse Motorsport', achievementId:'domatore-di-pioggia', liveryImg:'assets/team-liveries/eclipse-motorsport.webp' },
+  { id:'pulsar-racing', nome:'Pulsar Racing', achievementId:'doppietta-perfetta', liveryImg:'assets/team-liveries/pulsar-racing.webp' },
+  { id:'inferno-gp', nome:'Inferno GP', achievementId:'terrore-della-griglia', liveryImg:'assets/team-liveries/inferno-gp.webp' },
+  { id:'cobalt-gp', nome:'Cobalt GP', achievementId:'osso-duro', liveryImg:'assets/team-liveries/cobalt-gp.webp' },
+  { id:'crimson-dynamics', nome:'Crimson Dynamics', achievementId:'nato-per-soffrire', liveryImg:'assets/team-liveries/crimson-dynamics.webp' },
+  { id:'silver-formula', nome:'Silver Formula', achievementId:'si-impara-perdendo', liveryImg:'assets/team-liveries/silver-formula.webp' },
+  { id:'obsidian-motorsport', nome:'Obsidian Motorsport', achievementId:'tutto-o-niente', liveryImg:'assets/team-liveries/obsidian-motorsport.webp' },
+  { id:'emerald-performance', nome:'Emerald Performance', achievementId:'vittoria-agrodolce', liveryImg:'assets/team-liveries/emerald-performance.webp' },
+  { id:'golden-motorsport', nome:'Golden Motorsport', achievementId:'ultimo-centesimo', liveryImg:'assets/team-liveries/golden-motorsport.webp' },
+  { id:'iron-performance', nome:'Iron Performance', achievementId:'infallibile', liveryImg:'assets/team-liveries/iron-performance.webp' },
+  { id:'storm-works', nome:'Storm Works', achievementId:'padrone-di-ogni-asfalto', liveryImg:'assets/team-liveries/storm-works.webp' },
+  { id:'solar-formula', nome:'Solar Formula', achievementId:'dominio-assoluto', liveryImg:'assets/team-liveries/solar-formula.webp' },
+  { id:'lunar-motorsport', nome:'Lunar Motorsport', achievementId:'il-migliore-che-ci-sia', liveryImg:'assets/team-liveries/lunar-motorsport.webp' },
+];
+const LIVERY_PATTERNS = [...ARCADE_CLASSIC_PATTERNS, ...TEAM_LIVERY_PATTERNS]; // usata da chi non deve distinguere la categoria
 function findLiveryPattern(id){ return LIVERY_PATTERNS.find(p=>p.id===id); }
 
 const LIVERY_SAVE_KEY = 'racingDynastyLiveryV1';
@@ -4977,7 +5068,7 @@ function lightbulbSVG(color){
 // Composizione della monoposto: 4 layer allineati sullo stesso canvas (chassis/aero/tires/helmet,
 // ognuno colorato secondo la fascia di rating del componente corrispondente) + numero sovrapposto
 // (colore motore) + lampadina stratega separata (spec 0.7 punto 2).
-function carVisualHTML(pilot, comp, carNumber, previewPatternId, previewColor){
+function carVisualHTML(pilot, comp, carNumber, previewPatternId, previewColor, teamName){
   const chassisBand = ratingBandKey(comp.telaio.rating);
   const aeroBand = ratingBandKey(comp.aero.rating);
   const tiresBand = ratingBandKey(comp.gomme.rating);
@@ -4988,9 +5079,14 @@ function carVisualHTML(pilot, comp, carNumber, previewPatternId, previewColor){
   const digitsHTML = String(carNumber).split('').map(ch=>
     `<img class="car-digit" src="assets/digits/${numberBand}_${/^[a-zA-Z0-9]$/.test(ch)?ch:'char'+ch.charCodeAt(0)}.png" alt="${ch}">`
   ).join('');
-  // V0.9.7.8.5: pattern livrea — previewPatternId/previewColor per l'anteprima sandbox del Garage
-  // (non ancora salvati), altrimenti il pattern gia' applicato in modo permanente da liveryData.
-  const activePatternId = previewPatternId!==undefined ? previewPatternId : liveryData.selectedPatternId;
+  // V0.9.7.9.18: in Carriera Pilota la livrea VERA della scuderia (se esiste) ha priorita' sulla
+  // scelta personale del Garage — guidi PER quella scuderia, la macchina e' la sua, non la tua
+  // sandbox personale (che resta una cosa a parte, solo estetica, invariata per Carriera Scuderia).
+  let teamLivery = null;
+  if(state && state.isDriverCareer && teamName){
+    teamLivery = TEAM_LIVERY_PATTERNS.find(p=>p.nome===teamName && p.liveryImg);
+  }
+  const activePatternId = teamLivery ? teamLivery.id : (previewPatternId!==undefined ? previewPatternId : liveryData.selectedPatternId);
   const activeColor = previewColor!==undefined ? previewColor : liveryData.selectedColor;
   const activePattern = activePatternId ? findLiveryPattern(activePatternId) : null;
   const chassisSrc = activePatternId ? getPatternedChassisSrc(chassisBand, activePatternId, activeColor) : carLayerSrc(chassisBand,'chassis');
@@ -5009,12 +5105,12 @@ function carVisualHTML(pilot, comp, carNumber, previewPatternId, previewColor){
   </div>`;
 }
 
-function pregaraCarPanelHTML(pilot, carNumber, comp, gridPosNum){
+function pregaraCarPanelHTML(pilot, carNumber, comp, gridPosNum, teamName){
   const band = ratingBandKey(pilot.rating);
   const color = CAR_RARITY_COLOR[band];
   return `
   <div class="pregara-panel">
-    ${carVisualHTML(pilot, comp, carNumber)}
+    ${carVisualHTML(pilot, comp, carNumber, undefined, undefined, teamName)}
     <div class="pregara-info">
       <div class="pregara-name">${flag(pilot.naz)} ${pilot.nome}</div>
       <div class="pregara-meta">
@@ -5149,8 +5245,8 @@ function renderPregara(){
     </div>
     <div class="btnrow"><button class="primary" data-action="start-race-live">${window.t('pg_go_to_race')}</button></div>
     <div class="grid grid-2 pregara-grid">
-      ${pregaraCarPanelHTML(t.pilotMain, carNum1, compShared, null)}
-      ${pregaraCarPanelHTML(t.pilotSecond, carNum2, compShared, null)}
+      ${pregaraCarPanelHTML(t.pilotMain, carNum1, compShared, null, teamDisplayName())}
+      ${pregaraCarPanelHTML(t.pilotSecond, carNum2, compShared, null, teamDisplayName())}
     </div>
     <div class="panel">
       <button type="button" class="pregara-accordion-toggle" id="pregaraDetailsToggle">
@@ -6368,12 +6464,12 @@ function renderRivalAnnounce(){
       </div>
       <div class="grid grid-2" style="margin-top:8px;">
         <div class="rival-mini">
-          ${carVisualHTML(t.pilotMain, {motore:t.motore,telaio:t.telaio,aero:t.aero,gomme:t.gomme,stratega:t.stratega}, carNum1)}
+          ${carVisualHTML(t.pilotMain, {motore:t.motore,telaio:t.telaio,aero:t.aero,gomme:t.gomme,stratega:t.stratega}, carNum1, undefined, undefined, teamDisplayName())}
           <div class="rival-mini-name">${flag(t.pilotMain.naz)} ${t.pilotMain.nome}</div>
           <div class="dim mono" style="font-size:11px;">${t.pilotMain.rating} RATING</div>
         </div>
         <div class="rival-mini">
-          ${carVisualHTML(t.pilotSecond, {motore:t.motore,telaio:t.telaio,aero:t.aero,gomme:t.gomme,stratega:t.stratega}, carNum2)}
+          ${carVisualHTML(t.pilotSecond, {motore:t.motore,telaio:t.telaio,aero:t.aero,gomme:t.gomme,stratega:t.stratega}, carNum2, undefined, undefined, teamDisplayName())}
           <div class="rival-mini-name">${flag(t.pilotSecond.naz)} ${t.pilotSecond.nome}</div>
           <div class="dim mono" style="font-size:11px;">${t.pilotSecond.rating} RATING</div>
         </div>
@@ -6394,12 +6490,12 @@ function renderRivalAnnounce(){
       </div>
       <div class="grid grid-2" style="margin-top:8px;">
         <div class="rival-mini">
-          ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1)}
+          ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1, undefined, undefined, t.nome)}
           <div class="rival-mini-name">${flag(t.drivers[0].naz)} ${t.drivers[0].nome}</div>
           <div class="dim mono" style="font-size:11px;">${t.drivers[0].rating} RATING</div>
         </div>
         <div class="rival-mini">
-          ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2)}
+          ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2, undefined, undefined, t.nome)}
           <div class="rival-mini-name">${flag(t.drivers[1].naz)} ${t.drivers[1].nome}</div>
           <div class="dim mono" style="font-size:11px;">${t.drivers[1].rating} RATING</div>
         </div>
@@ -6452,12 +6548,12 @@ function rivalPanelHTML(){
       </div>
       <div class="grid grid-2" style="margin-top:8px;">
         <div class="rival-mini">
-          ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1)}
+          ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1, undefined, undefined, t.nome)}
           <div class="rival-mini-name">${flag(t.drivers[0].naz)} ${t.drivers[0].nome}</div>
           <div class="dim mono" style="font-size:11px;">${t.drivers[0].rating} RATING</div>
         </div>
         <div class="rival-mini">
-          ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2)}
+          ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2, undefined, undefined, t.nome)}
           <div class="rival-mini-name">${flag(t.drivers[1].naz)} ${t.drivers[1].nome}</div>
           <div class="dim mono" style="font-size:11px;">${t.drivers[1].rating} RATING</div>
         </div>
@@ -7219,12 +7315,12 @@ function pitlaneRivalsHTML(){
     const slot2 = state.grid.find(g=>g.teamId===id && g.role===1);
     return `
     <div class="rival-mini-small">
-      ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1)}
+      ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1, undefined, undefined, t.nome)}
       <div class="rival-mini-name">${teamFlag(id)} ${t.nome}</div>
       <div class="dim mono" style="font-size:10px;">${window.t('pit_strength')} <b style="color:var(--cyan);">${Math.round(aiTeamWeightedStrength(t))}</b> · ${cs.points} pt</div>
     </div>
     <div class="rival-mini-small">
-      ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2)}
+      ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2, undefined, undefined, t.nome)}
       <div class="rival-mini-name dim" style="font-size:9.5px;">${t.drivers[1].nome}</div>
       <div class="dim mono" style="font-size:9.5px;">${t.drivers[1].rating} RATING</div>
     </div>`;
@@ -7475,12 +7571,15 @@ function garageColorPickerHTML(){
 
 function renderGarage(){
   syncLiveryUnlocksFromAchievements(); // V0.9.7.8.7: difensivo, non costa nulla e garantisce coerenza
-  const patternCards = LIVERY_PATTERNS.map(garagePatternCardHTML).join('');
+  const teamCards = TEAM_LIVERY_PATTERNS.map(garagePatternCardHTML).join('');
+  const arcadeCards = ARCADE_CLASSIC_PATTERNS.map(garagePatternCardHTML).join('');
+  const teamUnlocked = TEAM_LIVERY_PATTERNS.filter(p=>liveryData.unlockedPatternIds.includes(p.id)).length;
+  const arcadeUnlocked = ARCADE_CLASSIC_PATTERNS.filter(p=>liveryData.unlockedPatternIds.includes(p.id)).length;
   app.innerHTML = `
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
       <h1 class="hdr" style="font-size:30px;">🎨 Garage</h1>
-      <div class="tagline">Sblocca pattern per il telaio completando obiettivi, scegli il colore, prova ogni fascia prima di decidere. La scelta resta valida in tutte le prossime carriere.</div>
+      <div class="tagline">Sblocca livree completando obiettivi, scegli il colore, prova ogni fascia prima di decidere. La scelta resta valida in tutte le prossime carriere.</div>
     </div>
   </div>
   <div class="panel">
@@ -7495,14 +7594,22 @@ function renderGarage(){
     </div>
   </div>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">Pattern (${liveryData.unlockedPatternIds.length}/${LIVERY_PATTERNS.length} sbloccati)</h3></div>
+    <div class="panel-title"><h3 class="hdr">Livree Scuderie (${teamUnlocked}/${TEAM_LIVERY_PATTERNS.length} sbloccate)</h3></div>
+    <div class="dim" style="font-size:11.5px;margin-bottom:10px;">Le 30 scuderie vere del gioco — la stessa livrea si applica alla scuderia corrispondente in Carriera Pilota.</div>
     <div class="garage-pattern-grid">
       <div class="card garage-pattern-card ${liveryData.selectedPatternId===null?'selected':''}" data-action="select-garage-pattern" data-pattern="">
         <div class="garage-pattern-swatch" style="display:flex;align-items:center;justify-content:center;font-size:20px;">—</div>
         <div class="garage-pattern-name">Nessun pattern</div>
         ${liveryData.selectedPatternId===null ? '<div class="garage-pattern-active">✓ Applicato</div>' : ''}
       </div>
-      ${patternCards}
+      ${teamCards}
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><h3 class="hdr">Arcade Classic (${arcadeUnlocked}/${ARCADE_CLASSIC_PATTERNS.length} sbloccati)</h3></div>
+    <div class="dim" style="font-size:11.5px;margin-bottom:10px;">Pattern geometrici originali, non legati a nessuna scuderia — solo estetica.</div>
+    <div class="garage-pattern-grid">
+      ${arcadeCards}
     </div>
   </div>
   <div class="panel">
@@ -7542,11 +7649,11 @@ function renderPitlane(){
     <div class="panel-title"><h3 class="hdr">${window.t('pitlane_team_now')}</h3><span class="strength-badge">${window.t('pitlane_strength')} <b>${Math.round(playerStrength())}</b></span></div>
     <div class="grid grid-2 pitlane-cars">
       <div class="pitlane-car-mini">
-        ${carVisualHTML(t.pilotMain, compShared, p1Slot.carNumber)}
+        ${carVisualHTML(t.pilotMain, compShared, p1Slot.carNumber, undefined, undefined, teamDisplayName())}
         <div class="pregara-name" style="font-size:12px;margin-top:6px;">${flag(t.pilotMain.naz)} ${t.pilotMain.nome} · ${t.pilotMain.rating} RATING</div>
       </div>
       <div class="pitlane-car-mini">
-        ${carVisualHTML(t.pilotSecond, compShared, p2Slot.carNumber)}
+        ${carVisualHTML(t.pilotSecond, compShared, p2Slot.carNumber, undefined, undefined, teamDisplayName())}
         <div class="pregara-name" style="font-size:12px;margin-top:6px;">${flag(t.pilotSecond.naz)} ${t.pilotSecond.nome} · ${t.pilotSecond.rating} RATING</div>
       </div>
     </div>
