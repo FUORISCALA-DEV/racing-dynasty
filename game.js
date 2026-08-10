@@ -70,7 +70,7 @@ function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1'
 const I18N = {
   it: {
     bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_hold: 'Mantieni la posizione',
-    bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni',
+    bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni', bkt_lose_3: 'Perdi 3 posizioni', bkt_gain_3_5: 'Guadagni 3-5 posizioni',
     dec_reveal_title: 'Ballottaggio in pista…',
     dret_career_totals: 'Numeri di carriera', dret_seasons: 'Stagioni', dret_total_wins: 'Vittorie', dret_total_podiums: 'Podi',
     dret_total_points: (n)=>`${n} punti totali in carriera`,
@@ -312,7 +312,7 @@ const I18N = {
   },
   en: {
     bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_hold: 'Hold position',
-    bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions',
+    bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions', bkt_lose_3: 'Lose 3 positions', bkt_gain_3_5: 'Gain 3-5 positions',
     dec_reveal_title: 'On track right now…',
     dret_career_totals: 'Career numbers', dret_seasons: 'Seasons', dret_total_wins: 'Wins', dret_total_podiums: 'Podiums',
     dret_total_points: (n)=>`${n} total career points`,
@@ -548,7 +548,7 @@ const I18N = {
   },
   es: {
     bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_hold: 'Mantienes la posición',
-    bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones',
+    bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones', bkt_lose_3: 'Pierdes 3 posiciones', bkt_gain_3_5: 'Ganas 3-5 posiciones',
     dec_reveal_title: 'Decidiéndose en pista…',
     dret_career_totals: 'Números de carrera', dret_seasons: 'Temporadas', dret_total_wins: 'Victorias', dret_total_podiums: 'Podios',
     dret_total_points: (n)=>`${n} puntos totales en carrera`,
@@ -3519,7 +3519,9 @@ function renderStartLights(){
 // ma la scelta del giocatore sposta davvero le posizioni dei suoi piloti per le fasi restanti.
 // V0.9.3.2: 5 occasioni "scriptate" pescate a caso (mai lo stesso set), piu' meteo/safety car quando capitano
 // per davvero. Circa 1 gara su 5 non propone nessuna occasione scriptata: se va liscia, va liscia.
-const SCRIPTED_DECISION_TYPES = ['pit','aggression','teamorders','defend','enginemode','mechanical'];
+const SCRIPTED_DECISION_TYPES = ['pit','aggression','teamorders','defend','enginemode','mechanical',
+  'overtakedesperate','fuelgamble','rivalmistake','trackliminvestigation','wheeltowheel',
+  'doubleyellow','engineersadvice','finalpush','backmarkertraffic','brakebite'];
 
 // V0.9.3.4: alcune decisioni fanno un'affermazione precisa sulla situazione in pista (piloti vicini,
 // rivale alle spalle) — devono scattare solo quando e' davvero vero, altrimenti perdono credibilita'.
@@ -3538,7 +3540,17 @@ function hasRivalCloseBehind(timeline, phase){
     return behind!=='PLAYER-1' && behind!=='PLAYER-2'; // qualcuno di davvero avversario, non il compagno
   });
 }
-const DECISION_CONTEXT_CHECK = { teamorders: driversAreClose, defend: hasRivalCloseBehind };
+// V0.9.7.9.22: come sopra ma al contrario — serve per le occasioni di sorpasso (rivale DAVANTI)
+function hasRivalCloseAhead(timeline, phase){
+  const order = timeline.phaseOrders[phase];
+  return ['PLAYER-1','PLAYER-2'].some(key=>{
+    const i = order.indexOf(key);
+    if(i<=0) return false;
+    const ahead = order[i-1];
+    return ahead!=='PLAYER-1' && ahead!=='PLAYER-2';
+  });
+}
+const DECISION_CONTEXT_CHECK = { teamorders: driversAreClose, defend: hasRivalCloseBehind, wheeltowheel: hasRivalCloseBehind, overtakedesperate: hasRivalCloseAhead, rivalmistake: hasRivalCloseAhead };
 
 function computeLiveDecisions(timeline){
   const candidates = [];
@@ -3613,6 +3625,56 @@ const LIVE_DECISION_INFO_EN = {
       { key:'nurse', label:'🩹 Nurse it carefully', desc:'Lose pace, but reduce retirement risk.' },
       { key:'push',  label:'🔥 Keep pushing', desc:'No compromise, but you risk retiring.' },
     ]},
+  overtakedesperate: { title:'Overtaking chance', question:'The rival ahead hesitates for a moment. Do you risk everything to pass?',
+    choices:[
+      { key:'try_overtake_desperate', label:'🎲 Try the desperate overtake', desc:'All or nothing: you could fly past or end up off track.' },
+      { key:'give_up_attack', label:'🛡️ Give up and manage', desc:'No risk, but the chance is gone.' },
+    ]},
+  fuelgamble: { title:'Fuel gamble', question:'You could lighten the fuel load for extra pace. Do you try it?',
+    choices:[
+      { key:'lighten_fuel', label:'⛽ Lighten the fuel load', desc:'All or nothing: much faster, but you risk running dry.' },
+      { key:'stay_conservative_fuel', label:'🛡️ Stay conservative', desc:'No risk, unchanged pace.' },
+    ]},
+  rivalmistake: { title:'The rival makes a mistake', question:'The car ahead just made an error. What do you do?',
+    choices:[
+      { key:'attack_now', label:'⚡ Attack immediately', desc:"Capitalize while it lasts, but you risk pushing too hard." },
+      { key:'wait_confirm', label:'👀 Wait for confirmation', desc:'Safer, smaller but nearly guaranteed gain.' },
+    ]},
+  trackliminvestigation: { title:'Track limits under investigation', question:'Stewards are watching track limits. What do you do?',
+    choices:[
+      { key:'push_limit', label:'🔥 Keep pushing the limit', desc:'More pace, but you risk a penalty.' },
+      { key:'play_safe_limit', label:'🛡️ Stay within safe margins', desc:'No risk, no gain.' },
+    ]},
+  wheeltowheel: { title:'Wheel to wheel', question:"You're side by side with a rival in the corner. What do you do?",
+    choices:[
+      { key:'hold_line', label:"🛑 Don't give up the space", desc:'You could hold them off, but risk contact.' },
+      { key:'give_room', label:'🟢 Give room', desc:'You lose a position, but the race stays clean.' },
+    ]},
+  doubleyellow: { title:'Double yellow flag', question:'Double yellow waved in your sector. What do you do?',
+    choices:[
+      { key:'slow_down_yellow', label:'🐢 Slow down as required', desc:'No risk, no gain.' },
+      { key:'risk_pace_yellow', label:'🔥 Risk the pace anyway', desc:"You could gain, but a penalty is just around the corner." },
+    ]},
+  engineersadvice: { title:'Advice from the engineers', question:'The pit wall suggests a setup tweak. Do you trust it?',
+    choices:[
+      { key:'follow_advice', label:'📻 Follow the advice', desc:'Likely helps, low risk.' },
+      { key:'trust_instinct', label:'💪 Trust your instinct', desc:'You could gain more, but it\'s less certain.' },
+    ]},
+  finalpush: { title:'Final push', question:'A few laps to go. Do you risk everything for the result?',
+    choices:[
+      { key:'all_or_nothing_push', label:'🎲 All or nothing', desc:"The race's defining moment: big reward or big risk." },
+      { key:'bring_home', label:'🏁 Bring the result home', desc:'No risk, position is safe.' },
+    ]},
+  backmarkertraffic: { title:'Backmarker traffic', question:'A slow backmarker is ahead of you. What do you do?',
+    choices:[
+      { key:'overtake_backmarker', label:'⚡ Pass immediately', desc:'Quick gain, but you risk a mistake in the move.' },
+      { key:'wait_for_space', label:'⏳ Wait for a clean gap', desc:'Slower, but safer.' },
+    ]},
+  brakebite: { title:'Brakes at the limit', question:'The brakes are running hotter than normal. What do you do?',
+    choices:[
+      { key:'push_brakes', label:'🔥 Squeeze the brakes to the end', desc:'More pace, but you risk locking up.' },
+      { key:'manage_brakes', label:'🩹 Manage the braking', desc:'No risk, unchanged pace.' },
+    ]},
 };
 const LIVE_DECISION_INFO_ES = {
   weather: { title:'El clima está cambiando', question:'Las condiciones de pista cambian justo ahora. ¿Qué haces?',
@@ -3656,6 +3718,56 @@ const LIVE_DECISION_INFO_ES = {
     choices:[
       { key:'nurse', label:'🩹 Gestiona con cautela', desc:'Pierdes ritmo, pero reduces el riesgo de retirada.' },
       { key:'push',  label:'🔥 Sigue apretando', desc:'Sin concesiones, pero arriesgas la retirada.' },
+    ]},
+  overtakedesperate: { title:'Ocasión de adelantamiento', question:'El rival de delante duda un instante. ¿Arriesgas todo para pasarlo?',
+    choices:[
+      { key:'try_overtake_desperate', label:'🎲 Intenta el adelantamiento desesperado', desc:'Todo o nada: puedes volar hacia adelante o irte fuera de pista.' },
+      { key:'give_up_attack', label:'🛡️ Renuncia y gestiona', desc:'Sin riesgo, pero la ocasión se esfuma.' },
+    ]},
+  fuelgamble: { title:'Apuesta de combustible', question:'Podrías aligerar el depósito para ganar ritmo. ¿Lo intentas?',
+    choices:[
+      { key:'lighten_fuel', label:'⛽ Aligera el depósito', desc:'Todo o nada: mucho más rápido, pero arriesgas quedarte sin combustible.' },
+      { key:'stay_conservative_fuel', label:'🛡️ Mantente prudente', desc:'Sin riesgo, ritmo sin cambios.' },
+    ]},
+  rivalmistake: { title:'El rival se equivoca', question:'El coche de delante acaba de cometer un error. ¿Qué haces?',
+    choices:[
+      { key:'attack_now', label:'⚡ Ataca de inmediato', desc:'Aprovecha mientras dure, pero arriesgas forzar demasiado.' },
+      { key:'wait_confirm', label:'👀 Espera confirmación', desc:'Más seguro, ganancia menor pero casi garantizada.' },
+    ]},
+  trackliminvestigation: { title:'Límites de pista bajo investigación', question:'Los comisarios vigilan los límites de pista. ¿Qué haces?',
+    choices:[
+      { key:'push_limit', label:'🔥 Sigue apretando al límite', desc:'Más ritmo, pero arriesgas una penalización.' },
+      { key:'play_safe_limit', label:'🛡️ Mantente en márgenes seguros', desc:'Sin riesgo, sin ganancia.' },
+    ]},
+  wheeltowheel: { title:'Rueda a rueda', question:'Estás lado a lado con un rival en la curva. ¿Qué haces?',
+    choices:[
+      { key:'hold_line', label:'🛑 No cedas el espacio', desc:'Podrías mantenerlo atrás, pero arriesgas el contacto.' },
+      { key:'give_room', label:'🟢 Deja margen', desc:'Pierdes una posición, pero la carrera sigue limpia.' },
+    ]},
+  doubleyellow: { title:'Doble bandera amarilla', question:'Doble amarilla en tu sector. ¿Qué haces?',
+    choices:[
+      { key:'slow_down_yellow', label:'🐢 Reduce como se pide', desc:'Sin riesgo, sin ganancia.' },
+      { key:'risk_pace_yellow', label:'🔥 Arriesga el ritmo de todos modos', desc:'Podrías ganar, pero una penalización está a la vuelta de la esquina.' },
+    ]},
+  engineersadvice: { title:'Consejo de los ingenieros', question:'El muro te sugiere un ajuste de reglaje. ¿Confías?',
+    choices:[
+      { key:'follow_advice', label:'📻 Sigue el consejo', desc:'Probablemente ayuda, riesgo bajo.' },
+      { key:'trust_instinct', label:'💪 Confía en tu instinto', desc:'Podrías ganar más, pero es más incierto.' },
+    ]},
+  finalpush: { title:'Último empujón', question:'Quedan pocas vueltas. ¿Te juegas todo por el resultado?',
+    choices:[
+      { key:'all_or_nothing_push', label:'🎲 Todo o nada', desc:'El momento decisivo de la carrera: gran premio o gran riesgo.' },
+      { key:'bring_home', label:'🏁 Guarda el resultado', desc:'Sin riesgo, la posición está a salvo.' },
+    ]},
+  backmarkertraffic: { title:'Tráfico de rezagados', question:'Tienes un rezagado lento delante. ¿Qué haces?',
+    choices:[
+      { key:'overtake_backmarker', label:'⚡ Adelántalo de inmediato', desc:'Ganancia rápida, pero arriesgas un error en la maniobra.' },
+      { key:'wait_for_space', label:'⏳ Espera el hueco adecuado', desc:'Más lento, pero más seguro.' },
+    ]},
+  brakebite: { title:'Frenos al límite', question:'Los frenos se calientan más de lo normal. ¿Qué haces?',
+    choices:[
+      { key:'push_brakes', label:'🔥 Exprime los frenos hasta el final', desc:'Más ritmo, pero arriesgas un bloqueo.' },
+      { key:'manage_brakes', label:'🩹 Gestiona la frenada', desc:'Sin riesgo, ritmo sin cambios.' },
     ]},
 };
 const LIVE_DECISION_INFO_IT_BASE = {
@@ -3701,6 +3813,56 @@ const LIVE_DECISION_INFO_IT_BASE = {
       { key:'nurse', label:'🩹 Gestisci con cautela', desc:'Perdi ritmo, ma riduci il rischio di ritiro.' },
       { key:'push',  label:'🔥 Continua a spingere', desc:'Nessun compromesso, ma rischi il ritiro.' },
     ]},
+  overtakedesperate: { title:'Occasione di sorpasso', question:'Il rivale davanti ha un attimo di esitazione. Rischi tutto per superarlo?',
+    choices:[
+      { key:'try_overtake_desperate', label:'🎲 Tenta il sorpasso disperato', desc:'Tutto o niente: puoi volare avanti o finire fuori pista.' },
+      { key:'give_up_attack', label:'🛡️ Rinuncia e gestisci', desc:'Nessun rischio, ma l\'occasione sfuma.' },
+    ]},
+  fuelgamble: { title:'Scommessa sul carburante', question:'Potresti alleggerire il serbatoio per guadagnare passo. Ci provi?',
+    choices:[
+      { key:'lighten_fuel', label:'⛽ Alleggerisci il serbatoio', desc:'Tutto o niente: molto più veloce, ma rischi di restare a secco.' },
+      { key:'stay_conservative_fuel', label:'🛡️ Resta prudente', desc:'Nessun rischio, ritmo invariato.' },
+    ]},
+  rivalmistake: { title:'Il rivale sbaglia', question:'Chi hai davanti ha appena commesso un errore. Che fai?',
+    choices:[
+      { key:'attack_now', label:'⚡ Attacca subito', desc:'Approfitta finché dura, ma rischi di forzare troppo.' },
+      { key:'wait_confirm', label:'👀 Aspetta conferma', desc:'Più sicuro, guadagno più piccolo ma quasi garantito.' },
+    ]},
+  trackliminvestigation: { title:'Track limits sotto investigazione', question:'I commissari stanno osservando i limiti di pista. Che fai?',
+    choices:[
+      { key:'push_limit', label:'🔥 Continua a spingere al limite', desc:'Più ritmo, ma rischi una penalità.' },
+      { key:'play_safe_limit', label:'🛡️ Rientra nei margini sicuri', desc:'Nessun rischio, nessun guadagno.' },
+    ]},
+  wheeltowheel: { title:'Ruota a ruota', question:'Sei fianco a fianco con un rivale in curva. Che fai?',
+    choices:[
+      { key:'hold_line', label:'🛑 Non cedere lo spazio', desc:'Puoi tenerlo dietro, ma rischi il contatto.' },
+      { key:'give_room', label:'🟢 Lascia margine', desc:'Perdi una posizione, ma la gara resta pulita.' },
+    ]},
+  doubleyellow: { title:'Doppia bandiera gialla', question:'Doppia gialla sventolata sul tuo settore. Che fai?',
+    choices:[
+      { key:'slow_down_yellow', label:'🐢 Rallenta come richiesto', desc:'Nessun rischio, nessun guadagno.' },
+      { key:'risk_pace_yellow', label:'🔥 Rischia comunque il ritmo', desc:'Puoi guadagnare, ma una penalità è dietro l\'angolo.' },
+    ]},
+  engineersadvice: { title:'Consiglio dagli ingegneri', question:'Il muretto ti suggerisce una modifica all\'assetto guida. Ti fidi?',
+    choices:[
+      { key:'follow_advice', label:'📻 Segui il consiglio', desc:'Probabilmente aiuta, rischio basso.' },
+      { key:'trust_instinct', label:'💪 Fidati del tuo istinto', desc:'Puoi guadagnare di più, ma è più incerto.' },
+    ]},
+  finalpush: { title:'Ultimo push', question:'Mancano pochi giri. Ti giochi tutto per il risultato?',
+    choices:[
+      { key:'all_or_nothing_push', label:'🎲 Tutto o niente', desc:'Il momento clou della gara: grande premio o grande rischio.' },
+      { key:'bring_home', label:'🏁 Porta a casa il risultato', desc:'Nessun rischio, la posizione è al sicuro.' },
+    ]},
+  backmarkertraffic: { title:'Traffico dei doppiati', question:'Hai un doppiato lento davanti. Che fai?',
+    choices:[
+      { key:'overtake_backmarker', label:'⚡ Sorpassalo subito', desc:'Guadagno rapido, ma rischi un errore nel sorpasso.' },
+      { key:'wait_for_space', label:'⏳ Aspetta lo spazio giusto', desc:'Più lento, ma più sicuro.' },
+    ]},
+  brakebite: { title:'Freni al limite', question:'I freni iniziano a scaldare oltre il normale. Che fai?',
+    choices:[
+      { key:'push_brakes', label:'🔥 Spremi i freni fino alla fine', desc:'Più ritmo, ma rischi un bloccaggio.' },
+      { key:'manage_brakes', label:'🩹 Gestisci la frenata', desc:'Nessun rischio, ritmo invariato.' },
+    ]},
 };
 const LIVE_DECISION_INFO = new Proxy({}, { get:(t,k)=> {
   const src = currentLang==='en' ? LIVE_DECISION_INFO_EN : (currentLang==='es' ? LIVE_DECISION_INFO_ES : LIVE_DECISION_INFO_IT_BASE);
@@ -3725,6 +3887,28 @@ const DECISION_OUTCOME_BUCKETS = {
   letpass:    [{ prob:1.00, label:'lose_1', min:1, max:1 }],
   push:       [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.375, label:'hold', min:0, max:0 }, { prob:0.125, label:'lose_2', min:2, max:2 }],
   nurse:      [{ prob:0.70, label:'hold', min:0, max:0 }, { prob:0.30, label:'lose_1', min:1, max:1 }],
+  // V0.9.7.9.22: 10 nuove decisioni. Tre sono esplicitamente "tutto o niente" (swing enormi,
+  // possono salvare o rovinare una gara): try_overtake_desperate, lighten_fuel, all_or_nothing_push.
+  try_overtake_desperate: [{ prob:0.35, label:'gain_3_5', min:-6, max:-4 }, { prob:0.65, label:'lose_3', min:3, max:3 }],
+  give_up_attack:         [{ prob:1.00, label:'hold', min:0, max:0 }],
+  lighten_fuel:           [{ prob:0.40, label:'gain_1_2', min:-4, max:-2 }, { prob:0.60, label:'lose_4', min:4, max:4 }],
+  stay_conservative_fuel: [{ prob:1.00, label:'hold', min:0, max:0 }],
+  attack_now:             [{ prob:0.65, label:'gain_1_2', min:-3, max:-1 }, { prob:0.35, label:'lose_1', min:1, max:1 }],
+  wait_confirm:           [{ prob:0.80, label:'gain_1', min:-1, max:-1 }, { prob:0.20, label:'hold', min:0, max:0 }],
+  push_limit:             [{ prob:0.50, label:'gain_1_2', min:-2, max:-1 }, { prob:0.50, label:'lose_2', min:2, max:2 }],
+  play_safe_limit:        [{ prob:1.00, label:'hold', min:0, max:0 }],
+  hold_line:              [{ prob:0.40, label:'gain_1', min:-1, max:-1 }, { prob:0.35, label:'hold', min:0, max:0 }, { prob:0.25, label:'lose_2', min:2, max:2 }],
+  give_room:              [{ prob:1.00, label:'lose_1', min:1, max:1 }],
+  slow_down_yellow:       [{ prob:1.00, label:'hold', min:0, max:0 }],
+  risk_pace_yellow:       [{ prob:0.55, label:'gain_1', min:-1, max:-1 }, { prob:0.45, label:'lose_2', min:2, max:2 }],
+  follow_advice:          [{ prob:0.65, label:'gain_1', min:-1, max:-1 }, { prob:0.35, label:'hold', min:0, max:0 }],
+  trust_instinct:         [{ prob:0.40, label:'gain_1_2', min:-2, max:-1 }, { prob:0.30, label:'hold', min:0, max:0 }, { prob:0.30, label:'lose_1', min:1, max:1 }],
+  all_or_nothing_push:    [{ prob:0.30, label:'gain_3_5', min:-5, max:-3 }, { prob:0.70, label:'lose_3', min:3, max:3 }],
+  bring_home:             [{ prob:1.00, label:'hold', min:0, max:0 }],
+  overtake_backmarker:    [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.50, label:'lose_1', min:1, max:1 }],
+  wait_for_space:         [{ prob:0.70, label:'hold', min:0, max:0 }, { prob:0.30, label:'lose_1', min:1, max:1 }],
+  push_brakes:            [{ prob:0.45, label:'gain_1_2', min:-2, max:-1 }, { prob:0.55, label:'lose_2', min:2, max:2 }],
+  manage_brakes:          [{ prob:1.00, label:'hold', min:0, max:0 }],
 };
 // sceglie un bucket in base alle probabilita', tira lo shift esatto dentro il range del bucket,
 // e ritorna ANCHE quale bucket e' uscito (indice), cosi' l'interfaccia puo' mostrarlo nel ballottaggio.
