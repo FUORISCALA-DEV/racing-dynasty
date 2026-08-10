@@ -69,6 +69,18 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    dret_career_totals: 'Numeri di carriera', dret_seasons: 'Stagioni', dret_total_wins: 'Vittorie', dret_total_podiums: 'Podi',
+    dret_total_points: (n)=>`${n} punti totali in carriera`,
+    dret_best_season: (age,pos,team)=>`Stagione migliore: a ${age} anni, P${pos} con ${team}`,
+    dret_highest_tier: (tier)=>`Livello massimo raggiunto: ${tier}`,
+    dret_teams_played: (n,names)=>`${n} scuderi${n===1?'a':'e'} in carriera: ${names}`,
+    dret_peaks: 'Picchi raggiunti',
+    dret_headline_star_outcast: 'Il pubblico ti adorava. La tua stessa squadra faceva fatica a sopportarti.',
+    dret_headline_respected_unknown: 'Rispettatissimo nel paddock, quasi sconosciuto al grande pubblico.',
+    dret_headline_beloved_legend: 'Amato dal pubblico e rispettato dagli addetti ai lavori — una leggenda vera.',
+    dret_headline_hidden_gem: 'Un fenomeno che il grande pubblico non ha mai davvero scoperto.',
+    dret_headline_quiet_career: 'Una carriera onesta, vissuta lontano dai riflettori.',
+    dret_headline_solid_pro: 'Il professionista solido che ogni scuderia vorrebbe avere in griglia.',
     dpt_eyebrow: 'Colloquio col Team Principal', dpt_reason_order: 'Il team principal ti chiama in ufficio: "Hai ignorato un ordine di squadra in gara. Vogliamo capire cosa è successo."',
     dpt_reason_rivalry: 'Il team principal ti chiama in ufficio: "La tensione con il tuo compagno sta diventando un problema per la squadra."',
     dpt_apologize: 'Ammetti l\'errore e prometti di fare meglio', dpt_defend_self: 'Difendi la tua scelta, non hai nulla di cui scusarti', dpt_silent: 'Ascolta senza sbilanciarti troppo',
@@ -113,7 +125,7 @@ const I18N = {
     dse2_promoted: (names)=>`⬆️ Promosse in Elite: ${names}`, dse2_relegated: (names)=>`⬇️ Retrocesse in Minore: ${names}`,
     dse2_continue: 'Inizia la Prossima Stagione →',
     dret_pill: 'FINE CARRIERA', dret_title: 'Ti ritiri dalle corse', dret_final_prestige: 'Prestigio Finale',
-    dret_footer: "Hai chiuso la carriera qui. Punto 4 completato — l'archivio carriere passate (punto 8) arriverà più avanti.",
+    dret_footer: "Hai chiuso qui la tua carriera da pilota. Grazie per il viaggio.",
     gate_message: 'Contenuto ancora in lavorazione, non visibile al pubblico. Inserisci il codice per continuare.',
     gate_wrong_password: 'Codice errato.',
     dc_done_start: 'Inizia la Stagione →',
@@ -296,6 +308,18 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    dret_career_totals: 'Career numbers', dret_seasons: 'Seasons', dret_total_wins: 'Wins', dret_total_podiums: 'Podiums',
+    dret_total_points: (n)=>`${n} total career points`,
+    dret_best_season: (age,pos,team)=>`Best season: at age ${age}, P${pos} with ${team}`,
+    dret_highest_tier: (tier)=>`Highest level reached: ${tier}`,
+    dret_teams_played: (n,names)=>`${n} team${n===1?'':'s'} across your career: ${names}`,
+    dret_peaks: 'Career peaks',
+    dret_headline_star_outcast: 'The public adored you. Your own team could barely stand you.',
+    dret_headline_respected_unknown: 'Deeply respected in the paddock, almost unknown to the wider public.',
+    dret_headline_beloved_legend: 'Loved by the public and respected by insiders — a true legend.',
+    dret_headline_hidden_gem: 'A phenomenon the wider public never truly discovered.',
+    dret_headline_quiet_career: 'An honest career, lived far from the spotlight.',
+    dret_headline_solid_pro: 'The solid professional every team would want on the grid.',
     dpt_eyebrow: 'Talk with the Team Principal', dpt_reason_order: 'The team principal calls you into the office: "You ignored a team order during the race. We want to understand what happened."',
     dpt_reason_rivalry: 'The team principal calls you into the office: "The tension with your teammate is becoming a problem for the team."',
     dpt_apologize: 'Admit the mistake and promise to do better', dpt_defend_self: "Defend your choice, you have nothing to apologize for", dpt_silent: 'Listen without committing to much',
@@ -340,7 +364,7 @@ const I18N = {
     dse2_promoted: (names)=>`⬆️ Promoted to Elite: ${names}`, dse2_relegated: (names)=>`⬇️ Relegated to Minor: ${names}`,
     dse2_continue: 'Start Next Season →',
     dret_pill: 'CAREER OVER', dret_title: 'You retire from racing', dret_final_prestige: 'Final Prestige',
-    dret_footer: 'Your career ends here. Step 4 complete — the archive of past careers (step 8) will come later.',
+    dret_footer: 'Your driving career ends here. Thanks for the ride.',
     gate_message: 'Content still in development, not public yet. Enter the code to continue.',
     gate_wrong_password: 'Wrong code.',
     dc_done_start: 'Start the Season →',
@@ -517,6 +541,18 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    dret_career_totals: 'Números de carrera', dret_seasons: 'Temporadas', dret_total_wins: 'Victorias', dret_total_podiums: 'Podios',
+    dret_total_points: (n)=>`${n} puntos totales en carrera`,
+    dret_best_season: (age,pos,team)=>`Mejor temporada: a los ${age} años, P${pos} con ${team}`,
+    dret_highest_tier: (tier)=>`Nivel máximo alcanzado: ${tier}`,
+    dret_teams_played: (n,names)=>`${n} escuderí${n===1?'a':'as'} en tu carrera: ${names}`,
+    dret_peaks: 'Picos alcanzados',
+    dret_headline_star_outcast: 'El público te adoraba. A tu propio equipo le costaba soportarte.',
+    dret_headline_respected_unknown: 'Muy respetado en el paddock, casi desconocido para el gran público.',
+    dret_headline_beloved_legend: 'Amado por el público y respetado por los profesionales — una leyenda de verdad.',
+    dret_headline_hidden_gem: 'Un fenómeno que el gran público nunca llegó a descubrir realmente.',
+    dret_headline_quiet_career: 'Una carrera honesta, vivida lejos de los focos.',
+    dret_headline_solid_pro: 'El profesional sólido que cualquier equipo querría tener en la parrilla.',
     dpt_eyebrow: 'Conversación con el Jefe de Equipo', dpt_reason_order: 'El jefe de equipo te llama a la oficina: "Ignoraste una orden de equipo durante la carrera. Queremos entender qué pasó."',
     dpt_reason_rivalry: 'El jefe de equipo te llama a la oficina: "La tensión con tu compañero se está convirtiendo en un problema para el equipo."',
     dpt_apologize: 'Admite el error y promete mejorar', dpt_defend_self: 'Defiende tu elección, no tienes nada de qué disculparte', dpt_silent: 'Escucha sin comprometerte demasiado',
@@ -561,7 +597,7 @@ const I18N = {
     dse2_promoted: (names)=>`⬆️ Ascendidas a Élite: ${names}`, dse2_relegated: (names)=>`⬇️ Descendidas a Menor: ${names}`,
     dse2_continue: 'Empezar la Próxima Temporada →',
     dret_pill: 'FIN DE CARRERA', dret_title: 'Te retiras de las carreras', dret_final_prestige: 'Prestigio Final',
-    dret_footer: 'Tu carrera termina aquí. Paso 4 completado — el archivo de carreras pasadas (paso 8) llegará más adelante.',
+    dret_footer: 'Tu carrera como piloto termina aquí. Gracias por el viaje.',
     gate_message: 'Contenido todavía en desarrollo, no visible al público. Introduce el código para continuar.',
     gate_wrong_password: 'Código incorrecto.',
     dc_done_start: 'Empezar la Temporada →',
@@ -1939,6 +1975,19 @@ function finalizeDriverCareerSeason(){
   driverCareerState.currentTier = driverCareerState.world.tiers[driverCareerState.currentTeamId];
   const retiring = d.eta >= DRIVER_CAREER_RETIREMENT_AGE;
 
+  // V0.9.7.9.17: storico di carriera, stagione per stagione, per il riepilogo fine carriera
+  if(!driverCareerState.careerHistory) driverCareerState.careerHistory = [];
+  driverCareerState.careerHistory.push({
+    age: d.eta-1, teamName: state.team.customName, tier: driverCareerState.currentTier,
+    finalPos, points: stats.points, wins: stats.wins, podiums: stats.podiums,
+  });
+  if(!driverCareerState.careerTeams) driverCareerState.careerTeams = [];
+  if(!driverCareerState.careerTeams.includes(state.team.customName)) driverCareerState.careerTeams.push(state.team.customName);
+  driverCareerState.peakRating = Math.max(driverCareerState.peakRating||0, d.rating);
+  driverCareerState.peakFama = Math.max(driverCareerState.peakFama||0, d.fama);
+  driverCareerState.peakReputazione = Math.max(driverCareerState.peakReputazione||0, d.reputazione);
+  driverCareerState.highestTierReached = ['kart','minore','elite'].indexOf(driverCareerState.currentTier) > ['kart','minore','elite'].indexOf(driverCareerState.highestTierReached||'kart') ? driverCareerState.currentTier : (driverCareerState.highestTierReached||'kart');
+
   driverCareerState.lastSeasonSummary = { finalPos, prestigeGained, stats: {...stats}, evolution, retiring, teamName: state.team.customName };
   state.phase = retiring ? 'driver-retirement' : 'driver-season-end';
   render();
@@ -2100,9 +2149,32 @@ function renderDriverSeasonEnd(){
   bindActions();
 }
 
+// V0.9.7.9.17: battuta narrativa che riassume il tipo di pilota diventato, in base al rapporto
+// tra Fama e Reputazione raggiunti — cattura esattamente il contrasto voluto dal documento design
+// ("sei il più veloce della griglia, il pubblico ti adora, ma la squadra non ti sopporta").
+function generateCareerHeadline(d, peakFama, peakRep, peakRating){
+  const highFama = peakFama>=60, lowFama = peakFama<30;
+  const highRep = peakRep>=70, lowRep = peakRep<40;
+  if(highFama && lowRep) return 'dret_headline_star_outcast';
+  if(highRep && lowFama) return 'dret_headline_respected_unknown';
+  if(highFama && highRep) return 'dret_headline_beloved_legend';
+  if(peakRating>=80 && lowFama && !highRep) return 'dret_headline_hidden_gem';
+  if(lowFama && lowRep) return 'dret_headline_quiet_career';
+  return 'dret_headline_solid_pro';
+}
+
 function renderDriverRetirement(){
   const d = driverCareerState.driver;
-  const s = driverCareerState.lastSeasonSummary;
+  const history = driverCareerState.careerHistory || [];
+  const totalSeasons = history.length;
+  const totals = history.reduce((acc,s)=>({ points:acc.points+s.points, wins:acc.wins+s.wins, podiums:acc.podiums+s.podiums }), {points:0,wins:0,podiums:0});
+  const bestSeason = history.slice().sort((a,b)=>a.finalPos-b.finalPos)[0];
+  const tierKey = { kart:'dh_tier_kart', minore:'dh_tier_minore', elite:'dh_tier_elite' };
+  const peakRating = driverCareerState.peakRating||d.rating;
+  const peakFama = driverCareerState.peakFama||d.fama;
+  const peakRep = driverCareerState.peakReputazione||d.reputazione;
+  const headlineKey = generateCareerHeadline(d, peakFama, peakRep, peakRating);
+
   app.innerHTML = `
   <div class="hero" style="padding:28px 20px 20px;">
     <div class="hero-inner">
@@ -2112,7 +2184,30 @@ function renderDriverRetirement(){
     </div>
   </div>
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">${t('dret_final_prestige')}</h3></div>
+    <div class="tag-line" style="font-size:15px;font-style:italic;text-align:center;">"${t(headlineKey)}"</div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><h3 class="hdr" style="font-size:15px;">${t('dret_career_totals')}</h3></div>
+    <div class="hub-quick-stats">
+      <div class="hub-quick-stat"><div class="hub-quick-val">${totalSeasons}</div><div class="hub-quick-label" style="font-size:11.5px;">${t('dret_seasons')}</div></div>
+      <div class="hub-quick-stat"><div class="hub-quick-val" style="color:var(--legendary);">${totals.wins}</div><div class="hub-quick-label" style="font-size:11.5px;">${t('dret_total_wins')}</div></div>
+      <div class="hub-quick-stat"><div class="hub-quick-val">${totals.podiums}</div><div class="hub-quick-label" style="font-size:11.5px;">${t('dret_total_podiums')}</div></div>
+    </div>
+    <div class="tag-line dim" style="margin-top:10px;">${t('dret_total_points', totals.points)}</div>
+    ${bestSeason ? `<div class="tag-line" style="font-size:14px;">${t('dret_best_season', bestSeason.age, bestSeason.finalPos, bestSeason.teamName)}</div>` : ''}
+    <div class="tag-line dim">${t('dret_highest_tier', t(tierKey[driverCareerState.highestTierReached||'kart']))}</div>
+    <div class="tag-line dim">${t('dret_teams_played', (driverCareerState.careerTeams||[]).length, (driverCareerState.careerTeams||[]).join(', '))}</div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><h3 class="hdr" style="font-size:15px;">${t('dret_peaks')}</h3></div>
+    <div class="hub-quick-stats">
+      <div class="hub-quick-stat"><div class="hub-quick-val" style="color:var(--cyan);">${peakRating}</div><div class="hub-quick-label" style="font-size:11.5px;">${t('dh_rating')}</div></div>
+      <div class="hub-quick-stat"><div class="hub-quick-val" style="color:var(--legendary);">${peakFama}</div><div class="hub-quick-label" style="font-size:11.5px;">${t('dh_fama')}</div></div>
+      <div class="hub-quick-stat"><div class="hub-quick-val" style="color:#4CD97B;">${peakRep}</div><div class="hub-quick-label" style="font-size:11.5px;">${t('dh_reputazione')}</div></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><h3 class="hdr" style="font-size:15px;">${t('dret_final_prestige')}</h3></div>
     <div class="card-rating" style="text-align:center;">${d.prestigio}</div>
   </div>
   <div class="footer-note" style="font-size:12.5px;">${t('dret_footer')}</div>
