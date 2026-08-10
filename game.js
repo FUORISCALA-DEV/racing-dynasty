@@ -2526,6 +2526,27 @@ const TRAIT_TABLE = {
   'Rookie Wonder':   { pressureMalus:-10, growthPerPodium:1 }
 };
 
+// V0.9.7.9.13 — CARRIERA PILOTA (punto 7/8): un pilota giocante con archStrength<1 ha lo STESSO
+// archetipo di un pilota IA maturo, ma con effetto ridotto — l'archetipo scelto alla creazione
+// (punto 1) parte "acerbo" e si rafforza giocando in modo coerente (vedi rafforzaArchetipo() piu'
+// sotto). Le soglie che definiscono QUANDO un effetto scatta (es. comebackGridThreshold) non si
+// scalano: sono condizioni, non intensita'.
+const TRAIT_THRESHOLD_KEYS = new Set(['comebackGridThreshold']);
+function effectiveTrait(pilot){
+  const base = TRAIT_TABLE[pilot.arch];
+  if(!base) return {};
+  if(pilot.archStrength===undefined || pilot.archStrength>=1) return base;
+  const s = Math.max(0, pilot.archStrength);
+  const scaled = {};
+  for(const k in base){
+    const v = base[k];
+    if(typeof v!=='number' || TRAIT_THRESHOLD_KEYS.has(k)){ scaled[k]=v; continue; }
+    if(/Mult$|Frac$/.test(k)) scaled[k] = 1 + (v-1)*s; // moltiplicatori/frazioni: scala la distanza dal neutro (1.0)
+    else scaled[k] = v*s; // bonus/malus/chance additivi: scala verso lo zero
+  }
+  return scaled;
+}
+
 function circuitCompatScore(comp, pilot, circuit){
   const domKey = DOM_KEY_MAP[circuit.componentedominante];
   let score = 50;
@@ -2534,10 +2555,10 @@ function circuitCompatScore(comp, pilot, circuit){
     score += (val-70)*0.6;
   }
   if(circuit.tipo==='Cittadino' || circuit.tipo==='Stop-and-go'){
-    if(pilot.arch==='Street King') score += TRAIT_TABLE['Street King'].streetBonus;
+    if(pilot.arch==='Street King') score += effectiveTrait(pilot).streetBonus;
   }
   if(circuit.tipo==='Alta velocità' && pilot.arch==='Street King'){
-    score += TRAIT_TABLE['Street King'].highSpeedMalus;
+    score += effectiveTrait(pilot).highSpeedMalus;
   }
   return clamp(score, 0, 100);
 }
@@ -2545,7 +2566,7 @@ function circuitCompatScore(comp, pilot, circuit){
 function computeQualifying(entries, circuit, weatherBefore){
   return entries.map(e=>{
     const pilot = e.pilot, comp = e.comp;
-    const trait = TRAIT_TABLE[pilot.arch] || {};
+    const trait = effectiveTrait(pilot);
     let pilotQ = pilot.qualifica;
     if(trait.qualiBonus) pilotQ += trait.qualiBonus;
     if(trait.qualiMalus) pilotQ += trait.qualiMalus;
@@ -2562,7 +2583,7 @@ function computeQualifying(entries, circuit, weatherBefore){
 function computeStart(entries, gridPos, circuit){
   return entries.map(e=>{
     const pilot = e.pilot, comp = e.comp;
-    const trait = TRAIT_TABLE[pilot.arch] || {};
+    const trait = effectiveTrait(pilot);
     let partenza = pilot.partenza;
     if(trait.partenzaMalus) partenza += trait.partenzaMalus;
     partenza = clamp(partenza, 1, 100);
@@ -2580,7 +2601,7 @@ function compressPilotRating(rating){
 }
 
 function effectivePilotPaceScore(pilot, ctx){
-  const trait = TRAIT_TABLE[pilot.arch] || {};
+  const trait = effectiveTrait(pilot);
   let score = compressPilotRating(pilot.rating);
 
   if(ctx.isWet) score += (pilot.pioggia-50)*0.35;
@@ -2622,7 +2643,7 @@ function effectiveGommeScore(gomme, tireWear){
 }
 
 function driverVarianceScale(pilot){
-  const trait = TRAIT_TABLE[pilot.arch] || {};
+  const trait = effectiveTrait(pilot);
   let scale = 1 - (pilot.costanza-50)/150;
   if(trait.varianceMult) scale *= trait.varianceMult;
   return clamp(scale, 0.25, 3);
@@ -2643,7 +2664,7 @@ function baseDnfChance(entry, comp, circuit){
   let chance = (100-reliability)*0.0004;
   chance *= (1 + circuit.stressmotore/500);
   chance *= (1 + (entry.pilot.aggressivita-50)/500);
-  const trait = TRAIT_TABLE[entry.pilot.arch] || {};
+  const trait = effectiveTrait(entry.pilot);
   if(trait.dnfMult) chance *= trait.dnfMult;
   if(trait.incidentRiskAdd) chance += trait.incidentRiskAdd*0.01;
   return clamp(chance, 0.0008, 0.05);
@@ -2655,7 +2676,7 @@ function decidePit(t, pilot, plan){
   } else if(t!==3 && t!==7){
     return false;
   }
-  const trait = TRAIT_TABLE[pilot.arch] || {};
+  const trait = effectiveTrait(pilot);
   if(trait.skipPitChance && rnd()<trait.skipPitChance) return false;
   return true;
 }
@@ -2687,7 +2708,7 @@ function applyOvertakeContest(provisional, prevOrder, byKey, circuit){
     if(prevRank[cur.slotKey]===undefined || prevRank[ahead.slotKey]===undefined) continue;
     if(prevRank[cur.slotKey] < prevRank[ahead.slotKey]) continue; // non e' un sorpasso in atto
     const attacker = byKey[cur.slotKey].pilot, defender = byKey[ahead.slotKey].pilot;
-    const attackerTrait = TRAIT_TABLE[attacker.arch] || {};
+    const attackerTrait = effectiveTrait(attacker);
     let chance = 0.5 + (attacker.sorpassi-50)*0.006 + (circuit.sorpassabilita-50)*0.004 + (attacker.aggressivita-50)*0.002;
     if(attacker.arch==='The Hunter' && defender.rating>attacker.rating) chance += attackerTrait.overtakeBonus*0.01;
     if(attacker.arch==='The Machine') chance += attackerTrait.overtakeMalus*0.01;
@@ -2853,7 +2874,7 @@ function simulateFullRace(){
       }
 
       const wearInc = (circuit.stressgomme/100)*0.085 * (1-(comp.gomme.durata-50)/320) * (1-(pilot.gestionegomme-50)/420)
-        * (TRAIT_TABLE[pilot.arch] && TRAIT_TABLE[pilot.arch].wearMult ? TRAIT_TABLE[pilot.arch].wearMult : 1);
+        * (effectiveTrait(pilot).wearMult || 1);
       tireWear[e.slotKey] = clamp(tireWear[e.slotKey] + Math.max(wearInc,0.01), 0, 1);
 
       const ctx = {
@@ -2878,7 +2899,7 @@ function simulateFullRace(){
       let dnfNow = forcedDnf;
       if(!dnfNow){
         let dnfChance = baseDnfChance(e, comp, circuit);
-        if(pilot.arch==='Rain Master' && isWet) dnfChance *= TRAIT_TABLE['Rain Master'].wetErrorMult;
+        if(pilot.arch==='Rain Master' && isWet) dnfChance *= effectiveTrait(pilot).wetErrorMult;
         dnfNow = rnd() < dnfChance;
       }
 
@@ -3527,14 +3548,39 @@ const DRIVER_DECISION_CONSEQUENCES = {
 };
 function applyDriverCareerDecisionConsequences(type, choiceKey){
   if(!state.isDriverCareer) return;
+  const d = driverCareerState.driver;
+  reinforceArchetypeIfCoherent(type, choiceKey, d);
   const delta = (DRIVER_DECISION_CONSEQUENCES[type]||{})[choiceKey];
   if(!delta) return;
-  const d = driverCareerState.driver;
   const ratingFactor = 0.6 + (d.rating/100)*0.8; // rating basso: 0.6x — rating alto: fino a 1.4x
   const famaDelta = delta.fama>0 ? Math.round(delta.fama*ratingFactor) : (delta.fama||0);
   d.fama = Math.max(0, Math.min(100, d.fama + famaDelta));
   d.reputazione = Math.max(0, Math.min(100, d.reputazione + (delta.reputazione||0)));
   if(delta.rivalry) driverCareerState.teammateRivalry = Math.max(0, Math.min(100, (driverCareerState.teammateRivalry||0) + delta.rivalry));
+}
+
+// V0.9.7.9.13: quali scelte in gara sono "coerenti" con ciascun archetipo — ogni volta che il
+// giocatore ne fa una, l'archetipo si rafforza un po' verso l'effetto pieno (mai retrocede per
+// scelte incoerenti, semplicemente non avanza quella volta — documento design, punto 1/4).
+const ARCH_REINFORCE_MAP = {
+  'Rain Master':     [{type:'weather',choice:'stay'}],
+  'The Hunter':      [{type:'aggression',choice:'aggressive'},{type:'defend',choice:'defend'}],
+  'The Machine':     [{type:'aggression',choice:'safe'},{type:'enginemode',choice:'save'}],
+  'Tire Whisperer':  [{type:'enginemode',choice:'save'},{type:'mechanical',choice:'nurse'}],
+  'Ice Man':         [{type:'aggression',choice:'safe'},{type:'defend',choice:'letpass'}],
+  'Wild Card':       [{type:'aggression',choice:'aggressive'},{type:'teamorders',choice:'free'}],
+  'Strategic Mind':  [{type:'pit',choice:'early'},{type:'pit',choice:'late'},{type:'weather',choice:'splitstrategy'}],
+  'Comeback King':   [{type:'aggression',choice:'aggressive'},{type:'defend',choice:'defend'}],
+  'Pole Specialist': [{type:'enginemode',choice:'push'}],
+  'Street King':     [{type:'aggression',choice:'aggressive'}],
+  'Rookie Wonder':   [{type:'aggression',choice:'safe'},{type:'defend',choice:'defend'}],
+};
+const ARCH_REINFORCE_STEP = 0.035;
+function reinforceArchetypeIfCoherent(type, choiceKey, driver){
+  if(driver.archStrength>=1) return;
+  const matches = ARCH_REINFORCE_MAP[driver.arch] || [];
+  const isCoherent = matches.some(m=>m.type===type && m.choice===choiceKey);
+  if(isCoherent) driver.archStrength = Math.min(1, (driver.archStrength||0.2) + ARCH_REINFORCE_STEP);
 }
 
 function resolveLiveDecision(choiceKey){
