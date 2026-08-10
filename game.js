@@ -4965,16 +4965,24 @@ function renderModeSelect(){
   </div>
   <div class="grid grid-2 mode-select-grid">
     <div class="card pickable mode-select-card" data-rarity="Rare" data-action="go-to-season-length">
-      <img class="mode-select-img" src="assets/mode-select/team-season.webp" alt="">
-      <span class="rarity-tag" data-rarity="Rare" style="font-size:11.5px;">🏎️ ${t('mode_select_team')}</span>
-      <div class="ability" style="font-size:14px;margin-top:8px;">${t('mode_select_team_desc')}</div>
-      <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_team_hint')}</div>
+      <img class="mode-select-bg-img" src="assets/mode-select/team-season.webp" alt="">
+      <div class="mode-select-top">
+        <span class="rarity-tag" data-rarity="Rare" style="font-size:11.5px;">🏎️ ${t('mode_select_team')}</span>
+      </div>
+      <div class="mode-select-bottom-scrim">
+        <div class="ability" style="font-size:14px;">${t('mode_select_team_desc')}</div>
+        <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_team_hint')}</div>
+      </div>
     </div>
     <div class="card pickable garage-coming-soon mode-select-card" data-rarity="Legendary" data-action="request-password-gate" data-gate-for="driver-creation">
-      <img class="mode-select-img" src="assets/mode-select/driver-career.webp" alt="">
-      <span class="rarity-tag" data-rarity="Legendary" style="font-size:11.5px;">🏁 ${t('mode_select_driver')}</span>
-      <div class="ability" style="font-size:14px;margin-top:8px;">${t('mode_select_driver_desc')}</div>
-      <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;font-size:12px;">${t('sl_garage_soon')}</div>
+      <img class="mode-select-bg-img" src="assets/mode-select/driver-career.webp" alt="">
+      <div class="mode-select-top">
+        <span class="rarity-tag" data-rarity="Legendary" style="font-size:11.5px;">🏁 ${t('mode_select_driver')}</span>
+      </div>
+      <div class="mode-select-bottom-scrim">
+        <div class="ability" style="font-size:14px;">${t('mode_select_driver_desc')}</div>
+        <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;font-size:12px;">${t('sl_garage_soon')}</div>
+      </div>
     </div>
   </div>
   `;
