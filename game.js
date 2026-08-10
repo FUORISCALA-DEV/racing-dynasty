@@ -71,7 +71,7 @@ const I18N = {
   it: {
     bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_hold: 'Mantieni la posizione',
     bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni', bkt_lose_3: 'Perdi 3 posizioni', bkt_gain_3_5: 'Guadagni 3-5 posizioni',
-    dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '⚠️ TUTTO O NIENTE — si decide ora',
+    dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '⚠️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito',
     dret_career_totals: 'Numeri di carriera', dret_seasons: 'Stagioni', dret_total_wins: 'Vittorie', dret_total_podiums: 'Podi',
     dret_total_points: (n)=>`${n} punti totali in carriera`,
     dret_best_season: (age,pos,team)=>`Stagione migliore: a ${age} anni, P${pos} con ${team}`,
@@ -313,7 +313,7 @@ const I18N = {
   en: {
     bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_hold: 'Hold position',
     bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions', bkt_lose_3: 'Lose 3 positions', bkt_gain_3_5: 'Gain 3-5 positions',
-    dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '⚠️ ALL OR NOTHING — deciding now',
+    dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '⚠️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result',
     dret_career_totals: 'Career numbers', dret_seasons: 'Seasons', dret_total_wins: 'Wins', dret_total_podiums: 'Podiums',
     dret_total_points: (n)=>`${n} total career points`,
     dret_best_season: (age,pos,team)=>`Best season: at age ${age}, P${pos} with ${team}`,
@@ -549,7 +549,7 @@ const I18N = {
   es: {
     bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_hold: 'Mantienes la posición',
     bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones', bkt_lose_3: 'Pierdes 3 posiciones', bkt_gain_3_5: 'Ganas 3-5 posiciones',
-    dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '⚠️ TODO O NADA — se decide ahora',
+    dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '⚠️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado',
     dret_career_totals: 'Números de carrera', dret_seasons: 'Temporadas', dret_total_wins: 'Victorias', dret_total_podiums: 'Podios',
     dret_total_points: (n)=>`${n} puntos totales en carrera`,
     dret_best_season: (age,pos,team)=>`Mejor temporada: a los ${age} años, P${pos} con ${team}`,
@@ -4051,6 +4051,13 @@ function reinforceArchetypeIfCoherent(type, choiceKey, driver){
 
 const HIGH_STAKES_CHOICES = new Set(['try_overtake_desperate','lighten_fuel','all_or_nothing_push']);
 
+// V0.9.7.9.24 — ridisegnato da capo dopo feedback: il battito-su-tutto-insieme era confuso e
+// lasciava troppo poco tempo per leggere. Nuovo meccanismo: una "ruota" che rallenta, un SOLO
+// elemento evidenziato alla volta (non tutti a lampeggiare insieme), atterra sempre sulla risposta
+// vera, poi resta ferma e leggibile a lungo prima di chiudersi.
+const REVEAL_SCHEDULE_NORMAL = [140,150,170,200,250,340];       // ~1250ms totali, ultimo step = esito vero
+const REVEAL_SCHEDULE_HIGHSTAKES = [110,115,125,140,160,190,230,290,380,520]; // ~2260ms, piu' lunga e piu' scandita
+
 function resolveLiveDecision(choiceKey){
   const dec = state.live.activeDecision;
   if(!dec) return;
@@ -4059,41 +4066,54 @@ function resolveLiveDecision(choiceKey){
   state.live.resolvedDecisions.push(dec.phase);
   state.live.activeDecision = null;
   state.live.decisionDeadline = null;
-  // V0.9.7.9.20/23: ballottaggio — prima "rolling" (tutte le ipotesi in bilico, battito cardiaco
-  // aptico+visivo), poi "settled" (resta accesa solo quella vera), poi si sblocca la gara. Le
-  // scelte "tutto o niente" (HIGH_STAKES_CHOICES) hanno tensione volutamente maggiore: rolling piu'
-  // lungo e battito piu' intenso, si deve sentire la differenza rispetto a una decisione normale.
+
   const isHighStakes = HIGH_STAKES_CHOICES.has(choiceKey);
-  const rollingMs = isHighStakes ? 1900 : 900;
-  state.live.pendingReveal = { outcomes, stage:'rolling', highStakes:isHighStakes };
+  const schedule = isHighStakes ? REVEAL_SCHEDULE_HIGHSTAKES : REVEAL_SCHEDULE_NORMAL;
+  const slotKeys = Object.keys(outcomes);
+  state.live.pendingReveal = { outcomes, stage:'cycling', highStakes:isHighStakes, highlightIdx:{} };
+  slotKeys.forEach(k=> state.live.pendingReveal.highlightIdx[k] = 0);
   render();
-  triggerHeartbeatHaptic(isHighStakes, rollingMs);
-  setTimeout(()=>{
+
+  let step = 0;
+  function tick(){
     if(!state.live || !state.live.pendingReveal) return;
-    state.live.pendingReveal.stage = 'settled';
-    render();
-    // V0.9.7.9.21: suono di esito proprio nel momento in cui il ballottaggio si ferma sulla
-    // risposta vera — successo se guadagni posizioni, fallimento se ne perdi. Se i due piloti
-    // hanno esiti opposti (capita, tirano indipendenti), suonano entrambi con un piccolo scarto
-    // cosi' si sentono distinti invece di sovrapporsi.
-    const outcomeTypes = Object.values(outcomes).map(o=>{
-      const label = o.buckets[o.bucketIdx].label;
-      return label.startsWith('gain') ? 'gain' : label.startsWith('lose') ? 'lose' : 'hold';
+    const isLast = step===schedule.length-1;
+    slotKeys.forEach(slotKey=>{
+      const { bucketIdx, buckets } = outcomes[slotKey];
+      state.live.pendingReveal.highlightIdx[slotKey] = isLast ? bucketIdx : (step % buckets.length);
     });
-    const hasGain = outcomeTypes.includes('gain');
-    const hasLose = outcomeTypes.includes('lose');
-    if(hasGain) playSfx('upgrade_success');
-    if(hasLose) setTimeout(()=> playSfx('upgrade_fail'), hasGain ? 180 : 0);
-    if(navigator.vibrate && audioSettings.hapticEnabled!==false){
-      try{ navigator.vibrate(isHighStakes ? (hasGain&&!hasLose?[15,30,15,30,80]:[120]) : [30]); }catch(e){}
-    }
-    setTimeout(()=>{
-      if(!state.live) return;
-      state.live.pendingReveal = null;
-      state.live.paused = false;
+    if(isLast){
+      state.live.pendingReveal.stage = 'settled';
       render();
-    }, isHighStakes ? 2000 : 1400);
-  }, rollingMs);
+      // suono + aptico proprio nel momento in cui la ruota si ferma sulla risposta vera
+      const outcomeTypes = Object.values(outcomes).map(o=>{
+        const label = o.buckets[o.bucketIdx].label;
+        return label.startsWith('gain') ? 'gain' : label.startsWith('lose') ? 'lose' : 'hold';
+      });
+      const hasGain = outcomeTypes.includes('gain');
+      const hasLose = outcomeTypes.includes('lose');
+      if(hasGain) playSfx('upgrade_success');
+      if(hasLose) setTimeout(()=> playSfx('upgrade_fail'), hasGain ? 180 : 0);
+      if(navigator.vibrate && audioSettings.hapticEnabled!==false){
+        try{ navigator.vibrate(isHighStakes ? (hasGain&&!hasLose?[18,35,18,35,90]:[130]) : [35]); }catch(e){}
+      }
+      // V0.9.7.9.24: molto piu' tempo per leggere l'esito fermo prima di richiudersi
+      setTimeout(()=>{
+        if(!state.live) return;
+        state.live.pendingReveal = null;
+        state.live.paused = false;
+        render();
+      }, isHighStakes ? 3200 : 2400);
+      return;
+    }
+    render();
+    if(navigator.vibrate && audioSettings.hapticEnabled!==false){
+      try{ navigator.vibrate(6); }catch(e){} // piccolo "tick" meccanico ad ogni scatto della ruota
+    }
+    step++;
+    setTimeout(tick, schedule[step]);
+  }
+  setTimeout(tick, schedule[0]);
 }
 
 function startLiveRace(timeline){
@@ -4256,10 +4276,12 @@ function liveDecisionRevealHTML(){
   };
   const columnsHTML = Object.keys(reveal.outcomes).map(slotKey=>{
     const { bucketIdx, buckets } = reveal.outcomes[slotKey];
+    const activeIdx = reveal.highlightIdx[slotKey];
     const chipsHTML = buckets.map((b,i)=>{
       const cls = b.label.startsWith('gain') ? 'bkt-gain' : b.label.startsWith('lose') ? 'bkt-lose' : 'bkt-hold';
-      const isWinner = i===bucketIdx;
-      const stateCls = !settled ? (highStakes?'reveal-rolling-intense':'reveal-rolling') : (isWinner ? 'reveal-winner' : 'reveal-dimmed');
+      let stateCls;
+      if(settled){ stateCls = i===bucketIdx ? 'reveal-winner' : 'reveal-dimmed'; }
+      else { stateCls = i===activeIdx ? 'reveal-active' : 'reveal-idle'; }
       return `<div class="decision-reveal-chip ${cls} ${stateCls}">${t('bkt_'+b.label)}</div>`;
     }).join('');
     return `
@@ -4271,8 +4293,8 @@ function liveDecisionRevealHTML(){
   const eyebrowText = highStakes ? t('dec_reveal_title_risky') : t('dec_reveal_title');
   return `
   <div class="decision-modal">
-    <div class="decision-card decision-reveal-card ${highStakes?'decision-reveal-highstakes':''}">
-      <div class="eyebrow ${highStakes?'reveal-eyebrow-risky':''}">${eyebrowText}</div>
+    <div class="decision-card decision-reveal-card ${highStakes?'decision-reveal-highstakes':''} ${settled?'decision-reveal-settled':''}">
+      <div class="eyebrow ${highStakes && !settled?'reveal-eyebrow-risky':''}">${settled ? t('dec_reveal_title_done') : eyebrowText}</div>
       <div class="decision-reveal-row">${columnsHTML}</div>
     </div>
   </div>`;

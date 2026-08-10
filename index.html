@@ -879,32 +879,20 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
 .decision-reveal-chip.bkt-gain{ background:rgba(76,217,123,0.20); color:#5EEB93; border:1px solid rgba(76,217,123,0.5); }
 .decision-reveal-chip.bkt-lose{ background:rgba(255,90,90,0.20); color:#FF7373; border:1px solid rgba(255,90,90,0.5); }
 .decision-reveal-chip.bkt-hold{ background:rgba(255,255,255,0.12); color:#C8CAD0; border:1px solid var(--line); }
-/* V0.9.7.9.23: vero ritmo cardiaco — doppio colpo ravvicinato (lub-dub) poi pausa, non un pulse semplice */
-.decision-reveal-chip.reveal-rolling{ animation:heartbeatChip 1.1s ease-in-out infinite; }
-.decision-reveal-chip.reveal-rolling-intense{ animation:heartbeatChipIntense 0.75s ease-in-out infinite; }
-.decision-reveal-chip.reveal-winner{ transform:scale(1.1); box-shadow:0 0 20px currentColor; opacity:1; }
-.decision-reveal-chip.reveal-dimmed{ opacity:0.2; transform:scale(0.92); filter:grayscale(0.7); }
-@keyframes heartbeatChip{
-  0%, 45%, 100% { transform:scale(1); opacity:0.68; }
-  12% { transform:scale(1.08); opacity:1; }
-  24% { transform:scale(1); opacity:0.68; }
-  32% { transform:scale(1.08); opacity:1; }
-}
-@keyframes heartbeatChipIntense{
-  0%, 45%, 100% { transform:scale(1); opacity:0.62; }
-  12% { transform:scale(1.14); opacity:1; }
-  24% { transform:scale(1); opacity:0.62; }
-  32% { transform:scale(1.14); opacity:1; }
-}
-.decision-reveal-card{ position:relative; }
-.decision-reveal-highstakes{
-  border:2px solid #FF3B3B; animation:highStakesBorderPulse 0.75s ease-in-out infinite;
-}
-.reveal-eyebrow-risky{ color:#FF5A5A !important; font-weight:900; letter-spacing:0.04em; animation:heartbeatChipIntense 0.75s ease-in-out infinite; }
+/* V0.9.7.9.24: ridisegnato — un solo elemento "attivo" alla volta durante il ciclo (nessun pulse
+   ripetuto e simultaneo su tutto, che era confuso). Transizione morbida quando passa da un'ipotesi
+   all'altra, poi tutto fermo e leggibile quando si arriva all'esito vero. */
+.decision-reveal-chip.reveal-idle{ opacity:0.35; transform:scale(0.96); }
+.decision-reveal-chip.reveal-active{ opacity:1; transform:scale(1.06); box-shadow:0 0 14px currentColor; }
+.decision-reveal-chip.reveal-winner{ opacity:1; transform:scale(1.08); box-shadow:0 0 18px currentColor; }
+.decision-reveal-chip.reveal-dimmed{ opacity:0.28; transform:scale(0.94); filter:grayscale(0.5); }
+.decision-reveal-card{ position:relative; transition:border-color .4s ease, box-shadow .4s ease; }
+.decision-reveal-highstakes{ border:2px solid #FF3B3B; animation:highStakesBorderPulse 1.1s ease-in-out infinite; }
+.decision-reveal-highstakes.decision-reveal-settled{ animation:none; box-shadow:0 0 24px 2px rgba(255,59,59,0.35); }
+.reveal-eyebrow-risky{ color:#FF5A5A !important; font-weight:900; letter-spacing:0.04em; }
 @keyframes highStakesBorderPulse{
-  0%, 45%, 100% { box-shadow:0 0 0 0 rgba(255,59,59,0.0); }
-  12% { box-shadow:0 0 22px 4px rgba(255,59,59,0.55); }
-  32% { box-shadow:0 0 22px 4px rgba(255,59,59,0.55); }
+  0%, 100% { box-shadow:0 0 0 0 rgba(255,59,59,0.0); }
+  50% { box-shadow:0 0 18px 3px rgba(255,59,59,0.45); }
 }
 .card-arch-badge{
   display:inline-block; font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:0.03em;
