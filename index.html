@@ -870,18 +870,42 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
 .decision-split-row{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:4px; }
 .decision-reveal-row{ display:flex; gap:14px; justify-content:center; margin-top:16px; }
 .decision-reveal-col{ display:flex; flex-direction:column; align-items:center; gap:8px; flex:1; max-width:160px; }
-.decision-reveal-driver{ font-size:12px; font-weight:800; color:var(--text); margin-bottom:2px; text-align:center; }
+.decision-reveal-driver{ font-size:13.5px; font-weight:800; color:var(--text); margin-bottom:2px; text-align:center; }
 .decision-reveal-chip{
-  font-size:12.5px; font-weight:800; padding:9px 10px; border-radius:8px; text-align:center; width:100%;
-  font-family:var(--font-mono); transition:all .35s ease;
+  font-size:14.5px; font-weight:800; padding:12px 10px; border-radius:8px; text-align:center; width:100%;
+  font-family:var(--font-mono); transition:transform .3s ease, opacity .3s ease, box-shadow .3s ease;
+  line-height:1.25;
 }
-.decision-reveal-chip.bkt-gain{ background:rgba(76,217,123,0.18); color:#4CD97B; border:1px solid rgba(76,217,123,0.4); }
-.decision-reveal-chip.bkt-lose{ background:rgba(255,90,90,0.18); color:#FF5A5A; border:1px solid rgba(255,90,90,0.4); }
-.decision-reveal-chip.bkt-hold{ background:rgba(255,255,255,0.10); color:var(--dim); border:1px solid var(--line); }
-.decision-reveal-chip.reveal-rolling{ animation:revealPulse 0.5s ease-in-out infinite alternate; }
-.decision-reveal-chip.reveal-winner{ transform:scale(1.08); box-shadow:0 0 16px currentColor; opacity:1; }
-.decision-reveal-chip.reveal-dimmed{ opacity:0.22; transform:scale(0.94); filter:grayscale(0.6); }
-@keyframes revealPulse{ from{ opacity:0.5; } to{ opacity:1; } }
+.decision-reveal-chip.bkt-gain{ background:rgba(76,217,123,0.20); color:#5EEB93; border:1px solid rgba(76,217,123,0.5); }
+.decision-reveal-chip.bkt-lose{ background:rgba(255,90,90,0.20); color:#FF7373; border:1px solid rgba(255,90,90,0.5); }
+.decision-reveal-chip.bkt-hold{ background:rgba(255,255,255,0.12); color:#C8CAD0; border:1px solid var(--line); }
+/* V0.9.7.9.23: vero ritmo cardiaco — doppio colpo ravvicinato (lub-dub) poi pausa, non un pulse semplice */
+.decision-reveal-chip.reveal-rolling{ animation:heartbeatChip 1.1s ease-in-out infinite; }
+.decision-reveal-chip.reveal-rolling-intense{ animation:heartbeatChipIntense 0.75s ease-in-out infinite; }
+.decision-reveal-chip.reveal-winner{ transform:scale(1.1); box-shadow:0 0 20px currentColor; opacity:1; }
+.decision-reveal-chip.reveal-dimmed{ opacity:0.2; transform:scale(0.92); filter:grayscale(0.7); }
+@keyframes heartbeatChip{
+  0%, 45%, 100% { transform:scale(1); opacity:0.68; }
+  12% { transform:scale(1.08); opacity:1; }
+  24% { transform:scale(1); opacity:0.68; }
+  32% { transform:scale(1.08); opacity:1; }
+}
+@keyframes heartbeatChipIntense{
+  0%, 45%, 100% { transform:scale(1); opacity:0.62; }
+  12% { transform:scale(1.14); opacity:1; }
+  24% { transform:scale(1); opacity:0.62; }
+  32% { transform:scale(1.14); opacity:1; }
+}
+.decision-reveal-card{ position:relative; }
+.decision-reveal-highstakes{
+  border:2px solid #FF3B3B; animation:highStakesBorderPulse 0.75s ease-in-out infinite;
+}
+.reveal-eyebrow-risky{ color:#FF5A5A !important; font-weight:900; letter-spacing:0.04em; animation:heartbeatChipIntense 0.75s ease-in-out infinite; }
+@keyframes highStakesBorderPulse{
+  0%, 45%, 100% { box-shadow:0 0 0 0 rgba(255,59,59,0.0); }
+  12% { box-shadow:0 0 22px 4px rgba(255,59,59,0.55); }
+  32% { box-shadow:0 0 22px 4px rgba(255,59,59,0.55); }
+}
 .card-arch-badge{
   display:inline-block; font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:0.03em;
   color:var(--amber); margin:4px 0 2px;
