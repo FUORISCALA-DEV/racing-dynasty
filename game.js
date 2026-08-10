@@ -69,6 +69,9 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_hold: 'Mantieni la posizione',
+    bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni',
+    dec_reveal_title: 'Ballottaggio in pista…',
     dret_career_totals: 'Numeri di carriera', dret_seasons: 'Stagioni', dret_total_wins: 'Vittorie', dret_total_podiums: 'Podi',
     dret_total_points: (n)=>`${n} punti totali in carriera`,
     dret_best_season: (age,pos,team)=>`Stagione migliore: a ${age} anni, P${pos} con ${team}`,
@@ -308,6 +311,9 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_hold: 'Hold position',
+    bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions',
+    dec_reveal_title: 'On track right now…',
     dret_career_totals: 'Career numbers', dret_seasons: 'Seasons', dret_total_wins: 'Wins', dret_total_podiums: 'Podiums',
     dret_total_points: (n)=>`${n} total career points`,
     dret_best_season: (age,pos,team)=>`Best season: at age ${age}, P${pos} with ${team}`,
@@ -541,6 +547,9 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_hold: 'Mantienes la posición',
+    bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones',
+    dec_reveal_title: 'Decidiéndose en pista…',
     dret_career_totals: 'Números de carrera', dret_seasons: 'Temporadas', dret_total_wins: 'Victorias', dret_total_podiums: 'Podios',
     dret_total_points: (n)=>`${n} puntos totales en carrera`,
     dret_best_season: (age,pos,team)=>`Mejor temporada: a los ${age} años, P${pos} con ${team}`,
@@ -3698,6 +3707,37 @@ const LIVE_DECISION_INFO = new Proxy({}, { get:(t,k)=> {
   return src[k];
 }});
 
+// V0.9.7.9.20: tabella "a bucket" delle probabilità — stesse identiche percentuali di prima
+// (decisionShiftFn), ma ora esplicite e leggibili, cosi' possiamo sia mostrarle sotto ogni scelta
+// sia sapere ESATTAMENTE quale esito si e' verificato per il ballottaggio in gara.
+// shift negativo = guadagni posizioni, positivo = ne perdi, 0 = mantieni.
+const DECISION_OUTCOME_BUCKETS = {
+  box:        [{ prob:1.00, label:'lose_1_2', min:1, max:2 }],
+  stay:       [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.50, label:'lose_1', min:1, max:1 }],
+  restart:    [{ prob:0.45, label:'gain_1_2', min:-2, max:-1 }, { prob:0.55, label:'lose_2', min:2, max:2 }],
+  early:      [{ prob:0.60, label:'gain_1', min:-1, max:-1 }, { prob:0.40, label:'lose_1', min:1, max:1 }],
+  late:       [{ prob:0.45, label:'gain_1', min:-1, max:-1 }, { prob:0.385, label:'hold', min:0, max:0 }, { prob:0.165, label:'lose_2', min:2, max:2 }],
+  aggressive: [{ prob:0.55, label:'gain_1_2', min:-2, max:-1 }, { prob:0.45, label:'lose_1', min:1, max:1 }],
+  safe:       [{ prob:1.00, label:'hold', min:0, max:0 }],
+  hold:       [{ prob:1.00, label:'hold', min:0, max:0 }],
+  free:       [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.375, label:'hold', min:0, max:0 }, { prob:0.125, label:'lose_2', min:2, max:2 }],
+  defend:     [{ prob:0.60, label:'hold', min:0, max:0 }, { prob:0.40, label:'lose_2', min:2, max:2 }],
+  letpass:    [{ prob:1.00, label:'lose_1', min:1, max:1 }],
+  push:       [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.375, label:'hold', min:0, max:0 }, { prob:0.125, label:'lose_2', min:2, max:2 }],
+  nurse:      [{ prob:0.70, label:'hold', min:0, max:0 }, { prob:0.30, label:'lose_1', min:1, max:1 }],
+};
+// sceglie un bucket in base alle probabilita', tira lo shift esatto dentro il range del bucket,
+// e ritorna ANCHE quale bucket e' uscito (indice), cosi' l'interfaccia puo' mostrarlo nel ballottaggio.
+function pickDecisionOutcome(choiceKey){
+  const buckets = DECISION_OUTCOME_BUCKETS[choiceKey] || [{ prob:1, label:'hold', min:0, max:0 }];
+  const roll = rnd();
+  let cum = 0, chosenIdx = buckets.length-1;
+  for(let i=0;i<buckets.length;i++){ cum += buckets[i].prob; if(roll<cum){ chosenIdx=i; break; } }
+  const b = buckets[chosenIdx];
+  const span = b.max-b.min;
+  const shift = span===0 ? b.min : b.min + Math.floor(rnd()*(span+1));
+  return { shift, bucketIdx: chosenIdx, buckets };
+}
 function decisionShiftFn(choiceKey){
   switch(choiceKey){
     case 'box': return ()=> 1+Math.floor(rnd()*2);
@@ -3724,36 +3764,41 @@ function applyLiveDecision(type, choiceKey){
   // V0.9.7.9.9: in Carriera Pilota le decisioni sono PERSONALI del pilota, non ordini di scuderia
   // che coinvolgono entrambe le vetture — il compagno di scuderia e' un'IA indipendente.
   const affectedSlots = state.isDriverCareer ? ['PLAYER-1'] : ['PLAYER-1','PLAYER-2'];
-  if(choiceKey==='splitstrategy'){
-    const fns = { 'PLAYER-1': decisionShiftFn('box'), 'PLAYER-2': decisionShiftFn('stay') };
-    (state.isDriverCareer ? ['PLAYER-1'] : ['PLAYER-1','PLAYER-2']).forEach(slotKey=>{
-      if(timeline.retiredAtPhase[slotKey]!==null) return;
-      for(let phase=t+1; phase<PHASES.length; phase++){
-        const order = timeline.phaseOrders[phase];
-        const idx = order.indexOf(slotKey);
-        if(idx<0) continue;
-        const shift = fns[slotKey]();
-        if(shift===0) continue;
-        const newIdx = Math.max(0, Math.min(order.length-1, idx+shift));
-        order.splice(idx,1); order.splice(newIdx,0,slotKey);
-      }
-    });
-    return;
-  }
-  const shiftFn = decisionShiftFn(choiceKey);
-  affectedSlots.forEach(slotKey=>{
-    if(timeline.retiredAtPhase[slotKey]!==null) return; // gia' ritirato: la scelta non ha piu' effetto
+  const reveal = {}; // V0.9.7.9.20: esito del primo tiro per pilota, per il ballottaggio in UI
+
+  function applyShiftAcrossPhases(slotKey, firstShift, laterShiftFn){
+    let isFirst = true;
     for(let phase=t+1; phase<PHASES.length; phase++){
       const order = timeline.phaseOrders[phase];
       const idx = order.indexOf(slotKey);
       if(idx<0) continue;
-      const shift = shiftFn();
+      const shift = isFirst ? firstShift : laterShiftFn();
+      isFirst = false;
       if(shift===0) continue;
       const newIdx = Math.max(0, Math.min(order.length-1, idx+shift));
-      order.splice(idx,1);
-      order.splice(newIdx,0,slotKey);
+      order.splice(idx,1); order.splice(newIdx,0,slotKey);
     }
+  }
+
+  if(choiceKey==='splitstrategy'){
+    const slots = state.isDriverCareer ? ['PLAYER-1'] : ['PLAYER-1','PLAYER-2'];
+    const bucketChoice = { 'PLAYER-1':'box', 'PLAYER-2':'stay' };
+    slots.forEach(slotKey=>{
+      if(timeline.retiredAtPhase[slotKey]!==null) return;
+      const outcome = pickDecisionOutcome(bucketChoice[slotKey]);
+      reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets };
+      applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(bucketChoice[slotKey]));
+    });
+    return reveal;
+  }
+
+  affectedSlots.forEach(slotKey=>{
+    if(timeline.retiredAtPhase[slotKey]!==null) return; // gia' ritirato: la scelta non ha piu' effetto
+    const outcome = pickDecisionOutcome(choiceKey);
+    reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets };
+    applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(choiceKey));
   });
+  return reveal;
 }
 
 // V0.9.7.9.9: conseguenze personali (Fama/Reputazione/Rivalità col compagno) sopra il sistema di
@@ -3811,13 +3856,27 @@ function reinforceArchetypeIfCoherent(type, choiceKey, driver){
 function resolveLiveDecision(choiceKey){
   const dec = state.live.activeDecision;
   if(!dec) return;
-  applyLiveDecision(dec.type, choiceKey);
+  const outcomes = applyLiveDecision(dec.type, choiceKey);
   applyDriverCareerDecisionConsequences(dec.type, choiceKey);
   state.live.resolvedDecisions.push(dec.phase);
   state.live.activeDecision = null;
   state.live.decisionDeadline = null;
-  state.live.paused = false;
+  // V0.9.7.9.20: ballottaggio — prima "rolling" (tutte le ipotesi in bilico), poi "settled" (resta
+  // accesa solo quella vera), poi si sblocca la gara. Il pilota non e' piu' fermo/in pausa in mezzo:
+  // resta in pausa SOLO per la durata del ballottaggio, breve e voluta.
+  state.live.pendingReveal = { outcomes, stage:'rolling' };
   render();
+  setTimeout(()=>{
+    if(!state.live || !state.live.pendingReveal) return;
+    state.live.pendingReveal.stage = 'settled';
+    render();
+    setTimeout(()=>{
+      if(!state.live) return;
+      state.live.pendingReveal = null;
+      state.live.paused = false;
+      render();
+    }, 1400);
+  }, 900);
 }
 
 function startLiveRace(timeline){
@@ -3954,7 +4013,54 @@ function computeLiveRows(){
   });
 }
 
+// V0.9.7.9.20: testo probabilita'/effetto sotto ogni scelta, in termini da corsa (non "resti fermo"
+// ma "mantieni la posizione" ecc.) — cosi' il giocatore sa esattamente su cosa sta scommettendo.
+function bucketsSummaryHTML(choiceKey){
+  if(choiceKey==='splitstrategy'){
+    const b1 = bucketsSummaryHTML('box'), b2 = bucketsSummaryHTML('stay');
+    return `<div class="decision-split-row"><span class="dim mono" style="font-size:9.5px;">P1</span>${b1}</div><div class="decision-split-row"><span class="dim mono" style="font-size:9.5px;">P2</span>${b2}</div>`;
+  }
+  const buckets = DECISION_OUTCOME_BUCKETS[choiceKey];
+  if(!buckets) return '';
+  return buckets.map(b=>{
+    const pct = Math.round(b.prob*100);
+    const cls = b.label.startsWith('gain') ? 'bkt-gain' : b.label.startsWith('lose') ? 'bkt-lose' : 'bkt-hold';
+    return `<span class="decision-bucket-chip ${cls}">${pct}% ${t('bkt_'+b.label)}</span>`;
+  }).join('');
+}
+
+function liveDecisionRevealHTML(){
+  const reveal = state.live.pendingReveal;
+  const settled = reveal.stage==='settled';
+  const slotNames = {
+    'PLAYER-1': state.team.pilotMain.nome,
+    'PLAYER-2': state.isDriverCareer ? null : state.team.pilotSecond.nome,
+  };
+  const columnsHTML = Object.keys(reveal.outcomes).map(slotKey=>{
+    const { bucketIdx, buckets } = reveal.outcomes[slotKey];
+    const chipsHTML = buckets.map((b,i)=>{
+      const cls = b.label.startsWith('gain') ? 'bkt-gain' : b.label.startsWith('lose') ? 'bkt-lose' : 'bkt-hold';
+      const isWinner = i===bucketIdx;
+      const stateCls = !settled ? 'reveal-rolling' : (isWinner ? 'reveal-winner' : 'reveal-dimmed');
+      return `<div class="decision-reveal-chip ${cls} ${stateCls}">${t('bkt_'+b.label)}</div>`;
+    }).join('');
+    return `
+    <div class="decision-reveal-col">
+      <div class="decision-reveal-driver">${slotNames[slotKey] ? shortName(slotNames[slotKey]) : ''}</div>
+      ${chipsHTML}
+    </div>`;
+  }).join('');
+  return `
+  <div class="decision-modal">
+    <div class="decision-card">
+      <div class="eyebrow">${t('dec_reveal_title')}</div>
+      <div class="decision-reveal-row">${columnsHTML}</div>
+    </div>
+  </div>`;
+}
+
 function liveDecisionHTML(){
+  if(state.live.pendingReveal) return liveDecisionRevealHTML();
   const dec = state.live.activeDecision;
   if(!dec) return '';
   const info = LIVE_DECISION_INFO[dec.type];
@@ -3962,6 +4068,7 @@ function liveDecisionHTML(){
         <button class="ghost decision-btn" data-action="resolve-live-decision" data-choice="${c.key}">
           <div class="decision-btn-label">${c.label}</div>
           <div class="decision-btn-desc">${c.desc}</div>
+          <div class="decision-bucket-row">${bucketsSummaryHTML(c.key)}</div>
         </button>`).join('');
   const timerEnabled = state.live.decisionDeadline!==null && state.live.decisionDeadline!==undefined;
   const timerHTML = timerEnabled ? `<div class="decision-timer-track"><div class="decision-timer-fill" id="decisionTimerFill"></div></div>` : '';
