@@ -69,6 +69,9 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    dpt_eyebrow: 'Colloquio col Team Principal', dpt_reason_order: 'Il team principal ti chiama in ufficio: "Hai ignorato un ordine di squadra in gara. Vogliamo capire cosa è successo."',
+    dpt_reason_rivalry: 'Il team principal ti chiama in ufficio: "La tensione con il tuo compagno sta diventando un problema per la squadra."',
+    dpt_apologize: 'Ammetti l\'errore e prometti di fare meglio', dpt_defend_self: 'Difendi la tua scelta, non hai nulla di cui scusarti', dpt_silent: 'Ascolta senza sbilanciarti troppo',
     mev_eyebrow: 'Punto stampa', mev_teammate_incident: (mate)=>`I giornalisti ti chiedono se ${mate} abbia superato il limite nel contatto di ieri.`,
     mev_defend: 'Difendilo pubblicamente', mev_diplomatic: 'Risposta diplomatica, senza sbilanciarti', mev_accuse: 'Dì chiaramente che ha esagerato',
     mev_title_ambitions: ()=>'Un giornalista ti chiede se punti al titolo quest\'anno.',
@@ -293,6 +296,9 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    dpt_eyebrow: 'Talk with the Team Principal', dpt_reason_order: 'The team principal calls you into the office: "You ignored a team order during the race. We want to understand what happened."',
+    dpt_reason_rivalry: 'The team principal calls you into the office: "The tension with your teammate is becoming a problem for the team."',
+    dpt_apologize: 'Admit the mistake and promise to do better', dpt_defend_self: "Defend your choice, you have nothing to apologize for", dpt_silent: 'Listen without committing to much',
     mev_eyebrow: 'Press conference', mev_teammate_incident: (mate)=>`Reporters ask if ${mate} went over the limit in yesterday's contact.`,
     mev_defend: 'Defend him publicly', mev_diplomatic: 'Give a diplomatic, neutral answer', mev_accuse: 'Say clearly he overdid it',
     mev_title_ambitions: ()=>'A reporter asks if you\'re targeting the title this year.',
@@ -511,6 +517,9 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    dpt_eyebrow: 'Conversación con el Jefe de Equipo', dpt_reason_order: 'El jefe de equipo te llama a la oficina: "Ignoraste una orden de equipo durante la carrera. Queremos entender qué pasó."',
+    dpt_reason_rivalry: 'El jefe de equipo te llama a la oficina: "La tensión con tu compañero se está convirtiendo en un problema para el equipo."',
+    dpt_apologize: 'Admite el error y promete mejorar', dpt_defend_self: 'Defiende tu elección, no tienes nada de qué disculparte', dpt_silent: 'Escucha sin comprometerte demasiado',
     mev_eyebrow: 'Rueda de prensa', mev_teammate_incident: (mate)=>`Los periodistas te preguntan si ${mate} se pasó de la raya en el contacto de ayer.`,
     mev_defend: 'Defiéndelo públicamente', mev_diplomatic: 'Respuesta diplomática, sin mojarte', mev_accuse: 'Di claramente que exageró',
     mev_title_ambitions: ()=>'Un periodista te pregunta si vas a por el título este año.',
@@ -2129,7 +2138,62 @@ function computeDriverTeamStatus(){
   return 'rookie';
 }
 
+// ============================================================
+// V0.9.7.9.16 — CARRIERA PILOTA: catene di conseguenze (documento design, punto 11).
+// Scelta -> conseguenza -> evento futuro, invece di eventi tutti isolati. Per ora: ignorare un
+// ordine di scuderia o far salire troppo la rivalita' porta a un colloquio col team principal
+// prima della gara successiva — con scelte vere che a loro volta lasciano un segno.
+// ============================================================
+function checkAndScheduleChainConsequence(type, choiceKey){
+  if(driverCareerState.pendingConsequence) return; // una alla volta, non accumuliamo
+  const rivalry = driverCareerState.teammateRivalry||0;
+  if(type==='teamorders' && choiceKey==='free'){
+    driverCareerState.pendingConsequence = { id:'principal_talk', reason:'ignored_order' };
+  } else if(rivalry>=70 && !driverCareerState.hadPrincipalTalkForHighRivalry){
+    driverCareerState.pendingConsequence = { id:'principal_talk', reason:'high_rivalry' };
+    driverCareerState.hadPrincipalTalkForHighRivalry = true;
+  }
+}
+
+function renderDriverPrincipalTalk(){
+  const pc = driverCareerState.pendingConsequence;
+  const reasonKey = pc.reason==='ignored_order' ? 'dpt_reason_order' : 'dpt_reason_rivalry';
+  app.innerHTML = `
+  <div class="panel">
+    <div class="eyebrow">📞 ${t('dpt_eyebrow')}</div>
+    <h2 class="hdr" style="font-size:19px;line-height:1.4;">${t(reasonKey)}</h2>
+  </div>
+  <div class="card pickable" data-rarity="Rare" data-action="resolve-principal-talk" data-choice="apologize">
+    <div class="ability" style="font-size:15px;border-top:none;padding-top:0;margin-top:0;">${t('dpt_apologize')}</div>
+  </div>
+  <div class="card pickable" data-rarity="Rare" data-action="resolve-principal-talk" data-choice="defend_self">
+    <div class="ability" style="font-size:15px;border-top:none;padding-top:0;margin-top:0;">${t('dpt_defend_self')}</div>
+  </div>
+  <div class="card pickable" data-rarity="Rare" data-action="resolve-principal-talk" data-choice="silent">
+    <div class="ability" style="font-size:15px;border-top:none;padding-top:0;margin-top:0;">${t('dpt_silent')}</div>
+  </div>
+  `;
+  bindActions();
+}
+
+const PRINCIPAL_TALK_CHOICES = {
+  apologize:   { reputazione:5, rivalry:-8 },
+  defend_self: { fama:3, reputazione:-2, rivalry:3 },
+  silent:      { reputazione:1 },
+};
+function resolveDriverPrincipalTalk(choiceKey){
+  const d = driverCareerState.driver;
+  const delta = PRINCIPAL_TALK_CHOICES[choiceKey] || {};
+  if(delta.fama) d.fama = Math.max(0, Math.min(100, d.fama+delta.fama));
+  if(delta.reputazione) d.reputazione = Math.max(0, Math.min(100, d.reputazione+delta.reputazione));
+  if(delta.rivalry) driverCareerState.teammateRivalry = Math.max(0, Math.min(100, (driverCareerState.teammateRivalry||0)+delta.rivalry));
+  driverCareerState.pendingConsequence = null;
+  state.phase = 'driver-hub';
+  render();
+}
+
 function renderDriverHub(){
+  if(driverCareerState.pendingConsequence){ return renderDriverPrincipalTalk(); }
   const d = driverCareerState.driver;
   const myTeam = state.team;
   const circuit = state.calendar[state.raceIndex];
@@ -3612,6 +3676,7 @@ function applyDriverCareerDecisionConsequences(type, choiceKey){
   if(!state.isDriverCareer) return;
   const d = driverCareerState.driver;
   reinforceArchetypeIfCoherent(type, choiceKey, d);
+  checkAndScheduleChainConsequence(type, choiceKey);
   const delta = (DRIVER_DECISION_CONSEQUENCES[type]||{})[choiceKey];
   if(!delta) return;
   const ratingFactor = 0.6 + (d.rating/100)*0.8; // rating basso: 0.6x — rating alto: fino a 1.4x
@@ -7917,6 +7982,9 @@ function onAction(e){
     window.__lastDriverActivityOutcome = outcome;
     state.phase = 'driver-activity-result';
     render();
+  }
+  else if(action==='resolve-principal-talk'){
+    resolveDriverPrincipalTalk(el.dataset.choice);
   }
   else if(action==='continue-to-driver-hub'){
     state.phase = 'driver-hub';
