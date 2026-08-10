@@ -2060,6 +2060,7 @@ function renderDriverContract(){
     </div>` : '';
 
   app.innerHTML = `
+  <img class="driver-scene-hero" src="assets/driver-scenes/contract-signing.webp" alt="">
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
       <h1 class="hdr" style="font-size:24px;">${t('dcon_title')}</h1>
@@ -2176,6 +2177,7 @@ function renderDriverRetirement(){
   const headlineKey = generateCareerHeadline(d, peakFama, peakRep, peakRating);
 
   app.innerHTML = `
+  <img class="driver-scene-hero" src="assets/driver-scenes/retirement.webp" alt="">
   <div class="hero" style="padding:28px 20px 20px;">
     <div class="hero-inner">
       <div class="pill">${t('dret_pill')}</div>
@@ -2254,6 +2256,7 @@ function renderDriverPrincipalTalk(){
   const pc = driverCareerState.pendingConsequence;
   const reasonKey = pc.reason==='ignored_order' ? 'dpt_reason_order' : 'dpt_reason_rivalry';
   app.innerHTML = `
+  <img class="driver-scene-hero" src="assets/driver-scenes/rivalry.webp" alt="">
   <div class="panel">
     <div class="eyebrow">📞 ${t('dpt_eyebrow')}</div>
     <h2 class="hdr" style="font-size:19px;line-height:1.4;">${t(reasonKey)}</h2>
@@ -4646,13 +4649,15 @@ function applyDriverMediaEventChoice(choiceIdx){
   return { activityId, famaGain, reputazioneGain: choice.reputazione||0, rivalryChange: choice.rivalry||0, isMediaScenario:true };
 }
 function renderDriverMediaEvent(){
-  const { scenario } = window.__activeMediaEvent;
+  const { scenario, activityId } = window.__activeMediaEvent;
   const mateName = state.team.pilotSecond.nome;
+  const sceneImg = activityId==='interview' ? 'assets/driver-scenes/interview.webp' : 'assets/driver-scenes/media-event.webp';
   const choicesHTML = scenario.choices.map((c,i)=>`
     <div class="card pickable" data-rarity="Rare" data-action="pick-media-event-choice" data-choice-idx="${i}">
       <div class="ability" style="font-size:15px;border-top:none;padding-top:0;margin-top:0;">${t(c.labelKey)}</div>
     </div>`).join('');
   app.innerHTML = `
+  <img class="driver-scene-hero" src="${sceneImg}" alt="">
   <div class="panel">
     <div class="eyebrow">🎙️ ${t('mev_eyebrow')}</div>
     <h2 class="hdr" style="font-size:19px;line-height:1.4;">${t(scenario.promptKey, mateName)}</h2>
@@ -4672,6 +4677,7 @@ function renderDriverActivity(){
     <div class="ability" style="font-size:14px;">${t('dact_devreq_desc')}</div>
   </div>` : '';
   app.innerHTML = `
+  <img class="driver-scene-hero" src="assets/driver-scenes/training.webp" alt="">
   <div class="panel">
     <div class="eyebrow">${t('dact_eyebrow')}</div>
     <h2 class="hdr" style="font-size:22px;">${t('dact_title')}</h2>
@@ -4717,7 +4723,9 @@ function renderDriverActivityResult(outcome){
   if(outcome.rivalryChange>0) lines.push({cls:'malus', text:t('dactr_rivalry_up')});
   if(outcome.devStatKey) lines.push({cls:'bonus', text:t('dactr_devreq', t('stat_'+outcome.devStatKey), outcome.devStatGain)});
   const backfiredNote = outcome.backfired ? `<div class="tag-line malus" style="font-size:14px;" style="margin-top:8px;">${t('dactr_backfired')}</div>` : '';
+  const sceneImg = outcome.activityId==='team-event' ? '<img class="driver-scene-hero" src="assets/driver-scenes/team-event.webp" alt="">' : '';
   app.innerHTML = `
+  ${sceneImg}
   <div class="topbar">
     <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_driver')} — ${GAME_VERSION}</small></div>
   </div>
@@ -5572,6 +5580,7 @@ function renderDriverCreation(){
   }).join('');
 
   app.innerHTML = `
+  <img class="driver-scene-hero" src="assets/driver-scenes/kart-tier.webp" alt="">
   <div class="hero" style="padding:28px 20px 20px;">
     <div class="hero-inner">
       <div class="pill">${GAME_VERSION} · ${t('mode_select_driver')}</div>
@@ -6523,6 +6532,14 @@ function renderRivalAnnounce(){
   bindActions();
 }
 // Pannello permanente con le scuderie rivali attuali e il confronto punti
+// V0.9.7.9.19: logo scuderia inline, usato dove serve identificare velocemente una scuderia —
+// riusa gli asset gia' raccolti per le livree, nessuna immagine nuova necessaria.
+function teamLogoHTML(teamName){
+  const match = TEAM_LIVERY_PATTERNS.find(p=>p.nome===teamName);
+  if(!match) return '';
+  return `<img src="assets/team-logos/${match.id}.webp" alt="" class="rival-team-logo">`;
+}
+
 function rivalPanelHTML(){
   if(!state.rivals || !state.rivals.length) return '';
   const rows = state.rivals.map(id=>{
@@ -6538,7 +6555,7 @@ function rivalPanelHTML(){
     const slot2 = state.grid.find(g=>g.teamId===id && g.role===1);
     return `<div class="rival-card-full">
       <div class="upcoming-row">
-        <span class="upcoming-name">${teamFlag(id)} ${cs.nome}</span>
+        <span class="upcoming-name">${teamFlag(id)} ${teamLogoHTML(cs.nome)}${cs.nome}</span>
         <span class="mono dim">${cs.points} pt</span>
         <span class="dim" style="font-size:11px;">${diffLabel}</span>
       </div>
