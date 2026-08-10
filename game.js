@@ -69,6 +69,10 @@ function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLan
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    dcon_title: 'Situazione contrattuale', dcon_market_score: (n)=>`Valore di mercato: ${n}`,
+    dcon_renew: 'Rinnova', dcon_released: (team)=>`${team} non ti rinnova per la prossima stagione.`,
+    dcon_offer: 'Offerta ricevuta', dcon_promotion: 'promozione', dcon_pick: 'Tocca per scegliere',
+    dcon_fallback_title: 'Ripartenza dal Kart', dcon_fallback_desc: 'Nessuna scuderia ti vuole per ora — ti sistemi con una scuderia Kart qualunque e riparti da lì.',
     se_visit_trophy_room: '🏆 Visita la Sala Trofei',
     dact_eyebrow: 'Tra una gara e l\'altra', dact_title: 'Cosa fai prima della prossima gara?', dact_subtitle: 'Scegline una: ognuna ha effetti diversi.',
     dact_training: 'Allenamento', dact_training_desc: 'Focus sulla crescita personale. Avvicina il prossimo punto Rating, nessun effetto su Fama o Reputazione.',
@@ -275,6 +279,10 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    dcon_title: 'Contract situation', dcon_market_score: (n)=>`Market value: ${n}`,
+    dcon_renew: 'Renew', dcon_released: (team)=>`${team} won't renew you for next season.`,
+    dcon_offer: 'Offer received', dcon_promotion: 'promotion', dcon_pick: 'Tap to choose',
+    dcon_fallback_title: 'Restart from Kart', dcon_fallback_desc: "No team wants you right now — you settle for any Kart team and start over from there.",
     se_visit_trophy_room: '🏆 Visit the Trophy Room',
     dact_eyebrow: 'Between races', dact_title: 'What do you do before the next race?', dact_subtitle: "Pick one: each has different effects.",
     dact_training: 'Training', dact_training_desc: "Focus on personal growth. Moves you closer to the next Rating point, no effect on Fame or Reputation.",
@@ -475,6 +483,10 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    dcon_title: 'Situación contractual', dcon_market_score: (n)=>`Valor de mercado: ${n}`,
+    dcon_renew: 'Renovar', dcon_released: (team)=>`${team} no te renueva para la próxima temporada.`,
+    dcon_offer: 'Oferta recibida', dcon_promotion: 'ascenso', dcon_pick: 'Toca para elegir',
+    dcon_fallback_title: 'Reinicio desde Kart', dcon_fallback_desc: 'Ninguna escudería te quiere por ahora — te conformas con cualquier escudería de Kart y empiezas de nuevo desde ahí.',
     se_visit_trophy_room: '🏆 Visita la Sala de Trofeos',
     dact_eyebrow: 'Entre carreras', dact_title: '¿Qué haces antes de la próxima carrera?', dact_subtitle: 'Elige una: cada una tiene efectos distintos.',
     dact_training: 'Entrenamiento', dact_training_desc: 'Enfoque en el crecimiento personal. Te acerca al próximo punto de Rating, sin efecto en Fama o Reputación.',
@@ -1881,8 +1893,91 @@ function finalizeDriverCareerSeason(){
   render();
 }
 
-// Nuova stagione con la STESSA scuderia (i contratti/offerte sono il punto 6, non ancora fatto —
-// per ora si resta sempre nella squadra attuale, che pero' puo' essere cambiata di Serie dal mondo).
+// ============================================================
+// V0.9.7.9.12 — CARRIERA PILOTA (punto 6/8): mercato piloti e contratti
+// Documento design sezione 13: le squadre valutano il giocatore attraverso una combinazione di
+// Rating, risultati, Reputazione, Fama — non un numero solo. Puoi essere scaricato se vai male.
+// ============================================================
+function evaluateDriverContractSituation(){
+  const d = driverCareerState.driver;
+  const currentTier = driverCareerState.currentTier;
+  // punteggio di mercato: pesa soprattutto il Rating (la forza reale), poi Reputazione, poi Fama —
+  // coerente col documento: "una squadra Elite non deve assumere automaticamente qualcuno solo
+  // perche' famoso".
+  const marketScore = Math.round(d.rating*0.5 + d.reputazione*0.3 + d.fama*0.2);
+
+  const renewChance = Math.max(0.08, Math.min(0.95, 0.22 + (marketScore/100)*0.7));
+  const renewed = rnd() < renewChance;
+
+  const candidateTiers = [currentTier];
+  if(currentTier==='kart' && marketScore>=52) candidateTiers.push('minore'); // rottura individuale dal Kart
+  if(currentTier==='minore' && marketScore>=62) candidateTiers.push('elite');
+
+  const numOffers = marketScore>=75 ? (rnd()<0.6?2:1) : marketScore>=45 ? (rnd()<0.5?1:0) : (rnd()<0.12?1:0);
+  const offers = [];
+  const usedTeamIds = new Set([driverCareerState.currentTeamId]);
+  for(let i=0;i<numOffers;i++){
+    const tier = candidateTiers[Math.floor(rnd()*candidateTiers.length)];
+    const teamIds = Object.keys(driverCareerState.world.tiers).filter(id=>driverCareerState.world.tiers[id]===tier && !usedTeamIds.has(id));
+    if(teamIds.length===0) continue;
+    const teamId = teamIds[Math.floor(rnd()*teamIds.length)];
+    usedTeamIds.add(teamId);
+    offers.push({ teamId, tier, teamData: DATA.scuderie.find(s=>s.id===teamId) });
+  }
+
+  return { renewed, marketScore, offers, currentTier };
+}
+
+function renderDriverContract(){
+  const d = driverCareerState.driver;
+  const sit = driverCareerState.contractSituation;
+  const currentTeamData = DATA.scuderie.find(s=>s.id===driverCareerState.currentTeamId);
+  const tierKey = { kart:'dh_tier_kart', minore:'dh_tier_minore', elite:'dh_tier_elite' };
+
+  const renewalCard = sit.renewed ? `
+    <div class="card pickable" data-rarity="Rare" data-action="accept-contract" data-team="${driverCareerState.currentTeamId}" data-tier="${sit.currentTier}">
+      <span class="rarity-tag" data-rarity="Rare">🔁 ${t('dcon_renew')}</span>
+      <div class="ability" style="font-size:14px;margin-top:8px;">${currentTeamData.nome} · ${t(tierKey[sit.currentTier])}</div>
+      <div class="card-tap-hint">${t('dcon_pick')}</div>
+    </div>` : `
+    <div class="panel" style="border-left:3px solid var(--danger);">
+      <div class="tag-line malus" style="font-size:14px;">${t('dcon_released', currentTeamData.nome)}</div>
+    </div>`;
+
+  const offerCards = sit.offers.map(o=>`
+    <div class="card pickable" data-rarity="Legendary" data-action="accept-contract" data-team="${o.teamId}" data-tier="${o.tier}">
+      <span class="rarity-tag" data-rarity="Legendary">📩 ${t('dcon_offer')}</span>
+      <div class="ability" style="font-size:14px;margin-top:8px;">${o.teamData.nome} · ${t(tierKey[o.tier])}${o.tier!==sit.currentTier ? ' · '+t('dcon_promotion') : ''}</div>
+      <div class="card-tap-hint">${t('dcon_pick')}</div>
+    </div>`).join('');
+
+  const noOptionsAtAll = !sit.renewed && sit.offers.length===0;
+  const fallbackCard = noOptionsAtAll ? `
+    <div class="card pickable" data-rarity="Common" data-action="accept-contract-fallback">
+      <span class="rarity-tag" data-rarity="Common">🆘 ${t('dcon_fallback_title')}</span>
+      <div class="ability" style="font-size:14px;margin-top:8px;">${t('dcon_fallback_desc')}</div>
+      <div class="card-tap-hint">${t('dcon_pick')}</div>
+    </div>` : '';
+
+  app.innerHTML = `
+  <div class="hero" style="padding:26px 20px 20px;">
+    <div class="hero-inner">
+      <h1 class="hdr" style="font-size:24px;">${t('dcon_title')}</h1>
+      <div class="tagline">${flag(d.naz)} ${d.nome} · ${t('dcon_market_score', sit.marketScore)}</div>
+    </div>
+  </div>
+  ${renewalCard}
+  ${offerCards}
+  ${fallbackCard}
+  `;
+  bindActions();
+}
+
+function applyDriverContractChoice(teamId, tier){
+  driverCareerState.currentTeamId = teamId;
+  driverCareerState.currentTier = tier;
+  startNextDriverCareerSeason();
+}
 function startNextDriverCareerSeason(){
   const usedIds = new Set();
   const tierName = driverCareerState.currentTier;
@@ -4804,6 +4899,7 @@ function renderInner(){
   if(state.phase==='driver-activity') return renderDriverActivity();
   if(state.phase==='driver-activity-result') return renderDriverActivityResult(window.__lastDriverActivityOutcome);
   if(state.phase==='driver-season-end') return renderDriverSeasonEnd();
+  if(state.phase==='driver-contract') return renderDriverContract();
   if(state.phase==='driver-retirement') return renderDriverRetirement();
   if(state.phase==='draft') return renderDraft();
   if(state.phase==='hub') return renderHub();
@@ -5528,7 +5624,7 @@ function checkSeasonEndAchievements(){
 
 
 const SAVE_KEY = 'racingDynastySaveV09';
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -7624,7 +7720,17 @@ function onAction(e){
     render();
   }
   else if(action==='start-next-driver-season'){
-    startNextDriverCareerSeason();
+    driverCareerState.contractSituation = evaluateDriverContractSituation();
+    state.phase = 'driver-contract';
+    render();
+  }
+  else if(action==='accept-contract'){
+    applyDriverContractChoice(el.dataset.team, el.dataset.tier);
+  }
+  else if(action==='accept-contract-fallback'){
+    const kartIds = Object.keys(driverCareerState.world.tiers).filter(id=>driverCareerState.world.tiers[id]==='kart');
+    const teamId = kartIds[Math.floor(rnd()*kartIds.length)];
+    applyDriverContractChoice(teamId, 'kart');
   }
   else if(action==='quit-driver-career'){
     gameConfirm(t('dh_quit_confirm'), ()=>{
