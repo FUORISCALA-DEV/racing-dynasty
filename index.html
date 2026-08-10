@@ -54,12 +54,22 @@ body{
 .promo-banner-badge{
   flex-shrink:0; width:36px; height:36px; border-radius:9px;
   background:#E54732; display:flex; align-items:center; justify-content:center;
+  animation:promoBadgePulse 3.2s ease-in-out infinite;
 }
 .promo-banner-badge img{ width:19px; height:19px; }
 .promo-banner-copy{ display:flex; flex-direction:column; flex:1; min-width:0; line-height:1.25; }
 .promo-banner-brand{ font-size:12.5px; font-weight:800; letter-spacing:0.04em; color:#F3F0E8; }
 .promo-banner-text{ font-size:10.5px; color:#8B8D91; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.promo-banner-cta{ flex-shrink:0; font-size:11.5px; font-weight:800; color:#E54732; white-space:nowrap; }
+.promo-banner-cta{ flex-shrink:0; font-size:11.5px; font-weight:800; color:#E54732; white-space:nowrap; display:inline-block; animation:promoCtaNudge 3.2s ease-in-out infinite; }
+@keyframes promoBadgePulse{
+  0%, 100% { box-shadow:0 0 0 0 rgba(229,71,50,0.55); }
+  50% { box-shadow:0 0 0 7px rgba(229,71,50,0); }
+}
+@keyframes promoCtaNudge{
+  0%, 75%, 100% { transform:translateX(0); }
+  85% { transform:translateX(3px); }
+  92% { transform:translateX(0); }
+}
 body.has-promo-banner .wrap{ padding-bottom:70px; }
 body.has-promo-banner .install-pitch-overlay{ padding-bottom:58px; }
 
