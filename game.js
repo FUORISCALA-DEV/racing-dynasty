@@ -6553,9 +6553,11 @@ function rivalPanelHTML(){
     const rCircles = aiTeamSynergyCircles(t);
     const slot1 = state.grid.find(g=>g.teamId===id && g.role===0);
     const slot2 = state.grid.find(g=>g.teamId===id && g.role===1);
+    const logoMatch = TEAM_LIVERY_PATTERNS.find(p=>p.nome===cs.nome);
+    const bgLogo = logoMatch ? `<img class="rival-bg-logo" src="assets/team-logos/${logoMatch.id}.webp" alt="">` : '';
     return `<div class="rival-card-full">
       <div class="upcoming-row">
-        <span class="upcoming-name">${teamFlag(id)} ${teamLogoHTML(cs.nome)}${cs.nome}</span>
+        <span class="upcoming-name">${teamFlag(id)} ${cs.nome}</span>
         <span class="mono dim">${cs.points} pt</span>
         <span class="dim" style="font-size:11px;">${diffLabel}</span>
       </div>
@@ -6563,16 +6565,19 @@ function rivalPanelHTML(){
         <div class="rival-full-rating" style="color:${teamStrengthColor(rStrength)};">${rStrength}</div>
         <div class="rival-full-sem">${miniSemaforoHTML(rCircles)}</div>
       </div>
-      <div class="grid grid-2" style="margin-top:8px;">
-        <div class="rival-mini">
-          ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1, undefined, undefined, t.nome)}
-          <div class="rival-mini-name">${flag(t.drivers[0].naz)} ${t.drivers[0].nome}</div>
-          <div class="dim mono" style="font-size:11px;">${t.drivers[0].rating} RATING</div>
-        </div>
-        <div class="rival-mini">
-          ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2, undefined, undefined, t.nome)}
-          <div class="rival-mini-name">${flag(t.drivers[1].naz)} ${t.drivers[1].nome}</div>
-          <div class="dim mono" style="font-size:11px;">${t.drivers[1].rating} RATING</div>
+      <div class="rival-duo-stage">
+        ${bgLogo}
+        <div class="rival-duo-row">
+          <div class="rival-mini">
+            ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1, undefined, undefined, t.nome)}
+            <div class="rival-mini-name">${flag(t.drivers[0].naz)} ${t.drivers[0].nome}</div>
+            <div class="dim mono" style="font-size:11px;">${t.drivers[0].rating} RATING</div>
+          </div>
+          <div class="rival-mini rival-mini-mirrored">
+            ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2, undefined, undefined, t.nome)}
+            <div class="rival-mini-name">${flag(t.drivers[1].naz)} ${t.drivers[1].nome}</div>
+            <div class="dim mono" style="font-size:11px;">${t.drivers[1].rating} RATING</div>
+          </div>
         </div>
       </div>
     </div>`;

@@ -770,7 +770,16 @@ tr.former td:first-child{border-left-color:var(--dim);}
 .live-row.rival{ border-left:3px solid #B143F3; background:rgba(177,67,243,0.08); }
 .live-row.rival .lr-team{ color:#c77bf7; }
 .rival-notice{ border-color:#B143F3; }
-.rival-mini{ text-align:center; }
+.rival-mini{ text-align:center; position:relative; z-index:1; }
+.rival-duo-stage{ position:relative; margin-top:8px; padding:10px 0; overflow:hidden; border-radius:6px; }
+.rival-bg-logo{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:62%; max-width:190px; opacity:0.16; z-index:0; pointer-events:none;
+  filter:drop-shadow(0 0 10px rgba(0,0,0,0.5));
+}
+.rival-duo-row{ position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.rival-mini-mirrored .car-canvas{ transform:scaleX(-1); }
+.rival-mini-mirrored .car-number-wrap{ transform:scaleX(-1); } /* ri-specchia SOLO il numero, cosi' resta leggibile */
 .rival-mini .car-canvas{ margin-bottom:4px; }
 .rival-mini-name{ font-size:11.5px; font-weight:700; }
 /* ---- V0.9.3: pioggia e lampo di sole durante la gara live ---- */
