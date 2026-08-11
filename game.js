@@ -190,6 +190,11 @@ function activateStreamerFrame(){
     iframe = document.createElement('iframe');
     iframe.id = 'streamerGameIframe';
     iframe.title = 'Racing Dynasty';
+    // V0.9.7.9.36: senza questi permessi espliciti, i browser veri (Chrome in testa) possono
+    // bloccare o comportarsi in modo imprevedibile quando uno script dentro l'iframe chiede il
+    // fullscreen sul documento genitore — anche se e' la stessa origine.
+    iframe.setAttribute('allow', 'fullscreen');
+    iframe.allowFullscreen = true;
     // V0.9.7.9.32: l'iframe ha il suo viewport indipendente — dimensionandolo esattamente come il
     // riquadro Game Area, il gioco dentro "crede" di avere solo quello spazio e si dispone di
     // conseguenza (colonne che collassano, font che si adattano...), non solo si rimpicciolisce.
@@ -10019,8 +10024,17 @@ function getFullscreenTargetDocument(){
 function toggleFullscreen(){
   try{
     const targetDoc = getFullscreenTargetDocument();
-    if(!targetDoc.fullscreenElement) targetDoc.documentElement.requestFullscreen();
-    else targetDoc.exitFullscreen();
+    if(!targetDoc.fullscreenElement){
+      const req = targetDoc.documentElement.requestFullscreen();
+      // V0.9.7.9.36: alcuni browser possono rifiutare la richiesta sul documento genitore anche
+      // con i permessi giusti sull'iframe — se succede, proviamo almeno su noi stessi invece di
+      // non fare nulla. Meglio un fullscreen parziale che nessuno.
+      if(req && req.catch && targetDoc!==document){
+        req.catch(()=>{ try{ document.documentElement.requestFullscreen(); }catch(e){} });
+      }
+    } else {
+      targetDoc.exitFullscreen();
+    }
   }catch(err){ /* API non disponibile: ignorato silenziosamente */ }
   closeMenuPanel();
 }
@@ -10114,13 +10128,7 @@ function initSidebar(){
   if(creditsBtn) creditsBtn.addEventListener('click', openCredits);
   document.getElementById('menuFullscreenBtn').addEventListener('click', toggleFullscreen);
   const fsBtn = document.getElementById('fullscreenToggleBtn');
-  if(fsBtn) fsBtn.addEventListener('click', ()=>{
-    try{
-      const targetDoc = getFullscreenTargetDocument();
-      if(!targetDoc.fullscreenElement) targetDoc.documentElement.requestFullscreen();
-      else targetDoc.exitFullscreen();
-    }catch(err){ /* API non disponibile: ignorato silenziosamente */ }
-  });
+  if(fsBtn) fsBtn.addEventListener('click', toggleFullscreen);
   document.querySelectorAll('.sidebar-settings-close').forEach(btn=>{
     if(btn.id==='sidebarGuideCloseBtn') btn.addEventListener('click', closeGuidePanel);
     else if(btn.id==='sidebarAchievementsCloseBtn') btn.addEventListener('click', closeAchievementsPanel);
