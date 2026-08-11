@@ -65,6 +65,12 @@ body{
 #streamerFuoriscalaLogo img{ width:26px; height:26px; }
 body.streamer-mode-active{ background:#050507; }
 body.streamer-mode-active #promoBanner{ display:none !important; } /* niente banner promo dentro l'overlay OBS */
+/* V0.9.7.9.35: il menu e il fullscreen della pagina esterna sono duplicati inutili quando la
+   modalita' streamer e' attiva — quelli che contano sono dentro l'iframe, dove l'utente interagisce
+   davvero. Tenerli visibili confondeva (due menu, due pulsanti fullscreen, funzioni sparse tra i due). */
+body.streamer-mode-active #gameMenuToggleBtn,
+body.streamer-mode-active #gameMenuPanel,
+body.streamer-mode-active #fullscreenToggleBtn{ display:none !important; }
 /* V0.9.7.8.25: banner promozionale — palette ufficiale FUORISCALA (carbon/ivory/signal), non il
    tema del gioco, cosi' si riconosce subito come "un'altra identita'" che si affaccia, non un
    elemento nativo del gioco. Badge col monogramma vero, non solo testo. */

@@ -10007,27 +10007,43 @@ function closeAchievementsPanel(){
   document.getElementById('sidebarAchievementsPanel').style.display = 'none';
 }
 
+// V0.9.7.9.35: dentro l'iframe della modalita' streamer, il fullscreen deve riguardare la pagina
+// ESTERNA (quella con tutta la cornice OBS), non l'iframe stesso — altrimenti si perde la cornice
+// e resta a schermo intero solo il gioco stretto. Stessa origine, quindi l'accesso diretto funziona.
+function getFullscreenTargetDocument(){
+  if(isEmbeddedStreamerInstance()){
+    try{ if(window.parent && window.parent.document) return window.parent.document; }catch(e){ /* ignorato */ }
+  }
+  return document;
+}
 function toggleFullscreen(){
   try{
-    if(!document.fullscreenElement) document.documentElement.requestFullscreen();
-    else document.exitFullscreen();
+    const targetDoc = getFullscreenTargetDocument();
+    if(!targetDoc.fullscreenElement) targetDoc.documentElement.requestFullscreen();
+    else targetDoc.exitFullscreen();
   }catch(err){ /* API non disponibile: ignorato silenziosamente */ }
   closeMenuPanel();
 }
 
 function updateMenuFullscreenLabel(){
+  const targetDoc = getFullscreenTargetDocument();
   const label = document.getElementById('menuFullscreenLabel');
-  if(label) label.textContent = document.fullscreenElement ? t('menu_exit_fullscreen') : t('menu_fullscreen');
+  if(label) label.textContent = targetDoc.fullscreenElement ? t('menu_exit_fullscreen') : t('menu_fullscreen');
   const enterIcon = document.getElementById('fullscreenEnterIcon');
   const exitIcon = document.getElementById('fullscreenExitIcon');
   if(enterIcon && exitIcon){
-    const isFs = !!document.fullscreenElement;
+    const isFs = !!targetDoc.fullscreenElement;
     enterIcon.style.display = isFs ? 'none' : '';
     exitIcon.style.display = isFs ? '' : 'none';
   }
 }
 
 document.addEventListener('fullscreenchange', updateMenuFullscreenLabel);
+if(isEmbeddedStreamerInstance()){
+  try{
+    if(window.parent && window.parent.document) window.parent.document.addEventListener('fullscreenchange', updateMenuFullscreenLabel);
+  }catch(e){ /* ignorato */ }
+}
 
 // la voce "Nuova Carriera" compare solo quando si e' davvero dentro una carriera
 function updateMenuNewCareerVisibility(){
@@ -10100,8 +10116,9 @@ function initSidebar(){
   const fsBtn = document.getElementById('fullscreenToggleBtn');
   if(fsBtn) fsBtn.addEventListener('click', ()=>{
     try{
-      if(!document.fullscreenElement) document.documentElement.requestFullscreen();
-      else document.exitFullscreen();
+      const targetDoc = getFullscreenTargetDocument();
+      if(!targetDoc.fullscreenElement) targetDoc.documentElement.requestFullscreen();
+      else targetDoc.exitFullscreen();
     }catch(err){ /* API non disponibile: ignorato silenziosamente */ }
   });
   document.querySelectorAll('.sidebar-settings-close').forEach(btn=>{
