@@ -35,6 +35,14 @@ function initSupabase(){
       name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email,
       avatarUrl: session.user.user_metadata?.avatar_url || null,
     } : null;
+    // V0.9.8.1: il redirect di ritorno da Google genera un evento di navigazione che il gestore
+    // del tasto/gesture indietro puo' scambiare per una vera pressione "indietro" dell'utente,
+    // facendo apparire per errore la richiesta di conferma uscita. Segnaliamo per un attimo che
+    // e' appena successo un login, cosi' quel gestore sa di doverlo ignorare.
+    if(event==='SIGNED_IN'){
+      window.__justHandledAuthRedirect = true;
+      setTimeout(()=>{ window.__justHandledAuthRedirect = false; }, 3000);
+    }
     if(typeof onAuthStateResolved==='function') onAuthStateResolved(event);
   });
   return supabaseClient;
@@ -10252,6 +10260,10 @@ function isPanelOpen(id){
   return !!(el && el.style.display === 'flex');
 }
 function handleBackGesture(){
+  // V0.9.8.1: appena tornati dal login con Google — questo "indietro" e' il redirect, non una
+  // vera pressione dell'utente. Lo ignoriamo, ripristinando la guardia per le pressioni vere
+  // successive (altrimenti la prossima uscirebbe senza chiedere conferma).
+  if(window.__justHandledAuthRedirect){ pushBackGuard(); return; }
   if(document.getElementById('goatRevealOverlay')){
     const closeBtn = document.getElementById('goatRevealCloseBtn');
     if(closeBtn) closeBtn.click();
