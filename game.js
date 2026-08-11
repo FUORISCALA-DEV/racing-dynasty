@@ -10530,9 +10530,11 @@ let museumPreviousPhase = 'title'; // V0.9.4.1: dove tornare chiudendo il Museo 
 state = { phase:'studio-splash', selectedDifficulty:'medio' };
 initSidebar();
 applyStaticMenuTranslations();
-initSupabase();
-handlePremiumCheckoutReturn();
-render();
+render(); // V0.9.8.9: lo splash parte SUBITO, pulito — Supabase si inizializza un attimo dopo
+setTimeout(()=>{
+  initSupabase();
+  handlePremiumCheckoutReturn();
+}, 0);
 window.addEventListener('popstate', handleBackGesture);
 pushBackGuard(); // prima voce di cronologia, cosi' anche la primissima gesture back viene intercettata
 
