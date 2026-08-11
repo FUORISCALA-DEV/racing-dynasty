@@ -76,14 +76,18 @@ function setStreamerName(name){ try{ localStorage.setItem('racingDynastyStreamer
 
 // V0.9.7.9.27: coordinate esatte (in percentuale) delle due zone dentro l'immagine cornice
 // 1672x941, misurate per flood-fill dall'immagine fornita.
-const STREAMER_GAME_BOX = { left:0.2129, top:0.2912, width:0.5586, height:0.5707 };
-const STREAMER_CAM_BOX  = { left:0.0179, top:0.2912, width:0.1639, height:0.2519 };
+const STREAMER_GAME_BOX = { left:0.3589, top:0.0510, width:0.3313, height:0.8927 };
+const STREAMER_CAM_BOX  = { left:0.0556, top:0.1722, width:0.2518, height:0.3996 };
+// V0.9.7.9.30: targhetta Twitch — coordinate esatte date da Gio (295,111 su immagine 1672x941),
+// centro della targhetta, non angolo.
+const STREAMER_TWITCH_TAG = { centerX:295/1672, centerY:111/941 };
 const STREAMER_FRAME_RATIO = 1672/941;
 
 function updateStreamerFrameLayout(){
   const container = document.getElementById('streamerFrame');
   const gameEl = document.getElementById('streamerGameSlot');
   const camEl = document.getElementById('streamerCamSlot');
+  const twitchEl = document.getElementById('streamerTwitchTag');
   if(!container || container.style.display==='none') return;
   const cw = container.clientWidth, ch = container.clientHeight;
   const containerRatio = cw/ch;
@@ -104,6 +108,10 @@ function updateStreamerFrameLayout(){
     camEl.style.top = (offY + STREAMER_CAM_BOX.top*dispH) + 'px';
     camEl.style.width = (STREAMER_CAM_BOX.width*dispW) + 'px';
     camEl.style.height = (STREAMER_CAM_BOX.height*dispH) + 'px';
+  }
+  if(twitchEl){
+    twitchEl.style.left = (offX + STREAMER_TWITCH_TAG.centerX*dispW) + 'px';
+    twitchEl.style.top = (offY + STREAMER_TWITCH_TAG.centerY*dispH) + 'px';
   }
 }
 window.addEventListener('resize', updateStreamerFrameLayout);
