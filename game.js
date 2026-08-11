@@ -82,11 +82,24 @@ function setStreamerName(name){ try{ localStorage.setItem('racingDynastyStreamer
 function isEmbeddedStreamerInstance(){
   try{ return new URLSearchParams(window.location.search).get('embed')==='1'; }catch(e){ return false; }
 }
+// V0.9.7.9.33: quando la modalita' e' attiva, l'utente interagisce con l'IFRAME (quello visibile),
+// non con la pagina esterna — quindi se cambia nome li' dentro, la pagina esterna (dove vive la
+// targhetta Twitch) deve accorgersene da sola. L'evento 'storage' scatta automaticamente sulle
+// altre finestre della stessa origine quando l'iframe scrive in localStorage.
+if(!isEmbeddedStreamerInstance()){
+  window.addEventListener('storage', (e)=>{
+    if(e.key==='racingDynastyStreamerNameV1'){
+      const label = document.getElementById('streamerNameLabel');
+      if(label) label.textContent = getStreamerName();
+    }
+  });
+}
 const STREAMER_GAME_BOX = { left:0.3589, top:0.0510, width:0.3313, height:0.8927 };
 const STREAMER_CAM_BOX  = { left:0.0556, top:0.1722, width:0.2518, height:0.3996 };
 // V0.9.7.9.30: targhetta Twitch — coordinate esatte date da Gio (295,111 su immagine 1672x941),
 // centro della targhetta, non angolo.
 const STREAMER_TWITCH_TAG = { centerX:295/1672, centerY:111/941 };
+const STREAMER_FUORISCALA_LOGO = { centerX:126/1672, centerY:886/941 };
 const STREAMER_FRAME_RATIO = 1672/941;
 
 function updateStreamerFrameLayout(){
@@ -95,6 +108,7 @@ function updateStreamerFrameLayout(){
   const camEl = document.getElementById('streamerCamSlot');
   const twitchEl = document.getElementById('streamerTwitchTag');
   const frameImg = document.getElementById('streamerFrameImg');
+  const logoEl = document.getElementById('streamerFuoriscalaLogo');
   if(!container || container.style.display==='none') return;
   const cw = container.clientWidth, ch = container.clientHeight;
 
@@ -108,6 +122,7 @@ function updateStreamerFrameLayout(){
     if(frameImg) frameImg.style.display = 'none';
     if(camEl) camEl.style.display = 'none';
     if(twitchEl) twitchEl.style.display = 'none';
+    if(logoEl) logoEl.style.display = 'none';
     if(gameEl){
       gameEl.style.left = '0px'; gameEl.style.top = '0px';
       gameEl.style.width = cw + 'px'; gameEl.style.height = ch + 'px';
@@ -118,6 +133,7 @@ function updateStreamerFrameLayout(){
   if(frameImg) frameImg.style.display = '';
   if(camEl) camEl.style.display = '';
   if(twitchEl) twitchEl.style.display = '';
+  if(logoEl) logoEl.style.display = '';
   if(gameEl) gameEl.style.borderRadius = '';
 
   const containerRatio = cw/ch;
@@ -142,6 +158,10 @@ function updateStreamerFrameLayout(){
   if(twitchEl){
     twitchEl.style.left = (offX + STREAMER_TWITCH_TAG.centerX*dispW) + 'px';
     twitchEl.style.top = (offY + STREAMER_TWITCH_TAG.centerY*dispH) + 'px';
+  }
+  if(logoEl){
+    logoEl.style.left = (offX + STREAMER_FUORISCALA_LOGO.centerX*dispW) + 'px';
+    logoEl.style.top = (offY + STREAMER_FUORISCALA_LOGO.centerY*dispH) + 'px';
   }
 }
 window.addEventListener('resize', updateStreamerFrameLayout);
@@ -193,7 +213,7 @@ const I18N = {
     stream_name_title: 'Come ti chiami?', stream_name_desc: 'Il tuo nome apparirà accanto all\'icona Twitch nell\'area webcam.',
     stream_name_placeholder: 'Il tuo nome streamer', stream_confirm: 'Conferma',
     stream_continue_title: 'Modalità streamer', stream_continue_desc: (name)=>`Vuoi continuare in modalità streamer come ${name}?`,
-    settings_streamer_mode: 'Modalità Streamer', settings_streamer_mode_desc: "Layout pensato per OBS, con spazio dedicato alla webcam.",
+    settings_streamer_mode: 'Modalità Streamer', settings_streamer_mode_desc: "Layout pensato per OBS, con spazio dedicato alla webcam.", settings_streamer_name: 'Nome Streamer',
     bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_hold: 'Mantieni la posizione',
     bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni', bkt_lose_3: 'Perdi 3 posizioni', bkt_gain_3_5: 'Guadagni 3-5 posizioni',
     dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '⚠️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito', bkt_gain_exact: (n)=>n===1?'Guadagni 1 posizione':`Guadagni ${n} posizioni`, bkt_lose_exact: (n)=>n===1?'Perdi 1 posizione':`Perdi ${n} posizioni`,
@@ -441,7 +461,7 @@ const I18N = {
     stream_name_title: "What's your name?", stream_name_desc: "Your name will appear next to the Twitch icon in the webcam area.",
     stream_name_placeholder: 'Your streamer name', stream_confirm: 'Confirm',
     stream_continue_title: 'Streamer mode', stream_continue_desc: (name)=>`Do you want to continue in streamer mode as ${name}?`,
-    settings_streamer_mode: 'Streamer Mode', settings_streamer_mode_desc: 'Layout designed for OBS, with a dedicated webcam space.',
+    settings_streamer_mode: 'Streamer Mode', settings_streamer_mode_desc: 'Layout designed for OBS, with a dedicated webcam space.', settings_streamer_name: 'Streamer Name',
     bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_hold: 'Hold position',
     bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions', bkt_lose_3: 'Lose 3 positions', bkt_gain_3_5: 'Gain 3-5 positions',
     dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '⚠️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result', bkt_gain_exact: (n)=>n===1?'Gain 1 position':`Gain ${n} positions`, bkt_lose_exact: (n)=>n===1?'Lose 1 position':`Lose ${n} positions`,
@@ -683,7 +703,7 @@ const I18N = {
     stream_name_title: '¿Cómo te llamas?', stream_name_desc: 'Tu nombre aparecerá junto al icono de Twitch en el área de la cámara.',
     stream_name_placeholder: 'Tu nombre de streamer', stream_confirm: 'Confirmar',
     stream_continue_title: 'Modo streamer', stream_continue_desc: (name)=>`¿Quieres continuar en modo streamer como ${name}?`,
-    settings_streamer_mode: 'Modo Streamer', settings_streamer_mode_desc: 'Diseño pensado para OBS, con espacio dedicado a la cámara web.',
+    settings_streamer_mode: 'Modo Streamer', settings_streamer_mode_desc: 'Diseño pensado para OBS, con espacio dedicado a la cámara web.', settings_streamer_name: 'Nombre de Streamer',
     bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_hold: 'Mantienes la posición',
     bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones', bkt_lose_3: 'Pierdes 3 posiciones', bkt_gain_3_5: 'Ganas 3-5 posiciones',
     dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '⚠️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado', bkt_gain_exact: (n)=>n===1?'Ganas 1 posición':`Ganas ${n} posiciones`, bkt_lose_exact: (n)=>n===1?'Pierdes 1 posición':`Pierdes ${n} posiciones`,
@@ -6774,11 +6794,12 @@ function renderStreamerQuestion(){
 }
 
 function renderStreamerNameInput(){
+  const existingName = getStreamerName();
   app.innerHTML = `
   <div class="lang-select-screen">
     <div class="lang-select-title">${t('stream_name_title')}</div>
     <div class="dim" style="font-size:13px;margin-top:10px;">${t('stream_name_desc')}</div>
-    <input type="text" id="streamerNameInput" maxlength="24" placeholder="${t('stream_name_placeholder')}"
+    <input type="text" id="streamerNameInput" maxlength="24" placeholder="${t('stream_name_placeholder')}" value="${existingName||''}"
       style="width:100%;max-width:280px;box-sizing:border-box;padding:12px 14px;font-size:15px;margin-top:16px;
       background:var(--panel2);border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);text-align:center;">
     <div class="btnrow" style="margin-top:18px;">
@@ -6787,6 +6808,8 @@ function renderStreamerNameInput(){
   </div>
   `;
   bindActions();
+  const input = document.getElementById('streamerNameInput');
+  if(input && existingName) input.select();
 }
 
 function renderStreamerContinueCheck(){
@@ -9324,6 +9347,7 @@ function openSettings(){
     </div>
     <button type="button" class="menu-item" id="sidebarHapticToggleBtn">📳 <span>${t('settings_haptic')}: ${audioSettings.hapticEnabled!==false?t('on'):t('off')}</span></button>
     <button type="button" class="menu-item" id="sidebarStreamerToggleBtn">🎥 <span>${t('settings_streamer_mode')}: ${isStreamerModeOn()?t('on'):t('off')}</span></button>
+    ${isStreamerModeOn() ? `<button type="button" class="menu-item" id="sidebarStreamerNameBtn">✏️ <span>${t('settings_streamer_name')}: ${getStreamerName()}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarSpeedBtn">🚀 <span>${t('settings_speed')}: ${defaultRaceSpeed}×</span></button>
     <button type="button" class="menu-item" id="sidebarDecisionTimerBtn">⏱️ <span>${t('settings_decision_timer')}: ${decisionTimerEnabled?t('on'):t('off')}</span></button>
     <button type="button" class="menu-item" id="sidebarExportSaveBtn">📤 <span>${t('settings_export')}</span></button>
@@ -9382,12 +9406,22 @@ function openSettings(){
       syncStreamerFrameState();
       openSettings();
     } else {
+      closeSettingsPanel();
       closeMenuPanel();
       markStreamerAsked();
       state.streamerSetupReturnPhase = state.phase;
       state.phase = 'streamer-name-input';
       render();
     }
+  });
+  const streamerNameBtn = document.getElementById('sidebarStreamerNameBtn');
+  if(streamerNameBtn) streamerNameBtn.addEventListener('click', ()=>{
+    closeSettingsPanel();
+    closeMenuPanel();
+    state.streamerSetupReturnPhase = state.phase;
+    state.streamerNameEditMode = true; // V0.9.7.9.33: non tocca il flag "gia' chiesto", e' solo un cambio nome
+    state.phase = 'streamer-name-input';
+    render();
   });
   document.getElementById('sidebarSpeedBtn').addEventListener('click', ()=>{
     defaultRaceSpeed = defaultRaceSpeed===1 ? 2 : 1;
