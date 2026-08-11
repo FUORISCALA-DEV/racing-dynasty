@@ -38,22 +38,15 @@ body{
 }
 ::selection{background:var(--amber);color:#0A0C10;}
 .wrap{max-width:1180px;margin:0 auto;padding:18px 18px 44px;flex:1;display:flex;flex-direction:column;width:100%;box-sizing:border-box;}
-#streamerGameSlot .menu-toggle-btn{ position:absolute; top:10px; right:10px; z-index:20; }
-#streamerGameSlot .game-menu-overlay{ position:absolute; inset:0; z-index:21; }
 
 /* V0.9.7.9.27: modalita' streamer — cornice pensata per OBS (Game Area / Cam Area) */
 #streamerFrame{ position:fixed; inset:0; z-index:1; background:#050507; }
 #streamerFrameImg{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; pointer-events:none; user-select:none; }
 #streamerGameSlot{
-  position:absolute; overflow-y:auto; overflow-x:hidden; background:#0a0a0e;
+  position:absolute; overflow:hidden; background:#0a0a0e;
   border-radius:4px;
-  scrollbar-width:thin; scrollbar-color:#E54732 rgba(255,255,255,0.06);
 }
-#streamerGameSlot::-webkit-scrollbar{ width:9px; }
-#streamerGameSlot::-webkit-scrollbar-track{ background:rgba(255,255,255,0.06); }
-#streamerGameSlot::-webkit-scrollbar-thumb{ background:#E54732; border-radius:5px; }
-#streamerGameSlot::-webkit-scrollbar-thumb:hover{ background:#ff5a3d; }
-#streamerGameSlot .wrap{ max-width:460px; margin:0 auto; min-height:100%; }
+#streamerGameIframe{ width:100%; height:100%; border:none; display:block; background:#0a0a0e; }
 #streamerCamSlot{ position:absolute; pointer-events:none; }
 .streamer-twitch-badge{
   position:absolute; transform:translate(-50%,-50%); z-index:5;
@@ -1167,7 +1160,7 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
 .fullscreen-toggle-btn:active{ transform: translateY(1px); filter: brightness(0.95); }
 .fullscreen-toggle-btn:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 1px; }
 .fullscreen-toggle-icon{ width: 18px; height: 18px; color: var(--text); }
-#streamerGameSlot .fullscreen-toggle-btn{ position:absolute; top:52px; right:10px; z-index:20; }
+
 
 /* ---- pannello menu principale (Home / Nuova Carriera / Sala Trofei / Impostazioni / Fullscreen) ---- */
 .game-menu-overlay{

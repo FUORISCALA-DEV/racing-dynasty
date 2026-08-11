@@ -76,6 +76,12 @@ function setStreamerName(name){ try{ localStorage.setItem('racingDynastyStreamer
 
 // V0.9.7.9.27: coordinate esatte (in percentuale) delle due zone dentro l'immagine cornice
 // 1672x941, misurate per flood-fill dall'immagine fornita.
+// V0.9.7.9.32: quando la modalita' streamer usa un iframe (per far si' che il gioco si adatti
+// davvero, non solo si rimpicciolisca — vedi activateStreamerFrame), l'istanza DENTRO l'iframe
+// deve sapere di esserlo, per non provare a sua volta a costruirsi una cornice annidata.
+function isEmbeddedStreamerInstance(){
+  try{ return new URLSearchParams(window.location.search).get('embed')==='1'; }catch(e){ return false; }
+}
 const STREAMER_GAME_BOX = { left:0.3589, top:0.0510, width:0.3313, height:0.8927 };
 const STREAMER_CAM_BOX  = { left:0.0556, top:0.1722, width:0.2518, height:0.3996 };
 // V0.9.7.9.30: targhetta Twitch — coordinate esatte date da Gio (295,111 su immagine 1672x941),
@@ -141,35 +147,37 @@ function updateStreamerFrameLayout(){
 window.addEventListener('resize', updateStreamerFrameLayout);
 
 function activateStreamerFrame(){
+  if(isEmbeddedStreamerInstance()) return; // l'istanza dentro l'iframe non deve mai costruirsi una propria cornice
   const frame = document.getElementById('streamerFrame');
   const gameSlot = document.getElementById('streamerGameSlot');
   const appEl = document.getElementById('app');
-  const menuBtn = document.getElementById('gameMenuToggleBtn');
-  const menuPanel = document.getElementById('gameMenuPanel');
-  const fsBtn = document.getElementById('fullscreenToggleBtn');
   const nameLabel = document.getElementById('streamerNameLabel');
   if(!frame || !gameSlot || !appEl) return;
-  if(appEl.parentElement !== gameSlot) gameSlot.appendChild(appEl);
-  if(menuBtn && menuBtn.parentElement !== gameSlot) gameSlot.appendChild(menuBtn);
-  if(menuPanel && menuPanel.parentElement !== gameSlot) gameSlot.appendChild(menuPanel);
-  if(fsBtn && fsBtn.parentElement !== gameSlot) gameSlot.appendChild(fsBtn);
-  appEl.style.display = '';
+  appEl.style.display = 'none'; // l'app esterna si mette in pausa visivamente, gira tutto nell'iframe
   frame.style.display = 'block';
   document.body.classList.add('streamer-mode-active');
   if(nameLabel) nameLabel.textContent = getStreamerName();
+  let iframe = document.getElementById('streamerGameIframe');
+  if(!iframe){
+    iframe = document.createElement('iframe');
+    iframe.id = 'streamerGameIframe';
+    iframe.title = 'Racing Dynasty';
+    // V0.9.7.9.32: l'iframe ha il suo viewport indipendente — dimensionandolo esattamente come il
+    // riquadro Game Area, il gioco dentro "crede" di avere solo quello spazio e si dispone di
+    // conseguenza (colonne che collassano, font che si adattano...), non solo si rimpicciolisce.
+    iframe.src = 'index.html?embed=1';
+    gameSlot.appendChild(iframe);
+  }
   updateStreamerFrameLayout();
 }
 function deactivateStreamerFrame(){
+  if(isEmbeddedStreamerInstance()) return;
   const frame = document.getElementById('streamerFrame');
   const appEl = document.getElementById('app');
-  const menuBtn = document.getElementById('gameMenuToggleBtn');
-  const menuPanel = document.getElementById('gameMenuPanel');
-  const fsBtn = document.getElementById('fullscreenToggleBtn');
+  const iframe = document.getElementById('streamerGameIframe');
   if(!frame || !appEl) return;
-  if(appEl.parentElement !== document.body) document.body.insertBefore(appEl, frame.nextSibling);
-  if(menuBtn && menuBtn.parentElement !== document.body) document.body.insertBefore(menuBtn, appEl);
-  if(menuPanel && menuPanel.parentElement !== document.body) document.body.insertBefore(menuPanel, appEl);
-  if(fsBtn && fsBtn.parentElement !== document.body) document.body.insertBefore(fsBtn, appEl);
+  if(iframe) iframe.remove();
+  appEl.style.display = '';
   frame.style.display = 'none';
   document.body.classList.remove('streamer-mode-active');
 }
@@ -6703,7 +6711,7 @@ function renderStudioSplash(){
     setTimeout(()=>{
       if(!hasLangBeenChosen()){
         state.phase = 'lang-select';
-      } else if(isStreamerModeOn()){
+      } else if(isStreamerModeOn() && !isEmbeddedStreamerInstance()){
         state.phase = 'streamer-continue-check';
       } else {
         state.phase = 'title';
@@ -8887,7 +8895,7 @@ function onAction(e){
     saveLang();
     markLangChosen();
     applyStaticMenuTranslations();
-    if(!hasStreamerBeenAsked()){
+    if(!hasStreamerBeenAsked() && !isEmbeddedStreamerInstance()){
       state.phase = 'streamer-question';
       render();
     } else {
