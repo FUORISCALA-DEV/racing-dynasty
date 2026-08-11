@@ -7954,29 +7954,43 @@ function upcomingCircuitsHTML(){
 // V0.9.3: vista leggera delle rivali in pit-lane (solo monoposto + rating, senza dettaglio componenti)
 function pitlaneRivalsHTML(){
   if(!state.rivals || !state.rivals.length) return '';
-  const cardsHTML = state.rivals.map(id=>{
+  const panelsHTML = state.rivals.map(id=>{
     const t = state.aiTeams.find(x=>x.id===id);
     if(!t) return '';
     const cs = state.constructorStandings[id];
     const slot1 = state.grid.find(g=>g.teamId===id && g.role===0);
     const slot2 = state.grid.find(g=>g.teamId===id && g.role===1);
+    const logoMatch = TEAM_LIVERY_PATTERNS.find(p=>p.nome===t.nome);
+    const logoHTML = logoMatch ? `<img src="assets/team-logos/${logoMatch.id}.webp" alt="" style="width:22px;height:22px;object-fit:contain;vertical-align:-5px;margin-right:6px;">` : '';
     return `
-    <div class="rival-mini-small">
-      ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1, undefined, undefined, t.nome)}
-      <div class="rival-mini-name">${teamFlag(id)} ${t.nome}</div>
-      <div class="dim mono" style="font-size:10px;">${window.t('pit_strength')} <b style="color:var(--cyan);">${Math.round(aiTeamWeightedStrength(t))}</b> · ${cs.points} pt</div>
-    </div>
-    <div class="rival-mini-small">
-      ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2, undefined, undefined, t.nome)}
-      <div class="rival-mini-name dim" style="font-size:9.5px;">${t.drivers[1].nome}</div>
-      <div class="dim mono" style="font-size:9.5px;">${t.drivers[1].rating} RATING</div>
+    <div class="panel">
+      <div class="panel-title">
+        <h3 class="hdr">${logoHTML}${teamFlag(id)} ${t.nome}</h3>
+        <span class="strength-badge">${window.t('pitlane_strength')} <b>${Math.round(aiTeamWeightedStrength(t))}</b></span>
+      </div>
+      <div class="dim mono" style="font-size:11px;margin-top:-6px;margin-bottom:8px;">${cs.points} pt</div>
+      <div class="grid grid-2 pitlane-cars">
+        <div class="pitlane-car-mini">
+          ${carVisualHTML(t.drivers[0], t.components, slot1?slot1.carNumber:1, undefined, undefined, t.nome)}
+          <div class="pregara-name" style="font-size:12px;margin-top:6px;">${flag(t.drivers[0].naz)} ${t.drivers[0].nome} · ${t.drivers[0].rating} RATING</div>
+        </div>
+        <div class="pitlane-car-mini">
+          ${carVisualHTML(t.drivers[1], t.components, slot2?slot2.carNumber:2, undefined, undefined, t.nome)}
+          <div class="pregara-name" style="font-size:12px;margin-top:6px;">${flag(t.drivers[1].naz)} ${t.drivers[1].nome} · ${t.drivers[1].rating} RATING</div>
+        </div>
+      </div>
+      <div class="pregara-legend" style="margin-top:10px;">
+        ${pregaraLegendRow(window.t('comp_engine').toUpperCase(), t.components.motore)}
+        ${pregaraLegendRow(window.t('comp_chassis').toUpperCase(), t.components.telaio)}
+        ${pregaraLegendRow(window.t('comp_aero').toUpperCase(), t.components.aero)}
+        ${pregaraLegendRow(window.t('comp_tires').toUpperCase(), t.components.gomme)}
+        ${pregaraLegendRow(window.t('comp_strategist').toUpperCase(), t.components.stratega)}
+      </div>
     </div>`;
   }).join('');
   return `
-  <div class="panel">
-    <div class="panel-title"><h3 class="hdr">${state.rivals.length>1?window.t('pit_rivals_plural'):window.t('pit_rivals_single')}</h3><span class="dim mono" style="font-size:10px;">${window.t('pit_quick_ref')}</span></div>
-    <div class="grid grid-4 rival-mini-grid">${cardsHTML}</div>
-  </div>`;
+  <div class="eyebrow" style="margin-top:4px;">${state.rivals.length>1?window.t('pit_rivals_plural'):window.t('pit_rivals_single')}</div>
+  ${panelsHTML}`;
 }
 
 // V0.9.4.1: indicatore "circuito nuovo" / "mai vinto qui" — mostrato ovunque compare il nome del prossimo circuito
