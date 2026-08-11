@@ -173,6 +173,14 @@ function activateStreamerFrame(){
   const appEl = document.getElementById('app');
   const nameLabel = document.getElementById('streamerNameLabel');
   if(!frame || !gameSlot || !appEl) return;
+  // V0.9.7.9.34: rete di sicurezza — qualunque cosa stesse suonando sulla pagina esterna, la
+  // fermiamo qui, a prescindere da quale percorso ci ha portato ad attivare la cornice. L'iframe
+  // avra' la sua musica indipendente, non devono mai sovrapporsi.
+  try{
+    Object.values(__musicAudioEls).forEach(el=>{ if(el){ el.pause(); el.currentTime = 0; } });
+    stopMusicFade();
+    __musicCurrentZone = null;
+  }catch(e){ /* ignorato */ }
   appEl.style.display = 'none'; // l'app esterna si mette in pausa visivamente, gira tutto nell'iframe
   frame.style.display = 'block';
   document.body.classList.add('streamer-mode-active');
@@ -1373,6 +1381,10 @@ function crossfadeMusicTo(zone){
 // solo se serve davvero (nessun effetto se restiamo nella stessa zona).
 function updateMusicForCurrentPhase(){
   if(!state || !state.phase) return;
+  // V0.9.7.9.34: la pagina esterna in modalita' streamer e' solo una cornice decorativa nascosta —
+  // la musica vera gira dentro l'iframe. Senza questo controllo, ogni render() qui la farebbe
+  // ripartire, sovrapponendosi a quella dell'iframe.
+  if(!isEmbeddedStreamerInstance() && isStreamerModeOn()) return;
   const zone = musicZoneForPhase(state.phase);
   crossfadeMusicTo(zone);
 }
@@ -8954,7 +8966,10 @@ function onAction(e){
     } else {
       state.phase = 'title';
       render();
-      playIntroOnce();
+      // V0.9.7.9.34: la modalita' streamer e' appena stata attivata — la pagina esterna verra'
+      // nascosta subito, l'iframe suonera' la sua intro. Farla partire anche qui creerebbe due
+      // musiche sovrapposte.
+      if(!isStreamerModeOn()) playIntroOnce();
     }
   }
   else if(action==='streamer-continue-answer'){
@@ -8962,7 +8977,7 @@ function onAction(e){
     syncStreamerFrameState();
     state.phase = 'title';
     render();
-    playIntroOnce();
+    if(!isStreamerModeOn()) playIntroOnce();
   }
   else if(action==='reroll-draft'){ rerollDraftTurn(); }
   else if(action==='choose-sponsor'){
