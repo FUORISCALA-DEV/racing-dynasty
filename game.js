@@ -291,6 +291,9 @@ function syncStreamerFrameState(){
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    premium_need_login_title: 'Serve un account', premium_need_login_desc: 'Per sbloccare il premium serve prima accedere con Google — lo colleghiamo al tuo acquisto. Vuoi accedere ora?',
+    premium_checkout_error_title: 'Qualcosa non ha funzionato', premium_checkout_error_desc: 'Non siamo riusciti ad aprire la pagina di pagamento. Riprova tra poco.',
+    premium_unlocked_title: '🎉 Premium sbloccato!', premium_unlocked_desc: 'Pagamento andato a buon fine — hai tutto illimitato, per sempre. Grazie!',
     sl_unlimited: '✨ Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`,
     tokens_out_title: 'Gettoni esauriti', tokens_out_desc: (len)=>`Hai finito i gettoni gratuiti per la Stagione Scuderia da ${len} gare. Torna più tardi, oppure sblocca tutto senza limiti.`,
     tokens_out_countdown_label: 'Prossima ricarica tra', tokens_out_unlock: 'Sblocca tutto illimitato',
@@ -543,6 +546,9 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    premium_need_login_title: 'Account required', premium_need_login_desc: 'To unlock premium you need to sign in with Google first — we link it to your purchase. Sign in now?',
+    premium_checkout_error_title: 'Something went wrong', premium_checkout_error_desc: "We couldn't open the payment page. Please try again shortly.",
+    premium_unlocked_title: '🎉 Premium unlocked!', premium_unlocked_desc: 'Payment successful — you now have everything unlimited, forever. Thank you!',
     sl_unlimited: '✨ Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`,
     tokens_out_title: 'Out of tokens', tokens_out_desc: (len)=>`You've used up your free tokens for the ${len}-race Team Season. Come back later, or unlock everything with no limits.`,
     tokens_out_countdown_label: 'Next refill in', tokens_out_unlock: 'Unlock unlimited',
@@ -789,6 +795,9 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    premium_need_login_title: 'Se necesita una cuenta', premium_need_login_desc: 'Para desbloquear el premium primero hay que iniciar sesión con Google — lo vinculamos a tu compra. ¿Iniciar sesión ahora?',
+    premium_checkout_error_title: 'Algo no ha funcionado', premium_checkout_error_desc: 'No hemos podido abrir la página de pago. Vuelve a intentarlo en breve.',
+    premium_unlocked_title: '🎉 ¡Premium desbloqueado!', premium_unlocked_desc: 'Pago realizado con éxito — ahora tienes todo ilimitado, para siempre. ¡Gracias!',
     sl_unlimited: '✨ Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`,
     tokens_out_title: 'Fichas agotadas', tokens_out_desc: (len)=>`Has usado tus fichas gratuitas para la Temporada de Escudería de ${len} carreras. Vuelve más tarde, o desbloquea todo sin límites.`,
     tokens_out_countdown_label: 'Próxima recarga en', tokens_out_unlock: 'Desbloquear todo ilimitado',
@@ -6815,6 +6824,52 @@ async function fetchPremiumStatus(){
   }catch(e){ console.warn('Lettura stato premium non riuscita:', e); }
 }
 
+// V0.9.8.5: chiede al server di aprire una vera sessione di pagamento Stripe, poi ci porta li'.
+async function startPremiumCheckout(){
+  if(!currentUser){
+    gameConfirm(t('premium_need_login_desc'), ()=>{ signInWithGoogle(); }, t('premium_need_login_title'));
+    return;
+  }
+  if(!supabaseClient) return;
+  try{
+    const returnUrl = window.location.href.split('?')[0];
+    const { data, error } = await supabaseClient.functions.invoke('create-checkout', {
+      body: { returnUrl },
+    });
+    if(error || !data || !data.url){
+      console.error('Errore avvio pagamento:', error || data);
+      gameConfirm(t('premium_checkout_error_desc'), ()=>{}, t('premium_checkout_error_title'));
+      return;
+    }
+    window.location.href = data.url; // reindirizza alla pagina di pagamento Stripe vera
+  }catch(e){
+    console.error('Errore avvio pagamento:', e);
+    gameConfirm(t('premium_checkout_error_desc'), ()=>{}, t('premium_checkout_error_title'));
+  }
+}
+
+// V0.9.8.5: al ritorno da Stripe (dopo il pagamento), l'indirizzo contiene ?premium_success=1 o
+// ?premium_cancelled=1. Puliamo l'indirizzo e, se e' andata bene, ricontrolliamo lo stato premium
+// (con un piccolo ritardo: il webhook di conferma potrebbe metterci un attimo ad arrivare).
+function handlePremiumCheckoutReturn(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.has('premium_success')){
+    window.history.replaceState({}, '', window.location.pathname);
+    setTimeout(async ()=>{
+      await fetchPremiumStatus();
+      if(isPremiumUser){
+        gameConfirm(t('premium_unlocked_desc'), ()=>{}, t('premium_unlocked_title'));
+      } else {
+        // il webhook a volte impiega qualche secondo in piu': un secondo tentativo
+        setTimeout(async ()=>{ await fetchPremiumStatus(); render(); }, 4000);
+      }
+      render();
+    }, 1500);
+  } else if(params.has('premium_cancelled')){
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+}
+
 const CLOUD_SAVE_TABLE = 'saves';
 let __cloudSyncDebounceTimer = null;
 
@@ -9120,7 +9175,7 @@ function onAction(e){
   else if(action==='sign-in-google'){ signInWithGoogle(); }
   else if(action==='sign-out-user'){ signOutUser(); }
   else if(action==='unlock-premium-placeholder'){
-    gameConfirm(t('premium_coming_soon_desc'), ()=>{}, t('premium_coming_soon_title'));
+    startPremiumCheckout();
   }
   else if(action==='request-password-gate'){
     openPasswordGate(el.dataset.gateFor);
@@ -10470,6 +10525,7 @@ state = { phase:'studio-splash', selectedDifficulty:'medio' };
 initSidebar();
 applyStaticMenuTranslations();
 initSupabase();
+handlePremiumCheckoutReturn();
 render();
 window.addEventListener('popstate', handleBackGesture);
 pushBackGuard(); // prima voce di cronologia, cosi' anche la primissima gesture back viene intercettata
