@@ -92,6 +92,12 @@ if(!isEmbeddedStreamerInstance()){
       const label = document.getElementById('streamerNameLabel');
       if(label) label.textContent = getStreamerName();
     }
+    // V0.9.7.9.38: se la modalita' viene spenta/accesa dall'interno dell'iframe (dove l'utente
+    // interagisce davvero mentre e' attiva), la pagina esterna deve accorgersene e reagire per
+    // davvero — non solo aggiornare una scritta, ma attivare/disattivare la cornice sul serio.
+    if(e.key==='racingDynastyStreamerModeV1'){
+      syncStreamerFrameState();
+    }
   });
 }
 const STREAMER_GAME_BOX = { left:0.3589, top:0.0510, width:0.3313, height:0.8927 };
@@ -9366,7 +9372,7 @@ function openSettings(){
       </div>
     </div>
     <button type="button" class="menu-item" id="sidebarHapticToggleBtn">📳 <span>${t('settings_haptic')}: ${audioSettings.hapticEnabled!==false?t('on'):t('off')}</span></button>
-    <button type="button" class="menu-item" id="sidebarStreamerToggleBtn">🎥 <span>${t('settings_streamer_mode')}: ${isStreamerModeOn()?t('on'):t('off')}</span></button>
+    <button type="button" class="menu-item" id="sidebarStreamerToggleBtn"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0;color:#9146FF;"><path fill="currentColor" d="M4.5 2 3 5.5v14h5V22l3-2.5h4L20 15V2H4.5zm13.5 12-3 2.5h-4l-2.5 2v-2H5V4h13v10z"/><rect x="9" y="7" width="2" height="5" fill="currentColor"/><rect x="14" y="7" width="2" height="5" fill="currentColor"/></svg> <span>${t('settings_streamer_mode')}: ${isStreamerModeOn()?t('on'):t('off')}</span></button>
     ${isStreamerModeOn() ? `<button type="button" class="menu-item" id="sidebarStreamerNameBtn">✏️ <span>${t('settings_streamer_name')}: ${getStreamerName()}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarSpeedBtn">🚀 <span>${t('settings_speed')}: ${defaultRaceSpeed}×</span></button>
     <button type="button" class="menu-item" id="sidebarDecisionTimerBtn">⏱️ <span>${t('settings_decision_timer')}: ${decisionTimerEnabled?t('on'):t('off')}</span></button>
