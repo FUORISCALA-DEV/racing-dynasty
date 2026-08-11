@@ -66,6 +66,9 @@ async function signOutUser(){
 // (login/logout avvenuto). Per ora si limita ad aggiornare la UI se siamo sulla schermata titolo —
 // il salvataggio cloud vero arriva in un passo successivo.
 function onAuthStateResolved(event){
+  if(currentUser && (event==='SIGNED_IN' || event==='INITIAL_SESSION') && typeof pullSaveFromCloud==='function'){
+    pullSaveFromCloud();
+  }
   if(state && (state.phase==='title' || state.phase==='studio-splash')){
     if(typeof render==='function') render();
   }
@@ -6713,6 +6716,58 @@ function checkSeasonEndAchievements(){
 
 
 const SAVE_KEY = 'racingDynastySaveV09';
+
+// ============================================================
+// V0.9.8.2 — SALVATAGGIO CLOUD. Attivo solo se loggati (currentUser valorizzato). Il salvataggio
+// locale resta sempre la fonte "immediata" (mai bloccare il gioco per una chiamata di rete);
+// quello cloud e' una copia di sicurezza che si aggiorna con un piccolo ritardo, e viene
+// confrontato per data ad ogni login per capire quale versione tenere.
+// ============================================================
+const CLOUD_SAVE_TABLE = 'saves';
+let __cloudSyncDebounceTimer = null;
+
+function pushSaveToCloud(){
+  if(!currentUser || !supabaseClient) return;
+  clearTimeout(__cloudSyncDebounceTimer);
+  __cloudSyncDebounceTimer = setTimeout(async ()=>{
+    try{
+      const raw = localStorage.getItem(SAVE_KEY);
+      if(!raw) return;
+      const parsed = JSON.parse(raw);
+      const { error } = await supabaseClient.from(CLOUD_SAVE_TABLE).upsert({
+        user_id: currentUser.id,
+        save_data: parsed,
+        updated_at: new Date().toISOString(),
+      });
+      if(error) console.warn('Salvataggio cloud non riuscito:', error.message);
+    }catch(e){ console.warn('Salvataggio cloud non riuscito:', e); }
+  }, 2500);
+}
+
+async function pullSaveFromCloud(){
+  if(!currentUser || !supabaseClient) return;
+  try{
+    const { data, error } = await supabaseClient
+      .from(CLOUD_SAVE_TABLE)
+      .select('save_data, updated_at')
+      .eq('user_id', currentUser.id)
+      .maybeSingle();
+    if(error){ console.warn('Caricamento cloud non riuscito:', error.message); return; }
+    if(!data || !data.save_data) return; // nessun salvataggio cloud ancora, niente da fare
+    const localRaw = localStorage.getItem(SAVE_KEY);
+    const localSave = localRaw ? JSON.parse(localRaw) : null;
+    const cloudTime = new Date(data.updated_at).getTime();
+    const localTime = localSave ? (localSave.savedAt||0) : 0;
+    if(cloudTime > localTime){
+      // il salvataggio cloud e' piu' recente di quello sul dispositivo: lo adottiamo
+      localStorage.setItem(SAVE_KEY, JSON.stringify(data.save_data));
+      if(state && (state.phase==='title' || state.phase==='studio-splash')) render();
+    } else if(localTime > 0 && localTime > cloudTime){
+      // il dispositivo ha qualcosa di piu' recente del cloud (es. giocato offline): spingiamolo su
+      pushSaveToCloud();
+    }
+  }catch(e){ console.warn('Caricamento cloud non riuscito:', e); }
+}
 const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check']);
 function saveGame(){
   try{
@@ -6721,6 +6776,7 @@ function saveGame(){
     if(state.phase==='season_end'){ deleteSave(); return; }
     const snapshot = { ...state, live: null, usedIds: Array.from(state.usedIds||[]) };
     localStorage.setItem(SAVE_KEY, JSON.stringify({ saveVersion:'0.9', savedAt: Date.now(), state: snapshot }));
+    pushSaveToCloud(); // V0.9.8.2: no-op se non loggati
   }catch(e){ /* storage non disponibile: ignorato silenziosamente */ }
 }
 function loadGame(){
