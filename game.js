@@ -291,6 +291,7 @@ function syncStreamerFrameState(){
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    sl_unlimited: '✨ Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`,
     tokens_out_title: 'Gettoni esauriti', tokens_out_desc: (len)=>`Hai finito i gettoni gratuiti per la Stagione Scuderia da ${len} gare. Torna più tardi, oppure sblocca tutto senza limiti.`,
     tokens_out_countdown_label: 'Prossima ricarica tra', tokens_out_unlock: 'Sblocca tutto illimitato',
     premium_coming_soon_title: 'Sblocco premium', premium_coming_soon_desc: 'Il pagamento vero arriverà a breve — per ora questa parte è ancora in costruzione.',
@@ -542,6 +543,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    sl_unlimited: '✨ Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`,
     tokens_out_title: 'Out of tokens', tokens_out_desc: (len)=>`You've used up your free tokens for the ${len}-race Team Season. Come back later, or unlock everything with no limits.`,
     tokens_out_countdown_label: 'Next refill in', tokens_out_unlock: 'Unlock unlimited',
     premium_coming_soon_title: 'Premium unlock', premium_coming_soon_desc: "Real payment is coming soon — this part is still under construction for now.",
@@ -787,6 +789,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    sl_unlimited: '✨ Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`,
     tokens_out_title: 'Fichas agotadas', tokens_out_desc: (len)=>`Has usado tus fichas gratuitas para la Temporada de Escudería de ${len} carreras. Vuelve más tarde, o desbloquea todo sin límites.`,
     tokens_out_countdown_label: 'Próxima recarga en', tokens_out_unlock: 'Desbloquear todo ilimitado',
     premium_coming_soon_title: 'Desbloqueo premium', premium_coming_soon_desc: 'El pago real llegará pronto — por ahora esta parte todavía está en construcción.',
@@ -7141,6 +7144,13 @@ function renderDifficulty(){
 }
 
 function renderSeasonLength(){
+  const tokenState = checkAndApplyTokenRefill();
+  const tokenChip10 = isPremiumUser
+    ? `<div class="dim mono" style="font-size:11px;color:var(--legendary);margin-top:4px;">${t('sl_unlimited')}</div>`
+    : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t10, FULL_TOKENS.t10)}</div>`;
+  const tokenChip20 = isPremiumUser
+    ? `<div class="dim mono" style="font-size:11px;color:var(--legendary);margin-top:4px;">${t('sl_unlimited')}</div>`
+    : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t20, FULL_TOKENS.t20)}</div>`;
   app.innerHTML = `
   <div class="panel">
     <div class="eyebrow">${t('diff_new_career')}</div>
@@ -7152,12 +7162,14 @@ function renderSeasonLength(){
       <span class="rarity-tag" data-rarity="Rare">${t('sl_quick')}</span>
       <div class="card-rating">10<span style="font-size:12px;color:var(--dim);"> ${t('sl_races_word')}</span></div>
       <div class="ability">${t('sl_quick_desc')}</div>
+      ${tokenChip10}
       <div class="card-tap-hint">${t('sl_quick_hint')}</div>
     </div>
     <div class="card pickable" data-rarity="Legendary" data-action="choose-season-length" data-length="20">
       <span class="rarity-tag" data-rarity="Legendary">${t('sl_full')}</span>
       <div class="card-rating">20<span style="font-size:12px;color:var(--dim);"> ${t('sl_races_word')}</span></div>
       <div class="ability">${t('sl_full_desc')}</div>
+      ${tokenChip20}
       <div class="card-tap-hint">${t('sl_full_hint')}</div>
     </div>
   </div>
@@ -9632,9 +9644,6 @@ function openSettings(){
     ${isStreamerModeOn() ? `<button type="button" class="menu-item" id="sidebarStreamerNameBtn">✏️ <span>${t('settings_streamer_name')}: ${getStreamerName()}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarSpeedBtn">🚀 <span>${t('settings_speed')}: ${defaultRaceSpeed}×</span></button>
     <button type="button" class="menu-item" id="sidebarDecisionTimerBtn">⏱️ <span>${t('settings_decision_timer')}: ${decisionTimerEnabled?t('on'):t('off')}</span></button>
-    <button type="button" class="menu-item" id="sidebarExportSaveBtn">📤 <span>${t('settings_export')}</span></button>
-    <button type="button" class="menu-item" id="sidebarImportSaveBtn">📥 <span>${t('settings_import')}</span></button>
-    <input type="file" id="importSaveFileInput" accept="application/json,.json" style="display:none;">
     ${!isStandaloneApp() ? `<button type="button" class="menu-item" id="sidebarInstallBtn" style="color:var(--legendary);">📲 <span>${t('settings_install')}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarFullResetBtn" style="color:var(--danger);">🗑️ <span>${t('settings_reset')}</span></button>
   `;
@@ -9717,7 +9726,6 @@ function openSettings(){
       state.live.decisionDeadline = decisionTimerEnabled ? (Date.now()+DECISION_TIME_MS) : null;
     }
   });
-  document.getElementById('sidebarExportSaveBtn').addEventListener('click', exportRunSave);
   const installBtn = document.getElementById('sidebarInstallBtn');
   if(installBtn){
     installBtn.addEventListener('click', async ()=>{
@@ -9731,25 +9739,6 @@ function openSettings(){
       }
     });
   }
-  document.getElementById('sidebarImportSaveBtn').addEventListener('click', ()=>{
-    document.getElementById('importSaveFileInput').click();
-  });
-  document.getElementById('importSaveFileInput').addEventListener('change', (e)=>{
-    const file = e.target.files && e.target.files[0];
-    if(!file) return;
-    const doImport = ()=>{
-      const reader = new FileReader();
-      reader.onload = ()=> importRunSaveFromText(reader.result);
-      reader.readAsText(file);
-    };
-    if(loadGame()){
-      closeSettingsPanel();
-      gameConfirm('Importare questo file sovrascriverà la stagione attualmente salvata. Continuare?', doImport, 'Sovrascrivere la Run?');
-    } else {
-      doImport();
-    }
-    e.target.value = ''; // permette di reimportare lo stesso file una seconda volta
-  });
   document.getElementById('sidebarFullResetBtn').addEventListener('click', ()=>{
     closeSettingsPanel();
     gameConfirm('Cancella TUTTO: carriera in corso, Sala Trofei, Museo Dynasty e Obiettivi sbloccati. Il gioco tornerà esattamente come alla primissima apertura. Non si può annullare.', ()=>{
