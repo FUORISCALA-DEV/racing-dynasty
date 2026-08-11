@@ -66,9 +66,13 @@ async function signOutUser(){
 // (login/logout avvenuto). Per ora si limita ad aggiornare la UI se siamo sulla schermata titolo —
 // il salvataggio cloud vero arriva in un passo successivo.
 function onAuthStateResolved(event){
-  if(currentUser && (event==='SIGNED_IN' || event==='INITIAL_SESSION') && typeof pullSaveFromCloud==='function'){
-    pullSaveFromCloud();
+  if(currentUser && (event==='SIGNED_IN' || event==='INITIAL_SESSION')){
+    if(typeof pullSaveFromCloud==='function') pullSaveFromCloud();
+    if(typeof fetchPremiumStatus==='function') fetchPremiumStatus().then(()=>{
+      if(state && (state.phase==='title' || state.phase==='season-length')) render();
+    });
   }
+  if(!currentUser) isPremiumUser = false; // logout: torna alla condizione gratuita finche' non si ri-loggano
   if(state && (state.phase==='title' || state.phase==='studio-splash')){
     if(typeof render==='function') render();
   }
@@ -287,6 +291,9 @@ function syncStreamerFrameState(){
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    tokens_out_title: 'Gettoni esauriti', tokens_out_desc: (len)=>`Hai finito i gettoni gratuiti per la Stagione Scuderia da ${len} gare. Torna più tardi, oppure sblocca tutto senza limiti.`,
+    tokens_out_countdown_label: 'Prossima ricarica tra', tokens_out_unlock: 'Sblocca tutto illimitato',
+    premium_coming_soon_title: 'Sblocco premium', premium_coming_soon_desc: 'Il pagamento vero arriverà a breve — per ora questa parte è ancora in costruzione.',
     title_login_cta: 'Accedi / Registrati', title_play_no_account: 'Gioca senza account', title_logged_in_as: (name)=>`Bentornato, ${name}`, title_sign_out: 'Esci dall\'account', speed2x_prompt_title: 'Velocità x2', speed2x_prompt_desc: 'Hai scelto la velocità x2 per la seconda volta. Vuoi impostarla come velocità predefinita per tutte le prossime gare?', stream_q_title: 'Sei uno streamer?', stream_q_desc: "Se sì, possiamo preparare un layout pensato per OBS, con uno spazio dedicato alla tua webcam.",
     stream_yes: 'Sì', stream_no: 'No',
     stream_name_title: 'Come ti chiami?', stream_name_desc: 'Il tuo nome apparirà accanto all\'icona Twitch nell\'area webcam.',
@@ -535,6 +542,9 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    tokens_out_title: 'Out of tokens', tokens_out_desc: (len)=>`You've used up your free tokens for the ${len}-race Team Season. Come back later, or unlock everything with no limits.`,
+    tokens_out_countdown_label: 'Next refill in', tokens_out_unlock: 'Unlock unlimited',
+    premium_coming_soon_title: 'Premium unlock', premium_coming_soon_desc: "Real payment is coming soon — this part is still under construction for now.",
     title_login_cta: 'Sign In / Register', title_play_no_account: 'Play without an account', title_logged_in_as: (name)=>`Welcome back, ${name}`, title_sign_out: 'Sign out', speed2x_prompt_title: 'x2 Speed', speed2x_prompt_desc: "You've chosen x2 speed for the second time. Do you want to set it as the default speed for all upcoming races?", stream_q_title: 'Are you a streamer?', stream_q_desc: "If so, we can prepare a layout designed for OBS, with a dedicated space for your webcam.",
     stream_yes: 'Yes', stream_no: 'No',
     stream_name_title: "What's your name?", stream_name_desc: "Your name will appear next to the Twitch icon in the webcam area.",
@@ -777,6 +787,9 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    tokens_out_title: 'Fichas agotadas', tokens_out_desc: (len)=>`Has usado tus fichas gratuitas para la Temporada de Escudería de ${len} carreras. Vuelve más tarde, o desbloquea todo sin límites.`,
+    tokens_out_countdown_label: 'Próxima recarga en', tokens_out_unlock: 'Desbloquear todo ilimitado',
+    premium_coming_soon_title: 'Desbloqueo premium', premium_coming_soon_desc: 'El pago real llegará pronto — por ahora esta parte todavía está en construcción.',
     title_login_cta: 'Iniciar sesión / Registrarse', title_play_no_account: 'Jugar sin cuenta', title_logged_in_as: (name)=>`Bienvenido de nuevo, ${name}`, title_sign_out: 'Cerrar sesión', speed2x_prompt_title: 'Velocidad x2', speed2x_prompt_desc: 'Has elegido la velocidad x2 por segunda vez. ¿Quieres establecerla como velocidad predeterminada para todas las próximas carreras?', stream_q_title: '¿Eres streamer?', stream_q_desc: 'Si es así, podemos preparar un diseño pensado para OBS, con un espacio dedicado a tu cámara web.',
     stream_yes: 'Sí', stream_no: 'No',
     stream_name_title: '¿Cómo te llamas?', stream_name_desc: 'Tu nombre aparecerá junto al icono de Twitch en el área de la cámara.',
@@ -5975,6 +5988,7 @@ function renderInner(){
   if(state.phase==='race_live') return renderRaceLiveInit();
   if(state.phase==='studio-splash') return renderStudioSplash();
   if(state.phase==='lang-select') return renderLangSelect();
+  if(state.phase==='out-of-tokens') return renderOutOfTokens();
   if(state.phase==='streamer-question') return renderStreamerQuestion();
   if(state.phase==='streamer-name-input') return renderStreamerNameInput();
   if(state.phase==='streamer-continue-check') return renderStreamerContinueCheck();
@@ -6723,6 +6737,81 @@ const SAVE_KEY = 'racingDynastySaveV09';
 // quello cloud e' una copia di sicurezza che si aggiorna con un piccolo ritardo, e viene
 // confrontato per data ad ogni login per capire quale versione tenere.
 // ============================================================
+// ============================================================
+// V0.9.8.3 — GETTONI GRATUITI + STATO PREMIUM.
+// Gettoni: 2x Stagione Scuderia 10 gare + 1x da 20 gare, tracciati sul dispositivo (localStorage,
+// come deciso — chi bara cancellando i dati perde anche trofei/obiettivi/progressi, deterrente
+// naturale). Al primo utilizzo di un gettone parte un conto di 12h; allo scadere si ricarica tutto
+// insieme, non gettone per gettone.
+// Premium: letto dal server (tabella 'profiles'), mai scrivibile dal gioco stesso — solo un
+// pagamento confermato lato server puo' cambiarlo. Se premium, i gettoni non contano piu': tutto
+// illimitato.
+// ============================================================
+const TOKEN_STATE_KEY = 'racingDynastyTokensV1';
+const TOKEN_REFILL_MS = 12*60*60*1000; // 12 ore
+const FULL_TOKENS = { t10:2, t20:1 };
+let isPremiumUser = false; // aggiornato dopo il login, leggendo la tabella 'profiles'
+
+function getTokenState(){
+  try{
+    const raw = localStorage.getItem(TOKEN_STATE_KEY);
+    if(!raw) return { t10:FULL_TOKENS.t10, t20:FULL_TOKENS.t20, refillAt:null };
+    const parsed = JSON.parse(raw);
+    return { t10: parsed.t10 ?? FULL_TOKENS.t10, t20: parsed.t20 ?? FULL_TOKENS.t20, refillAt: parsed.refillAt ?? null };
+  }catch(e){ return { t10:FULL_TOKENS.t10, t20:FULL_TOKENS.t20, refillAt:null }; }
+}
+function saveTokenState(s){
+  try{ localStorage.setItem(TOKEN_STATE_KEY, JSON.stringify(s)); }catch(e){ /* ignorato */ }
+}
+// Se il conto delle 12h e' scaduto, ricarica tutto insieme e cancella il conto. Va chiamata prima
+// di ogni controllo/consumo, cosi' lo stato e' sempre aggiornato.
+function checkAndApplyTokenRefill(){
+  const s = getTokenState();
+  if(s.refillAt && Date.now() >= s.refillAt){
+    const refilled = { t10:FULL_TOKENS.t10, t20:FULL_TOKENS.t20, refillAt:null };
+    saveTokenState(refilled);
+    return refilled;
+  }
+  return s;
+}
+function hasTokenFor(length){
+  if(isPremiumUser) return true;
+  const s = checkAndApplyTokenRefill();
+  return length===20 ? s.t20>0 : s.t10>0;
+}
+// Consuma un gettone (se non premium) e, se e' il PRIMO consumato da quando tutto era pieno,
+// avvia il conto delle 12h. Da chiamare solo quando la stagione parte davvero (start-run), non
+// alla semplice selezione della lunghezza.
+function consumeToken(length){
+  if(isPremiumUser) return;
+  const s = checkAndApplyTokenRefill();
+  const wasFull = s.refillAt===null;
+  if(length===20) s.t20 = Math.max(0, s.t20-1);
+  else s.t10 = Math.max(0, s.t10-1);
+  if(wasFull) s.refillAt = Date.now() + TOKEN_REFILL_MS;
+  saveTokenState(s);
+}
+function getTokenRefillCountdownMs(){
+  const s = checkAndApplyTokenRefill();
+  if(!s.refillAt) return 0;
+  return Math.max(0, s.refillAt - Date.now());
+}
+
+// V0.9.8.3: stato premium — SOLO lettura dal gioco, mai scrittura (nessuna policy di insert/update
+// sulla tabella, di proposito: solo il server, dopo un pagamento vero confermato, puo' cambiarlo).
+async function fetchPremiumStatus(){
+  if(!currentUser || !supabaseClient) { isPremiumUser = false; return; }
+  try{
+    const { data, error } = await supabaseClient
+      .from('profiles')
+      .select('is_premium')
+      .eq('user_id', currentUser.id)
+      .maybeSingle();
+    if(error){ console.warn('Lettura stato premium non riuscita:', error.message); return; }
+    isPremiumUser = !!(data && data.is_premium);
+  }catch(e){ console.warn('Lettura stato premium non riuscita:', e); }
+}
+
 const CLOUD_SAVE_TABLE = 'saves';
 let __cloudSyncDebounceTimer = null;
 
@@ -6768,7 +6857,7 @@ async function pullSaveFromCloud(){
     }
   }catch(e){ console.warn('Caricamento cloud non riuscito:', e); }
 }
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -6892,6 +6981,25 @@ function renderStudioSplash(){
     const hint = document.getElementById('splashSkipHint');
     if(hint && state.phase==='studio-splash') hint.classList.add('splash-hint-blink');
   }, 5000);
+}
+
+function renderOutOfTokens(){
+  const len = state.selectedSeasonLength===20 ? 20 : 10;
+  const ms = getTokenRefillCountdownMs();
+  const h = Math.floor(ms/3600000), m = Math.floor((ms%3600000)/60000);
+  app.innerHTML = `
+  <div class="lang-select-screen">
+    <div class="lang-select-title">${t('tokens_out_title')}</div>
+    <div class="dim" style="font-size:13px;margin-top:10px;max-width:320px;">${t('tokens_out_desc', len)}</div>
+    <div class="mono" style="font-size:28px;font-weight:800;margin-top:20px;color:var(--amber);" id="tokenCountdownDisplay">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}</div>
+    <div class="dim" style="font-size:11.5px;margin-top:4px;">${t('tokens_out_countdown_label')}</div>
+    <div class="btnrow" style="margin-top:22px;flex-direction:column;align-items:stretch;">
+      <button class="primary" data-action="unlock-premium-placeholder" style="width:100%;">${t('tokens_out_unlock')}</button>
+      <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('back_to_mode_select')}</button>
+    </div>
+  </div>
+  `;
+  bindActions();
 }
 
 function renderLangSelect(){
@@ -8999,6 +9107,9 @@ function onAction(e){
   else if(action==='go-to-mode-select'){ state.phase='mode-select'; render(); }
   else if(action==='sign-in-google'){ signInWithGoogle(); }
   else if(action==='sign-out-user'){ signOutUser(); }
+  else if(action==='unlock-premium-placeholder'){
+    gameConfirm(t('premium_coming_soon_desc'), ()=>{}, t('premium_coming_soon_title'));
+  }
   else if(action==='request-password-gate'){
     openPasswordGate(el.dataset.gateFor);
   }
@@ -9046,8 +9157,14 @@ function onAction(e){
   }
   else if(action==='start-run'){
     const diff = el.dataset.diff || state.selectedDifficulty || state.difficulty || 'medio';
-    state.selectedDifficulty = diff;
     const len = state.selectedSeasonLength===20 ? 20 : 10;
+    if(!hasTokenFor(len)){
+      state.phase='out-of-tokens';
+      render();
+      return;
+    }
+    state.selectedDifficulty = diff;
+    consumeToken(len);
     newRun(diff, len);
     state.phase='naming';
     render();
