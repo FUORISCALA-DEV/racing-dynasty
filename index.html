@@ -38,6 +38,31 @@ body{
 }
 ::selection{background:var(--amber);color:#0A0C10;}
 .wrap{max-width:1180px;margin:0 auto;padding:18px 18px 44px;flex:1;display:flex;flex-direction:column;width:100%;box-sizing:border-box;}
+#streamerGameSlot .menu-toggle-btn{ position:absolute; top:10px; right:10px; z-index:20; }
+#streamerGameSlot .game-menu-overlay{ position:absolute; inset:0; z-index:21; }
+
+/* V0.9.7.9.27: modalita' streamer — cornice pensata per OBS (Game Area / Cam Area) */
+#streamerFrame{ position:fixed; inset:0; z-index:1; background:#050507; }
+#streamerFrameImg{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; pointer-events:none; user-select:none; }
+#streamerGameSlot{
+  position:absolute; overflow-y:auto; overflow-x:hidden; background:#0a0a0e;
+  border-radius:4px;
+  scrollbar-width:thin; scrollbar-color:#E54732 rgba(255,255,255,0.06);
+}
+#streamerGameSlot::-webkit-scrollbar{ width:9px; }
+#streamerGameSlot::-webkit-scrollbar-track{ background:rgba(255,255,255,0.06); }
+#streamerGameSlot::-webkit-scrollbar-thumb{ background:#E54732; border-radius:5px; }
+#streamerGameSlot::-webkit-scrollbar-thumb:hover{ background:#ff5a3d; }
+#streamerGameSlot .wrap{ max-width:460px; margin:0 auto; min-height:100%; }
+#streamerCamSlot{ position:absolute; display:flex; align-items:flex-start; justify-content:center; padding-top:8px; pointer-events:none; }
+.streamer-twitch-badge{
+  display:flex; align-items:center; gap:6px; background:rgba(10,10,14,0.88); border:1px solid #9146FF;
+  border-radius:20px; padding:5px 12px 5px 8px; box-shadow:0 2px 10px rgba(0,0,0,0.5);
+}
+.streamer-twitch-icon{ width:16px; height:16px; color:#9146FF; flex-shrink:0; }
+#streamerNameLabel{ font-family:var(--font-mono); font-weight:800; font-size:12px; color:#F3F0E8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px; }
+body.streamer-mode-active{ background:#050507; }
+body.streamer-mode-active #promoBanner{ display:none !important; } /* niente banner promo dentro l'overlay OBS */
 /* V0.9.7.8.25: banner promozionale — palette ufficiale FUORISCALA (carbon/ivory/signal), non il
    tema del gioco, cosi' si riconosce subito come "un'altra identita'" che si affaccia, non un
    elemento nativo del gioco. Badge col monogramma vero, non solo testo. */
@@ -1640,6 +1665,16 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
   <link rel="apple-touch-icon" href="assets/app-icon.png">
 </head>
 <body>
+<div id="streamerFrame" style="display:none;">
+  <img id="streamerFrameImg" src="assets/streamer/overlay_frame.webp" alt="">
+  <div id="streamerGameSlot"></div>
+  <div id="streamerCamSlot">
+    <div class="streamer-twitch-badge">
+      <svg viewBox="0 0 24 24" class="streamer-twitch-icon"><path fill="currentColor" d="M4.5 2 3 5.5v14h5V22l3-2.5h4L20 15V2H4.5zm13.5 12-3 2.5h-4l-2.5 2v-2H5V4h13v10z"/><rect x="9" y="7" width="2" height="5" fill="currentColor"/><rect x="14" y="7" width="2" height="5" fill="currentColor"/></svg>
+      <span id="streamerNameLabel"></span>
+    </div>
+  </div>
+</div>
 <div class="wrap" id="app"></div>
 <div id="promoBanner" class="promo-banner" style="display:none;">
   <a href="https://fuoriscala-dev.github.io/FUORISCALA.SITOWEB/" target="_blank" rel="noopener" class="promo-banner-link">

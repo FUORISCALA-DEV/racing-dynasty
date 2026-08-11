@@ -66,9 +66,90 @@ function loadLang(){
 let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLangChosenV1')==='1'; }catch(e){ return false; } }
+// V0.9.7.9.27: modalita' streamer — overlay pensato per OBS con Game Area/Cam Area dedicate.
+function hasStreamerBeenAsked(){ try{ return localStorage.getItem('racingDynastyStreamerAskedV1')==='1'; }catch(e){ return false; } }
+function markStreamerAsked(){ try{ localStorage.setItem('racingDynastyStreamerAskedV1','1'); }catch(e){} }
+function isStreamerModeOn(){ try{ return localStorage.getItem('racingDynastyStreamerModeV1')==='1'; }catch(e){ return false; } }
+function setStreamerMode(on){ try{ localStorage.setItem('racingDynastyStreamerModeV1', on?'1':'0'); }catch(e){} }
+function getStreamerName(){ try{ return localStorage.getItem('racingDynastyStreamerNameV1')||''; }catch(e){ return ''; } }
+function setStreamerName(name){ try{ localStorage.setItem('racingDynastyStreamerNameV1', name); }catch(e){} }
+
+// V0.9.7.9.27: coordinate esatte (in percentuale) delle due zone dentro l'immagine cornice
+// 1672x941, misurate per flood-fill dall'immagine fornita.
+const STREAMER_GAME_BOX = { left:0.2129, top:0.2912, width:0.5586, height:0.5707 };
+const STREAMER_CAM_BOX  = { left:0.0179, top:0.2912, width:0.1639, height:0.2519 };
+const STREAMER_FRAME_RATIO = 1672/941;
+
+function updateStreamerFrameLayout(){
+  const container = document.getElementById('streamerFrame');
+  const gameEl = document.getElementById('streamerGameSlot');
+  const camEl = document.getElementById('streamerCamSlot');
+  if(!container || container.style.display==='none') return;
+  const cw = container.clientWidth, ch = container.clientHeight;
+  const containerRatio = cw/ch;
+  let dispW, dispH, offX, offY;
+  if(containerRatio > STREAMER_FRAME_RATIO){
+    dispH = ch; dispW = ch*STREAMER_FRAME_RATIO; offX = (cw-dispW)/2; offY = 0;
+  } else {
+    dispW = cw; dispH = cw/STREAMER_FRAME_RATIO; offX = 0; offY = (ch-dispH)/2;
+  }
+  if(gameEl){
+    gameEl.style.left = (offX + STREAMER_GAME_BOX.left*dispW) + 'px';
+    gameEl.style.top = (offY + STREAMER_GAME_BOX.top*dispH) + 'px';
+    gameEl.style.width = (STREAMER_GAME_BOX.width*dispW) + 'px';
+    gameEl.style.height = (STREAMER_GAME_BOX.height*dispH) + 'px';
+  }
+  if(camEl){
+    camEl.style.left = (offX + STREAMER_CAM_BOX.left*dispW) + 'px';
+    camEl.style.top = (offY + STREAMER_CAM_BOX.top*dispH) + 'px';
+    camEl.style.width = (STREAMER_CAM_BOX.width*dispW) + 'px';
+    camEl.style.height = (STREAMER_CAM_BOX.height*dispH) + 'px';
+  }
+}
+window.addEventListener('resize', updateStreamerFrameLayout);
+
+function activateStreamerFrame(){
+  const frame = document.getElementById('streamerFrame');
+  const gameSlot = document.getElementById('streamerGameSlot');
+  const appEl = document.getElementById('app');
+  const menuBtn = document.getElementById('gameMenuToggleBtn');
+  const menuPanel = document.getElementById('gameMenuPanel');
+  const nameLabel = document.getElementById('streamerNameLabel');
+  if(!frame || !gameSlot || !appEl) return;
+  if(appEl.parentElement !== gameSlot) gameSlot.appendChild(appEl);
+  if(menuBtn && menuBtn.parentElement !== gameSlot) gameSlot.appendChild(menuBtn);
+  if(menuPanel && menuPanel.parentElement !== gameSlot) gameSlot.appendChild(menuPanel);
+  appEl.style.display = '';
+  frame.style.display = 'block';
+  document.body.classList.add('streamer-mode-active');
+  if(nameLabel) nameLabel.textContent = getStreamerName();
+  updateStreamerFrameLayout();
+}
+function deactivateStreamerFrame(){
+  const frame = document.getElementById('streamerFrame');
+  const appEl = document.getElementById('app');
+  const menuBtn = document.getElementById('gameMenuToggleBtn');
+  const menuPanel = document.getElementById('gameMenuPanel');
+  if(!frame || !appEl) return;
+  if(appEl.parentElement !== document.body) document.body.insertBefore(appEl, frame.nextSibling);
+  if(menuBtn && menuBtn.parentElement !== document.body) document.body.insertBefore(menuBtn, appEl);
+  if(menuPanel && menuPanel.parentElement !== document.body) document.body.insertBefore(menuPanel, appEl);
+  frame.style.display = 'none';
+  document.body.classList.remove('streamer-mode-active');
+}
+function syncStreamerFrameState(){
+  if(isStreamerModeOn()) activateStreamerFrame();
+  else deactivateStreamerFrame();
+}
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    stream_q_title: 'Sei uno streamer?', stream_q_desc: "Se sì, possiamo preparare un layout pensato per OBS, con uno spazio dedicato alla tua webcam.",
+    stream_yes: 'Sì', stream_no: 'No',
+    stream_name_title: 'Come ti chiami?', stream_name_desc: 'Il tuo nome apparirà accanto all\'icona Twitch nell\'area webcam.',
+    stream_name_placeholder: 'Il tuo nome streamer', stream_confirm: 'Conferma',
+    stream_continue_title: 'Modalità streamer', stream_continue_desc: (name)=>`Vuoi continuare in modalità streamer come ${name}?`,
+    settings_streamer_mode: 'Modalità Streamer', settings_streamer_mode_desc: "Layout pensato per OBS, con spazio dedicato alla webcam.",
     bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_hold: 'Mantieni la posizione',
     bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni', bkt_lose_3: 'Perdi 3 posizioni', bkt_gain_3_5: 'Guadagni 3-5 posizioni',
     dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '⚠️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito', bkt_gain_exact: (n)=>n===1?'Guadagni 1 posizione':`Guadagni ${n} posizioni`, bkt_lose_exact: (n)=>n===1?'Perdi 1 posizione':`Perdi ${n} posizioni`,
@@ -311,6 +392,12 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    stream_q_title: 'Are you a streamer?', stream_q_desc: "If so, we can prepare a layout designed for OBS, with a dedicated space for your webcam.",
+    stream_yes: 'Yes', stream_no: 'No',
+    stream_name_title: "What's your name?", stream_name_desc: "Your name will appear next to the Twitch icon in the webcam area.",
+    stream_name_placeholder: 'Your streamer name', stream_confirm: 'Confirm',
+    stream_continue_title: 'Streamer mode', stream_continue_desc: (name)=>`Do you want to continue in streamer mode as ${name}?`,
+    settings_streamer_mode: 'Streamer Mode', settings_streamer_mode_desc: 'Layout designed for OBS, with a dedicated webcam space.',
     bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_hold: 'Hold position',
     bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions', bkt_lose_3: 'Lose 3 positions', bkt_gain_3_5: 'Gain 3-5 positions',
     dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '⚠️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result', bkt_gain_exact: (n)=>n===1?'Gain 1 position':`Gain ${n} positions`, bkt_lose_exact: (n)=>n===1?'Lose 1 position':`Lose ${n} positions`,
@@ -547,6 +634,12 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    stream_q_title: '¿Eres streamer?', stream_q_desc: 'Si es así, podemos preparar un diseño pensado para OBS, con un espacio dedicado a tu cámara web.',
+    stream_yes: 'Sí', stream_no: 'No',
+    stream_name_title: '¿Cómo te llamas?', stream_name_desc: 'Tu nombre aparecerá junto al icono de Twitch en el área de la cámara.',
+    stream_name_placeholder: 'Tu nombre de streamer', stream_confirm: 'Confirmar',
+    stream_continue_title: 'Modo streamer', stream_continue_desc: (name)=>`¿Quieres continuar en modo streamer como ${name}?`,
+    settings_streamer_mode: 'Modo Streamer', settings_streamer_mode_desc: 'Diseño pensado para OBS, con espacio dedicado a la cámara web.',
     bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_hold: 'Mantienes la posición',
     bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones', bkt_lose_3: 'Pierdes 3 posiciones', bkt_gain_3_5: 'Ganas 3-5 posiciones',
     dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '⚠️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado', bkt_gain_exact: (n)=>n===1?'Ganas 1 posición':`Ganas ${n} posiciones`, bkt_lose_exact: (n)=>n===1?'Pierdes 1 posición':`Pierdes ${n} posiciones`,
@@ -5718,6 +5811,9 @@ function renderInner(){
   if(state.phase==='race_live') return renderRaceLiveInit();
   if(state.phase==='studio-splash') return renderStudioSplash();
   if(state.phase==='lang-select') return renderLangSelect();
+  if(state.phase==='streamer-question') return renderStreamerQuestion();
+  if(state.phase==='streamer-name-input') return renderStreamerNameInput();
+  if(state.phase==='streamer-continue-check') return renderStreamerContinueCheck();
   if(state.phase==='title') return renderTitle();
   if(state.phase==='difficulty') return renderDifficulty();
   if(state.phase==='season-length') return renderSeasonLength();
@@ -6456,7 +6552,7 @@ function checkSeasonEndAchievements(){
 
 
 const SAVE_KEY = 'racingDynastySaveV09';
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -6554,6 +6650,8 @@ function renderStudioSplash(){
     setTimeout(()=>{
       if(!hasLangBeenChosen()){
         state.phase = 'lang-select';
+      } else if(isStreamerModeOn()){
+        state.phase = 'streamer-continue-check';
       } else {
         state.phase = 'title';
         playIntroOnce();
@@ -6595,6 +6693,51 @@ function renderLangSelect(){
       </button>
     </div>
     <div class="dim" style="font-size:11px;margin-top:18px;">You can change this anytime in Settings · Puoi cambiarla quando vuoi dalle Impostazioni</div>
+  </div>
+  `;
+  bindActions();
+}
+
+function renderStreamerQuestion(){
+  app.innerHTML = `
+  <div class="lang-select-screen">
+    <div class="lang-select-title">${t('stream_q_title')}</div>
+    <div class="dim" style="font-size:13px;margin-top:10px;max-width:320px;">${t('stream_q_desc')}</div>
+    <div class="btnrow" style="margin-top:24px;">
+      <button class="primary" data-action="streamer-question-answer" data-answer="yes">${t('stream_yes')}</button>
+      <button class="ghost" data-action="streamer-question-answer" data-answer="no">${t('stream_no')}</button>
+    </div>
+  </div>
+  `;
+  bindActions();
+}
+
+function renderStreamerNameInput(){
+  app.innerHTML = `
+  <div class="lang-select-screen">
+    <div class="lang-select-title">${t('stream_name_title')}</div>
+    <div class="dim" style="font-size:13px;margin-top:10px;">${t('stream_name_desc')}</div>
+    <input type="text" id="streamerNameInput" maxlength="24" placeholder="${t('stream_name_placeholder')}"
+      style="width:100%;max-width:280px;box-sizing:border-box;padding:12px 14px;font-size:15px;margin-top:16px;
+      background:var(--panel2);border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);text-align:center;">
+    <div class="btnrow" style="margin-top:18px;">
+      <button class="primary" data-action="streamer-name-confirm">${t('stream_confirm')}</button>
+    </div>
+  </div>
+  `;
+  bindActions();
+}
+
+function renderStreamerContinueCheck(){
+  const name = getStreamerName();
+  app.innerHTML = `
+  <div class="lang-select-screen">
+    <div class="lang-select-title">${t('stream_continue_title')}</div>
+    <div class="dim" style="font-size:13px;margin-top:10px;">${t('stream_continue_desc', name)}</div>
+    <div class="btnrow" style="margin-top:24px;">
+      <button class="primary" data-action="streamer-continue-answer" data-answer="yes">${t('stream_yes')}</button>
+      <button class="ghost" data-action="streamer-continue-answer" data-answer="no">${t('stream_no')}</button>
+    </div>
   </div>
   `;
   bindActions();
@@ -8691,6 +8834,48 @@ function onAction(e){
     saveLang();
     markLangChosen();
     applyStaticMenuTranslations();
+    if(!hasStreamerBeenAsked()){
+      state.phase = 'streamer-question';
+      render();
+    } else {
+      state.phase = 'title';
+      render();
+      playIntroOnce();
+    }
+  }
+  else if(action==='streamer-question-answer'){
+    if(el.dataset.answer==='yes'){
+      state.phase = 'streamer-name-input';
+      render();
+    } else {
+      markStreamerAsked();
+      setStreamerMode(false);
+      syncStreamerFrameState();
+      state.phase = 'title';
+      render();
+      playIntroOnce();
+    }
+  }
+  else if(action==='streamer-name-confirm'){
+    const input = document.getElementById('streamerNameInput');
+    const name = (input?.value||'').trim();
+    setStreamerName(name || 'Streamer');
+    setStreamerMode(true);
+    markStreamerAsked();
+    syncStreamerFrameState();
+    if(state.streamerSetupReturnPhase){
+      state.phase = state.streamerSetupReturnPhase;
+      delete state.streamerSetupReturnPhase;
+      render();
+    } else {
+      state.phase = 'title';
+      render();
+      playIntroOnce();
+    }
+  }
+  else if(action==='streamer-continue-answer'){
+    setStreamerMode(el.dataset.answer==='yes');
+    syncStreamerFrameState();
     state.phase = 'title';
     render();
     playIntroOnce();
@@ -9077,6 +9262,7 @@ function openSettings(){
       </div>
     </div>
     <button type="button" class="menu-item" id="sidebarHapticToggleBtn">📳 <span>${t('settings_haptic')}: ${audioSettings.hapticEnabled!==false?t('on'):t('off')}</span></button>
+    <button type="button" class="menu-item" id="sidebarStreamerToggleBtn">🎥 <span>${t('settings_streamer_mode')}: ${isStreamerModeOn()?t('on'):t('off')}</span></button>
     <button type="button" class="menu-item" id="sidebarSpeedBtn">🚀 <span>${t('settings_speed')}: ${defaultRaceSpeed}×</span></button>
     <button type="button" class="menu-item" id="sidebarDecisionTimerBtn">⏱️ <span>${t('settings_decision_timer')}: ${decisionTimerEnabled?t('on'):t('off')}</span></button>
     <button type="button" class="menu-item" id="sidebarExportSaveBtn">📤 <span>${t('settings_export')}</span></button>
@@ -9124,6 +9310,23 @@ function openSettings(){
     saveAudioSettings();
     triggerHaptic(); // un assaggio, se appena riattivato
     openSettings();
+  });
+  document.getElementById('sidebarStreamerToggleBtn').addEventListener('click', ()=>{
+    if(isStreamerModeOn()){
+      setStreamerMode(false);
+      syncStreamerFrameState();
+      openSettings();
+    } else if(getStreamerName()){
+      setStreamerMode(true);
+      syncStreamerFrameState();
+      openSettings();
+    } else {
+      closeMenuPanel();
+      markStreamerAsked();
+      state.streamerSetupReturnPhase = state.phase;
+      state.phase = 'streamer-name-input';
+      render();
+    }
   });
   document.getElementById('sidebarSpeedBtn').addEventListener('click', ()=>{
     defaultRaceSpeed = defaultRaceSpeed===1 ? 2 : 1;
