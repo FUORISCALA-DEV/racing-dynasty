@@ -13,6 +13,55 @@
 // prima era scritto a mano in 3 punti diversi e si era disallineato (mostrava ancora v0.9.5
 // nonostante decine di aggiornamenti successivi). Aggiornare SOLO qui d'ora in poi.
 const GAME_VERSION = 'v0.9.7.8.33';
+
+// ============================================================
+// V0.9.8.0 — ACCOUNT / LOGIN (Supabase + Google). Si gioca sempre anche senza account: il login
+// serve per salvare i progressi sul cloud e, piu' avanti, per collegare gli acquisti premium a
+// una persona vera invece che a un singolo telefono.
+// ============================================================
+const SUPABASE_URL = 'https://tumthmpnzbkgkztkakyo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_RErcEwMWFrWluTHFxqZKsg_zDja9sQ3';
+let supabaseClient = null;
+let currentUser = null; // null = non loggato. altrimenti { id, email, name, avatarUrl }
+
+function initSupabase(){
+  if(typeof window.supabase==='undefined'){ console.warn('Libreria Supabase non caricata'); return; }
+  if(supabaseClient) return supabaseClient;
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  supabaseClient.auth.onAuthStateChange((event, session)=>{
+    currentUser = session && session.user ? {
+      id: session.user.id,
+      email: session.user.email,
+      name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email,
+      avatarUrl: session.user.user_metadata?.avatar_url || null,
+    } : null;
+    if(typeof onAuthStateResolved==='function') onAuthStateResolved(event);
+  });
+  return supabaseClient;
+}
+
+async function signInWithGoogle(){
+  if(!supabaseClient) initSupabase();
+  if(!supabaseClient) return;
+  await supabaseClient.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href.split('?')[0] } // torna sulla stessa pagina, senza parametri residui
+  });
+}
+
+async function signOutUser(){
+  if(!supabaseClient) return;
+  await supabaseClient.auth.signOut();
+}
+
+// V0.9.8.0: chiamata quando lo stato di login e' noto per la prima volta (al caricamento) o cambia
+// (login/logout avvenuto). Per ora si limita ad aggiornare la UI se siamo sulla schermata titolo —
+// il salvataggio cloud vero arriva in un passo successivo.
+function onAuthStateResolved(event){
+  if(state && (state.phase==='title' || state.phase==='studio-splash')){
+    if(typeof render==='function') render();
+  }
+}
 const DATA = (function(){
   const xhr = new XMLHttpRequest();
   xhr.open('GET', 'data/data.json', false);
@@ -227,7 +276,7 @@ function syncStreamerFrameState(){
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
-    speed2x_prompt_title: 'Velocità x2', speed2x_prompt_desc: 'Hai scelto la velocità x2 per la seconda volta. Vuoi impostarla come velocità predefinita per tutte le prossime gare?', stream_q_title: 'Sei uno streamer?', stream_q_desc: "Se sì, possiamo preparare un layout pensato per OBS, con uno spazio dedicato alla tua webcam.",
+    title_login_cta: 'Accedi / Registrati', title_play_no_account: 'Gioca senza account', title_logged_in_as: (name)=>`Bentornato, ${name}`, title_sign_out: 'Esci dall\'account', speed2x_prompt_title: 'Velocità x2', speed2x_prompt_desc: 'Hai scelto la velocità x2 per la seconda volta. Vuoi impostarla come velocità predefinita per tutte le prossime gare?', stream_q_title: 'Sei uno streamer?', stream_q_desc: "Se sì, possiamo preparare un layout pensato per OBS, con uno spazio dedicato alla tua webcam.",
     stream_yes: 'Sì', stream_no: 'No',
     stream_name_title: 'Come ti chiami?', stream_name_desc: 'Il tuo nome apparirà accanto all\'icona Twitch nell\'area webcam.',
     stream_name_placeholder: 'Il tuo nome streamer', stream_confirm: 'Conferma',
@@ -475,7 +524,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
-    speed2x_prompt_title: 'x2 Speed', speed2x_prompt_desc: "You've chosen x2 speed for the second time. Do you want to set it as the default speed for all upcoming races?", stream_q_title: 'Are you a streamer?', stream_q_desc: "If so, we can prepare a layout designed for OBS, with a dedicated space for your webcam.",
+    title_login_cta: 'Sign In / Register', title_play_no_account: 'Play without an account', title_logged_in_as: (name)=>`Welcome back, ${name}`, title_sign_out: 'Sign out', speed2x_prompt_title: 'x2 Speed', speed2x_prompt_desc: "You've chosen x2 speed for the second time. Do you want to set it as the default speed for all upcoming races?", stream_q_title: 'Are you a streamer?', stream_q_desc: "If so, we can prepare a layout designed for OBS, with a dedicated space for your webcam.",
     stream_yes: 'Yes', stream_no: 'No',
     stream_name_title: "What's your name?", stream_name_desc: "Your name will appear next to the Twitch icon in the webcam area.",
     stream_name_placeholder: 'Your streamer name', stream_confirm: 'Confirm',
@@ -717,7 +766,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
-    speed2x_prompt_title: 'Velocidad x2', speed2x_prompt_desc: 'Has elegido la velocidad x2 por segunda vez. ¿Quieres establecerla como velocidad predeterminada para todas las próximas carreras?', stream_q_title: '¿Eres streamer?', stream_q_desc: 'Si es así, podemos preparar un diseño pensado para OBS, con un espacio dedicado a tu cámara web.',
+    title_login_cta: 'Iniciar sesión / Registrarse', title_play_no_account: 'Jugar sin cuenta', title_logged_in_as: (name)=>`Bienvenido de nuevo, ${name}`, title_sign_out: 'Cerrar sesión', speed2x_prompt_title: 'Velocidad x2', speed2x_prompt_desc: 'Has elegido la velocidad x2 por segunda vez. ¿Quieres establecerla como velocidad predeterminada para todas las próximas carreras?', stream_q_title: '¿Eres streamer?', stream_q_desc: 'Si es así, podemos preparar un diseño pensado para OBS, con un espacio dedicado a tu cámara web.',
     stream_yes: 'Sí', stream_no: 'No',
     stream_name_title: '¿Cómo te llamas?', stream_name_desc: 'Tu nombre aparecerá junto al icono de Twitch en el área de la cámara.',
     stream_name_placeholder: 'Tu nombre de streamer', stream_confirm: 'Confirmar',
@@ -6870,16 +6919,26 @@ function renderTitle(){
     bindActions();
     return;
   }
+  const loginBlockHTML = currentUser ? `
+    <div class="dim" style="text-align:center;font-size:13px;margin-bottom:10px;">${t('title_logged_in_as', currentUser.name)}</div>
+    <div class="btnrow" style="flex-direction:column;align-items:stretch;">
+      <button class="primary" data-action="go-to-mode-select" style="width:100%;">${t('title_cta')} ${t('title_cta_bold')}</button>
+      <button class="ghost" data-action="sign-out-user" style="width:100%;">${t('title_sign_out')}</button>
+    </div>` : `
+    <div class="btnrow" style="flex-direction:column;align-items:stretch;">
+      <button class="primary heartbeat" data-action="sign-in-google" style="width:100%;">${t('title_login_cta')}</button>
+      <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('title_play_no_account')}</button>
+    </div>`;
   app.innerHTML = `
-  <div class="hero title-hero pickable" data-action="go-to-mode-select" style="padding:26px 20px 22px;">
+  <div class="hero title-hero" style="padding:26px 20px 22px;">
     <div class="hero-inner">
       <div class="title-logo-wrap">
         <img src="${LOGO_DATA_URI}" alt="Racing Dynasty" class="title-logo">
       </div>
-      <div class="tagline title-cta">${t('title_cta')}<b class="heartbeat">${t('title_cta_bold')}</b></div>
       <div class="pill" style="margin-top:12px;">${GAME_VERSION} · DATABASE V1 · 250 PILOTI · 830+ COMPONENTI</div>
     </div>
   </div>
+  ${loginBlockHTML}
   `;
   bindActions();
 }
@@ -8874,6 +8933,8 @@ function onAction(e){
     }, t('dh_quit'));
   }
   else if(action==='go-to-mode-select'){ state.phase='mode-select'; render(); }
+  else if(action==='sign-in-google'){ signInWithGoogle(); }
+  else if(action==='sign-out-user'){ signOutUser(); }
   else if(action==='request-password-gate'){
     openPasswordGate(el.dataset.gateFor);
   }
@@ -10234,6 +10295,7 @@ let museumPreviousPhase = 'title'; // V0.9.4.1: dove tornare chiudendo il Museo 
 state = { phase:'studio-splash', selectedDifficulty:'medio' };
 initSidebar();
 applyStaticMenuTranslations();
+initSupabase();
 render();
 window.addEventListener('popstate', handleBackGesture);
 pushBackGuard(); // prima voce di cronologia, cosi' anche la primissima gesture back viene intercettata
