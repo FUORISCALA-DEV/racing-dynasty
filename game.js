@@ -7004,7 +7004,6 @@ function renderStudioSplash(){
   app.innerHTML = `
   <div class="studio-splash ${reduced?'reduced':''}" id="studioSplashRoot">
     <div class="studio-splash-stage">
-      <div class="studio-splash-scale-label" id="splashScaleLabel">SCALE 1:1</div>
       <img class="studio-splash-logo" id="splashLogoImg" src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA">
     </div>
     <div class="studio-splash-tagline" id="splashTagline">${t('splash_presents')}</div>
@@ -7029,16 +7028,12 @@ function renderStudioSplash(){
   };
   if(root) root.addEventListener('click', advance, { once:true });
 
-  if(!reduced){
-    // readout tecnico sincronizzato con la crescita del logo (echi del mockup "1:1 / 2:1 / 4:1")
-    const label = document.getElementById('splashScaleLabel');
-    if(label){
-      setTimeout(()=>{ label.textContent = 'SCALE 2:1'; }, 260);
-      setTimeout(()=>{ label.textContent = 'SCALE 4:1'; }, 520);
-      setTimeout(()=>{ label.style.opacity = '0'; }, 900);
-    }
-  }
-  // "premi per continuare" lampeggiante dopo 5s, se ancora sullo splash — per chi non capisce da solo
+  // V0.9.8.10: RICOSTRUITO DA ZERO. Prima c'erano 3 setTimeout che cambiavano testo a mano mentre
+  // l'animazione CSS girava (il readout "SCALE 1:1/2:1/4:1"), piu' un ingrandimento drammatico a
+  // 4.2x del logo — troppi pezzi mobili sincronizzati sul thread principale, primo indiziato per
+  // scatti su telefoni piu' deboli del mio ambiente di test. Ora e' tutta e sola CSS: un fade+scale
+  // leggero, nessuna scrittura DOM durante l'animazione, nessun ingrandimento oltre le dimensioni
+  // naturali del logo. E' il biglietto da visita del gioco, deve essere a prova di scatto.
   setTimeout(()=>{
     const hint = document.getElementById('splashSkipHint');
     if(hint && state.phase==='studio-splash') hint.classList.add('splash-hint-blink');
