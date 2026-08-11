@@ -6838,13 +6838,16 @@ async function startPremiumCheckout(){
     });
     if(error || !data || !data.url){
       console.error('Errore avvio pagamento:', error || data);
-      gameConfirm(t('premium_checkout_error_desc'), ()=>{}, t('premium_checkout_error_title'));
+      // V0.9.8.6: TEMPORANEO, solo per diagnosticare da telefono senza strumenti sviluppatore —
+      // mostriamo il dettaglio tecnico vero invece del messaggio generico.
+      const detail = error ? (error.message || JSON.stringify(error)) : JSON.stringify(data);
+      gameConfirm(t('premium_checkout_error_desc') + '\n\n[DEBUG] ' + detail, ()=>{}, t('premium_checkout_error_title'));
       return;
     }
     window.location.href = data.url; // reindirizza alla pagina di pagamento Stripe vera
   }catch(e){
     console.error('Errore avvio pagamento:', e);
-    gameConfirm(t('premium_checkout_error_desc'), ()=>{}, t('premium_checkout_error_title'));
+    gameConfirm(t('premium_checkout_error_desc') + '\n\n[DEBUG] ' + (e?.message||String(e)), ()=>{}, t('premium_checkout_error_title'));
   }
 }
 
