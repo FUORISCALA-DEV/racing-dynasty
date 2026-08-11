@@ -114,11 +114,13 @@ function activateStreamerFrame(){
   const appEl = document.getElementById('app');
   const menuBtn = document.getElementById('gameMenuToggleBtn');
   const menuPanel = document.getElementById('gameMenuPanel');
+  const fsBtn = document.getElementById('fullscreenToggleBtn');
   const nameLabel = document.getElementById('streamerNameLabel');
   if(!frame || !gameSlot || !appEl) return;
   if(appEl.parentElement !== gameSlot) gameSlot.appendChild(appEl);
   if(menuBtn && menuBtn.parentElement !== gameSlot) gameSlot.appendChild(menuBtn);
   if(menuPanel && menuPanel.parentElement !== gameSlot) gameSlot.appendChild(menuPanel);
+  if(fsBtn && fsBtn.parentElement !== gameSlot) gameSlot.appendChild(fsBtn);
   appEl.style.display = '';
   frame.style.display = 'block';
   document.body.classList.add('streamer-mode-active');
@@ -130,10 +132,12 @@ function deactivateStreamerFrame(){
   const appEl = document.getElementById('app');
   const menuBtn = document.getElementById('gameMenuToggleBtn');
   const menuPanel = document.getElementById('gameMenuPanel');
+  const fsBtn = document.getElementById('fullscreenToggleBtn');
   if(!frame || !appEl) return;
   if(appEl.parentElement !== document.body) document.body.insertBefore(appEl, frame.nextSibling);
   if(menuBtn && menuBtn.parentElement !== document.body) document.body.insertBefore(menuBtn, appEl);
   if(menuPanel && menuPanel.parentElement !== document.body) document.body.insertBefore(menuPanel, appEl);
+  if(fsBtn && fsBtn.parentElement !== document.body) document.body.insertBefore(fsBtn, appEl);
   frame.style.display = 'none';
   document.body.classList.remove('streamer-mode-active');
 }
@@ -9924,8 +9928,14 @@ function toggleFullscreen(){
 
 function updateMenuFullscreenLabel(){
   const label = document.getElementById('menuFullscreenLabel');
-  if(!label) return;
-  label.textContent = document.fullscreenElement ? t('menu_exit_fullscreen') : t('menu_fullscreen');
+  if(label) label.textContent = document.fullscreenElement ? t('menu_exit_fullscreen') : t('menu_fullscreen');
+  const enterIcon = document.getElementById('fullscreenEnterIcon');
+  const exitIcon = document.getElementById('fullscreenExitIcon');
+  if(enterIcon && exitIcon){
+    const isFs = !!document.fullscreenElement;
+    enterIcon.style.display = isFs ? 'none' : '';
+    exitIcon.style.display = isFs ? '' : 'none';
+  }
 }
 
 document.addEventListener('fullscreenchange', updateMenuFullscreenLabel);
@@ -9998,6 +10008,13 @@ function initSidebar(){
   const creditsBtn = document.getElementById('menuCreditsBtn');
   if(creditsBtn) creditsBtn.addEventListener('click', openCredits);
   document.getElementById('menuFullscreenBtn').addEventListener('click', toggleFullscreen);
+  const fsBtn = document.getElementById('fullscreenToggleBtn');
+  if(fsBtn) fsBtn.addEventListener('click', ()=>{
+    try{
+      if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }catch(err){ /* API non disponibile: ignorato silenziosamente */ }
+  });
   document.querySelectorAll('.sidebar-settings-close').forEach(btn=>{
     if(btn.id==='sidebarGuideCloseBtn') btn.addEventListener('click', closeGuidePanel);
     else if(btn.id==='sidebarAchievementsCloseBtn') btn.addEventListener('click', closeAchievementsPanel);

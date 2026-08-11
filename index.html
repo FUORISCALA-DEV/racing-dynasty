@@ -1142,6 +1142,32 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
   shape-rendering: crispEdges;
 }
 
+/* V0.9.7.9.29: pulsante schermo intero persistente, sempre visibile subito sotto l'hamburger */
+.fullscreen-toggle-btn{
+  position: fixed;
+  top: 62px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  z-index: 9500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.03);
+  transition: filter .12s ease, border-color .12s ease;
+}
+.fullscreen-toggle-btn:hover{ filter: brightness(1.18); border-color: #3a4356; }
+.fullscreen-toggle-btn:active{ transform: translateY(1px); filter: brightness(0.95); }
+.fullscreen-toggle-btn:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 1px; }
+.fullscreen-toggle-icon{ width: 18px; height: 18px; color: var(--text); }
+#streamerGameSlot .fullscreen-toggle-btn{ position:absolute; top:52px; right:10px; z-index:20; }
+
 /* ---- pannello menu principale (Home / Nuova Carriera / Sala Trofei / Impostazioni / Fullscreen) ---- */
 .game-menu-overlay{
   position: fixed;
@@ -1692,6 +1718,14 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
     <rect x="3" y="5" width="18" height="3.2" />
     <rect x="3" y="10.4" width="18" height="3.2" />
     <rect x="3" y="15.8" width="18" height="3.2" />
+  </svg>
+</button>
+<button type="button" id="fullscreenToggleBtn" class="fullscreen-toggle-btn" aria-label="Schermo intero">
+  <svg viewBox="0 0 24 24" class="fullscreen-toggle-icon" id="fullscreenEnterIcon">
+    <path fill="currentColor" d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm16 0h2v6h-6v-2h4v-4z"/>
+  </svg>
+  <svg viewBox="0 0 24 24" class="fullscreen-toggle-icon" id="fullscreenExitIcon" style="display:none;">
+    <path fill="currentColor" d="M8 4h2v4H6V6h2V4zm8 0v2h2v2h-4V4h2zM4 16h4v4H6v-2H4v-2zm14 4h-2v-4h4v2h-2v2z"/>
   </svg>
 </button>
 
