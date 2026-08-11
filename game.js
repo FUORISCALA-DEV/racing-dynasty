@@ -144,7 +144,7 @@ function syncStreamerFrameState(){
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
-    stream_q_title: 'Sei uno streamer?', stream_q_desc: "Se sì, possiamo preparare un layout pensato per OBS, con uno spazio dedicato alla tua webcam.",
+    speed2x_prompt_title: 'Velocità x2', speed2x_prompt_desc: 'Hai scelto la velocità x2 per la seconda volta. Vuoi impostarla come velocità predefinita per tutte le prossime gare?', stream_q_title: 'Sei uno streamer?', stream_q_desc: "Se sì, possiamo preparare un layout pensato per OBS, con uno spazio dedicato alla tua webcam.",
     stream_yes: 'Sì', stream_no: 'No',
     stream_name_title: 'Come ti chiami?', stream_name_desc: 'Il tuo nome apparirà accanto all\'icona Twitch nell\'area webcam.',
     stream_name_placeholder: 'Il tuo nome streamer', stream_confirm: 'Conferma',
@@ -392,7 +392,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
-    stream_q_title: 'Are you a streamer?', stream_q_desc: "If so, we can prepare a layout designed for OBS, with a dedicated space for your webcam.",
+    speed2x_prompt_title: 'x2 Speed', speed2x_prompt_desc: "You've chosen x2 speed for the second time. Do you want to set it as the default speed for all upcoming races?", stream_q_title: 'Are you a streamer?', stream_q_desc: "If so, we can prepare a layout designed for OBS, with a dedicated space for your webcam.",
     stream_yes: 'Yes', stream_no: 'No',
     stream_name_title: "What's your name?", stream_name_desc: "Your name will appear next to the Twitch icon in the webcam area.",
     stream_name_placeholder: 'Your streamer name', stream_confirm: 'Confirm',
@@ -634,7 +634,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
-    stream_q_title: '¿Eres streamer?', stream_q_desc: 'Si es así, podemos preparar un diseño pensado para OBS, con un espacio dedicado a tu cámara web.',
+    speed2x_prompt_title: 'Velocidad x2', speed2x_prompt_desc: 'Has elegido la velocidad x2 por segunda vez. ¿Quieres establecerla como velocidad predeterminada para todas las próximas carreras?', stream_q_title: '¿Eres streamer?', stream_q_desc: 'Si es así, podemos preparar un diseño pensado para OBS, con un espacio dedicado a tu cámara web.',
     stream_yes: 'Sí', stream_no: 'No',
     stream_name_title: '¿Cómo te llamas?', stream_name_desc: 'Tu nombre aparecerá junto al icono de Twitch en el área de la cámara.',
     stream_name_placeholder: 'Tu nombre de streamer', stream_confirm: 'Confirmar',
@@ -4301,8 +4301,25 @@ function pauseLive(){
 }
 function toggleSpeedLive(){
   if(!state.live) return;
+  const goingTo2x = state.live.speed===1;
   state.live.speed = state.live.speed===1 ? 2 : 1;
   render();
+  // V0.9.7.9.28: contiamo solo il PRIMO passaggio a x2 dentro questa gara (non ogni click avanti
+  // e indietro), cosi' "seconda volta di fila" significa davvero "in due gare diverse".
+  if(goingTo2x && !state.live.speed2xCountedThisRace){
+    state.live.speed2xCountedThisRace = true;
+    const count = loadSpeed2xCount()+1;
+    saveSpeed2xCount(count);
+    if(count===2 && defaultRaceSpeed!==2 && !hasSpeed2xPromptShown()){
+      markSpeed2xPromptShown();
+      setTimeout(()=>{
+        gameConfirm(t('speed2x_prompt_desc'), ()=>{
+          defaultRaceSpeed = 2;
+          saveDefaultRaceSpeed(2);
+        }, t('speed2x_prompt_title'));
+      }, 500); // piccolo ritardo, non interrompe di scatto il click appena fatto
+    }
+  }
 }
 function skipLiveRace(){
   if(window._liveTimer) clearInterval(window._liveTimer);
@@ -9330,6 +9347,7 @@ function openSettings(){
   });
   document.getElementById('sidebarSpeedBtn').addEventListener('click', ()=>{
     defaultRaceSpeed = defaultRaceSpeed===1 ? 2 : 1;
+    saveDefaultRaceSpeed(defaultRaceSpeed);
     document.getElementById('sidebarSpeedBtn').innerHTML = `🚀 <span>Velocità Gara Predefinita: ${defaultRaceSpeed}×</span>`;
   });
   document.getElementById('sidebarDecisionTimerBtn').addEventListener('click', ()=>{
@@ -10048,7 +10066,17 @@ function handleBackGesture(){
 }
 
 /* ---------------- boot ---------------- */
-let defaultRaceSpeed = 1; // V0.7.3: velocita' predefinita per l'avvio di ogni gara live, impostabile dal menu
+// V0.9.7.9.28: velocita' predefinita ora persistente (prima si perdeva ad ogni ricarica)
+function loadDefaultRaceSpeed(){ try{ const v = localStorage.getItem('racingDynastyDefaultSpeedV1'); return v ? Number(v) : 1; }catch(e){ return 1; } }
+function saveDefaultRaceSpeed(v){ try{ localStorage.setItem('racingDynastyDefaultSpeedV1', String(v)); }catch(e){} }
+let defaultRaceSpeed = loadDefaultRaceSpeed(); // V0.7.3: velocita' predefinita per l'avvio di ogni gara live, impostabile dal menu
+// V0.9.7.9.28: se il giocatore imposta manualmente x2 per la seconda volta (in gare diverse, non
+// nella stessa gara), gli chiediamo se vuole renderla la velocita' predefinita — chiesto una sola
+// volta nella vita del gioco, non ripetuto ad ogni gara successiva.
+function loadSpeed2xCount(){ try{ return Number(localStorage.getItem('racingDynastySpeed2xCountV1')||'0'); }catch(e){ return 0; } }
+function saveSpeed2xCount(n){ try{ localStorage.setItem('racingDynastySpeed2xCountV1', String(n)); }catch(e){} }
+function hasSpeed2xPromptShown(){ try{ return localStorage.getItem('racingDynastySpeed2xPromptShownV1')==='1'; }catch(e){ return false; } }
+function markSpeed2xPromptShown(){ try{ localStorage.setItem('racingDynastySpeed2xPromptShownV1','1'); }catch(e){} }
 let decisionTimerEnabled = true; // V0.9.3.2: countdown per le decisioni in gara, disattivabile dal menu
 let trophyRoomPreviousPhase = 'title'; // V0.9.4: dove tornare chiudendo la sala trofei
 let museumPreviousPhase = 'title'; // V0.9.4.1: dove tornare chiudendo il Museo Dynasty
