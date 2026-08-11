@@ -73,7 +73,11 @@ function onAuthStateResolved(event){
     });
   }
   if(!currentUser) isPremiumUser = false; // logout: torna alla condizione gratuita finche' non si ri-loggano
-  if(state && (state.phase==='title' || state.phase==='studio-splash')){
+  // V0.9.8.8: NON ri-renderizziamo durante 'studio-splash' — quella schermata non mostra nulla di
+  // legato al login, e ricreare il markup li' riavviava l'animazione dello splash (sembrava un
+  // glitch, "come se partisse due volte"). Il titolo invece mostra davvero lo stato di login,
+  // quindi li' il re-render resta necessario.
+  if(state && state.phase==='title'){
     if(typeof render==='function') render();
   }
 }
@@ -10379,6 +10383,8 @@ function updateSidebarVisibility(){
   const toggleBtn = document.getElementById('gameMenuToggleBtn');
   const hideMenuOn = new Set(['studio-splash','lang-select']);
   if(toggleBtn) toggleBtn.style.display = (state && hideMenuOn.has(state.phase)) ? 'none' : '';
+  const fsBtn = document.getElementById('fullscreenToggleBtn');
+  if(fsBtn) fsBtn.style.display = (state && hideMenuOn.has(state.phase)) ? 'none' : '';
   // V0.9.7.8.24: banner promozionale — sempre visibile tranne su splash, scelta lingua e titolo
   const banner = document.getElementById('promoBanner');
   const hideBannerOn = new Set(['studio-splash','lang-select','title']);
