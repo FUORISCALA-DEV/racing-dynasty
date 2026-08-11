@@ -1269,7 +1269,7 @@ const REAL_SFX_FILES = {
   upgrade_fail: 'audio/sfx_upgrade_fail.mp3',
   rain_start: 'audio/sfx_rain_start.mp3',
   checkered_flag: 'audio/sfx_checkered_flag.mp3',
-  rival_beaten: 'audio/sfx_rival_beaten.mp3',
+  rival_beaten: 'audio/sfx_upgrade_success.mp3', // V0.9.7.9.39: stesso suono di "sviluppo riuscito", su richiesta
   podium: 'audio/sfx_podium.mp3',
   victory_fanfare: 'audio/sfx_victory_fanfare.mp3',
 };
