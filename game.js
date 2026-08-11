@@ -88,8 +88,32 @@ function updateStreamerFrameLayout(){
   const gameEl = document.getElementById('streamerGameSlot');
   const camEl = document.getElementById('streamerCamSlot');
   const twitchEl = document.getElementById('streamerTwitchTag');
+  const frameImg = document.getElementById('streamerFrameImg');
   if(!container || container.style.display==='none') return;
   const cw = container.clientWidth, ch = container.clientHeight;
+
+  // V0.9.7.9.31: la cornice e' pensata per OBS in landscape largo — se la finestra diventa stretta
+  // o piu' alta che larga (es. telefono in verticale, finestra ridimensionata a mano), forzare il
+  // gioco dentro il riquadro fisso lo schiaccia male. Sotto questa soglia passiamo a un layout
+  // "compatto": cornice decorativa nascosta, il gioco riprende tutto lo schermo e si comporta come
+  // in modalita' normale (stesso adattamento fluido).
+  const isCompact = cw < 760 || cw < ch;
+  if(isCompact){
+    if(frameImg) frameImg.style.display = 'none';
+    if(camEl) camEl.style.display = 'none';
+    if(twitchEl) twitchEl.style.display = 'none';
+    if(gameEl){
+      gameEl.style.left = '0px'; gameEl.style.top = '0px';
+      gameEl.style.width = cw + 'px'; gameEl.style.height = ch + 'px';
+      gameEl.style.borderRadius = '0';
+    }
+    return;
+  }
+  if(frameImg) frameImg.style.display = '';
+  if(camEl) camEl.style.display = '';
+  if(twitchEl) twitchEl.style.display = '';
+  if(gameEl) gameEl.style.borderRadius = '';
+
   const containerRatio = cw/ch;
   let dispW, dispH, offX, offY;
   if(containerRatio > STREAMER_FRAME_RATIO){
