@@ -7004,7 +7004,7 @@ function renderStudioSplash(){
   app.innerHTML = `
   <div class="studio-splash ${reduced?'reduced':''}" id="studioSplashRoot">
     <div class="studio-splash-stage">
-      <img class="studio-splash-logo" id="splashLogoImg" src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA">
+      <img class="studio-splash-logo" id="splashLogoImg" src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA" style="opacity:0;">
     </div>
     <div class="studio-splash-tagline" id="splashTagline">${t('splash_presents')}</div>
     <div class="studio-splash-skip" id="splashSkipHint">${t('splash_tap_continue')}</div>
@@ -7028,12 +7028,36 @@ function renderStudioSplash(){
   };
   if(root) root.addEventListener('click', advance, { once:true });
 
-  // V0.9.8.10: RICOSTRUITO DA ZERO. Prima c'erano 3 setTimeout che cambiavano testo a mano mentre
-  // l'animazione CSS girava (il readout "SCALE 1:1/2:1/4:1"), piu' un ingrandimento drammatico a
-  // 4.2x del logo — troppi pezzi mobili sincronizzati sul thread principale, primo indiziato per
-  // scatti su telefoni piu' deboli del mio ambiente di test. Ora e' tutta e sola CSS: un fade+scale
-  // leggero, nessuna scrittura DOM durante l'animazione, nessun ingrandimento oltre le dimensioni
-  // naturali del logo. E' il biglietto da visita del gioco, deve essere a prova di scatto.
+  // V0.9.8.11: RICOSTRUITO ANCORA — stavolta l'animazione e' guidata interamente da JavaScript
+  // (requestAnimationFrame), non piu' affidata al motore CSS del browser. Controlliamo noi ogni
+  // singolo fotogramma con la nostra matematica, invece di sperare che il browser interpoli bene
+  // una keyframe complessa — elimina qualunque comportamento imprevedibile specifico del
+  // dispositivo (probabile causa dello sfarfallio). Recupera lo zoom drammatico di prima, che
+  // piaceva, ma con controllo totale sul risultato.
+  const logo = document.getElementById('splashLogoImg');
+  if(logo && !reduced){
+    const duration = 900;
+    const startTime = performance.now();
+    function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+    function tick(now){
+      const elapsed = now - startTime;
+      const t = Math.min(1, elapsed/duration);
+      // zoom drammatico che poi si assesta: parte piccolo, supera 1.0 abbondantemente, torna a 1.0
+      const overshootPeak = 3.6;
+      const scale = t<0.5
+        ? 0.3 + (overshootPeak-0.3) * easeInOutCubic(t/0.5)
+        : overshootPeak - (overshootPeak-1) * easeInOutCubic((t-0.5)/0.5);
+      const opacity = Math.min(1, elapsed/180); // dissolvenza in ingresso rapida e indipendente
+      logo.style.transform = `scale(${scale.toFixed(4)})`;
+      logo.style.opacity = String(opacity);
+      if(t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  } else if(logo){
+    logo.style.opacity = '1';
+    logo.style.transform = 'scale(1)';
+  }
+
   setTimeout(()=>{
     const hint = document.getElementById('splashSkipHint');
     if(hint && state.phase==='studio-splash') hint.classList.add('splash-hint-blink');
