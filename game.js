@@ -4067,9 +4067,19 @@ function resolveLiveDecision(choiceKey){
   state.live.activeDecision = null;
   state.live.decisionDeadline = null;
 
+  const slotKeys = Object.keys(outcomes);
+  // V0.9.7.9.25: se TUTTI gli esiti sono deterministici (un solo bucket possibile, 100%), non c'e'
+  // niente da rivelare — saltiamo il ballottaggio del tutto e proseguiamo subito, niente teatro
+  // inutile su una scelta che non aveva davvero incertezza.
+  const isFullyDeterministic = slotKeys.every(k => outcomes[k].buckets.length===1);
+  if(isFullyDeterministic){
+    state.live.paused = false;
+    render();
+    return;
+  }
+
   const isHighStakes = HIGH_STAKES_CHOICES.has(choiceKey);
   const schedule = isHighStakes ? REVEAL_SCHEDULE_HIGHSTAKES : REVEAL_SCHEDULE_NORMAL;
-  const slotKeys = Object.keys(outcomes);
   state.live.pendingReveal = { outcomes, stage:'cycling', highStakes:isHighStakes, highlightIdx:{} };
   slotKeys.forEach(k=> state.live.pendingReveal.highlightIdx[k] = 0);
   render();
@@ -4097,13 +4107,22 @@ function resolveLiveDecision(choiceKey){
       if(navigator.vibrate && audioSettings.hapticEnabled!==false){
         try{ navigator.vibrate(isHighStakes ? (hasGain&&!hasLose?[18,35,18,35,90]:[130]) : [35]); }catch(e){}
       }
-      // V0.9.7.9.24: molto piu' tempo per leggere l'esito fermo prima di richiudersi
+      // V0.9.7.9.25: tempo di lettura DINAMICO in base a quanto testo c'e' davvero da leggere —
+      // i risultati brevi restano come prima, quelli con piu' testo (nomi lunghi, piu' colonne)
+      // ottengono automaticamente piu' tempo, invece di un valore fisso identico per tutti.
+      let readLen = 0;
+      slotKeys.forEach(slotKey=>{
+        const { bucketIdx, buckets } = outcomes[slotKey];
+        readLen += t('bkt_'+buckets[bucketIdx].label).length;
+      });
+      const baseMs = isHighStakes ? 3200 : 2400;
+      const dynamicMs = baseMs + Math.max(0, readLen-30)*38;
       setTimeout(()=>{
         if(!state.live) return;
         state.live.pendingReveal = null;
         state.live.paused = false;
         render();
-      }, isHighStakes ? 3200 : 2400);
+      }, dynamicMs);
       return;
     }
     render();
