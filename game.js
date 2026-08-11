@@ -71,7 +71,7 @@ const I18N = {
   it: {
     bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_hold: 'Mantieni la posizione',
     bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni', bkt_lose_3: 'Perdi 3 posizioni', bkt_gain_3_5: 'Guadagni 3-5 posizioni',
-    dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '⚠️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito',
+    dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '⚠️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito', bkt_gain_exact: (n)=>n===1?'Guadagni 1 posizione':`Guadagni ${n} posizioni`, bkt_lose_exact: (n)=>n===1?'Perdi 1 posizione':`Perdi ${n} posizioni`,
     dret_career_totals: 'Numeri di carriera', dret_seasons: 'Stagioni', dret_total_wins: 'Vittorie', dret_total_podiums: 'Podi',
     dret_total_points: (n)=>`${n} punti totali in carriera`,
     dret_best_season: (age,pos,team)=>`Stagione migliore: a ${age} anni, P${pos} con ${team}`,
@@ -313,7 +313,7 @@ const I18N = {
   en: {
     bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_hold: 'Hold position',
     bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions', bkt_lose_3: 'Lose 3 positions', bkt_gain_3_5: 'Gain 3-5 positions',
-    dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '⚠️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result',
+    dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '⚠️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result', bkt_gain_exact: (n)=>n===1?'Gain 1 position':`Gain ${n} positions`, bkt_lose_exact: (n)=>n===1?'Lose 1 position':`Lose ${n} positions`,
     dret_career_totals: 'Career numbers', dret_seasons: 'Seasons', dret_total_wins: 'Wins', dret_total_podiums: 'Podiums',
     dret_total_points: (n)=>`${n} total career points`,
     dret_best_season: (age,pos,team)=>`Best season: at age ${age}, P${pos} with ${team}`,
@@ -549,7 +549,7 @@ const I18N = {
   es: {
     bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_hold: 'Mantienes la posición',
     bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones', bkt_lose_3: 'Pierdes 3 posiciones', bkt_gain_3_5: 'Ganas 3-5 posiciones',
-    dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '⚠️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado',
+    dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '⚠️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado', bkt_gain_exact: (n)=>n===1?'Ganas 1 posición':`Ganas ${n} posiciones`, bkt_lose_exact: (n)=>n===1?'Pierdes 1 posición':`Pierdes ${n} posiciones`,
     dret_career_totals: 'Números de carrera', dret_seasons: 'Temporadas', dret_total_wins: 'Victorias', dret_total_podiums: 'Podios',
     dret_total_points: (n)=>`${n} puntos totales en carrera`,
     dret_best_season: (age,pos,team)=>`Mejor temporada: a los ${age} años, P${pos} con ${team}`,
@@ -3982,7 +3982,7 @@ function applyLiveDecision(type, choiceKey){
     slots.forEach(slotKey=>{
       if(timeline.retiredAtPhase[slotKey]!==null) return;
       const outcome = pickDecisionOutcome(bucketChoice[slotKey]);
-      reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets };
+      reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:outcome.shift };
       applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(bucketChoice[slotKey]));
     });
     return reveal;
@@ -3991,7 +3991,7 @@ function applyLiveDecision(type, choiceKey){
   affectedSlots.forEach(slotKey=>{
     if(timeline.retiredAtPhase[slotKey]!==null) return; // gia' ritirato: la scelta non ha piu' effetto
     const outcome = pickDecisionOutcome(choiceKey);
-    reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets };
+    reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:outcome.shift };
     applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(choiceKey));
   });
   return reveal;
@@ -4112,8 +4112,9 @@ function resolveLiveDecision(choiceKey){
       // ottengono automaticamente piu' tempo, invece di un valore fisso identico per tutti.
       let readLen = 0;
       slotKeys.forEach(slotKey=>{
-        const { bucketIdx, buckets } = outcomes[slotKey];
-        readLen += t('bkt_'+buckets[bucketIdx].label).length;
+        const { bucketIdx, buckets, shift } = outcomes[slotKey];
+        const label = shift!==0 ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift)) : t('bkt_'+buckets[bucketIdx].label);
+        readLen += label.length;
       });
       const baseMs = isHighStakes ? 3200 : 2400;
       const dynamicMs = baseMs + Math.max(0, readLen-30)*38;
@@ -4294,14 +4295,21 @@ function liveDecisionRevealHTML(){
     'PLAYER-2': state.isDriverCareer ? null : state.team.pilotSecond.nome,
   };
   const columnsHTML = Object.keys(reveal.outcomes).map(slotKey=>{
-    const { bucketIdx, buckets } = reveal.outcomes[slotKey];
+    const { bucketIdx, buckets, shift } = reveal.outcomes[slotKey];
     const activeIdx = reveal.highlightIdx[slotKey];
     const chipsHTML = buckets.map((b,i)=>{
       const cls = b.label.startsWith('gain') ? 'bkt-gain' : b.label.startsWith('lose') ? 'bkt-lose' : 'bkt-hold';
-      let stateCls;
-      if(settled){ stateCls = i===bucketIdx ? 'reveal-winner' : 'reveal-dimmed'; }
-      else { stateCls = i===activeIdx ? 'reveal-active' : 'reveal-idle'; }
-      return `<div class="decision-reveal-chip ${cls} ${stateCls}">${t('bkt_'+b.label)}</div>`;
+      let stateCls, text;
+      if(settled){
+        stateCls = i===bucketIdx ? 'reveal-winner' : 'reveal-dimmed';
+        // V0.9.7.9.26: sulla chip vincente mostriamo il numero ESATTO uscito (es. "Guadagni 2
+        // posizioni"), non piu' il range generico ("1-2") — quello serve solo prima di sapere.
+        text = (i===bucketIdx && shift!==0) ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift)) : t('bkt_'+b.label);
+      } else {
+        stateCls = i===activeIdx ? 'reveal-active' : 'reveal-idle';
+        text = t('bkt_'+b.label);
+      }
+      return `<div class="decision-reveal-chip ${cls} ${stateCls}">${text}</div>`;
     }).join('');
     return `
     <div class="decision-reveal-col">
