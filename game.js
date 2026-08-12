@@ -5723,8 +5723,8 @@ const EVENT_EMOJI = {
 const EMOJI_RAIN = '🌧️', EMOJI_TIRE = '🛞', EMOJI_OVERTAKE = '🔀', EMOJI_SAFETYCAR = '🚨', EMOJI_FLAG_CHECKERED = '🏁';
 
 const CAR_RARITY_COLOR = {
-  debole:'#6FD62F', discreto:'#22DCDC', intermedio:'#1892F5', ottimo:'#1D67EB',
-  eccellente:'#EB3488', legendary:'#F7B800', immortal:'#B143F3'
+  debole:'#8B8D91', discreto:'#6FD62F', intermedio:'#22DCDC', ottimo:'#1892F5',
+  eccellente:'#B143F3', legendary:'#F7B800', immortal:'#C9D6DF'
 };
 const CAR_RARITY_LABEL = {
   debole:'DEBOLE', discreto:'DISCRETO', intermedio:'INTERMEDIO', ottimo:'OTTIMO',
