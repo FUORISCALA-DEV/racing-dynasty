@@ -7039,11 +7039,14 @@ function renderStudioSplash(){
     const duration = 900;
     const startTime = performance.now();
     function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+    // V0.9.8.13: l'uscita dallo schermo e' VOLUTA — gioco di parole col nome "FUORISCALA" (esce
+    // dalla scala/misura). Il picco resta drammatico. Il problema tecnico va cercato altrove:
+    // probabilmente il costo di ritagliare (overflow:hidden) un elemento molto piu' grande del suo
+    // contenitore, ricalcolato ad ogni fotogramma — vedi il cambiamento al contenitore piu' sotto.
+    const overshootPeak = 3.6;
     function tick(now){
       const elapsed = now - startTime;
       const t = Math.min(1, elapsed/duration);
-      // zoom drammatico che poi si assesta: parte piccolo, supera 1.0 abbondantemente, torna a 1.0
-      const overshootPeak = 3.6;
       const scale = t<0.5
         ? 0.3 + (overshootPeak-0.3) * easeInOutCubic(t/0.5)
         : overshootPeak - (overshootPeak-1) * easeInOutCubic((t-0.5)/0.5);
