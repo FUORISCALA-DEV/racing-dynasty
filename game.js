@@ -3979,9 +3979,11 @@ function renderStartLights(){
     }
     const useMirrored = !state.isDriverCareer && slotKey==='PLAYER-1';
     return `
-    <div class="pedal-box ${stateCls}" data-pedal-slot="${slotKey}">
+    <div class="pedal-col">
+      <div class="pedal-box ${stateCls}" data-pedal-slot="${slotKey}">
+        <img class="pedal-icon-img" src="assets/pedal/${useMirrored?'pedal_p1':'pedal_p2'}.webp" alt="">
+      </div>
       <div class="pedal-key-hint">${keyLabel}</div>
-      <img class="pedal-icon-img" src="assets/pedal/${useMirrored?'pedal_p1':'pedal_p2'}.webp" alt="">
       <div class="pedal-driver-name">${pedalDriverName(slotKey)}</div>
       ${bodyHTML}
     </div>`;
