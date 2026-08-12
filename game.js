@@ -3795,10 +3795,10 @@ function pedalDriverName(slotKey){
 function pedalReleaseShift(deltaMs){
   if(deltaMs===null) return -3;       // mai rilasciato entro il tempo massimo concesso
   if(deltaMs < 0) return -3;          // falsa partenza
-  if(deltaMs <= 150) return 2;        // partenza perfetta
-  if(deltaMs <= 350) return 1;        // buona partenza
-  if(deltaMs <= 600) return 0;        // partenza nella media
-  if(deltaMs <= 900) return -1;       // partenza lenta
+  if(deltaMs <= 80) return 2;         // partenza perfetta — finestra stretta, premia i riflessi veri
+  if(deltaMs <= 180) return 1;        // buona partenza
+  if(deltaMs <= 550) return 0;        // partenza nella media
+  if(deltaMs <= 850) return -1;       // partenza lenta
   return -2;                          // partenza molto lenta
 }
 function pedalResultLabel(shift){
@@ -3977,10 +3977,11 @@ function renderStartLights(){
     } else {
       bodyHTML = `<div class="pedal-instruction">${t('pedal_hold_instruction')}</div>`;
     }
+    const useMirrored = !state.isDriverCareer && slotKey==='PLAYER-1';
     return `
     <div class="pedal-box ${stateCls}" data-pedal-slot="${slotKey}">
       <div class="pedal-key-hint">${keyLabel}</div>
-      <div class="pedal-icon">🦶</div>
+      <img class="pedal-icon-img" src="assets/pedal/${useMirrored?'pedal_p1':'pedal_p2'}.webp" alt="">
       <div class="pedal-driver-name">${pedalDriverName(slotKey)}</div>
       ${bodyHTML}
     </div>`;
