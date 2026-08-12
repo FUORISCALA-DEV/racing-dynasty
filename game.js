@@ -295,6 +295,17 @@ function syncStreamerFrameState(){
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    pedal_tutorial_eyebrow: 'Prima della partenza', pedal_tutorial_title: 'Pedale frizione',
+    pedal_tutorial_desc: 'Tieni premuto durante i semafori. Rilascia al momento giusto: troppo presto è una falsa partenza, troppo tardi ti fa perdere terreno.',
+    pedal_tutorial_perfect_desc: 'Rilascio immediato allo spegnimento', pedal_tutorial_good_desc: 'Rilascio rapido, poco dopo lo spegnimento',
+    pedal_tutorial_ok_desc: 'Rilascio nella media, nessun vantaggio né svantaggio', pedal_tutorial_falsestart_desc: 'Rilasciato prima dello spegnimento, o troppo tardi',
+    pedal_tutorial_controls_single: 'Tieni premuto SPAZIO, oppure tocca e tieni premuto il pedale sullo schermo.',
+    pedal_tutorial_controls_double: 'Tieni premuti A e D, oppure tocca e tieni premuti i due pedali sullo schermo.',
+    pedal_tutorial_cta: 'Ho capito, si parte!',
+    pedal_key_space: 'SPAZIO', pedal_holding: 'Frizione tenuta...', pedal_hold_instruction: 'Tieni premuto',
+    pedal_result_perfect: '+2 PARTENZA PERFETTA', pedal_result_good: '+1 BUONA PARTENZA', pedal_result_ok: 'PARTENZA NELLA MEDIA',
+    pedal_result_late: '-1 PARTENZA LENTA', pedal_result_verylate: '-2 PARTENZA MOLTO LENTA', pedal_result_falsestart: '-3 FALSA PARTENZA',
+    skip_race_warning_title: 'Saltare la gara?', skip_race_warning_desc: 'Se salti la gara, sceglierai sempre l\'opzione più prudente in ogni decisione — potresti perdere occasioni di sorpasso e altri momenti chiave. Continuare?',
     premium_need_login_title: 'Serve un account', premium_need_login_desc: 'Per sbloccare il premium serve prima accedere con Google — lo colleghiamo al tuo acquisto. Vuoi accedere ora?',
     premium_checkout_error_title: 'Qualcosa non ha funzionato', premium_checkout_error_desc: 'Non siamo riusciti ad aprire la pagina di pagamento. Riprova tra poco.',
     premium_unlocked_title: '🎉 Premium sbloccato!', premium_unlocked_desc: 'Pagamento andato a buon fine — hai tutto illimitato, per sempre. Grazie!',
@@ -550,6 +561,17 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    pedal_tutorial_eyebrow: 'Before the start', pedal_tutorial_title: 'Clutch pedal',
+    pedal_tutorial_desc: 'Hold down during the start lights. Release at the right moment: too early is a false start, too late costs you ground.',
+    pedal_tutorial_perfect_desc: 'Released right as the lights go out', pedal_tutorial_good_desc: 'Released quickly, shortly after the lights go out',
+    pedal_tutorial_ok_desc: 'Average release, no advantage or disadvantage', pedal_tutorial_falsestart_desc: 'Released before the lights go out, or way too late',
+    pedal_tutorial_controls_single: 'Hold SPACE, or touch and hold the pedal on screen.',
+    pedal_tutorial_controls_double: 'Hold A and D, or touch and hold both pedals on screen.',
+    pedal_tutorial_cta: "Got it, let's go!",
+    pedal_key_space: 'SPACE', pedal_holding: 'Clutch held...', pedal_hold_instruction: 'Hold down',
+    pedal_result_perfect: '+2 PERFECT START', pedal_result_good: '+1 GOOD START', pedal_result_ok: 'AVERAGE START',
+    pedal_result_late: '-1 SLOW START', pedal_result_verylate: '-2 VERY SLOW START', pedal_result_falsestart: '-3 FALSE START',
+    skip_race_warning_title: 'Skip the race?', skip_race_warning_desc: "If you skip the race, you'll always pick the safest option on every decision — you might miss overtaking chances and other key moments. Continue?",
     premium_need_login_title: 'Account required', premium_need_login_desc: 'To unlock premium you need to sign in with Google first — we link it to your purchase. Sign in now?',
     premium_checkout_error_title: 'Something went wrong', premium_checkout_error_desc: "We couldn't open the payment page. Please try again shortly.",
     premium_unlocked_title: '🎉 Premium unlocked!', premium_unlocked_desc: 'Payment successful — you now have everything unlimited, forever. Thank you!',
@@ -799,6 +821,17 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    pedal_tutorial_eyebrow: 'Antes de la salida', pedal_tutorial_title: 'Pedal de embrague',
+    pedal_tutorial_desc: 'Mantén pulsado durante los semáforos. Suelta en el momento justo: demasiado pronto es una salida en falso, demasiado tarde te hace perder terreno.',
+    pedal_tutorial_perfect_desc: 'Soltado justo al apagarse', pedal_tutorial_good_desc: 'Soltado rápido, poco después de apagarse',
+    pedal_tutorial_ok_desc: 'Soltado en la media, sin ventaja ni desventaja', pedal_tutorial_falsestart_desc: 'Soltado antes de apagarse, o demasiado tarde',
+    pedal_tutorial_controls_single: 'Mantén pulsado ESPACIO, o toca y mantén pulsado el pedal en pantalla.',
+    pedal_tutorial_controls_double: 'Mantén pulsados A y D, o toca y mantén pulsados los dos pedales en pantalla.',
+    pedal_tutorial_cta: '¡Entendido, vamos!',
+    pedal_key_space: 'ESPACIO', pedal_holding: 'Embrague sujeto...', pedal_hold_instruction: 'Mantén pulsado',
+    pedal_result_perfect: '+2 SALIDA PERFECTA', pedal_result_good: '+1 BUENA SALIDA', pedal_result_ok: 'SALIDA MEDIA',
+    pedal_result_late: '-1 SALIDA LENTA', pedal_result_verylate: '-2 SALIDA MUY LENTA', pedal_result_falsestart: '-3 SALIDA EN FALSO',
+    skip_race_warning_title: '¿Saltar la carrera?', skip_race_warning_desc: 'Si saltas la carrera, elegirás siempre la opción más prudente en cada decisión — podrías perder ocasiones de adelantamiento y otros momentos clave. ¿Continuar?',
     premium_need_login_title: 'Se necesita una cuenta', premium_need_login_desc: 'Para desbloquear el premium primero hay que iniciar sesión con Google — lo vinculamos a tu compra. ¿Iniciar sesión ahora?',
     premium_checkout_error_title: 'Algo no ha funcionado', premium_checkout_error_desc: 'No hemos podido abrir la página de pago. Vuelve a intentarlo en breve.',
     premium_unlocked_title: '🎉 ¡Premium desbloqueado!', premium_unlocked_desc: 'Pago realizado con éxito — ahora tienes todo ilimitado, para siempre. ¡Gracias!',
@@ -3743,14 +3776,96 @@ function buildPhaseLog(t, timeline){
 function randomPhaseDuration(){ return 1900 + Math.floor(rnd()*400); } // 1.9-2.3s per fase
 
 /* ---------------- V0.7.5: semaforo di partenza F1 (pixel art) ---------------- */
+// ============================================================
+// V0.9.9.0 — PEDALI FRIZIONE ALLA PARTENZA. Minigioco di riflessi: tieni premuto durante i
+// semafori, rilascia al momento giusto. Prima dello spegnimento = falsa partenza (-3). Rilascio
+// perfetto (0-150ms dopo lo spegnimento) = +2. Più tardi il rilascio, meno vantaggio, fino a
+// diventare esso stesso una perdita di posizioni. Due pedali in Stagione Scuderia (A/D da
+// tastiera), uno solo in Carriera Pilota (SPAZIO) — solo per il pilota del giocatore.
+// ============================================================
+const PEDAL_TUTORIAL_KEY = 'racingDynastyPedalTutorialSeenV1';
+function hasPedalTutorialBeenSeen(){ try{ return localStorage.getItem(PEDAL_TUTORIAL_KEY)==='1'; }catch(e){ return false; } }
+function markPedalTutorialSeen(){ try{ localStorage.setItem(PEDAL_TUTORIAL_KEY,'1'); }catch(e){} }
+function pedalSlotsForRun(){ return state.isDriverCareer ? ['PLAYER-1'] : ['PLAYER-1','PLAYER-2']; }
+function pedalDriverName(slotKey){
+  const d = slotKey==='PLAYER-1' ? state.team?.pilotMain : state.team?.pilotSecond;
+  return d ? shortName(d.nome) : '';
+}
+// deltaMs = tempo di rilascio rispetto allo spegnimento dei semafori (negativo = rilasciato prima)
+function pedalReleaseShift(deltaMs){
+  if(deltaMs===null) return -3;       // mai rilasciato entro il tempo massimo concesso
+  if(deltaMs < 0) return -3;          // falsa partenza
+  if(deltaMs <= 150) return 2;        // partenza perfetta
+  if(deltaMs <= 350) return 1;        // buona partenza
+  if(deltaMs <= 600) return 0;        // partenza nella media
+  if(deltaMs <= 900) return -1;       // partenza lenta
+  return -2;                          // partenza molto lenta
+}
+function pedalResultLabel(shift){
+  if(shift<=-3) return { text:t('pedal_result_falsestart'), cls:'pedal-bad' };
+  if(shift===-2) return { text:t('pedal_result_verylate'), cls:'pedal-bad' };
+  if(shift===-1) return { text:t('pedal_result_late'), cls:'pedal-meh' };
+  if(shift===0) return { text:t('pedal_result_ok'), cls:'pedal-meh' };
+  if(shift===1) return { text:t('pedal_result_good'), cls:'pedal-good' };
+  return { text:t('pedal_result_perfect'), cls:'pedal-perfect' };
+}
+// applica lo shift di partenza a TUTTE le fasi della gara gia' simulata (non solo alla Partenza),
+// cosi' il vantaggio/svantaggio si porta dietro per l'intera corsa — stessa logica di splice
+// usata dalle decisioni in gara, ma applicata fin dalla prima fase.
+function applyStartShiftAcrossPhases(timeline, slotKey, shift){
+  if(!shift) return;
+  for(let phase=0; phase<PHASES.length; phase++){
+    const order = timeline.phaseOrders[phase];
+    if(!order) continue;
+    const idx = order.indexOf(slotKey);
+    if(idx<0) continue;
+    const newIdx = Math.max(0, Math.min(order.length-1, idx+shift));
+    order.splice(idx,1); order.splice(newIdx,0,slotKey);
+  }
+}
+
 function beginRaceWithLights(){
+  if(!hasPedalTutorialBeenSeen()){
+    state.phase = 'pedal-tutorial';
+    render();
+    return;
+  }
+  startLightsSequence();
+}
+function renderPedalTutorial(){
+  const slots = pedalSlotsForRun();
+  const single = slots.length===1;
+  app.innerHTML = `
+  ${topbarHTML()}
+  <div class="panel pedal-tutorial-panel">
+    <div class="eyebrow">🚦 ${t('pedal_tutorial_eyebrow')}</div>
+    <h2 class="hdr" style="font-size:22px;">${t('pedal_tutorial_title')}</h2>
+    <div class="dim" style="font-size:13px;margin-top:8px;line-height:1.5;">${t('pedal_tutorial_desc')}</div>
+    <div class="pedal-tutorial-rows">
+      <div class="pedal-tutorial-row pedal-perfect"><b>${t('pedal_result_perfect')}</b><span>${t('pedal_tutorial_perfect_desc')}</span></div>
+      <div class="pedal-tutorial-row pedal-good"><b>${t('pedal_result_good')}</b><span>${t('pedal_tutorial_good_desc')}</span></div>
+      <div class="pedal-tutorial-row pedal-meh"><b>${t('pedal_result_ok')}</b><span>${t('pedal_tutorial_ok_desc')}</span></div>
+      <div class="pedal-tutorial-row pedal-bad"><b>${t('pedal_result_falsestart')}</b><span>${t('pedal_tutorial_falsestart_desc')}</span></div>
+    </div>
+    <div class="dim" style="font-size:12px;margin-top:14px;">${single ? t('pedal_tutorial_controls_single') : t('pedal_tutorial_controls_double')}</div>
+    <div class="btnrow" style="margin-top:16px;">
+      <button class="primary" data-action="pedal-tutorial-done" style="width:100%;">${t('pedal_tutorial_cta')}</button>
+    </div>
+  </div>
+  `;
+  bindActions();
+}
+function startLightsSequence(){
+  const slots = pedalSlotsForRun();
+  const pedals = {};
+  slots.forEach(s=> pedals[s] = { held:false, released:false, releasedAt:null, shift:null });
   state.phase = 'start_lights';
-  state.startLights = { lit:0, off:false };
+  state.startLights = { lit:0, off:false, offAt:null, pedals, slots, resolved:false };
   render();
+  attachPedalInputListeners();
   // V0.9.7.8.39: tempi ricalibrati sui delay REALI misurati nell'audio F1 fornito da Gio — non
   // piu' 480ms fissi (che risultavano quasi il doppio piu' veloci del vero e "immangiabili").
-  // Delay tra un'accensione e la successiva: luce1->2, 2->3, 3->4, 4->5, 5->via.
-  const LIGHT_DELAYS = [640, 750, 755, 750, 750]; // ~25% più veloce dell'audio esatto, resta comunque naturale
+  const LIGHT_DELAYS = [640, 750, 755, 750, 750];
   let i = 0;
   function tick(){
     if(state.phase!=='start_lights') return;
@@ -3758,24 +3873,87 @@ function beginRaceWithLights(){
       i++;
       state.startLights.lit = i;
       render();
-      playRealSfx('audio/sfx_lights_ignite.mp3'); // un "clic" ad ogni luce che si accende
+      playRealSfx('audio/sfx_lights_ignite.mp3');
       window._lightsTimer = setTimeout(tick, LIGHT_DELAYS[i-1]);
     } else {
       state.startLights.off = true;
+      state.startLights.offAt = performance.now();
       render();
-      playRealSfx('audio/sfx_lights_go.mp3'); // il "via!" vero, allo spegnimento
-      window._lightsTimer = setTimeout(()=>{
-        const { timeline } = simulateFullRace();
-        startLiveRace(timeline);
-      }, 500);
+      playRealSfx('audio/sfx_lights_go.mp3');
+      // tempo massimo per reagire: chi non ha ancora rilasciato dopo questo, penalita' massima
+      window._pedalTimeoutTimer = setTimeout(()=> resolvePedalsIfNeeded(true), 1400);
     }
   }
   tick();
 }
-function skipStartLights(){
-  if(window._lightsTimer) clearTimeout(window._lightsTimer);
-  const { timeline } = simulateFullRace();
-  startLiveRace(timeline);
+function pedalKeyMap(){
+  const slots = state.startLights?.slots || [];
+  if(slots.length===1) return { ' ':slots[0], 'Spacebar':slots[0] };
+  const map = {};
+  map['a']=slots[0]; map['A']=slots[0]; map['d']=slots[1]; map['D']=slots[1];
+  return map;
+}
+function handlePedalKeyDown(e){
+  const slot = pedalKeyMap()[e.key];
+  if(!slot) return;
+  e.preventDefault();
+  pedalPress(slot);
+}
+function handlePedalKeyUp(e){
+  const slot = pedalKeyMap()[e.key];
+  if(!slot) return;
+  e.preventDefault();
+  pedalRelease(slot);
+}
+function attachPedalInputListeners(){
+  document.addEventListener('keydown', handlePedalKeyDown);
+  document.addEventListener('keyup', handlePedalKeyUp);
+}
+function detachPedalInputListeners(){
+  document.removeEventListener('keydown', handlePedalKeyDown);
+  document.removeEventListener('keyup', handlePedalKeyUp);
+}
+function pedalPress(slotKey){
+  const sl = state.startLights;
+  if(!sl) return;
+  const p = sl.pedals[slotKey];
+  if(!p || p.released) return;
+  if(!p.held){ p.held = true; render(); }
+}
+function pedalRelease(slotKey){
+  const sl = state.startLights;
+  if(!sl) return;
+  const p = sl.pedals[slotKey];
+  if(!p || p.released || !p.held) return;
+  p.held = false;
+  p.released = true;
+  if(!sl.off){
+    p.shift = -3; // rilasciato PRIMA dello spegnimento: falsa partenza
+  } else {
+    const delta = performance.now() - sl.offAt;
+    p.shift = pedalReleaseShift(delta);
+  }
+  render();
+  resolvePedalsIfNeeded(false);
+}
+function resolvePedalsIfNeeded(forceTimeout){
+  const sl = state.startLights;
+  if(!sl || sl.resolved) return;
+  const allDone = sl.slots.every(s=> sl.pedals[s].released);
+  if(!allDone && !forceTimeout) return;
+  sl.slots.forEach(s=>{
+    const p = sl.pedals[s];
+    if(!p.released){ p.released = true; p.shift = -3; } // non ha rilasciato in tempo: penalita' massima
+  });
+  sl.resolved = true;
+  clearTimeout(window._pedalTimeoutTimer);
+  detachPedalInputListeners();
+  render();
+  window._lightsTimer = setTimeout(()=>{
+    const { timeline } = simulateFullRace();
+    sl.slots.forEach(s=> applyStartShiftAcrossPhases(timeline, s, sl.pedals[s].shift));
+    startLiveRace(timeline);
+  }, 1300); // tempo per leggere l'esito di ciascun pedale prima che parta la gara vera
 }
 function renderStartLights(){
   const sl = state.startLights;
@@ -3784,15 +3962,51 @@ function renderStartLights(){
     dots.push(`<div class="f1-light ${(!sl.off && i<sl.lit)?'lit':''}"></div>`);
   }
   const msg = sl.off ? t('sl_go_msg') : (sl.lit>=5 ? t('sl_ready_msg') : t('sl_lighting_msg'));
+  const single = sl.slots.length===1;
+  const pedalsHTML = sl.slots.map((slotKey,i)=>{
+    const p = sl.pedals[slotKey];
+    const keyLabel = single ? t('pedal_key_space') : (i===0?'A':'D');
+    let stateCls = 'pedal-idle', bodyHTML;
+    if(p.released){
+      const res = pedalResultLabel(p.shift);
+      stateCls = res.cls;
+      bodyHTML = `<div class="pedal-result">${res.text}</div>`;
+    } else if(p.held){
+      stateCls = 'pedal-held';
+      bodyHTML = `<div class="pedal-instruction">${t('pedal_holding')}</div>`;
+    } else {
+      bodyHTML = `<div class="pedal-instruction">${t('pedal_hold_instruction')}</div>`;
+    }
+    return `
+    <div class="pedal-box ${stateCls}" data-pedal-slot="${slotKey}">
+      <div class="pedal-key-hint">${keyLabel}</div>
+      <div class="pedal-icon">🦶</div>
+      <div class="pedal-driver-name">${pedalDriverName(slotKey)}</div>
+      ${bodyHTML}
+    </div>`;
+  }).join('');
+
   app.innerHTML = `
   ${topbarHTML()}
-  <div class="suspense-screen pickable" data-action="skip-start-lights">
+  <div class="suspense-screen">
     <div class="f1-lights-rig">${dots.join('')}</div>
     <div class="suspense-title ${sl.off?'lights-go':''}">${msg}</div>
-    <div class="dim" style="font-size:11px;margin-top:18px;">Tocca per saltare</div>
+    <div class="pedal-row ${single?'pedal-row-single':''}">${pedalsHTML}</div>
   </div>
   `;
   bindActions();
+  // press/hold veri (non un semplice click) per i pedali touch — attacco diretto, non tramite bindActions
+  document.querySelectorAll('.pedal-box').forEach(el=>{
+    const slotKey = el.dataset.pedalSlot;
+    const start = (e)=>{ e.preventDefault(); pedalPress(slotKey); };
+    const end = (e)=>{ e.preventDefault(); pedalRelease(slotKey); };
+    el.addEventListener('touchstart', start, { passive:false });
+    el.addEventListener('touchend', end);
+    el.addEventListener('touchcancel', end);
+    el.addEventListener('mousedown', start);
+    el.addEventListener('mouseup', end);
+    el.addEventListener('mouseleave', (e)=>{ if(state.startLights?.pedals[slotKey]?.held) end(e); });
+  });
 }
 
 // V0.9.3.1: decisioni strategiche in gara — al massimo 2 per gara, scelte tra le occasioni disponibili
@@ -6005,6 +6219,7 @@ function renderInner(){
   if(state.phase==='studio-splash') return renderStudioSplash();
   if(state.phase==='lang-select') return renderLangSelect();
   if(state.phase==='out-of-tokens') return renderOutOfTokens();
+  if(state.phase==='pedal-tutorial') return renderPedalTutorial();
   if(state.phase==='streamer-question') return renderStreamerQuestion();
   if(state.phase==='streamer-name-input') return renderStreamerNameInput();
   if(state.phase==='streamer-continue-check') return renderStreamerContinueCheck();
@@ -6956,7 +7171,7 @@ async function pullSaveFromCloud(){
     }
   }catch(e){ console.warn('Caricamento cloud non riuscito:', e); }
 }
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -9399,10 +9614,12 @@ function onAction(e){
   }
   else if(action==='run-race'){ runQualifying(); state.phase='pregara'; render(); }
   else if(action==='start-race-live'){ beginRaceWithLights(); }
-  else if(action==='skip-start-lights'){ skipStartLights(); }
+  else if(action==='pedal-tutorial-done'){ markPedalTutorialSeen(); startLightsSequence(); }
   else if(action==='pause-live'){ pauseLive(); }
   else if(action==='speed-live'){ toggleSpeedLive(); }
-  else if(action==='skip-live'){ skipLiveRace(); }
+  else if(action==='skip-live'){
+    gameConfirm(t('skip_race_warning_desc'), ()=>{ skipLiveRace(); }, t('skip_race_warning_title'));
+  }
   else if(action==='resolve-live-decision'){ resolveLiveDecision(el.dataset.choice); }
   else if(action==='continue-to-pitlane'){
     if(state.isDriverCareer) goToDriverHubOrSeasonEnd();
