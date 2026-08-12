@@ -698,37 +698,45 @@ tr.former td:first-child{border-left-color:var(--dim);}
 .pedal-row-single{ max-width:220px; margin-left:auto; margin-right:auto; }
 .pedal-col{ display:flex; flex-direction:column; align-items:center; gap:8px; flex:1; max-width:180px; }
 /* V0.9.9.3: il quadrato ora contiene SOLO l'icona, che lo riempie quasi per intero — tutto il
-   testo (tasto, nome, istruzione/esito) vive fuori, sotto, come richiesto. */
+   testo (tasto, nome, istruzione/esito) vive fuori, sotto. */
 .pedal-box{
   width:100%; aspect-ratio:1/1; max-width:170px; border-radius:14px;
   display:flex; align-items:center; justify-content:center; overflow:hidden;
   background:var(--panel2); border:2px solid var(--line); user-select:none; -webkit-user-select:none;
   touch-action:none; cursor:pointer; transition:background .12s ease, border-color .12s ease, transform .12s ease;
 }
-.pedal-icon-img{ width:90%; height:90%; object-fit:contain; }
+.pedal-icon-img{ width:90%; height:90%; object-fit:contain; transition:filter .12s ease, transform .12s ease; }
 /* respiro luminoso mentre si aspetta la pressione — richiama l'attenzione senza essere frenetico */
 @keyframes pedalBreathe{ 0%,100%{ opacity:0.7; transform:scale(1); } 50%{ opacity:1; transform:scale(1.045); } }
-.pedal-box.pedal-idle .pedal-icon-img{ animation: pedalBreathe 1.7s ease-in-out infinite; }
+.pedal-col.pedal-idle .pedal-icon-img{ animation: pedalBreathe 1.7s ease-in-out infinite; }
 .pedal-key-hint{
   font-family:var(--font-mono); font-weight:800; font-size:13px; color:var(--dim);
   border:1px solid var(--line); border-radius:4px; padding:1px 8px; letter-spacing:0.05em;
 }
 .pedal-driver-name{ font-size:11.5px; font-weight:700; color:var(--text); text-transform:uppercase; letter-spacing:0.03em; }
 .pedal-instruction{ font-size:10.5px; color:var(--dim); font-weight:600; }
-.pedal-result{ font-family:var(--font-mono); font-size:12px; font-weight:800; letter-spacing:0.02em; }
-/* tenuto premuto: niente più respiro, resta acceso e fermo in arancione — bagliore forte, non ricolorazione piatta */
-.pedal-box.pedal-held{ background:rgba(255,106,26,0.16); border-color:var(--amber); transform:scale(0.97); }
-.pedal-box.pedal-held .pedal-icon-img{
+.pedal-result{ font-family:var(--font-mono); font-size:13px; font-weight:800; letter-spacing:0.02em; }
+/* V0.9.9.4: FIX — l'esito era spostato fuori dal box durante la ristrutturazione precedente, ma i
+   selettori CSS si aspettavano ancora che fosse dentro (.pedal-box.STATO .pedal-result), quindi il
+   colore non scattava mai e il testo restava grigio, quasi invisibile. Ora lo stato si applica al
+   contenitore esterno (.pedal-col), cosi' box/icona/testo si colorano tutti insieme, anche se sono
+   fratelli e non piu' genitore/figlio.
+   Bagliore sull'icona per ogni esito, stesso linguaggio visivo del bagliore arancione "tenuto premuto". */
+.pedal-col.pedal-held .pedal-box{ background:rgba(255,106,26,0.16); border-color:var(--amber); transform:scale(0.97); }
+.pedal-col.pedal-held .pedal-icon-img{
   animation:none; transform:scale(1.05);
   filter: drop-shadow(0 0 14px var(--amber)) drop-shadow(0 0 6px var(--amber)) brightness(1.18) saturate(1.25);
 }
-.pedal-box.pedal-perfect{ background:rgba(52,199,89,0.18); border-color:var(--ok); }
-.pedal-box.pedal-perfect .pedal-result{ color:var(--ok); }
-.pedal-box.pedal-good{ background:rgba(52,199,89,0.10); border-color:var(--ok); }
-.pedal-box.pedal-good .pedal-result{ color:var(--ok); }
-.pedal-box.pedal-meh .pedal-result{ color:var(--dim); }
-.pedal-box.pedal-bad{ background:rgba(255,59,48,0.14); border-color:var(--danger); }
-.pedal-box.pedal-bad .pedal-result{ color:var(--danger); }
+.pedal-col.pedal-perfect .pedal-box{ background:rgba(52,199,89,0.20); border-color:var(--ok); }
+.pedal-col.pedal-perfect .pedal-icon-img{ filter: drop-shadow(0 0 16px var(--ok)) drop-shadow(0 0 7px var(--ok)) brightness(1.2) saturate(1.2); }
+.pedal-col.pedal-perfect .pedal-result{ color:var(--ok); }
+.pedal-col.pedal-good .pedal-box{ background:rgba(52,199,89,0.12); border-color:var(--ok); }
+.pedal-col.pedal-good .pedal-icon-img{ filter: drop-shadow(0 0 10px var(--ok)) brightness(1.1); }
+.pedal-col.pedal-good .pedal-result{ color:var(--ok); }
+.pedal-col.pedal-meh .pedal-result{ color:var(--dim); }
+.pedal-col.pedal-bad .pedal-box{ background:rgba(255,59,48,0.16); border-color:var(--danger); }
+.pedal-col.pedal-bad .pedal-icon-img{ filter: drop-shadow(0 0 14px var(--danger)) drop-shadow(0 0 6px var(--danger)) brightness(1.05) saturate(1.1); }
+.pedal-col.pedal-bad .pedal-result{ color:var(--danger); }
 
 /* ---- V0.9.9.0: tutorial pedali (primo utilizzo, mette in pausa il gioco) ---- */
 .pedal-tutorial-rows{ display:flex; flex-direction:column; gap:8px; margin-top:16px; }
