@@ -295,14 +295,14 @@ function syncStreamerFrameState(){
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
-    pedal_tutorial_eyebrow: 'Prima della partenza', pedal_tutorial_title: 'Pedale frizione',
-    pedal_tutorial_desc: 'Tieni premuto durante i semafori. Rilascia al momento giusto: troppo presto è una falsa partenza, troppo tardi ti fa perdere terreno.',
+    pedal_tutorial_eyebrow: 'Prima della partenza', pedal_tutorial_title: 'Paddle frizione',
+    pedal_tutorial_desc: 'Tieni premuto il paddle durante i semafori. Rilascialo al momento giusto: troppo presto è una falsa partenza, troppo tardi ti fa perdere terreno.',
     pedal_tutorial_perfect_desc: 'Rilascio immediato allo spegnimento', pedal_tutorial_good_desc: 'Rilascio rapido, poco dopo lo spegnimento',
     pedal_tutorial_ok_desc: 'Rilascio nella media, nessun vantaggio né svantaggio', pedal_tutorial_falsestart_desc: 'Rilasciato prima dello spegnimento, o troppo tardi',
-    pedal_tutorial_controls_single: 'Tieni premuto SPAZIO, oppure tocca e tieni premuto il pedale sullo schermo.',
-    pedal_tutorial_controls_double: 'Tieni premuti A e D, oppure tocca e tieni premuti i due pedali sullo schermo.',
+    pedal_tutorial_controls_single: 'Tieni premuto SPAZIO, oppure tocca e tieni premuto il paddle sullo schermo.',
+    pedal_tutorial_controls_double: 'Tieni premuti A e D, oppure tocca e tieni premuti i due paddle sullo schermo.',
     pedal_tutorial_cta: 'Ho capito, si parte!',
-    pedal_key_space: 'SPAZIO', pedal_holding: 'Frizione tenuta...', pedal_hold_instruction: 'Tieni premuto',
+    pedal_key_space: 'SPAZIO', pedal_holding: 'Paddle tenuto...', pedal_hold_instruction: 'Tieni premuto',
     pedal_result_perfect: '+2 PARTENZA PERFETTA', pedal_result_good: '+1 BUONA PARTENZA', pedal_result_ok: 'PARTENZA NELLA MEDIA',
     pedal_result_late: '-1 PARTENZA LENTA', pedal_result_verylate: '-2 PARTENZA MOLTO LENTA', pedal_result_falsestart: '-3 FALSA PARTENZA',
     skip_race_warning_title: 'Saltare la gara?', skip_race_warning_desc: 'Se salti la gara, sceglierai sempre l\'opzione più prudente in ogni decisione — potresti perdere occasioni di sorpasso e altri momenti chiave. Continuare?',
@@ -561,14 +561,14 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
-    pedal_tutorial_eyebrow: 'Before the start', pedal_tutorial_title: 'Clutch pedal',
-    pedal_tutorial_desc: 'Hold down during the start lights. Release at the right moment: too early is a false start, too late costs you ground.',
+    pedal_tutorial_eyebrow: 'Before the start', pedal_tutorial_title: 'Clutch paddle',
+    pedal_tutorial_desc: 'Hold down the paddle during the start lights. Release it at the right moment: too early is a false start, too late costs you ground.',
     pedal_tutorial_perfect_desc: 'Released right as the lights go out', pedal_tutorial_good_desc: 'Released quickly, shortly after the lights go out',
     pedal_tutorial_ok_desc: 'Average release, no advantage or disadvantage', pedal_tutorial_falsestart_desc: 'Released before the lights go out, or way too late',
-    pedal_tutorial_controls_single: 'Hold SPACE, or touch and hold the pedal on screen.',
-    pedal_tutorial_controls_double: 'Hold A and D, or touch and hold both pedals on screen.',
+    pedal_tutorial_controls_single: 'Hold SPACE, or touch and hold the paddle on screen.',
+    pedal_tutorial_controls_double: 'Hold A and D, or touch and hold both paddles on screen.',
     pedal_tutorial_cta: "Got it, let's go!",
-    pedal_key_space: 'SPACE', pedal_holding: 'Clutch held...', pedal_hold_instruction: 'Hold down',
+    pedal_key_space: 'SPACE', pedal_holding: 'Paddle held...', pedal_hold_instruction: 'Hold down',
     pedal_result_perfect: '+2 PERFECT START', pedal_result_good: '+1 GOOD START', pedal_result_ok: 'AVERAGE START',
     pedal_result_late: '-1 SLOW START', pedal_result_verylate: '-2 VERY SLOW START', pedal_result_falsestart: '-3 FALSE START',
     skip_race_warning_title: 'Skip the race?', skip_race_warning_desc: "If you skip the race, you'll always pick the safest option on every decision — you might miss overtaking chances and other key moments. Continue?",
@@ -821,14 +821,14 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
-    pedal_tutorial_eyebrow: 'Antes de la salida', pedal_tutorial_title: 'Pedal de embrague',
-    pedal_tutorial_desc: 'Mantén pulsado durante los semáforos. Suelta en el momento justo: demasiado pronto es una salida en falso, demasiado tarde te hace perder terreno.',
+    pedal_tutorial_eyebrow: 'Antes de la salida', pedal_tutorial_title: 'Paddle de embrague',
+    pedal_tutorial_desc: 'Mantén pulsado el paddle durante los semáforos. Suéltalo en el momento justo: demasiado pronto es una salida en falso, demasiado tarde te hace perder terreno.',
     pedal_tutorial_perfect_desc: 'Soltado justo al apagarse', pedal_tutorial_good_desc: 'Soltado rápido, poco después de apagarse',
     pedal_tutorial_ok_desc: 'Soltado en la media, sin ventaja ni desventaja', pedal_tutorial_falsestart_desc: 'Soltado antes de apagarse, o demasiado tarde',
-    pedal_tutorial_controls_single: 'Mantén pulsado ESPACIO, o toca y mantén pulsado el pedal en pantalla.',
-    pedal_tutorial_controls_double: 'Mantén pulsados A y D, o toca y mantén pulsados los dos pedales en pantalla.',
+    pedal_tutorial_controls_single: 'Mantén pulsado ESPACIO, o toca y mantén pulsado el paddle en pantalla.',
+    pedal_tutorial_controls_double: 'Mantén pulsados A y D, o toca y mantén pulsados los dos paddles en pantalla.',
     pedal_tutorial_cta: '¡Entendido, vamos!',
-    pedal_key_space: 'ESPACIO', pedal_holding: 'Embrague sujeto...', pedal_hold_instruction: 'Mantén pulsado',
+    pedal_key_space: 'ESPACIO', pedal_holding: 'Paddle sujeto...', pedal_hold_instruction: 'Mantén pulsado',
     pedal_result_perfect: '+2 SALIDA PERFECTA', pedal_result_good: '+1 BUENA SALIDA', pedal_result_ok: 'SALIDA MEDIA',
     pedal_result_late: '-1 SALIDA LENTA', pedal_result_verylate: '-2 SALIDA MUY LENTA', pedal_result_falsestart: '-3 SALIDA EN FALSO',
     skip_race_warning_title: '¿Saltar la carrera?', skip_race_warning_desc: 'Si saltas la carrera, elegirás siempre la opción más prudente en cada decisión — podrías perder ocasiones de adelantamiento y otros momentos clave. ¿Continuar?',
@@ -3777,7 +3777,7 @@ function randomPhaseDuration(){ return 1900 + Math.floor(rnd()*400); } // 1.9-2.
 
 /* ---------------- V0.7.5: semaforo di partenza F1 (pixel art) ---------------- */
 // ============================================================
-// V0.9.9.0 — PEDALI FRIZIONE ALLA PARTENZA. Minigioco di riflessi: tieni premuto durante i
+// V0.9.9.2 — PADDLE FRIZIONE ALLA PARTENZA. Minigioco di riflessi: tieni premuto il paddle durante i
 // semafori, rilascia al momento giusto. Prima dello spegnimento = falsa partenza (-3). Rilascio
 // perfetto (0-150ms dopo lo spegnimento) = +2. Più tardi il rilascio, meno vantaggio, fino a
 // diventare esso stesso una perdita di posizioni. Due pedali in Stagione Scuderia (A/D da
@@ -3953,7 +3953,7 @@ function resolvePedalsIfNeeded(forceTimeout){
     const { timeline } = simulateFullRace();
     sl.slots.forEach(s=> applyStartShiftAcrossPhases(timeline, s, sl.pedals[s].shift));
     startLiveRace(timeline);
-  }, 1300); // tempo per leggere l'esito di ciascun pedale prima che parta la gara vera
+  }, 1300); // tempo per leggere l'esito di ciascun paddle prima che parta la gara vera
 }
 function renderStartLights(){
   const sl = state.startLights;
