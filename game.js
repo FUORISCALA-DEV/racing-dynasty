@@ -295,6 +295,13 @@ function syncStreamerFrameState(){
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
+    sponsor_area_piloti: 'Piloti', sponsor_fx_tier_boost: 'Upgrade di fascia alta (Epic/Legendary/Immortal) molto più frequenti in Pit Lane.',
+    sponsor_fx_area_boost: (aree)=>`Upgrade ${aree} molto più frequenti in Pit Lane.`,
+    sponsor_fx_budget_bonus: (n)=>`+${n}M di budget extra, ogni gara, senza condizioni.`,
+    sponsor_fx_risk_reduction: (n)=>`-${n}% di rischio fallimento su ogni upgrade.`,
+    sponsor_fx_prize_boost: (n)=>`+${n}% sui premi in denaro a fine gara, sempre.`,
+    sponsor_fx_cost_reduction: (n)=>`-${n}% sul costo di ogni upgrade in Pit Lane.`,
+    sponsor_fx_extra_reroll: (n)=>`+${n} reroll extra nel Draft, subito.`,
     pedal_tutorial_eyebrow: 'Prima della partenza', pedal_tutorial_title: 'Paddle frizione',
     pedal_tutorial_desc: 'Tieni premuto il paddle durante i semafori. Rilascialo al momento giusto: troppo presto è una falsa partenza, troppo tardi ti fa perdere terreno.',
     pedal_tutorial_perfect_desc: 'Rilascio immediato allo spegnimento', pedal_tutorial_good_desc: 'Rilascio rapido, poco dopo lo spegnimento',
@@ -561,6 +568,13 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
+    sponsor_area_piloti: 'Drivers', sponsor_fx_tier_boost: 'High-tier upgrades (Epic/Legendary/Immortal) much more frequent in Pit Lane.',
+    sponsor_fx_area_boost: (areas)=>`${areas} upgrades much more frequent in Pit Lane.`,
+    sponsor_fx_budget_bonus: (n)=>`+${n}M extra budget, every race, no conditions.`,
+    sponsor_fx_risk_reduction: (n)=>`-${n}% failure risk on every upgrade.`,
+    sponsor_fx_prize_boost: (n)=>`+${n}% on prize money after every race, always.`,
+    sponsor_fx_cost_reduction: (n)=>`-${n}% on the cost of every Pit Lane upgrade.`,
+    sponsor_fx_extra_reroll: (n)=>`+${n} extra Draft rerolls, right away.`,
     pedal_tutorial_eyebrow: 'Before the start', pedal_tutorial_title: 'Clutch paddle',
     pedal_tutorial_desc: 'Hold down the paddle during the start lights. Release it at the right moment: too early is a false start, too late costs you ground.',
     pedal_tutorial_perfect_desc: 'Released right as the lights go out', pedal_tutorial_good_desc: 'Released quickly, shortly after the lights go out',
@@ -821,6 +835,13 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
+    sponsor_area_piloti: 'Pilotos', sponsor_fx_tier_boost: 'Mejoras de gama alta (Epic/Legendary/Immortal) mucho más frecuentes en Pit Lane.',
+    sponsor_fx_area_boost: (areas)=>`Mejoras de ${areas} mucho más frecuentes en Pit Lane.`,
+    sponsor_fx_budget_bonus: (n)=>`+${n}M de presupuesto extra, cada carrera, sin condiciones.`,
+    sponsor_fx_risk_reduction: (n)=>`-${n}% de riesgo de fallo en cada mejora.`,
+    sponsor_fx_prize_boost: (n)=>`+${n}% en el dinero de los premios tras cada carrera, siempre.`,
+    sponsor_fx_cost_reduction: (n)=>`-${n}% en el coste de cada mejora en Pit Lane.`,
+    sponsor_fx_extra_reroll: (n)=>`+${n} rerolls extra en el Draft, de inmediato.`,
     pedal_tutorial_eyebrow: 'Antes de la salida', pedal_tutorial_title: 'Paddle de embrague',
     pedal_tutorial_desc: 'Mantén pulsado el paddle durante los semáforos. Suéltalo en el momento justo: demasiado pronto es una salida en falso, demasiado tarde te hace perder terreno.',
     pedal_tutorial_perfect_desc: 'Soltado justo al apagarse', pedal_tutorial_good_desc: 'Soltado rápido, poco después de apagarse',
@@ -2015,6 +2036,10 @@ function newRun(difficulty, seasonLength){
     .map(c=> ({ ...c, giri: computeRaceLaps(c) })); // V0.5.1: giri reali dalla lunghezza del circuito
   const aiTeamsRaw = DATA.scuderie.slice().sort(()=>rnd()-0.5).slice(0,9);
   const aiTeams = buildAIGrid(aiTeamsRaw, usedIds, difficulty); // riserva anche i 18 id piloti IA in usedIds
+  // V0.9.9.8: sponsor virtuale invisibile per ogni squadra IA — stesso pool di effetti del
+  // giocatore, cosi' anche gli avversari sviluppano in modo credibile e vario, non tutti uguali.
+  // Mai mostrato in nessuna schermata: e' solo il "carattere" nascosto della squadra per la stagione.
+  aiTeams.forEach(t=>{ t.virtualSponsor = SPONSOR_NAMES[Math.floor(rnd()*SPONSOR_NAMES.length)]; });
   const diffParams = DIFFICULTY_PARAMS[difficulty] || DIFFICULTY_PARAMS.medio;
 
   state = {
@@ -3552,21 +3577,15 @@ function finalizeRaceScoring(timeline){
     const cs = state.constructorStandings[e.teamId];
     cs.points += e.points;
   });
-  // V0.9.7.8.8: Title Sponsor — +15% sui premi gara, ma solo mentre resti in Top 8 Costruttori
-  // (calcolato SUBITO DOPO aver aggiornato i punti di questa gara, quindi riflette la classifica
-  // vera e propria in questo preciso momento della stagione).
-  let sponsorTitleActive = false;
-  if(state.sponsor && state.sponsor.tier==='title'){
-    const cstdNow = constructorStandingsSorted();
-    const idx = cstdNow.findIndex(c=>c.teamId==='PLAYER');
-    sponsorTitleActive = idx>=0 && idx<8;
-    state.sponsor.active = sponsorTitleActive;
-  }
-  const sponsorTitleMult = sponsorTitleActive ? 1.15 : 1;
-  const prize = finalEntries.filter(e=>e.isPlayerTeam).reduce((s,e)=> s+e.prize, 0) * difficultyParams().prizeMult * sponsorTitleMult;
+  // V0.9.9.8: Auronis — +15% sui premi gara, sempre (prima era il vecchio "Title Sponsor",
+  // condizionato alla top 8 — ora e' un vantaggio sempre attivo se scegli questo sponsor, senza
+  // condizioni, in cambio pero' non da' nessun altro bonus: e' la scelta di chi punta sui risultati).
+  const sponsorEffectNow = state.sponsor ? SPONSOR_EFFECTS[state.sponsor.nome] : null;
+  const sponsorPrizeBoost = (sponsorEffectNow && sponsorEffectNow.type==='prize_boost') ? (1+sponsorEffectNow.pct) : 1;
+  const prize = finalEntries.filter(e=>e.isPlayerTeam).reduce((s,e)=> s+e.prize, 0) * difficultyParams().prizeMult * sponsorPrizeBoost;
   state.budget += prize;
-  // V0.9.7.8.8: Sponsor Secondario — piccolo bonus fisso, sempre, senza condizioni
-  if(state.sponsor && state.sponsor.tier==='secondario') state.budget += 0.3;
+  // V0.9.9.8: Meridia — piccolo bonus fisso ogni gara, senza condizioni
+  if(sponsorEffectNow && sponsorEffectNow.type==='budget_bonus') state.budget += sponsorEffectNow.amount;
 
   // V0.9.7.9: "Sul Podio" — la prima volta che un'auto del giocatore chiude nei primi 3, ritiro escluso
   if(finalEntries.some(e=>e.isPlayerTeam && !e.dnf && e.pos<=3)) unlockAchievement('sul-podio');
@@ -5080,11 +5099,6 @@ function estimateSquadEffect(catKey, candidate){
 // V0.9.3.1: mai proporre un upgrade che non potrebbe dare alcun guadagno reale (componente gia' a 100)
 function isUpgradeUseful(u){
   const areaMap = {'Piloti':'pilotMain','Motore':'motore','Telaio':'telaio','Aerodinamica':'aero','Gomme':'gomme','Strategia':'stratega'};
-  // V0.9.7.8.8: gli upgrade "Richiede Sponsor" sono disponibili solo con uno Sponsor Tecnico
-  // attivo sulla stessa area — altrimenti restano bloccati per l'intera stagione.
-  if(u.requisito==='Richiede Sponsor'){
-    if(!(state.sponsor && state.sponsor.tier==='tecnico' && state.sponsor.category===u.area)) return false;
-  }
   if(u.area==='Globale'){
     return ['motore','telaio','aero','gomme','stratega'].some(k=> state.team[k].rating < 100);
   }
@@ -5100,33 +5114,69 @@ function isUpgradeUseful(u){
    gioco e' gia' abbastanza generosa: la vera posta in gioco e' quale RISCHIO accetti, non quanto
    guadagni in piu' in assoluto.
    ============================================================ */
-const SPONSOR_NAMES = [
-  'Zenith Finance','Skyline Telecom','Apex Energy','Nova Fuels','Meridian Bank',
-  'Volt Dynamics','Solaris Insurance','Titan Logistics','Quantum Watches','Northpoint Airlines',
-];
-const SPONSOR_TECNICO_CATEGORIES = ['Aerodinamica','Telaio','Strategia']; // uniche aree con upgrade "Richiede Sponsor" in data.json
+/* ============================================================
+   V0.9.9.8 — SPONSOR RIFATTI DA ZERO
+   Prima: 3 SLOT fissi (Title/Tecnico/Secondario), l'effetto dipendeva dallo slot, il nome sponsor
+   era puro testo estetico. Ora: 10 sponsor VERI, ognuno con un effetto proprio e distinto — vantaggi
+   e svantaggi diversi, nessuno oggettivamente il migliore. Si scelgono 3 a caso tra i 10 a inizio
+   stagione, come prima, ma stavolta la scelta È il nome (non uno slot astratto).
+   Spazio per il logo lasciato apposta nel markup (logoSrc), da agganciare quando arrivano i loghi.
+   ============================================================ */
+const SPONSOR_EFFECTS = {
+  'Voltrix':   { type:'tier_boost',      mult:2.0,  areas:null,                          settore:'Elettronica' },
+  'Ember':     { type:'area_boost',      mult:2.5,  areas:['Piloti'],                    settore:'Bevanda energetica' },
+  'Meridia':   { type:'budget_bonus',    amount:0.4,                                     settore:'Banca' },
+  'Solace':    { type:'risk_reduction',  amount:8,                                       settore:'Assicurazioni' },
+  'Auronis':   { type:'prize_boost',     pct:0.15,                                       settore:'Orologi di lusso' },
+  'Nexora':    { type:'area_boost',      mult:2.5,  areas:['Strategia'],                 settore:'Telecomunicazioni' },
+  'Ferrotech': { type:'cost_reduction',  pct:0.20,                                       settore:'Logistica industriale' },
+  'Skyvane':   { type:'extra_reroll',    amount:2,                                       settore:'Compagnia aerea' },
+  'Combustia': { type:'area_boost',      mult:2.5,  areas:['Motore'],                    settore:'Carburanti' },
+  'Apexis':    { type:'area_boost',      mult:1.7,  areas:['Gomme','Aerodinamica'],      settore:'Abbigliamento sportivo' },
+};
+const SPONSOR_NAMES = Object.keys(SPONSOR_EFFECTS);
+function sponsorLogoSrc(nome){ return `assets/sponsors/${nome.toLowerCase()}.png`; } // V0.9.9.8: spazio pronto per i loghi, non ancora presenti
 function generateSponsorOffers(){
-  const names = weightedSampleDistinct(SPONSOR_NAMES.map(n=>({id:n,nome:n,costo:1})), 3, 'costo', new Set()).map(o=>o.nome);
-  const tecnicoCategory = SPONSOR_TECNICO_CATEGORIES[Math.floor(rnd()*SPONSOR_TECNICO_CATEGORIES.length)];
-  const labels = { title:'Title Sponsor', tecnico:t('sponsor_technical'), secondario:t('sponsor_secondary') };
-  return [
-    { tier:'title', nome:names[0], label:labels.title },
-    { tier:'tecnico', nome:names[1], label:labels.tecnico, category:tecnicoCategory },
-    { tier:'secondario', nome:names[2], label:labels.secondario },
-  ];
+  const chosen = weightedSampleDistinct(SPONSOR_NAMES.map(n=>({id:n,nome:n,costo:1})), 3, 'costo', new Set()).map(o=>o.nome);
+  return chosen.map(nome => ({ nome, effect: SPONSOR_EFFECTS[nome] }));
+}
+// V0.9.9.8: nomi area generici per il contesto sponsor — displayArea() usa "Pilota #1" (pensato
+// per l'upgrade di un pilota specifico), qui serve invece il nome della categoria in generale.
+function sponsorAreaLabel(area){
+  const map = { 'Motore':t('comp_engine'), 'Telaio':t('comp_chassis'), 'Aerodinamica':t('comp_aero'), 'Gomme':t('comp_tires'), 'Strategia':t('comp_strategist'), 'Piloti':t('sponsor_area_piloti') };
+  return map[area] || area;
+}
+function sponsorEffectDescHTML(nome){
+  const e = SPONSOR_EFFECTS[nome];
+  if(!e) return '';
+  switch(e.type){
+    case 'tier_boost': return t('sponsor_fx_tier_boost');
+    case 'area_boost': return t('sponsor_fx_area_boost', e.areas.map(a=>sponsorAreaLabel(a)).join(' e '));
+    case 'budget_bonus': return t('sponsor_fx_budget_bonus', e.amount);
+    case 'risk_reduction': return t('sponsor_fx_risk_reduction', e.amount);
+    case 'prize_boost': return t('sponsor_fx_prize_boost', Math.round(e.pct*100));
+    case 'cost_reduction': return t('sponsor_fx_cost_reduction', Math.round(e.pct*100));
+    case 'extra_reroll': return t('sponsor_fx_extra_reroll', e.amount);
+    default: return '';
+  }
 }
 function sponsorCardHTML(offer){
-  const descByTier = {
-    title: `<b>+15% ${t('sponsor_desc_title_prizes')}</b> ${t('sponsor_desc_title_condition')}`,
-    tecnico: t('sponsor_desc_tecnico', offer.category),
-    secondario: `<b>${t('sponsor_desc_secondario_amount')}</b> ${t('sponsor_desc_secondario_rest')}`,
-  };
-  const iconByTier = { title:'👑', tecnico:'🔧', secondario:'🤝' };
-  return `<div class="card pickable sponsor-card" data-action="choose-sponsor" data-tier="${offer.tier}">
-    <span class="rarity-tag" data-rarity="Rare">${iconByTier[offer.tier]} ${offer.label.toUpperCase()}</span>
-    <div class="sponsor-card-name">${offer.nome}</div>
-    <div class="sponsor-card-desc">${descByTier[offer.tier]}</div>
+  const e = offer.effect;
+  return `<div class="card pickable sponsor-card" data-action="choose-sponsor" data-nome="${offer.nome}">
+    <div class="sponsor-logo-slot"><img src="${sponsorLogoSrc(offer.nome)}" alt="" onerror="this.style.display='none'"></div>
+    <span class="rarity-tag" data-rarity="Rare">${offer.nome.toUpperCase()}</span>
+    <div class="sponsor-card-desc-settore dim">${e.settore}</div>
+    <div class="sponsor-card-desc">${sponsorEffectDescHTML(offer.nome)}</div>
   </div>`;
+}
+// V0.9.9.8: quanto pesa lo sponsor attivo sul pescaggio pit-lane per un dato upgrade — 1 = nessun effetto
+function sponsorSpawnMultFor(u){
+  if(!state.sponsor) return 1;
+  const e = SPONSOR_EFFECTS[state.sponsor.nome];
+  if(!e) return 1;
+  if(e.type==='tier_boost' && (u.tier==='Epic'||u.tier==='Legendary'||u.tier==='Immortal')) return e.mult;
+  if(e.type==='area_boost' && e.areas.includes(u.area)) return e.mult;
+  return 1;
 }
 function renderSponsorChoice(){
   const offers = state.sponsorOffers || generateSponsorOffers();
@@ -5161,12 +5211,20 @@ function ensureUsefulScoutOptions(pool, current){
   return options;
 }
 
+// V0.9.9.8: peso di comparsa per fascia — prima il pescaggio usava il COSTO come peso, il che
+// significava che gli upgrade piu' cari (di solito i piu' forti) comparivano PIU' spesso, il
+// contrario di quello che ci si aspetta da un sistema di rarita'. Ora le fasce basse sono
+// deliberatamente piu' comuni, quelle alte via via piu' rare.
+const UPGRADE_TIER_SPAWN_WEIGHT = { Common:40, Rare:28, Epic:18, Legendary:10, Immortal:4 };
 function buildPitlaneOptions(){
   const usedUpg = new Set();
-  const usefulUpgrades = DATA.upgrade.filter(isUpgradeUseful);
+  const usefulUpgrades = DATA.upgrade.filter(isUpgradeUseful).map(u=>({ ...u, spawnWeight: (UPGRADE_TIER_SPAWN_WEIGHT[u.tier]||1) * sponsorSpawnMultFor(u) }));
   const seasonCostMult = state.seasonLength===20 ? 2 : 1; // V0.9.7: run da 20 gare, upgrade piu' cari
-  const upgrades = weightedSampleDistinct(usefulUpgrades.length?usefulUpgrades:DATA.upgrade, 2, 'costo', usedUpg).map(u=>{
-    const clone = seasonCostMult!==1 ? { ...u, costo: u.costo*seasonCostMult } : u;
+  const upgrades = weightedSampleDistinct(usefulUpgrades.length?usefulUpgrades:DATA.upgrade, 2, 'spawnWeight', usedUpg).map(u=>{
+    let costMult = seasonCostMult;
+    const e = state.sponsor ? SPONSOR_EFFECTS[state.sponsor.nome] : null;
+    if(e && e.type==='cost_reduction') costMult *= (1-e.pct); // V0.9.9.8: Ferrotech — costo upgrade ridotto
+    const clone = costMult!==1 ? { ...u, costo: Math.round(u.costo*costMult) } : u;
     return {type:'upgrade', data:clone};
   });
   const scoutCategories = [
@@ -5198,7 +5256,11 @@ const INVEST_PREMIUM = 2.2;                // al rischio minimo: costo 2.2x il b
 function investedRisk(t){
   const offset = difficultyParams().riskOffset || 0;
   const maxR = Math.min(95, RISK_MAX+offset), minR = Math.max(1, RISK_MIN+offset);
-  return Math.round(maxR - (maxR-minR)*Math.max(0,Math.min(1,t)));
+  let risk = Math.round(maxR - (maxR-minR)*Math.max(0,Math.min(1,t)));
+  // V0.9.9.8: Solace — riduce il rischio di fallimento su ogni upgrade, sempre
+  const e = state.sponsor ? SPONSOR_EFFECTS[state.sponsor.nome] : null;
+  if(e && e.type==='risk_reduction') risk = Math.max(1, risk - e.amount);
+  return risk;
 }
 
 // t0 = il punto sulla barra dove il rischio coincide col probfallimento originale del database
@@ -5378,6 +5440,43 @@ function skipPitlane(){
 
 // V0.9.2.1: le scuderie IA fanno upgrade in stagione come il giocatore — solo componenti,
 // i piloti IA restano fissi per tutta la stagione (crea una progressione leggibile in classifica).
+// V0.9.9.8: ora l'IA pesca dalla STESSA griglia a fasce del giocatore (Common/Rare/Epic/Legendary/
+// Immortal, stessi punti) invece di un +3/+6 casuale scollegato — coerente col resto del gioco.
+// Lo sponsor virtuale di ogni squadra (invisibile, assegnato a inizio stagione) influenza sia la
+// fascia che il componente scelto, stessa logica del giocatore. La PROBABILITA' di successo resta
+// quella di sempre, gia' tarata con cura per stagioni competitive — non l'ho toccata.
+// V0.9.9.8: pesi DEDICATI per l'IA, deliberatamente piu' conservativi di quelli del giocatore —
+// riusare direttamente i pesi del giocatore avrebbe alzato la media di guadagno IA da 4.5 a 6.3
+// (+40%), rompendo il bilanciamento esistente gia' tarato con cura. Questi pesi restano vicini
+// alla media originale (4.5) pur dando comunque varieta' vera di fasce.
+const AI_UPGRADE_TIER_WEIGHT = { Common:65, Rare:22, Epic:8, Legendary:4, Immortal:1 };
+function pickAIUpgradeTier(virtualSponsor){
+  const e = virtualSponsor ? SPONSOR_EFFECTS[virtualSponsor] : null;
+  const weights = Object.keys(AI_UPGRADE_TIER_WEIGHT).map(tier=>{
+    let w = AI_UPGRADE_TIER_WEIGHT[tier];
+    if(e && e.type==='tier_boost' && (tier==='Epic'||tier==='Legendary'||tier==='Immortal')) w *= e.mult;
+    return { tier, w };
+  });
+  const total = weights.reduce((s,x)=>s+x.w, 0);
+  let r = rnd()*total;
+  for(const x of weights){ r -= x.w; if(r<=0) return x.tier; }
+  return weights[weights.length-1].tier;
+}
+function pickAIUpgradeArea(virtualSponsor){
+  const keys = ['motore','telaio','aero','gomme','stratega'];
+  const areaByKey = { motore:'Motore', telaio:'Telaio', aero:'Aerodinamica', gomme:'Gomme', stratega:'Strategia' };
+  const e = virtualSponsor ? SPONSOR_EFFECTS[virtualSponsor] : null;
+  const weights = keys.map(key=>{
+    let w = 1;
+    if(e && e.type==='area_boost' && e.areas.includes(areaByKey[key])) w *= e.mult;
+    return { key, w };
+  });
+  const total = weights.reduce((s,x)=>s+x.w, 0);
+  let r = rnd()*total;
+  for(const x of weights){ r -= x.w; if(r<=0) return x.key; }
+  return weights[weights.length-1].key;
+}
+const AI_UPGRADE_TIER_GAIN = { Common:3, Rare:6, Epic:9, Legendary:12, Immortal:15 };
 function applyAIUpgrades(){
   const playerInvested = !!state.playerInvestedLastRace;
   const myPoints = state.constructorStandings['PLAYER'] ? state.constructorStandings['PLAYER'].points : 0;
@@ -5390,9 +5489,9 @@ function applyAIUpgrades(){
     const rivalGapBehind = isRival ? Math.max(0, myPoints - rivalPoints) : 0;
     if(isRival && rivalGapBehind > 40) chance = Math.min(0.95, chance + 0.1);
     if(rnd() < chance){
-      const keys = ['motore','telaio','aero','gomme','stratega'];
-      const key = keys[Math.floor(rnd()*keys.length)];
-      const gain = 3 + Math.floor(rnd()*4);
+      const tier = pickAIUpgradeTier(t.virtualSponsor);
+      const key = pickAIUpgradeArea(t.virtualSponsor);
+      const gain = AI_UPGRADE_TIER_GAIN[tier];
       t.components[key].rating = clamp(t.components[key].rating + gain, 1, 100);
     }
   });
@@ -6267,9 +6366,8 @@ function topbarHTML(){
   const p2Pos = dstd.findIndex(d=>d.slotKey==='PLAYER-2' && !d.isFormer)+1;
   const bestDriverPos = Math.min(p1Pos||99, p2Pos||99);
   const constructorPos = cstd.findIndex(c=>c.teamId==='PLAYER')+1;
-  const sponsorIcon = { title:'👑', tecnico:'🔧', secondario:'🤝' };
   const sponsorHTML = state.sponsor
-    ? `<div class="hud-item"><div class="hud-label">${t('hud_sponsor')}</div><div class="hud-value" style="${state.sponsor.tier==='title' && state.sponsor.active===false ? 'color:var(--danger);' : ''}" title="${state.sponsor.nome}">${sponsorIcon[state.sponsor.tier]}${state.sponsor.tier==='title' && state.sponsor.active===false ? ' ('+t('sponsor_suspended')+')' : ''}</div></div>`
+    ? `<div class="hud-item"><div class="hud-label">${t('hud_sponsor')}</div><div class="hud-value" title="${state.sponsor.nome}">🤝</div></div>`
     : '';
   return `
   <div class="topbar">
@@ -8228,7 +8326,7 @@ function pitlaneCardHTML(node, idx){
   if(node.type==='upgrade'){
     const u = node.data;
     const isGuaranteed = u.probfallimento===0;
-    const rarityLike = u.tier==='Legendary'?'Legendary':u.tier==='Elite'?'Epic':u.tier==='Avanzato'?'Rare':'Common';
+    const rarityLike = u.tier; // V0.9.9.8: nomi fascia ora coincidono esattamente con le rarità carte, nessuna conversione
     const typeLabel = isGuaranteed ? t('pcard_guaranteed') : t('pcard_development');
     const info = upgradeTargetInfo(u);
 
@@ -9604,11 +9702,17 @@ function onAction(e){
   }
   else if(action==='reroll-draft'){ rerollDraftTurn(); }
   else if(action==='choose-sponsor'){
-    const tier = el.dataset.tier;
-    const offer = (state.sponsorOffers||[]).find(o=>o.tier===tier);
+    const nome = el.dataset.nome;
+    const offer = (state.sponsorOffers||[]).find(o=>o.nome===nome);
     if(offer){
-      state.sponsor = { tier: offer.tier, nome: offer.nome, category: offer.category||null, active:true };
+      state.sponsor = { nome: offer.nome };
       state.sponsorOffers = null;
+      // V0.9.9.8: Skyvane da' reroll extra subito, una tantum, al momento della scelta
+      const e = SPONSOR_EFFECTS[offer.nome];
+      if(e && e.type==='extra_reroll'){
+        state.rerollsLeft += e.amount;
+        state.rerollsTotal += e.amount;
+      }
       playSfx('ui_confirm');
       state.phase = state.pendingPostSponsorPhase || 'hub';
       state.pendingPostSponsorPhase = null;

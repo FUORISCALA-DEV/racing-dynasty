@@ -16,11 +16,11 @@
   --cyan:#35E1C1;
   --danger:#FF4757;
   --ok:#4CD97B;
-  --common:#9AA5B1;
-  --rare:#4C8DFF;
-  --epic:#A855F7;
-  --legendary:#F5B324;
-  --immortal:#FF3B4E;
+  --common:#8B8D91;
+  --rare:#22DCDC;
+  --epic:#B143F3;
+  --legendary:#F7B800;
+  --immortal:#C9D6DF;
   --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 }
@@ -210,7 +210,7 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .card[data-rarity="Rare"]{border-top-color:var(--rare);}
 .card[data-rarity="Epic"]{border-top-color:var(--epic);}
 .card[data-rarity="Legendary"]{border-top-color:var(--legendary);}
-.card[data-rarity="Immortal"]{border-top-color:var(--immortal);box-shadow:0 0 18px rgba(255,59,78,0.35);}
+.card[data-rarity="Immortal"]{border-top-color:var(--immortal);box-shadow:0 0 18px rgba(201,214,223,0.4);}
 .card[data-rarity="TheGoat"]{
   border-top-color:#FF1801;
   position:relative; overflow:hidden;
@@ -230,11 +230,11 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
   font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
   padding:3px 7px;border-radius:3px;display:inline-block;width:fit-content;font-weight:700;
 }
-.rarity-tag[data-rarity="Common"]{color:var(--common);background:rgba(154,165,177,0.12);}
-.rarity-tag[data-rarity="Rare"]{color:var(--rare);background:rgba(76,141,255,0.12);}
-.rarity-tag[data-rarity="Epic"]{color:var(--epic);background:rgba(168,85,247,0.14);}
-.rarity-tag[data-rarity="Legendary"]{color:var(--legendary);background:rgba(245,179,36,0.14);}
-.rarity-tag[data-rarity="Immortal"]{color:var(--immortal);background:rgba(255,59,78,0.14);}
+.rarity-tag[data-rarity="Common"]{color:var(--common);background:rgba(139,141,145,0.14);}
+.rarity-tag[data-rarity="Rare"]{color:var(--rare);background:rgba(34,220,220,0.14);}
+.rarity-tag[data-rarity="Epic"]{color:var(--epic);background:rgba(177,67,243,0.14);}
+.rarity-tag[data-rarity="Legendary"]{color:var(--legendary);background:rgba(247,184,0,0.14);}
+.rarity-tag[data-rarity="Immortal"]{color:var(--immortal);background:rgba(201,214,223,0.16);}
 .rarity-tag[data-rarity="TheGoat"]{color:#FF1801;background:rgba(255,24,1,0.16);}
 .card-name{font-size:16px;font-weight:800;line-height:1.2;overflow-wrap:anywhere;}
 .card-arch{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.06em;overflow-wrap:anywhere;}
@@ -1090,6 +1090,13 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
 }
 /* V0.9.7.8.8: card di scelta sponsor */
 .sponsor-card{ padding:16px; text-align:left; }
+.sponsor-logo-slot{
+  width:100%; height:64px; border-radius:8px; margin-bottom:10px;
+  background:var(--panel2); border:1px dashed var(--line);
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.sponsor-logo-slot img{ max-width:80%; max-height:80%; object-fit:contain; }
+.sponsor-card-desc-settore{ font-size:10.5px; text-transform:uppercase; letter-spacing:0.05em; margin:6px 0 4px; }
 .sponsor-card-name{ font-size:16px; font-weight:800; color:var(--text); margin:8px 0 6px; }
 .sponsor-card-desc{ font-size:12.5px; line-height:1.5; color:var(--dim); }
 .trophy-cell{ text-align:center; }
@@ -1667,7 +1674,7 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
 }
 .guide-rarity-mock .grm-tag{ font-size:9px; font-weight:800; padding:2px 6px; border-radius:8px; display:inline-block; margin-bottom:4px; }
 .guide-rarity-mock .grm-rating{ font-family:var(--font-mono); font-weight:800; font-size:15px; }
-.guide-rarity-mock.immortal{ box-shadow:0 0 14px rgba(255,59,78,0.4); }
+.guide-rarity-mock.immortal{ box-shadow:0 0 14px rgba(201,214,223,0.45); }
 /* capitolo THE GOAT */
 .guide-goat-chapter{
   display:flex; gap:14px; align-items:center; background:linear-gradient(135deg, rgba(255,59,78,0.08), var(--panel));
