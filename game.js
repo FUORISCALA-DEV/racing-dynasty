@@ -7037,14 +7037,13 @@ function renderStudioSplash(){
   const logo = document.getElementById('splashLogoImg');
   if(logo && !reduced){
     const duration = 900;
-    const startTime = performance.now();
     function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
     // V0.9.8.13: l'uscita dallo schermo e' VOLUTA — gioco di parole col nome "FUORISCALA" (esce
     // dalla scala/misura). Il picco resta drammatico. Il problema tecnico va cercato altrove:
     // probabilmente il costo di ritagliare (overflow:hidden) un elemento molto piu' grande del suo
     // contenitore, ricalcolato ad ogni fotogramma — vedi il cambiamento al contenitore piu' sotto.
     const overshootPeak = 3.6;
-    function tick(now){
+    function tick(now, startTime){
       const elapsed = now - startTime;
       const t = Math.min(1, elapsed/duration);
       const scale = t<0.5
@@ -7053,9 +7052,13 @@ function renderStudioSplash(){
       const opacity = Math.min(1, elapsed/180); // dissolvenza in ingresso rapida e indipendente
       logo.style.transform = `scale(${scale.toFixed(4)})`;
       logo.style.opacity = String(opacity);
-      if(t < 1) requestAnimationFrame(tick);
+      if(t < 1) requestAnimationFrame((now2)=>tick(now2, startTime));
     }
-    requestAnimationFrame(tick);
+    // V0.9.8.14: attesa esplicita di 100ms prima di far partire l'animazione — non piu' "parti
+    // appena il codice viene eseguito", ma un momento fermo e deliberato prima del movimento.
+    setTimeout(()=>{
+      requestAnimationFrame((now)=>tick(now, now));
+    }, 100);
   } else if(logo){
     logo.style.opacity = '1';
     logo.style.transform = 'scale(1)';
