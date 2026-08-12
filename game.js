@@ -300,7 +300,7 @@ const I18N = {
     premium_unlocked_title: '🎉 Premium sbloccato!', premium_unlocked_desc: 'Pagamento andato a buon fine — hai tutto illimitato, per sempre. Grazie!',
     sl_unlimited: '✨ Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`,
     tokens_out_title: 'Gettoni esauriti', tokens_out_desc: (len)=>`Hai finito i gettoni gratuiti per la Stagione Scuderia da ${len} gare. Torna più tardi, oppure sblocca tutto senza limiti.`,
-    tokens_out_countdown_label: 'Prossima ricarica tra', tokens_out_unlock: 'Sblocca tutto illimitato',
+    tokens_out_countdown_label: 'Prossima ricarica tra', tokens_out_unlock: 'Diventa Immortale — 4€',
     premium_coming_soon_title: 'Sblocco premium', premium_coming_soon_desc: 'Il pagamento vero arriverà a breve — per ora questa parte è ancora in costruzione.',
     title_login_cta: 'Accedi / Registrati', title_play_no_account: 'Gioca senza account', title_logged_in_as: (name)=>`Bentornato, ${name}`, title_sign_out: 'Esci dall\'account', speed2x_prompt_title: 'Velocità x2', speed2x_prompt_desc: 'Hai scelto la velocità x2 per la seconda volta. Vuoi impostarla come velocità predefinita per tutte le prossime gare?', stream_q_title: 'Sei uno streamer?', stream_q_desc: "Se sì, possiamo preparare un layout pensato per OBS, con uno spazio dedicato alla tua webcam.",
     stream_yes: 'Sì', stream_no: 'No',
@@ -555,7 +555,7 @@ const I18N = {
     premium_unlocked_title: '🎉 Premium unlocked!', premium_unlocked_desc: 'Payment successful — you now have everything unlimited, forever. Thank you!',
     sl_unlimited: '✨ Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`,
     tokens_out_title: 'Out of tokens', tokens_out_desc: (len)=>`You've used up your free tokens for the ${len}-race Team Season. Come back later, or unlock everything with no limits.`,
-    tokens_out_countdown_label: 'Next refill in', tokens_out_unlock: 'Unlock unlimited',
+    tokens_out_countdown_label: 'Next refill in', tokens_out_unlock: 'Become Immortal — €4',
     premium_coming_soon_title: 'Premium unlock', premium_coming_soon_desc: "Real payment is coming soon — this part is still under construction for now.",
     title_login_cta: 'Sign In / Register', title_play_no_account: 'Play without an account', title_logged_in_as: (name)=>`Welcome back, ${name}`, title_sign_out: 'Sign out', speed2x_prompt_title: 'x2 Speed', speed2x_prompt_desc: "You've chosen x2 speed for the second time. Do you want to set it as the default speed for all upcoming races?", stream_q_title: 'Are you a streamer?', stream_q_desc: "If so, we can prepare a layout designed for OBS, with a dedicated space for your webcam.",
     stream_yes: 'Yes', stream_no: 'No',
@@ -804,7 +804,7 @@ const I18N = {
     premium_unlocked_title: '🎉 ¡Premium desbloqueado!', premium_unlocked_desc: 'Pago realizado con éxito — ahora tienes todo ilimitado, para siempre. ¡Gracias!',
     sl_unlimited: '✨ Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`,
     tokens_out_title: 'Fichas agotadas', tokens_out_desc: (len)=>`Has usado tus fichas gratuitas para la Temporada de Escudería de ${len} carreras. Vuelve más tarde, o desbloquea todo sin límites.`,
-    tokens_out_countdown_label: 'Próxima recarga en', tokens_out_unlock: 'Desbloquear todo ilimitado',
+    tokens_out_countdown_label: 'Próxima recarga en', tokens_out_unlock: 'Hazte Inmortal — 4€',
     premium_coming_soon_title: 'Desbloqueo premium', premium_coming_soon_desc: 'El pago real llegará pronto — por ahora esta parte todavía está en construcción.',
     title_login_cta: 'Iniciar sesión / Registrarse', title_play_no_account: 'Jugar sin cuenta', title_logged_in_as: (name)=>`Bienvenido de nuevo, ${name}`, title_sign_out: 'Cerrar sesión', speed2x_prompt_title: 'Velocidad x2', speed2x_prompt_desc: 'Has elegido la velocidad x2 por segunda vez. ¿Quieres establecerla como velocidad predeterminada para todas las próximas carreras?', stream_q_title: '¿Eres streamer?', stream_q_desc: 'Si es así, podemos preparar un diseño pensado para OBS, con un espacio dedicado a tu cámara web.',
     stream_yes: 'Sí', stream_no: 'No',
@@ -6392,6 +6392,7 @@ function loadMuseumData(){
 }
 function saveMuseumData(){
   try{ localStorage.setItem(MUSEUM_SAVE_KEY, JSON.stringify(museumData)); }catch(e){ /* ignorato */ }
+  touchLocalProgress(); pushSaveToCloud();
 }
 function unlockMuseumItem(catKey, item){
   if(!item || !item.id) return;
@@ -6425,6 +6426,7 @@ function loadTrophyData(){
 }
 function saveTrophyData(){
   try{ localStorage.setItem(TROPHY_SAVE_KEY, JSON.stringify(trophyData)); }catch(e){ /* ignorato */ }
+  touchLocalProgress(); pushSaveToCloud();
 }
 function recordCircuitResult(circuitName, won){
   if(!trophyData[circuitName]) trophyData[circuitName] = { raced:0, won:0 };
@@ -6446,6 +6448,7 @@ function loadDriverTrophyData(){
 }
 function saveDriverTrophyData(){
   try{ localStorage.setItem(DRIVER_TROPHY_SAVE_KEY, JSON.stringify(driverTrophyData)); }catch(e){ /* ignorato */ }
+  touchLocalProgress(); pushSaveToCloud();
 }
 function recordDriverCircuitResult(circuitName, won){
   if(!driverTrophyData[circuitName]) driverTrophyData[circuitName] = { raced:0, won:0 };
@@ -6535,11 +6538,16 @@ const ACHIEVEMENT_DATA_DEFAULTS = {
 function loadAchievementData(){
   try{
     const raw = localStorage.getItem(ACHIEVEMENT_SAVE_KEY);
-    return raw ? { ...ACHIEVEMENT_DATA_DEFAULTS, ...JSON.parse(raw) } : { ...ACHIEVEMENT_DATA_DEFAULTS };
-  }catch(e){ return { ...ACHIEVEMENT_DATA_DEFAULTS }; }
+    // V0.9.8.16: copia PROFONDA dei default (non superficiale) — con lo spread semplice gli array
+    // annidati (unlockedIds ecc.) restavano condivisi per riferimento tra tutte le chiamate,
+    // mutando permanentemente il modello di default stesso alla prima .push()
+    const freshDefaults = JSON.parse(JSON.stringify(ACHIEVEMENT_DATA_DEFAULTS));
+    return raw ? { ...freshDefaults, ...JSON.parse(raw) } : freshDefaults;
+  }catch(e){ return JSON.parse(JSON.stringify(ACHIEVEMENT_DATA_DEFAULTS)); }
 }
 function saveAchievementData(){
   try{ localStorage.setItem(ACHIEVEMENT_SAVE_KEY, JSON.stringify(achievementData)); }catch(e){ /* ignorato */ }
+  touchLocalProgress(); pushSaveToCloud();
 }
 let achievementData = loadAchievementData();
 // V0.9.7.8.7: FIX — un obiettivo gia' sbloccato PRIMA che esistesse questo aggancio (partite
@@ -6875,6 +6883,17 @@ function handlePremiumCheckoutReturn(){
 }
 
 const CLOUD_SAVE_TABLE = 'saves';
+// V0.9.8.16: FIX IMPORTANTE — prima il salvataggio cloud copriva solo la partita in corso, non i
+// progressi PERMANENTI (Museo, Sala Trofei Scuderia, Sala Trofei Pilota, Obiettivi). Cancellando
+// la cache del browser, quei progressi andavano persi per sempre perche' non esisteva nessuna copia
+// di sicurezza per loro. Ora tutti e 5 i pezzi viaggiano insieme, in un unico salvataggio cloud.
+const LOCAL_PROGRESS_TOUCHED_KEY = 'racingDynastyProgressTouchedV1';
+function touchLocalProgress(){
+  try{ localStorage.setItem(LOCAL_PROGRESS_TOUCHED_KEY, String(Date.now())); }catch(e){ /* ignorato */ }
+}
+function getLocalProgressTouchedAt(){
+  try{ return Number(localStorage.getItem(LOCAL_PROGRESS_TOUCHED_KEY)||0); }catch(e){ return 0; }
+}
 let __cloudSyncDebounceTimer = null;
 
 function pushSaveToCloud(){
@@ -6882,12 +6901,18 @@ function pushSaveToCloud(){
   clearTimeout(__cloudSyncDebounceTimer);
   __cloudSyncDebounceTimer = setTimeout(async ()=>{
     try{
-      const raw = localStorage.getItem(SAVE_KEY);
-      if(!raw) return;
-      const parsed = JSON.parse(raw);
+      // V0.9.8.16: tutti e 5 i pezzi insieme — la partita in corso da sola non basta piu'.
+      const runRaw = localStorage.getItem(SAVE_KEY);
+      const bundle = {
+        run: runRaw ? JSON.parse(runRaw) : null,
+        museum: museumData,
+        trophies: trophyData,
+        driverTrophies: driverTrophyData,
+        achievements: achievementData,
+      };
       const { error } = await supabaseClient.from(CLOUD_SAVE_TABLE).upsert({
         user_id: currentUser.id,
-        save_data: parsed,
+        save_data: bundle,
         updated_at: new Date().toISOString(),
       });
       if(error) console.warn('Salvataggio cloud non riuscito:', error.message);
@@ -6905,13 +6930,25 @@ async function pullSaveFromCloud(){
       .maybeSingle();
     if(error){ console.warn('Caricamento cloud non riuscito:', error.message); return; }
     if(!data || !data.save_data) return; // nessun salvataggio cloud ancora, niente da fare
-    const localRaw = localStorage.getItem(SAVE_KEY);
-    const localSave = localRaw ? JSON.parse(localRaw) : null;
     const cloudTime = new Date(data.updated_at).getTime();
-    const localTime = localSave ? (localSave.savedAt||0) : 0;
+    // V0.9.8.16: confrontiamo col timestamp unificato (tocca ad ogni modifica di uno qualsiasi
+    // dei 5 pezzi), non piu' solo con la data della partita in corso.
+    const localTime = getLocalProgressTouchedAt();
+    const bundle = data.save_data;
+    const isNewBundleFormat = bundle && typeof bundle==='object' && ('museum' in bundle || 'trophies' in bundle || 'run' in bundle);
     if(cloudTime > localTime){
-      // il salvataggio cloud e' piu' recente di quello sul dispositivo: lo adottiamo
-      localStorage.setItem(SAVE_KEY, JSON.stringify(data.save_data));
+      // il salvataggio cloud e' piu' recente: lo adottiamo, per tutti e 5 i pezzi
+      if(isNewBundleFormat){
+        if(bundle.run) localStorage.setItem(SAVE_KEY, JSON.stringify(bundle.run));
+        if(bundle.museum){ museumData = bundle.museum; localStorage.setItem(MUSEUM_SAVE_KEY, JSON.stringify(museumData)); }
+        if(bundle.trophies){ trophyData = bundle.trophies; localStorage.setItem(TROPHY_SAVE_KEY, JSON.stringify(trophyData)); }
+        if(bundle.driverTrophies){ driverTrophyData = bundle.driverTrophies; localStorage.setItem(DRIVER_TROPHY_SAVE_KEY, JSON.stringify(driverTrophyData)); }
+        if(bundle.achievements){ achievementData = { ...ACHIEVEMENT_DATA_DEFAULTS, ...bundle.achievements }; localStorage.setItem(ACHIEVEMENT_SAVE_KEY, JSON.stringify(achievementData)); }
+      } else {
+        // formato vecchio (solo partita, da prima di questo fix) — compatibilita' con salvataggi gia' esistenti
+        localStorage.setItem(SAVE_KEY, JSON.stringify(bundle));
+      }
+      localStorage.setItem(LOCAL_PROGRESS_TOUCHED_KEY, String(cloudTime));
       if(state && (state.phase==='title' || state.phase==='studio-splash')) render();
     } else if(localTime > 0 && localTime > cloudTime){
       // il dispositivo ha qualcosa di piu' recente del cloud (es. giocato offline): spingiamolo su
@@ -6927,6 +6964,7 @@ function saveGame(){
     if(state.phase==='season_end'){ deleteSave(); return; }
     const snapshot = { ...state, live: null, usedIds: Array.from(state.usedIds||[]) };
     localStorage.setItem(SAVE_KEY, JSON.stringify({ saveVersion:'0.9', savedAt: Date.now(), state: snapshot }));
+    touchLocalProgress();
     pushSaveToCloud(); // V0.9.8.2: no-op se non loggati
   }catch(e){ /* storage non disponibile: ignorato silenziosamente */ }
 }
@@ -7173,6 +7211,7 @@ function renderTitle(){
       <button class="primary" data-action="continue-save" style="width:100%;">${t('title_continue')}</button>
       <button class="ghost" data-action="new-season-confirm" style="width:100%;">${t('title_new')}</button>
       <button class="ghost" data-action="delete-save" style="width:100%;">${t('title_delete')}</button>
+      ${!isPremiumUser ? `<button class="ghost" data-action="unlock-premium-placeholder" style="width:100%;color:var(--amber);border-color:var(--amber);">${t('tokens_out_unlock')}</button>` : ''}
     </div>
     `;
     bindActions();
@@ -7182,11 +7221,13 @@ function renderTitle(){
     <div class="dim" style="text-align:center;font-size:13px;margin-bottom:10px;">${t('title_logged_in_as', currentUser.name)}</div>
     <div class="btnrow" style="flex-direction:column;align-items:stretch;">
       <button class="primary" data-action="go-to-mode-select" style="width:100%;">${t('title_cta')} ${t('title_cta_bold')}</button>
+      ${!isPremiumUser ? `<button class="ghost" data-action="unlock-premium-placeholder" style="width:100%;color:var(--amber);border-color:var(--amber);">${t('tokens_out_unlock')}</button>` : ''}
       <button class="ghost" data-action="sign-out-user" style="width:100%;">${t('title_sign_out')}</button>
     </div>` : `
     <div class="btnrow" style="flex-direction:column;align-items:stretch;">
       <button class="primary heartbeat" data-action="sign-in-google" style="width:100%;">${t('title_login_cta')}</button>
       <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('title_play_no_account')}</button>
+      ${!isPremiumUser ? `<button class="ghost" data-action="unlock-premium-placeholder" style="width:100%;color:var(--amber);border-color:var(--amber);">${t('tokens_out_unlock')}</button>` : ''}
     </div>`;
   app.innerHTML = `
   <div class="hero title-hero" style="padding:26px 20px 22px;">
@@ -9108,6 +9149,7 @@ function renderSeasonEnd(){
       </div>
     </a>
   </div>
+  ${!isPremiumUser ? `<div class="btnrow" style="margin-top:4px;"><button class="ghost" data-action="unlock-premium-placeholder" style="width:100%;color:var(--amber);border-color:var(--amber);">${t('tokens_out_unlock')}</button></div>` : ''}
   <div class="footer-note">${t('se_footer')}</div>
   `;
   bindActions();
@@ -9724,6 +9766,7 @@ function openSettings(){
       </div>
     </div>
     <button type="button" class="menu-item" id="sidebarHapticToggleBtn">📳 <span>${t('settings_haptic')}: ${audioSettings.hapticEnabled!==false?t('on'):t('off')}</span></button>
+    ${!isPremiumUser ? `<button type="button" class="menu-item" id="sidebarUnlockPremiumBtn" style="color:var(--amber);border-color:var(--amber);">✨ <span>${t('tokens_out_unlock')}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarStreamerToggleBtn"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0;color:#9146FF;"><path fill="currentColor" d="M4.5 2 3 5.5v14h5V22l3-2.5h4L20 15V2H4.5zm13.5 12-3 2.5h-4l-2.5 2v-2H5V4h13v10z"/><rect x="9" y="7" width="2" height="5" fill="currentColor"/><rect x="14" y="7" width="2" height="5" fill="currentColor"/></svg> <span>${t('settings_streamer_mode')}: ${isStreamerModeOn()?t('on'):t('off')}</span></button>
     ${isStreamerModeOn() ? `<button type="button" class="menu-item" id="sidebarStreamerNameBtn">✏️ <span>${t('settings_streamer_name')}: ${getStreamerName()}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarSpeedBtn">🚀 <span>${t('settings_speed')}: ${defaultRaceSpeed}×</span></button>
@@ -9770,6 +9813,12 @@ function openSettings(){
     saveAudioSettings();
     triggerHaptic(); // un assaggio, se appena riattivato
     openSettings();
+  });
+  const unlockPremiumBtn = document.getElementById('sidebarUnlockPremiumBtn');
+  if(unlockPremiumBtn) unlockPremiumBtn.addEventListener('click', ()=>{
+    closeSettingsPanel();
+    closeMenuPanel();
+    startPremiumCheckout();
   });
   document.getElementById('sidebarStreamerToggleBtn').addEventListener('click', ()=>{
     if(isStreamerModeOn()){
