@@ -301,7 +301,7 @@ const I18N = {
     sponsor_fx_risk_reduction: (n)=>`-${n}% di rischio fallimento su ogni upgrade.`,
     sponsor_fx_prize_boost: (n)=>`+${n}% sui premi in denaro a fine gara, sempre.`,
     sponsor_fx_cost_reduction: (n)=>`-${n}% sul costo di ogni upgrade in Pit Lane.`,
-    sponsor_fx_extra_reroll: (n)=>`+${n} reroll extra nel Draft, subito.`,
+    sponsor_fx_extra_pitlane_option: (n)=>`${n} carta upgrade in più ogni volta, in Pit Lane.`,
     pedal_tutorial_eyebrow: 'Prima della partenza', pedal_tutorial_title: 'Paddle frizione',
     pedal_tutorial_desc: 'Tieni premuto il paddle durante i semafori. Rilascialo al momento giusto: troppo presto è una falsa partenza, troppo tardi ti fa perdere terreno.',
     pedal_tutorial_perfect_desc: 'Rilascio immediato allo spegnimento', pedal_tutorial_good_desc: 'Rilascio rapido, poco dopo lo spegnimento',
@@ -574,7 +574,7 @@ const I18N = {
     sponsor_fx_risk_reduction: (n)=>`-${n}% failure risk on every upgrade.`,
     sponsor_fx_prize_boost: (n)=>`+${n}% on prize money after every race, always.`,
     sponsor_fx_cost_reduction: (n)=>`-${n}% on the cost of every Pit Lane upgrade.`,
-    sponsor_fx_extra_reroll: (n)=>`+${n} extra Draft rerolls, right away.`,
+    sponsor_fx_extra_pitlane_option: (n)=>`${n} extra upgrade card every time, in Pit Lane.`,
     pedal_tutorial_eyebrow: 'Before the start', pedal_tutorial_title: 'Clutch paddle',
     pedal_tutorial_desc: 'Hold down the paddle during the start lights. Release it at the right moment: too early is a false start, too late costs you ground.',
     pedal_tutorial_perfect_desc: 'Released right as the lights go out', pedal_tutorial_good_desc: 'Released quickly, shortly after the lights go out',
@@ -841,7 +841,7 @@ const I18N = {
     sponsor_fx_risk_reduction: (n)=>`-${n}% de riesgo de fallo en cada mejora.`,
     sponsor_fx_prize_boost: (n)=>`+${n}% en el dinero de los premios tras cada carrera, siempre.`,
     sponsor_fx_cost_reduction: (n)=>`-${n}% en el coste de cada mejora en Pit Lane.`,
-    sponsor_fx_extra_reroll: (n)=>`+${n} rerolls extra en el Draft, de inmediato.`,
+    sponsor_fx_extra_pitlane_option: (n)=>`${n} carta de mejora extra cada vez, en Pit Lane.`,
     pedal_tutorial_eyebrow: 'Antes de la salida', pedal_tutorial_title: 'Paddle de embrague',
     pedal_tutorial_desc: 'Mantén pulsado el paddle durante los semáforos. Suéltalo en el momento justo: demasiado pronto es una salida en falso, demasiado tarde te hace perder terreno.',
     pedal_tutorial_perfect_desc: 'Soltado justo al apagarse', pedal_tutorial_good_desc: 'Soltado rápido, poco después de apagarse',
@@ -5130,7 +5130,7 @@ const SPONSOR_EFFECTS = {
   'Auronis':   { type:'prize_boost',     pct:0.15,                                       settore:'Orologi di lusso' },
   'Nexora':    { type:'area_boost',      mult:2.5,  areas:['Strategia'],                 settore:'Telecomunicazioni' },
   'Ferrotech': { type:'cost_reduction',  pct:0.20,                                       settore:'Logistica industriale' },
-  'Skyvane':   { type:'extra_reroll',    amount:2,                                       settore:'Compagnia aerea' },
+  'Skyvane':   { type:'extra_pitlane_option', amount:1,                                   settore:'Compagnia aerea' },
   'Combustia': { type:'area_boost',      mult:2.5,  areas:['Motore'],                    settore:'Carburanti' },
   'Apexis':    { type:'area_boost',      mult:1.7,  areas:['Gomme','Aerodinamica'],      settore:'Abbigliamento sportivo' },
 };
@@ -5156,7 +5156,7 @@ function sponsorEffectDescHTML(nome){
     case 'risk_reduction': return t('sponsor_fx_risk_reduction', e.amount);
     case 'prize_boost': return t('sponsor_fx_prize_boost', Math.round(e.pct*100));
     case 'cost_reduction': return t('sponsor_fx_cost_reduction', Math.round(e.pct*100));
-    case 'extra_reroll': return t('sponsor_fx_extra_reroll', e.amount);
+    case 'extra_pitlane_option': return t('sponsor_fx_extra_pitlane_option', e.amount);
     default: return '';
   }
 }
@@ -5220,7 +5220,12 @@ function buildPitlaneOptions(){
   const usedUpg = new Set();
   const usefulUpgrades = DATA.upgrade.filter(isUpgradeUseful).map(u=>({ ...u, spawnWeight: (UPGRADE_TIER_SPAWN_WEIGHT[u.tier]||1) * sponsorSpawnMultFor(u) }));
   const seasonCostMult = state.seasonLength===20 ? 2 : 1; // V0.9.7: run da 20 gare, upgrade piu' cari
-  const upgrades = weightedSampleDistinct(usefulUpgrades.length?usefulUpgrades:DATA.upgrade, 2, 'spawnWeight', usedUpg).map(u=>{
+  // V0.9.9.9: Skyvane — una carta upgrade IN PIU' del solito ad ogni Pit Lane (3 invece di 2). Prima
+  // dava "reroll extra nel Draft", ma lo sponsor si sceglie DOPO che il Draft e' gia' finito — un
+  // bonus impossibile da spendere. Questo invece si sente davvero, gara dopo gara.
+  const sponsorEffectForCount = state.sponsor ? SPONSOR_EFFECTS[state.sponsor.nome] : null;
+  const upgradeCount = 2 + ((sponsorEffectForCount && sponsorEffectForCount.type==='extra_pitlane_option') ? sponsorEffectForCount.amount : 0);
+  const upgrades = weightedSampleDistinct(usefulUpgrades.length?usefulUpgrades:DATA.upgrade, upgradeCount, 'spawnWeight', usedUpg).map(u=>{
     let costMult = seasonCostMult;
     const e = state.sponsor ? SPONSOR_EFFECTS[state.sponsor.nome] : null;
     if(e && e.type==='cost_reduction') costMult *= (1-e.pct); // V0.9.9.8: Ferrotech — costo upgrade ridotto
@@ -7559,14 +7564,18 @@ function renderTitle(){
   bindActions();
 }
 
+// V0.9.9.9: palette DEDICATA per la difficoltà, non più presa in prestito dalle rarità carte —
+// prima "Facile" era grigio (Common) e "Hardcore" platino (Immortal), due grigi troppo simili
+// sulla stessa schermata, e "Facile" non comunicava affatto "sicuro/verde" come ci si aspetterebbe.
+const DIFFICULTY_COLOR = { facile:'#4CD97B', medio:'#22DCDC', difficile:'#FF9F1C', hardcore:'#FF3B4E' };
 function renderDifficulty(){
   const lastUsed = state.selectedDifficulty;
   const diffCards = DIFFICULTY_ORDER.map(d=>{
-    const rarityLike = d==='facile'?'Common':d==='medio'?'Rare':d==='difficile'?'Epic':'Immortal';
+    const color = DIFFICULTY_COLOR[d];
     const rerolls = DIFFICULTY_REROLLS[d];
     return `
-    <div class="card pickable" data-rarity="${rarityLike}" data-action="start-run" data-diff="${d}">
-      <span class="rarity-tag" data-rarity="${rarityLike}">${DIFFICULTY_LABEL[d]}${d===lastUsed?t('diff_last_used'):''}</span>
+    <div class="card pickable" data-action="start-run" data-diff="${d}" style="border-top-color:${color};">
+      <span class="rarity-tag" style="color:${color};background:${color}22;">${DIFFICULTY_LABEL[d]}${d===lastUsed?t('diff_last_used'):''}</span>
       <div class="card-rating">${rerolls}<span style="font-size:12px;color:var(--dim);"> REROLL</span></div>
       <div class="ability">${DIFFICULTY_DESC[d]}</div>
       <div class="card-tap-hint">${t('diff_tap_hint', DIFFICULTY_LABEL[d])}</div>
@@ -9707,12 +9716,6 @@ function onAction(e){
     if(offer){
       state.sponsor = { nome: offer.nome };
       state.sponsorOffers = null;
-      // V0.9.9.8: Skyvane da' reroll extra subito, una tantum, al momento della scelta
-      const e = SPONSOR_EFFECTS[offer.nome];
-      if(e && e.type==='extra_reroll'){
-        state.rerollsLeft += e.amount;
-        state.rerollsTotal += e.amount;
-      }
       playSfx('ui_confirm');
       state.phase = state.pendingPostSponsorPhase || 'hub';
       state.pendingPostSponsorPhase = null;
