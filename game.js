@@ -436,7 +436,7 @@ const I18N = {
     cat_aero_pack: 'Pacchetto Aerodinamico', cat_tire_supplier: 'Fornitore Gomme',
     pcard_guaranteed: 'UPGRADE GARANTITO', pcard_development: 'SVILUPPO', pcard_cost: 'Costo', pcard_no_risk: 'Nessun rischio',
     pitlane_extra_card_banner: (nome)=>`Disponibile grazie a ${nome}`, pcard_discount_thanks: (nome)=>`Discount powered by ${nome}`,
-    pitlane_tier_boost_banner: (nome)=>`Fascia alta più frequente grazie a ${nome}`, pitlane_area_boost_banner: (nome)=>`Più frequente grazie a ${nome}`,
+    pitlane_tier_boost_banner: (nome)=>`Fascia alta più frequente grazie a ${nome}`, pitlane_area_boost_banner: (nome)=>`Più frequente grazie a ${nome}`, pitlane_risk_reduction_banner: (nome,n)=>`Rischio ridotto di ${n}% da ${nome}`,
     pcard_insufficient_budget: 'Budget insufficiente', pcard_tap_buy: 'Tocca per acquistare',
     pcard_frozen: (max)=>`Budget insufficiente — nemmeno l'investimento minimo (rischio ${max}%) è alla tua portata ora.`,
     pcard_invest_cost: 'Costo', pcard_slider_hint: 'Aumentando l\'investimento riduci il rischio di fallimento',
@@ -471,6 +471,8 @@ const I18N = {
     museum_no_components: 'Nessun componente ancora sbloccato.',
     tr_title: '🏆 Sala Trofei', tr_tagline: 'Un trofeo per ogni circuito — oro se vinto, grigio se corso, nascosto se non ancora visto.',
     tr_raced: 'CIRCUITI CORSI', tr_won: 'CIRCUITI VINTI', tr_share: '📤 Condividi Sala Trofei', tr_museum_btn: '🏛️ Museo Dynasty', tr_back: '← Torna Indietro',
+    tr_unlock_first: 'TROFEO SBLOCCATO!', tr_unlock_nth: (n)=>`${n}ª VITTORIA SU QUESTO CIRCUITO`, tr_unlock_title: 'VITTORIA!', tr_unlock_continue: 'Continua →',
+    tr_detail_participations: 'Partecipazioni', tr_detail_wins: 'Vittorie', tr_detail_never: 'Non ancora corso qui', tr_detail_close: 'Chiudi',
     mss_eyebrow: (r,tot)=>`🏁 MID SEASON DRAFT — Gara ${r}/${tot}`, mss_title: "L'unica finestra di mercato piloti della stagione",
     mss_subtitle: "Puoi sostituire nessuno, uno solo, o entrambi i piloti: la scelta è indipendente per ciascun sedile e resta valida fino all'ultima gara. Nessun rischio: se paghi il prezzo di scouting, ottieni il pilota. Da qui in poi, per il resto della stagione, i piloti restano fissi — lo sviluppo componenti riprende regolarmente dalla prossima pit-lane.",
     mss_pilot_main: 'Pilota Principale', mss_pilot_second: 'Secondo Pilota', mss_confirm: 'Conferma Scelte e Prosegui →',
@@ -715,7 +717,7 @@ const I18N = {
     cat_aero_pack: 'Aero Package', cat_tire_supplier: 'Tyre Supplier',
     pcard_guaranteed: 'GUARANTEED UPGRADE', pcard_development: 'DEVELOPMENT', pcard_cost: 'Cost', pcard_no_risk: 'No risk',
     pitlane_extra_card_banner: (nome)=>`Available thanks to ${nome}`, pcard_discount_thanks: (nome)=>`Discount powered by ${nome}`,
-    pitlane_tier_boost_banner: (nome)=>`High-tier, more frequent thanks to ${nome}`, pitlane_area_boost_banner: (nome)=>`More frequent thanks to ${nome}`,
+    pitlane_tier_boost_banner: (nome)=>`High-tier, more frequent thanks to ${nome}`, pitlane_area_boost_banner: (nome)=>`More frequent thanks to ${nome}`, pitlane_risk_reduction_banner: (nome,n)=>`Risk reduced by ${n}% by ${nome}`,
     pcard_insufficient_budget: 'Insufficient budget', pcard_tap_buy: 'Tap to buy',
     pcard_frozen: (max)=>`Insufficient budget — not even the minimum investment (${max}% risk) is within reach right now.`,
     pcard_invest_cost: 'Cost', pcard_slider_hint: 'Increasing the investment reduces the risk of failure',
@@ -750,6 +752,8 @@ const I18N = {
     museum_no_components: 'No components unlocked yet.',
     tr_title: '🏆 Trophy Room', tr_tagline: 'A trophy for every circuit — gold if won, gray if raced, hidden if not seen yet.',
     tr_raced: 'CIRCUITS RACED', tr_won: 'CIRCUITS WON', tr_share: '📤 Share Trophy Room', tr_museum_btn: '🏛️ Dynasty Museum', tr_back: '← Back',
+    tr_unlock_first: 'TROPHY UNLOCKED!', tr_unlock_nth: (n)=>`${n}${n===1?'st':n===2?'nd':n===3?'rd':'th'} WIN AT THIS CIRCUIT`, tr_unlock_title: 'VICTORY!', tr_unlock_continue: 'Continue →',
+    tr_detail_participations: 'Participations', tr_detail_wins: 'Wins', tr_detail_never: 'Not raced here yet', tr_detail_close: 'Close',
     mss_eyebrow: (r,tot)=>`🏁 MID SEASON DRAFT — Race ${r}/${tot}`, mss_title: "The season's only driver market window",
     mss_subtitle: "You can replace none, just one, or both drivers: the choice is independent for each seat and stays valid until the last race. No risk: if you pay the scouting price, you get the driver. From here on, for the rest of the season, drivers are fixed — component development resumes normally from the next pit lane.",
     mss_pilot_main: 'Main Driver', mss_pilot_second: 'Second Driver', mss_confirm: 'Confirm Choices and Continue →',
@@ -988,7 +992,7 @@ const I18N = {
     cat_aero_pack: 'Paquete Aerodinámico', cat_tire_supplier: 'Proveedor de Neumáticos',
     pcard_guaranteed: 'MEJORA GARANTIZADA', pcard_development: 'DESARROLLO', pcard_cost: 'Coste', pcard_no_risk: 'Sin riesgo',
     pitlane_extra_card_banner: (nome)=>`Disponible gracias a ${nome}`, pcard_discount_thanks: (nome)=>`Discount powered by ${nome}`,
-    pitlane_tier_boost_banner: (nome)=>`Gama alta más frecuente gracias a ${nome}`, pitlane_area_boost_banner: (nome)=>`Más frecuente gracias a ${nome}`,
+    pitlane_tier_boost_banner: (nome)=>`Gama alta más frecuente gracias a ${nome}`, pitlane_area_boost_banner: (nome)=>`Más frecuente gracias a ${nome}`, pitlane_risk_reduction_banner: (nome,n)=>`Riesgo reducido en ${n}% por ${nome}`,
     pcard_insufficient_budget: 'Presupuesto insuficiente', pcard_tap_buy: 'Toca para comprar',
     pcard_frozen: (max)=>`Presupuesto insuficiente — ni siquiera la inversión mínima (riesgo ${max}%) está a tu alcance ahora.`,
     pcard_invest_cost: 'Coste', pcard_slider_hint: 'Aumentar la inversión reduce el riesgo de fallo',
@@ -1023,6 +1027,8 @@ const I18N = {
     museum_no_components: 'Todavía no has desbloqueado ningún componente.',
     tr_title: '🏆 Sala de Trofeos', tr_tagline: 'Un trofeo por cada circuito — dorado si ganado, gris si disputado, oculto si aún no visto.',
     tr_raced: 'CIRCUITOS DISPUTADOS', tr_won: 'CIRCUITOS GANADOS', tr_share: '📤 Compartir Sala de Trofeos', tr_museum_btn: '🏛️ Museo Dynasty', tr_back: '← Volver',
+    tr_unlock_first: '¡TROFEO DESBLOQUEADO!', tr_unlock_nth: (n)=>`${n}ª VICTORIA EN ESTE CIRCUITO`, tr_unlock_title: '¡VICTORIA!', tr_unlock_continue: 'Continuar →',
+    tr_detail_participations: 'Participaciones', tr_detail_wins: 'Victorias', tr_detail_never: 'Aún no corrido aquí', tr_detail_close: 'Cerrar',
     mss_eyebrow: (r,tot)=>`🏁 MID SEASON DRAFT — Carrera ${r}/${tot}`, mss_title: 'La única ventana de mercado de pilotos de la temporada',
     mss_subtitle: 'Puedes sustituir a ninguno, a uno solo, o a ambos pilotos: la elección es independiente para cada asiento y sigue siendo válida hasta la última carrera. Sin riesgo: si pagas el precio de scouting, obtienes al piloto. A partir de aquí, durante el resto de la temporada, los pilotos quedan fijos — el desarrollo de componentes se reanuda con normalidad desde el próximo pit lane.',
     mss_pilot_main: 'Piloto Principal', mss_pilot_second: 'Segundo Piloto', mss_confirm: 'Confirmar Elecciones y Continuar →',
@@ -8364,34 +8370,14 @@ function constructorStandingsSorted(){
 // Due varianti di festeggiamento: raggi+trofeo per il primo trofeo su un circuito (evento raro,
 // merita piu' peso), streak di velocita' per le vittorie successive sullo stesso circuito.
 function trophyUnlockBannerHTML(){
-  const t = state.lastTrophyUnlock;
-  if(!t) return '';
-  const img = `assets/circuit-trophies/${slugify(t.circuitName)}_oro.webp`;
-  const subLabel = t.isFirstTime ? 'TROFEO SBLOCCATO!' : `${t.totalWins}ª VITTORIA SU QUESTO CIRCUITO`;
-
-  if(t.isFirstTime){
-    // V0.9.7.8: chiusa esplicitamente dall'utente (pulsante Continua) — finche' non la chiude, resta
-    // in primo piano sopra la schermata risultato/classifica/log, che intanto e' gia' pronta sotto.
-    if(state.trophyUnlockDismissed) return '';
-    return `
-    <div class="trophy-unlock-fullscreen" data-action="dismiss-trophy-unlock">
-      <div class="trophy-unlock-fullscreen-card">
-        <div class="victory-vignette"></div>
-        <div class="victory-rays"></div>
-        <img src="${img}" alt="" class="victory-trophy-pop victory-trophy-pop-lg">
-        <div class="victory-title">VITTORIA!</div>
-        <div class="victory-sub">
-          <div class="trophy-unlock-label">${subLabel}</div>
-          <div class="dim">${t.circuitName}</div>
-        </div>
-        <div class="btnrow" style="justify-content:center;margin-top:22px;position:relative;z-index:5;">
-          <button class="primary" data-action="dismiss-trophy-unlock">Continua →</button>
-        </div>
-      </div>
-    </div>`;
-  }
-
-  // colori scuderia (arancione principale + ciano accento), stesse tonalita' usate nel resto della UI
+  const tw = state.lastTrophyUnlock;
+  if(!tw) return '';
+  if(state.trophyUnlockDismissed) return '';
+  const img = `assets/circuit-trophies/${slugify(tw.circuitName)}_oro.webp`;
+  const subLabel = tw.isFirstTime ? t('tr_unlock_first') : t('tr_unlock_nth', tw.totalWins);
+  // V0.9.9.31: unificato — prima solo la PRIMA vittoria su un circuito era davvero a tutto schermo,
+  // le successive restavano un banner piccolo dentro la pagina. Ora entrambe usano lo stesso overlay,
+  // dato che i trofei meritano di essere visti bene ogni volta, non solo la prima.
   const streakColors = ['#FF6A1A','#FF6A1A','#35E1C1','#FF6A1A','#35E1C1'];
   const streaks = Array.from({length:10}).map((_,i)=>{
     const top = 8 + Math.random()*84;
@@ -8402,16 +8388,21 @@ function trophyUnlockBannerHTML(){
     const c = streakColors[i % streakColors.length];
     return `<div class="victory-streak" style="top:${top}%;width:${width}px;--c:${c};--dur:${dur}s;--del:${del}s;transform:rotate(${angle}deg);"></div>`;
   }).join('');
-
-  // V0.9.7.8: mancava l'immagine del trofeo in questa variante (c'era solo nella prima vittoria) — aggiunta.
   return `
-  <div class="panel trophy-unlock-banner">
-    <div class="victory-streaks">${streaks}</div>
-    <img src="${img}" alt="" class="victory-trophy-pop">
-    <div class="victory-title">VITTORIA!</div>
-    <div class="victory-sub">
-      <div class="trophy-unlock-label">${subLabel}</div>
-      <div class="dim">${t.circuitName}</div>
+  <div class="trophy-unlock-fullscreen" data-action="dismiss-trophy-unlock">
+    <div class="trophy-unlock-fullscreen-card">
+      <div class="victory-vignette"></div>
+      <div class="victory-rays"></div>
+      <div class="victory-streaks">${streaks}</div>
+      <img src="${img}" alt="" class="victory-trophy-pop victory-trophy-pop-lg">
+      <div class="victory-title">${t('tr_unlock_title')}</div>
+      <div class="victory-sub">
+        <div class="trophy-unlock-label">${subLabel}</div>
+        <div class="dim">${tw.circuitName}</div>
+      </div>
+      <div class="btnrow" style="justify-content:center;margin-top:22px;position:relative;z-index:5;">
+        <button class="primary" data-action="dismiss-trophy-unlock">${t('tr_unlock_continue')}</button>
+      </div>
     </div>
   </div>`;
 }
@@ -8648,6 +8639,8 @@ function pitlaneCardHTML(node, idx){
       const nome = state.sponsor.nome;
       if(e.type==='tier_boost' && (u.tier==='Epic'||u.tier==='Legendary'||u.tier==='Immortal')) return sponsorAdBannerHTML(nome, t('pitlane_tier_boost_banner', nome), true);
       if(e.type==='area_boost' && e.areas.includes(u.area)) return sponsorAdBannerHTML(nome, t('pitlane_area_boost_banner', nome), true);
+      // V0.9.9.31: Solace — riduce il rischio su TUTTE le carte, non solo una fascia/area specifica
+      if(e.type==='risk_reduction') return sponsorAdBannerHTML(nome, t('pitlane_risk_reduction_banner', nome, e.amount), true);
       return '';
     })();
     const topBanner = extraCardBanner || boostBanner;
@@ -9042,15 +9035,18 @@ function trophyCellHTML(circuit, dataSource){
   const td = src[circuit.nome] || { raced:0, won:0 };
   const circuitSlug = slugify(circuit.nome);
   const shortName = circuit.nome.replace(' Grand Prix','');
+  const isDriverSource = dataSource === driverTrophyData;
+  const clickAttrs = td.raced>0 ? `data-action="open-trophy-detail" data-circuit="${circuit.nome}" data-driver-source="${isDriverSource?'1':'0'}"` : '';
+  const clickCls = td.raced>0 ? ' trophy-cell-clickable' : '';
   if(td.won>0){
     const img = `assets/circuit-trophies/${circuitSlug}_oro.webp`;
-    return `<div class="trophy-cell trophy-gold">
+    return `<div class="trophy-cell trophy-gold${clickCls}" ${clickAttrs}>
       <div class="trophy-img-wrap"><img src="${img}" alt="${shortName}"><div class="trophy-count">${td.won}×</div></div>
       <div class="trophy-name">${flag(circuit.paese)} ${shortName}</div>
     </div>`;
   } else if(td.raced>0){
     const img = `assets/circuit-trophies/${circuitSlug}_bloccato.webp`;
-    return `<div class="trophy-cell trophy-gray">
+    return `<div class="trophy-cell trophy-gray${clickCls}" ${clickAttrs}>
       <div class="trophy-img-wrap"><img src="${img}" alt="${shortName}"></div>
       <div class="trophy-name">${flag(circuit.paese)} ${shortName}</div>
     </div>`;
@@ -9059,6 +9055,29 @@ function trophyCellHTML(circuit, dataSource){
     <div class="trophy-img-wrap"><div class="trophy-placeholder">?</div></div>
     <div class="trophy-name dim">${shortName}</div>
   </div>`;
+}
+// V0.9.9.31: popup dettaglio trofeo — logo grande, partecipazioni/vittorie sul circuito. Stesso
+// pattern DOM diretto di showSponsorInfo/gameConfirm, nessun render completo.
+function showTrophyDetail(circuitName, isDriverSource){
+  const src = isDriverSource ? driverTrophyData : trophyData;
+  const td = src[circuitName] || { raced:0, won:0 };
+  const circuit = DATA.circuiti.find(c=>c.nome===circuitName);
+  if(!circuit) return;
+  const circuitSlug = slugify(circuitName);
+  const img = td.won>0 ? `assets/circuit-trophies/${circuitSlug}_oro.webp` : `assets/circuit-trophies/${circuitSlug}_bloccato.webp`;
+  document.getElementById('trophyDetailName').innerHTML = `${flag(circuit.paese)} ${circuitName}`;
+  document.getElementById('trophyDetailImg').src = img;
+  document.getElementById('trophyDetailParticipations').textContent = td.raced;
+  document.getElementById('trophyDetailParticipationsLabel').textContent = t('tr_detail_participations');
+  document.getElementById('trophyDetailWins').textContent = td.won;
+  document.getElementById('trophyDetailWinsLabel').textContent = t('tr_detail_wins');
+  document.getElementById('trophyDetailCloseBtn').textContent = t('tr_detail_close');
+  const panel = document.getElementById('trophyDetailPanel');
+  const closeBtn = document.getElementById('trophyDetailCloseBtn');
+  function onClose(){ panel.style.display = 'none'; closeBtn.removeEventListener('click', onClose); }
+  closeBtn.addEventListener('click', onClose);
+  panel.style.display = 'flex';
+  pushBackGuard();
 }
 
 // V0.9.4.1: Museo Dynasty — collezione piloti/componenti, accessibile insieme alla Sala Trofei
@@ -10079,6 +10098,9 @@ function onAction(e){
     state.sponsorOffers = generateSponsorOffers(count);
     playSfx('ui_click');
     render();
+  }
+  else if(action==='open-trophy-detail'){
+    showTrophyDetail(el.dataset.circuit, el.dataset.driverSource==='1');
   }
   else if(action==='open-sponsor-info'){
     showSponsorInfo();
