@@ -140,6 +140,8 @@ h1,h2,h3{margin:0;font-weight:800;letter-spacing:0.02em;}
 .hud-item{text-align:right;}
 .hud-label{font-family:var(--font-mono);font-size:10px;color:var(--dim);letter-spacing:0.12em;text-transform:uppercase;}
 .hud-value{font-family:var(--font-mono);font-size:20px;font-weight:700;}
+.hud-sponsor-icon{ cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.hud-sponsor-icon img{ width:22px; height:22px; object-fit:contain; }
 .hud-value.amber{color:var(--amber);}
 .hud-value.cyan{color:var(--cyan);}
 
@@ -698,6 +700,14 @@ tr.former td:first-child{border-left-color:var(--dim);}
    dato che segue solo la sagoma trasparente dell'icona). Ogni stato ha un colore netto e riconoscibile
    a colpo d'occhio: grigio spento a riposo, arancione pulsante mentre tenuto, verde/rosso all'esito. ---- */
 .pedal-row{ display:flex; gap:16px; justify-content:center; margin-top:36px; width:100%; }
+/* V0.9.9.14: messaggio a prova di idiota, dopo 3s di totale inattività sulla schermata semaforo */
+.pedal-idle-hint{
+  margin-top:22px; padding:10px 18px; border-radius:10px; max-width:280px;
+  background:rgba(255,106,26,0.16); border:1px solid var(--amber); color:var(--amber);
+  font-size:12.5px; font-weight:700; text-align:center; line-height:1.4;
+  animation: pedalIdleHintPulse 1s ease-in-out infinite;
+}
+@keyframes pedalIdleHintPulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.45; } }
 .pedal-row-single{ max-width:220px; margin-left:auto; margin-right:auto; }
 .pedal-col{ display:flex; flex-direction:column; align-items:center; gap:9px; flex:1; max-width:180px; }
 .pedal-box{
@@ -1901,6 +1911,21 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
         <button type="button" class="primary" id="gameConfirmYesBtn">Conferma</button>
         <button type="button" class="ghost" id="gameConfirmNoBtn">Annulla</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- V0.9.9.13: popup icona sponsor in topbar — promemoria di quale sponsor hai scelto e cosa fa -->
+<div id="sponsorInfoPanel" class="sidebar-settings-overlay" style="display:none;">
+  <div class="sidebar-settings-window">
+    <div class="sidebar-settings-title">
+      <span id="sponsorInfoName">Sponsor</span>
+    </div>
+    <div class="sidebar-settings-body" style="padding:16px;text-align:center;">
+      <img id="sponsorInfoLogo" src="" alt="" style="max-width:220px;max-height:140px;object-fit:contain;margin:0 auto 14px;display:block;">
+      <div id="sponsorInfoSettore" class="dim" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;"></div>
+      <div id="sponsorInfoDesc" style="font-size:14px;line-height:1.5;margin-bottom:18px;"></div>
+      <button type="button" class="ghost" id="sponsorInfoCloseBtn" style="width:100%;">Chiudi</button>
     </div>
   </div>
 </div>

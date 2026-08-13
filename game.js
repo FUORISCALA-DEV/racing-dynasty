@@ -406,7 +406,8 @@ const I18N = {
     dc_done_title: 'Pilota creato', dc_done_subtitle: 'Punto 2 completato — da qui in poi serve l\'Hub vero (punto 3).',
     dc_done_world_info: (n)=>`Il mondo delle 30 scuderie è pronto: ${n} in Kart, 10 in Serie Minore, 10 in Serie Elite, ognuna con una storia simulata alle spalle.`,
     dc_done_footer: 'Schermata temporanea di verifica — non ancora giocabile oltre questo punto.',
-    sl_go_msg: 'VIA!!', sl_ready_msg: 'Pronti...', sl_lighting_msg: 'Si accendono le luci…',
+    sl_go_msg: 'VIA!!', sl_ready_msg: 'Pronti...', sl_lighting_msg: 'Si accendono le luci…', sl_waiting_msg: 'Tieni premuto per partire',
+    pedal_idle_hint_single: 'Tieni premuto SPAZIO e rilascialo allo spegnimento dei semafori', pedal_idle_hint_double: 'Premi i paddle A e D e rilasciali allo spegnimento dei semafori',
     menu_exit_fullscreen: 'Esci da Schermo Intero',
     draft_founding: 'Fondazione scuderia',
     promo_banner_tagline: 'Piccolo studio, giochi fuori misura', promo_banner_cta: 'Scopri di più ↗',
@@ -510,6 +511,8 @@ const I18N = {
     sponsor_desc_tecnico: (cat)=>`Sblocca da subito gli upgrade "${cat}" normalmente riservati agli sponsor. Nessun bonus economico diretto.`,
     sponsor_desc_secondario_amount: '+0.3M a gara', sponsor_desc_secondario_rest: ', fisso, garantito, senza alcuna condizione.',
     sponsor_choose_subtitle: 'Scegli il tuo sponsor per la stagione', sponsor_choose_one: "Scegli una sola offerta per l'intera stagione",
+    sponsor_reroll_btn: 'Ricerca di mercato', sponsor_reroll_desc: 'Le ricerche di mercato costano budget scuderia, ma possono far comparire sponsor nuovi — da 2 a 4 ogni volta.',
+    sponsor_team_overview_toggle: 'Panoramica scuderia',
     sponsor_headline: 'Chi ti accompagna quest\'anno?', sponsor_subtitle: 'La scelta vale per tutta la stagione e non si può cambiare a metà strada.',
     naming_title: 'Dai un nome alla tua scuderia', naming_optional: 'Facoltativo — se lo lasci vuoto useremo un nome automatico (es. "Dynasty Racing").',
     naming_placeholder: 'Es. Nova Racing Team', naming_inspire: '🎲 Ispira la scuderia', naming_nation: 'Nazione della Scuderia',
@@ -679,7 +682,8 @@ const I18N = {
     dc_done_title: 'Driver created', dc_done_subtitle: "Step 2 complete — from here on the real Hub (step 3) is needed.",
     dc_done_world_info: (n)=>`The world of 30 teams is ready: ${n} in Kart, 10 in Minor Series, 10 in Elite Series, each with a simulated history behind it.`,
     dc_done_footer: 'Temporary verification screen — not yet playable beyond this point.',
-    sl_go_msg: 'GO!!', sl_ready_msg: 'Ready...', sl_lighting_msg: 'Lights coming on…',
+    sl_go_msg: 'GO!!', sl_ready_msg: 'Ready...', sl_lighting_msg: 'Lights coming on…', sl_waiting_msg: 'Hold down to start',
+    pedal_idle_hint_single: 'Hold SPACE and release it when the lights go out', pedal_idle_hint_double: 'Press paddles A and D and release them when the lights go out',
     menu_exit_fullscreen: 'Exit Fullscreen',
     draft_founding: 'Team founding',
     promo_banner_tagline: 'Small studio, outsized games', promo_banner_cta: 'Learn more ↗',
@@ -783,6 +787,8 @@ const I18N = {
     sponsor_desc_tecnico: (cat)=>`Immediately unlocks "${cat}" upgrades normally reserved for sponsors. No direct economic bonus.`,
     sponsor_desc_secondario_amount: '+0.3M per race', sponsor_desc_secondario_rest: ', fixed, guaranteed, no conditions.',
     sponsor_choose_subtitle: 'Choose your sponsor for the season', sponsor_choose_one: 'Choose only one offer for the whole season',
+    sponsor_reroll_btn: 'Market research', sponsor_reroll_desc: 'Market research costs team budget, but can bring up new sponsors — 2 to 4 every time.',
+    sponsor_team_overview_toggle: 'Team overview',
     sponsor_headline: "Who's with you this year?", sponsor_subtitle: "The choice applies for the whole season and can't be changed midway.",
     naming_title: 'Name your team', naming_optional: 'Optional — if you leave it blank we\'ll use an automatic name (e.g. "Dynasty Racing").',
     naming_placeholder: 'E.g. Nova Racing Team', naming_inspire: '🎲 Inspire the team', naming_nation: 'Team Nationality',
@@ -946,7 +952,8 @@ const I18N = {
     dc_done_title: 'Piloto creado', dc_done_subtitle: 'Paso 2 completado — a partir de aquí hace falta el Hub real (paso 3).',
     dc_done_world_info: (n)=>`El mundo de las 30 escuderías está listo: ${n} en Kart, 10 en Serie Menor, 10 en Serie Élite, cada una con una historia simulada detrás.`,
     dc_done_footer: 'Pantalla de verificación temporal — todavía no jugable más allá de este punto.',
-    sl_go_msg: '¡VAMOS!!', sl_ready_msg: 'Listos...', sl_lighting_msg: 'Se encienden las luces…',
+    sl_go_msg: '¡VAMOS!!', sl_ready_msg: 'Listos...', sl_lighting_msg: 'Se encienden las luces…', sl_waiting_msg: 'Mantén pulsado para empezar',
+    pedal_idle_hint_single: 'Mantén pulsado ESPACIO y suéltalo cuando se apaguen los semáforos', pedal_idle_hint_double: 'Pulsa los paddles A y D y suéltalos cuando se apaguen los semáforos',
     menu_exit_fullscreen: 'Salir de Pantalla Completa',
     draft_founding: 'Fundación de la escudería',
     promo_banner_tagline: 'Estudio pequeño, juegos fuera de escala', promo_banner_cta: 'Saber más ↗',
@@ -1050,6 +1057,8 @@ const I18N = {
     sponsor_desc_tecnico: (cat)=>`Desbloquea de inmediato las mejoras de "${cat}" normalmente reservadas a los patrocinadores. Sin bonus económico directo.`,
     sponsor_desc_secondario_amount: '+0.3M por carrera', sponsor_desc_secondario_rest: ', fijo, garantizado, sin condiciones.',
     sponsor_choose_subtitle: 'Elige tu patrocinador para la temporada', sponsor_choose_one: 'Elige solo una oferta para toda la temporada',
+    sponsor_reroll_btn: 'Estudio de mercado', sponsor_reroll_desc: 'Los estudios de mercado cuestan presupuesto del equipo, pero pueden traer nuevos patrocinadores — de 2 a 4 cada vez.',
+    sponsor_team_overview_toggle: 'Resumen del equipo',
     sponsor_headline: '¿Quién te acompaña este año?', sponsor_subtitle: 'La elección vale para toda la temporada y no se puede cambiar a mitad de camino.',
     naming_title: 'Ponle nombre a tu escudería', naming_optional: 'Opcional — si lo dejas vacío usaremos un nombre automático (ej. "Dynasty Racing").',
     naming_placeholder: 'Ej. Nova Racing Team', naming_inspire: '🎲 Inspirar la escudería', naming_nation: 'Nacionalidad de la Escudería',
@@ -1750,6 +1759,7 @@ const app = document.getElementById('app');
 function rnd(){ return Math.random(); }
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
 function fmtM(v){ return (v>=0?'':'-') + Math.abs(v).toFixed(1) + 'M'; }
+function fmtSmallMoney(v){ return Math.round(v*1000)+'k'; } // V0.9.9.13: per importi sotto il milione (es. costo ricerca di mercato), fmtM arrotonderebbe a "0.0M"
 function pick(arr){ return arr[Math.floor(rnd()*arr.length)]; }
 
 function weightedSampleDistinct(pool, n, weightKey, excludeIds){
@@ -3907,9 +3917,20 @@ function startLightsSequence(){
   const pedals = {};
   slots.forEach(s=> pedals[s] = { held:false, released:false, releasedAt:null, shift:null });
   state.phase = 'start_lights';
-  state.startLights = { lit:0, off:false, offAt:null, pedals, slots, resolved:false };
+  state.startLights = { lit:0, off:false, offAt:null, pedals, slots, resolved:false, started:false, touchedOnce:false, showIdleHint:false };
   render();
   attachPedalInputListeners();
+
+  // V0.9.9.14: FIX — i semafori NON partono piu' da soli: aspettano che il giocatore tenga premuti
+  // ENTRAMBI i paddle (uno solo non basta), poi la sequenza vera si accende. A prova di idiota: se
+  // dopo 3s non si e' ancora toccato nulla, un messaggio pulsante spiega cosa fare.
+  window._pedalIdleHintTimer = setTimeout(()=>{
+    if(state.phase==='start_lights' && state.startLights && !state.startLights.touchedOnce){
+      state.startLights.showIdleHint = true;
+      render();
+    }
+  }, 3000);
+
   // V0.9.7.8.39: tempi ricalibrati sui delay REALI misurati nell'audio F1 fornito da Gio — non
   // piu' 480ms fissi (che risultavano quasi il doppio piu' veloci del vero e "immangiabili").
   const LIGHT_DELAYS = [640, 750, 755, 750, 750];
@@ -3931,7 +3952,9 @@ function startLightsSequence(){
       window._pedalTimeoutTimer = setTimeout(()=> resolvePedalsIfNeeded(true), 1400);
     }
   }
-  tick();
+  // V0.9.9.14: la sequenza vera si avvia da pedalPress() quando ENTRAMBI i paddle sono premuti,
+  // non piu' qui in automatico.
+  window._startLightsTick = tick;
 }
 function pedalKeyMap(){
   const slots = state.startLights?.slots || [];
@@ -3965,13 +3988,33 @@ function pedalPress(slotKey){
   if(!sl) return;
   const p = sl.pedals[slotKey];
   if(!p || p.released) return;
-  if(!p.held){ p.held = true; render(); }
+  if(!p.held){
+    p.held = true;
+    if(!sl.touchedOnce){
+      sl.touchedOnce = true;
+      sl.showIdleHint = false;
+      clearTimeout(window._pedalIdleHintTimer);
+    }
+    // V0.9.9.14: i semafori partono SOLO quando entrambi i paddle sono tenuti premuti insieme
+    if(!sl.started && sl.slots.every(s=> sl.pedals[s].held)){
+      sl.started = true;
+      if(window._startLightsTick) window._startLightsTick();
+    }
+    render();
+  }
 }
 function pedalRelease(slotKey){
   const sl = state.startLights;
   if(!sl) return;
   const p = sl.pedals[slotKey];
   if(!p || p.released || !p.held) return;
+  if(!sl.started){
+    // V0.9.9.14: i semafori non sono ancora partiti (mancava l'altro paddle) — un rilascio qui non
+    // e' una falsa partenza, e' solo "non ancora pronto". Nessuna penalita', si puo' ripremere.
+    p.held = false;
+    render();
+    return;
+  }
   p.held = false;
   p.released = true;
   if(!sl.off){
@@ -4013,7 +4056,7 @@ function renderStartLights(){
   for(let i=0;i<5;i++){
     dots.push(`<div class="f1-light ${(!sl.off && i<sl.lit)?'lit':''}"></div>`);
   }
-  const msg = sl.off ? t('sl_go_msg') : (sl.lit>=5 ? t('sl_ready_msg') : t('sl_lighting_msg'));
+  const msg = sl.off ? t('sl_go_msg') : (sl.started ? (sl.lit>=5 ? t('sl_ready_msg') : t('sl_lighting_msg')) : t('sl_waiting_msg'));
   const single = sl.slots.length===1;
   const pedalsHTML = sl.slots.map((slotKey,i)=>{
     const p = sl.pedals[slotKey];
@@ -4047,6 +4090,7 @@ function renderStartLights(){
     <div class="f1-lights-rig">${dots.join('')}</div>
     <div class="suspense-title ${sl.off?'lights-go':''}">${msg}</div>
     <div class="pedal-row ${single?'pedal-row-single':''}">${pedalsHTML}</div>
+    ${sl.showIdleHint && !sl.started ? `<div class="pedal-idle-hint">${single ? t('pedal_idle_hint_single') : t('pedal_idle_hint_double')}</div>` : ''}
   </div>
   `;
   bindActions();
@@ -5181,9 +5225,12 @@ const SPONSOR_EFFECTS = {
   'Apexis':    { type:'area_boost',      mult:1.7,  areas:['Gomme','Aerodinamica'],      settore:'Abbigliamento sportivo' },
 };
 const SPONSOR_NAMES = Object.keys(SPONSOR_EFFECTS);
-function sponsorLogoSrc(nome){ return `assets/sponsors/${nome.toLowerCase()}.png`; } // V0.9.9.8: spazio pronto per i loghi, non ancora presenti
-function generateSponsorOffers(){
-  const chosen = weightedSampleDistinct(SPONSOR_NAMES.map(n=>({id:n,nome:n,costo:1})), 3, 'costo', new Set()).map(o=>o.nome);
+function sponsorLogoSrc(nome){ return `assets/sponsors/${nome.toLowerCase()}.png`; }
+function sponsorIconSrc(nome){ return `assets/sponsors/${nome.toLowerCase()}_icon.png`; } // V0.9.9.13: icona per la topbar
+const SPONSOR_REROLL_COST = 5; // V0.9.9.13: 5M, stessa unita' del budget (milioni)
+function generateSponsorOffers(count){
+  const n = count || 2; // V0.9.9.13: 2 offerte all'inizio, invece delle 3 di prima
+  const chosen = weightedSampleDistinct(SPONSOR_NAMES.map(nm=>({id:nm,nome:nm,costo:1})), n, 'costo', new Set()).map(o=>o.nome);
   return chosen.map(nome => ({ nome, effect: SPONSOR_EFFECTS[nome] }));
 }
 // V0.9.9.8: nomi area generici per il contesto sponsor — displayArea() usa "Pilota #1" (pensato
@@ -5227,18 +5274,60 @@ function sponsorSpawnMultFor(u){
 function renderSponsorChoice(){
   const offers = state.sponsorOffers || generateSponsorOffers();
   state.sponsorOffers = offers;
+  const canReroll = state.budget >= SPONSOR_REROLL_COST;
+  // V0.9.9.13: stessa costruzione usata in renderPregara, per riusare pregaraCarPanelHTML — con
+  // fallback sicuri se lo stato non fosse ancora del tutto popolato a questo punto del flusso.
+  // NOTA: chiamata 'team', non 't', per non entrare in conflitto con la funzione di traduzione t().
+  const team = state.team;
+  const compShared = { motore:team.motore, telaio:team.telaio, aero:team.aero, gomme:team.gomme, stratega:team.stratega };
+  const carNum1 = (state.grid && state.grid.find(g=>g.slotKey==='PLAYER-1') || {}).carNumber || 1;
+  const carNum2 = (state.grid && state.grid.find(g=>g.slotKey==='PLAYER-2') || {}).carNumber || 2;
   app.innerHTML = `
   <div class="topbar">
-    <div class="brand hdr">RACING DYNASTY<small>${t('sponsor_choose_subtitle')}</small></div>
+    <div class="brand hdr">RACING DYNASTY<small>${window.t('sponsor_choose_subtitle')}</small></div>
   </div>
   <div class="panel">
-    <div class="eyebrow">${t('sponsor_choose_one')}</div>
-    <h2 class="hdr" style="font-size:22px;">${t('sponsor_headline')}</h2>
-    <div class="dim" style="font-size:12px;margin-top:6px;">${t('sponsor_subtitle')}</div>
+    <div class="eyebrow">${window.t('sponsor_choose_one')}</div>
+    <h2 class="hdr" style="font-size:22px;">${window.t('sponsor_headline')}</h2>
+    <div class="dim" style="font-size:12px;margin-top:6px;">${window.t('sponsor_subtitle')}</div>
+    <div class="sponsor-budget-row">
+      <span class="dim">${window.t('hud_budget')}</span>
+      <span class="mono" style="color:var(--amber);font-weight:800;">${fmtM(state.budget)}</span>
+    </div>
   </div>
   <div class="draft-turn-grid">${offers.map(sponsorCardHTML).join('')}</div>
+  <div class="panel sponsor-reroll-panel">
+    <button type="button" class="ghost" data-action="reroll-sponsor" ${canReroll?'':'disabled'} style="width:100%;">
+      🔍 ${window.t('sponsor_reroll_btn')} — ${fmtM(SPONSOR_REROLL_COST)}
+    </button>
+    <div class="dim" style="font-size:11px;margin-top:8px;line-height:1.5;">${window.t('sponsor_reroll_desc')}</div>
+  </div>
+  <div class="panel">
+    <button type="button" class="pregara-accordion-toggle" id="sponsorTeamToggle">
+      <span>${window.t('sponsor_team_overview_toggle')}</span>
+      <span id="sponsorTeamChevron">▾</span>
+    </button>
+    <div id="sponsorTeamBody" style="display:none;">
+      <div class="grid grid-2 pregara-grid">
+        ${pregaraCarPanelHTML(team.pilotMain, carNum1, compShared, null, teamDisplayName())}
+        ${pregaraCarPanelHTML(team.pilotSecond, carNum2, compShared, null, teamDisplayName())}
+      </div>
+      ${pregaraSharedComponentsHTML(compShared)}
+    </div>
+  </div>
   `;
   bindActions();
+  const toggle = document.getElementById('sponsorTeamToggle');
+  const body = document.getElementById('sponsorTeamBody');
+  const chevron = document.getElementById('sponsorTeamChevron');
+  if(toggle){
+    toggle.addEventListener('click', ()=>{
+      const open = body.style.display!=='none';
+      body.style.display = open ? 'none' : 'block';
+      chevron.textContent = open ? '▾' : '▴';
+      playSfx('ui_click');
+    });
+  }
 }
 
 // V0.9.3.1: lo scouting deve offrire sempre almeno un'opzione potenzialmente valida
@@ -6418,7 +6507,7 @@ function topbarHTML(){
   const bestDriverPos = Math.min(p1Pos||99, p2Pos||99);
   const constructorPos = cstd.findIndex(c=>c.teamId==='PLAYER')+1;
   const sponsorHTML = state.sponsor
-    ? `<div class="hud-item"><div class="hud-label">${t('hud_sponsor')}</div><div class="hud-value" title="${state.sponsor.nome}">🤝</div></div>`
+    ? `<div class="hud-item"><div class="hud-label">${t('hud_sponsor')}</div><div class="hud-value hud-sponsor-icon" data-action="open-sponsor-info" title="${state.sponsor.nome}"><img src="${sponsorIconSrc(state.sponsor.nome)}" alt="${state.sponsor.nome}" onerror="this.style.display='none'"></div></div>`
     : '';
   return `
   <div class="topbar">
@@ -9767,6 +9856,18 @@ function onAction(e){
       render();
     }
   }
+  else if(action==='reroll-sponsor'){
+    // V0.9.9.13: "Ricerca di mercato" — 5k a tentativo, tra 2 e 4 nuovi sponsor ogni volta
+    if(state.budget < SPONSOR_REROLL_COST){ playSfx('error_disabled'); return; }
+    state.budget = Math.round((state.budget - SPONSOR_REROLL_COST)*10)/10;
+    const count = 2 + Math.floor(rnd()*3); // 2, 3, o 4
+    state.sponsorOffers = generateSponsorOffers(count);
+    playSfx('ui_click');
+    render();
+  }
+  else if(action==='open-sponsor-info'){
+    showSponsorInfo();
+  }
   else if(action==='run-race'){ runQualifying(); state.phase='pregara'; render(); }
   else if(action==='start-race-live'){ beginRaceWithLights(); }
   else if(action==='pedal-tutorial-done'){ markPedalTutorialSeen(); startLightsSequence(); }
@@ -10034,6 +10135,26 @@ function openPasswordGate(target){
   setTimeout(()=> input.focus(), 50);
 }
 
+// V0.9.9.13: popup icona sponsor in topbar — promemoria di logo+effetto, stesso pattern di
+// gameConfirm (manipolazione diretta del DOM, niente render completo che rischierebbe di
+// disturbare la schermata sottostante, dato che l'icona sponsor puo' comparire ovunque).
+function showSponsorInfo(){
+  if(!state.sponsor) return;
+  const nome = state.sponsor.nome;
+  const e = SPONSOR_EFFECTS[nome];
+  if(!e) return;
+  document.getElementById('sponsorInfoName').textContent = nome;
+  document.getElementById('sponsorInfoLogo').src = sponsorLogoSrc(nome);
+  document.getElementById('sponsorInfoSettore').textContent = e.settore;
+  document.getElementById('sponsorInfoDesc').textContent = sponsorEffectDescHTML(nome);
+  const panel = document.getElementById('sponsorInfoPanel');
+  const closeBtn = document.getElementById('sponsorInfoCloseBtn');
+  function cleanup(){ panel.style.display = 'none'; closeBtn.removeEventListener('click', onClose); }
+  function onClose(){ cleanup(); }
+  closeBtn.addEventListener('click', onClose);
+  panel.style.display = 'flex';
+  pushBackGuard();
+}
 function gameConfirm(message, onConfirm, title){
   document.getElementById('gameConfirmTitle').textContent = title || 'Conferma';
   document.getElementById('gameConfirmMessage').textContent = message;
