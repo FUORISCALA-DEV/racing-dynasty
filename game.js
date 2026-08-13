@@ -3430,6 +3430,7 @@ function simulateFullRace(){
   phase0Order.forEach((k,i)=>{ cumTime[k] = i*0.28; });
 
   const phaseOrders = [ phase0Order.slice() ];
+  const cumTimeByPhase = [ { ...cumTime } ]; // V0.9.9.12: istantanea del tempo cumulato reale per ogni fase — serve per i distacchi veri
   const eventsByPhase = [ [] ];
   const pitByPhase = [ new Set() ];
   const penaltyByPhase = [ new Set() ];
@@ -3512,6 +3513,7 @@ function simulateFullRace(){
     const order = [ ...stillRacing.map(p=>p.slotKey), ...retiredList.map(e=>e.slotKey) ];
 
     phaseOrders.push(order);
+    cumTimeByPhase.push({ ...cumTime }); // V0.9.9.12: istantanea del tempo cumulato reale a questa fase
     eventsByPhase.push(evThis);
     pitByPhase.push(pitThis);
     penaltyByPhase.push(penaltyThis);
@@ -3546,7 +3548,7 @@ function simulateFullRace(){
   }
 
   const timeline = {
-    entries, circuit, gridPos, gridOrder, phaseOrders,
+    entries, circuit, gridPos, gridOrder, phaseOrders, cumTimeByPhase,
     retiredAtPhase, eventsByPhase, pitByPhase, penaltyByPhase,
     safetyCarPhase, weatherBefore, weatherAfter, weatherChangePhase,
     lapNumbers: buildPhaseLapNumbers(circuit.giri), totalGiri: circuit.giri,
@@ -3844,6 +3846,18 @@ function pedalResultLabel(shift){
 // applica lo shift di partenza a TUTTE le fasi della gara gia' simulata (non solo alla Partenza),
 // cosi' il vantaggio/svantaggio si porta dietro per l'intera corsa — stessa logica di splice
 // usata dalle decisioni in gara, ma applicata fin dalla prima fase.
+// V0.9.9.12: quando una decisione o il paddle sposta un pilota nell'ordine, il suo tempo cumulato
+// deve seguirlo — altrimenti il distacco mostrato resterebbe legato alla vecchia posizione,
+// incoerente con quella nuova. Interpola tra i due vicini nella nuova posizione.
+function interpolateCumTimeForShift(cumTimeSnapshot, order, slotKey, newIdx, retiredAtPhase){
+  if(!cumTimeSnapshot) return;
+  const isRacing = k => !retiredAtPhase || retiredAtPhase[k]==null;
+  const before = newIdx>0 && isRacing(order[newIdx-1]) ? cumTimeSnapshot[order[newIdx-1]] : null;
+  const after = newIdx<order.length-1 && isRacing(order[newIdx+1]) ? cumTimeSnapshot[order[newIdx+1]] : null;
+  if(before!=null && after!=null) cumTimeSnapshot[slotKey] = (before+after)/2;
+  else if(after!=null) cumTimeSnapshot[slotKey] = after - 0.3;
+  else if(before!=null) cumTimeSnapshot[slotKey] = before + 0.3;
+}
 function applyStartShiftAcrossPhases(timeline, slotKey, shift){
   if(!shift) return;
   for(let phase=0; phase<PHASES.length; phase++){
@@ -3853,6 +3867,7 @@ function applyStartShiftAcrossPhases(timeline, slotKey, shift){
     if(idx<0) continue;
     const newIdx = Math.max(0, Math.min(order.length-1, idx+shift));
     order.splice(idx,1); order.splice(newIdx,0,slotKey);
+    interpolateCumTimeForShift(timeline.cumTimeByPhase && timeline.cumTimeByPhase[phase], order, slotKey, newIdx, timeline.retiredAtPhase);
   }
 }
 
@@ -4496,6 +4511,7 @@ function applyLiveDecision(type, choiceKey){
       if(shift===0) continue;
       const newIdx = Math.max(0, Math.min(order.length-1, idx+shift));
       order.splice(idx,1); order.splice(newIdx,0,slotKey);
+      interpolateCumTimeForShift(timeline.cumTimeByPhase && timeline.cumTimeByPhase[phase], order, slotKey, newIdx, timeline.retiredAtPhase);
     }
   }
 
@@ -4805,7 +4821,19 @@ function computeLiveRows(){
     if(isFinalPhase){
       status = statusRaw==='RITIRATO' ? window.t('status_retired_short') : '🏁';
     }
-    const gap = i===0 ? window.t('status_leader') : ((statusRaw==='RITIRATO') ? '—' : '+'+(i*0.55 + (i%3)*0.2).toFixed(1)+'s');
+    // V0.9.9.12: distacco VERO, dal tempo cumulato reale della simulazione (non piu' una formula
+    // finta legata solo alla posizione) — fallback alla vecchia formula solo se i dati non ci sono.
+    const cumSnap = timeline.cumTimeByPhase && timeline.cumTimeByPhase[t];
+    let gap;
+    if(i===0){
+      gap = window.t('status_leader');
+    } else if(statusRaw==='RITIRATO'){
+      gap = '—';
+    } else if(cumSnap && cumSnap[key]!=null && cumSnap[order[0]]!=null){
+      gap = '+'+Math.max(0, cumSnap[key]-cumSnap[order[0]]).toFixed(1)+'s';
+    } else {
+      gap = '+'+(i*0.55 + (i%3)*0.2).toFixed(1)+'s';
+    }
     return { key, index:i, pos:i+1, carNumber:e.carNumber, driverName:e.driverName, teamName:e.teamName, teamId:e.teamId, isPlayerTeam:e.isPlayerTeam, status, statusRaw, gap, delta };
   });
 }
