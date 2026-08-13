@@ -8893,9 +8893,15 @@ function renderPitlaneConfirm(){
 
 function renderUpgradeSuspense(){
   const u = state.pendingUpgradeReveal;
+  // V0.9.9.25: se hai uno sponsor attivo, ti accompagna anche nello sviluppo — sfondo tenue nei
+  // suoi colori + filigrana del logo, stesso trattamento usato per la schermata premio.
+  const brand = state.sponsor ? SPONSOR_BRAND[state.sponsor.nome] : null;
+  const themeStyle = brand ? `style="background:linear-gradient(160deg, ${brand.c1}22, ${brand.c2}44);"` : '';
+  const watermark = brand ? `<img src="${sponsorLogoSrc(state.sponsor.nome)}" alt="" class="prize-panel-watermark">` : '';
   app.innerHTML = `
   ${topbarHTML()}
-  <div class="suspense-screen pickable" data-action="skip-upgrade-suspense">
+  <div class="suspense-screen pickable" data-action="skip-upgrade-suspense" ${themeStyle}>
+    ${watermark}
     <div class="suspense-spinner" aria-hidden="true">
       <div class="suspense-cell"></div><div class="suspense-cell"></div><div class="suspense-cell"></div>
       <div class="suspense-cell"></div><div class="suspense-cell"></div>
@@ -8913,9 +8919,13 @@ function renderUpgradeResult(){
   const icon = u.failed ? '❌' : '✅';
   const title = u.failed ? t('upg_failed') : t('upg_success');
   const cls = u.failed ? 'result-fail' : 'result-ok';
+  const brand = state.sponsor ? SPONSOR_BRAND[state.sponsor.nome] : null;
+  const themeStyle = brand ? `style="background:linear-gradient(160deg, ${brand.c1}22, ${brand.c2}44);"` : '';
+  const watermark = brand ? `<img src="${sponsorLogoSrc(state.sponsor.nome)}" alt="" class="prize-panel-watermark">` : '';
   app.innerHTML = `
   ${topbarHTML()}
-  <div class="suspense-screen ${cls}">
+  <div class="suspense-screen ${cls}" ${themeStyle}>
+    ${watermark}
     <div class="result-icon">${icon}</div>
     <div class="suspense-title">${title}</div>
     <div class="suspense-sub dim">${u.nome}${u.riskPct!==undefined?t('upg_risk_taken', u.riskPct):''}</div>
