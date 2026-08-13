@@ -5258,6 +5258,31 @@ function isUpgradeUseful(u){
    stagione, come prima, ma stavolta la scelta È il nome (non uno slot astratto).
    Spazio per il logo lasciato apposta nel markup (logoSrc), da agganciare quando arrivano i loghi.
    ============================================================ */
+// V0.9.9.23: colori di marca veri, presi dai loghi — usati per dare a ciascuno sponsor un banner
+// pubblicitario nel proprio stile invece che nel colore standard del gioco.
+const SPONSOR_BRAND = {
+  Voltrix:   { c1:'#0a3fa3', c2:'#062868', accent:'#22DCFF', text:'#eaffff' },
+  Ember:     { c1:'#c53a10', c2:'#7a2008', accent:'#FFB020', text:'#fff5e6' },
+  Meridia:   { c1:'#8a6d1f', c2:'#5c470f', accent:'#F5E7C4', text:'#fff8e6' },
+  Solace:    { c1:'#12294f', c2:'#0a1730', accent:'#9fc1e8', text:'#eef5ff' },
+  Auronis:   { c1:'#8a6a10', c2:'#3a2c05', accent:'#e8c25a', text:'#fff5db' },
+  Nexora:    { c1:'#5b1fb0', c2:'#1e2f8f', accent:'#33d2ff', text:'#f2e8ff' },
+  Ferrotech: { c1:'#c8620f', c2:'#2b2b2b', accent:'#ff9a3d', text:'#fff2e6' },
+  Skyvane:   { c1:'#0b2a5b', c2:'#061530', accent:'#9fb8e0', text:'#eef4ff' },
+  Combustia: { c1:'#8a5a10', c2:'#3d2606', accent:'#e0a83d', text:'#fff2db' },
+  Apexis:    { c1:'#1a1a1a', c2:'#000000', accent:'#c8ff3d', text:'#f4ffe0' },
+};
+// V0.9.9.23: banner pubblicitario riutilizzabile, nei colori veri dello sponsor, col logo grande
+// come sfondo semi-trasparente — usato ovunque uno sponsor sia coinvolto (carta extra, sconto,
+// bonus premio), non piu' solo testo nello stile standard del gioco.
+function sponsorAdBannerHTML(nome, text, topOfCard){
+  const b = SPONSOR_BRAND[nome];
+  if(!b) return '';
+  return `<div class="sponsor-ad-banner ${topOfCard?'top-of-card':''}" style="background:linear-gradient(135deg, ${b.c1}, ${b.c2}); border-color:${b.accent};">
+    <img class="sponsor-ad-banner-bg" src="${sponsorLogoSrc(nome)}" alt="">
+    <span class="sponsor-ad-banner-text" style="color:${b.text};">${text}</span>
+  </div>`;
+}
 const SPONSOR_EFFECTS = {
   'Voltrix':   { type:'tier_boost',      mult:2.0,  areas:null,                          settore:'Elettronica' },
   'Ember':     { type:'area_boost',      mult:2.5,  areas:['Piloti'],                    settore:'Bevanda energetica' },
@@ -8498,10 +8523,7 @@ function renderRaceResult(){
   <div class="panel prize-collect-panel ${pp.collected?'collected':''}" id="collectPrizePanel">
     <div class="eyebrow">${t('prize_panel_title')}</div>
     <div class="prize-collect-amount" id="collectPrizeReadout">${fmtMIcon(prizeTotal)}</div>
-    ${sponsorBonusTotal>0 ? `<div class="prize-powered-by">
-      <img src="${sponsorLogoSrc(pp.sponsorNome)}" alt="" onerror="this.style.display='none'">
-      <span>+${fmtMIcon(sponsorBonusTotal)} ${t('prize_powered_by', pp.sponsorNome)}</span>
-    </div>` : ''}
+    ${sponsorBonusTotal>0 ? sponsorAdBannerHTML(pp.sponsorNome, `+${fmtMIcon(sponsorBonusTotal)} ${t('prize_powered_by', pp.sponsorNome)}`) : ''}
     <button class="primary" id="collectPrizeBtn" data-action="collect-prize-btn" ${pp.collected?'disabled':''} style="width:100%;margin-top:12px;">
       ${pp.collected ? t('prize_collected_btn') : t('prize_collect_btn')}
     </button>
@@ -8587,16 +8609,17 @@ function pitlaneCardHTML(node, idx){
     const typeLabel = isGuaranteed ? t('pcard_guaranteed') : t('pcard_development');
     const info = upgradeTargetInfo(u);
     // V0.9.9.19: banner "carta extra grazie allo sponsor" (Skyvane), riusato in entrambi i template
-    const extraCardBanner = u.sponsorExtraCard ? `<div class="pitlane-sponsor-banner"><img src="${sponsorLogoSrc(u.sponsorExtraCard)}" alt="" onerror="this.style.display='none'"><span>${t('pitlane_extra_card_banner', u.sponsorExtraCard)}</span></div>` : '';
+    const extraCardBanner = u.sponsorExtraCard ? sponsorAdBannerHTML(u.sponsorExtraCard, t('pitlane_extra_card_banner', u.sponsorExtraCard), true) : '';
 
     if(isGuaranteed){
       // nessun rischio da negoziare: acquisto diretto al costo fisso, come prima
       const costoM = u.costo/1000000;
       const afford = state.budget >= costoM;
-      // V0.9.9.19: sconto sponsor (Ferrotech) — prezzo pieno barrato, nuovo prezzo, badge di merito
+      // V0.9.9.19/23: sconto sponsor (Ferrotech) — prezzo pieno barrato, nuovo prezzo, banner sotto
       const costHTML = u.sponsorDiscount
-        ? `<span class="dev-cost">${t('pcard_cost')} <s class="mono dim">${fmtMIcon(u.sponsorDiscount.originalCosto/1000000)}</s> <b class="mono" style="color:var(--ok);">${fmtMIcon(costoM)}</b><div class="pitlane-discount-badge">${t('pcard_discount_thanks', u.sponsorDiscount.nome)}</div></span>`
+        ? `<span class="dev-cost">${t('pcard_cost')} <s class="mono dim">${fmtMIcon(u.sponsorDiscount.originalCosto/1000000)}</s> <b class="mono" style="color:var(--ok);">${fmtMIcon(costoM)}</b></span>`
         : `<span class="dev-cost">${t('pcard_cost')} <b class="mono">${fmtMIcon(costoM)}</b></span>`;
+      const discountBanner = u.sponsorDiscount ? sponsorAdBannerHTML(u.sponsorDiscount.nome, t('pcard_discount_thanks', u.sponsorDiscount.nome)) : '';
       return `
       <div class="card ${afford?'pickable':'card-frozen'}" data-rarity="${rarityLike}" ${afford?`data-action="confirm-upgrade-invest" data-idx="${idx}" data-fixed="1"`:''}>
         ${extraCardBanner}
@@ -8605,6 +8628,7 @@ function pitlaneCardHTML(node, idx){
         <div class="card-name">${u.nome}</div>
         <div class="dev-target"><span class="dev-area">${info.label}</span><span class="dev-change mono">${info.change}</span></div>
         <div class="dev-meta">${costHTML}<span class="dev-risk risk-none">${t('pcard_no_risk')}</span></div>
+        ${discountBanner}
         ${!afford? `<div class="tag-line malus">${t('pcard_insufficient_budget')}</div>`:''}
         <div class="card-tap-hint">${afford?t('pcard_tap_buy'):''}</div>
       </div>`;
@@ -8635,9 +8659,10 @@ function pitlaneCardHTML(node, idx){
         <input type="range" class="invest-slider" min="0" max="100" value="${Math.floor(defaultT*100)}" step="1"
           data-idx="${idx}" data-base-cost="${u.costo}" data-t0="${t0}" data-max-t="${maxT}">
         <div class="invest-readout">
-          <span>${t('pcard_invest_cost')} ${u.sponsorDiscount ? `<s class="mono dim">${fmtMIcon(defaultCostM * u.sponsorDiscount.originalCosto / u.costo)}</s> ` : ''}<b class="mono" id="investCost-${idx}">${fmtMIcon(defaultCostM)}</b>${u.sponsorDiscount ? `<div class="pitlane-discount-badge">${t('pcard_discount_thanks', u.sponsorDiscount.nome)}</div>` : ''}</span>
+          <span>${t('pcard_invest_cost')} ${u.sponsorDiscount ? `<s class="mono dim">${fmtMIcon(defaultCostM * u.sponsorDiscount.originalCosto / u.costo)}</s> ` : ''}<b class="mono" id="investCost-${idx}">${fmtMIcon(defaultCostM)}</b></span>
           <span class="dev-risk ${risk.cls}" id="investRisk-${idx}">${risk.label} · ${defaultRisk}%</span>
         </div>
+        ${u.sponsorDiscount ? sponsorAdBannerHTML(u.sponsorDiscount.nome, t('pcard_discount_thanks', u.sponsorDiscount.nome)) : ''}
         <div class="dim" style="font-size:10px;margin-top:2px;">${t('pcard_slider_hint')}</div>
       </div>
       `}
