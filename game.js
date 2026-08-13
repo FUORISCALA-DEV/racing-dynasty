@@ -5264,17 +5264,24 @@ function isUpgradeUseful(u){
 // V0.9.9.23: colori di marca veri, presi dai loghi — usati per dare a ciascuno sponsor un banner
 // pubblicitario nel proprio stile invece che nel colore standard del gioco.
 const SPONSOR_BRAND = {
-  Voltrix:   { c1:'#0a3fa3', c2:'#062868', accent:'#22DCFF', text:'#eaffff' },
-  Ember:     { c1:'#c53a10', c2:'#7a2008', accent:'#FFB020', text:'#fff5e6' },
-  Meridia:   { c1:'#8a6d1f', c2:'#5c470f', accent:'#F5E7C4', text:'#fff8e6' },
-  Solace:    { c1:'#12294f', c2:'#0a1730', accent:'#9fc1e8', text:'#eef5ff' },
-  Auronis:   { c1:'#8a6a10', c2:'#3a2c05', accent:'#e8c25a', text:'#fff5db' },
-  Nexora:    { c1:'#5b1fb0', c2:'#1e2f8f', accent:'#33d2ff', text:'#f2e8ff' },
-  Ferrotech: { c1:'#c8620f', c2:'#2b2b2b', accent:'#ff9a3d', text:'#fff2e6' },
-  Skyvane:   { c1:'#0b2a5b', c2:'#061530', accent:'#9fb8e0', text:'#eef4ff' },
-  Combustia: { c1:'#8a5a10', c2:'#3d2606', accent:'#e0a83d', text:'#fff2db' },
-  Apexis:    { c1:'#1a1a1a', c2:'#000000', accent:'#c8ff3d', text:'#f4ffe0' },
+  Voltrix:   { c1:'#0a3fa3', c2:'#062868', accent:'#22DCFF', text:'#eaffff', shape:'4px 16px 4px 16px' },
+  Ember:     { c1:'#c53a10', c2:'#7a2008', accent:'#FFB020', text:'#fff5e6', shape:'2px 20px 2px 20px' },
+  Meridia:   { c1:'#8a6d1f', c2:'#5c470f', accent:'#F5E7C4', text:'#fff8e6', shape:'30px' },
+  Solace:    { c1:'#12294f', c2:'#0a1730', accent:'#9fc1e8', text:'#eef5ff', shape:'16px' },
+  Auronis:   { c1:'#8a6a10', c2:'#3a2c05', accent:'#e8c25a', text:'#fff5db', shape:'2px' },
+  Nexora:    { c1:'#5b1fb0', c2:'#1e2f8f', accent:'#33d2ff', text:'#f2e8ff', shape:'4px 24px 4px 24px' },
+  Ferrotech: { c1:'#c8620f', c2:'#2b2b2b', accent:'#ff9a3d', text:'#fff2e6', shape:'2px 12px 2px 12px' },
+  Skyvane:   { c1:'#0b2a5b', c2:'#061530', accent:'#9fb8e0', text:'#eef4ff', shape:'24px 4px 24px 4px' },
+  Combustia: { c1:'#8a5a10', c2:'#3d2606', accent:'#e0a83d', text:'#fff2db', shape:'2px 18px 2px 18px' },
+  Apexis:    { c1:'#1a1a1a', c2:'#000000', accent:'#c8ff3d', text:'#f4ffe0', shape:'20px 2px 20px 2px' },
 };
+// V0.9.9.27: pulsante tematizzato — colore E forma dello sponsor, non solo lo sfondo del pannello.
+// Deve sembrare un pulsante fatto DALLO sponsor, non uno standard del gioco ricolorato.
+function sponsorButtonStyle(nome){
+  const b = SPONSOR_BRAND[nome];
+  if(!b) return '';
+  return `background:linear-gradient(135deg, ${b.accent}, ${b.c1}); border:2px solid ${b.accent}; border-radius:${b.shape}; color:${b.text}; text-shadow:0 1px 2px rgba(0,0,0,0.4);`;
+}
 // V0.9.9.23: banner pubblicitario riutilizzabile, nei colori veri dello sponsor, col logo grande
 // come sfondo semi-trasparente — usato ovunque uno sponsor sia coinvolto (carta extra, sconto,
 // bonus premio), non piu' solo testo nello stile standard del gioco.
@@ -5329,7 +5336,9 @@ function sponsorEffectDescHTML(nome){
 }
 function sponsorCardHTML(offer){
   const e = offer.effect;
-  return `<div class="card pickable sponsor-card" data-action="choose-sponsor" data-nome="${offer.nome}">
+  const b = SPONSOR_BRAND[offer.nome];
+  const themeStyle = b ? `background:linear-gradient(165deg, ${b.c1}30, var(--panel2) 60%); border-color:${b.accent}88; border-radius:${b.shape};` : '';
+  return `<div class="card pickable sponsor-card" data-action="choose-sponsor" data-nome="${offer.nome}" style="${themeStyle}">
     <div class="sponsor-logo-slot"><img src="${sponsorLogoSrc(offer.nome)}" alt="" onerror="this.style.display='none'"></div>
     <span class="rarity-tag" data-rarity="Rare">${offer.nome.toUpperCase()}</span>
     <div class="sponsor-card-desc-settore dim">${e.settore}</div>
@@ -8534,7 +8543,7 @@ function renderRaceResult(){
     <div class="eyebrow">${t('prize_panel_title')}</div>
     <div class="prize-collect-amount" id="collectPrizeReadout">${fmtMIcon(prizeTotal)}</div>
     ${sponsorBonusTotal>0 ? sponsorAdBannerHTML(pp.sponsorNome, `+${fmtMIcon(sponsorBonusTotal)} ${t('prize_powered_by', pp.sponsorNome)}`) : ''}
-    <button class="primary" id="collectPrizeBtn" data-action="collect-prize-btn" ${pp.collected?'disabled':''} style="width:100%;margin-top:12px;">
+    <button class="primary" id="collectPrizeBtn" data-action="collect-prize-btn" ${pp.collected?'disabled':''} style="width:100%;margin-top:12px;${brand?sponsorButtonStyle(pp.sponsorNome):''}">
       ${pp.collected ? t('prize_collected_btn') : t('prize_collect_btn')}
     </button>
   </div>` : '';
@@ -8704,7 +8713,7 @@ function pitlaneCardHTML(node, idx){
         ${u.durata? `<div class="tag-line dim">${t('pcard_duration', u.durata)}</div>`:''}
         <div class="tag-line dim">${t('pcard_risk_range', RISK_MIN, RISK_MAX, !!u.malus)}</div>
       </details>
-      ${!frozen ? `<button class="primary" style="width:100%;margin-top:10px;" data-action="confirm-upgrade-invest" data-idx="${idx}">${t('pcard_confirm_invest')}</button>` : ''}
+      ${!frozen ? `<button class="primary" style="width:100%;margin-top:10px;${cardBrand?sponsorButtonStyle(bannerSponsorNome):''}" data-action="confirm-upgrade-invest" data-idx="${idx}">${t('pcard_confirm_invest')}</button>` : ''}
     </div>`;
   } else {
     const current = state.team[node.catKey];
