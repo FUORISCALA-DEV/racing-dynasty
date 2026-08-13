@@ -3970,7 +3970,12 @@ function resolvePedalsIfNeeded(forceTimeout){
   render();
   window._lightsTimer = setTimeout(()=>{
     const { timeline } = simulateFullRace();
-    sl.slots.forEach(s=> applyStartShiftAcrossPhases(timeline, s, sl.pedals[s].shift));
+    // V0.9.9.10: FIX BUG SERIO — pedalReleaseShift usa "positivo=buono" (es. +2 per partenza
+    // perfetta, coerente col testo mostrato a schermo), ma applyStartShiftAcrossPhases si aspetta
+    // "negativo=guadagna posizione" (la convenzione di TUTTO il resto del gioco). Senza
+    // l'inversione qui, una falsa partenza (-3) faceva GUADAGNARE 3 posizioni invece di perderle —
+    // l'esatto contrario di quello che doveva succedere.
+    sl.slots.forEach(s=> applyStartShiftAcrossPhases(timeline, s, -sl.pedals[s].shift));
     startLiveRace(timeline);
   }, 1300); // tempo per leggere l'esito di ciascun paddle prima che parta la gara vera
 }
@@ -4102,13 +4107,13 @@ function computeLiveDecisions(timeline){
 const LIVE_DECISION_INFO_EN = {
   weather: { title:'The weather is changing', question:"Track conditions are changing right now. What do you do?",
     choices:[
-      { key:'box', label:'🛞 Change tires now', desc:'Safe, but you lose a few positions in the pits.' },
+      { key:'box', label:'🛞 Change tires now', desc:'Risky: pull off the undercut and you gain ground, get it wrong and you lose positions.' },
       { key:'stay', label:'⏳ Stay out one more lap', desc:'Risky, but you gain if the weather helps you.' },
       { key:'splitstrategy', label:'🔀 Split strategies', desc:'One driver pits, the other stays out: cover both options.' },
     ]},
   safetycar: { title:'Safety Car on track', question:'The field bunches up. Do you take advantage?',
     choices:[
-      { key:'box', label:'🔧 Pit now', desc:'Nearly free stop, but you lose a few positions in traffic.' },
+      { key:'box', label:'🔧 Pit now', desc:'The undercut can pay off big, but get it wrong and you lose positions in traffic.' },
       { key:'stay', label:'🚦 Stay out', desc:"Keep your position, but you'll have to stop later under normal conditions." },
       { key:'restart', label:'⚡ Aggressive restart', desc:'Risk it all at the restart to gain positions immediately.' },
     ]},
@@ -4196,13 +4201,13 @@ const LIVE_DECISION_INFO_EN = {
 const LIVE_DECISION_INFO_ES = {
   weather: { title:'El clima está cambiando', question:'Las condiciones de pista cambian justo ahora. ¿Qué haces?',
     choices:[
-      { key:'box', label:'🛞 Cambia neumáticos ya', desc:'Seguro, pero pierdes algunas posiciones en boxes.' },
+      { key:'box', label:'🛞 Cambia neumáticos ya', desc:'Arriesgado: si el undercut sale bien ganas terreno, si no pierdes posiciones.' },
       { key:'stay', label:'⏳ Sigue una vuelta más', desc:'Arriesgas, pero ganas si el clima te ayuda.' },
       { key:'splitstrategy', label:'🔀 Divide las estrategias', desc:'Un piloto entra, el otro sigue fuera: cubres ambas opciones.' },
     ]},
   safetycar: { title:'Safety Car en pista', question:'El pelotón se compacta. ¿Lo aprovechas?',
     choices:[
-      { key:'box', label:'🔧 Entra a boxes', desc:'Parada casi gratis, pero pierdes algunas posiciones en el tráfico.' },
+      { key:'box', label:'🔧 Entra a boxes', desc:'El undercut puede salir muy bien, pero si falla pierdes posiciones en el tráfico.' },
       { key:'stay', label:'🚦 Sigue en pista', desc:'Mantienes la posición, pero tendrás que parar después en condiciones normales.' },
       { key:'restart', label:'⚡ Reinicio agresivo', desc:'Arriesgas todo en la reanudación para ganar posiciones de inmediato.' },
     ]},
@@ -4290,13 +4295,13 @@ const LIVE_DECISION_INFO_ES = {
 const LIVE_DECISION_INFO_IT_BASE = {
   weather: { title:'Il meteo sta cambiando', question:'Le condizioni di pista cambiano proprio ora. Che fai?',
     choices:[
-      { key:'box', label:'🛞 Cambia gomme subito', desc:'Sicuro, ma perdi qualche posizione ai box.' },
+      { key:'box', label:'🛞 Cambia gomme subito', desc:'Rischioso: se l\'undercut riesce guadagni terreno, se va male perdi posizioni.' },
       { key:'stay', label:'⏳ Resta fuori un altro giro', desc:'Rischi, ma guadagni se il meteo ti aiuta.' },
       { key:'splitstrategy', label:'🔀 Dividi le strategie', desc:'Un pilota entra, l\'altro resta fuori: copri entrambe le opzioni.' },
     ]},
   safetycar: { title:'Safety Car in pista', question:'Il gruppo si compatta. Ne approfitti?',
     choices:[
-      { key:'box', label:'🔧 Entra ai box', desc:'Sosta quasi gratis, ma perdi qualche posizione nel traffico.' },
+      { key:'box', label:'🔧 Entra ai box', desc:'L\'undercut può ripagarsi alla grande, ma se va male perdi posizioni nel traffico.' },
       { key:'stay', label:'🚦 Resta in pista', desc:'Mantieni la posizione, ma dovrai fermarti dopo in condizioni normali.' },
       { key:'restart', label:'⚡ Ripartenza aggressiva', desc:'Rischi tutto al riavvio per guadagnare subito posizioni.' },
     ]},
@@ -4391,7 +4396,7 @@ const LIVE_DECISION_INFO = new Proxy({}, { get:(t,k)=> {
 // sia sapere ESATTAMENTE quale esito si e' verificato per il ballottaggio in gara.
 // shift negativo = guadagni posizioni, positivo = ne perdi, 0 = mantieni.
 const DECISION_OUTCOME_BUCKETS = {
-  box:        [{ prob:1.00, label:'lose_1_2', min:1, max:2 }],
+  box:        [{ prob:0.45, label:'gain_1_2', min:-2, max:-1 }, { prob:0.30, label:'hold', min:0, max:0 }, { prob:0.25, label:'lose_2', min:2, max:2 }],
   stay:       [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.50, label:'lose_1', min:1, max:1 }],
   restart:    [{ prob:0.45, label:'gain_1_2', min:-2, max:-1 }, { prob:0.55, label:'lose_2', min:2, max:2 }],
   early:      [{ prob:0.60, label:'gain_1', min:-1, max:-1 }, { prob:0.40, label:'lose_1', min:1, max:1 }],
@@ -5322,7 +5327,7 @@ function applyUpgrade(upg, investT){
   if(upg.area==='Globale'){
     if(!failed){
       ['motore','telaio','aero','gomme','stratega'].forEach(k=>{
-        state.team[k].rating = clamp(state.team[k].rating + Math.round(upg.guadagno/3), 1, 100);
+        state.team[k].rating = clamp(state.team[k].rating + upg.guadagno, 1, 100);
       });
       state.log.unshift({type:'pos', text:`Sviluppo riuscito: ${upg.nome} — bonus diffuso a tutta la vettura.`});
     } else {
@@ -8307,8 +8312,7 @@ function currentItemCardHTML(item){
 function upgradeTargetInfo(u){
   const areaMap = {'Piloti':'pilotMain','Motore':'motore','Telaio':'telaio','Aerodinamica':'aero','Gomme':'gomme','Strategia':'stratega'};
   if(u.area==='Globale'){
-    const perComponent = Math.round(u.guadagno/3);
-    return { label:'Tutta la vettura', change:`+${perComponent} RATING su motore, telaio, aero, gomme e stratega` };
+    return { label:'Tutta la vettura', change:`+${u.guadagno} RATING su motore, telaio, aero, gomme e stratega` };
   }
   const key = areaMap[u.area];
   const current = key ? state.team[key] : null;
@@ -8617,7 +8621,7 @@ function renderUpgradeResult(){
     <div class="suspense-sub dim">${u.nome}${u.riskPct!==undefined?t('upg_risk_taken', u.riskPct):''}</div>
     ${u.failed
       ? `<div class="tag-line malus" style="margin-top:10px;font-size:13px;">${u.malus || t('upg_no_gain')}</div>`
-      : `<div class="tag-line bonus" style="margin-top:10px;font-size:13px;">${u.area==='Globale' ? t('upg_gain_global', Math.round(u.guadagno/3)) : t('upg_gain_area', u.guadagno, displayArea(u.area))}</div>`}
+      : `<div class="tag-line bonus" style="margin-top:10px;font-size:13px;">${u.area==='Globale' ? t('upg_gain_global', u.guadagno) : t('upg_gain_area', u.guadagno, displayArea(u.area))}</div>`}
   </div>
   <div class="btnrow" style="justify-content:center;"><button class="primary" data-action="continue-upgrade-result">${t('upg_continue')}</button></div>
   `;
