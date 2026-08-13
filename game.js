@@ -8653,9 +8653,11 @@ function pitlaneCardHTML(node, idx){
       // nessun rischio da negoziare: acquisto diretto al costo fisso, come prima
       const costoM = u.costo/1000000;
       const afford = state.budget >= costoM;
-      // V0.9.9.19/23: sconto sponsor (Ferrotech) — prezzo pieno barrato, nuovo prezzo, banner sotto
+      // V0.9.9.28: sconto sponsor (Ferrotech) — prezzo pieno barrato, nuovo prezzo nel colore DEL
+      // MARCHIO invece del verde generico, banner sotto
+      const discountColor = u.sponsorDiscount ? (SPONSOR_BRAND[u.sponsorDiscount.nome]||{}).accent : null;
       const costHTML = u.sponsorDiscount
-        ? `<span class="dev-cost">${t('pcard_cost')} <s class="mono dim">${fmtMIcon(u.sponsorDiscount.originalCosto/1000000)}</s> <b class="mono" style="color:var(--ok);">${fmtMIcon(costoM)}</b></span>`
+        ? `<span class="dev-cost">${t('pcard_cost')} <s class="mono dim">${fmtMIcon(u.sponsorDiscount.originalCosto/1000000)}</s> <b class="mono" style="color:${discountColor||'var(--ok)'};">${fmtMIcon(costoM)}</b></span>`
         : `<span class="dev-cost">${t('pcard_cost')} <b class="mono">${fmtMIcon(costoM)}</b></span>`;
       const discountBanner = u.sponsorDiscount ? sponsorAdBannerHTML(u.sponsorDiscount.nome, t('pcard_discount_thanks', u.sponsorDiscount.nome)) : '';
       return `
@@ -8697,9 +8699,9 @@ function pitlaneCardHTML(node, idx){
       ` : `
       <div class="invest-row">
         <input type="range" class="invest-slider" min="0" max="100" value="${Math.floor(defaultT*100)}" step="1"
-          data-idx="${idx}" data-base-cost="${u.costo}" data-t0="${t0}" data-max-t="${maxT}">
+          data-idx="${idx}" data-base-cost="${u.costo}" data-t0="${t0}" data-max-t="${maxT}" ${cardBrand?`style="--slider-accent:${cardBrand.accent};"`:''}>
         <div class="invest-readout">
-          <span>${t('pcard_invest_cost')} ${u.sponsorDiscount ? `<s class="mono dim">${fmtMIcon(defaultCostM * u.sponsorDiscount.originalCosto / u.costo)}</s> ` : ''}<b class="mono" id="investCost-${idx}">${fmtMIcon(defaultCostM)}</b></span>
+          <span>${t('pcard_invest_cost')} ${u.sponsorDiscount ? `<s class="mono dim">${fmtMIcon(defaultCostM * u.sponsorDiscount.originalCosto / u.costo)}</s> ` : ''}<b class="mono" id="investCost-${idx}" style="${u.sponsorDiscount?`color:${(SPONSOR_BRAND[u.sponsorDiscount.nome]||{}).accent||'var(--ok)'};`:''}">${fmtMIcon(defaultCostM)}</b></span>
           <span class="dev-risk ${risk.cls}" id="investRisk-${idx}">${risk.label} · ${defaultRisk}%</span>
         </div>
         ${u.sponsorDiscount ? sponsorAdBannerHTML(u.sponsorDiscount.nome, t('pcard_discount_thanks', u.sponsorDiscount.nome)) : ''}
