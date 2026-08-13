@@ -51,6 +51,11 @@ function initSupabase(){
 async function signInWithGoogle(){
   if(!supabaseClient) initSupabase();
   if(!supabaseClient) return;
+  // V0.9.9.16: FIX VERO — un semplice window.* NON sopravvive alla navigazione fisica verso Google
+  // e ritorno (l'intera pagina si ricarica, window viene ricreato da zero, qualunque valore
+  // impostato qui andrebbe perso). sessionStorage invece sopravvive, essendo legato alla scheda
+  // del browser, non al singolo caricamento della pagina.
+  try{ sessionStorage.setItem('rdAuthRedirectAt', String(Date.now())); }catch(e){ /* ignorato */ }
   await supabaseClient.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: window.location.href.split('?')[0] } // torna sulla stessa pagina, senza parametri residui
@@ -11060,7 +11065,18 @@ function handleBackGesture(){
   // V0.9.8.1: appena tornati dal login con Google — questo "indietro" e' il redirect, non una
   // vera pressione dell'utente. Lo ignoriamo, ripristinando la guardia per le pressioni vere
   // successive (altrimenti la prossima uscirebbe senza chiedere conferma).
-  if(window.__justHandledAuthRedirect){ pushBackGuard(); return; }
+  // V0.9.9.16: controllo primario via sessionStorage (sopravvive alla navigazione fisica verso
+  // Google e ritorno), finestra di 15s per coprire anche round-trip OAuth piu' lenti del solito.
+  let justReturnedFromAuth = false;
+  try{
+    const ts = Number(sessionStorage.getItem('rdAuthRedirectAt')||0);
+    if(ts && (Date.now()-ts) < 15000) justReturnedFromAuth = true;
+  }catch(e){ /* ignorato */ }
+  if(justReturnedFromAuth || window.__justHandledAuthRedirect){
+    try{ sessionStorage.removeItem('rdAuthRedirectAt'); }catch(e){}
+    pushBackGuard();
+    return;
+  }
   if(document.getElementById('goatRevealOverlay')){
     const closeBtn = document.getElementById('goatRevealCloseBtn');
     if(closeBtn) closeBtn.click();
