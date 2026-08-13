@@ -435,6 +435,7 @@ const I18N = {
     pg_go_to_race: 'Vai alla Gara →', pg_details_toggle: '🔍 Dettagli — componenti, statistiche, griglia completa',
     cat_aero_pack: 'Pacchetto Aerodinamico', cat_tire_supplier: 'Fornitore Gomme',
     pcard_guaranteed: 'UPGRADE GARANTITO', pcard_development: 'SVILUPPO', pcard_cost: 'Costo', pcard_no_risk: 'Nessun rischio',
+    pitlane_extra_card_banner: (nome)=>`Disponibile grazie a ${nome}`, pcard_discount_thanks: (nome)=>`grazie a ${nome}`,
     pcard_insufficient_budget: 'Budget insufficiente', pcard_tap_buy: 'Tocca per acquistare',
     pcard_frozen: (max)=>`Budget insufficiente — nemmeno l'investimento minimo (rischio ${max}%) è alla tua portata ora.`,
     pcard_invest_cost: 'Costo', pcard_slider_hint: '← più economico, più rischio &nbsp;·&nbsp; più sicuro, più caro →',
@@ -500,6 +501,7 @@ const I18N = {
     race_result_retired: 'RIT', race_result_retired_full: 'RITIRATO',
     race_result_you_badge: 'TU', race_result_rival_badge: 'RIVALE', race_result_no_events: 'Nessun evento di rilievo in questo Gran Premio.',
     race_result_title: (n,tot)=>`Risultato Gran Premio ${n}/${tot}`, race_result_continue: 'Continua →',
+    prize_panel_title: 'Premio Gran Premio', prize_collect_btn: 'Incassa', prize_collected_btn: 'Incassato ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
     race_result_why: '❓ Perché sei arrivato così', race_result_finish_order: 'Ordine di Arrivo', race_result_20_drivers: '20 PILOTI',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Pilota', race_result_th_team: 'Scuderia', race_result_th_points: 'Punti',
     race_result_event_log: 'Log Eventi di Gara', race_result_show_full_log: (n)=>`Mostra il log completo della gara (${n} eventi)`,
@@ -711,6 +713,7 @@ const I18N = {
     pg_go_to_race: 'Go to Race →', pg_details_toggle: '🔍 Details — components, stats, full grid',
     cat_aero_pack: 'Aero Package', cat_tire_supplier: 'Tyre Supplier',
     pcard_guaranteed: 'GUARANTEED UPGRADE', pcard_development: 'DEVELOPMENT', pcard_cost: 'Cost', pcard_no_risk: 'No risk',
+    pitlane_extra_card_banner: (nome)=>`Available thanks to ${nome}`, pcard_discount_thanks: (nome)=>`thanks to ${nome}`,
     pcard_insufficient_budget: 'Insufficient budget', pcard_tap_buy: 'Tap to buy',
     pcard_frozen: (max)=>`Insufficient budget — not even the minimum investment (${max}% risk) is within reach right now.`,
     pcard_invest_cost: 'Cost', pcard_slider_hint: '← cheaper, more risk &nbsp;·&nbsp; safer, more expensive →',
@@ -776,6 +779,7 @@ const I18N = {
     race_result_retired: 'DNF', race_result_retired_full: 'RETIRED',
     race_result_you_badge: 'YOU', race_result_rival_badge: 'RIVAL', race_result_no_events: 'No notable events in this Grand Prix.',
     race_result_title: (n,tot)=>`Grand Prix Result ${n}/${tot}`, race_result_continue: 'Continue →',
+    prize_panel_title: 'Grand Prix Prize', prize_collect_btn: 'Collect', prize_collected_btn: 'Collected ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
     race_result_why: '❓ Why you finished like this', race_result_finish_order: 'Finishing Order', race_result_20_drivers: '20 DRIVERS',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Driver', race_result_th_team: 'Team', race_result_th_points: 'Points',
     race_result_event_log: 'Race Event Log', race_result_show_full_log: (n)=>`Show full race log (${n} events)`,
@@ -981,6 +985,7 @@ const I18N = {
     pg_go_to_race: 'Ir a la Carrera →', pg_details_toggle: '🔍 Detalles — componentes, estadísticas, parrilla completa',
     cat_aero_pack: 'Paquete Aerodinámico', cat_tire_supplier: 'Proveedor de Neumáticos',
     pcard_guaranteed: 'MEJORA GARANTIZADA', pcard_development: 'DESARROLLO', pcard_cost: 'Coste', pcard_no_risk: 'Sin riesgo',
+    pitlane_extra_card_banner: (nome)=>`Disponible gracias a ${nome}`, pcard_discount_thanks: (nome)=>`gracias a ${nome}`,
     pcard_insufficient_budget: 'Presupuesto insuficiente', pcard_tap_buy: 'Toca para comprar',
     pcard_frozen: (max)=>`Presupuesto insuficiente — ni siquiera la inversión mínima (riesgo ${max}%) está a tu alcance ahora.`,
     pcard_invest_cost: 'Coste', pcard_slider_hint: '← más económico, más riesgo &nbsp;·&nbsp; más seguro, más caro →',
@@ -1046,6 +1051,7 @@ const I18N = {
     race_result_retired: 'RET', race_result_retired_full: 'RETIRADO',
     race_result_you_badge: 'TÚ', race_result_rival_badge: 'RIVAL', race_result_no_events: 'Sin eventos destacables en este Gran Premio.',
     race_result_title: (n,tot)=>`Resultado Gran Premio ${n}/${tot}`, race_result_continue: 'Continuar →',
+    prize_panel_title: 'Premio del Gran Premio', prize_collect_btn: 'Cobrar', prize_collected_btn: 'Cobrado ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
     race_result_why: '❓ Por qué has terminado así', race_result_finish_order: 'Orden de Llegada', race_result_20_drivers: '20 PILOTOS',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Piloto', race_result_th_team: 'Escudería', race_result_th_points: 'Puntos',
     race_result_event_log: 'Registro de Eventos de Carrera', race_result_show_full_log: (n)=>`Mostrar registro completo de la carrera (${n} eventos)`,
@@ -1692,7 +1698,7 @@ document.addEventListener('visibilitychange', ()=>{
 const LOGO_DATA_URI = 'assets/logo.png'; // V0.7.2: logo titolo
 const RARITY_ORDER = ['Common','Rare','Epic','Legendary','Immortal'];
 const POINTS_TABLE = [25,18,15,12,10,8,6,4,2,1];
-const PRIZE_TABLE  = [3.2,2.5,2.0,1.6,1.3,1.0,0.8,0.6,0.4,0.2]; // milioni
+const PRIZE_TABLE  = [16,12,10,8,6.5,5,4,3,2,1]; // milioni — V0.9.9.20: alzato ~5x, prima erano cifre troppo piccole per sentirsi un vero premio
 const START_BUDGET = 20; // milioni
 
 // --- V0.2: difficoltà e reroll ---
@@ -3595,7 +3601,7 @@ function finalizeRaceScoring(timeline){
     return {
       slotKey, teamId:e.teamId, teamName:e.teamName, isPlayerTeam:e.isPlayerTeam, carNumber:e.carNumber,
       driverName:e.pilot.nome, pos:i+1, dnf,
-      points: dnf?0:(POINTS_TABLE[i]||0), prize: dnf?0.1:(PRIZE_TABLE[i]||0.1)
+      points: dnf?0:(POINTS_TABLE[i]||0), prize: dnf?0.5:(PRIZE_TABLE[i]||0.5)
     };
   });
   timeline.entries = finalEntries; // da qui in poi anche i dettagli live (se riconsultati) riflettono il risultato vero
@@ -3614,15 +3620,23 @@ function finalizeRaceScoring(timeline){
     const cs = state.constructorStandings[e.teamId];
     cs.points += e.points;
   });
-  // V0.9.9.8: Auronis — +15% sui premi gara, sempre (prima era il vecchio "Title Sponsor",
-  // condizionato alla top 8 — ora e' un vantaggio sempre attivo se scegli questo sponsor, senza
-  // condizioni, in cambio pero' non da' nessun altro bonus: e' la scelta di chi punta sui risultati).
+  // V0.9.9.19: NON accreditiamo piu' subito — l'importo viene mostrato nella schermata risultato
+  // gara e accreditato solo al click su "Incassa" (animato, soddisfacente). Calcoliamo base e
+  // bonus sponsor SEPARATAMENTE, per poterli mostrare come due voci distinte ("premio" + "bonus
+  // sponsor powered by X", stile pubblicita' discreta).
   const sponsorEffectNow = state.sponsor ? SPONSOR_EFFECTS[state.sponsor.nome] : null;
   const sponsorPrizeBoost = (sponsorEffectNow && sponsorEffectNow.type==='prize_boost') ? (1+sponsorEffectNow.pct) : 1;
-  const prize = finalEntries.filter(e=>e.isPlayerTeam).reduce((s,e)=> s+e.prize, 0) * difficultyParams().prizeMult * sponsorPrizeBoost;
-  state.budget += prize;
-  // V0.9.9.8: Meridia — piccolo bonus fisso ogni gara, senza condizioni
-  if(sponsorEffectNow && sponsorEffectNow.type==='budget_bonus') state.budget += sponsorEffectNow.amount;
+  const basePrize = finalEntries.filter(e=>e.isPlayerTeam).reduce((s,e)=> s+e.prize, 0) * difficultyParams().prizeMult;
+  const totalPrize = basePrize * sponsorPrizeBoost;
+  const sponsorPrizeBonusAmount = totalPrize - basePrize; // solo la parte in piu' dovuta allo sponsor
+  const sponsorFlatBonus = (sponsorEffectNow && sponsorEffectNow.type==='budget_bonus') ? sponsorEffectNow.amount : 0;
+  state.pendingPrize = {
+    base: basePrize,
+    sponsorPrizeBonus: sponsorPrizeBonusAmount,
+    sponsorFlatBonus: sponsorFlatBonus,
+    sponsorNome: state.sponsor ? state.sponsor.nome : null,
+    collected: false,
+  };
 
   // V0.9.7.9: "Sul Podio" — la prima volta che un'auto del giocatore chiude nei primi 3, ritiro escluso
   if(finalEntries.some(e=>e.isPlayerTeam && !e.dnf && e.pos<=3)) unlockAchievement('sul-podio');
@@ -4558,17 +4572,20 @@ function applyLiveDecision(type, choiceKey){
 
   function applyShiftAcrossPhases(slotKey, firstShift, laterShiftFn){
     let isFirst = true;
+    let actualFirstShift = 0; // V0.9.9.18: lo spostamento VERO alla prima fase, dopo il limite ai bordi
     for(let phase=t+1; phase<PHASES.length; phase++){
       const order = timeline.phaseOrders[phase];
       const idx = order.indexOf(slotKey);
       if(idx<0) continue;
       const shift = isFirst ? firstShift : laterShiftFn();
-      isFirst = false;
-      if(shift===0) continue;
+      if(shift===0){ isFirst = false; continue; }
       const newIdx = Math.max(0, Math.min(order.length-1, idx+shift));
+      if(isFirst) actualFirstShift = newIdx - idx; // puo' essere piu' piccolo del nominale se al limite (es. gia' P1)
+      isFirst = false;
       order.splice(idx,1); order.splice(newIdx,0,slotKey);
       interpolateCumTimeForShift(timeline.cumTimeByPhase && timeline.cumTimeByPhase[phase], order, slotKey, newIdx, timeline.retiredAtPhase);
     }
+    return actualFirstShift;
   }
 
   if(choiceKey==='splitstrategy'){
@@ -4577,8 +4594,8 @@ function applyLiveDecision(type, choiceKey){
     slots.forEach(slotKey=>{
       if(timeline.retiredAtPhase[slotKey]!==null) return;
       const outcome = pickDecisionOutcome(bucketChoice[slotKey]);
-      reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:outcome.shift };
-      applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(bucketChoice[slotKey]));
+      const actualShift = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(bucketChoice[slotKey]));
+      reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualShift };
     });
     return reveal;
   }
@@ -4586,8 +4603,12 @@ function applyLiveDecision(type, choiceKey){
   affectedSlots.forEach(slotKey=>{
     if(timeline.retiredAtPhase[slotKey]!==null) return; // gia' ritirato: la scelta non ha piu' effetto
     const outcome = pickDecisionOutcome(choiceKey);
-    reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:outcome.shift };
-    applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(choiceKey));
+    const actualShift = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(choiceKey));
+    // V0.9.9.18: FIX — il testo mostrato ("Guadagni X posizioni") usava lo shift NOMINALE della
+    // scelta, non quello davvero applicato dopo il limite ai bordi (es. gia' P1, non puoi guadagnare
+    // altro). Ora mostra quello vero — se sei gia' primo, dira' correttamente "resti primo" invece
+    // di promettere posizioni che non esistono.
+    reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualShift };
   });
   return reveal;
 }
@@ -4708,7 +4729,7 @@ function resolveLiveDecision(choiceKey){
       let readLen = 0;
       slotKeys.forEach(slotKey=>{
         const { bucketIdx, buckets, shift } = outcomes[slotKey];
-        const label = shift!==0 ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift)) : t('bkt_'+buckets[bucketIdx].label);
+        const label = shift!==0 ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift)) : t('bkt_hold');
         readLen += label.length;
       });
       const baseMs = isHighStakes ? 3200 : 2400;
@@ -4928,7 +4949,7 @@ function liveDecisionRevealHTML(){
         stateCls = i===bucketIdx ? 'reveal-winner' : 'reveal-dimmed';
         // V0.9.7.9.26: sulla chip vincente mostriamo il numero ESATTO uscito (es. "Guadagni 2
         // posizioni"), non piu' il range generico ("1-2") — quello serve solo prima di sapere.
-        text = (i===bucketIdx && shift!==0) ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift)) : t('bkt_'+b.label);
+        text = (i===bucketIdx) ? (shift!==0 ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift)) : t('bkt_hold')) : t('bkt_'+b.label);
       } else {
         stateCls = i===activeIdx ? 'reveal-active' : 'reveal-idle';
         text = t('bkt_'+b.label);
@@ -5372,11 +5393,20 @@ function buildPitlaneOptions(){
   // bonus impossibile da spendere. Questo invece si sente davvero, gara dopo gara.
   const sponsorEffectForCount = state.sponsor ? SPONSOR_EFFECTS[state.sponsor.nome] : null;
   const upgradeCount = 2 + ((sponsorEffectForCount && sponsorEffectForCount.type==='extra_pitlane_option') ? sponsorEffectForCount.amount : 0);
-  const upgrades = weightedSampleDistinct(usefulUpgrades.length?usefulUpgrades:DATA.upgrade, upgradeCount, 'spawnWeight', usedUpg).map(u=>{
+  const upgrades = weightedSampleDistinct(usefulUpgrades.length?usefulUpgrades:DATA.upgrade, upgradeCount, 'spawnWeight', usedUpg).map((u,i)=>{
     let costMult = seasonCostMult;
     const e = state.sponsor ? SPONSOR_EFFECTS[state.sponsor.nome] : null;
-    if(e && e.type==='cost_reduction') costMult *= (1-e.pct); // V0.9.9.8: Ferrotech — costo upgrade ridotto
-    const clone = costMult!==1 ? { ...u, costo: Math.round(u.costo*costMult) } : u;
+    const hasDiscount = e && e.type==='cost_reduction';
+    if(hasDiscount) costMult *= (1-e.pct); // V0.9.9.8: Ferrotech — costo upgrade ridotto
+    const originalCosto = Math.round(u.costo*seasonCostMult);
+    const finalCosto = Math.round(u.costo*costMult);
+    const clone = {
+      ...u, costo: finalCosto,
+      // V0.9.9.19: segniamo la carta extra (oltre le prime 2, sbloccata da Skyvane) e lo sconto
+      // sponsor (Ferrotech), per mostrare i banner giusti nel rendering.
+      sponsorExtraCard: (i>=2 && sponsorEffectForCount && sponsorEffectForCount.type==='extra_pitlane_option') ? state.sponsor.nome : null,
+      sponsorDiscount: hasDiscount ? { originalCosto, nome: state.sponsor.nome } : null,
+    };
     return {type:'upgrade', data:clone};
   });
   const scoutCategories = [
@@ -6526,7 +6556,7 @@ function topbarHTML(){
     <div class="brand hdr">RACING DYNASTY<small>Roguelike GP Manager — ${GAME_VERSION} · ${DIFFICULTY_LABEL[state.difficulty]}</small></div>
     <div class="hud">
       <div class="hud-item"><div class="hud-label">${t('hud_reroll')}</div><div class="hud-value">${state.rerollsLeft}/${state.rerollsTotal}</div></div>
-      <div class="hud-item"><div class="hud-label">${t('hud_budget')}</div><div class="hud-value amber">${fmtMIcon(state.budget)}</div></div>
+      <div class="hud-item"><div class="hud-label">${t('hud_budget')}</div><div class="hud-value amber" id="hudBudgetValue">${fmtMIcon(state.budget)}</div></div>
       ${sponsorHTML}
       <div class="hud-item"><div class="hud-label">${t('hud_race')}</div><div class="hud-value">${Math.min(state.raceIndex+1,state.calendar.length)}/${state.calendar.length}</div></div>
       <div class="hud-item"><div class="hud-label">${t('hud_best_driver')}</div><div class="hud-value cyan">P${bestDriverPos||'-'}</div></div>
@@ -8377,6 +8407,46 @@ function raceExplanationHTML(r, slotKey){
   return lines.map(l=>`<div class="logline ${l.sign}"><span class="icon">${l.sign==='pos'?'▲':l.sign==='neg'?'▼':'–'}</span><span>${l.text}</span></div>`).join('');
 }
 
+// V0.9.9.19: accredita il premio in sospeso — idempotente, si puo' chiamare piu' volte senza
+// rischio di doppio accredito (usata sia dal pulsante "Incassa" che dalla rete di sicurezza).
+function collectPendingPrize(){
+  const p = state.pendingPrize;
+  if(!p || p.collected) return;
+  state.budget += (p.base + p.sponsorPrizeBonus + p.sponsorFlatBonus);
+  p.collected = true;
+}
+// V0.9.9.19: animazione di conteggio soddisfacente ma discreta — numero che sale, sincronizzato
+// tra il pulsante e il budget in topbar, niente monete volanti o effetti eccessivi.
+function animatePrizeCollect(){
+  const p = state.pendingPrize;
+  if(!p || p.collected) return;
+  const btn = document.getElementById('collectPrizeBtn');
+  const readout = document.getElementById('collectPrizeReadout');
+  const hudEl = document.getElementById('hudBudgetValue');
+  if(btn) btn.disabled = true;
+  const total = p.base + p.sponsorPrizeBonus + p.sponsorFlatBonus;
+  const startBudget = state.budget;
+  const duration = 900;
+  const startTime = performance.now();
+  function tick(now){
+    const progress = Math.min(1, (now-startTime)/duration);
+    const eased = 1 - Math.pow(1-progress, 3); // ease-out, rallenta verso la fine
+    const current = total * eased;
+    if(readout) readout.innerHTML = fmtMIcon(current);
+    if(hudEl) hudEl.innerHTML = fmtMIcon(startBudget + current);
+    if(progress < 1){
+      requestAnimationFrame(tick);
+    } else {
+      collectPendingPrize();
+      if(readout) readout.innerHTML = fmtMIcon(total);
+      if(hudEl) hudEl.innerHTML = fmtMIcon(state.budget);
+      const panel = document.getElementById('collectPrizePanel');
+      if(panel) panel.classList.add('collected');
+      if(btn) btn.textContent = t('prize_collected_btn');
+    }
+  }
+  requestAnimationFrame(tick);
+}
 function renderRaceResult(){
   const r = state.lastRaceResult;
   const rows = r.entries.map(e=>{
@@ -8406,12 +8476,31 @@ function renderRaceResult(){
   const nm2 = state.team.pilotSecond.nome.split(' ').pop();
   const headline = `${nm1}: ${p1.dnf?t('race_result_retired_full'):'P'+p1.pos} · ${nm2}: ${p2.dnf?t('race_result_retired_full'):'P'+p2.pos}`;
 
+  // V0.9.9.19: pannello premio gara — importo mostrato, accreditato solo al click su "Incassa".
+  // Il bonus sponsor (se presente) e' mostrato come riga separata, discreta, stile "powered by".
+  const pp = state.pendingPrize;
+  const prizeTotal = pp ? (pp.base + pp.sponsorPrizeBonus + pp.sponsorFlatBonus) : 0;
+  const sponsorBonusTotal = pp ? (pp.sponsorPrizeBonus + pp.sponsorFlatBonus) : 0;
+  const prizePanelHTML = pp ? `
+  <div class="panel prize-collect-panel ${pp.collected?'collected':''}" id="collectPrizePanel">
+    <div class="eyebrow">${t('prize_panel_title')}</div>
+    <div class="prize-collect-amount" id="collectPrizeReadout">${fmtMIcon(pp.collected ? prizeTotal : 0)}</div>
+    ${sponsorBonusTotal>0 ? `<div class="prize-powered-by">
+      <img src="${sponsorLogoSrc(pp.sponsorNome)}" alt="" onerror="this.style.display='none'">
+      <span>+${fmtMIcon(sponsorBonusTotal)} ${t('prize_powered_by', pp.sponsorNome)}</span>
+    </div>` : ''}
+    <button class="primary" id="collectPrizeBtn" data-action="collect-prize-btn" ${pp.collected?'disabled':''} style="width:100%;margin-top:12px;">
+      ${pp.collected ? t('prize_collected_btn') : t('prize_collect_btn')}
+    </button>
+  </div>` : '';
+
   app.innerHTML = `
   ${topbarHTML()}
   <div class="panel">
     <div class="eyebrow">${t('race_result_title', state.raceIndex+1, state.calendar.length)} — ${flag(r.circuit.paese)} ${r.circuit.nome}</div>
     <h2 class="hdr" style="font-size:26px;">${headline}</h2>
   </div>
+  ${prizePanelHTML}
   ${trophyUnlockBannerHTML()}
   <div class="btnrow"><button class="primary" data-action="continue-to-pitlane">${t('race_result_continue')}</button></div>
   <details class="hub-expand">
@@ -8484,18 +8573,25 @@ function pitlaneCardHTML(node, idx){
     const rarityLike = u.tier; // V0.9.9.8: nomi fascia ora coincidono esattamente con le rarità carte, nessuna conversione
     const typeLabel = isGuaranteed ? t('pcard_guaranteed') : t('pcard_development');
     const info = upgradeTargetInfo(u);
+    // V0.9.9.19: banner "carta extra grazie allo sponsor" (Skyvane), riusato in entrambi i template
+    const extraCardBanner = u.sponsorExtraCard ? `<div class="pitlane-sponsor-banner"><img src="${sponsorLogoSrc(u.sponsorExtraCard)}" alt="" onerror="this.style.display='none'"><span>${t('pitlane_extra_card_banner', u.sponsorExtraCard)}</span></div>` : '';
 
     if(isGuaranteed){
       // nessun rischio da negoziare: acquisto diretto al costo fisso, come prima
       const costoM = u.costo/1000000;
       const afford = state.budget >= costoM;
+      // V0.9.9.19: sconto sponsor (Ferrotech) — prezzo pieno barrato, nuovo prezzo, badge di merito
+      const costHTML = u.sponsorDiscount
+        ? `<span class="dev-cost">${t('pcard_cost')} <s class="mono dim">${fmtMIcon(u.sponsorDiscount.originalCosto/1000000)}</s> <b class="mono" style="color:var(--ok);">${fmtMIcon(costoM)}</b><div class="pitlane-discount-badge">${t('pcard_discount_thanks', u.sponsorDiscount.nome)}</div></span>`
+        : `<span class="dev-cost">${t('pcard_cost')} <b class="mono">${fmtMIcon(costoM)}</b></span>`;
       return `
       <div class="card ${afford?'pickable':'card-frozen'}" data-rarity="${rarityLike}" ${afford?`data-action="confirm-upgrade-invest" data-idx="${idx}" data-fixed="1"`:''}>
+        ${extraCardBanner}
         <div class="tag-line dim" style="text-transform:uppercase;letter-spacing:0.06em;font-size:9.5px;">${typeLabel}</div>
         <span class="rarity-tag" data-rarity="${rarityLike}">${u.tier}</span>
         <div class="card-name">${u.nome}</div>
         <div class="dev-target"><span class="dev-area">${info.label}</span><span class="dev-change mono">${info.change}</span></div>
-        <div class="dev-meta"><span class="dev-cost">${t('pcard_cost')} <b class="mono">${fmtMIcon(costoM)}</b></span><span class="dev-risk risk-none">${t('pcard_no_risk')}</span></div>
+        <div class="dev-meta">${costHTML}<span class="dev-risk risk-none">${t('pcard_no_risk')}</span></div>
         ${!afford? `<div class="tag-line malus">${t('pcard_insufficient_budget')}</div>`:''}
         <div class="card-tap-hint">${afford?t('pcard_tap_buy'):''}</div>
       </div>`;
@@ -8511,6 +8607,7 @@ function pitlaneCardHTML(node, idx){
     const risk = riskLevel(defaultRisk);
     return `
     <div class="card ${frozen?'card-frozen':''}" data-rarity="${rarityLike}">
+      ${extraCardBanner}
       <div class="tag-line dim" style="text-transform:uppercase;letter-spacing:0.06em;font-size:9.5px;">${typeLabel}</div>
       <span class="rarity-tag" data-rarity="${rarityLike}">${u.tier}</span>
       <div class="card-name">${u.nome}</div>
@@ -8525,7 +8622,7 @@ function pitlaneCardHTML(node, idx){
         <input type="range" class="invest-slider" min="0" max="100" value="${Math.floor(defaultT*100)}" step="1"
           data-idx="${idx}" data-base-cost="${u.costo}" data-t0="${t0}" data-max-t="${maxT}">
         <div class="invest-readout">
-          <span>${t('pcard_invest_cost')} <b class="mono" id="investCost-${idx}">${fmtM(defaultCostM)}</b></span>
+          <span>${t('pcard_invest_cost')} ${u.sponsorDiscount ? `<s class="mono dim">${fmtMIcon(defaultCostM * u.sponsorDiscount.originalCosto / u.costo)}</s> ` : ''}<b class="mono" id="investCost-${idx}">${fmtMIcon(defaultCostM)}</b>${u.sponsorDiscount ? `<div class="pitlane-discount-badge">${t('pcard_discount_thanks', u.sponsorDiscount.nome)}</div>` : ''}</span>
           <span class="dev-risk ${risk.cls}" id="investRisk-${idx}">${risk.label} · ${defaultRisk}%</span>
         </div>
         <div class="dim" style="font-size:10px;margin-top:2px;">${t('pcard_slider_hint')}</div>
@@ -8572,7 +8669,7 @@ function pitlaneCardHTML(node, idx){
       const cls = classifyReplacement(node.catKey, current, o);
       const price = scoutSwapPrice(current, o);
       const priceCls = price>0 ? 'price-cost' : (price<0 ? 'price-gain' : 'price-neutral');
-      const priceText = price===0 ? '±0' : (price>0 ? `-${fmtM(price)}` : `+${fmtM(-price)}`);
+      const priceText = price===0 ? '±0' : (price>0 ? `-${fmtMIcon(price)}` : `+${fmtMIcon(-price)}`);
 
       const sameAsCurrent = current && current.sinergia && o.sinergia===current.sinergia;
       const wouldGain = o.sinergia && unpaired.has(o.sinergia) && !sameAsCurrent;
@@ -8687,8 +8784,8 @@ function renderPitlaneConfirm(){
     </div>
     <div class="dim" style="font-size:12px;margin-top:12px;">${t('pc_disclaimer')}</div>
     <div style="margin-top:10px;font-size:14px;">
-      <b style="color:${isDowngrade?'var(--ok)':(canAfford?'var(--cyan)':'var(--danger)')};">${isDowngrade?t('pc_gain', fmtM(-price)):t('pc_cost', fmtM(price))}</b>
-      · ${t('pc_budget_avail', fmtM(state.budget))}
+      <b style="color:${isDowngrade?'var(--ok)':(canAfford?'var(--cyan)':'var(--danger)')};">${isDowngrade?t('pc_gain', fmtMIcon(-price)):t('pc_cost', fmtMIcon(price))}</b>
+      · ${t('pc_budget_avail', fmtMIcon(state.budget))}
     </div>
     ${isDowngrade ? `<div class="dim" style="font-size:12px;color:var(--ok);margin-top:4px;">${t('pc_downgrade_note')}</div>` : ''}
     ${!canAfford ? `<div class="dim" style="font-size:12px;color:var(--danger);margin-top:4px;">${t('pc_cant_afford')}</div>` : ''}
@@ -9574,7 +9671,7 @@ function renderSeasonEnd(){
     <div class="hero-inner">
       <div class="pill">${pillText}</div>
       <h1 class="hdr" style="margin-top:14px;font-size:38px;">${heroTitle}</h1>
-      <div class="tagline">${t('se_summary', teamDisplayName(), totalPoints, totalWins, totalPodiums, totalDnfs, state.calendar.length, fmtM(state.budget))}</div>
+      <div class="tagline">${t('se_summary', teamDisplayName(), totalPoints, totalWins, totalPodiums, totalDnfs, state.calendar.length, fmtMIcon(state.budget))}</div>
       <div class="tagline" style="margin-top:6px;">${rivalComparisonSentence()}</div>
       <div class="btnrow" style="justify-content:center;">
         <button class="primary" data-action="back-to-title">${t('se_new_career')}</button>
@@ -9647,7 +9744,7 @@ function bindActions(){
       const riskPct = investedRisk(t);
       const costEl = document.getElementById(`investCost-${idx}`);
       const riskEl = document.getElementById(`investRisk-${idx}`);
-      if(costEl) costEl.textContent = fmtM(costoM);
+      if(costEl) costEl.innerHTML = fmtMIcon(costoM);
       if(riskEl){ const rl = riskLevel(riskPct); riskEl.textContent = `${rl.label} · ${riskPct}%`; riskEl.className = `dev-risk ${rl.cls}`; }
       const btn = app.querySelector(`[data-action="confirm-upgrade-invest"][data-idx="${idx}"]`);
       if(btn) btn.disabled = state.budget < costoM;
@@ -9889,7 +9986,11 @@ function onAction(e){
     gameConfirm(t('skip_race_warning_desc'), ()=>{ skipLiveRace(); }, t('skip_race_warning_title'));
   }
   else if(action==='resolve-live-decision'){ resolveLiveDecision(el.dataset.choice); }
+  else if(action==='collect-prize-btn'){
+    animatePrizeCollect();
+  }
   else if(action==='continue-to-pitlane'){
+    collectPendingPrize(); // V0.9.9.19: rete di sicurezza — se non hai cliccato "Incassa", viene accreditato comunque, silenziosamente
     if(state.isDriverCareer) goToDriverHubOrSeasonEnd();
     else goToPitlaneOrEnd();
   }
