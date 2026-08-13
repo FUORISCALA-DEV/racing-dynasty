@@ -436,6 +436,7 @@ const I18N = {
     cat_aero_pack: 'Pacchetto Aerodinamico', cat_tire_supplier: 'Fornitore Gomme',
     pcard_guaranteed: 'UPGRADE GARANTITO', pcard_development: 'SVILUPPO', pcard_cost: 'Costo', pcard_no_risk: 'Nessun rischio',
     pitlane_extra_card_banner: (nome)=>`Disponibile grazie a ${nome}`, pcard_discount_thanks: (nome)=>`grazie a ${nome}`,
+    pitlane_tier_boost_banner: (nome)=>`Fascia alta più frequente grazie a ${nome}`, pitlane_area_boost_banner: (nome)=>`Più frequente grazie a ${nome}`,
     pcard_insufficient_budget: 'Budget insufficiente', pcard_tap_buy: 'Tocca per acquistare',
     pcard_frozen: (max)=>`Budget insufficiente — nemmeno l'investimento minimo (rischio ${max}%) è alla tua portata ora.`,
     pcard_invest_cost: 'Costo', pcard_slider_hint: '← più economico, più rischio &nbsp;·&nbsp; più sicuro, più caro →',
@@ -714,6 +715,7 @@ const I18N = {
     cat_aero_pack: 'Aero Package', cat_tire_supplier: 'Tyre Supplier',
     pcard_guaranteed: 'GUARANTEED UPGRADE', pcard_development: 'DEVELOPMENT', pcard_cost: 'Cost', pcard_no_risk: 'No risk',
     pitlane_extra_card_banner: (nome)=>`Available thanks to ${nome}`, pcard_discount_thanks: (nome)=>`thanks to ${nome}`,
+    pitlane_tier_boost_banner: (nome)=>`High-tier, more frequent thanks to ${nome}`, pitlane_area_boost_banner: (nome)=>`More frequent thanks to ${nome}`,
     pcard_insufficient_budget: 'Insufficient budget', pcard_tap_buy: 'Tap to buy',
     pcard_frozen: (max)=>`Insufficient budget — not even the minimum investment (${max}% risk) is within reach right now.`,
     pcard_invest_cost: 'Cost', pcard_slider_hint: '← cheaper, more risk &nbsp;·&nbsp; safer, more expensive →',
@@ -986,6 +988,7 @@ const I18N = {
     cat_aero_pack: 'Paquete Aerodinámico', cat_tire_supplier: 'Proveedor de Neumáticos',
     pcard_guaranteed: 'MEJORA GARANTIZADA', pcard_development: 'DESARROLLO', pcard_cost: 'Coste', pcard_no_risk: 'Sin riesgo',
     pitlane_extra_card_banner: (nome)=>`Disponible gracias a ${nome}`, pcard_discount_thanks: (nome)=>`gracias a ${nome}`,
+    pitlane_tier_boost_banner: (nome)=>`Gama alta más frecuente gracias a ${nome}`, pitlane_area_boost_banner: (nome)=>`Más frecuente gracias a ${nome}`,
     pcard_insufficient_budget: 'Presupuesto insuficiente', pcard_tap_buy: 'Toca para comprar',
     pcard_frozen: (max)=>`Presupuesto insuficiente — ni siquiera la inversión mínima (riesgo ${max}%) está a tu alcance ahora.`,
     pcard_invest_cost: 'Coste', pcard_slider_hint: '← más económico, más riesgo &nbsp;·&nbsp; más seguro, más caro →',
@@ -8514,13 +8517,20 @@ function renderRaceResult(){
   const nm2 = state.team.pilotSecond.nome.split(' ').pop();
   const headline = `${nm1}: ${p1.dnf?t('race_result_retired_full'):'P'+p1.pos} · ${nm2}: ${p2.dnf?t('race_result_retired_full'):'P'+p2.pos}`;
 
-  // V0.9.9.19: pannello premio gara — importo mostrato, accreditato solo al click su "Incassa".
-  // Il bonus sponsor (se presente) e' mostrato come riga separata, discreta, stile "powered by".
+  // V0.9.9.19/24: pannello premio gara — importo mostrato, accreditato solo al click su "Incassa".
+  // Se lo sponsor attivo e' legato ai soldi (Meridia/Auronis), l'INTERO pannello si personalizza nei
+  // suoi colori (non solo una riga) — ha senso che la schermata dei soldi "vesta" il loro sponsor.
   const pp = state.pendingPrize;
   const prizeTotal = pp ? (pp.base + pp.sponsorPrizeBonus + pp.sponsorFlatBonus) : 0;
   const sponsorBonusTotal = pp ? (pp.sponsorPrizeBonus + pp.sponsorFlatBonus) : 0;
+  const moneySponsorEffect = pp && pp.sponsorNome ? SPONSOR_EFFECTS[pp.sponsorNome] : null;
+  const isMoneySponsor = moneySponsorEffect && (moneySponsorEffect.type==='prize_boost' || moneySponsorEffect.type==='budget_bonus');
+  const brand = isMoneySponsor ? SPONSOR_BRAND[pp.sponsorNome] : null;
+  const panelThemeStyle = brand ? `style="background:linear-gradient(160deg, ${brand.c1}22, ${brand.c2}44); border:1px solid ${brand.accent}66;"` : '';
+  const panelWatermark = brand ? `<img src="${sponsorLogoSrc(pp.sponsorNome)}" alt="" class="prize-panel-watermark">` : '';
   const prizePanelHTML = pp ? `
-  <div class="panel prize-collect-panel ${pp.collected?'collected':''}" id="collectPrizePanel">
+  <div class="panel prize-collect-panel ${pp.collected?'collected':''}" id="collectPrizePanel" ${panelThemeStyle}>
+    ${panelWatermark}
     <div class="eyebrow">${t('prize_panel_title')}</div>
     <div class="prize-collect-amount" id="collectPrizeReadout">${fmtMIcon(prizeTotal)}</div>
     ${sponsorBonusTotal>0 ? sponsorAdBannerHTML(pp.sponsorNome, `+${fmtMIcon(sponsorBonusTotal)} ${t('prize_powered_by', pp.sponsorNome)}`) : ''}
@@ -8610,6 +8620,19 @@ function pitlaneCardHTML(node, idx){
     const info = upgradeTargetInfo(u);
     // V0.9.9.19: banner "carta extra grazie allo sponsor" (Skyvane), riusato in entrambi i template
     const extraCardBanner = u.sponsorExtraCard ? sponsorAdBannerHTML(u.sponsorExtraCard, t('pitlane_extra_card_banner', u.sponsorExtraCard), true) : '';
+    // V0.9.9.24: se lo sponsor attivo alza la probabilita' della fascia (Voltrix) o dell'area
+    // (Ember/Nexora/Combustia/Apexis) di QUESTA carta specifica, banner tematizzato in cima —
+    // mutuamente esclusivo con extraCardBanner (un solo sponsor attivo alla volta, tipi diversi).
+    const boostBanner = (()=>{
+      if(!state.sponsor) return '';
+      const e = SPONSOR_EFFECTS[state.sponsor.nome];
+      if(!e) return '';
+      const nome = state.sponsor.nome;
+      if(e.type==='tier_boost' && (u.tier==='Epic'||u.tier==='Legendary'||u.tier==='Immortal')) return sponsorAdBannerHTML(nome, t('pitlane_tier_boost_banner', nome), true);
+      if(e.type==='area_boost' && e.areas.includes(u.area)) return sponsorAdBannerHTML(nome, t('pitlane_area_boost_banner', nome), true);
+      return '';
+    })();
+    const topBanner = extraCardBanner || boostBanner;
 
     if(isGuaranteed){
       // nessun rischio da negoziare: acquisto diretto al costo fisso, come prima
@@ -8622,7 +8645,7 @@ function pitlaneCardHTML(node, idx){
       const discountBanner = u.sponsorDiscount ? sponsorAdBannerHTML(u.sponsorDiscount.nome, t('pcard_discount_thanks', u.sponsorDiscount.nome)) : '';
       return `
       <div class="card ${afford?'pickable':'card-frozen'}" data-rarity="${rarityLike}" ${afford?`data-action="confirm-upgrade-invest" data-idx="${idx}" data-fixed="1"`:''}>
-        ${extraCardBanner}
+        ${topBanner}
         <div class="tag-line dim" style="text-transform:uppercase;letter-spacing:0.06em;font-size:9.5px;">${typeLabel}</div>
         <span class="rarity-tag" data-rarity="${rarityLike}">${u.tier}</span>
         <div class="card-name">${u.nome}</div>
@@ -8644,7 +8667,7 @@ function pitlaneCardHTML(node, idx){
     const risk = riskLevel(defaultRisk);
     return `
     <div class="card ${frozen?'card-frozen':''}" data-rarity="${rarityLike}">
-      ${extraCardBanner}
+      ${topBanner}
       <div class="tag-line dim" style="text-transform:uppercase;letter-spacing:0.06em;font-size:9.5px;">${typeLabel}</div>
       <span class="rarity-tag" data-rarity="${rarityLike}">${u.tier}</span>
       <div class="card-name">${u.nome}</div>

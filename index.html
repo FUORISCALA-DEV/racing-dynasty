@@ -1123,7 +1123,11 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
 .pitlane-discount-badge{
   display:inline-block; margin-top:3px; font-size:9.5px; font-style:italic; color:var(--ok);
 }
-.prize-collect-panel{ text-align:center; }
+.prize-collect-panel{ text-align:center; position:relative; overflow:hidden; transition:background .3s ease, border-color .3s ease; }
+.prize-panel-watermark{
+  position:absolute; right:-20px; top:-20px; width:140px; height:140px;
+  object-fit:contain; opacity:0.14; pointer-events:none; transform:rotate(8deg);
+}
 .prize-collect-amount{
   font-family:var(--font-mono); font-size:34px; font-weight:800; color:var(--amber);
   margin:6px 0 4px;
