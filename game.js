@@ -333,7 +333,7 @@ const I18N = {
     settings_streamer_mode: 'Modalità Streamer', settings_streamer_mode_desc: "Layout pensato per OBS, con spazio dedicato alla webcam.", settings_streamer_name: 'Nome Streamer',
     bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_hold: 'Mantieni la posizione',
     bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni', bkt_lose_3: 'Perdi 3 posizioni', bkt_gain_3_5: 'Guadagni 3-5 posizioni',
-    dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '⚠️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito', bkt_gain_exact: (n)=>n===1?'Guadagni 1 posizione':`Guadagni ${n} posizioni`, bkt_lose_exact: (n)=>n===1?'Perdi 1 posizione':`Perdi ${n} posizioni`,
+    dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '⚠️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito', bkt_gain_exact: (n)=>n===1?'Guadagni 1 posizione':`Guadagni ${n} posizioni`, bkt_lose_exact: (n)=>n===1?'Perdi 1 posizione':`Perdi ${n} posizioni`, bkt_gain_seconds: (s)=>`Guadagni ${s} secondi`, bkt_lose_seconds: (s)=>`Perdi ${s} secondi`,
     dret_career_totals: 'Numeri di carriera', dret_seasons: 'Stagioni', dret_total_wins: 'Vittorie', dret_total_podiums: 'Podi',
     dret_total_points: (n)=>`${n} punti totali in carriera`,
     dret_best_season: (age,pos,team)=>`Stagione migliore: a ${age} anni, P${pos} con ${team}`,
@@ -611,7 +611,7 @@ const I18N = {
     settings_streamer_mode: 'Streamer Mode', settings_streamer_mode_desc: 'Layout designed for OBS, with a dedicated webcam space.', settings_streamer_name: 'Streamer Name',
     bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_hold: 'Hold position',
     bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions', bkt_lose_3: 'Lose 3 positions', bkt_gain_3_5: 'Gain 3-5 positions',
-    dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '⚠️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result', bkt_gain_exact: (n)=>n===1?'Gain 1 position':`Gain ${n} positions`, bkt_lose_exact: (n)=>n===1?'Lose 1 position':`Lose ${n} positions`,
+    dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '⚠️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result', bkt_gain_exact: (n)=>n===1?'Gain 1 position':`Gain ${n} positions`, bkt_lose_exact: (n)=>n===1?'Lose 1 position':`Lose ${n} positions`, bkt_gain_seconds: (s)=>`Gain ${s} seconds`, bkt_lose_seconds: (s)=>`Lose ${s} seconds`,
     dret_career_totals: 'Career numbers', dret_seasons: 'Seasons', dret_total_wins: 'Wins', dret_total_podiums: 'Podiums',
     dret_total_points: (n)=>`${n} total career points`,
     dret_best_season: (age,pos,team)=>`Best season: at age ${age}, P${pos} with ${team}`,
@@ -883,7 +883,7 @@ const I18N = {
     settings_streamer_mode: 'Modo Streamer', settings_streamer_mode_desc: 'Diseño pensado para OBS, con espacio dedicado a la cámara web.', settings_streamer_name: 'Nombre de Streamer',
     bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_hold: 'Mantienes la posición',
     bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones', bkt_lose_3: 'Pierdes 3 posiciones', bkt_gain_3_5: 'Ganas 3-5 posiciones',
-    dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '⚠️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado', bkt_gain_exact: (n)=>n===1?'Ganas 1 posición':`Ganas ${n} posiciones`, bkt_lose_exact: (n)=>n===1?'Pierdes 1 posición':`Pierdes ${n} posiciones`,
+    dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '⚠️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado', bkt_gain_exact: (n)=>n===1?'Ganas 1 posición':`Ganas ${n} posiciones`, bkt_lose_exact: (n)=>n===1?'Pierdes 1 posición':`Pierdes ${n} posiciones`, bkt_gain_seconds: (s)=>`Ganas ${s} segundos`, bkt_lose_seconds: (s)=>`Pierdes ${s} segundos`,
     dret_career_totals: 'Números de carrera', dret_seasons: 'Temporadas', dret_total_wins: 'Victorias', dret_total_podiums: 'Podios',
     dret_total_points: (n)=>`${n} puntos totales en carrera`,
     dret_best_season: (age,pos,team)=>`Mejor temporada: a los ${age} años, P${pos} con ${team}`,
@@ -4562,6 +4562,10 @@ function decisionShiftFn(choiceKey){
   }
 }
 
+// V0.9.9.21: quando una scelta darebbe posizioni ma sei gia' primo (o le toglierebbe ma sei gia'
+// ultimo), quel vantaggio/svantaggio non deve sparire nel nulla — diventa un distacco reale in
+// secondi, dato che ora abbiamo il tempo cumulato vero della simulazione.
+const TIME_PER_CLAMPED_POSITION = 1.2;
 function applyLiveDecision(type, choiceKey){
   const timeline = state.live.timeline;
   const t = state.live.phaseIndex;
@@ -4573,6 +4577,7 @@ function applyLiveDecision(type, choiceKey){
   function applyShiftAcrossPhases(slotKey, firstShift, laterShiftFn){
     let isFirst = true;
     let actualFirstShift = 0; // V0.9.9.18: lo spostamento VERO alla prima fase, dopo il limite ai bordi
+    let firstPhaseTimeBonus = 0; // V0.9.9.21: secondi guadagnati/persi quando il limite "spreca" parte dello shift
     for(let phase=t+1; phase<PHASES.length; phase++){
       const order = timeline.phaseOrders[phase];
       const idx = order.indexOf(slotKey);
@@ -4580,12 +4585,19 @@ function applyLiveDecision(type, choiceKey){
       const shift = isFirst ? firstShift : laterShiftFn();
       if(shift===0){ isFirst = false; continue; }
       const newIdx = Math.max(0, Math.min(order.length-1, idx+shift));
-      if(isFirst) actualFirstShift = newIdx - idx; // puo' essere piu' piccolo del nominale se al limite (es. gia' P1)
+      const clampedAmount = shift - (newIdx-idx); // quanto dello shift richiesto non si e' potuto applicare (limite ai bordi)
+      if(isFirst){ actualFirstShift = newIdx - idx; firstPhaseTimeBonus = clampedAmount * TIME_PER_CLAMPED_POSITION; }
       isFirst = false;
       order.splice(idx,1); order.splice(newIdx,0,slotKey);
-      interpolateCumTimeForShift(timeline.cumTimeByPhase && timeline.cumTimeByPhase[phase], order, slotKey, newIdx, timeline.retiredAtPhase);
+      const cumSnap = timeline.cumTimeByPhase && timeline.cumTimeByPhase[phase];
+      interpolateCumTimeForShift(cumSnap, order, slotKey, newIdx, timeline.retiredAtPhase);
+      // V0.9.9.21: gia' primo (o gia' ultimo) — il guadagno/svantaggio che non puo' tradursi in
+      // posizioni diventa distacco reale, invece di sparire nel nulla. Segno: clampedAmount negativo
+      // = guadagno sprecato (es. -2 non applicato) => il tempo MIGLIORA (si sottrae); positivo =
+      // perdita sprecata => il tempo PEGGIORA (si somma).
+      if(clampedAmount!==0 && cumSnap && cumSnap[slotKey]!=null) cumSnap[slotKey] += clampedAmount * TIME_PER_CLAMPED_POSITION;
     }
-    return actualFirstShift;
+    return { actualFirstShift, firstPhaseTimeBonus };
   }
 
   if(choiceKey==='splitstrategy'){
@@ -4594,8 +4606,8 @@ function applyLiveDecision(type, choiceKey){
     slots.forEach(slotKey=>{
       if(timeline.retiredAtPhase[slotKey]!==null) return;
       const outcome = pickDecisionOutcome(bucketChoice[slotKey]);
-      const actualShift = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(bucketChoice[slotKey]));
-      reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualShift };
+      const { actualFirstShift, firstPhaseTimeBonus } = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(bucketChoice[slotKey]));
+      reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus };
     });
     return reveal;
   }
@@ -4603,12 +4615,11 @@ function applyLiveDecision(type, choiceKey){
   affectedSlots.forEach(slotKey=>{
     if(timeline.retiredAtPhase[slotKey]!==null) return; // gia' ritirato: la scelta non ha piu' effetto
     const outcome = pickDecisionOutcome(choiceKey);
-    const actualShift = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(choiceKey));
-    // V0.9.9.18: FIX — il testo mostrato ("Guadagni X posizioni") usava lo shift NOMINALE della
-    // scelta, non quello davvero applicato dopo il limite ai bordi (es. gia' P1, non puoi guadagnare
-    // altro). Ora mostra quello vero — se sei gia' primo, dira' correttamente "resti primo" invece
-    // di promettere posizioni che non esistono.
-    reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualShift };
+    const { actualFirstShift, firstPhaseTimeBonus } = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(choiceKey));
+    // V0.9.9.18/21: il testo mostrato usa lo shift VERO (dopo il limite ai bordi), non quello
+    // nominale della scelta. Se sei gia' primo/ultimo e il guadagno/perdita non puo' tradursi in
+    // posizioni, diventa un distacco in secondi (timeBonus) invece di sparire nel nulla.
+    reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus };
   });
   return reveal;
 }
@@ -4728,8 +4739,9 @@ function resolveLiveDecision(choiceKey){
       // ottengono automaticamente piu' tempo, invece di un valore fisso identico per tutti.
       let readLen = 0;
       slotKeys.forEach(slotKey=>{
-        const { bucketIdx, buckets, shift } = outcomes[slotKey];
-        const label = shift!==0 ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift)) : t('bkt_hold');
+        const { bucketIdx, buckets, shift, timeBonus } = outcomes[slotKey];
+        const label = shift!==0 ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift))
+          : (timeBonus ? t(timeBonus<0 ? 'bkt_gain_seconds' : 'bkt_lose_seconds', Math.abs(timeBonus).toFixed(1)) : t('bkt_hold'));
         readLen += label.length;
       });
       const baseMs = isHighStakes ? 3200 : 2400;
@@ -4940,7 +4952,7 @@ function liveDecisionRevealHTML(){
     'PLAYER-2': state.isDriverCareer ? null : state.team.pilotSecond.nome,
   };
   const columnsHTML = Object.keys(reveal.outcomes).map(slotKey=>{
-    const { bucketIdx, buckets, shift } = reveal.outcomes[slotKey];
+    const { bucketIdx, buckets, shift, timeBonus } = reveal.outcomes[slotKey];
     const activeIdx = reveal.highlightIdx[slotKey];
     const chipsHTML = buckets.map((b,i)=>{
       const cls = b.label.startsWith('gain') ? 'bkt-gain' : b.label.startsWith('lose') ? 'bkt-lose' : 'bkt-hold';
@@ -4949,7 +4961,8 @@ function liveDecisionRevealHTML(){
         stateCls = i===bucketIdx ? 'reveal-winner' : 'reveal-dimmed';
         // V0.9.7.9.26: sulla chip vincente mostriamo il numero ESATTO uscito (es. "Guadagni 2
         // posizioni"), non piu' il range generico ("1-2") — quello serve solo prima di sapere.
-        text = (i===bucketIdx) ? (shift!==0 ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift)) : t('bkt_hold')) : t('bkt_'+b.label);
+        text = (i===bucketIdx) ? (shift!==0 ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift))
+          : (timeBonus ? t(timeBonus<0 ? 'bkt_gain_seconds' : 'bkt_lose_seconds', Math.abs(timeBonus).toFixed(1)) : t('bkt_hold'))) : t('bkt_'+b.label);
       } else {
         stateCls = i===activeIdx ? 'reveal-active' : 'reveal-idle';
         text = t('bkt_'+b.label);
