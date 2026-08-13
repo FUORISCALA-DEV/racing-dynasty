@@ -439,7 +439,7 @@ const I18N = {
     pitlane_tier_boost_banner: (nome)=>`Fascia alta più frequente grazie a ${nome}`, pitlane_area_boost_banner: (nome)=>`Più frequente grazie a ${nome}`,
     pcard_insufficient_budget: 'Budget insufficiente', pcard_tap_buy: 'Tocca per acquistare',
     pcard_frozen: (max)=>`Budget insufficiente — nemmeno l'investimento minimo (rischio ${max}%) è alla tua portata ora.`,
-    pcard_invest_cost: 'Costo', pcard_slider_hint: '← più economico, più rischio &nbsp;·&nbsp; più sicuro, più caro →',
+    pcard_invest_cost: 'Costo', pcard_slider_hint: 'Aumentando l\'investimento riduci il rischio di fallimento',
     pcard_if_fails: (m)=>`Se fallisce: ${m}`, pcard_more_info: 'Più info', pcard_dev_area: (a)=>`Area di sviluppo: ${a}`,
     pcard_duration: (d)=>`Durata effetto: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`Il rischio va sempre da ${max}% (investimento minimo, più economico) a ${min}% (investimento massimo, mai a zero)${hasMalus?'. In caso di fallimento potrebbe applicarsi un malus':''}.`,
     pcard_confirm_invest: 'Conferma Investimento',
@@ -502,7 +502,7 @@ const I18N = {
     race_result_retired: 'RIT', race_result_retired_full: 'RITIRATO',
     race_result_you_badge: 'TU', race_result_rival_badge: 'RIVALE', race_result_no_events: 'Nessun evento di rilievo in questo Gran Premio.',
     race_result_title: (n,tot)=>`Risultato Gran Premio ${n}/${tot}`, race_result_continue: 'Continua →',
-    prize_panel_title: 'Guadagni Gran Premio', prize_collect_btn: 'Incassa', prize_collected_btn: 'Incassato ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
+    prize_panel_title: 'Guadagni Gran Premio', prize_collect_btn: 'Incassa', prize_collect_continue_btn: 'Incassa e continua', prize_collected_btn: 'Incassato ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
     race_result_why: '❓ Perché sei arrivato così', race_result_finish_order: 'Ordine di Arrivo', race_result_20_drivers: '20 PILOTI',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Pilota', race_result_th_team: 'Scuderia', race_result_th_points: 'Punti',
     race_result_event_log: 'Log Eventi di Gara', race_result_show_full_log: (n)=>`Mostra il log completo della gara (${n} eventi)`,
@@ -718,7 +718,7 @@ const I18N = {
     pitlane_tier_boost_banner: (nome)=>`High-tier, more frequent thanks to ${nome}`, pitlane_area_boost_banner: (nome)=>`More frequent thanks to ${nome}`,
     pcard_insufficient_budget: 'Insufficient budget', pcard_tap_buy: 'Tap to buy',
     pcard_frozen: (max)=>`Insufficient budget — not even the minimum investment (${max}% risk) is within reach right now.`,
-    pcard_invest_cost: 'Cost', pcard_slider_hint: '← cheaper, more risk &nbsp;·&nbsp; safer, more expensive →',
+    pcard_invest_cost: 'Cost', pcard_slider_hint: 'Increasing the investment reduces the risk of failure',
     pcard_if_fails: (m)=>`If it fails: ${m}`, pcard_more_info: 'More info', pcard_dev_area: (a)=>`Development area: ${a}`,
     pcard_duration: (d)=>`Effect duration: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`Risk always ranges from ${max}% (minimum investment, cheaper) to ${min}% (maximum investment, never zero)${hasMalus?'. On failure a malus may apply':''}.`,
     pcard_confirm_invest: 'Confirm Investment',
@@ -781,7 +781,7 @@ const I18N = {
     race_result_retired: 'DNF', race_result_retired_full: 'RETIRED',
     race_result_you_badge: 'YOU', race_result_rival_badge: 'RIVAL', race_result_no_events: 'No notable events in this Grand Prix.',
     race_result_title: (n,tot)=>`Grand Prix Result ${n}/${tot}`, race_result_continue: 'Continue →',
-    prize_panel_title: 'Grand Prix Earnings', prize_collect_btn: 'Collect', prize_collected_btn: 'Collected ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
+    prize_panel_title: 'Grand Prix Earnings', prize_collect_btn: 'Collect', prize_collect_continue_btn: 'Collect and continue', prize_collected_btn: 'Collected ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
     race_result_why: '❓ Why you finished like this', race_result_finish_order: 'Finishing Order', race_result_20_drivers: '20 DRIVERS',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Driver', race_result_th_team: 'Team', race_result_th_points: 'Points',
     race_result_event_log: 'Race Event Log', race_result_show_full_log: (n)=>`Show full race log (${n} events)`,
@@ -991,7 +991,7 @@ const I18N = {
     pitlane_tier_boost_banner: (nome)=>`Gama alta más frecuente gracias a ${nome}`, pitlane_area_boost_banner: (nome)=>`Más frecuente gracias a ${nome}`,
     pcard_insufficient_budget: 'Presupuesto insuficiente', pcard_tap_buy: 'Toca para comprar',
     pcard_frozen: (max)=>`Presupuesto insuficiente — ni siquiera la inversión mínima (riesgo ${max}%) está a tu alcance ahora.`,
-    pcard_invest_cost: 'Coste', pcard_slider_hint: '← más económico, más riesgo &nbsp;·&nbsp; más seguro, más caro →',
+    pcard_invest_cost: 'Coste', pcard_slider_hint: 'Aumentar la inversión reduce el riesgo de fallo',
     pcard_if_fails: (m)=>`Si falla: ${m}`, pcard_more_info: 'Más información', pcard_dev_area: (a)=>`Área de desarrollo: ${a}`,
     pcard_duration: (d)=>`Duración del efecto: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`El riesgo siempre va del ${max}% (inversión mínima, más económica) al ${min}% (inversión máxima, nunca cero)${hasMalus?'. Si falla podría aplicarse un malus':''}.`,
     pcard_confirm_invest: 'Confirmar Inversión',
@@ -1054,7 +1054,7 @@ const I18N = {
     race_result_retired: 'RET', race_result_retired_full: 'RETIRADO',
     race_result_you_badge: 'TÚ', race_result_rival_badge: 'RIVAL', race_result_no_events: 'Sin eventos destacables en este Gran Premio.',
     race_result_title: (n,tot)=>`Resultado Gran Premio ${n}/${tot}`, race_result_continue: 'Continuar →',
-    prize_panel_title: 'Ganancias del Gran Premio', prize_collect_btn: 'Cobrar', prize_collected_btn: 'Cobrado ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
+    prize_panel_title: 'Ganancias del Gran Premio', prize_collect_btn: 'Cobrar', prize_collect_continue_btn: 'Cobrar y continuar', prize_collected_btn: 'Cobrado ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
     race_result_why: '❓ Por qué has terminado así', race_result_finish_order: 'Orden de Llegada', race_result_20_drivers: '20 PILOTOS',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Piloto', race_result_th_team: 'Escudería', race_result_th_points: 'Puntos',
     race_result_event_log: 'Registro de Eventos de Carrera', race_result_show_full_log: (n)=>`Mostrar registro completo de la carrera (${n} eventos)`,
@@ -6601,11 +6601,14 @@ function topbarHTML(){
   const sponsorHTML = state.sponsor
     ? `<div class="hud-item"><div class="hud-label">${t('hud_sponsor')}</div><div class="hud-value hud-sponsor-icon" data-action="open-sponsor-info" title="${state.sponsor.nome}"><img src="${sponsorIconSrc(state.sponsor.nome)}" alt="${state.sponsor.nome}" onerror="this.style.display='none'"></div></div>`
     : '';
+  const rerollHTML = state.phase==='draft'
+    ? `<div class="hud-item"><div class="hud-label">${t('hud_reroll')}</div><div class="hud-value">${state.rerollsLeft}/${state.rerollsTotal}</div></div>`
+    : '';
   return `
   <div class="topbar">
     <div class="brand hdr">RACING DYNASTY<small>Roguelike GP Manager — ${GAME_VERSION} · ${DIFFICULTY_LABEL[state.difficulty]}</small></div>
     <div class="hud">
-      <div class="hud-item"><div class="hud-label">${t('hud_reroll')}</div><div class="hud-value">${state.rerollsLeft}/${state.rerollsTotal}</div></div>
+      ${rerollHTML}
       <div class="hud-item"><div class="hud-label">${t('hud_budget')}</div><div class="hud-value amber" id="hudBudgetValue">${fmtMIcon(state.budget)}</div></div>
       ${sponsorHTML}
       <div class="hud-item"><div class="hud-label">${t('hud_race')}</div><div class="hud-value">${Math.min(state.raceIndex+1,state.calendar.length)}/${state.calendar.length}</div></div>
@@ -8493,6 +8496,12 @@ function animatePrizeCollect(){
       const panel = document.getElementById('collectPrizePanel');
       if(panel) panel.classList.add('collected');
       if(btn) btn.textContent = t('prize_collected_btn');
+      // V0.9.9.30: pausa breve e piacevole (si vede il risultato, non sembra bloccato), poi si
+      // avanza da soli — non serve piu' un pulsante "Continua" separato.
+      setTimeout(()=>{
+        if(state.isDriverCareer) goToDriverHubOrSeasonEnd();
+        else goToPitlaneOrEnd();
+      }, 900);
     }
   }
   requestAnimationFrame(tick);
@@ -8544,7 +8553,7 @@ function renderRaceResult(){
     <div class="prize-collect-amount" id="collectPrizeReadout">${fmtMIcon(prizeTotal)}</div>
     ${sponsorBonusTotal>0 ? sponsorAdBannerHTML(pp.sponsorNome, `+${fmtMIcon(sponsorBonusTotal)} ${t('prize_powered_by', pp.sponsorNome)}`) : ''}
     <button class="primary" id="collectPrizeBtn" data-action="collect-prize-btn" ${pp.collected?'disabled':''} style="width:100%;margin-top:12px;${brand?sponsorButtonStyle(pp.sponsorNome):''}">
-      ${pp.collected ? t('prize_collected_btn') : t('prize_collect_btn')}
+      ${pp.collected ? t('prize_collected_btn') : t('prize_collect_continue_btn')}
     </button>
   </div>` : '';
 
@@ -8555,8 +8564,8 @@ function renderRaceResult(){
     <h2 class="hdr" style="font-size:26px;">${headline}</h2>
   </div>
   ${prizePanelHTML}
+  ${!pp ? `<div class="btnrow"><button class="primary" data-action="continue-to-pitlane">${t('race_result_continue')}</button></div>` : ''}
   ${trophyUnlockBannerHTML()}
-  <div class="btnrow"><button class="primary" data-action="continue-to-pitlane">${t('race_result_continue')}</button></div>
   <details class="hub-expand">
     <summary>${t('race_result_why')}</summary>
     <div class="panel">
@@ -8951,8 +8960,8 @@ function renderUpgradeResult(){
     ${u.failed
       ? `<div class="tag-line malus" style="margin-top:10px;font-size:13px;">${u.malus || t('upg_no_gain')}</div>`
       : `<div class="tag-line bonus" style="margin-top:10px;font-size:13px;">${u.area==='Globale' ? t('upg_gain_global', u.guadagno) : t('upg_gain_area', u.guadagno, displayArea(u.area))}</div>`}
+    <button class="primary" data-action="continue-upgrade-result" style="width:100%;margin-top:22px;position:relative;z-index:1;">${t('upg_continue')}</button>
   </div>
-  <div class="btnrow" style="justify-content:center;"><button class="primary" data-action="continue-upgrade-result">${t('upg_continue')}</button></div>
   `;
   bindActions();
 }
