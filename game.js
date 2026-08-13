@@ -435,7 +435,7 @@ const I18N = {
     pg_go_to_race: 'Vai alla Gara →', pg_details_toggle: '🔍 Dettagli — componenti, statistiche, griglia completa',
     cat_aero_pack: 'Pacchetto Aerodinamico', cat_tire_supplier: 'Fornitore Gomme',
     pcard_guaranteed: 'UPGRADE GARANTITO', pcard_development: 'SVILUPPO', pcard_cost: 'Costo', pcard_no_risk: 'Nessun rischio',
-    pitlane_extra_card_banner: (nome)=>`Disponibile grazie a ${nome}`, pcard_discount_thanks: (nome)=>`grazie a ${nome}`,
+    pitlane_extra_card_banner: (nome)=>`Disponibile grazie a ${nome}`, pcard_discount_thanks: (nome)=>`Discount powered by ${nome}`,
     pitlane_tier_boost_banner: (nome)=>`Fascia alta più frequente grazie a ${nome}`, pitlane_area_boost_banner: (nome)=>`Più frequente grazie a ${nome}`,
     pcard_insufficient_budget: 'Budget insufficiente', pcard_tap_buy: 'Tocca per acquistare',
     pcard_frozen: (max)=>`Budget insufficiente — nemmeno l'investimento minimo (rischio ${max}%) è alla tua portata ora.`,
@@ -714,7 +714,7 @@ const I18N = {
     pg_go_to_race: 'Go to Race →', pg_details_toggle: '🔍 Details — components, stats, full grid',
     cat_aero_pack: 'Aero Package', cat_tire_supplier: 'Tyre Supplier',
     pcard_guaranteed: 'GUARANTEED UPGRADE', pcard_development: 'DEVELOPMENT', pcard_cost: 'Cost', pcard_no_risk: 'No risk',
-    pitlane_extra_card_banner: (nome)=>`Available thanks to ${nome}`, pcard_discount_thanks: (nome)=>`thanks to ${nome}`,
+    pitlane_extra_card_banner: (nome)=>`Available thanks to ${nome}`, pcard_discount_thanks: (nome)=>`Discount powered by ${nome}`,
     pitlane_tier_boost_banner: (nome)=>`High-tier, more frequent thanks to ${nome}`, pitlane_area_boost_banner: (nome)=>`More frequent thanks to ${nome}`,
     pcard_insufficient_budget: 'Insufficient budget', pcard_tap_buy: 'Tap to buy',
     pcard_frozen: (max)=>`Insufficient budget — not even the minimum investment (${max}% risk) is within reach right now.`,
@@ -987,7 +987,7 @@ const I18N = {
     pg_go_to_race: 'Ir a la Carrera →', pg_details_toggle: '🔍 Detalles — componentes, estadísticas, parrilla completa',
     cat_aero_pack: 'Paquete Aerodinámico', cat_tire_supplier: 'Proveedor de Neumáticos',
     pcard_guaranteed: 'MEJORA GARANTIZADA', pcard_development: 'DESARROLLO', pcard_cost: 'Coste', pcard_no_risk: 'Sin riesgo',
-    pitlane_extra_card_banner: (nome)=>`Disponible gracias a ${nome}`, pcard_discount_thanks: (nome)=>`gracias a ${nome}`,
+    pitlane_extra_card_banner: (nome)=>`Disponible gracias a ${nome}`, pcard_discount_thanks: (nome)=>`Discount powered by ${nome}`,
     pitlane_tier_boost_banner: (nome)=>`Gama alta más frecuente gracias a ${nome}`, pitlane_area_boost_banner: (nome)=>`Más frecuente gracias a ${nome}`,
     pcard_insufficient_budget: 'Presupuesto insuficiente', pcard_tap_buy: 'Toca para comprar',
     pcard_frozen: (max)=>`Presupuesto insuficiente — ni siquiera la inversión mínima (riesgo ${max}%) está a tu alcance ahora.`,
@@ -8699,9 +8699,9 @@ function pitlaneCardHTML(node, idx){
       ` : `
       <div class="invest-row">
         <input type="range" class="invest-slider" min="0" max="100" value="${Math.floor(defaultT*100)}" step="1"
-          data-idx="${idx}" data-base-cost="${u.costo}" data-t0="${t0}" data-max-t="${maxT}" ${cardBrand?`style="--slider-accent:${cardBrand.accent};"`:''}>
+          data-idx="${idx}" data-base-cost="${u.costo}" data-t0="${t0}" data-max-t="${maxT}" ${u.sponsorDiscount?`data-original-base-cost="${u.sponsorDiscount.originalCosto}"`:''} ${cardBrand?`style="--slider-accent:${cardBrand.accent};"`:''}>
         <div class="invest-readout">
-          <span>${t('pcard_invest_cost')} ${u.sponsorDiscount ? `<s class="mono dim">${fmtMIcon(defaultCostM * u.sponsorDiscount.originalCosto / u.costo)}</s> ` : ''}<b class="mono" id="investCost-${idx}" style="${u.sponsorDiscount?`color:${(SPONSOR_BRAND[u.sponsorDiscount.nome]||{}).accent||'var(--ok)'};`:''}">${fmtMIcon(defaultCostM)}</b></span>
+          <span>${t('pcard_invest_cost')} ${u.sponsorDiscount ? `<s class="mono dim" id="investCostOriginal-${idx}">${fmtMIcon(defaultCostM * u.sponsorDiscount.originalCosto / u.costo)}</s> ` : ''}<b class="mono" id="investCost-${idx}" style="${u.sponsorDiscount?`color:${(SPONSOR_BRAND[u.sponsorDiscount.nome]||{}).accent||'var(--ok)'};`:''}">${fmtMIcon(defaultCostM)}</b></span>
           <span class="dev-risk ${risk.cls}" id="investRisk-${idx}">${risk.label} · ${defaultRisk}%</span>
         </div>
         ${u.sponsorDiscount ? sponsorAdBannerHTML(u.sponsorDiscount.nome, t('pcard_discount_thanks', u.sponsorDiscount.nome)) : ''}
@@ -9835,6 +9835,13 @@ function bindActions(){
       const costEl = document.getElementById(`investCost-${idx}`);
       const riskEl = document.getElementById(`investRisk-${idx}`);
       if(costEl) costEl.innerHTML = fmtMIcon(costoM);
+      // V0.9.9.29: FIX — il prezzo barrato (originale, prima dello sconto) restava fermo al valore
+      // iniziale mentre si trascinava il cursore. Ora si ricalcola insieme, con lo stesso rapporto.
+      const originalBaseCost = sl.dataset.originalBaseCost;
+      if(originalBaseCost){
+        const originalCostEl = document.getElementById(`investCostOriginal-${idx}`);
+        if(originalCostEl) originalCostEl.innerHTML = fmtMIcon(costoM * Number(originalBaseCost) / baseCost);
+      }
       if(riskEl){ const rl = riskLevel(riskPct); riskEl.textContent = `${rl.label} · ${riskPct}%`; riskEl.className = `dev-risk ${rl.cls}`; }
       const btn = app.querySelector(`[data-action="confirm-upgrade-invest"][data-idx="${idx}"]`);
       if(btn) btn.disabled = state.budget < costoM;
