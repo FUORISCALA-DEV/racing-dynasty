@@ -1769,7 +1769,7 @@ function fmtM(v){ return (v>=0?'':'-') + Math.abs(v).toFixed(1) + 'M'; }
 // e log narrativi di eventi, dove un tag <img> comparirebbe come testo letterale rotto). Questa
 // invece va usata solo dove il risultato finisce dentro innerHTML vero.
 function fmtMIcon(v){
-  return `<span class="dynasty-dollar-amount">${(v>=0?'':'-')}<img class="dynasty-dollar-icon" src="assets/currency/dynasty_dollar.png" alt="D">${Math.abs(v).toFixed(1)}</span>`;
+  return `<span class="dynasty-dollar-amount">${(v>=0?'':'-')}${Math.abs(v).toFixed(1)}M<img class="dynasty-dollar-icon" src="assets/currency/dynasty_dollar.png" alt="DynastyDollars"></span>`;
 }
 function fmtSmallMoney(v){ return Math.round(v*1000)+'k'; } // V0.9.9.13: per importi sotto il milione (es. costo ricerca di mercato), fmtM arrotonderebbe a "0.0M"
 function pick(arr){ return arr[Math.floor(rnd()*arr.length)]; }
