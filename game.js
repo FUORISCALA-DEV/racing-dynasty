@@ -1811,8 +1811,20 @@ function rarityColor(r){
 }
 // V0.9.7.6: THE GOAT ha un'identita' cromatica fissa (rosso Ferrari), sempre diversa dal colore di
 // fascia standard, ovunque compaia una sua card — draft, scouting, squadra attuale, conferme.
-function displayRarity(item){ return (item && item.nome==='THE GOAT') ? 'TheGoat' : (item ? item.rarita : ''); }
-function displayRarityLabel(item){ return (item && item.nome==='THE GOAT') ? 'THE GOAT' : (item ? item.rarita : ''); }
+// V0.9.9.11: la rarità mostrata sulle card (Common/Rare/Epic/Legendary/Immortal) ora si calcola
+// DIRETTAMENTE dal rating vero, invece di leggere un campo statico assegnato a mano nei dati — che
+// non seguiva soglie coerenti (es. rating 71 e rating 84 potevano finire entrambi "Rare", mentre
+// i pezzi sull'auto, calcolati dal rating, li coloravano correttamente in modo diverso). Stessa
+// soglia di ratingBandKey, compressa da 7 a 5 fasce per restare coerente col resto del gioco.
+function rarityFromRating(rating){
+  if(rating>=100) return 'Immortal';
+  if(rating>=90) return 'Legendary';
+  if(rating>=80) return 'Epic';
+  if(rating>=70) return 'Rare';
+  return 'Common';
+}
+function displayRarity(item){ return (item && item.nome==='THE GOAT') ? 'TheGoat' : (item ? rarityFromRating(item.rating) : ''); }
+function displayRarityLabel(item){ return (item && item.nome==='THE GOAT') ? 'THE GOAT' : (item ? rarityFromRating(item.rating) : ''); }
 
 // --- V0.3: pescaggio per rating piu' vicino (usato per assegnare piloti/componenti reali alle IA) ---
 function pickNearestDistinct(pool, target, excludeIds){
@@ -3353,8 +3365,9 @@ function recordStoryEvents(finalEntries, gridPos, circuit, weatherBefore, weathe
 function recordComponentStoryEvent(label, item, isReplacement){
   if(!state.storyEvents) return;
   const bigTiers = ['Legendary','Immortal','Epic'];
-  if(bigTiers.includes(item.rarita) || isReplacement){
-    state.storyEvents.push({ race: state.raceIndex+1, text: `${isReplacement?'Nuovo':'Upgrade'} ${label}: ${item.nome} (${item.rarita})` });
+  const rarity = rarityFromRating(item.rating);
+  if(bigTiers.includes(rarity) || isReplacement){
+    state.storyEvents.push({ race: state.raceIndex+1, text: `${isReplacement?'Nuovo':'Upgrade'} ${label}: ${item.nome} (${rarity})` });
   }
 }
 
@@ -3613,7 +3626,7 @@ function finalizeRaceScoring(timeline){
     const winnerFull = byKey[winnerEntry.slotKey]; // ha ancora accesso a .pilot con rarita'/arch completi
     const winnerPilot = winnerFull.pilot;
     // V0.9.7.9: obiettivi legati a come si vince, non solo al fatto di vincere
-    if(winnerPilot.rarita==='Common') unlockAchievement('underdog');
+    if(rarityFromRating(winnerPilot.rating)==='Common') unlockAchievement('underdog');
     if(winnerPilot.nome==='THE GOAT') unlockAchievement('leggenda-al-volante');
     const wasWetAtFinish = weatherAfter==='Bagnato' || (weatherAfter===null && weatherBefore==='Bagnato');
     if(wasWetAtFinish && winnerPilot.arch==='Rain Master') unlockAchievement('domatore-di-pioggia');
@@ -5403,7 +5416,7 @@ function applyScout(catKey, chosenId, options){
     if(catKey!=='stratega') playRealSfx('audio/sfx_component_pick.mp3');
     else playSfx('ui_confirm'); // V0.9.7.8.18: team principal non ha un suono reale, placeholder ripristinato
   }
-  if(RARITY_ORDER && RARITY_ORDER.indexOf(chosen.rarita) >= RARITY_ORDER.indexOf('Epic')){
+  if(RARITY_ORDER && RARITY_ORDER.indexOf(rarityFromRating(chosen.rating)) >= RARITY_ORDER.indexOf('Epic')){
     state.everUsedEpicOrHigher = true; // V0.9.7.9: con-quello-che-c-e
   }
   if(old) { unlockMuseumItem(catKey, old); /* replaced component returns to the paddock, no refund by design */ }
