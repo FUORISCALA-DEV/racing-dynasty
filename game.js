@@ -1759,6 +1759,13 @@ const app = document.getElementById('app');
 function rnd(){ return Math.random(); }
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
 function fmtM(v){ return (v>=0?'':'-') + Math.abs(v).toFixed(1) + 'M'; }
+// V0.9.9.15: simbolo DynastyDollars — la valuta del gioco, non piu' euro/dollari impliciti.
+// Funzione SEPARATA da fmtM: quella resta testo puro (usata anche in contesti come .textContent
+// e log narrativi di eventi, dove un tag <img> comparirebbe come testo letterale rotto). Questa
+// invece va usata solo dove il risultato finisce dentro innerHTML vero.
+function fmtMIcon(v){
+  return `<span class="dynasty-dollar-amount">${(v>=0?'':'-')}<img class="dynasty-dollar-icon" src="assets/currency/dynasty_dollar.png" alt="D">${Math.abs(v).toFixed(1)}</span>`;
+}
 function fmtSmallMoney(v){ return Math.round(v*1000)+'k'; } // V0.9.9.13: per importi sotto il milione (es. costo ricerca di mercato), fmtM arrotonderebbe a "0.0M"
 function pick(arr){ return arr[Math.floor(rnd()*arr.length)]; }
 
@@ -5292,13 +5299,13 @@ function renderSponsorChoice(){
     <div class="dim" style="font-size:12px;margin-top:6px;">${window.t('sponsor_subtitle')}</div>
     <div class="sponsor-budget-row">
       <span class="dim">${window.t('hud_budget')}</span>
-      <span class="mono" style="color:var(--amber);font-weight:800;">${fmtM(state.budget)}</span>
+      <span class="mono" style="color:var(--amber);font-weight:800;">${fmtMIcon(state.budget)}</span>
     </div>
   </div>
   <div class="draft-turn-grid">${offers.map(sponsorCardHTML).join('')}</div>
   <div class="panel sponsor-reroll-panel">
     <button type="button" class="ghost" data-action="reroll-sponsor" ${canReroll?'':'disabled'} style="width:100%;">
-      🔍 ${window.t('sponsor_reroll_btn')} — ${fmtM(SPONSOR_REROLL_COST)}
+      🔍 ${window.t('sponsor_reroll_btn')} — ${fmtMIcon(SPONSOR_REROLL_COST)}
     </button>
     <div class="dim" style="font-size:11px;margin-top:8px;line-height:1.5;">${window.t('sponsor_reroll_desc')}</div>
   </div>
@@ -6514,7 +6521,7 @@ function topbarHTML(){
     <div class="brand hdr">RACING DYNASTY<small>Roguelike GP Manager — ${GAME_VERSION} · ${DIFFICULTY_LABEL[state.difficulty]}</small></div>
     <div class="hud">
       <div class="hud-item"><div class="hud-label">${t('hud_reroll')}</div><div class="hud-value">${state.rerollsLeft}/${state.rerollsTotal}</div></div>
-      <div class="hud-item"><div class="hud-label">${t('hud_budget')}</div><div class="hud-value amber">${fmtM(state.budget)}</div></div>
+      <div class="hud-item"><div class="hud-label">${t('hud_budget')}</div><div class="hud-value amber">${fmtMIcon(state.budget)}</div></div>
       ${sponsorHTML}
       <div class="hud-item"><div class="hud-label">${t('hud_race')}</div><div class="hud-value">${Math.min(state.raceIndex+1,state.calendar.length)}/${state.calendar.length}</div></div>
       <div class="hud-item"><div class="hud-label">${t('hud_best_driver')}</div><div class="hud-value cyan">P${bestDriverPos||'-'}</div></div>
@@ -8483,7 +8490,7 @@ function pitlaneCardHTML(node, idx){
         <span class="rarity-tag" data-rarity="${rarityLike}">${u.tier}</span>
         <div class="card-name">${u.nome}</div>
         <div class="dev-target"><span class="dev-area">${info.label}</span><span class="dev-change mono">${info.change}</span></div>
-        <div class="dev-meta"><span class="dev-cost">${t('pcard_cost')} <b class="mono">${fmtM(costoM)}</b></span><span class="dev-risk risk-none">${t('pcard_no_risk')}</span></div>
+        <div class="dev-meta"><span class="dev-cost">${t('pcard_cost')} <b class="mono">${fmtMIcon(costoM)}</b></span><span class="dev-risk risk-none">${t('pcard_no_risk')}</span></div>
         ${!afford? `<div class="tag-line malus">${t('pcard_insufficient_budget')}</div>`:''}
         <div class="card-tap-hint">${afford?t('pcard_tap_buy'):''}</div>
       </div>`;
