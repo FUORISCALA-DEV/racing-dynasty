@@ -11369,15 +11369,5 @@ setTimeout(()=>{
 window.addEventListener('popstate', handleBackGesture);
 pushBackGuard(); // prima voce di cronologia, cosi' anche la primissima gesture back viene intercettata
 
-// V0.9.3.4.1: schermo intero automatico al primo tocco, solo su smartphone (mai su PC)
-(function autoFullscreenOnFirstTapMobileOnly(){
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mobi/i.test(navigator.userAgent));
-  if(!isMobile) return;
-  document.addEventListener('touchend', function goFullscreen(){
-    document.removeEventListener('touchend', goFullscreen);
-    if(!document.fullscreenElement && document.documentElement.requestFullscreen){
-      document.documentElement.requestFullscreen().catch(()=>{ /* negato dall'utente/browser: ignorato in silenzio */ });
-    }
-  }, { once:true });
-})();
-
+// V0.9.9.33: RIMOSSO lo schermo intero automatico al primo tocco su mobile — l'utente lo attiva
+// volontariamente dal pulsante dedicato, non deve essere forzato senza chiederlo.

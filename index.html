@@ -1197,19 +1197,17 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
    cosi' il momento si sente come l'evento importante che e', e si chiude esplicitamente con un tap
    invece di scorrere via insieme al resto della schermata risultato. */
 .trophy-unlock-fullscreen{
-  position:fixed; inset:0; z-index:9800; background:rgba(5,6,8,0.92);
+  position:fixed; inset:0; z-index:9800; background:radial-gradient(circle at 50% 40%, rgba(40,28,4,0.55), rgba(5,6,8,0.97) 70%);
   display:flex; align-items:center; justify-content:center; padding:20px;
   animation: trophyFullscreenFadeIn 0.35s ease forwards;
 }
 @keyframes trophyFullscreenFadeIn{ from{ opacity:0; } to{ opacity:1; } }
 .trophy-unlock-fullscreen-card{
-  position:relative; overflow:hidden; text-align:center; padding:40px 26px 30px;
-  max-width:420px; width:100%; border-radius:10px;
-  border:1px solid var(--legendary);
-  background:linear-gradient(160deg, rgba(247,184,0,0.12), var(--panel2) 60%);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  position:relative; overflow:hidden; text-align:center;
+  width:100%; height:100%; max-width:520px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
 }
-.victory-trophy-pop-lg{ max-height:140px; }
+.victory-trophy-pop.victory-trophy-pop-lg{ max-height:min(38vh, 260px); }
 .trophy-room-card{ margin-top:14px; }
 .garage-coming-soon{ opacity:0.55; cursor:default; filter:grayscale(0.4); }
 
