@@ -5363,7 +5363,10 @@ function sponsorSpawnMultFor(u){
 function renderSponsorChoice(){
   const offers = state.sponsorOffers || generateSponsorOffers();
   state.sponsorOffers = offers;
-  const canReroll = state.budget >= SPONSOR_REROLL_COST;
+  // V0.9.9.32: prezzo dinamico che raddoppia ad ogni uso — parte da 2M, inizializzato una sola volta
+  if(state.sponsorRerollCost==null) state.sponsorRerollCost = 2;
+  const sponsorPoolExhausted = (state.sponsorOffers||[]).length >= SPONSOR_NAMES.length;
+  const canReroll = state.budget >= state.sponsorRerollCost && !sponsorPoolExhausted;
   // V0.9.9.13: stessa costruzione usata in renderPregara, per riusare pregaraCarPanelHTML — con
   // fallback sicuri se lo stato non fosse ancora del tutto popolato a questo punto del flusso.
   // NOTA: chiamata 'team', non 't', per non entrare in conflitto con la funzione di traduzione t().
@@ -5387,7 +5390,7 @@ function renderSponsorChoice(){
   <div class="draft-turn-grid">${offers.map(sponsorCardHTML).join('')}</div>
   <div class="panel sponsor-reroll-panel">
     <button type="button" class="ghost" data-action="reroll-sponsor" ${canReroll?'':'disabled'} style="width:100%;">
-      🔍 ${window.t('sponsor_reroll_btn')} — ${fmtMIcon(SPONSOR_REROLL_COST)}
+      🔍 ${window.t('sponsor_reroll_btn')} — ${fmtMIcon(state.sponsorRerollCost)}
     </button>
     <div class="dim" style="font-size:11px;margin-top:8px;line-height:1.5;">${window.t('sponsor_reroll_desc')}</div>
   </div>
@@ -10091,11 +10094,20 @@ function onAction(e){
     }
   }
   else if(action==='reroll-sponsor'){
-    // V0.9.9.13: "Ricerca di mercato" — 5k a tentativo, tra 2 e 4 nuovi sponsor ogni volta
-    if(state.budget < SPONSOR_REROLL_COST){ playSfx('error_disabled'); return; }
-    state.budget = Math.round((state.budget - SPONSOR_REROLL_COST)*10)/10;
-    const count = 2 + Math.floor(rnd()*3); // 2, 3, o 4
-    state.sponsorOffers = generateSponsorOffers(count);
+    // V0.9.9.32: "Ricerca di mercato" — parte da 2M e raddoppia ad ogni click, le nuove offerte si
+    // AGGIUNGONO a quelle gia' mostrate invece di sostituirle (1 o 2 in piu' ogni volta).
+    const cost = state.sponsorRerollCost || 2;
+    if(state.budget < cost){ playSfx('error_disabled'); return; }
+    state.budget = Math.round((state.budget - cost)*10)/10;
+    const alreadyShown = new Set((state.sponsorOffers||[]).map(o=>o.nome));
+    const pool = SPONSOR_NAMES.filter(n=>!alreadyShown.has(n));
+    const addCount = Math.min(1 + Math.floor(rnd()*2), pool.length); // 1 o 2, ma mai piu' di quanti ne restano
+    if(addCount>0){
+      const newNames = weightedSampleDistinct(pool.map(n=>({id:n,nome:n,costo:1})), addCount, 'costo', new Set()).map(o=>o.nome);
+      const newOffers = newNames.map(nome => ({ nome, effect: SPONSOR_EFFECTS[nome] }));
+      state.sponsorOffers = [...state.sponsorOffers, ...newOffers];
+    }
+    state.sponsorRerollCost = cost * 2;
     playSfx('ui_click');
     render();
   }
