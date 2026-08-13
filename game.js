@@ -501,7 +501,7 @@ const I18N = {
     race_result_retired: 'RIT', race_result_retired_full: 'RITIRATO',
     race_result_you_badge: 'TU', race_result_rival_badge: 'RIVALE', race_result_no_events: 'Nessun evento di rilievo in questo Gran Premio.',
     race_result_title: (n,tot)=>`Risultato Gran Premio ${n}/${tot}`, race_result_continue: 'Continua →',
-    prize_panel_title: 'Premio Gran Premio', prize_collect_btn: 'Incassa', prize_collected_btn: 'Incassato ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
+    prize_panel_title: 'Guadagni Gran Premio', prize_collect_btn: 'Incassa', prize_collected_btn: 'Incassato ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
     race_result_why: '❓ Perché sei arrivato così', race_result_finish_order: 'Ordine di Arrivo', race_result_20_drivers: '20 PILOTI',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Pilota', race_result_th_team: 'Scuderia', race_result_th_points: 'Punti',
     race_result_event_log: 'Log Eventi di Gara', race_result_show_full_log: (n)=>`Mostra il log completo della gara (${n} eventi)`,
@@ -779,7 +779,7 @@ const I18N = {
     race_result_retired: 'DNF', race_result_retired_full: 'RETIRED',
     race_result_you_badge: 'YOU', race_result_rival_badge: 'RIVAL', race_result_no_events: 'No notable events in this Grand Prix.',
     race_result_title: (n,tot)=>`Grand Prix Result ${n}/${tot}`, race_result_continue: 'Continue →',
-    prize_panel_title: 'Grand Prix Prize', prize_collect_btn: 'Collect', prize_collected_btn: 'Collected ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
+    prize_panel_title: 'Grand Prix Earnings', prize_collect_btn: 'Collect', prize_collected_btn: 'Collected ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
     race_result_why: '❓ Why you finished like this', race_result_finish_order: 'Finishing Order', race_result_20_drivers: '20 DRIVERS',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Driver', race_result_th_team: 'Team', race_result_th_points: 'Points',
     race_result_event_log: 'Race Event Log', race_result_show_full_log: (n)=>`Show full race log (${n} events)`,
@@ -1051,7 +1051,7 @@ const I18N = {
     race_result_retired: 'RET', race_result_retired_full: 'RETIRADO',
     race_result_you_badge: 'TÚ', race_result_rival_badge: 'RIVAL', race_result_no_events: 'Sin eventos destacables en este Gran Premio.',
     race_result_title: (n,tot)=>`Resultado Gran Premio ${n}/${tot}`, race_result_continue: 'Continuar →',
-    prize_panel_title: 'Premio del Gran Premio', prize_collect_btn: 'Cobrar', prize_collected_btn: 'Cobrado ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
+    prize_panel_title: 'Ganancias del Gran Premio', prize_collect_btn: 'Cobrar', prize_collected_btn: 'Cobrado ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
     race_result_why: '❓ Por qué has terminado así', race_result_finish_order: 'Orden de Llegada', race_result_20_drivers: '20 PILOTOS',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Piloto', race_result_th_team: 'Escudería', race_result_th_points: 'Puntos',
     race_result_event_log: 'Registro de Eventos de Carrera', race_result_show_full_log: (n)=>`Mostrar registro completo de la carrera (${n} eventos)`,
@@ -8444,14 +8444,14 @@ function animatePrizeCollect(){
   function tick(now){
     const progress = Math.min(1, (now-startTime)/duration);
     const eased = 1 - Math.pow(1-progress, 3); // ease-out, rallenta verso la fine
-    const current = total * eased;
-    if(readout) readout.innerHTML = fmtMIcon(current);
-    if(hudEl) hudEl.innerHTML = fmtMIcon(startBudget + current);
+    const moved = total * eased;
+    if(readout) readout.innerHTML = fmtMIcon(total - moved); // scende dal totale a zero
+    if(hudEl) hudEl.innerHTML = fmtMIcon(startBudget + moved); // sale in parallelo, stessa progressione
     if(progress < 1){
       requestAnimationFrame(tick);
     } else {
       collectPendingPrize();
-      if(readout) readout.innerHTML = fmtMIcon(total);
+      if(readout) readout.innerHTML = fmtMIcon(0);
       if(hudEl) hudEl.innerHTML = fmtMIcon(state.budget);
       const panel = document.getElementById('collectPrizePanel');
       if(panel) panel.classList.add('collected');
@@ -8497,7 +8497,7 @@ function renderRaceResult(){
   const prizePanelHTML = pp ? `
   <div class="panel prize-collect-panel ${pp.collected?'collected':''}" id="collectPrizePanel">
     <div class="eyebrow">${t('prize_panel_title')}</div>
-    <div class="prize-collect-amount" id="collectPrizeReadout">${fmtMIcon(pp.collected ? prizeTotal : 0)}</div>
+    <div class="prize-collect-amount" id="collectPrizeReadout">${fmtMIcon(prizeTotal)}</div>
     ${sponsorBonusTotal>0 ? `<div class="prize-powered-by">
       <img src="${sponsorLogoSrc(pp.sponsorNome)}" alt="" onerror="this.style.display='none'">
       <span>+${fmtMIcon(sponsorBonusTotal)} ${t('prize_powered_by', pp.sponsorNome)}</span>
