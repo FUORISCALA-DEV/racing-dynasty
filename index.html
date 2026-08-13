@@ -205,7 +205,13 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .card{
   background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:16px;
   border-top:4px solid var(--common);position:relative;display:flex;flex-direction:column;gap:8px;
-  transition:transform .15s ease, box-shadow .15s ease;
+  transition:transform .15s ease, box-shadow .15s ease, background .3s ease;
+  overflow:hidden;
+}
+/* V0.9.9.26: filigrana dello sponsor su tutta la carta (non solo il banner in cima) */
+.pitlane-card-watermark{
+  position:absolute; right:-16px; bottom:-16px; width:110px; height:110px;
+  object-fit:contain; opacity:0.13; pointer-events:none; transform:rotate(-6deg); z-index:0;
 }
 .card.pickable{cursor:pointer;}
 .card.pickable:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(0,0,0,0.45);}

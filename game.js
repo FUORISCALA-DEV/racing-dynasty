@@ -8633,6 +8633,12 @@ function pitlaneCardHTML(node, idx){
       return '';
     })();
     const topBanner = extraCardBanner || boostBanner;
+    // V0.9.9.26: l'INTERA carta si tematizza, non solo la striscia del banner — sfondo sfumato
+    // tenue + filigrana grande, stesso principio gia' usato per il pannello premio.
+    const bannerSponsorNome = u.sponsorExtraCard || (boostBanner ? state.sponsor.nome : null) || (u.sponsorDiscount ? u.sponsorDiscount.nome : null);
+    const cardBrand = bannerSponsorNome ? SPONSOR_BRAND[bannerSponsorNome] : null;
+    const cardThemeStyle = cardBrand ? `background:linear-gradient(165deg, ${cardBrand.c1}26, var(--panel) 55%); border-color:${cardBrand.accent}77;` : '';
+    const cardWatermark = cardBrand ? `<img src="${sponsorLogoSrc(bannerSponsorNome)}" alt="" class="pitlane-card-watermark">` : '';
 
     if(isGuaranteed){
       // nessun rischio da negoziare: acquisto diretto al costo fisso, come prima
@@ -8644,7 +8650,8 @@ function pitlaneCardHTML(node, idx){
         : `<span class="dev-cost">${t('pcard_cost')} <b class="mono">${fmtMIcon(costoM)}</b></span>`;
       const discountBanner = u.sponsorDiscount ? sponsorAdBannerHTML(u.sponsorDiscount.nome, t('pcard_discount_thanks', u.sponsorDiscount.nome)) : '';
       return `
-      <div class="card ${afford?'pickable':'card-frozen'}" data-rarity="${rarityLike}" ${afford?`data-action="confirm-upgrade-invest" data-idx="${idx}" data-fixed="1"`:''}>
+      <div class="card ${afford?'pickable':'card-frozen'}" data-rarity="${rarityLike}" ${afford?`data-action="confirm-upgrade-invest" data-idx="${idx}" data-fixed="1"`:''} style="${cardThemeStyle}">
+        ${cardWatermark}
         ${topBanner}
         <div class="tag-line dim" style="text-transform:uppercase;letter-spacing:0.06em;font-size:9.5px;">${typeLabel}</div>
         <span class="rarity-tag" data-rarity="${rarityLike}">${u.tier}</span>
@@ -8666,7 +8673,8 @@ function pitlaneCardHTML(node, idx){
     const defaultRisk = investedRisk(defaultT);
     const risk = riskLevel(defaultRisk);
     return `
-    <div class="card ${frozen?'card-frozen':''}" data-rarity="${rarityLike}">
+    <div class="card ${frozen?'card-frozen':''}" data-rarity="${rarityLike}" style="${cardThemeStyle}">
+      ${cardWatermark}
       ${topBanner}
       <div class="tag-line dim" style="text-transform:uppercase;letter-spacing:0.06em;font-size:9.5px;">${typeLabel}</div>
       <span class="rarity-tag" data-rarity="${rarityLike}">${u.tier}</span>
