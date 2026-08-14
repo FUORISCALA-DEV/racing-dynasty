@@ -3895,6 +3895,12 @@ function pickSkipStartShift(){
   for(const w of SKIP_START_WEIGHTS){ r -= w.weight; if(r<=0) return w.shift; }
   return 0;
 }
+const SKIP_START_BUCKETS = [
+  { shift:-2, label:'verylate' },
+  { shift:-1, label:'late' },
+  { shift:0,  label:'ok' },
+  { shift:1,  label:'good' },
+];
 function pedalResultLabel(shift){
   if(shift<=-3) return { text:t('pedal_result_falsestart'), cls:'pedal-bad' };
   if(shift===-2) return { text:t('pedal_result_verylate'), cls:'pedal-bad' };
@@ -3998,8 +4004,12 @@ function startLightsSequence(){
       state.startLights.offAt = performance.now();
       render();
       playRealSfx('audio/sfx_lights_go.mp3');
-      // tempo massimo per reagire: chi non ha ancora rilasciato dopo questo, penalita' massima
-      window._pedalTimeoutTimer = setTimeout(()=> resolvePedalsIfNeeded(true), 1400);
+      if(state.startLights.skipMode){
+        settleSkipStartOnLightsOut();
+      } else {
+        // tempo massimo per reagire: chi non ha ancora rilasciato dopo questo, penalita' massima
+        window._pedalTimeoutTimer = setTimeout(()=> resolvePedalsIfNeeded(true), 1400);
+      }
     }
   }
   // V0.9.9.14: la sequenza vera si avvia da pedalPress() quando ENTRAMBI i paddle sono premuti,
@@ -4076,91 +4086,73 @@ function pedalRelease(slotKey){
   render();
   resolvePedalsIfNeeded(false);
 }
-// V0.9.9.34: pulsante "Salta" ai semafori — pesca un esito per ogni pilota dalla tabella dedicata
-// (mai perfetta gratis), anima con lo stesso linguaggio visivo del ballottaggio decisioni live,
-// poi procede esattamente come se i paddle fossero stati usati davvero.
-const SKIP_REVEAL_SCHEDULE = [140,150,170,200,250,340];
-const SKIP_START_BUCKETS = [
-  { shift:-2, label:'verylate' },
-  { shift:-1, label:'late' },
-  { shift:0,  label:'ok' },
-  { shift:1,  label:'good' },
-];
+// V0.9.9.35: pulsante "Salta" ai semafori — RIDISEGNATO su richiesta di Gio: prima apriva un
+// pop-up separato subito al click, ora invece avvia la sequenza semaforo VERA (le stesse luci che
+// si accendono per una partenza normale). Le possibilita' per ogni pilota girano MENTRE le luci si
+// accendono, e allo spegnimento si fermano una alla volta — non tutte insieme: chi ha un esito
+// migliore si ferma prima (come una reazione piu' rapida), chi ha un esito peggiore si ferma dopo.
+const SKIP_SETTLE_DELAY = { 2:150, 1:150, 0:450, '-1':700, '-2':1000 }; // ms dopo lo spegnimento
 function skipStartLights(){
   const sl = state.startLights;
-  if(!sl || sl.resolved || sl.skipReveal) return;
+  if(!sl || sl.resolved || sl.skipMode) return;
   clearTimeout(window._pedalIdleHintTimer);
-  clearTimeout(window._lightsTimer);
-  detachPedalInputListeners();
-  const outcomes = {};
+  sl.showIdleHint = false;
+  sl.skipMode = true;
+  sl.skipOutcomes = {};
+  sl.skipHighlightIdx = {};
+  sl.skipSettled = {};
   sl.slots.forEach(slotKey=>{
     const shift = pickSkipStartShift();
     const bucketIdx = SKIP_START_BUCKETS.findIndex(b=>b.shift===shift);
-    outcomes[slotKey] = { shift, bucketIdx };
+    sl.skipOutcomes[slotKey] = { shift, bucketIdx };
+    sl.skipHighlightIdx[slotKey] = 0;
+    sl.skipSettled[slotKey] = false;
   });
-  sl.skipReveal = { outcomes, stage:'cycling', highlightIdx:{} };
-  sl.slots.forEach(k=> sl.skipReveal.highlightIdx[k]=0);
-  render();
-  let step = 0;
-  function tick(){
-    if(!state.startLights || !state.startLights.skipReveal) return;
-    const isLast = step===SKIP_REVEAL_SCHEDULE.length-1;
-    sl.slots.forEach(slotKey=>{
-      sl.skipReveal.highlightIdx[slotKey] = isLast ? outcomes[slotKey].bucketIdx : (step % SKIP_START_BUCKETS.length);
-    });
-    if(isLast){
-      sl.skipReveal.stage = 'settled';
-      render();
-      setTimeout(()=>{
-        if(!state.startLights) return;
-        sl.slots.forEach(s=>{
-          sl.pedals[s].released = true;
-          sl.pedals[s].shift = outcomes[s].shift;
-        });
-        sl.resolved = true;
-        const { timeline } = simulateFullRace();
-        sl.slots.forEach(s=> applyStartShiftAcrossPhases(timeline, s, -sl.pedals[s].shift));
-        startLiveRace(timeline);
-      }, 1400);
-      return;
-    }
-    step++;
-    setTimeout(tick, SKIP_REVEAL_SCHEDULE[step]);
+  // avvia la sequenza semaforo vera, come se entrambi i paddle fossero stati premuti
+  if(!sl.started){
+    sl.started = true;
+    if(window._startLightsTick) window._startLightsTick();
   }
-  setTimeout(tick, SKIP_REVEAL_SCHEDULE[0]);
+  // le possibilita' girano finche' le luci non si spengono
+  window._skipCycleInterval = setInterval(()=>{
+    if(!state.startLights || state.startLights.off){ clearInterval(window._skipCycleInterval); return; }
+    sl.slots.forEach(slotKey=>{
+      sl.skipHighlightIdx[slotKey] = (sl.skipHighlightIdx[slotKey]+1) % SKIP_START_BUCKETS.length;
+    });
+    render();
+  }, 130);
+  render();
 }
-function skipStartLightsRevealHTML(){
+// V0.9.9.35: chiamata quando i semafori si spengono in modalita' skip — ogni pilota si ferma sulla
+// propria possibilita' con un ritardo diverso in base alla qualita' dell'esito, poi si procede.
+function settleSkipStartOnLightsOut(){
   const sl = state.startLights;
-  const reveal = sl.skipReveal;
-  const settled = reveal.stage==='settled';
-  const columnsHTML = sl.slots.map(slotKey=>{
-    const { shift, bucketIdx } = reveal.outcomes[slotKey];
-    const activeIdx = reveal.highlightIdx[slotKey];
-    const chipsHTML = SKIP_START_BUCKETS.map((b,i)=>{
-      const cls = b.shift>0 ? 'bkt-gain' : b.shift<0 ? 'bkt-lose' : 'bkt-hold';
-      let stateCls, text;
-      if(settled){
-        stateCls = i===bucketIdx ? 'reveal-winner' : 'reveal-dimmed';
-        text = i===bucketIdx ? pedalResultLabel(shift).text : t('pedal_result_'+b.label);
-      } else {
-        stateCls = i===activeIdx ? 'reveal-active' : 'reveal-idle';
-        text = t('pedal_result_'+b.label);
+  clearInterval(window._skipCycleInterval);
+  sl.slots.forEach(slotKey=>{
+    const { shift, bucketIdx } = sl.skipOutcomes[slotKey];
+    const delay = SKIP_SETTLE_DELAY[shift] ?? 450;
+    setTimeout(()=>{
+      if(!state.startLights) return;
+      sl.skipHighlightIdx[slotKey] = bucketIdx;
+      sl.skipSettled[slotKey] = true;
+      render();
+      if(sl.slots.every(s=> sl.skipSettled[s])){
+        // tutti fermi: applichiamo davvero gli esiti e procediamo, dopo una breve pausa di lettura
+        setTimeout(()=>{
+          if(!state.startLights) return;
+          sl.slots.forEach(s=>{
+            sl.pedals[s].released = true;
+            sl.pedals[s].shift = sl.skipOutcomes[s].shift;
+          });
+          sl.resolved = true;
+          detachPedalInputListeners();
+          const { timeline } = simulateFullRace();
+          sl.slots.forEach(s=> applyStartShiftAcrossPhases(timeline, s, -sl.pedals[s].shift));
+          startLiveRace(timeline);
+        }, 700);
       }
-      return `<div class="decision-reveal-chip ${cls} ${stateCls}">${text}</div>`;
-    }).join('');
-    return `
-    <div class="decision-reveal-col">
-      <div class="decision-reveal-driver">${shortName(pedalDriverName(slotKey))}</div>
-      ${chipsHTML}
-    </div>`;
-  }).join('');
-  return `
-  <div class="decision-modal">
-    <div class="decision-card decision-reveal-card ${settled?'decision-reveal-settled':''}">
-      <div class="eyebrow">${settled ? t('dec_reveal_title_done') : t('sl_skip_reveal_title')}</div>
-      <div class="decision-reveal-row">${columnsHTML}</div>
-    </div>
-  </div>`;
+    }, delay);
+  });
 }
 function resolvePedalsIfNeeded(forceTimeout){
   const sl = state.startLights;
@@ -4194,42 +4186,66 @@ function renderStartLights(){
   }
   const msg = sl.off ? t('sl_go_msg') : (sl.started ? (sl.lit>=5 ? t('sl_ready_msg') : t('sl_lighting_msg')) : t('sl_waiting_msg'));
   const single = sl.slots.length===1;
-  const pedalsHTML = sl.slots.map((slotKey,i)=>{
-    const p = sl.pedals[slotKey];
-    const keyLabel = single ? t('pedal_key_space') : (i===0?'A':'D');
-    let stateCls = 'pedal-idle', bodyHTML;
-    if(p.released){
-      const res = pedalResultLabel(p.shift);
-      stateCls = res.cls;
-      bodyHTML = `<div class="pedal-result">${res.text}</div>`;
-    } else if(p.held){
-      stateCls = 'pedal-held';
-      bodyHTML = `<div class="pedal-instruction">${t('pedal_holding')}</div>`;
-    } else {
-      bodyHTML = `<div class="pedal-instruction">${t('pedal_hold_instruction')}</div>`;
-    }
-    const useMirrored = !state.isDriverCareer && slotKey==='PLAYER-1';
-    return `
-    <div class="pedal-col ${stateCls}">
-      <div class="pedal-driver-name">${pedalDriverName(slotKey)}</div>
-      <div class="pedal-key-hint">${keyLabel}</div>
-      ${bodyHTML}
-      <div class="pedal-box" data-pedal-slot="${slotKey}">
-        <img class="pedal-icon-img" src="assets/pedal/${useMirrored?'pedal_p1':'pedal_p2'}.webp" alt="">
-      </div>
-    </div>`;
-  }).join('');
+  let middleHTML;
+  if(sl.skipMode){
+    // V0.9.9.35: possibilita' che girano per ogni pilota, ferme finche' le luci sono accese, si
+    // fermano una alla volta allo spegnimento con ritardo diverso in base alla qualita' dell'esito.
+    middleHTML = `<div class="decision-reveal-row skip-reveal-row">${sl.slots.map(slotKey=>{
+      const { shift, bucketIdx } = sl.skipOutcomes[slotKey];
+      const activeIdx = sl.skipHighlightIdx[slotKey];
+      const settled = sl.skipSettled[slotKey];
+      const chipsHTML = SKIP_START_BUCKETS.map((b,i)=>{
+        const cls = b.shift>0 ? 'bkt-gain' : b.shift<0 ? 'bkt-lose' : 'bkt-hold';
+        let stateCls, text;
+        if(settled){
+          stateCls = i===bucketIdx ? 'reveal-winner' : 'reveal-dimmed';
+          text = i===bucketIdx ? pedalResultLabel(shift).text : t('pedal_result_'+b.label);
+        } else {
+          stateCls = i===activeIdx ? 'reveal-active' : 'reveal-idle';
+          text = t('pedal_result_'+b.label);
+        }
+        return `<div class="decision-reveal-chip ${cls} ${stateCls}">${text}</div>`;
+      }).join('');
+      return `<div class="decision-reveal-col"><div class="decision-reveal-driver">${shortName(pedalDriverName(slotKey))}</div>${chipsHTML}</div>`;
+    }).join('')}</div>`;
+  } else {
+    const pedalsHTML = sl.slots.map((slotKey,i)=>{
+      const p = sl.pedals[slotKey];
+      const keyLabel = single ? t('pedal_key_space') : (i===0?'A':'D');
+      let stateCls = 'pedal-idle', bodyHTML;
+      if(p.released){
+        const res = pedalResultLabel(p.shift);
+        stateCls = res.cls;
+        bodyHTML = `<div class="pedal-result">${res.text}</div>`;
+      } else if(p.held){
+        stateCls = 'pedal-held';
+        bodyHTML = `<div class="pedal-instruction">${t('pedal_holding')}</div>`;
+      } else {
+        bodyHTML = `<div class="pedal-instruction">${t('pedal_hold_instruction')}</div>`;
+      }
+      const useMirrored = !state.isDriverCareer && slotKey==='PLAYER-1';
+      return `
+      <div class="pedal-col ${stateCls}">
+        <div class="pedal-driver-name">${pedalDriverName(slotKey)}</div>
+        <div class="pedal-key-hint">${keyLabel}</div>
+        ${bodyHTML}
+        <div class="pedal-box" data-pedal-slot="${slotKey}">
+          <img class="pedal-icon-img" src="assets/pedal/${useMirrored?'pedal_p1':'pedal_p2'}.webp" alt="">
+        </div>
+      </div>`;
+    }).join('');
+    middleHTML = `<div class="pedal-row ${single?'pedal-row-single':''}">${pedalsHTML}</div>`;
+  }
 
   app.innerHTML = `
   ${topbarHTML()}
   <div class="suspense-screen">
     <div class="f1-lights-rig">${dots.join('')}</div>
     <div class="suspense-title ${sl.off?'lights-go':''}">${msg}</div>
-    <div class="pedal-row ${single?'pedal-row-single':''}">${pedalsHTML}</div>
+    ${middleHTML}
     ${sl.showIdleHint && !sl.started ? `<div class="pedal-idle-hint">${single ? t('pedal_idle_hint_single') : t('pedal_idle_hint_double')}</div>` : ''}
-    ${!sl.started && !sl.skipReveal ? `<button class="ghost pedal-skip-btn" data-action="skip-start-lights">${t('sl_skip_btn')}</button>` : ''}
+    ${!sl.started && !sl.skipMode ? `<button class="ghost pedal-skip-btn" data-action="skip-start-lights">${t('sl_skip_btn')}</button>` : ''}
   </div>
-  ${sl.skipReveal ? skipStartLightsRevealHTML() : ''}
   `;
   bindActions();
   // press/hold veri (non un semplice click) per i pedali touch — attacco diretto, non tramite bindActions
