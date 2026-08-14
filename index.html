@@ -718,6 +718,11 @@ tr.former td:first-child{border-left-color:var(--dim);}
   animation: pedalIdleHintPulse 1s ease-in-out infinite;
 }
 @keyframes pedalIdleHintPulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.45; } }
+/* V0.9.9.34: pulsante Salta, basso a destra — .suspense-screen ha gia' position:relative */
+.pedal-skip-btn{
+  position:absolute; right:14px; bottom:14px; z-index:2;
+  padding:8px 16px; font-size:12.5px;
+}
 .pedal-row-single{ max-width:220px; margin-left:auto; margin-right:auto; }
 .pedal-col{ display:flex; flex-direction:column; align-items:center; gap:9px; flex:1; max-width:180px; }
 .pedal-box{
@@ -1197,7 +1202,8 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
    cosi' il momento si sente come l'evento importante che e', e si chiude esplicitamente con un tap
    invece di scorrere via insieme al resto della schermata risultato. */
 .trophy-unlock-fullscreen{
-  position:fixed; inset:0; z-index:9800; background:radial-gradient(circle at 50% 40%, rgba(40,28,4,0.55), rgba(5,6,8,0.97) 70%);
+  position:fixed; inset:0; z-index:9800; background:#050608;
+  background-image:radial-gradient(circle at 50% 40%, rgba(40,28,4,0.65), #050608 70%);
   display:flex; align-items:center; justify-content:center; padding:20px;
   animation: trophyFullscreenFadeIn 0.35s ease forwards;
 }

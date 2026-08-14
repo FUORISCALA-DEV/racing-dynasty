@@ -411,7 +411,7 @@ const I18N = {
     dc_done_title: 'Pilota creato', dc_done_subtitle: 'Punto 2 completato — da qui in poi serve l\'Hub vero (punto 3).',
     dc_done_world_info: (n)=>`Il mondo delle 30 scuderie è pronto: ${n} in Kart, 10 in Serie Minore, 10 in Serie Elite, ognuna con una storia simulata alle spalle.`,
     dc_done_footer: 'Schermata temporanea di verifica — non ancora giocabile oltre questo punto.',
-    sl_go_msg: 'VIA!!', sl_ready_msg: 'Pronti...', sl_lighting_msg: 'Si accendono le luci…', sl_waiting_msg: 'Tieni premuto per partire',
+    sl_go_msg: 'VIA!!', sl_ready_msg: 'Pronti...', sl_lighting_msg: 'Si accendono le luci…', sl_waiting_msg: 'Tieni premuto per partire', sl_skip_btn: 'Salta →', sl_skip_reveal_title: 'Partenza in corso…',
     pedal_idle_hint_single: 'Tieni premuto SPAZIO e rilascialo allo spegnimento dei semafori', pedal_idle_hint_double: 'Premi i paddle A e D e rilasciali allo spegnimento dei semafori',
     menu_exit_fullscreen: 'Esci da Schermo Intero',
     draft_founding: 'Fondazione scuderia',
@@ -692,7 +692,7 @@ const I18N = {
     dc_done_title: 'Driver created', dc_done_subtitle: "Step 2 complete — from here on the real Hub (step 3) is needed.",
     dc_done_world_info: (n)=>`The world of 30 teams is ready: ${n} in Kart, 10 in Minor Series, 10 in Elite Series, each with a simulated history behind it.`,
     dc_done_footer: 'Temporary verification screen — not yet playable beyond this point.',
-    sl_go_msg: 'GO!!', sl_ready_msg: 'Ready...', sl_lighting_msg: 'Lights coming on…', sl_waiting_msg: 'Hold down to start',
+    sl_go_msg: 'GO!!', sl_ready_msg: 'Ready...', sl_lighting_msg: 'Lights coming on…', sl_waiting_msg: 'Hold down to start', sl_skip_btn: 'Skip →', sl_skip_reveal_title: 'Starting…',
     pedal_idle_hint_single: 'Hold SPACE and release it when the lights go out', pedal_idle_hint_double: 'Press paddles A and D and release them when the lights go out',
     menu_exit_fullscreen: 'Exit Fullscreen',
     draft_founding: 'Team founding',
@@ -967,7 +967,7 @@ const I18N = {
     dc_done_title: 'Piloto creado', dc_done_subtitle: 'Paso 2 completado — a partir de aquí hace falta el Hub real (paso 3).',
     dc_done_world_info: (n)=>`El mundo de las 30 escuderías está listo: ${n} en Kart, 10 en Serie Menor, 10 en Serie Élite, cada una con una historia simulada detrás.`,
     dc_done_footer: 'Pantalla de verificación temporal — todavía no jugable más allá de este punto.',
-    sl_go_msg: '¡VAMOS!!', sl_ready_msg: 'Listos...', sl_lighting_msg: 'Se encienden las luces…', sl_waiting_msg: 'Mantén pulsado para empezar',
+    sl_go_msg: '¡VAMOS!!', sl_ready_msg: 'Listos...', sl_lighting_msg: 'Se encienden las luces…', sl_waiting_msg: 'Mantén pulsado para empezar', sl_skip_btn: 'Saltar →', sl_skip_reveal_title: 'Saliendo…',
     pedal_idle_hint_single: 'Mantén pulsado ESPACIO y suéltalo cuando se apaguen los semáforos', pedal_idle_hint_double: 'Pulsa los paddles A y D y suéltalos cuando se apaguen los semáforos',
     menu_exit_fullscreen: 'Salir de Pantalla Completa',
     draft_founding: 'Fundación de la escudería',
@@ -3880,6 +3880,21 @@ function pedalReleaseShift(deltaMs){
   if(deltaMs <= 850) return -1;       // partenza lenta
   return -2;                          // partenza molto lenta
 }
+// V0.9.9.34: pulsante "Salta" ai semafori — tabella pesata DEDICATA, diversa da quella dei paddle
+// veri: niente mai "partenza perfetta" gratis (chi salta non ha dimostrato riflessi), pesantemente
+// sbilanciata verso partenze nella media. Stessi 4 esiti mostrati come "possibilita'" nell'animazione.
+const SKIP_START_WEIGHTS = [
+  { shift:-2, weight:10 }, // partenza molto lenta
+  { shift:-1, weight:15 }, // partenza lenta
+  { shift:0,  weight:55 }, // partenza nella media — di gran lunga la piu' probabile
+  { shift:1,  weight:20 }, // buona partenza
+];
+function pickSkipStartShift(){
+  const total = SKIP_START_WEIGHTS.reduce((s,w)=>s+w.weight, 0);
+  let r = rnd()*total;
+  for(const w of SKIP_START_WEIGHTS){ r -= w.weight; if(r<=0) return w.shift; }
+  return 0;
+}
 function pedalResultLabel(shift){
   if(shift<=-3) return { text:t('pedal_result_falsestart'), cls:'pedal-bad' };
   if(shift===-2) return { text:t('pedal_result_verylate'), cls:'pedal-bad' };
@@ -4061,6 +4076,92 @@ function pedalRelease(slotKey){
   render();
   resolvePedalsIfNeeded(false);
 }
+// V0.9.9.34: pulsante "Salta" ai semafori — pesca un esito per ogni pilota dalla tabella dedicata
+// (mai perfetta gratis), anima con lo stesso linguaggio visivo del ballottaggio decisioni live,
+// poi procede esattamente come se i paddle fossero stati usati davvero.
+const SKIP_REVEAL_SCHEDULE = [140,150,170,200,250,340];
+const SKIP_START_BUCKETS = [
+  { shift:-2, label:'verylate' },
+  { shift:-1, label:'late' },
+  { shift:0,  label:'ok' },
+  { shift:1,  label:'good' },
+];
+function skipStartLights(){
+  const sl = state.startLights;
+  if(!sl || sl.resolved || sl.skipReveal) return;
+  clearTimeout(window._pedalIdleHintTimer);
+  clearTimeout(window._lightsTimer);
+  detachPedalInputListeners();
+  const outcomes = {};
+  sl.slots.forEach(slotKey=>{
+    const shift = pickSkipStartShift();
+    const bucketIdx = SKIP_START_BUCKETS.findIndex(b=>b.shift===shift);
+    outcomes[slotKey] = { shift, bucketIdx };
+  });
+  sl.skipReveal = { outcomes, stage:'cycling', highlightIdx:{} };
+  sl.slots.forEach(k=> sl.skipReveal.highlightIdx[k]=0);
+  render();
+  let step = 0;
+  function tick(){
+    if(!state.startLights || !state.startLights.skipReveal) return;
+    const isLast = step===SKIP_REVEAL_SCHEDULE.length-1;
+    sl.slots.forEach(slotKey=>{
+      sl.skipReveal.highlightIdx[slotKey] = isLast ? outcomes[slotKey].bucketIdx : (step % SKIP_START_BUCKETS.length);
+    });
+    if(isLast){
+      sl.skipReveal.stage = 'settled';
+      render();
+      setTimeout(()=>{
+        if(!state.startLights) return;
+        sl.slots.forEach(s=>{
+          sl.pedals[s].released = true;
+          sl.pedals[s].shift = outcomes[s].shift;
+        });
+        sl.resolved = true;
+        const { timeline } = simulateFullRace();
+        sl.slots.forEach(s=> applyStartShiftAcrossPhases(timeline, s, -sl.pedals[s].shift));
+        startLiveRace(timeline);
+      }, 1400);
+      return;
+    }
+    step++;
+    setTimeout(tick, SKIP_REVEAL_SCHEDULE[step]);
+  }
+  setTimeout(tick, SKIP_REVEAL_SCHEDULE[0]);
+}
+function skipStartLightsRevealHTML(){
+  const sl = state.startLights;
+  const reveal = sl.skipReveal;
+  const settled = reveal.stage==='settled';
+  const columnsHTML = sl.slots.map(slotKey=>{
+    const { shift, bucketIdx } = reveal.outcomes[slotKey];
+    const activeIdx = reveal.highlightIdx[slotKey];
+    const chipsHTML = SKIP_START_BUCKETS.map((b,i)=>{
+      const cls = b.shift>0 ? 'bkt-gain' : b.shift<0 ? 'bkt-lose' : 'bkt-hold';
+      let stateCls, text;
+      if(settled){
+        stateCls = i===bucketIdx ? 'reveal-winner' : 'reveal-dimmed';
+        text = i===bucketIdx ? pedalResultLabel(shift).text : t('pedal_result_'+b.label);
+      } else {
+        stateCls = i===activeIdx ? 'reveal-active' : 'reveal-idle';
+        text = t('pedal_result_'+b.label);
+      }
+      return `<div class="decision-reveal-chip ${cls} ${stateCls}">${text}</div>`;
+    }).join('');
+    return `
+    <div class="decision-reveal-col">
+      <div class="decision-reveal-driver">${shortName(pedalDriverName(slotKey))}</div>
+      ${chipsHTML}
+    </div>`;
+  }).join('');
+  return `
+  <div class="decision-modal">
+    <div class="decision-card decision-reveal-card ${settled?'decision-reveal-settled':''}">
+      <div class="eyebrow">${settled ? t('dec_reveal_title_done') : t('sl_skip_reveal_title')}</div>
+      <div class="decision-reveal-row">${columnsHTML}</div>
+    </div>
+  </div>`;
+}
 function resolvePedalsIfNeeded(forceTimeout){
   const sl = state.startLights;
   if(!sl || sl.resolved) return;
@@ -4126,7 +4227,9 @@ function renderStartLights(){
     <div class="suspense-title ${sl.off?'lights-go':''}">${msg}</div>
     <div class="pedal-row ${single?'pedal-row-single':''}">${pedalsHTML}</div>
     ${sl.showIdleHint && !sl.started ? `<div class="pedal-idle-hint">${single ? t('pedal_idle_hint_single') : t('pedal_idle_hint_double')}</div>` : ''}
+    ${!sl.started && !sl.skipReveal ? `<button class="ghost pedal-skip-btn" data-action="skip-start-lights">${t('sl_skip_btn')}</button>` : ''}
   </div>
+  ${sl.skipReveal ? skipStartLightsRevealHTML() : ''}
   `;
   bindActions();
   // press/hold veri (non un semplice click) per i pedali touch — attacco diretto, non tramite bindActions
@@ -10122,6 +10225,7 @@ function onAction(e){
   else if(action==='pedal-tutorial-done'){ markPedalTutorialSeen(); startLightsSequence(); }
   else if(action==='pause-live'){ pauseLive(); }
   else if(action==='speed-live'){ toggleSpeedLive(); }
+  else if(action==='skip-start-lights'){ skipStartLights(); }
   else if(action==='skip-live'){
     gameConfirm(t('skip_race_warning_desc'), ()=>{ skipLiveRace(); }, t('skip_race_warning_title'));
   }
