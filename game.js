@@ -300,7 +300,7 @@ function syncStreamerFrameState(){
 function markLangChosen(){ try{ localStorage.setItem('racingDynastyLangChosenV1','1'); }catch(e){} }
 const I18N = {
   it: {
-    sponsor_area_piloti: 'Piloti', sponsor_fx_tier_boost: 'Upgrade di fascia alta (Epic/Legendary/Immortal) molto più frequenti in Pit Lane.',
+    sponsor_area_piloti: 'Piloti', sponsor_fx_tier_boost: 'Upgrade di fascia alta (Epic/Mythic/Legendary/Immortal) molto più frequenti in Pit Lane.',
     sponsor_fx_area_boost: (aree)=>`Upgrade ${aree} molto più frequenti in Pit Lane.`,
     sponsor_fx_budget_bonus: (n)=>`+${n}M di budget extra, ogni gara, senza condizioni.`,
     sponsor_fx_risk_reduction: (n)=>`-${n}% di rischio fallimento su ogni upgrade.`,
@@ -582,7 +582,7 @@ const I18N = {
     race_lights_out: 'Si spengono i semafori, si parte!', race_checkered: 'BANDIERA A SCACCHI — gara conclusa!',
   },
   en: {
-    sponsor_area_piloti: 'Drivers', sponsor_fx_tier_boost: 'High-tier upgrades (Epic/Legendary/Immortal) much more frequent in Pit Lane.',
+    sponsor_area_piloti: 'Drivers', sponsor_fx_tier_boost: 'High-tier upgrades (Epic/Mythic/Legendary/Immortal) much more frequent in Pit Lane.',
     sponsor_fx_area_boost: (areas)=>`${areas} upgrades much more frequent in Pit Lane.`,
     sponsor_fx_budget_bonus: (n)=>`+${n}M extra budget, every race, no conditions.`,
     sponsor_fx_risk_reduction: (n)=>`-${n}% failure risk on every upgrade.`,
@@ -858,7 +858,7 @@ const I18N = {
     race_lights_out: "Lights out, and away we go!", race_checkered: 'CHECKERED FLAG — race complete!',
   },
   es: {
-    sponsor_area_piloti: 'Pilotos', sponsor_fx_tier_boost: 'Mejoras de gama alta (Epic/Legendary/Immortal) mucho más frecuentes en Pit Lane.',
+    sponsor_area_piloti: 'Pilotos', sponsor_fx_tier_boost: 'Mejoras de gama alta (Epic/Mythic/Legendary/Immortal) mucho más frecuentes en Pit Lane.',
     sponsor_fx_area_boost: (areas)=>`Mejoras de ${areas} mucho más frecuentes en Pit Lane.`,
     sponsor_fx_budget_bonus: (n)=>`+${n}M de presupuesto extra, cada carrera, sin condiciones.`,
     sponsor_fx_risk_reduction: (n)=>`-${n}% de riesgo de fallo en cada mejora.`,
@@ -1708,7 +1708,7 @@ document.addEventListener('visibilitychange', ()=>{
 
 
 const LOGO_DATA_URI = 'assets/logo.png'; // V0.7.2: logo titolo
-const RARITY_ORDER = ['Common','Rare','Epic','Legendary','Immortal'];
+const RARITY_ORDER = ['Common','Uncommon','Rare','Epic','Mythic','Legendary','Immortal'];
 const POINTS_TABLE = [25,18,15,12,10,8,6,4,2,1];
 const PRIZE_TABLE  = [16,12,10,8,6.5,5,4,3,2,1]; // milioni — V0.9.9.20: alzato ~5x, prima erano cifre troppo piccole per sentirsi un vero premio
 const START_BUDGET = 20; // milioni
@@ -1856,11 +1856,16 @@ function rarityColor(r){
 // non seguiva soglie coerenti (es. rating 71 e rating 84 potevano finire entrambi "Rare", mentre
 // i pezzi sull'auto, calcolati dal rating, li coloravano correttamente in modo diverso). Stessa
 // soglia di ratingBandKey, compressa da 7 a 5 fasce per restare coerente col resto del gioco.
+// V0.9.9.40: unificazione vera dei sistemi colore — prima le carte usavano 5 fasce (soglie
+// 70/80/90/100) mentre auto/pallini ne usavano 7 (soglie 60/70/80/90/95/100), stesso numero
+// poteva avere colori diversi in punti diversi del gioco. Ora usano le STESSE identiche soglie.
 function rarityFromRating(rating){
   if(rating>=100) return 'Immortal';
-  if(rating>=90) return 'Legendary';
+  if(rating>=95) return 'Legendary';
+  if(rating>=90) return 'Mythic';
   if(rating>=80) return 'Epic';
   if(rating>=70) return 'Rare';
+  if(rating>=60) return 'Uncommon';
   return 'Common';
 }
 function displayRarity(item){ return (item && item.nome==='THE GOAT') ? 'TheGoat' : (item ? rarityFromRating(item.rating) : ''); }
@@ -2764,7 +2769,7 @@ function startDraftTurn(){
   state.phase = 'draft';
   // V0.9.7.8.2: SFX #16 — reveal scalato sulla rarita' migliore tra le offerte di questo turno
   const allOffers = Object.values(state.draftTurnOffers);
-  const rarityScore = { 'Common':0, 'Rare':0.15, 'Epic':0.45, 'Legendary':0.75, 'Immortal':0.9, 'TheGoat':1 };
+  const rarityScore = { 'Common':0, 'Uncommon':0.08, 'Rare':0.15, 'Epic':0.35, 'Mythic':0.6, 'Legendary':0.75, 'Immortal':0.9, 'TheGoat':1 };
   const bestScore = Math.max(0, ...allOffers.map(o=> rarityScore[displayRarity(o)] ?? 0));
   if(bestScore >= 0.45) playSfx('draft_reveal', bestScore);
   render();
@@ -3404,7 +3409,7 @@ function recordStoryEvents(finalEntries, gridPos, circuit, weatherBefore, weathe
 // V0.9: registra un cambio componente rilevante (upgrade riuscito o scouting) nella storia stagione
 function recordComponentStoryEvent(label, item, isReplacement){
   if(!state.storyEvents) return;
-  const bigTiers = ['Legendary','Immortal','Epic'];
+  const bigTiers = ['Legendary','Immortal','Epic','Mythic'];
   const rarity = rarityFromRating(item.rating);
   if(bigTiers.includes(rarity) || isReplacement){
     state.storyEvents.push({ race: state.raceIndex+1, text: `${isReplacement?'Nuovo':'Upgrade'} ${label}: ${item.nome} (${rarity})` });
@@ -5482,7 +5487,7 @@ function sponsorSpawnMultFor(u){
   if(!state.sponsor) return 1;
   const e = SPONSOR_EFFECTS[state.sponsor.nome];
   if(!e) return 1;
-  if(e.type==='tier_boost' && (u.tier==='Epic'||u.tier==='Legendary'||u.tier==='Immortal')) return e.mult;
+  if(e.type==='tier_boost' && (u.tier==='Epic'||u.tier==='Mythic'||u.tier==='Legendary'||u.tier==='Immortal')) return e.mult;
   if(e.type==='area_boost' && e.areas.includes(u.area)) return e.mult;
   return 1;
 }
@@ -5568,7 +5573,7 @@ function ensureUsefulScoutOptions(pool, current){
 // significava che gli upgrade piu' cari (di solito i piu' forti) comparivano PIU' spesso, il
 // contrario di quello che ci si aspetta da un sistema di rarita'. Ora le fasce basse sono
 // deliberatamente piu' comuni, quelle alte via via piu' rare.
-const UPGRADE_TIER_SPAWN_WEIGHT = { Common:40, Rare:28, Epic:18, Legendary:10, Immortal:4 };
+const UPGRADE_TIER_SPAWN_WEIGHT = { Common:32, Uncommon:24, Rare:18, Epic:12, Mythic:8, Legendary:4, Immortal:2 };
 function buildPitlaneOptions(){
   const usedUpg = new Set();
   const usefulUpgrades = DATA.upgrade.filter(isUpgradeUseful).map(u=>({ ...u, spawnWeight: (UPGRADE_TIER_SPAWN_WEIGHT[u.tier]||1) * sponsorSpawnMultFor(u) }));
@@ -5816,12 +5821,12 @@ function skipPitlane(){
 // riusare direttamente i pesi del giocatore avrebbe alzato la media di guadagno IA da 4.5 a 6.3
 // (+40%), rompendo il bilanciamento esistente gia' tarato con cura. Questi pesi restano vicini
 // alla media originale (4.5) pur dando comunque varieta' vera di fasce.
-const AI_UPGRADE_TIER_WEIGHT = { Common:65, Rare:22, Epic:8, Legendary:4, Immortal:1 };
+const AI_UPGRADE_TIER_WEIGHT = { Common:55, Uncommon:23, Rare:12, Epic:6, Mythic:2.5, Legendary:1, Immortal:0.5 };
 function pickAIUpgradeTier(virtualSponsor){
   const e = virtualSponsor ? SPONSOR_EFFECTS[virtualSponsor] : null;
   const weights = Object.keys(AI_UPGRADE_TIER_WEIGHT).map(tier=>{
     let w = AI_UPGRADE_TIER_WEIGHT[tier];
-    if(e && e.type==='tier_boost' && (tier==='Epic'||tier==='Legendary'||tier==='Immortal')) w *= e.mult;
+    if(e && e.type==='tier_boost' && (tier==='Epic'||tier==='Mythic'||tier==='Legendary'||tier==='Immortal')) w *= e.mult;
     return { tier, w };
   });
   const total = weights.reduce((s,x)=>s+x.w, 0);
@@ -5843,7 +5848,7 @@ function pickAIUpgradeArea(virtualSponsor){
   for(const x of weights){ r -= x.w; if(r<=0) return x.key; }
   return weights[weights.length-1].key;
 }
-const AI_UPGRADE_TIER_GAIN = { Common:3, Rare:6, Epic:9, Legendary:12, Immortal:15 };
+const AI_UPGRADE_TIER_GAIN = { Common:3, Uncommon:5, Rare:7, Epic:9, Mythic:11, Legendary:14, Immortal:17 };
 function applyAIUpgrades(){
   const playerInvested = !!state.playerInvestedLastRace;
   const myPoints = state.constructorStandings['PLAYER'] ? state.constructorStandings['PLAYER'].points : 0;
@@ -8778,7 +8783,7 @@ function pitlaneCardHTML(node, idx){
       const e = SPONSOR_EFFECTS[state.sponsor.nome];
       if(!e) return '';
       const nome = state.sponsor.nome;
-      if(e.type==='tier_boost' && (u.tier==='Epic'||u.tier==='Legendary'||u.tier==='Immortal')) return sponsorAdBannerHTML(nome, t('pitlane_tier_boost_banner', nome), true);
+      if(e.type==='tier_boost' && (u.tier==='Epic'||u.tier==='Mythic'||u.tier==='Legendary'||u.tier==='Immortal')) return sponsorAdBannerHTML(nome, t('pitlane_tier_boost_banner', nome), true);
       if(e.type==='area_boost' && e.areas.includes(u.area)) return sponsorAdBannerHTML(nome, t('pitlane_area_boost_banner', nome), true);
       // V0.9.9.31: Solace — riduce il rischio su TUTTE le carte, non solo una fascia/area specifica
       if(e.type==='risk_reduction') return sponsorAdBannerHTML(nome, t('pitlane_risk_reduction_banner', nome, e.amount), true);
