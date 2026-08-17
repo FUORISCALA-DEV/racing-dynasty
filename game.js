@@ -3492,7 +3492,11 @@ function simulateFullRace(){
       let pitPenalty = 0;
       if(decidePit(t, pilot, pitPlan[e.slotKey])){
         pitThis.add(e.slotKey);
-        pitPenalty = clamp(3.0 - (comp.stratega.pitstop-50)*0.02, 1.2, 4.2);
+        // V0.9.9.36: costo pit stop realistico — normale 22-24s, sotto Safety Car 10-12s (l'auto
+        // e' gia' rallentata dietro la Safety Car, quindi il tempo perso ai box e' molto minore),
+        // entrambi in base all'abilita' pit-stop del Team Principal (100=veloce, 0=lento).
+        const pitSkillFrac = comp.stratega.pitstop/100;
+        pitPenalty = (t===safetyCarPhase) ? (12 - pitSkillFrac*2) : (24 - pitSkillFrac*2);
         tireWear[e.slotKey] = 0.05;
       }
 
@@ -8372,7 +8376,8 @@ function renderHub(){
     const cls = (d.isPlayerTeam ? (d.isFormer?'me former':'me') : '') + (isRivalTeam(d.teamId)?' rival':'');
     const posCls = i===0?'p1':i===1?'p2':i===2?'p3':'';
     const badge = d.isPlayerTeam ? ` <span class="badge-event ${d.isFormer?'ex':''}">${d.isFormer?'EX':'TU'}</span>` : (isRivalTeam(d.teamId)?' <span class="badge-event rival-badge">RIVALE</span>':'');
-    return `<tr class="${cls}"><td><span class="pos ${posCls}">P${i+1}</span></td><td class="mono dim">#${d.carNumber}</td><td>${d.naz?flag(d.naz)+' ':''}${d.nome}${badge}</td><td class="dim">${d.teamNome}</td><td class="mono">${d.points}</td></tr>`;
+    const clickAttrs = d.isFormer ? '' : `data-action="open-driver-detail" data-slot-key="${d.slotKey}" data-team-id="${d.teamId}"`;
+    return `<tr class="${cls} ${d.isFormer?'':'row-clickable'}" ${clickAttrs}><td><span class="pos ${posCls}">P${i+1}</span></td><td class="mono dim">#${d.carNumber}</td><td>${d.naz?flag(d.naz)+' ':''}${d.nome}${badge}</td><td class="dim">${d.teamNome}</td><td class="mono">${d.points}</td></tr>`;
   }).join('');
 
   const constructorRows = constructorStandingsSorted().map((c,i)=>{
@@ -8626,7 +8631,7 @@ function renderRaceResult(){
     const posCls = e.pos===1?'p1':e.pos===2?'p2':e.pos===3?'p3':'';
     const evBadge = e.event ? `<span class="badge-event">${evName(e.event.nome)}</span>` : '';
     const rivalBadge = !e.isPlayerTeam && isRivalTeam(e.teamId) ? ` <span class="badge-event rival-badge">${t('race_result_rival_badge')}</span>` : '';
-    return `<tr class="${cls}"><td><span class="pos ${posCls}">${e.dnf?t('race_result_retired'):'P'+e.pos}</span></td><td class="mono dim">#${e.carNumber}</td><td>${e.driverName}${e.isPlayerTeam?` <span class="badge-event">${t('race_result_you_badge')}</span>`:rivalBadge}${evBadge}</td><td class="dim">${e.teamName}</td><td class="mono">${e.points}</td></tr>`;
+    return `<tr class="${cls} row-clickable" data-action="open-driver-detail" data-slot-key="${e.slotKey}" data-team-id="${e.teamId}"><td><span class="pos ${posCls}">${e.dnf?t('race_result_retired'):'P'+e.pos}</span></td><td class="mono dim">#${e.carNumber}</td><td>${e.driverName}${e.isPlayerTeam?` <span class="badge-event">${t('race_result_you_badge')}</span>`:rivalBadge}${evBadge}</td><td class="dim">${e.teamName}</td><td class="mono">${e.points}</td></tr>`;
   }).join('');
 
   // V0.9.7.8.30 fix: il filtro usava regex su parole italiane ("Ritiro","meteo cambia") che in
@@ -9890,7 +9895,10 @@ function renderSeasonEnd(){
     const cls = (d.isPlayerTeam ? (d.isFormer?'me former':'me') : '') + (isRivalTeam(d.teamId)?' rival':'');
     const posCls = i===0?'p1':i===1?'p2':i===2?'p3':'';
     const badge = d.isPlayerTeam ? ` <span class="badge-event ${d.isFormer?'ex':''}">${d.isFormer?t('se_ex_badge'):t('se_you_badge')}</span>` : (isRivalTeam(d.teamId)?` <span class="badge-event rival-badge">${t('se_rival_badge')}</span>`:'');
-    return `<tr class="${cls}"><td><span class="pos ${posCls}">P${i+1}</span></td><td>${d.naz?flag(d.naz)+' ':''}${d.nome}${badge}</td><td class="dim">${d.teamNome}</td><td class="mono">${d.points}</td><td class="mono dim">${d.wins}V</td></tr>`;
+    // V0.9.9.37: i piloti EX (sostituiti a stagione in corso) non sono cliccabili — il loro slotKey
+    // non corrisponde piu' a un sedile reale, mostrare "la loro auto" oggi sarebbe fuorviante
+    const clickAttrs = d.isFormer ? '' : `data-action="open-driver-detail" data-slot-key="${d.slotKey}" data-team-id="${d.teamId}"`;
+    return `<tr class="${cls} ${d.isFormer?'':'row-clickable'}" ${clickAttrs}><td><span class="pos ${posCls}">P${i+1}</span></td><td>${d.naz?flag(d.naz)+' ':''}${d.nome}${badge}</td><td class="dim">${d.teamNome}</td><td class="mono">${d.points}</td><td class="mono dim">${d.wins}V</td></tr>`;
   }).join('');
 
   const constructorRows = cstd.map((c,i)=>{
@@ -9914,7 +9922,7 @@ function renderSeasonEnd(){
       <div class="tagline">${t('se_summary', teamDisplayName(), totalPoints, totalWins, totalPodiums, totalDnfs, state.calendar.length, fmtMIcon(state.budget))}</div>
       <div class="tagline" style="margin-top:6px;">${rivalComparisonSentence()}</div>
       <div class="btnrow" style="justify-content:center;">
-        <button class="primary" data-action="back-to-title">${t('se_new_career')}</button>
+        <button class="primary" data-action="go-to-mode-select">${t('se_new_career')}</button>
         <button class="ghost" data-action="share-result-card">${t('se_share')}</button>
         <button class="ghost" data-action="open-trophy-room">${t('se_visit_trophy_room')}</button>
       </div>
@@ -10230,6 +10238,9 @@ function onAction(e){
     playSfx('ui_click');
     render();
   }
+  else if(action==='open-driver-detail'){
+    showDriverCarDetail(el.dataset.slotKey, el.dataset.teamId);
+  }
   else if(action==='open-trophy-detail'){
     showTrophyDetail(el.dataset.circuit, el.dataset.driverSource==='1');
   }
@@ -10511,6 +10522,39 @@ function openPasswordGate(target){
 // V0.9.9.13: popup icona sponsor in topbar — promemoria di logo+effetto, stesso pattern di
 // gameConfirm (manipolazione diretta del DOM, niente render completo che rischierebbe di
 // disturbare la schermata sottostante, dato che l'icona sponsor puo' comparire ovunque).
+// V0.9.9.37: popup "auto del pilota" — cliccando una riga in qualunque classifica (fine gara, fine
+// stagione/carriera, hub), mostra la sua auto con tutti i rating. Riusa pregaraCarPanelHTML, gia'
+// pronta, e normalizza la struttura dati diversa tra squadra giocatore e squadre IA.
+function showDriverCarDetail(slotKey, teamId){
+  let pilot, comp, teamName, carNumber;
+  if(teamId==='PLAYER'){
+    const isP1 = slotKey==='PLAYER-1';
+    pilot = isP1 ? state.team.pilotMain : state.team.pilotSecond;
+    comp = { motore:state.team.motore, telaio:state.team.telaio, aero:state.team.aero, gomme:state.team.gomme, stratega:state.team.stratega };
+    teamName = teamDisplayName();
+    carNumber = (state.grid && state.grid.find(g=>g.slotKey===slotKey) || {}).carNumber || (isP1?1:2);
+  } else {
+    const aiTeam = state.aiTeams && state.aiTeams.find(t=>t.id===teamId);
+    if(!aiTeam) return;
+    // V0.9.9.37: buildGrid() (quella vera, usata in gara) usa slotKey 0-indicizzato per le
+    // squadre IA (es. "TEAMID-0"/"TEAMID-1"), non 1-indicizzato come per il giocatore.
+    const isFirst = slotKey.endsWith('-0');
+    pilot = aiTeam.drivers[isFirst?0:1];
+    comp = aiTeam.components;
+    teamName = aiTeam.nome;
+    carNumber = (state.grid && state.grid.find(g=>g.slotKey===slotKey) || {}).carNumber || (isFirst?1:2);
+  }
+  if(!pilot || !comp) return;
+  const panel = document.getElementById('driverDetailPanel');
+  const body = document.getElementById('driverDetailBody');
+  body.innerHTML = pregaraCarPanelHTML(pilot, carNumber, comp, null, teamName) + pregaraSharedComponentsHTML(comp);
+  const closeBtn = document.getElementById('driverDetailCloseBtn');
+  closeBtn.textContent = t('tr_detail_close');
+  function onClose(){ panel.style.display = 'none'; closeBtn.removeEventListener('click', onClose); }
+  closeBtn.addEventListener('click', onClose);
+  panel.style.display = 'flex';
+  pushBackGuard();
+}
 function showSponsorInfo(){
   if(!state.sponsor) return;
   const nome = state.sponsor.nome;

@@ -1078,6 +1078,11 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
 .trophy-cell-clickable:hover{ transform:translateY(-3px); }
 .trophy-cell-clickable:active{ transform:translateY(-1px) scale(0.97); }
 .trophy-detail-window{ max-width:340px; }
+/* V0.9.9.37: righe classifica cliccabili — aprono il popup auto pilota */
+tr.row-clickable{ cursor:pointer; transition:background .12s ease; }
+tr.row-clickable:hover{ background:rgba(255,106,26,0.08); }
+tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
+.driver-detail-window{ max-width:420px; max-height:85vh; overflow-y:auto; }
 .trophy-detail-img-wrap{
   width:100%; max-width:220px; margin:0 auto 18px; aspect-ratio:1/1;
   display:flex; align-items:center; justify-content:center;
@@ -2023,6 +2028,16 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
         </div>
       </div>
       <button type="button" class="ghost" id="trophyDetailCloseBtn" style="width:100%;margin-top:18px;">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<!-- V0.9.9.37: popup "auto del pilota" cliccato in qualunque classifica -->
+<div id="driverDetailPanel" class="sidebar-settings-overlay" style="display:none;">
+  <div class="sidebar-settings-window driver-detail-window">
+    <div class="sidebar-settings-body" style="padding:16px;" id="driverDetailBody"></div>
+    <div style="padding:0 16px 16px;">
+      <button type="button" class="ghost" id="driverDetailCloseBtn" style="width:100%;">Chiudi</button>
     </div>
   </div>
 </div>
