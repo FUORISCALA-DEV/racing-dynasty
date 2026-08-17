@@ -9554,7 +9554,13 @@ async function buildShareCardCanvas(){
   // piloti sostituiti a stagione in corso (record EX), non solo i due sedili correnti.
   const { points: totalPoints, wins: totalWins, podiums: totalPodiums, dnfs: totalDnfs } = playerSeasonTotals();
 
-  const bestDriverRating = Math.max(state.team.pilotMain.rating, state.team.pilotSecond.rating);
+  // V0.9.9.38: fix bug segnalato da Gio — se sei campione, il colore deve essere quello del pilota
+  // che ha DAVVERO vinto il titolo (stessa logica della schermata finale nell'app), non il rating
+  // piu' alto tra i due piloti — potevano non coincidere se il campione non era il tuo pilota con
+  // rating piu' alto (es. ha vinto per costanza/punti, non per rating puro).
+  const bestDriverRating = isDriverChamp
+    ? (driverChamp.slotKey==='PLAYER-1' ? state.team.pilotMain.rating : state.team.pilotSecond.rating)
+    : Math.max(state.team.pilotMain.rating, state.team.pilotSecond.rating);
   const band = ratingBandKey(bestDriverRating);
 
   let title, subtitle;
