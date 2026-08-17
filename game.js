@@ -6441,12 +6441,23 @@ function carVisualHTML(pilot, comp, carNumber, previewPatternId, previewColor, t
   const chassisSrc = activePatternId ? getPatternedChassisSrc(chassisBand, activePatternId, activeColor) : carLayerSrc(chassisBand,'chassis');
   const hideNumber = !!(activePattern && activePattern.liveryImg); // V0.9.7.9.8: la livrea copre anche il numero
 
+  // V0.9.9.38: luccichio platino — per ogni layer in fascia "immortal", una sovrapposizione
+  // mascherata sulla STESSA forma del layer (non un riquadro generico), con un fascio di luce che
+  // scorre sopra. Il casco GOAT non lo prende mai (e' sempre rosso Ferrari, non fascia immortal).
+  function shimmerFor(band, src){
+    return band==='immortal' ? `<div class="car-layer-shimmer" style="-webkit-mask-image:url(${src});mask-image:url(${src});"></div>` : '';
+  }
+
   return `
   <div class="car-canvas">
     <img class="car-layer" src="${chassisSrc}" alt="">
+    ${shimmerFor(chassisBand, chassisSrc)}
     <img class="car-layer" src="${carLayerSrc(aeroBand,'aero')}" alt="">
+    ${shimmerFor(aeroBand, carLayerSrc(aeroBand,'aero'))}
     <img class="car-layer" src="${carLayerSrc(tiresBand,'tires')}" alt="">
+    ${shimmerFor(tiresBand, carLayerSrc(tiresBand,'tires'))}
     <img class="car-layer" src="${helmetSrc}" alt="">
+    ${(!isGoat) ? shimmerFor(helmetBand, helmetSrc) : ''}
     ${hideNumber ? '' : `<div class="car-number-wrap">
       <div class="car-number-plate"></div>
       <div class="car-number-digits">${digitsHTML}</div>
