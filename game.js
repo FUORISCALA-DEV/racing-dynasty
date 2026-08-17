@@ -557,7 +557,8 @@ const I18N = {
     title_continue: '▶ Continua Stagione', title_new: 'Nuova Stagione', title_delete: '🗑 Cancella Salvataggio',
     title_cta: '🏁 Scegli la tua sfida e scendi in pista — ', title_cta_bold: 'premi per iniziare',
     // Menu laterale
-    menu_new_career: 'Nuova Carriera', menu_trophy_room: 'Sala Trofei — Scuderia', menu_driver_trophy_room: 'Sala Trofei — Pilota', menu_museum: 'Museo Dynasty', menu_guide: 'Guida',
+    menu_new_career: 'Nuova Run', menu_trophy_room: 'Sala Trofei — Scuderia', menu_driver_trophy_room: 'Sala Trofei — Pilota', menu_museum: 'Museo Dynasty', menu_guide: 'Guida',
+    menu_new_run: 'Nuova Run', menu_new_run_confirm: 'Vuoi davvero abbandonare la run attuale e ricominciare da capo? Il progresso non salvato andrà perso.',
     menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti',
     menu_fullscreen: 'Schermo Intero', menu_language: 'Lingua',
     // Impostazioni comuni
@@ -836,7 +837,8 @@ const I18N = {
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
     title_continue: '▶ Continue Season', title_new: 'New Season', title_delete: '🗑 Delete Save',
     title_cta: '🏁 Choose your challenge and hit the track — ', title_cta_bold: 'tap to start',
-    menu_new_career: 'New Career', menu_trophy_room: 'Trophy Room — Team', menu_driver_trophy_room: 'Trophy Room — Driver', menu_museum: 'Dynasty Museum', menu_guide: 'Guide',
+    menu_new_career: 'New Run', menu_trophy_room: 'Trophy Room — Team', menu_driver_trophy_room: 'Trophy Room — Driver', menu_museum: 'Dynasty Museum', menu_guide: 'Guide',
+    menu_new_run: 'New Run', menu_new_run_confirm: 'Do you really want to abandon the current run and start over? Unsaved progress will be lost.',
     menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits',
     menu_fullscreen: 'Fullscreen', menu_language: 'Language',
     settings_title: '⚙️ Settings', settings_sfx_vol: 'Sound Effects Volume', settings_music_vol: 'Music Volume',
@@ -1111,7 +1113,8 @@ const I18N = {
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
     title_continue: '▶ Continuar Temporada', title_new: 'Nueva Temporada', title_delete: '🗑 Borrar Partida',
     title_cta: '🏁 Elige tu desafío y sal a pista — ', title_cta_bold: 'toca para empezar',
-    menu_new_career: 'Nueva Carrera', menu_trophy_room: 'Sala de Trofeos — Escudería', menu_driver_trophy_room: 'Sala de Trofeos — Piloto', menu_museum: 'Museo Dynasty', menu_guide: 'Guía',
+    menu_new_career: 'Nueva Partida', menu_trophy_room: 'Sala de Trofeos — Escudería', menu_driver_trophy_room: 'Sala de Trofeos — Piloto', menu_museum: 'Museo Dynasty', menu_guide: 'Guía',
+    menu_new_run: 'Nueva Partida', menu_new_run_confirm: '¿Seguro que quieres abandonar la partida actual y empezar de nuevo? El progreso no guardado se perderá.',
     menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos',
     menu_fullscreen: 'Pantalla Completa', menu_language: 'Idioma',
     settings_title: '⚙️ Ajustes', settings_sfx_vol: 'Volumen de Efectos', settings_music_vol: 'Volumen de Música',
@@ -10631,12 +10634,12 @@ function goHome(){
 
 function newCareer(){
   closeMenuPanel();
-  gameConfirm('Vuoi davvero abbandonare la carriera attuale e ricominciare da capo? Il progresso non salvato andrà perso.', ()=>{
+  gameConfirm(t('menu_new_run_confirm'), ()=>{
     const fx = document.getElementById('celebrationFx'); if(fx) fx.remove();
     deleteSave();
-    state = { phase:'title', selectedDifficulty: (state && state.difficulty) || 'medio' };
+    state = { phase:'mode-select', selectedDifficulty: (state && state.difficulty) || 'medio' };
     render();
-  }, 'Nuova Carriera');
+  }, t('menu_new_run'));
 }
 
 function openTrophies(){
