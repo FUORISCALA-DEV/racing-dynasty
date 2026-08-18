@@ -4948,10 +4948,19 @@ function startLiveRace(timeline){
 }
 
 function advanceLivePhase(){
-  state.live.phaseIndex++;
+  // V0.9.9.52: sostituisce il vecchio sistema "stessa velocità, tempo dimezzato" — ora X1 mostra
+  // il doppio dei momenti (24 invece di 12), interpolando un fotogramma intermedio tra una fase
+  // vera e la successiva; X2 resta il comportamento originale (12 fasi, un passo alla volta).
+  // Gli effetti REALI (log, meteo, Safety Car, decisioni) scattano solo sui passaggi interi — un
+  // mezzo passo è puramente un fotogramma interpolato, non una fase vera della simulazione.
+  // il primissimo avanzamento (da -1, prima che la gara sia partita) atterra sempre sulla fase
+  // intera 0 — non esiste una "fase -1" con cui interpolare, quindi qui il passo e' sempre 1
+  const step = state.live.phaseIndex < 0 ? 1 : (state.live.speed===1 ? 0.5 : 1);
+  state.live.phaseIndex += step;
   state.live.elapsedInPhase = 0;
   state.live.phaseDuration = randomPhaseDuration();
   const t = state.live.phaseIndex;
+  if(!Number.isInteger(t)) return; // fotogramma interpolato: nessun evento reale, solo display
   const timeline = state.live.timeline;
   const newLines = buildPhaseLog(t, timeline);
   newLines.forEach(l=>{ if(l.sfx) playSfx(l.sfx); if(l.realSfx) playRealSfx(l.realSfx); }); // V0.9.7.8.2 / V0.9.7.8.14
@@ -5064,16 +5073,43 @@ function finishLiveRace(){
 /* ---------------- V0.4 rendering: board live con righe animate ---------------- */
 const ROW_H = 34;
 
+// V0.9.9.52: unico helper di interpolazione, riusato per qualunque valore per-fase (usura gomme,
+// e implicitamente il tempo cumulato in computeLiveRows) — cosi' non serve duplicare la logica.
+function interpolatePerPhaseValue(byPhaseArray, tLow, tHigh, frac, key){
+  const a = byPhaseArray[tLow] ? byPhaseArray[tLow][key] : undefined;
+  if(a==null) return 0;
+  const bRaw = byPhaseArray[tHigh] ? byPhaseArray[tHigh][key] : undefined;
+  const b = bRaw!=null ? bRaw : a;
+  return a + (b-a)*frac;
+}
 function computeLiveRows(){
   const t = state.live.phaseIndex;
   const timeline = state.live.timeline;
-  const order = timeline.phaseOrders[t];
-  const prevOrder = t>0 ? timeline.phaseOrders[t-1] : timeline.gridOrder;
+  const isInterpolated = !Number.isInteger(t);
+  let order, cumSnap;
+  if(isInterpolated){
+    // V0.9.9.52: fotogramma interpolato (velocità X1, il doppio dei momenti) — nessuna fase vera
+    // qui, calcoliamo un tempo cumulato "a meta' strada" tra le due fasi vere adiacenti, e ne
+    // deriviamo l'ordine (chi ha tempo piu' basso e' davanti), invece di leggere un ordine che a
+    // questo indice non esiste.
+    const tLow = Math.floor(t), tHigh = Math.ceil(t), frac = t-tLow;
+    const snapLow = timeline.cumTimeByPhase[tLow], snapHigh = timeline.cumTimeByPhase[tHigh];
+    cumSnap = {};
+    Object.keys(snapLow).forEach(key=>{
+      const a = snapLow[key], b = (snapHigh[key]!=null) ? snapHigh[key] : a;
+      cumSnap[key] = a + (b-a)*frac;
+    });
+    order = Object.keys(cumSnap).sort((k1,k2)=> cumSnap[k1]-cumSnap[k2]);
+  } else {
+    order = timeline.phaseOrders[t];
+    cumSnap = timeline.cumTimeByPhase && timeline.cumTimeByPhase[t];
+  }
+  const prevOrder = (!isInterpolated && t>0) ? timeline.phaseOrders[t-1] : null; // niente frecce durante un fotogramma interpolato
   const byKey = {}; timeline.entries.forEach(e=> byKey[e.slotKey]=e);
   const isFinalPhase = t === PHASES.length-1;
   return order.map((key,i)=>{
     const e = byKey[key];
-    const prevIdx = prevOrder.indexOf(key);
+    const prevIdx = prevOrder ? prevOrder.indexOf(key) : -1;
     const delta = prevIdx>=0 ? (prevIdx - i) : 0;
     const statusRaw = statusFor(key, t, timeline); // V0.9.7.8.31: valore interno, mai tradotto, usato solo per confronti
     let status = statusLabel(statusRaw);
@@ -5082,7 +5118,6 @@ function computeLiveRows(){
     }
     // V0.9.9.12: distacco VERO, dal tempo cumulato reale della simulazione (non piu' una formula
     // finta legata solo alla posizione) — fallback alla vecchia formula solo se i dati non ci sono.
-    const cumSnap = timeline.cumTimeByPhase && timeline.cumTimeByPhase[t];
     let gap;
     if(i===0){
       gap = window.t('status_leader');
@@ -5193,8 +5228,9 @@ function liveLapTimeDisplay(circuit, tireWear){
 function tireCardHTML(slotKey, timeline, phaseIdx, rows){
   const row = rows.find(r=>r.key===slotKey);
   if(!row) return '';
-  const wearSnap = timeline.tireWearByPhase && timeline.tireWearByPhase[phaseIdx];
-  const wear = wearSnap ? (wearSnap[slotKey]||0) : 0;
+  const wear = timeline.tireWearByPhase
+    ? interpolatePerPhaseValue(timeline.tireWearByPhase, Math.floor(phaseIdx), Math.ceil(phaseIdx), phaseIdx-Math.floor(phaseIdx), slotKey)
+    : 0;
   const wearPct = Math.round(wear*100);
   const wearCls = wear>=0.75 ? 'tire-wear-high' : wear>=0.45 ? 'tire-wear-mid' : 'tire-wear-low';
   const lapTime = liveLapTimeDisplay(timeline.circuit, wear);
@@ -5217,7 +5253,8 @@ function tireCardsRowHTML(timeline, phaseIdx, rows){
 }
 function renderRaceLiveInit(){
   const t = state.live.phaseIndex;
-  const phase = PHASES[t];
+  const safeIdx = Math.round(t); // V0.9.9.52: indice sicuro per nome fase/giro durante un fotogramma interpolato
+  const phase = PHASES[safeIdx];
   const timeline = state.live.timeline;
   const rows = computeLiveRows();
   const leader = rows[0];
@@ -5250,7 +5287,7 @@ function renderRaceLiveInit(){
       <div class="hud-item"><div class="hud-label">Leader</div><div class="hud-value cyan" id="liveLeader">${shortName(leader.driverName)}</div></div>
       <div class="hud-item"><div class="hud-label">Meteo</div><div class="hud-value" id="liveWeather">${state.live.weather}</div></div>
       <div class="hud-item"><div class="hud-label">Pista</div><div class="hud-value ${state.live.trackStatus==='Safety Car'?'amber':''}" id="liveTrack">${state.live.trackStatus}</div></div>
-      <div class="hud-item"><div class="hud-label">Giro</div><div class="hud-value" id="livePhaseNum">${timeline.lapNumbers[t]}/${timeline.totalGiri}</div></div>
+      <div class="hud-item"><div class="hud-label">Giro</div><div class="hud-value" id="livePhaseNum">${timeline.lapNumbers[safeIdx]}/${timeline.totalGiri}</div></div>
     </div>
   </div>
   <div class="live-progress"><div class="live-progress-fill" id="liveProgressFill" style="width:${(t/(PHASES.length-1))*100}%;"></div></div>
@@ -5279,7 +5316,8 @@ function renderRaceLiveInit(){
 
 function updateLiveBoard(){
   const t = state.live.phaseIndex;
-  const phase = PHASES[t];
+  const safeIdx = Math.round(t); // V0.9.9.52: indice sicuro per nome fase/giro durante un fotogramma interpolato
+  const phase = PHASES[safeIdx];
   const timeline = state.live.timeline;
   const rows = computeLiveRows();
   const leader = rows[0];
@@ -5322,7 +5360,7 @@ function updateLiveBoard(){
   });
 
   document.getElementById('livePhaseName').textContent = phase.name;
-  document.getElementById('livePhaseNum').textContent = timeline.lapNumbers[t]+'/'+timeline.totalGiri;
+  document.getElementById('livePhaseNum').textContent = timeline.lapNumbers[safeIdx]+'/'+timeline.totalGiri;
   document.getElementById('liveLeader').textContent = shortName(leader.driverName);
 
   // V0.9.9.51: aggiorna le schede pilota (posizione, barra usura, tempo sul giro) ad ogni fase
@@ -5331,8 +5369,9 @@ function updateLiveBoard(){
     if(!card) return;
     const row = rows.find(r=>r.key===slotKey);
     if(!row) return;
-    const wearSnap = timeline.tireWearByPhase && timeline.tireWearByPhase[t];
-    const wear = wearSnap ? (wearSnap[slotKey]||0) : 0;
+    const wear = timeline.tireWearByPhase
+      ? interpolatePerPhaseValue(timeline.tireWearByPhase, Math.floor(t), Math.ceil(t), t-Math.floor(t), slotKey)
+      : 0;
     const wearPct = Math.round(wear*100);
     const wearCls = wear>=0.75 ? 'tire-wear-high' : wear>=0.45 ? 'tire-wear-mid' : 'tire-wear-low';
     card.querySelector('.tire-card-pos').textContent = 'P'+row.pos;
