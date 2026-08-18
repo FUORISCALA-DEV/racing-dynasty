@@ -422,7 +422,7 @@ const I18N = {
     share_world_champion: 'CAMPIONE DEL MONDO', share_drivers_title: (team)=>`${team} — Titolo Piloti`,
     share_season_over: (pos)=>`Stagione conclusa — P${pos} Costruttori`, share_full_season: 'Stagione Completa (20 gare)',
     share_quick_season: 'Stagione Veloce (10 gare)', share_manager_tag: 'ROGUELIKE GP MANAGER',
-    share_wins: (n)=>`${n} vittorie`, share_podiums: (n)=>`${n} podi`, share_points: (n)=>`${n} punti`,
+    share_wins: (n)=>`${n} vittorie`, share_podiums: (n)=>`${n} podi`, share_points: (n)=>`${n} punti`, share_stat_wins: 'Vittorie', share_stat_podiums: 'Podi', share_stat_points: 'Punti',
     share_dnfs: (n)=>`${n} ritiri`, share_champion_line: (n)=>`${n}, Campione`, share_beat_me: 'PROVA A BATTERMI',
     share_season_trophies_title: (n)=>`TROFEI VINTI IN STAGIONE (${n})`, share_components_title: 'COMPONENTI DI SQUADRA', share_comp_motore: 'Motore', share_comp_telaio: 'Telaio', share_comp_aero: 'Aerodinamica', share_comp_gomme: 'Gomme', share_comp_stratega: 'Team Principal', share_sponsor_label: 'Sponsor di stagione',
     splash_presents: 'FUORISCALA presenta', splash_tap_continue: 'tocca per continuare',
@@ -707,7 +707,7 @@ const I18N = {
     share_world_champion: 'WORLD CHAMPION', share_drivers_title: (team)=>`${team} — Drivers' Title`,
     share_season_over: (pos)=>`Season over — P${pos} Constructors`, share_full_season: 'Full Season (20 races)',
     share_quick_season: 'Quick Season (10 races)', share_manager_tag: 'ROGUELIKE GP MANAGER',
-    share_wins: (n)=>`${n} wins`, share_podiums: (n)=>`${n} podiums`, share_points: (n)=>`${n} points`,
+    share_wins: (n)=>`${n} wins`, share_podiums: (n)=>`${n} podiums`, share_points: (n)=>`${n} points`, share_stat_wins: 'Wins', share_stat_podiums: 'Podiums', share_stat_points: 'Points',
     share_dnfs: (n)=>`${n} retirements`, share_champion_line: (n)=>`${n}, Champion`, share_beat_me: 'TRY TO BEAT ME',
     share_season_trophies_title: (n)=>`TROPHIES WON THIS SEASON (${n})`, share_components_title: 'TEAM COMPONENTS', share_comp_motore: 'Engine', share_comp_telaio: 'Chassis', share_comp_aero: 'Aero', share_comp_gomme: 'Tyres', share_comp_stratega: 'Team Principal', share_sponsor_label: 'Season sponsor',
     splash_presents: 'FUORISCALA presents', splash_tap_continue: 'tap to continue',
@@ -986,7 +986,7 @@ const I18N = {
     share_world_champion: 'CAMPEÓN DEL MUNDO', share_drivers_title: (team)=>`${team} — Título de Pilotos`,
     share_season_over: (pos)=>`Temporada terminada — P${pos} Constructores`, share_full_season: 'Temporada Completa (20 carreras)',
     share_quick_season: 'Temporada Rápida (10 carreras)', share_manager_tag: 'ROGUELIKE GP MANAGER',
-    share_wins: (n)=>`${n} victorias`, share_podiums: (n)=>`${n} podios`, share_points: (n)=>`${n} puntos`,
+    share_wins: (n)=>`${n} victorias`, share_podiums: (n)=>`${n} podios`, share_points: (n)=>`${n} puntos`, share_stat_wins: 'Victorias', share_stat_podiums: 'Podios', share_stat_points: 'Puntos',
     share_dnfs: (n)=>`${n} retiros`, share_champion_line: (n)=>`${n}, Campeón`, share_beat_me: 'INTENTA VENCERME',
     share_season_trophies_title: (n)=>`TROFEOS GANADOS ESTA TEMPORADA (${n})`, share_components_title: 'COMPONENTES DEL EQUIPO', share_comp_motore: 'Motor', share_comp_telaio: 'Chasis', share_comp_aero: 'Aerodinámica', share_comp_gomme: 'Neumáticos', share_comp_stratega: 'Team Principal', share_sponsor_label: 'Patrocinador de temporada',
     splash_presents: 'FUORISCALA presenta', splash_tap_continue: 'toca para continuar',
@@ -9641,14 +9641,8 @@ async function buildShareCardCanvas(){
   const constructorChamp = cstd[0];
   const isDriverChamp = driverChamp.isPlayerTeam;
 
-  // V0.9.7.8: fix bug segnalato da Gio — i totali ora includono anche le statistiche di eventuali
-  // piloti sostituiti a stagione in corso (record EX), non solo i due sedili correnti.
   const { points: totalPoints, wins: totalWins, podiums: totalPodiums, dnfs: totalDnfs } = playerSeasonTotals();
 
-  // V0.9.9.38: fix bug segnalato da Gio — se sei campione, il colore deve essere quello del pilota
-  // che ha DAVVERO vinto il titolo (stessa logica della schermata finale nell'app), non il rating
-  // piu' alto tra i due piloti — potevano non coincidere se il campione non era il tuo pilota con
-  // rating piu' alto (es. ha vinto per costanza/punti, non per rating puro).
   const bestDriverRating = isDriverChamp
     ? (driverChamp.slotKey==='PLAYER-1' ? state.team.pilotMain.rating : state.team.pilotSecond.rating)
     : Math.max(state.team.pilotMain.rating, state.team.pilotSecond.rating);
@@ -9659,20 +9653,18 @@ async function buildShareCardCanvas(){
   else { title = teamDisplayName().toUpperCase(); subtitle = t('share_season_over', constructorPos); }
   const metaLine = `${state.seasonLength===20?t('share_full_season'):t('share_quick_season')}  ·  ${DIFFICULTY_LABEL[state.difficulty]}`;
 
-  const poseNum = isDriverChamp ? 1 : (2+Math.floor(rnd()*4)); // 2..5, mai la 1 se non hai vinto il titolo
-  // V0.9.7.5: THE GOAT ha una posa dedicata (casco/tuta rosso Ferrari) al posto del generico Immortal viola
+  const poseNum = isDriverChamp ? 1 : (2+Math.floor(rnd()*4));
   const isGoatChamp = isDriverChamp && driverChamp.nome==='THE GOAT';
   const poseBand = isGoatChamp ? 'goat_ferrari' : band;
   const poseSrc = `assets/share-poses/pose${poseNum}_${poseBand}.webp`;
   const accent = isGoatChamp ? '#FF1801' : CAR_RARITY_COLOR[band];
 
-  const statsLines = isDriverChamp
-    ? [t('share_wins', totalWins), t('share_podiums', totalPodiums), t('share_points', totalPoints), t('share_champion_line', driverChamp.nome)]
-    : [t('share_wins', totalWins), t('share_podiums', totalPodiums), t('share_points', totalPoints), t('share_dnfs', totalDnfs)];
+  // V0.9.9.48: RIDISEGNO COMPLETO su richiesta di Gio — la card era troppo lunga (troppi elementi
+  // semplicemente impilati in verticale). Stessa identica logica dati/asset di prima, riorganizzata
+  // in blocchi piu' compatti e densi, ispirandosi (senza seguirla alla lettera) a una bozza esterna.
+  const champLine = isDriverChamp ? t('share_champion_line', driverChamp.nome) : null;
 
   const [logoImg, poseImg] = await Promise.all([loadImg(LOGO_DATA_URI), loadImg(poseSrc)]);
-  // V0.9.9.46: progressione componenti (partenza -> attuale) e sponsor con logo, richiesti da Gio.
-  // Fallback sicuro se lo snapshot iniziale non esiste (partite iniziate prima di questo aggiornamento).
   const compRows = [
     { label:t('share_comp_motore'), init:state.initialComponentRatings?.motore, cur:state.team.motore.rating },
     { label:t('share_comp_telaio'), init:state.initialComponentRatings?.telaio, cur:state.team.telaio.rating },
@@ -9681,144 +9673,198 @@ async function buildShareCardCanvas(){
     { label:t('share_comp_stratega'), init:state.initialComponentRatings?.stratega, cur:state.team.stratega.rating },
   ];
   const sponsorImg = state.sponsor ? await loadImg(sponsorLogoSrc(state.sponsor.nome)).catch(()=>null) : null;
-  // V0.9.9.47: fila trofei vinti in stagione — state.seasonTrophiesWon esisteva gia' (usato per
-  // un controllo achievement), lo riusiamo qui invece di inventare un nuovo tracciamento.
   const seasonTrophyNames = state.seasonTrophiesWon || [];
   const trophyImgs = (await Promise.all(seasonTrophyNames.map(name =>
     loadImg(`assets/circuit-trophies/${slugify(name)}_oro.webp`).catch(()=>null)
   ))).filter(Boolean);
 
-  const W = 720;
+  const W = 720, M = 36; // M = margine laterale, ridotto da 50 per un feel piu' denso
   const cv = document.createElement('canvas');
   let ctx = cv.getContext('2d');
 
-  // --- passo 1: calcolo in sequenza di ogni altezza, prima di disegnare (niente sovrapposizioni) ---
-  let cursor = 50;
-  const logoW = Math.round(W*0.86), logoH = Math.round(logoImg.height*(logoW/logoImg.width));
-  const logoY = cursor; cursor += logoH + 6;
-  const subY = cursor; cursor += 40;
-  const ty = cursor + 30; cursor = ty + 50 + 40 + 30 + 20;
-  const poseW = Math.round(W*0.46), poseH = Math.round(poseImg.height*(poseW/poseImg.width));
-  const py = cursor; cursor = py + poseH + 40;
-  const sy = cursor; cursor = sy + 56*statsLines.length + 30;
-  // V0.9.9.47: componenti (colonna sinistra, valori vicini alle etichette) e sponsor (colonna
-  // destra, logo grande) condividono la stessa riga — non piu' una sotto l'altra.
+  // --- passo 1: calcolo altezze in sequenza, tutto piu' stretto rispetto a prima ---
+  let cursor = 28;
+  // header: logo molto piu' piccolo (funziona da intestazione, non da hero)
+  const logoW = Math.round(W*0.40), logoH = Math.round(logoImg.height*(logoW/logoImg.width));
+  const logoY = cursor; cursor += logoH + 4;
+  const subY = cursor; cursor += 24;
+  cursor += 14; // spazio prima del divisore
+  const dividerY = cursor; cursor += 18;
+
+  // blocco risultato principale: titolo+sottotitolo+meta come un unico blocco coeso
+  const resultY = cursor;
+  cursor += 46 + 30 + 26 + 18;
+
+  // hero pilota/podio — meno spazio vuoto sopra/sotto, leggermente piu' stretto
+  const poseW = Math.round(W*0.40), poseH = Math.round(poseImg.height*(poseW/poseImg.width));
+  const py = cursor; cursor += poseH + 18;
+
+  // statistiche: pannello compatto a 3 colonne + riga campione/ritiri sotto
+  const statsY = cursor;
+  cursor += 92 + (champLine || !isDriverChamp ? 34 : 0) + 22;
+
+  // componenti + sponsor, stessa riga
   const compY = cursor;
-  const compBlockH = 34 + compRows.length*38;
-  cursor += compBlockH + 26;
+  const compRowH = 32;
+  const compBlockH = 26 + compRows.length*compRowH;
+  cursor += compBlockH + 20;
+
+  // trofei stagione — V0.9.9.49: FIX segnalato da Gio, prima ogni trofeo veniva stirato in un
+  // riquadro quadrato (deformandolo, dato che i trofei sono piu' alti che larghi, ~0.79 di rapporto)
+  // e la fila era allineata a sinistra. Ora: altezza fissa, larghezza proporzionata per ognuno,
+  // righe calcolate sulla larghezza VERA (non su una dimensione fissa), righe centrate.
   const trophyRowY = (trophyImgs.length>0) ? cursor : null;
-  if(trophyImgs.length>0) cursor += 100;
-  const boxY0 = cursor, boxY1 = boxY0 + 100; cursor = boxY1 + 50;
+  const trophySize = 64, trophyGap = 12;
+  const trophyRowsPacked = [];
+  if(trophyImgs.length>0){
+    const availW = W-2*M;
+    let curRow = [], curRowW = 0;
+    for(const img of trophyImgs){
+      const w = trophySize * (img.width/img.height);
+      const addW = curRow.length===0 ? w : w+trophyGap;
+      if(curRowW + addW > availW && curRow.length>0){
+        trophyRowsPacked.push(curRow); curRow = []; curRowW = 0;
+      }
+      curRow.push({ img, w });
+      curRowW += (curRow.length===1 ? w : w+trophyGap);
+    }
+    if(curRow.length>0) trophyRowsPacked.push(curRow);
+    cursor += 26 + trophyRowsPacked.length*(trophySize+trophyGap) - trophyGap + 18;
+  }
+
+  // CTA finale, piu' basso di prima
+  const boxY0 = cursor, boxY1 = boxY0 + 72; cursor = boxY1 + 28;
   const H = cursor;
 
   cv.width = W; cv.height = H;
   ctx = cv.getContext('2d');
 
-  // sfondo con bagliore radiale nel colore della fascia
+  // V0.9.9.50: proviamo lo sfondo col colore VERO dello sponsor invece che del pilota — il resto
+  // (titolo, statistiche, box finale) resta legato alla fascia del pilota come prima, solo il
+  // bagliore di sfondo cambia fonte. Riserva al colore pilota se non c'e' uno sponsor attivo.
+  const sponsorBrand = state.sponsor ? SPONSOR_BRAND[state.sponsor.nome] : null;
+  const bgGlowColor = sponsorBrand ? sponsorBrand.accent : accent;
   ctx.fillStyle = '#08090c'; ctx.fillRect(0,0,W,H);
-  const grad = ctx.createRadialGradient(W*0.62,H*0.55,0, W*0.62,H*0.55, 620);
-  grad.addColorStop(0, accent+'55'); grad.addColorStop(1, '#08090c00');
+  const grad = ctx.createRadialGradient(W*0.62,H*0.5,0, W*0.62,H*0.5, H*0.75);
+  grad.addColorStop(0, bgGlowColor+'50'); grad.addColorStop(1, '#08090c00');
   ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.045)';
   for(let i=-H;i<W;i+=34){ ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i+H,H); ctx.stroke(); }
-  for(let cx=0; cx<W; cx+=16){ ctx.fillStyle = (cx/16)%2===0 ? '#ebebeb' : '#121318'; ctx.fillRect(cx,0,16,9); }
+  for(let cx=0; cx<W; cx+=16){ ctx.fillStyle = (cx/16)%2===0 ? '#ebebeb' : '#121318'; ctx.fillRect(cx,0,16,7); }
 
+  // header: logo piccolo + sottotitolo + divisore sottile
   ctx.drawImage(logoImg, (W-logoW)/2, logoY, logoW, logoH);
-  ctx.fillStyle = '#96969e'; ctx.font = '21px -apple-system,sans-serif'; ctx.textAlign='center';
-  ctx.fillText(t('share_manager_tag'), W/2, subY+18);
+  ctx.fillStyle = '#8c8c94'; ctx.font = '15px -apple-system,sans-serif'; ctx.textAlign='center';
+  ctx.fillText(t('share_manager_tag'), W/2, subY+14);
   ctx.textAlign='left';
-  ctx.strokeStyle = '#34363a'; ctx.beginPath(); ctx.moveTo(50,subY+38); ctx.lineTo(W-50,subY+38); ctx.stroke();
+  ctx.strokeStyle = '#2a2c31'; ctx.beginPath(); ctx.moveTo(M,dividerY); ctx.lineTo(W-M,dividerY); ctx.stroke();
 
-  ctx.fillStyle = accent; ctx.font = '900 44px -apple-system,sans-serif';
-  ctx.fillText(title, 40, ty+40);
-  ctx.fillStyle = '#e1e1e6'; ctx.font = '25px -apple-system,sans-serif';
-  ctx.fillText(subtitle, 40, ty+80);
-  ctx.fillStyle = '#8c8c94'; ctx.font = '21px -apple-system,sans-serif';
-  ctx.fillText(metaLine, 40, ty+112);
+  // blocco risultato principale — un'unica composizione coesa, non tre righe scollegate
+  ctx.fillStyle = accent; ctx.font = '900 40px -apple-system,sans-serif';
+  ctx.fillText(title, M, resultY+40);
+  ctx.fillStyle = '#e8e8ec'; ctx.font = '600 23px -apple-system,sans-serif';
+  ctx.fillText(subtitle, M, resultY+72);
+  ctx.fillStyle = '#83838b'; ctx.font = '17px -apple-system,sans-serif';
+  ctx.fillText(metaLine, M, resultY+98);
 
-  // ombra morbida + posa
+  // hero: ombra morbida + posa, meno margine sopra/sotto
   ctx.save();
-  ctx.filter = 'blur(16px)';
+  ctx.filter = 'blur(14px)';
   ctx.fillStyle = 'rgba(0,0,0,0.5)';
-  ctx.beginPath(); ctx.ellipse((W)/2, py+poseH-10, poseW/2+20, 24, 0, 0, 2*Math.PI); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(W/2, py+poseH-8, poseW/2+16, 20, 0, 0, 2*Math.PI); ctx.fill();
   ctx.restore();
-  // V0.9.7.5: qualita' massima nel ridimensionamento — l'immagine sorgente e' molto piu' grande del
-  // riquadro finale (contiene anche il "1" vero scolpito nel podio, dettaglio sottile) e col filtro
-  // di default del canvas veniva sfocato fino a diventare quasi invisibile in fase di rimpicciolimento.
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(poseImg, (W-poseW)/2, py, poseW, poseH);
 
-  let yy = sy;
-  for(const line of statsLines){
-    ctx.fillStyle = accent;
-    ctx.beginPath(); ctx.moveTo(50,yy+20); ctx.lineTo(62,yy+8); ctx.lineTo(74,yy+20); ctx.lineTo(62,yy+32); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = '#ffffff'; ctx.font = '700 30px -apple-system,sans-serif';
-    ctx.fillText(line, 90, yy+26);
-    yy += 56;
+  // statistiche — pannello compatto a 3 colonne (numero grande + etichetta piccola), non piu'
+  // quattro righe impilate. La quarta info (campione/ritiri) resta sotto come riga singola.
+  const statsPanelX = M, statsPanelW = W-2*M;
+  ctx.fillStyle = 'rgba(255,255,255,0.035)';
+  roundRectPath(ctx, statsPanelX, statsY, statsPanelW, 92 + (champLine || !isDriverChamp ? 34 : 0), 14);
+  ctx.fill();
+  const threeStats = [ [totalWins, t('share_stat_wins')], [totalPodiums, t('share_stat_podiums')], [totalPoints, t('share_stat_points')] ];
+  const colW = statsPanelW/3;
+  threeStats.forEach(([val,label], i)=>{
+    const cx = statsPanelX + colW*i + colW/2;
+    ctx.textAlign = 'center';
+    ctx.fillStyle = accent; ctx.font = '900 42px -apple-system,sans-serif';
+    ctx.fillText(String(val), cx, statsY+52);
+    ctx.fillStyle = '#93939b'; ctx.font = '600 14px -apple-system,sans-serif';
+    ctx.fillText(label.toUpperCase(), cx, statsY+76);
+    if(i>0){ ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.beginPath(); ctx.moveTo(statsPanelX+colW*i,statsY+18); ctx.lineTo(statsPanelX+colW*i,statsY+74); ctx.stroke(); }
+  });
+  ctx.textAlign = 'left';
+  if(champLine || !isDriverChamp){
+    const lastLineText = isDriverChamp ? champLine : t('share_dnfs', totalDnfs);
+    ctx.fillStyle = '#d5d5da'; ctx.font = '700 19px -apple-system,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(lastLineText, W/2, statsY+92+24);
+    ctx.textAlign='left';
   }
 
-  // V0.9.9.47: componenti compatti a sinistra (valore SUBITO dopo l'etichetta, non piu' a destra
-  // del tutto) — libera spazio per lo sponsor, mostrato grande sulla colonna destra della stessa riga.
-  const compColW = W*0.52;
-  ctx.fillStyle = '#e1e1e6'; ctx.font = '700 22px -apple-system,sans-serif';
-  ctx.fillText(t('share_components_title'), 40, compY+20);
-  let cyy = compY + 44;
+  // componenti (sinistra, valore vicino all'etichetta) + sponsor (destra, logo grande) — stessa riga
+  const compColW = statsPanelW*0.54;
+  ctx.fillStyle = '#c9c9d0'; ctx.font = '700 17px -apple-system,sans-serif';
+  ctx.fillText(t('share_components_title'), M, compY+16);
+  let cyy = compY + 34;
   for(const row of compRows){
-    ctx.fillStyle = '#8c8c94'; ctx.font = '600 20px -apple-system,sans-serif';
-    ctx.fillText(row.label, 50, cyy+16);
+    ctx.fillStyle = '#83838b'; ctx.font = '600 17px -apple-system,sans-serif';
+    ctx.fillText(row.label, M, cyy+14);
     const labelW = ctx.measureText(row.label).width;
     const hasInit = row.init!==undefined && row.init!==null;
     const valueText = hasInit ? `${row.init} → ${row.cur}` : `${row.cur}`;
     const improved = hasInit && row.cur > row.init;
     ctx.fillStyle = improved ? '#4CD97B' : '#c9c9d0';
-    ctx.font = '700 22px -apple-system,sans-serif';
-    ctx.fillText(valueText, 50+labelW+16, cyy+17); // subito dopo l'etichetta, non piu' a fine riga
-    cyy += 38;
+    ctx.font = '700 18px -apple-system,sans-serif';
+    ctx.fillText(valueText, M+labelW+12, cyy+15);
+    cyy += compRowH;
   }
-
-  // V0.9.9.47: sponsor grande, colonna destra, stessa riga dei componenti
   if(state.sponsor && sponsorImg){
-    const sponsorAreaX = compColW+20, sponsorAreaW = W-50-sponsorAreaX;
-    const maxLogoH = 90, maxLogoW = sponsorAreaW;
+    const sponsorAreaX = M+compColW+16, sponsorAreaW = W-M-sponsorAreaX;
+    const maxLogoH = 104, maxLogoW = sponsorAreaW; // V0.9.9.49: ingrandito, prima lasciava troppo vuoto (era 66)
     let logoW2 = maxLogoW, logoH2 = logoW2 * sponsorImg.height/sponsorImg.width;
     if(logoH2 > maxLogoH){ logoH2 = maxLogoH; logoW2 = logoH2 * sponsorImg.width/sponsorImg.height; }
     const logoX = sponsorAreaX + (sponsorAreaW-logoW2)/2;
-    const logoTopY = compY + 30;
+    const logoTopY = compY + 12;
     ctx.drawImage(sponsorImg, logoX, logoTopY, logoW2, logoH2);
-    ctx.fillStyle = '#8c8c94'; ctx.font = '18px -apple-system,sans-serif'; ctx.textAlign='center';
-    ctx.fillText(t('share_sponsor_label'), sponsorAreaX+sponsorAreaW/2, logoTopY+logoH2+26);
-    ctx.fillStyle = '#e1e1e6'; ctx.font = '700 22px -apple-system,sans-serif';
-    ctx.fillText(state.sponsor.nome, sponsorAreaX+sponsorAreaW/2, logoTopY+logoH2+52);
+    ctx.fillStyle = '#83838b'; ctx.font = '14px -apple-system,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(t('share_sponsor_label'), sponsorAreaX+sponsorAreaW/2, logoTopY+logoH2+22);
+    ctx.fillStyle = '#e1e1e6'; ctx.font = '700 19px -apple-system,sans-serif';
+    ctx.fillText(state.sponsor.nome, sponsorAreaX+sponsorAreaW/2, logoTopY+logoH2+45);
     ctx.textAlign='left';
   }
 
-  // V0.9.9.47: fila trofei vinti in stagione, tutti in fila sotto componenti/sponsor
+  // trophy strip — righe centrate, ogni trofeo con la SUA proporzione (mai stirato)
   if(trophyImgs.length>0){
-    ctx.fillStyle = '#e1e1e6'; ctx.font = '700 20px -apple-system,sans-serif';
-    ctx.fillText(t('share_season_trophies_title', trophyImgs.length), 40, trophyRowY+2);
-    const trophySize = 74, trophyGap = 14, rowTopY = trophyRowY + 16;
-    const maxPerRow = Math.floor((W-80+trophyGap) / (trophySize+trophyGap));
-    trophyImgs.forEach((img, i) => {
-      const col = i % maxPerRow, rowN = Math.floor(i/maxPerRow);
-      const tx = 40 + col*(trophySize+trophyGap), tyy = rowTopY + rowN*(trophySize+trophyGap);
-      ctx.drawImage(img, tx, tyy, trophySize, trophySize);
-    });
+    ctx.fillStyle = '#c9c9d0'; ctx.font = '700 15px -apple-system,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(t('share_season_trophies_title', trophyImgs.length), W/2, trophyRowY+14);
+    ctx.textAlign='left';
+    let rowTopY = trophyRowY + 26;
+    for(const row of trophyRowsPacked){
+      const rowW = row.reduce((s,t)=>s+t.w, 0) + trophyGap*(row.length-1);
+      let tx = (W-rowW)/2; // centrata, non piu' allineata a sinistra
+      for(const {img,w} of row){
+        ctx.drawImage(img, tx, rowTopY, w, trophySize);
+        tx += w + trophyGap;
+      }
+      rowTopY += trophySize + trophyGap;
+    }
   }
 
-  ctx.fillStyle = accent+'20'; ctx.fillRect(30, boxY0, W-60, boxY1-boxY0);
-  ctx.strokeStyle = accent; ctx.lineWidth = 3; ctx.strokeRect(30, boxY0, W-60, boxY1-boxY0);
-  ctx.fillStyle = accent; ctx.font = '900 30px -apple-system,sans-serif'; ctx.textAlign='center';
-  ctx.fillText(t('share_beat_me'), W/2, boxY0+58);
+  // CTA finale — piu' basso di prima, larghezza quasi piena
+  ctx.fillStyle = accent+'22'; roundRectPath(ctx, M, boxY0, W-2*M, boxY1-boxY0, 12); ctx.fill();
+  ctx.strokeStyle = accent; ctx.lineWidth = 2.5; roundRectPath(ctx, M, boxY0, W-2*M, boxY1-boxY0, 12); ctx.stroke();
+  ctx.fillStyle = accent; ctx.font = '900 26px -apple-system,sans-serif'; ctx.textAlign='center';
+  ctx.fillText(t('share_beat_me'), W/2, boxY0+45);
   ctx.textAlign='left';
 
-  // coriandoli statici, solo per il titolo piloti
+  // coriandoli statici, solo per il titolo piloti — densita' e range adattati alla card piu' corta
   if(isDriverChamp){
     const seedRnd = (n)=>{ const x = Math.sin(n*999)*10000; return x-Math.floor(x); };
     const confColors = ['#FFD700','#FFEE99','#F7B800','#FFFFFF','#FFAA00'];
-    for(let i=0;i<50;i++){
-      const cx = seedRnd(i)*W, cyp = seedRnd(i+500)*(H-subY-60)+subY+60;
-      const size = 6+seedRnd(i+900)*8;
+    for(let i=0;i<36;i++){
+      const cx = seedRnd(i)*W, cyp = seedRnd(i+500)*(H-subY-40)+subY+40;
+      const size = 5+seedRnd(i+900)*7;
       const rot = seedRnd(i+50)*360;
       ctx.save();
       ctx.translate(cx,cyp); ctx.rotate(rot*Math.PI/180);
@@ -9829,6 +9875,15 @@ async function buildShareCardCanvas(){
   }
 
   return cv;
+}
+function roundRectPath(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y, x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r);
+  ctx.arcTo(x, y, x+w, y, r);
+  ctx.closePath();
 }
 
 async function buildTrophyRoomCanvas(){
