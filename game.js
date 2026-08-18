@@ -535,7 +535,7 @@ const I18N = {
     sl_trophy_room: 'SALA TROFEI', sl_raced: 'CORSI', sl_won: 'VINTI', sl_trophy_desc: 'Un trofeo per ogni circuito del mondo — rivivi le tue vittorie e scopri quanti ne mancano ancora alla collezione completa.', sl_trophy_hint: 'Tocca per aprire — Sala Trofei',
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETAMENTO', sl_museum_desc: 'Piloti e componenti portati fino in fondo a una stagione, o sostituiti lungo il percorso, restano qui per sempre.', sl_museum_hint: 'Tocca per aprire — Museo Dynasty',
     sl_garage: 'GARAGE', sl_garage_desc: 'Personalizza la livrea del telaio con pattern sbloccabili completando obiettivi.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PROSSIMAMENTE',
-    sl_aiuto_coda: 'Aiuto in coda', sl_aiuto_coda_desc: 'Se sei indietro in classifica, la ricerca di mercato costa meno (fino a 1×). In testa costa il pieno (5×). Disattivato: sempre 5×.',
+    sl_aiuto_coda: 'Aiuto in coda', sl_aiuto_coda_desc: 'Se sei indietro in classifica, la ricerca di mercato costa quasi il pieno normale (fino a 1×). Avvicinandoti alla vetta il costo sale drasticamente, fino a 20× in testa. Disattivato: sempre 5×.',
     diff_new_career: 'Nuova Carriera', diff_choose: 'Scegli la difficoltà',
     diff_subtitle: 'Incide solo sui reroll disponibili nel draft — un tocco e si parte.',
     diff_last_used: ' · ultima usata', diff_tap_hint: (l)=>`Tocca per avviare — ${l}`,
@@ -820,7 +820,7 @@ const I18N = {
     sl_trophy_room: 'TROPHY ROOM', sl_raced: 'RACED', sl_won: 'WON', sl_trophy_desc: 'A trophy for every circuit in the world — relive your wins and see how many are left for the full collection.', sl_trophy_hint: 'Tap to open — Trophy Room',
     sl_museum: 'DYNASTY MUSEUM', sl_completion: 'COMPLETION', sl_museum_desc: 'Drivers and components carried through a full season, or replaced along the way, stay here forever.', sl_museum_hint: 'Tap to open — Dynasty Museum',
     sl_garage: 'GARAGE', sl_garage_desc: 'Customize your chassis livery with patterns unlockable by completing achievements.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> COMING SOON',
-    sl_aiuto_coda: 'Catch-up help', sl_aiuto_coda_desc: 'If you are behind in the standings, market research costs less (down to 1×). Leading costs full price (5×). Disabled: always 5×.',
+    sl_aiuto_coda: 'Catch-up help', sl_aiuto_coda_desc: 'If you are behind in the standings, market research costs almost the normal price (down to 1×). Approaching the lead, cost rises sharply, up to 20× in P1. Disabled: always 5×.',
     diff_new_career: 'New Career', diff_choose: 'Choose difficulty',
     diff_subtitle: 'Only affects the rerolls available in the draft — one tap and you\'re off.',
     diff_last_used: ' · last used', diff_tap_hint: (l)=>`Tap to start — ${l}`,
@@ -1099,7 +1099,7 @@ const I18N = {
     sl_trophy_room: 'SALA DE TROFEOS', sl_raced: 'DISPUTADOS', sl_won: 'GANADOS', sl_trophy_desc: 'Un trofeo por cada circuito del mundo — revive tus victorias y descubre cuántos faltan para la colección completa.', sl_trophy_hint: 'Toca para abrir — Sala de Trofeos',
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETADO', sl_museum_desc: 'Pilotos y componentes llevados hasta el final de una temporada, o sustituidos por el camino, se quedan aquí para siempre.', sl_museum_hint: 'Toca para abrir — Museo Dynasty',
     sl_garage: 'GARAGE', sl_garage_desc: 'Personaliza la librea del chasis con patrones desbloqueables completando logros.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PRÓXIMAMENTE',
-    sl_aiuto_coda: 'Ayuda de recuperación', sl_aiuto_coda_desc: 'Si vas retrasado en la clasificación, la búsqueda de mercado cuesta menos (hasta 1×). En cabeza cuesta el precio completo (5×). Desactivado: siempre 5×.',
+    sl_aiuto_coda: 'Ayuda de recuperación', sl_aiuto_coda_desc: 'Si vas retrasado en la clasificación, la búsqueda de mercado cuesta casi el precio normal (hasta 1×). Al acercarte al liderato, el coste sube drásticamente, hasta 20× en P1. Desactivado: siempre 5×.',
     diff_new_career: 'Nueva Carrera', diff_choose: 'Elige la dificultad',
     diff_subtitle: 'Solo afecta a los rerolls disponibles en el draft — un toque y empiezas.',
     diff_last_used: ' · última usada', diff_tap_hint: (l)=>`Toca para empezar — ${l}`,
@@ -1719,7 +1719,7 @@ document.addEventListener('visibilitychange', ()=>{
 const LOGO_DATA_URI = 'assets/logo.png'; // V0.7.2: logo titolo
 const RARITY_ORDER = ['Common','Uncommon','Rare','Epic','Mythic','Legendary','Immortal'];
 const POINTS_TABLE = [25,18,15,12,10,8,6,4,2,1];
-const PRIZE_TABLE  = [16,12,10,8,6.5,5,4,3,2,1]; // milioni — V0.9.9.20: alzato ~5x, prima erano cifre troppo piccole per sentirsi un vero premio
+const PRIZE_TABLE  = [12,9,7.5,6,4.9,3.75,3,2.25,1.5,0.75]; // milioni — V0.9.9.57: ridotti ~25%, l'economia rendeva troppo facile maxare tutto in una stagione
 const START_BUDGET = 20; // milioni
 
 // --- V0.2: difficoltà e reroll ---
@@ -9017,7 +9017,7 @@ function scoutCostMultiplier(){
 function scoutSwapPrice(current, candidate){
   const delta = candidate.rating - (current ? current.rating : candidate.rating);
   const { mult } = scoutCostMultiplier();
-  return Math.round(delta * 0.35 * mult * 10) / 10;
+  return Math.round(delta * 0.5 * mult * 10) / 10; // V0.9.9.57: alzato da 0.35, l'economia rendeva troppo facile maxare tutto
 }
 
 function pitlaneCardHTML(node, idx){
