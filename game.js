@@ -5099,7 +5099,15 @@ function computeLiveRows(){
       const a = snapLow[key], b = (snapHigh[key]!=null) ? snapHigh[key] : a;
       cumSnap[key] = a + (b-a)*frac;
     });
-    order = Object.keys(cumSnap).sort((k1,k2)=> cumSnap[k1]-cumSnap[k2]);
+    // V0.9.9.54: fix segnalato da Gio — i ritirati finivano mescolati per tempo cumulato (spesso
+    // "congelato" basso da quando si sono fermati) e potevano risultare DAVANTI a chi corre ancora.
+    // La simulazione vera li separa sempre e li mette in fondo (i piu' recenti prima) — replichiamo
+    // la stessa logica qui invece di un ordinamento unico per tutti.
+    const retiredKeys = Object.keys(cumSnap).filter(k => timeline.retiredAtPhase[k]!==null && t>=timeline.retiredAtPhase[k]);
+    const activeKeys = Object.keys(cumSnap).filter(k => !retiredKeys.includes(k));
+    activeKeys.sort((k1,k2)=> cumSnap[k1]-cumSnap[k2]);
+    retiredKeys.sort((k1,k2)=> (timeline.retiredAtPhase[k2]||0) - (timeline.retiredAtPhase[k1]||0));
+    order = [...activeKeys, ...retiredKeys];
   } else {
     order = timeline.phaseOrders[t];
     cumSnap = timeline.cumTimeByPhase && timeline.cumTimeByPhase[t];
@@ -5253,7 +5261,7 @@ function tireCardsRowHTML(timeline, phaseIdx, rows){
 }
 function renderRaceLiveInit(){
   const t = state.live.phaseIndex;
-  const safeIdx = Math.round(t); // V0.9.9.52: indice sicuro per nome fase/giro durante un fotogramma interpolato
+  const safeIdx = Math.floor(t); // V0.9.9.54: floor non round — con round, il fotogramma interpolato mostrava gia il giro dopo, e la fase reale successiva restava sullo stesso numero (sembrava che il giro non crescesse mai)
   const phase = PHASES[safeIdx];
   const timeline = state.live.timeline;
   const rows = computeLiveRows();
@@ -5316,7 +5324,7 @@ function renderRaceLiveInit(){
 
 function updateLiveBoard(){
   const t = state.live.phaseIndex;
-  const safeIdx = Math.round(t); // V0.9.9.52: indice sicuro per nome fase/giro durante un fotogramma interpolato
+  const safeIdx = Math.floor(t); // V0.9.9.54: floor non round — con round, il fotogramma interpolato mostrava gia il giro dopo, e la fase reale successiva restava sullo stesso numero (sembrava che il giro non crescesse mai)
   const phase = PHASES[safeIdx];
   const timeline = state.live.timeline;
   const rows = computeLiveRows();
@@ -5347,7 +5355,7 @@ function updateLiveBoard(){
     row.className = `live-row ${r.isPlayerTeam?'player':''} ${r.statusRaw==='RITIRATO'?'dnf':''} ${!r.isPlayerTeam && state.rivals && state.rivals.includes(r.teamId)?'rival':''}`;
     row.querySelector('.lr-pos').textContent = 'P'+r.pos;
     row.querySelector('.lr-gap').textContent = r.gap;
-    row.querySelector('.lr-status').textContent = r.status;
+    row.querySelector('.lr-status').innerHTML = r.status;
     const deltaEl = row.querySelector('.lr-delta');
     if(r.delta!==0){
       deltaEl.textContent = (r.delta>0? '+':'') + r.delta;
