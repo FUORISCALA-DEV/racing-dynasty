@@ -8929,12 +8929,16 @@ function riskLevel(prob){
 // (fino a 1×ase ultimo), chi guida paga il pieno (5×). Disattivabile a inizio stagione: se
 // disattivato, sempre 5× indipendentemente dalla posizione.
 function scoutCostMultiplier(){
-  if(state.aiutoInCoda === false) return { mult: 5, pos: null, total: null };
+  if(state.aiutoInCoda === false) return { mult: 5, pos: null, total: null }; // valore fisso, invariato dall'originale
   const standings = constructorStandingsSorted();
   const total = standings.length;
   const pos = standings.findIndex(c=>c.teamId==='PLAYER') + 1;
-  if(total<=1 || pos<=0) return { mult: 5, pos: pos||1, total };
-  const mult = 5 - (4 * (pos-1)/(total-1));
+  if(total<=1 || pos<=0) return { mult: 20, pos: pos||1, total };
+  // V0.9.9.53: curva ESPONENZIALE (potenza 4) invece che lineare, segnalato da Gio — a P1 il vecchio
+  // tetto di 5x era ancora troppo economico. Chi e' nella meta' bassa della classifica resta vicino
+  // a 1x (quasi invariato), ma avvicinandosi alla vetta il costo sale drasticamente: 1 a coda, 20 in testa.
+  const tNorm = (total-pos)/(total-1); // 0 in ultima posizione, 1 in testa
+  const mult = 1 + 19*Math.pow(tNorm, 4);
   return { mult: Math.round(mult*10)/10, pos, total };
 }
 function scoutSwapPrice(current, candidate){
