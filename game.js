@@ -5131,6 +5131,9 @@ function finishLiveRace(){
   const bestPos = playerEntries.length ? Math.min(...playerEntries.map(e=>e.pos)) : null;
   if(bestPos===1) playSfx('victory_fanfare');
   else if(bestPos!==null && bestPos<=3) playSfx('podium');
+  // V0.9.9.58: su richiesta di Gio, niente transizione tra gara e risultato in caso di vittoria —
+  // l'esultanza deve arrivare subito, senza un'animazione di passaggio che la rallenti.
+  if(bestPos===1) window._skipNextTransition = true;
   state.phase = 'race_result';
   render();
 }
@@ -6866,7 +6869,10 @@ function render(){
   // chiusura importanti, usata con parsimonia; standard (Slide Fade Left) per tutto il resto.
   const SPECIAL_TRANSITION_PHASES = new Set(['season_end','driver-season-end','driver-retirement']);
   const phaseChanged = state && state.phase !== window._lastRenderedPhase;
-  const transitionClass = phaseChanged
+  // V0.9.9.58: semaforo per sopprimere la transizione una volta sola (es. vittoria -> risultato gara)
+  const skipThisTransition = window._skipNextTransition === true;
+  window._skipNextTransition = false;
+  const transitionClass = (phaseChanged && !skipThisTransition)
     ? (SPECIAL_TRANSITION_PHASES.has(state.phase) ? 'app-enter-special' : 'app-enter-standard')
     : null;
   if(state) window._lastRenderedPhase = state.phase;
