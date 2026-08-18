@@ -540,6 +540,29 @@ tr.former td:first-child{border-left-color:var(--dim);}
 .live-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;align-items:start;}
 @media (max-width:900px){.live-layout{grid-template-columns:1fr;}}
 .live-board-panel{overflow:hidden;}
+/* V0.9.9.51: schede pilota (usura gomme + tempo sul giro), sopra la classifica live */
+.tire-cards-row{ display:flex; gap:10px; margin-bottom:14px; }
+.tire-card{
+  flex:1; background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:10px 12px;
+  min-width:0;
+}
+.tire-card-head{ display:flex; align-items:baseline; gap:6px; margin-bottom:8px; }
+.tire-card-pos{ font-family:var(--font-mono); font-weight:800; color:var(--amber); font-size:14px; }
+.tire-card-name{ font-size:12.5px; font-weight:600; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.tire-card-lap{ font-size:12.5px; color:var(--dim); }
+.tire-wear-track{ height:7px; border-radius:4px; background:rgba(255,255,255,0.08); overflow:hidden; }
+.tire-wear-fill{ height:100%; border-radius:4px; transition:width .3s ease, background .3s ease; }
+.tire-wear-fill.tire-wear-low{ background:var(--ok); }
+.tire-wear-fill.tire-wear-mid{ background:var(--amber); }
+.tire-wear-fill.tire-wear-high{ background:#ff4d4d; }
+.tire-card-foot{ font-size:10px; margin-top:5px; text-align:right; }
+/* V0.9.9.51: badge compatibilità circuito, colori per fascia qualitativa */
+.compat-badge{ font-weight:700; padding:2px 8px; border-radius:5px; font-size:11.5px; }
+.compat-badge.compat-excellent{ color:#4CD97B; background:rgba(76,217,123,0.14); }
+.compat-badge.compat-good{ color:var(--cyan); background:rgba(53,225,193,0.14); }
+.compat-badge.compat-average{ color:var(--dim); background:rgba(255,255,255,0.06); }
+.compat-badge.compat-below{ color:var(--amber); background:rgba(255,106,26,0.12); }
+.compat-badge.compat-poor{ color:#ff4d4d; background:rgba(255,77,77,0.12); }
 .live-head{
   display:grid;grid-template-columns:44px 40px 1.4fr 1fr 70px 74px 30px;
   font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim);

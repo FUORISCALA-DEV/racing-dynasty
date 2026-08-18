@@ -429,7 +429,7 @@ const I18N = {
     sl_races_word: 'GARE',
     settings_sfx_vol_short: 'Effetti Sonori', settings_music_vol_short: 'Musica',
     menu_home: 'Home', menu_section_game: 'GIOCO', menu_section_progress: 'PROGRESSI', menu_section_info: 'INFO', menu_section_app: 'APP',
-    status_retired: 'RITIRATO', status_retired_short: 'RIT', status_box: 'BOX', status_penalty: 'PENALITÀ', status_on_track: 'In pista', status_leader: 'Leader',
+    status_retired: 'RITIRATO', status_retired_short: 'RIT', status_box: 'BOX', status_penalty: 'PENALITÀ', status_on_track: 'In pista', status_leader: 'Leader', live_tire_wear_label: 'Usura gomme',
     pg_rain_expected: 'Pioggia attesa', pg_rain_risk: (p)=>`Rischio pioggia ${p}%`, pg_dry_track: 'Pista asciutta',
     pg_rating_gap: 'Distacco Rating dal Rivale', pg_main_rival: 'Rivale principale', pg_none_yet: 'Ancora nessuna',
     pg_lineup: (team)=>`Schieramento — ${team}`, pg_team_rating: 'Rating Squadra', pg_weather_forecast: 'Meteo Previsto',
@@ -552,7 +552,7 @@ const I18N = {
     hub_overtake: 'Sorpasso', hub_degradation: 'Degrado', hub_team_strength: 'FORZA SCUDERIA (P1/P2)',
     hub_pos_drivers: 'POS. PILOTI', hub_pos_constructors: 'POS. COSTRUTTORI', hub_go_to_gp: 'Vai al Gran Premio →',
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalità', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Calendario Stagione', hub_race_word: 'GARA',
-    hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ La Tua Scuderia', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento speciale',
+    hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ La Tua Scuderia', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento speciale', compat_label: 'Compatibilità', compat_excellent: 'Eccellente', compat_good: 'Buona', compat_average: 'Nella media', compat_below: 'Sotto la media', compat_poor: 'Scarsa',
     hub_weather: 'Clima', comp_driver1: 'Pilota #1', comp_driver2: 'Pilota #2', comp_engine: 'Motore',
     comp_chassis: 'Telaio', comp_aero: 'Aerodinamica', comp_tires: 'Gomme', comp_strategist: 'Team Principal',
     // Titolo
@@ -714,7 +714,7 @@ const I18N = {
     sl_races_word: 'RACES',
     settings_sfx_vol_short: 'Sound Effects', settings_music_vol_short: 'Music',
     menu_home: 'Home', menu_section_game: 'GAME', menu_section_progress: 'PROGRESS', menu_section_info: 'INFO', menu_section_app: 'APP',
-    status_retired: 'RETIRED', status_retired_short: 'DNF', status_box: 'PIT', status_penalty: 'PENALTY', status_on_track: 'On track', status_leader: 'Leader',
+    status_retired: 'RETIRED', status_retired_short: 'DNF', status_box: 'PIT', status_penalty: 'PENALTY', status_on_track: 'On track', status_leader: 'Leader', live_tire_wear_label: 'Tyre wear',
     pg_rain_expected: 'Rain expected', pg_rain_risk: (p)=>`Rain risk ${p}%`, pg_dry_track: 'Dry track',
     pg_rating_gap: 'Rating Gap to Rival', pg_main_rival: 'Main rival', pg_none_yet: 'None yet',
     pg_lineup: (team)=>`Lineup — ${team}`, pg_team_rating: 'Team Rating', pg_weather_forecast: 'Weather Forecast',
@@ -837,7 +837,7 @@ const I18N = {
     hub_overtake: 'Overtaking', hub_degradation: 'Degradation', hub_team_strength: 'TEAM STRENGTH (P1/P2)',
     hub_pos_drivers: 'DRIVERS POS.', hub_pos_constructors: 'CONSTRUCTORS POS.', hub_go_to_gp: 'Go to Grand Prix →',
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalry', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Season Calendar', hub_race_word: 'RACE',
-    hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Your Team', hub_dominant_component: 'Dominant component', hub_special_event: 'Special event',
+    hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Your Team', hub_dominant_component: 'Dominant component', hub_special_event: 'Special event', compat_label: 'Compatibility', compat_excellent: 'Excellent', compat_good: 'Good', compat_average: 'Average', compat_below: 'Below average', compat_poor: 'Poor',
     hub_weather: 'Weather', comp_driver1: 'Driver #1', comp_driver2: 'Driver #2', comp_engine: 'Engine',
     comp_chassis: 'Chassis', comp_aero: 'Aerodynamics', comp_tires: 'Tires', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
@@ -993,7 +993,7 @@ const I18N = {
     sl_races_word: 'CARRERAS',
     settings_sfx_vol_short: 'Efectos de Sonido', settings_music_vol_short: 'Música',
     menu_home: 'Inicio', menu_section_game: 'JUEGO', menu_section_progress: 'PROGRESO', menu_section_info: 'INFO', menu_section_app: 'APP',
-    status_retired: 'RETIRADO', status_retired_short: 'RET', status_box: 'BOX', status_penalty: 'PENALIZACIÓN', status_on_track: 'En pista', status_leader: 'Líder',
+    status_retired: 'RETIRADO', status_retired_short: 'RET', status_box: 'BOX', status_penalty: 'PENALIZACIÓN', status_on_track: 'En pista', status_leader: 'Líder', live_tire_wear_label: 'Desgaste neumáticos',
     pg_rain_expected: 'Lluvia prevista', pg_rain_risk: (p)=>`Riesgo de lluvia ${p}%`, pg_dry_track: 'Pista seca',
     pg_rating_gap: 'Diferencia de Rating con el Rival', pg_main_rival: 'Rival principal', pg_none_yet: 'Todavía ninguna',
     pg_lineup: (team)=>`Alineación — ${team}`, pg_team_rating: 'Rating del Equipo', pg_weather_forecast: 'Previsión Meteorológica',
@@ -1116,7 +1116,7 @@ const I18N = {
     hub_overtake: 'Adelantamiento', hub_degradation: 'Degradación', hub_team_strength: 'FUERZA DE ESCUDERÍA (P1/P2)',
     hub_pos_drivers: 'POS. PILOTOS', hub_pos_constructors: 'POS. CONSTRUCTORES', hub_go_to_gp: 'Ir al Gran Premio →',
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalidad', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Calendario de Temporada', hub_race_word: 'CARRERA',
-    hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Tu Escudería', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento especial',
+    hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Tu Escudería', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento especial', compat_label: 'Compatibilidad', compat_excellent: 'Excelente', compat_good: 'Buena', compat_average: 'En la media', compat_below: 'Por debajo de la media', compat_poor: 'Escasa',
     hub_weather: 'Clima', comp_driver1: 'Piloto #1', comp_driver2: 'Piloto #2', comp_engine: 'Motor',
     comp_chassis: 'Chasis', comp_aero: 'Aerodinámica', comp_tires: 'Neumáticos', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
@@ -3205,6 +3205,20 @@ function circuitCompatScore(comp, pilot, circuit){
   }
   return clamp(score, 0, 100);
 }
+// V0.9.9.51: compatibilità circuito come ETICHETTA qualitativa, non un numero — su richiesta di
+// Gio. Soglie tarate sul range realistico della formula (base 50, raramente sotto 20 o sopra 75).
+function circuitCompatLabel(score){
+  if(score>=75) return { text:window.t('compat_excellent'), cls:'compat-excellent' };
+  if(score>=60) return { text:window.t('compat_good'), cls:'compat-good' };
+  if(score>=45) return { text:window.t('compat_average'), cls:'compat-average' };
+  if(score>=30) return { text:window.t('compat_below'), cls:'compat-below' };
+  return { text:window.t('compat_poor'), cls:'compat-poor' };
+}
+function circuitCompatBadgeHTML(circuit){
+  const score = circuitCompatScore(state.team, state.team.pilotMain, circuit);
+  const { text, cls } = circuitCompatLabel(score);
+  return `<span class="compat-badge ${cls}">${text}</span>`;
+}
 
 function computeQualifying(entries, circuit, weatherBefore){
   return entries.map(e=>{
@@ -3490,6 +3504,7 @@ function simulateFullRace(){
 
   const phaseOrders = [ phase0Order.slice() ];
   const cumTimeByPhase = [ { ...cumTime } ]; // V0.9.9.12: istantanea del tempo cumulato reale per ogni fase — serve per i distacchi veri
+  const tireWearByPhase = [ { ...tireWear } ]; // V0.9.9.51: istantanea usura gomme per ogni fase — serve per la barra usura in gara live
   const eventsByPhase = [ [] ];
   const pitByPhase = [ new Set() ];
   const penaltyByPhase = [ new Set() ];
@@ -3577,6 +3592,7 @@ function simulateFullRace(){
 
     phaseOrders.push(order);
     cumTimeByPhase.push({ ...cumTime }); // V0.9.9.12: istantanea del tempo cumulato reale a questa fase
+    tireWearByPhase.push({ ...tireWear }); // V0.9.9.51: istantanea usura gomme a questa fase
     eventsByPhase.push(evThis);
     pitByPhase.push(pitThis);
     penaltyByPhase.push(penaltyThis);
@@ -3611,7 +3627,7 @@ function simulateFullRace(){
   }
 
   const timeline = {
-    entries, circuit, gridPos, gridOrder, phaseOrders, cumTimeByPhase,
+    entries, circuit, gridPos, gridOrder, phaseOrders, cumTimeByPhase, tireWearByPhase,
     retiredAtPhase, eventsByPhase, pitByPhase, penaltyByPhase,
     safetyCarPhase, weatherBefore, weatherAfter, weatherChangePhase,
     lapNumbers: buildPhaseLapNumbers(circuit.giri), totalGiri: circuit.giri,
@@ -5163,6 +5179,42 @@ function liveDecisionHTML(){
   </div>`;
 }
 
+// V0.9.9.51: tempo sul giro plausibile, derivato dalla lunghezza del circuito (non e' il vero
+// tempo usato dalla simulazione interna, e' una lettura pensata per il giocatore) + penalita' da
+// usura gomme, cosi' la barra usura ha un effetto visibile e concreto, non solo estetico.
+function liveLapTimeDisplay(circuit, tireWear){
+  const baseSeconds = (circuit.lunghezza/205)*3600; // ~205km/h di passo medio, plausibile
+  const wearPenalty = tireWear * 2.6; // fino a +2.6s col pieno consumo
+  const total = baseSeconds + wearPenalty;
+  const mins = Math.floor(total/60);
+  const secs = (total%60).toFixed(3).padStart(6,'0');
+  return `${mins}:${secs}`;
+}
+function tireCardHTML(slotKey, timeline, phaseIdx, rows){
+  const row = rows.find(r=>r.key===slotKey);
+  if(!row) return '';
+  const wearSnap = timeline.tireWearByPhase && timeline.tireWearByPhase[phaseIdx];
+  const wear = wearSnap ? (wearSnap[slotKey]||0) : 0;
+  const wearPct = Math.round(wear*100);
+  const wearCls = wear>=0.75 ? 'tire-wear-high' : wear>=0.45 ? 'tire-wear-mid' : 'tire-wear-low';
+  const lapTime = liveLapTimeDisplay(timeline.circuit, wear);
+  return `
+  <div class="tire-card" id="tirecard-${slotKey}">
+    <div class="tire-card-head">
+      <span class="tire-card-pos">P${row.pos}</span>
+      <span class="tire-card-name">${shortName(row.driverName)}</span>
+      <span class="tire-card-lap mono">${lapTime}</span>
+    </div>
+    <div class="tire-wear-track">
+      <div class="tire-wear-fill ${wearCls}" id="tirewear-${slotKey}" style="width:${wearPct}%;"></div>
+    </div>
+    <div class="tire-card-foot dim">${window.t('live_tire_wear_label')} ${wearPct}%</div>
+  </div>`;
+}
+function tireCardsRowHTML(timeline, phaseIdx, rows){
+  const slots = pedalSlotsForRun();
+  return `<div class="tire-cards-row">${slots.map(s=>tireCardHTML(s,timeline,phaseIdx,rows)).join('')}</div>`;
+}
 function renderRaceLiveInit(){
   const t = state.live.phaseIndex;
   const phase = PHASES[t];
@@ -5209,6 +5261,7 @@ function renderRaceLiveInit(){
   </div>
   <div class="live-layout">
     <div class="panel live-board-panel">
+      ${tireCardsRowHTML(timeline, t, rows)}
       <div class="panel-title"><h3 class="hdr">Classifica Live</h3><span class="dim mono" style="font-size:11px;">20 PILOTI</span></div>
       <div class="live-head"><span>Pos</span><span>#</span><span>Pilota</span><span>Scuderia</span><span>Distacco</span><span>Stato</span><span></span></div>
       <div class="live-board" id="liveBoard" style="height:${rows.length*ROW_H}px;">${rowsHTML}</div>
@@ -5271,6 +5324,24 @@ function updateLiveBoard(){
   document.getElementById('livePhaseName').textContent = phase.name;
   document.getElementById('livePhaseNum').textContent = timeline.lapNumbers[t]+'/'+timeline.totalGiri;
   document.getElementById('liveLeader').textContent = shortName(leader.driverName);
+
+  // V0.9.9.51: aggiorna le schede pilota (posizione, barra usura, tempo sul giro) ad ogni fase
+  pedalSlotsForRun().forEach(slotKey=>{
+    const card = document.getElementById('tirecard-'+slotKey);
+    if(!card) return;
+    const row = rows.find(r=>r.key===slotKey);
+    if(!row) return;
+    const wearSnap = timeline.tireWearByPhase && timeline.tireWearByPhase[t];
+    const wear = wearSnap ? (wearSnap[slotKey]||0) : 0;
+    const wearPct = Math.round(wear*100);
+    const wearCls = wear>=0.75 ? 'tire-wear-high' : wear>=0.45 ? 'tire-wear-mid' : 'tire-wear-low';
+    card.querySelector('.tire-card-pos').textContent = 'P'+row.pos;
+    card.querySelector('.tire-card-lap').textContent = liveLapTimeDisplay(timeline.circuit, wear);
+    const fillEl = document.getElementById('tirewear-'+slotKey);
+    fillEl.style.width = wearPct+'%';
+    fillEl.className = 'tire-wear-fill ' + wearCls;
+    card.querySelector('.tire-card-foot').textContent = window.t('live_tire_wear_label') + ' ' + wearPct + '%';
+  });
   document.getElementById('liveWeather').textContent = state.live.weather;
   const trackEl = document.getElementById('liveTrack');
   trackEl.textContent = state.live.trackStatus;
@@ -8485,6 +8556,7 @@ function renderHub(){
       <h2 class="hdr" style="font-size:26px;">${flag(circuit.paese)} ${circuit.nome} ${circuitStatusBadgeHTML(circuit.nome)}</h2>
       <div class="dim" style="font-size:13px;margin-top:4px;">${nationLabel(circuit.paese)} · ${circuit.tipo} · ${circuit.lunghezza}km/giro · ${circuit.giri} giri · ${(circuit.lunghezza*circuit.giri).toFixed(0)}km totali · ${window.t('hub_weather')} ${circuit.clima}</div>
       <div style="margin-top:8px;font-size:12px;" class="dim">${window.t('hub_dominant_component')}: <b style="color:var(--cyan);">${displayArea(circuit.componentedominante)}</b> · ${window.t('hub_special_event')}: ${circuit.eventospeciale}</div>
+      <div style="margin-top:6px;font-size:12px;" class="dim">${window.t('compat_label')}: ${circuitCompatBadgeHTML(circuit)}</div>
     </div>
     <div class="circuit-stats">
       <div class="cstat"><div class="n">${EMOJI_RAIN} ${circuit.probpioggia}%</div><div class="l">${window.t('hub_rain')}</div></div>
