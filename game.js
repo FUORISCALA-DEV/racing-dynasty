@@ -445,7 +445,8 @@ const I18N = {
     pcard_confirm_invest: 'Conferma Investimento',
     pcard_mentality: 'Mentalità', pcard_type: 'Tipologia', pcard_in_use: 'In uso ora',
     pcard_scouting_title: (l)=>`Scouting Libero — ${l}`, pcard_scouting_hint: 'Confronta con quello che hai già in squadra: un tocco apre il confronto dettagliato prima di confermare.',
-    pcard_scouting_note: (k)=>`<b style="color:var(--text);">Le sostituzioni che abbassano il rating non chiudono il turno</b> — puoi farne più di una, se disponibile. Il semicerchio indica la ${k} del pezzo — passa il mouse per il nome. Le righe verdi ti danno un bonus sinergia se le scegli.`,
+    pcard_scouting_note: (k)=>`Tutte le alternative qui sotto migliorano il rating — <b style="color:var(--text);">più il salto è grande, più costano</b>. Il semicerchio indica la ${k} del pezzo — passa il mouse per il nome. Le righe verdi ti danno un bonus sinergia se le scegli.`,
+    scout_mult_on: (m,p,t)=>`Moltiplicatore prezzo <b style="color:var(--text);">×${m}</b> · Aiuto in coda: sei P${p}/${t} in Costruttori`, scout_mult_off: (m)=>`Moltiplicatore prezzo <b style="color:var(--text);">×${m}</b> · Aiuto in coda disattivato`,
     pcard_synergy_plus: (l)=>`+ Sinergia ${l}`, pcard_synergy_plus_short: (l)=>`+ ${l}`, pcard_synergy_minus: (l)=>`− Sinergia ${l}`, pcard_synergy_minus_short: (l)=>`− ${l}`,
     classify_upgrade: 'UPGRADE GARANTITO', classify_opportunity: 'OPPORTUNITÀ', classify_trade: 'SCAMBIO', classify_replacement: 'SOSTITUZIONE',
     eff_qualifying: 'Qualifica', eff_dry_race: 'Gara asciutta', eff_wet_race: 'Gara bagnata',
@@ -533,6 +534,7 @@ const I18N = {
     sl_trophy_room: 'SALA TROFEI', sl_raced: 'CORSI', sl_won: 'VINTI', sl_trophy_desc: 'Un trofeo per ogni circuito del mondo — rivivi le tue vittorie e scopri quanti ne mancano ancora alla collezione completa.', sl_trophy_hint: 'Tocca per aprire — Sala Trofei',
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETAMENTO', sl_museum_desc: 'Piloti e componenti portati fino in fondo a una stagione, o sostituiti lungo il percorso, restano qui per sempre.', sl_museum_hint: 'Tocca per aprire — Museo Dynasty',
     sl_garage: 'GARAGE', sl_garage_desc: 'Personalizza la livrea del telaio con pattern sbloccabili completando obiettivi.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PROSSIMAMENTE',
+    sl_aiuto_coda: 'Aiuto in coda', sl_aiuto_coda_desc: 'Se sei indietro in classifica, la ricerca di mercato costa meno (fino a 1×). In testa costa il pieno (5×). Disattivato: sempre 5×.',
     diff_new_career: 'Nuova Carriera', diff_choose: 'Scegli la difficoltà',
     diff_subtitle: 'Incide solo sui reroll disponibili nel draft — un tocco e si parte.',
     diff_last_used: ' · ultima usata', diff_tap_hint: (l)=>`Tocca per avviare — ${l}`,
@@ -727,7 +729,8 @@ const I18N = {
     pcard_confirm_invest: 'Confirm Investment',
     pcard_mentality: 'Mentality', pcard_type: 'Type', pcard_in_use: 'Currently in use',
     pcard_scouting_title: (l)=>`Free Scouting — ${l}`, pcard_scouting_hint: 'Compare with what you already have on the team: a tap opens the detailed comparison before confirming.',
-    pcard_scouting_note: (k)=>`<b style="color:var(--text);">Replacements that lower the rating don't close the turn</b> — you can make more than one, if available. The half-circle shows the piece's ${k} — hover for the name. Green rows give you a synergy bonus if you pick them.`,
+    pcard_scouting_note: (k)=>`All the alternatives below improve the rating — <b style="color:var(--text);">the bigger the jump, the more they cost</b>. The half-circle shows the piece's ${k} — hover for the name. Green rows give you a synergy bonus if you pick them.`,
+    scout_mult_on: (m,p,t)=>`Price multiplier <b style="color:var(--text);">×${m}</b> · Catch-up help: you're P${p}/${t} in Constructors`, scout_mult_off: (m)=>`Price multiplier <b style="color:var(--text);">×${m}</b> · Catch-up help disabled`,
     pcard_synergy_plus: (l)=>`+ ${l} Synergy`, pcard_synergy_plus_short: (l)=>`+ ${l}`, pcard_synergy_minus: (l)=>`− ${l} Synergy`, pcard_synergy_minus_short: (l)=>`− ${l}`,
     classify_upgrade: 'GUARANTEED UPGRADE', classify_opportunity: 'OPPORTUNITY', classify_trade: 'TRADE-OFF', classify_replacement: 'REPLACEMENT',
     eff_qualifying: 'Qualifying', eff_dry_race: 'Dry race', eff_wet_race: 'Wet race',
@@ -815,6 +818,7 @@ const I18N = {
     sl_trophy_room: 'TROPHY ROOM', sl_raced: 'RACED', sl_won: 'WON', sl_trophy_desc: 'A trophy for every circuit in the world — relive your wins and see how many are left for the full collection.', sl_trophy_hint: 'Tap to open — Trophy Room',
     sl_museum: 'DYNASTY MUSEUM', sl_completion: 'COMPLETION', sl_museum_desc: 'Drivers and components carried through a full season, or replaced along the way, stay here forever.', sl_museum_hint: 'Tap to open — Dynasty Museum',
     sl_garage: 'GARAGE', sl_garage_desc: 'Customize your chassis livery with patterns unlockable by completing achievements.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> COMING SOON',
+    sl_aiuto_coda: 'Catch-up help', sl_aiuto_coda_desc: 'If you are behind in the standings, market research costs less (down to 1×). Leading costs full price (5×). Disabled: always 5×.',
     diff_new_career: 'New Career', diff_choose: 'Choose difficulty',
     diff_subtitle: 'Only affects the rerolls available in the draft — one tap and you\'re off.',
     diff_last_used: ' · last used', diff_tap_hint: (l)=>`Tap to start — ${l}`,
@@ -1003,7 +1007,8 @@ const I18N = {
     pcard_confirm_invest: 'Confirmar Inversión',
     pcard_mentality: 'Mentalidad', pcard_type: 'Tipología', pcard_in_use: 'En uso ahora',
     pcard_scouting_title: (l)=>`Scouting Libre — ${l}`, pcard_scouting_hint: 'Compara con lo que ya tienes en el equipo: un toque abre la comparación detallada antes de confirmar.',
-    pcard_scouting_note: (k)=>`<b style="color:var(--text);">Las sustituciones que bajan el rating no cierran el turno</b> — puedes hacer más de una, si hay disponibles. El semicírculo indica la ${k} de la pieza — pasa el ratón para ver el nombre. Las filas verdes te dan un bonus de sinergia si las eliges.`,
+    pcard_scouting_note: (k)=>`Todas las alternativas de abajo mejoran el rating — <b style="color:var(--text);">cuanto mayor el salto, más cuestan</b>. El semicírculo indica la ${k} de la pieza — pasa el ratón para ver el nombre. Las filas verdes te dan un bonus de sinergia si las eliges.`,
+    scout_mult_on: (m,p,t)=>`Multiplicador de precio <b style="color:var(--text);">×${m}</b> · Ayuda de recuperación: eres P${p}/${t} en Constructores`, scout_mult_off: (m)=>`Multiplicador de precio <b style="color:var(--text);">×${m}</b> · Ayuda de recuperación desactivada`,
     pcard_synergy_plus: (l)=>`+ Sinergia ${l}`, pcard_synergy_plus_short: (l)=>`+ ${l}`, pcard_synergy_minus: (l)=>`− Sinergia ${l}`, pcard_synergy_minus_short: (l)=>`− ${l}`,
     classify_upgrade: 'MEJORA GARANTIZADA', classify_opportunity: 'OPORTUNIDAD', classify_trade: 'INTERCAMBIO', classify_replacement: 'SUSTITUCIÓN',
     eff_qualifying: 'Clasificación', eff_dry_race: 'Carrera en seco', eff_wet_race: 'Carrera en mojado',
@@ -1091,6 +1096,7 @@ const I18N = {
     sl_trophy_room: 'SALA DE TROFEOS', sl_raced: 'DISPUTADOS', sl_won: 'GANADOS', sl_trophy_desc: 'Un trofeo por cada circuito del mundo — revive tus victorias y descubre cuántos faltan para la colección completa.', sl_trophy_hint: 'Toca para abrir — Sala de Trofeos',
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETADO', sl_museum_desc: 'Pilotos y componentes llevados hasta el final de una temporada, o sustituidos por el camino, se quedan aquí para siempre.', sl_museum_hint: 'Toca para abrir — Museo Dynasty',
     sl_garage: 'GARAGE', sl_garage_desc: 'Personaliza la librea del chasis con patrones desbloqueables completando logros.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PRÓXIMAMENTE',
+    sl_aiuto_coda: 'Ayuda de recuperación', sl_aiuto_coda_desc: 'Si vas retrasado en la clasificación, la búsqueda de mercado cuesta menos (hasta 1×). En cabeza cuesta el precio completo (5×). Desactivado: siempre 5×.',
     diff_new_career: 'Nueva Carrera', diff_choose: 'Elige la dificultad',
     diff_subtitle: 'Solo afecta a los rerolls disponibles en el draft — un toque y empiezas.',
     diff_last_used: ' · última usada', diff_tap_hint: (l)=>`Toca para empezar — ${l}`,
@@ -2085,9 +2091,10 @@ function buildAIGrid(aiTeamsRaw, usedIds, difficulty){
 }
 
 /* ---------------- new run ---------------- */
-function newRun(difficulty, seasonLength){
+function newRun(difficulty, seasonLength, aiutoInCoda){
   difficulty = DIFFICULTY_REROLLS.hasOwnProperty(difficulty) ? difficulty : 'medio';
   seasonLength = (seasonLength===20) ? 20 : 10;
+  aiutoInCoda = aiutoInCoda !== false; // default ON se non specificato
   const usedIds = new Set();
   const shuffledCircuits = DATA.circuiti.slice().sort(()=>rnd()-0.5).slice(0,seasonLength)
     .map(c=> ({ ...c, giri: computeRaceLaps(c) })); // V0.5.1: giri reali dalla lunghezza del circuito
@@ -2103,6 +2110,7 @@ function newRun(difficulty, seasonLength){
     phase:'title',
     difficulty,
     seasonLength,               // V0.7.5: 10 (Veloce) o 20 (Completa)
+    aiutoInCoda,                 // V0.9.9.45: se attivo, il prezzo scouting scala con la posizione in classifica (1x-5x). Se disattivo, sempre 5x.
     midSeasonSwapDone: false,   // V0.7.5: la finestra di cambio pilota a meta' stagione completa e' unica
     rerollsLeft: DIFFICULTY_REROLLS[difficulty],
     rerollsTotal: DIFFICULTY_REROLLS[difficulty],
@@ -5555,18 +5563,22 @@ function renderSponsorChoice(){
 
 // V0.9.3.1: lo scouting deve offrire sempre almeno un'opzione potenzialmente valida
 // (rating piu' alto, bonus diverso, o specializzazione diversa), non solo pesca casuale
+// V0.9.9.45: RISCRITTA su richiesta di Gio — prima garantiva solo che ALMENO UNA delle 3 opzioni
+// avesse un vantaggio, le altre 2 potevano essere un vero peggioramento. Ora TUTTE le opzioni
+// mostrate hanno rating strettamente superiore a quello attuale (mai un downgrade tra le scelte),
+// pesate per la DIMENSIONE del salto — piccoli guadagni molto più comuni, grandi guadagni rari.
+// Se il pool ha meno di 3 candidati validi, ne mostriamo quanti ce ne sono davvero.
+const SCOUT_DELTA_WEIGHT = [ {max:3, w:50}, {max:7, w:30}, {max:15, w:15}, {max:Infinity, w:5} ];
 function ensureUsefulScoutOptions(pool, current){
-  const hasUpside = o => o.rating > current.rating || (o.bonus && o.bonus !== current.bonus) || (o.arch && o.arch !== current.arch);
-  // V0.9.4.6.1: il pezzo attuale va SEMPRE escluso dalle alternative offerte, anche come rete di
-  // sicurezza indipendente da usedIds — altrimenti puo' ricomparire come "sostituzione" di se stesso.
   const exclude = new Set(state.usedIds); exclude.add(current.id);
-  let options = drawBandedDistinct(pool, 3, exclude);
-  let attempts = 0;
-  while(!options.some(hasUpside) && attempts < 6){
-    options = drawBandedDistinct(pool, 3, exclude);
-    attempts++;
-  }
-  return options;
+  const candidates = pool
+    .filter(o => !exclude.has(o.id) && o.rating > current.rating)
+    .map(o=>{
+      const delta = o.rating - current.rating;
+      const tier = SCOUT_DELTA_WEIGHT.find(t=>delta<=t.max);
+      return { ...o, _scoutWeight: tier.w };
+    });
+  return weightedSampleDistinct(candidates, 3, '_scoutWeight', new Set());
 }
 
 // V0.9.9.8: peso di comparsa per fascia — prima il pescaggio usava il COSTO come peso, il che
@@ -5599,7 +5611,10 @@ function buildPitlaneOptions(){
     };
     return {type:'upgrade', data:clone};
   });
-  const scoutCategories = [
+  // V0.9.9.45: se un componente è già sopra 85 di rating, niente più sostituti da scouting per
+  // quello — solo gli upgrade possono migliorarlo oltre quel punto, come richiesto da Gio.
+  const SCOUT_RATING_CAP = 85;
+  const scoutCategoriesAll = [
     {key:'motore', pool:DATA.motori, label:'Motore'},
     {key:'telaio', pool:DATA.telai, label:'Telaio'},
     {key:'aero', pool:DATA.aero, label:'Aerodinamica'},
@@ -5607,11 +5622,14 @@ function buildPitlaneOptions(){
     {key:'stratega', pool:DATA.strategi, label:'Team Principal'},
   ];
   if(state.seasonLength !== 20){
-    scoutCategories.push({key:'pilotSecond', pool:DATA.piloti, label:'Secondo Pilota'});
+    scoutCategoriesAll.push({key:'pilotSecond', pool:DATA.piloti, label:'Secondo Pilota'});
   }
+  const scoutCategories = scoutCategoriesAll.filter(c => (state.team[c.key].rating||0) <= SCOUT_RATING_CAP);
+  if(scoutCategories.length === 0) return upgrades; // squadra tutta sopra 85: niente scouting questo giro
   const cat = pick(scoutCategories);
   const currentItem = state.team[cat.key];
   const scoutOptions = ensureUsefulScoutOptions(cat.pool, currentItem);
+  if(scoutOptions.length === 0) return upgrades; // nessun candidato migliore disponibile nel pool
   const scoutNode = {type:'scout', catKey:cat.key, catLabel:cat.label, options:scoutOptions};
   return [...upgrades, scoutNode];
 }
@@ -8022,6 +8040,15 @@ function renderSeasonLength(){
       <div class="card-tap-hint">${t('sl_full_hint')}</div>
     </div>
   </div>
+  <div class="card" style="margin-top:10px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+      <div>
+        <div style="font-weight:700;">${t('sl_aiuto_coda')}</div>
+        <div class="dim" style="font-size:11.5px; margin-top:3px; line-height:1.4;">${t('sl_aiuto_coda_desc')}</div>
+      </div>
+      <button type="button" class="toggle-switch ${state.selectedAiutoInCoda!==false?'on':''}" data-action="toggle-aiuto-coda" aria-label="${t('sl_aiuto_coda')}"><span class="toggle-knob"></span></button>
+    </div>
+  </div>
   <div class="card pickable trophy-room-card garage-coming-soon" data-action="request-password-gate" data-gate-for="garage">
     <span class="rarity-tag" data-rarity="Rare"><img class=ico src=assets/icons/palette.png> ${t('sl_garage')}</span>
     <div class="trophy-room-card-body">
@@ -8781,9 +8808,22 @@ function riskLevel(prob){
 
 // V0.9.4.5: prezzo dello scambio scouting — proporzionale alla DIFFERENZA di rating tra quello che
 // hai e quello che prendi. Positivo = paghi (rating piu' alto), negativo = incassi (rating piu' basso).
+// V0.9.9.45: "Aiuto in coda" — chi è indietro in classifica Costruttori scouta più a buon mercato
+// (fino a 1×ase ultimo), chi guida paga il pieno (5×). Disattivabile a inizio stagione: se
+// disattivato, sempre 5× indipendentemente dalla posizione.
+function scoutCostMultiplier(){
+  if(state.aiutoInCoda === false) return { mult: 5, pos: null, total: null };
+  const standings = constructorStandingsSorted();
+  const total = standings.length;
+  const pos = standings.findIndex(c=>c.teamId==='PLAYER') + 1;
+  if(total<=1 || pos<=0) return { mult: 5, pos: pos||1, total };
+  const mult = 5 - (4 * (pos-1)/(total-1));
+  return { mult: Math.round(mult*10)/10, pos, total };
+}
 function scoutSwapPrice(current, candidate){
   const delta = candidate.rating - (current ? current.rating : candidate.rating);
-  return Math.round(delta * 0.35 * 10) / 10;
+  const { mult } = scoutCostMultiplier();
+  return Math.round(delta * 0.35 * mult * 10) / 10;
 }
 
 function pitlaneCardHTML(node, idx){
@@ -8950,10 +8990,16 @@ function pitlaneCardHTML(node, idx){
         </div>
       </div>`;
     }).join('');
+    const multInfo = scoutCostMultiplier();
+    const multLabel = state.aiutoInCoda===false
+      ? t('scout_mult_off', multInfo.mult)
+      : t('scout_mult_on', multInfo.mult, multInfo.pos, multInfo.total);
     return `<div class="panel" style="grid-column:1/-1;">
       <div class="eyebrow" style="font-size:14px;">${t('pcard_scouting_title', node.catLabel)}</div>
       <div class="dim" style="font-size:14px;margin:8px 0;line-height:1.5;">${t('pcard_scouting_hint')}</div>
-      <div class="dim" style="font-size:14px;margin-bottom:14px;line-height:1.5;">${t('pcard_scouting_note', kindLabel.toLowerCase())}</div>
+      <div class="dim" style="font-size:14px;margin-bottom:6px;line-height:1.5;">${t('pcard_scouting_note', kindLabel.toLowerCase())}</div>
+      <div class="scout-mult-badge">${multLabel}</div>
+      <div style="height:8px;"></div>
       ${currentRow}
       ${opts}
     </div>`;
@@ -10156,6 +10202,10 @@ function onAction(e){
     state.phase = 'driver-creation-done';
     render();
   }
+  else if(action==='toggle-aiuto-coda'){
+    state.selectedAiutoInCoda = state.selectedAiutoInCoda===false ? true : false;
+    render();
+  }
   else if(action==='choose-season-length'){
     state.selectedSeasonLength = parseInt(el.dataset.length,10)===20 ? 20 : 10;
     state.phase='difficulty';
@@ -10171,7 +10221,7 @@ function onAction(e){
     }
     state.selectedDifficulty = diff;
     consumeToken(len);
-    newRun(diff, len);
+    newRun(diff, len, state.selectedAiutoInCoda!==false);
     state.phase='naming';
     render();
   }
