@@ -424,6 +424,7 @@ const I18N = {
     share_quick_season: 'Stagione Veloce (10 gare)', share_manager_tag: 'ROGUELIKE GP MANAGER',
     share_wins: (n)=>`${n} vittorie`, share_podiums: (n)=>`${n} podi`, share_points: (n)=>`${n} punti`,
     share_dnfs: (n)=>`${n} ritiri`, share_champion_line: (n)=>`${n}, Campione`, share_beat_me: 'PROVA A BATTERMI',
+    share_components_title: 'COMPONENTI DI SQUADRA', share_comp_motore: 'Motore', share_comp_telaio: 'Telaio', share_comp_aero: 'Aerodinamica', share_comp_gomme: 'Gomme', share_comp_stratega: 'Team Principal', share_sponsor_label: 'Sponsor di stagione',
     splash_presents: 'FUORISCALA presenta', splash_tap_continue: 'tocca per continuare',
     sl_races_word: 'GARE',
     settings_sfx_vol_short: 'Effetti Sonori', settings_music_vol_short: 'Musica',
@@ -708,6 +709,7 @@ const I18N = {
     share_quick_season: 'Quick Season (10 races)', share_manager_tag: 'ROGUELIKE GP MANAGER',
     share_wins: (n)=>`${n} wins`, share_podiums: (n)=>`${n} podiums`, share_points: (n)=>`${n} points`,
     share_dnfs: (n)=>`${n} retirements`, share_champion_line: (n)=>`${n}, Champion`, share_beat_me: 'TRY TO BEAT ME',
+    share_components_title: 'TEAM COMPONENTS', share_comp_motore: 'Engine', share_comp_telaio: 'Chassis', share_comp_aero: 'Aero', share_comp_gomme: 'Tyres', share_comp_stratega: 'Team Principal', share_sponsor_label: 'Season sponsor',
     splash_presents: 'FUORISCALA presents', splash_tap_continue: 'tap to continue',
     sl_races_word: 'RACES',
     settings_sfx_vol_short: 'Sound Effects', settings_music_vol_short: 'Music',
@@ -986,6 +988,7 @@ const I18N = {
     share_quick_season: 'Temporada Rápida (10 carreras)', share_manager_tag: 'ROGUELIKE GP MANAGER',
     share_wins: (n)=>`${n} victorias`, share_podiums: (n)=>`${n} podios`, share_points: (n)=>`${n} puntos`,
     share_dnfs: (n)=>`${n} retiros`, share_champion_line: (n)=>`${n}, Campeón`, share_beat_me: 'INTENTA VENCERME',
+    share_components_title: 'COMPONENTES DEL EQUIPO', share_comp_motore: 'Motor', share_comp_telaio: 'Chasis', share_comp_aero: 'Aerodinámica', share_comp_gomme: 'Neumáticos', share_comp_stratega: 'Team Principal', share_sponsor_label: 'Patrocinador de temporada',
     splash_presents: 'FUORISCALA presenta', splash_tap_continue: 'toca para continuar',
     sl_races_word: 'CARRERAS',
     settings_sfx_vol_short: 'Efectos de Sonido', settings_music_vol_short: 'Música',
@@ -2989,6 +2992,9 @@ function pickDraftTurnOption(id){
   checkSynergyAchievements(); // V0.9.7.9
     buildGrid();
     state.initialTeamRatingAtDraft = computeTeamStrength(state.team); // V0.9.7: snapshot per l'obiettivo "Da Zero a Cento"
+    // V0.9.9.46: snapshot dei rating per componente a inizio stagione, per mostrare la progressione
+    // (partenza -> attuale) nella carta condivisa, come richiesto da Gio.
+    state.initialComponentRatings = { motore:state.team.motore.rating, telaio:state.team.telaio.rating, aero:state.team.aero.rating, gomme:state.team.gomme.rating, stratega:state.team.stratega.rating };
     unlockAchievement('primo-giorno'); // V0.9.7.9
     state.pendingPostSponsorPhase = state.pendingRivalNotice ? 'rival-announce' : 'hub';
     state.sponsorOffers = generateSponsorOffers();
@@ -9665,6 +9671,16 @@ async function buildShareCardCanvas(){
     : [t('share_wins', totalWins), t('share_podiums', totalPodiums), t('share_points', totalPoints), t('share_dnfs', totalDnfs)];
 
   const [logoImg, poseImg] = await Promise.all([loadImg(LOGO_DATA_URI), loadImg(poseSrc)]);
+  // V0.9.9.46: progressione componenti (partenza -> attuale) e sponsor con logo, richiesti da Gio.
+  // Fallback sicuro se lo snapshot iniziale non esiste (partite iniziate prima di questo aggiornamento).
+  const compRows = [
+    { label:t('share_comp_motore'), init:state.initialComponentRatings?.motore, cur:state.team.motore.rating },
+    { label:t('share_comp_telaio'), init:state.initialComponentRatings?.telaio, cur:state.team.telaio.rating },
+    { label:t('share_comp_aero'), init:state.initialComponentRatings?.aero, cur:state.team.aero.rating },
+    { label:t('share_comp_gomme'), init:state.initialComponentRatings?.gomme, cur:state.team.gomme.rating },
+    { label:t('share_comp_stratega'), init:state.initialComponentRatings?.stratega, cur:state.team.stratega.rating },
+  ];
+  const sponsorImg = state.sponsor ? await loadImg(sponsorLogoSrc(state.sponsor.nome)).catch(()=>null) : null;
 
   const W = 720;
   const cv = document.createElement('canvas');
@@ -9679,6 +9695,8 @@ async function buildShareCardCanvas(){
   const poseW = Math.round(W*0.46), poseH = Math.round(poseImg.height*(poseW/poseImg.width));
   const py = cursor; cursor = py + poseH + 40;
   const sy = cursor; cursor = sy + 56*statsLines.length + 30;
+  const compY = cursor; cursor += 34 + compRows.length*38 + 20;
+  const sponsorY = state.sponsor ? cursor : null; if(state.sponsor) cursor += 74;
   const boxY0 = cursor, boxY1 = boxY0 + 100; cursor = boxY1 + 50;
   const H = cursor;
 
@@ -9727,6 +9745,33 @@ async function buildShareCardCanvas(){
     ctx.fillStyle = '#ffffff'; ctx.font = '700 30px -apple-system,sans-serif';
     ctx.fillText(line, 90, yy+26);
     yy += 56;
+  }
+
+  // V0.9.9.46: sezione componenti — nome + progressione partenza->attuale, verde se migliorato.
+  ctx.fillStyle = '#e1e1e6'; ctx.font = '700 22px -apple-system,sans-serif';
+  ctx.fillText(t('share_components_title'), 40, compY+20);
+  let cyy = compY + 44;
+  for(const row of compRows){
+    ctx.fillStyle = '#8c8c94'; ctx.font = '600 20px -apple-system,sans-serif';
+    ctx.fillText(row.label, 50, cyy+16);
+    const hasInit = row.init!==undefined && row.init!==null;
+    const valueText = hasInit ? `${row.init} → ${row.cur}` : `${row.cur}`;
+    const improved = hasInit && row.cur > row.init;
+    ctx.fillStyle = improved ? '#4CD97B' : '#c9c9d0';
+    ctx.font = '700 22px -apple-system,sans-serif'; ctx.textAlign='right';
+    ctx.fillText(valueText, W-50, cyy+17);
+    ctx.textAlign='left';
+    cyy += 38;
+  }
+
+  // V0.9.9.46: sezione sponsor — logo + nome, solo se presente
+  if(state.sponsor && sponsorImg){
+    const logoBoxH = 54, logoBoxW = Math.round(logoBoxH * sponsorImg.width/sponsorImg.height);
+    ctx.drawImage(sponsorImg, 50, sponsorY+10, logoBoxW, logoBoxH);
+    ctx.fillStyle = '#8c8c94'; ctx.font = '19px -apple-system,sans-serif';
+    ctx.fillText(t('share_sponsor_label'), 50+logoBoxW+18, sponsorY+30);
+    ctx.fillStyle = '#e1e1e6'; ctx.font = '700 24px -apple-system,sans-serif';
+    ctx.fillText(state.sponsor.nome, 50+logoBoxW+18, sponsorY+56);
   }
 
   ctx.fillStyle = accent+'20'; ctx.fillRect(30, boxY0, W-60, boxY1-boxY0);
