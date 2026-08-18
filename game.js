@@ -320,8 +320,8 @@ const I18N = {
     skip_race_warning_title: 'Saltare la gara?', skip_race_warning_desc: 'Se salti la gara, sceglierai sempre l\'opzione più prudente in ogni decisione — potresti perdere occasioni di sorpasso e altri momenti chiave. Continuare?',
     premium_need_login_title: 'Serve un account', premium_need_login_desc: 'Per sbloccare il premium serve prima accedere con Google — lo colleghiamo al tuo acquisto. Vuoi accedere ora?',
     premium_checkout_error_title: 'Qualcosa non ha funzionato', premium_checkout_error_desc: 'Non siamo riusciti ad aprire la pagina di pagamento. Riprova tra poco.',
-    premium_unlocked_title: '🎉 Premium sbloccato!', premium_unlocked_desc: 'Pagamento andato a buon fine — hai tutto illimitato, per sempre. Grazie!',
-    sl_unlimited: '✨ Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`,
+    premium_unlocked_title: '<img class=ico src=assets/icons/party.png> Premium sbloccato!', premium_unlocked_desc: 'Pagamento andato a buon fine — hai tutto illimitato, per sempre. Grazie!',
+    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`,
     tokens_out_title: 'Gettoni esauriti', tokens_out_desc: (len)=>`Hai finito i gettoni gratuiti per la Stagione Scuderia da ${len} gare. Torna più tardi, oppure sblocca tutto senza limiti.`,
     tokens_out_countdown_label: 'Prossima ricarica tra', tokens_out_unlock: 'Diventa Immortale — 4€',
     premium_coming_soon_title: 'Sblocco premium', premium_coming_soon_desc: 'Il pagamento vero arriverà a breve — per ora questa parte è ancora in costruzione.',
@@ -333,7 +333,7 @@ const I18N = {
     settings_streamer_mode: 'Modalità Streamer', settings_streamer_mode_desc: "Layout pensato per OBS, con spazio dedicato alla webcam.", settings_streamer_name: 'Nome Streamer',
     bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_hold: 'Mantieni la posizione',
     bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni', bkt_lose_3: 'Perdi 3 posizioni', bkt_gain_3_5: 'Guadagni 3-5 posizioni',
-    dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '⚠️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito', bkt_gain_exact: (n)=>n===1?'Guadagni 1 posizione':`Guadagni ${n} posizioni`, bkt_lose_exact: (n)=>n===1?'Perdi 1 posizione':`Perdi ${n} posizioni`, bkt_gain_seconds: (s)=>`Guadagni ${s} secondi`, bkt_lose_seconds: (s)=>`Perdi ${s} secondi`,
+    dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito', bkt_gain_exact: (n)=>n===1?'Guadagni 1 posizione':`Guadagni ${n} posizioni`, bkt_lose_exact: (n)=>n===1?'Perdi 1 posizione':`Perdi ${n} posizioni`, bkt_gain_seconds: (s)=>`Guadagni ${s} secondi`, bkt_lose_seconds: (s)=>`Perdi ${s} secondi`,
     dret_career_totals: 'Numeri di carriera', dret_seasons: 'Stagioni', dret_total_wins: 'Vittorie', dret_total_podiums: 'Podi',
     dret_total_points: (n)=>`${n} punti totali in carriera`,
     dret_best_season: (age,pos,team)=>`Stagione migliore: a ${age} anni, P${pos} con ${team}`,
@@ -367,7 +367,7 @@ const I18N = {
     dcon_renew: 'Rinnova', dcon_released: (team)=>`${team} non ti rinnova per la prossima stagione.`,
     dcon_offer: 'Offerta ricevuta', dcon_promotion: 'promozione', dcon_pick: 'Tocca per scegliere',
     dcon_fallback_title: 'Ripartenza dal Kart', dcon_fallback_desc: 'Nessuna scuderia ti vuole per ora — ti sistemi con una scuderia Kart qualunque e riparti da lì.',
-    se_visit_trophy_room: '🏆 Visita la Sala Trofei',
+    se_visit_trophy_room: '<img class=ico src=assets/icons/trophy.png> Visita la Sala Trofei',
     dact_eyebrow: 'Tra una gara e l\'altra', dact_title: 'Cosa fai prima della prossima gara?', dact_subtitle: 'Scegline una: ognuna ha effetti diversi.',
     dact_training: 'Allenamento', dact_training_desc: 'Focus sulla crescita personale. Avvicina il prossimo punto Rating, nessun effetto su Fama o Reputazione.',
     dact_simulator: 'Simulatore e Analisi Dati', dact_simulator_desc: 'Lavori con gli ingegneri: avvicina il prossimo punto Rating e migliora leggermente la Reputazione.',
@@ -383,7 +383,7 @@ const I18N = {
     dh_rating: 'RATING', dh_fama: 'FAMA', dh_reputazione: 'REPUTAZIONE',
     dh_teammate_title: 'Tu vs Compagno di Squadra', dh_you: 'TU', dh_teammate: 'COMPAGNO',
     dh_rivalry_low: 'rivalità bassa', dh_rivalry_mid: 'rivalità in crescita', dh_rivalry_high: 'rivalità accesa',
-    dse2_title: '🏁 Stagione conclusa', dse2_final_pos: (p)=>`Posizione finale: P${p}`,
+    dse2_title: '<img class=ico src=assets/icons/checkered_flag.png> Stagione conclusa', dse2_final_pos: (p)=>`Posizione finale: P${p}`,
     dse2_stats: (pts,w,pod)=>`${pts} punti · ${w} vittorie · ${pod} podi`,
     dse2_prestige_gained: (n)=>`+${n} punti prestigio guadagnati`, dse2_prestige_total: (n)=>`Prestigio totale: ${n}`,
     dse2_new_age: (e)=>`Ora hai ${e} anni.`, dse2_world_title: 'Il mondo si muove',
@@ -418,7 +418,7 @@ const I18N = {
     promo_banner_tagline: 'Piccolo studio, giochi fuori misura', promo_banner_cta: 'Scopri di più ↗',
     se_fs_title: "Ti sta piacendo?", se_fs_body: "Questo è il primo gioco di FUORISCALA, uno studio indipendente piccolo piccolo. Passa a trovarci — un click, zero impegno, e ci aiuti a fare il prossimo.",
     se_fs_cta: "Scopri FUORISCALA ↗",
-    share_trophy_title: '🏆 SALA TROFEI', share_trophy_stats: (r,t,w)=>`${r}/${t} circuiti corsi  ·  ${w}/${t} vinti`,
+    share_trophy_title: '<img class=ico src=assets/icons/trophy.png> SALA TROFEI', share_trophy_stats: (r,t,w)=>`${r}/${t} circuiti corsi  ·  ${w}/${t} vinti`,
     share_world_champion: 'CAMPIONE DEL MONDO', share_drivers_title: (team)=>`${team} — Titolo Piloti`,
     share_season_over: (pos)=>`Stagione conclusa — P${pos} Costruttori`, share_full_season: 'Stagione Completa (20 gare)',
     share_quick_season: 'Stagione Veloce (10 gare)', share_manager_tag: 'ROGUELIKE GP MANAGER',
@@ -432,7 +432,7 @@ const I18N = {
     pg_rain_expected: 'Pioggia attesa', pg_rain_risk: (p)=>`Rischio pioggia ${p}%`, pg_dry_track: 'Pista asciutta',
     pg_rating_gap: 'Distacco Rating dal Rivale', pg_main_rival: 'Rivale principale', pg_none_yet: 'Ancora nessuna',
     pg_lineup: (team)=>`Schieramento — ${team}`, pg_team_rating: 'Rating Squadra', pg_weather_forecast: 'Meteo Previsto',
-    pg_go_to_race: 'Vai alla Gara →', pg_details_toggle: '🔍 Dettagli — componenti, statistiche, griglia completa',
+    pg_go_to_race: 'Vai alla Gara →', pg_details_toggle: '<img class=ico src=assets/icons/search.png> Dettagli — componenti, statistiche, griglia completa',
     cat_aero_pack: 'Pacchetto Aerodinamico', cat_tire_supplier: 'Fornitore Gomme',
     pcard_guaranteed: 'UPGRADE GARANTITO', pcard_development: 'SVILUPPO', pcard_cost: 'Costo', pcard_no_risk: 'Nessun rischio',
     pitlane_extra_card_banner: (nome)=>`Disponibile grazie a ${nome}`, pcard_discount_thanks: (nome)=>`Discount powered by ${nome}`,
@@ -465,26 +465,26 @@ const I18N = {
     upg_no_gain: 'Nessun guadagno questa volta.', upg_gain_global: (n)=>`+${n} RATING diffuso su tutta la vettura`,
     upg_gain_area: (n,a)=>`+${n} RATING su ${a}`, upg_continue: 'Continua →',
     upcoming_title: 'Prossimi Circuiti', upcoming_most_useful: 'COMPONENTE PIÙ UTILE', upcoming_next: 'PROSSIMA', upcoming_race: (n)=>`GARA ${n}`,
-    museum_title: '🏛️ Museo Dynasty', museum_tagline: 'Ogni pilota e componente portato fino in fondo a una stagione, o sostituito lungo il percorso, resta qui per sempre.',
+    museum_title: '<img class=ico src=assets/icons/temple.png>️ Museo Dynasty', museum_tagline: 'Ogni pilota e componente portato fino in fondo a una stagione, o sostituito lungo il percorso, resta qui per sempre.',
     museum_completion: 'COMPLETAMENTO', museum_back: '← Torna Indietro', museum_drivers: 'Piloti', museum_components: 'Componenti',
     museum_no_drivers: 'Nessun pilota ancora sbloccato: portane uno fino a fine stagione, o sostituiscilo, per iniziare la collezione.',
     museum_no_components: 'Nessun componente ancora sbloccato.',
-    tr_title: '🏆 Sala Trofei', tr_tagline: 'Un trofeo per ogni circuito — oro se vinto, grigio se corso, nascosto se non ancora visto.',
-    tr_raced: 'CIRCUITI CORSI', tr_won: 'CIRCUITI VINTI', tr_share: '📤 Condividi Sala Trofei', tr_museum_btn: '🏛️ Museo Dynasty', tr_back: '← Torna Indietro',
+    tr_title: '<img class=ico src=assets/icons/trophy.png> Sala Trofei', tr_tagline: 'Un trofeo per ogni circuito — oro se vinto, grigio se corso, nascosto se non ancora visto.',
+    tr_raced: 'CIRCUITI CORSI', tr_won: 'CIRCUITI VINTI', tr_share: '<img class=ico src=assets/icons/upload.png> Condividi Sala Trofei', tr_museum_btn: '<img class=ico src=assets/icons/temple.png>️ Museo Dynasty', tr_back: '← Torna Indietro',
     tr_unlock_first: 'TROFEO SBLOCCATO!', tr_unlock_nth: (n)=>`${n}ª VITTORIA SU QUESTO CIRCUITO`, tr_unlock_title: 'VITTORIA!', tr_unlock_continue: 'Continua →',
     tr_detail_participations: 'Partecipazioni', tr_detail_wins: 'Vittorie', tr_detail_never: 'Non ancora corso qui', tr_detail_close: 'Chiudi',
-    mss_eyebrow: (r,tot)=>`🏁 MID SEASON DRAFT — Gara ${r}/${tot}`, mss_title: "L'unica finestra di mercato piloti della stagione",
+    mss_eyebrow: (r,tot)=>`<img class=ico src=assets/icons/checkered_flag.png> MID SEASON DRAFT — Gara ${r}/${tot}`, mss_title: "L'unica finestra di mercato piloti della stagione",
     mss_subtitle: "Puoi sostituire nessuno, uno solo, o entrambi i piloti: la scelta è indipendente per ciascun sedile e resta valida fino all'ultima gara. Nessun rischio: se paghi il prezzo di scouting, ottieni il pilota. Da qui in poi, per il resto della stagione, i piloti restano fissi — lo sviluppo componenti riprende regolarmente dalla prossima pit-lane.",
     mss_pilot_main: 'Pilota Principale', mss_pilot_second: 'Secondo Pilota', mss_confirm: 'Conferma Scelte e Prosegui →',
     rcs_beat_single: (n)=>`Hai battuto la tua rivale, ${n}.`, rcs_lost_single: (n)=>`${n} ti ha battuto in classifica.`,
     rcs_tied: 'Hai chiuso in parità con la tua rivale.', rcs_beat_all: (n)=>`Hai battuto tutte le tue rivali (${n}).`,
     rcs_lost_all: (n)=>`Le tue rivali ti hanno battuto tutte (${n}).`, rcs_mixed: (b,l)=>`Hai battuto ${b}, ma perso da ${l}.`,
-    se_doppietta_pill: 'DOPPIETTA', se_doppietta_title: '🏆🏆 DOPPIO TITOLO MONDIALE',
-    se_driver_champ_pill: 'CAMPIONE PILOTI', se_driver_champ_title: '🏆 CAMPIONE DEL MONDO PILOTI',
-    se_constr_champ_pill: 'CAMPIONE COSTRUTTORI', se_constr_champ_title: '🏆 CAMPIONE DEL MONDO COSTRUTTORI',
+    se_doppietta_pill: 'DOPPIETTA', se_doppietta_title: '<img class=ico src=assets/icons/trophy.png><img class=ico src=assets/icons/trophy.png> DOPPIO TITOLO MONDIALE',
+    se_driver_champ_pill: 'CAMPIONE PILOTI', se_driver_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPIONE DEL MONDO PILOTI',
+    se_constr_champ_pill: 'CAMPIONE COSTRUTTORI', se_constr_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPIONE DEL MONDO COSTRUTTORI',
     se_end_pill: 'FINE STAGIONE', se_end_top3: (n,p)=>`Complimenti ${n} ha chiuso in P${p}`, se_end_other: (n,p)=>`${n} chiude la stagione in P${p}`,
     se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} chiude la stagione con ${pts} punti complessivi, ${wins} vittorie, ${pod} podi e ${dnf} ritiri su ${tot} gare. Budget residuo: ${budget}.`,
-    se_new_career: 'Nuova Carriera', se_share: '📤 Condividi Risultato', se_your_drivers: 'I Tuoi Piloti',
+    se_new_career: 'Nuova Carriera', se_share: '<img class=ico src=assets/icons/upload.png> Condividi Risultato', se_your_drivers: 'I Tuoi Piloti',
     se_pilot1: (n)=>`Pilota #1 — ${n}`, se_pilot2: (n)=>`Pilota #2 — ${n}`, se_drivers_pos: (p)=>`Posizione Piloti: P${p}`,
     se_stats: (pts,wins,pod,dnf)=>`${pts} punti · ${wins} vittorie · ${pod} podi · ${dnf} ritiri`,
     se_team_constr_pos: (team,pos)=>`Scuderia <b>${team}</b> — Posizione Costruttori: <b style="color:var(--cyan);">P${pos}</b>`,
@@ -505,12 +505,12 @@ const I18N = {
     race_result_you_badge: 'TU', race_result_rival_badge: 'RIVALE', race_result_no_events: 'Nessun evento di rilievo in questo Gran Premio.',
     race_result_title: (n,tot)=>`Risultato Gran Premio ${n}/${tot}`, race_result_continue: 'Continua →',
     prize_panel_title: 'Guadagni Gran Premio', prize_collect_btn: 'Incassa', prize_collect_continue_btn: 'Incassa e continua', prize_collected_btn: 'Incassato ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
-    race_result_why: '❓ Perché sei arrivato così', race_result_finish_order: 'Ordine di Arrivo', race_result_20_drivers: '20 PILOTI',
+    race_result_why: '<img class=ico src=assets/icons/question.png> Perché sei arrivato così', race_result_finish_order: 'Ordine di Arrivo', race_result_20_drivers: '20 PILOTI',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Pilota', race_result_th_team: 'Scuderia', race_result_th_points: 'Punti',
     race_result_event_log: 'Log Eventi di Gara', race_result_show_full_log: (n)=>`Mostra il log completo della gara (${n} eventi)`,
     rival_ahead: (n)=>`+${n} su di loro`, rival_behind: (n)=>`${n} da recuperare`, rival_tied: 'in parità',
     rival_you_badge: 'TU', rival_constructor_points: 'punti costruttori · forza',
-    rival_title_initial: '🎯 La Tua Rivalità', rival_title_new: '↗ Nuova Rivalità',
+    rival_title_initial: '<img class=ico src=assets/icons/target.png> La Tua Rivalità', rival_title_new: '↗ Nuova Rivalità',
     rival_subtitle_initial_plural: 'In base alla forza della tua scuderia, queste sono le tue scuderie rivali. Batterle è il primo obiettivo della stagione, prima ancora del titolo.',
     rival_subtitle_initial_single: 'In base alla forza della tua scuderia, questa è la tua scuderia rivale. Batterle è il primo obiettivo della stagione, prima ancora del titolo.',
     rival_subtitle_new: (names)=>`Hai superato ${names}: non c'è più partita con loro.`,
@@ -525,14 +525,14 @@ const I18N = {
     sponsor_team_overview_toggle: 'Panoramica scuderia',
     sponsor_headline: 'Chi ti accompagna quest\'anno?', sponsor_subtitle: 'La scelta vale per tutta la stagione e non si può cambiare a metà strada.',
     naming_title: 'Dai un nome alla tua scuderia', naming_optional: 'Facoltativo — se lo lasci vuoto useremo un nome automatico (es. "Dynasty Racing").',
-    naming_placeholder: 'Es. Nova Racing Team', naming_inspire: '🎲 Ispira la scuderia', naming_nation: 'Nazione della Scuderia',
+    naming_placeholder: 'Es. Nova Racing Team', naming_inspire: '<img class=ico src=assets/icons/dice.png> Ispira la scuderia', naming_nation: 'Nazione della Scuderia',
     naming_confirm: 'Conferma e inizia il Draft →',
     sl_choose: 'Scegli la lunghezza della stagione', sl_subtitle: 'Un tocco e si passa alla scelta della difficoltà.',
     sl_quick: 'STAGIONE VELOCE', sl_quick_desc: 'Il formato classico: 10 Gran Premi, pit-lane completo (upgrade e scouting, pilota incluso) ad ogni gara.', sl_quick_hint: 'Tocca per scegliere — Stagione Veloce',
     sl_full: 'STAGIONE COMPLETA', sl_full_desc: 'Il doppio dei Gran Premi. Gli upgrade dei componenti restano disponibili come sempre, ma il Secondo Pilota si può cambiare una sola volta, in una finestra dedicata tra la gara 10 e la gara 11.', sl_full_hint: 'Tocca per scegliere — Stagione Completa',
     sl_trophy_room: 'SALA TROFEI', sl_raced: 'CORSI', sl_won: 'VINTI', sl_trophy_desc: 'Un trofeo per ogni circuito del mondo — rivivi le tue vittorie e scopri quanti ne mancano ancora alla collezione completa.', sl_trophy_hint: 'Tocca per aprire — Sala Trofei',
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETAMENTO', sl_museum_desc: 'Piloti e componenti portati fino in fondo a una stagione, o sostituiti lungo il percorso, restano qui per sempre.', sl_museum_hint: 'Tocca per aprire — Museo Dynasty',
-    sl_garage: 'GARAGE', sl_garage_desc: 'Personalizza la livrea del telaio con pattern sbloccabili completando obiettivi.', sl_garage_soon: '🔒 PROSSIMAMENTE',
+    sl_garage: 'GARAGE', sl_garage_desc: 'Personalizza la livrea del telaio con pattern sbloccabili completando obiettivi.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PROSSIMAMENTE',
     diff_new_career: 'Nuova Carriera', diff_choose: 'Scegli la difficoltà',
     diff_subtitle: 'Incide solo sui reroll disponibili nel draft — un tocco e si parte.',
     diff_last_used: ' · ultima usata', diff_tap_hint: (l)=>`Tocca per avviare — ${l}`,
@@ -548,26 +548,26 @@ const I18N = {
     hub_next_gp: 'Prossimo Gran Premio', hub_rain: 'Pioggia', hub_safety_car: 'Safety Car',
     hub_overtake: 'Sorpasso', hub_degradation: 'Degrado', hub_team_strength: 'FORZA SCUDERIA (P1/P2)',
     hub_pos_drivers: 'POS. PILOTI', hub_pos_constructors: 'POS. COSTRUTTORI', hub_go_to_gp: 'Vai al Gran Premio →',
-    hub_rivalry: '🏆 Rivalità', hub_calendar: '🗓️ Calendario Stagione', hub_race_word: 'GARA',
-    hub_your_team: '🏎️ La Tua Scuderia', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento speciale',
+    hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalità', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Calendario Stagione', hub_race_word: 'GARA',
+    hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ La Tua Scuderia', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento speciale',
     hub_weather: 'Clima', comp_driver1: 'Pilota #1', comp_driver2: 'Pilota #2', comp_engine: 'Motore',
     comp_chassis: 'Telaio', comp_aero: 'Aerodinamica', comp_tires: 'Gomme', comp_strategist: 'Team Principal',
     // Titolo
     title_tagline_return: (race,total)=>`Bentornato — hai una stagione in corso (Gara ${race}/${total})`,
-    title_continue: '▶ Continua Stagione', title_new: 'Nuova Stagione', title_delete: '🗑 Cancella Salvataggio',
-    title_cta: '🏁 Scegli la tua sfida e scendi in pista — ', title_cta_bold: 'premi per iniziare',
+    title_continue: '▶ Continua Stagione', title_new: 'Nuova Stagione', title_delete: '<img class=ico src=assets/icons/trash.png> Cancella Salvataggio',
+    title_cta: '<img class=ico src=assets/icons/checkered_flag.png> Scegli la tua sfida e scendi in pista — ', title_cta_bold: 'premi per iniziare',
     // Menu laterale
     menu_new_career: 'Nuova Run', menu_trophy_room: 'Sala Trofei — Scuderia', menu_driver_trophy_room: 'Sala Trofei — Pilota', menu_museum: 'Museo Dynasty', menu_guide: 'Guida',
     menu_new_run: 'Nuova Run', menu_new_run_confirm: 'Vuoi davvero abbandonare la run attuale e ricominciare da capo? Il progresso non salvato andrà perso.',
     menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti',
     menu_fullscreen: 'Schermo Intero', menu_language: 'Lingua',
     // Impostazioni comuni
-    settings_title: '⚙️ Impostazioni', settings_sfx_vol: 'Volume Effetti', settings_music_vol: 'Volume Musica',
+    settings_title: '<img class=ico src=assets/icons/gear.png>️ Impostazioni', settings_sfx_vol: 'Volume Effetti', settings_music_vol: 'Volume Musica',
     settings_haptic: 'Feedback Aptico', settings_speed: 'Velocità Gara Predefinita', settings_decision_timer: 'Countdown Decisioni',
     settings_export: 'Esporta Run (.json)', settings_import: 'Importa Run (.json)', settings_install: "Installa l'App",
     settings_reset: 'Ripristina Tutto (Prima Apertura)', on: 'Attivo', off: 'Disattivato',
     // Crediti
-    credits_title: '🏢 Crediti', credits_tagline: 'Piccolo studio. Giochi fuori misura.',
+    credits_title: '<img class=ico src=assets/icons/building.png> Crediti', credits_tagline: 'Piccolo studio. Giochi fuori misura.',
     credits_first_game: 'Il primo gioco di FUORISCALA', credits_dev: 'Sviluppato e pubblicato da',
     credits_created: 'Creato da',
     // Hub — etichette HUD
@@ -602,8 +602,8 @@ const I18N = {
     skip_race_warning_title: 'Skip the race?', skip_race_warning_desc: "If you skip the race, you'll always pick the safest option on every decision — you might miss overtaking chances and other key moments. Continue?",
     premium_need_login_title: 'Account required', premium_need_login_desc: 'To unlock premium you need to sign in with Google first — we link it to your purchase. Sign in now?',
     premium_checkout_error_title: 'Something went wrong', premium_checkout_error_desc: "We couldn't open the payment page. Please try again shortly.",
-    premium_unlocked_title: '🎉 Premium unlocked!', premium_unlocked_desc: 'Payment successful — you now have everything unlimited, forever. Thank you!',
-    sl_unlimited: '✨ Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`,
+    premium_unlocked_title: '<img class=ico src=assets/icons/party.png> Premium unlocked!', premium_unlocked_desc: 'Payment successful — you now have everything unlimited, forever. Thank you!',
+    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`,
     tokens_out_title: 'Out of tokens', tokens_out_desc: (len)=>`You've used up your free tokens for the ${len}-race Team Season. Come back later, or unlock everything with no limits.`,
     tokens_out_countdown_label: 'Next refill in', tokens_out_unlock: 'Become Immortal — €4',
     premium_coming_soon_title: 'Premium unlock', premium_coming_soon_desc: "Real payment is coming soon — this part is still under construction for now.",
@@ -615,7 +615,7 @@ const I18N = {
     settings_streamer_mode: 'Streamer Mode', settings_streamer_mode_desc: 'Layout designed for OBS, with a dedicated webcam space.', settings_streamer_name: 'Streamer Name',
     bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_hold: 'Hold position',
     bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions', bkt_lose_3: 'Lose 3 positions', bkt_gain_3_5: 'Gain 3-5 positions',
-    dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '⚠️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result', bkt_gain_exact: (n)=>n===1?'Gain 1 position':`Gain ${n} positions`, bkt_lose_exact: (n)=>n===1?'Lose 1 position':`Lose ${n} positions`, bkt_gain_seconds: (s)=>`Gain ${s} seconds`, bkt_lose_seconds: (s)=>`Lose ${s} seconds`,
+    dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result', bkt_gain_exact: (n)=>n===1?'Gain 1 position':`Gain ${n} positions`, bkt_lose_exact: (n)=>n===1?'Lose 1 position':`Lose ${n} positions`, bkt_gain_seconds: (s)=>`Gain ${s} seconds`, bkt_lose_seconds: (s)=>`Lose ${s} seconds`,
     dret_career_totals: 'Career numbers', dret_seasons: 'Seasons', dret_total_wins: 'Wins', dret_total_podiums: 'Podiums',
     dret_total_points: (n)=>`${n} total career points`,
     dret_best_season: (age,pos,team)=>`Best season: at age ${age}, P${pos} with ${team}`,
@@ -649,7 +649,7 @@ const I18N = {
     dcon_renew: 'Renew', dcon_released: (team)=>`${team} won't renew you for next season.`,
     dcon_offer: 'Offer received', dcon_promotion: 'promotion', dcon_pick: 'Tap to choose',
     dcon_fallback_title: 'Restart from Kart', dcon_fallback_desc: "No team wants you right now — you settle for any Kart team and start over from there.",
-    se_visit_trophy_room: '🏆 Visit the Trophy Room',
+    se_visit_trophy_room: '<img class=ico src=assets/icons/trophy.png> Visit the Trophy Room',
     dact_eyebrow: 'Between races', dact_title: 'What do you do before the next race?', dact_subtitle: "Pick one: each has different effects.",
     dact_training: 'Training', dact_training_desc: "Focus on personal growth. Moves you closer to the next Rating point, no effect on Fame or Reputation.",
     dact_simulator: 'Simulator and Data Analysis', dact_simulator_desc: "You work with the engineers: closer to the next Rating point and a small Reputation boost.",
@@ -665,7 +665,7 @@ const I18N = {
     dh_rating: 'RATING', dh_fama: 'FAME', dh_reputazione: 'REPUTATION',
     dh_teammate_title: 'You vs Teammate', dh_you: 'YOU', dh_teammate: 'TEAMMATE',
     dh_rivalry_low: 'low rivalry', dh_rivalry_mid: 'growing rivalry', dh_rivalry_high: 'fierce rivalry',
-    dse2_title: '🏁 Season over', dse2_final_pos: (p)=>`Final position: P${p}`,
+    dse2_title: '<img class=ico src=assets/icons/checkered_flag.png> Season over', dse2_final_pos: (p)=>`Final position: P${p}`,
     dse2_stats: (pts,w,pod)=>`${pts} points · ${w} wins · ${pod} podiums`,
     dse2_prestige_gained: (n)=>`+${n} prestige points earned`, dse2_prestige_total: (n)=>`Total prestige: ${n}`,
     dse2_new_age: (e)=>`You're now ${e} years old.`, dse2_world_title: 'The world moves on',
@@ -700,7 +700,7 @@ const I18N = {
     promo_banner_tagline: 'Small studio, outsized games', promo_banner_cta: 'Learn more ↗',
     se_fs_title: "Enjoying it?", se_fs_body: "This is FUORISCALA's first game, a tiny independent studio. Come say hi — one click, zero commitment, and it helps us make the next one.",
     se_fs_cta: "Discover FUORISCALA ↗",
-    share_trophy_title: '🏆 TROPHY ROOM', share_trophy_stats: (r,t,w)=>`${r}/${t} circuits raced  ·  ${w}/${t} won`,
+    share_trophy_title: '<img class=ico src=assets/icons/trophy.png> TROPHY ROOM', share_trophy_stats: (r,t,w)=>`${r}/${t} circuits raced  ·  ${w}/${t} won`,
     share_world_champion: 'WORLD CHAMPION', share_drivers_title: (team)=>`${team} — Drivers' Title`,
     share_season_over: (pos)=>`Season over — P${pos} Constructors`, share_full_season: 'Full Season (20 races)',
     share_quick_season: 'Quick Season (10 races)', share_manager_tag: 'ROGUELIKE GP MANAGER',
@@ -714,7 +714,7 @@ const I18N = {
     pg_rain_expected: 'Rain expected', pg_rain_risk: (p)=>`Rain risk ${p}%`, pg_dry_track: 'Dry track',
     pg_rating_gap: 'Rating Gap to Rival', pg_main_rival: 'Main rival', pg_none_yet: 'None yet',
     pg_lineup: (team)=>`Lineup — ${team}`, pg_team_rating: 'Team Rating', pg_weather_forecast: 'Weather Forecast',
-    pg_go_to_race: 'Go to Race →', pg_details_toggle: '🔍 Details — components, stats, full grid',
+    pg_go_to_race: 'Go to Race →', pg_details_toggle: '<img class=ico src=assets/icons/search.png> Details — components, stats, full grid',
     cat_aero_pack: 'Aero Package', cat_tire_supplier: 'Tyre Supplier',
     pcard_guaranteed: 'GUARANTEED UPGRADE', pcard_development: 'DEVELOPMENT', pcard_cost: 'Cost', pcard_no_risk: 'No risk',
     pitlane_extra_card_banner: (nome)=>`Available thanks to ${nome}`, pcard_discount_thanks: (nome)=>`Discount powered by ${nome}`,
@@ -747,26 +747,26 @@ const I18N = {
     upg_no_gain: 'No gain this time.', upg_gain_global: (n)=>`+${n} RATING spread across the whole car`,
     upg_gain_area: (n,a)=>`+${n} RATING on ${a}`, upg_continue: 'Continue →',
     upcoming_title: 'Upcoming Circuits', upcoming_most_useful: 'MOST USEFUL COMPONENT', upcoming_next: 'NEXT', upcoming_race: (n)=>`RACE ${n}`,
-    museum_title: '🏛️ Dynasty Museum', museum_tagline: 'Every driver and component carried through to the end of a season, or replaced along the way, stays here forever.',
+    museum_title: '<img class=ico src=assets/icons/temple.png>️ Dynasty Museum', museum_tagline: 'Every driver and component carried through to the end of a season, or replaced along the way, stays here forever.',
     museum_completion: 'COMPLETION', museum_back: '← Back', museum_drivers: 'Drivers', museum_components: 'Components',
     museum_no_drivers: "No drivers unlocked yet: carry one to the end of a season, or replace it, to start the collection.",
     museum_no_components: 'No components unlocked yet.',
-    tr_title: '🏆 Trophy Room', tr_tagline: 'A trophy for every circuit — gold if won, gray if raced, hidden if not seen yet.',
-    tr_raced: 'CIRCUITS RACED', tr_won: 'CIRCUITS WON', tr_share: '📤 Share Trophy Room', tr_museum_btn: '🏛️ Dynasty Museum', tr_back: '← Back',
+    tr_title: '<img class=ico src=assets/icons/trophy.png> Trophy Room', tr_tagline: 'A trophy for every circuit — gold if won, gray if raced, hidden if not seen yet.',
+    tr_raced: 'CIRCUITS RACED', tr_won: 'CIRCUITS WON', tr_share: '<img class=ico src=assets/icons/upload.png> Share Trophy Room', tr_museum_btn: '<img class=ico src=assets/icons/temple.png>️ Dynasty Museum', tr_back: '← Back',
     tr_unlock_first: 'TROPHY UNLOCKED!', tr_unlock_nth: (n)=>`${n}${n===1?'st':n===2?'nd':n===3?'rd':'th'} WIN AT THIS CIRCUIT`, tr_unlock_title: 'VICTORY!', tr_unlock_continue: 'Continue →',
     tr_detail_participations: 'Participations', tr_detail_wins: 'Wins', tr_detail_never: 'Not raced here yet', tr_detail_close: 'Close',
-    mss_eyebrow: (r,tot)=>`🏁 MID SEASON DRAFT — Race ${r}/${tot}`, mss_title: "The season's only driver market window",
+    mss_eyebrow: (r,tot)=>`<img class=ico src=assets/icons/checkered_flag.png> MID SEASON DRAFT — Race ${r}/${tot}`, mss_title: "The season's only driver market window",
     mss_subtitle: "You can replace none, just one, or both drivers: the choice is independent for each seat and stays valid until the last race. No risk: if you pay the scouting price, you get the driver. From here on, for the rest of the season, drivers are fixed — component development resumes normally from the next pit lane.",
     mss_pilot_main: 'Main Driver', mss_pilot_second: 'Second Driver', mss_confirm: 'Confirm Choices and Continue →',
     rcs_beat_single: (n)=>`You beat your rival, ${n}.`, rcs_lost_single: (n)=>`${n} beat you in the standings.`,
     rcs_tied: 'You finished tied with your rival.', rcs_beat_all: (n)=>`You beat all your rivals (${n}).`,
     rcs_lost_all: (n)=>`Your rivals all beat you (${n}).`, rcs_mixed: (b,l)=>`You beat ${b}, but lost to ${l}.`,
-    se_doppietta_pill: 'GRAND SLAM', se_doppietta_title: '🏆🏆 DOUBLE WORLD TITLE',
-    se_driver_champ_pill: 'DRIVERS\' CHAMPION', se_driver_champ_title: "🏆 DRIVERS' WORLD CHAMPION",
-    se_constr_champ_pill: 'CONSTRUCTORS\' CHAMPION', se_constr_champ_title: "🏆 CONSTRUCTORS' WORLD CHAMPION",
+    se_doppietta_pill: 'GRAND SLAM', se_doppietta_title: '<img class=ico src=assets/icons/trophy.png><img class=ico src=assets/icons/trophy.png> DOUBLE WORLD TITLE',
+    se_driver_champ_pill: 'DRIVERS\' CHAMPION', se_driver_champ_title: "<img class=ico src=assets/icons/trophy.png> DRIVERS' WORLD CHAMPION",
+    se_constr_champ_pill: 'CONSTRUCTORS\' CHAMPION', se_constr_champ_title: "<img class=ico src=assets/icons/trophy.png> CONSTRUCTORS' WORLD CHAMPION",
     se_end_pill: 'SEASON END', se_end_top3: (n,p)=>`Congratulations, ${n} finished P${p}`, se_end_other: (n,p)=>`${n} closes the season in P${p}`,
     se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} closes the season with ${pts} total points, ${wins} wins, ${pod} podiums and ${dnf} retirements across ${tot} races. Remaining budget: ${budget}.`,
-    se_new_career: 'New Career', se_share: '📤 Share Result', se_your_drivers: 'Your Drivers',
+    se_new_career: 'New Career', se_share: '<img class=ico src=assets/icons/upload.png> Share Result', se_your_drivers: 'Your Drivers',
     se_pilot1: (n)=>`Driver #1 — ${n}`, se_pilot2: (n)=>`Driver #2 — ${n}`, se_drivers_pos: (p)=>`Drivers' Position: P${p}`,
     se_stats: (pts,wins,pod,dnf)=>`${pts} points · ${wins} wins · ${pod} podiums · ${dnf} retirements`,
     se_team_constr_pos: (team,pos)=>`Team <b>${team}</b> — Constructors' Position: <b style="color:var(--cyan);">P${pos}</b>`,
@@ -787,12 +787,12 @@ const I18N = {
     race_result_you_badge: 'YOU', race_result_rival_badge: 'RIVAL', race_result_no_events: 'No notable events in this Grand Prix.',
     race_result_title: (n,tot)=>`Grand Prix Result ${n}/${tot}`, race_result_continue: 'Continue →',
     prize_panel_title: 'Grand Prix Earnings', prize_collect_btn: 'Collect', prize_collect_continue_btn: 'Collect and continue', prize_collected_btn: 'Collected ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
-    race_result_why: '❓ Why you finished like this', race_result_finish_order: 'Finishing Order', race_result_20_drivers: '20 DRIVERS',
+    race_result_why: '<img class=ico src=assets/icons/question.png> Why you finished like this', race_result_finish_order: 'Finishing Order', race_result_20_drivers: '20 DRIVERS',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Driver', race_result_th_team: 'Team', race_result_th_points: 'Points',
     race_result_event_log: 'Race Event Log', race_result_show_full_log: (n)=>`Show full race log (${n} events)`,
     rival_ahead: (n)=>`+${n} ahead of them`, rival_behind: (n)=>`${n} to catch up`, rival_tied: 'tied',
     rival_you_badge: 'YOU', rival_constructor_points: 'constructor points · strength',
-    rival_title_initial: '🎯 Your Rivalry', rival_title_new: '↗ New Rivalry',
+    rival_title_initial: '<img class=ico src=assets/icons/target.png> Your Rivalry', rival_title_new: '↗ New Rivalry',
     rival_subtitle_initial_plural: "Based on your team's strength, these are your rival teams. Beating them is the season's first goal, even before the title.",
     rival_subtitle_initial_single: "Based on your team's strength, this is your rival team. Beating them is the season's first goal, even before the title.",
     rival_subtitle_new: (names)=>`You've overtaken ${names}: there's no more contest with them.`,
@@ -807,14 +807,14 @@ const I18N = {
     sponsor_team_overview_toggle: 'Team overview',
     sponsor_headline: "Who's with you this year?", sponsor_subtitle: "The choice applies for the whole season and can't be changed midway.",
     naming_title: 'Name your team', naming_optional: 'Optional — if you leave it blank we\'ll use an automatic name (e.g. "Dynasty Racing").',
-    naming_placeholder: 'E.g. Nova Racing Team', naming_inspire: '🎲 Inspire the team', naming_nation: 'Team Nationality',
+    naming_placeholder: 'E.g. Nova Racing Team', naming_inspire: '<img class=ico src=assets/icons/dice.png> Inspire the team', naming_nation: 'Team Nationality',
     naming_confirm: 'Confirm and start the Draft →',
     sl_choose: 'Choose the season length', sl_subtitle: 'One tap and you move to choosing difficulty.',
     sl_quick: 'QUICK SEASON', sl_quick_desc: 'The classic format: 10 Grands Prix, full pit lane (upgrades and scouting, driver included) every race.', sl_quick_hint: 'Tap to choose — Quick Season',
     sl_full: 'FULL SEASON', sl_full_desc: 'Double the Grands Prix. Component upgrades remain available as always, but the Second Driver can be swapped once, in a dedicated window between race 10 and race 11.', sl_full_hint: 'Tap to choose — Full Season',
     sl_trophy_room: 'TROPHY ROOM', sl_raced: 'RACED', sl_won: 'WON', sl_trophy_desc: 'A trophy for every circuit in the world — relive your wins and see how many are left for the full collection.', sl_trophy_hint: 'Tap to open — Trophy Room',
     sl_museum: 'DYNASTY MUSEUM', sl_completion: 'COMPLETION', sl_museum_desc: 'Drivers and components carried through a full season, or replaced along the way, stay here forever.', sl_museum_hint: 'Tap to open — Dynasty Museum',
-    sl_garage: 'GARAGE', sl_garage_desc: 'Customize your chassis livery with patterns unlockable by completing achievements.', sl_garage_soon: '🔒 COMING SOON',
+    sl_garage: 'GARAGE', sl_garage_desc: 'Customize your chassis livery with patterns unlockable by completing achievements.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> COMING SOON',
     diff_new_career: 'New Career', diff_choose: 'Choose difficulty',
     diff_subtitle: 'Only affects the rerolls available in the draft — one tap and you\'re off.',
     diff_last_used: ' · last used', diff_tap_hint: (l)=>`Tap to start — ${l}`,
@@ -830,22 +830,22 @@ const I18N = {
     hub_next_gp: 'Next Grand Prix', hub_rain: 'Rain', hub_safety_car: 'Safety Car',
     hub_overtake: 'Overtaking', hub_degradation: 'Degradation', hub_team_strength: 'TEAM STRENGTH (P1/P2)',
     hub_pos_drivers: 'DRIVERS POS.', hub_pos_constructors: 'CONSTRUCTORS POS.', hub_go_to_gp: 'Go to Grand Prix →',
-    hub_rivalry: '🏆 Rivalry', hub_calendar: '🗓️ Season Calendar', hub_race_word: 'RACE',
-    hub_your_team: '🏎️ Your Team', hub_dominant_component: 'Dominant component', hub_special_event: 'Special event',
+    hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalry', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Season Calendar', hub_race_word: 'RACE',
+    hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Your Team', hub_dominant_component: 'Dominant component', hub_special_event: 'Special event',
     hub_weather: 'Weather', comp_driver1: 'Driver #1', comp_driver2: 'Driver #2', comp_engine: 'Engine',
     comp_chassis: 'Chassis', comp_aero: 'Aerodynamics', comp_tires: 'Tires', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
-    title_continue: '▶ Continue Season', title_new: 'New Season', title_delete: '🗑 Delete Save',
-    title_cta: '🏁 Choose your challenge and hit the track — ', title_cta_bold: 'tap to start',
+    title_continue: '▶ Continue Season', title_new: 'New Season', title_delete: '<img class=ico src=assets/icons/trash.png> Delete Save',
+    title_cta: '<img class=ico src=assets/icons/checkered_flag.png> Choose your challenge and hit the track — ', title_cta_bold: 'tap to start',
     menu_new_career: 'New Run', menu_trophy_room: 'Trophy Room — Team', menu_driver_trophy_room: 'Trophy Room — Driver', menu_museum: 'Dynasty Museum', menu_guide: 'Guide',
     menu_new_run: 'New Run', menu_new_run_confirm: 'Do you really want to abandon the current run and start over? Unsaved progress will be lost.',
     menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits',
     menu_fullscreen: 'Fullscreen', menu_language: 'Language',
-    settings_title: '⚙️ Settings', settings_sfx_vol: 'Sound Effects Volume', settings_music_vol: 'Music Volume',
+    settings_title: '<img class=ico src=assets/icons/gear.png>️ Settings', settings_sfx_vol: 'Sound Effects Volume', settings_music_vol: 'Music Volume',
     settings_haptic: 'Haptic Feedback', settings_speed: 'Default Race Speed', settings_decision_timer: 'Decision Countdown',
     settings_export: 'Export Run (.json)', settings_import: 'Import Run (.json)', settings_install: 'Install the App',
     settings_reset: 'Reset Everything (First Launch)', on: 'On', off: 'Off',
-    credits_title: '🏢 Credits', credits_tagline: 'Small studio. Outsized games.',
+    credits_title: '<img class=ico src=assets/icons/building.png> Credits', credits_tagline: 'Small studio. Outsized games.',
     credits_first_game: "FUORISCALA's first game", credits_dev: 'Developed and published by',
     credits_created: 'Created by',
     hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Race',
@@ -878,8 +878,8 @@ const I18N = {
     skip_race_warning_title: '¿Saltar la carrera?', skip_race_warning_desc: 'Si saltas la carrera, elegirás siempre la opción más prudente en cada decisión — podrías perder ocasiones de adelantamiento y otros momentos clave. ¿Continuar?',
     premium_need_login_title: 'Se necesita una cuenta', premium_need_login_desc: 'Para desbloquear el premium primero hay que iniciar sesión con Google — lo vinculamos a tu compra. ¿Iniciar sesión ahora?',
     premium_checkout_error_title: 'Algo no ha funcionado', premium_checkout_error_desc: 'No hemos podido abrir la página de pago. Vuelve a intentarlo en breve.',
-    premium_unlocked_title: '🎉 ¡Premium desbloqueado!', premium_unlocked_desc: 'Pago realizado con éxito — ahora tienes todo ilimitado, para siempre. ¡Gracias!',
-    sl_unlimited: '✨ Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`,
+    premium_unlocked_title: '<img class=ico src=assets/icons/party.png> ¡Premium desbloqueado!', premium_unlocked_desc: 'Pago realizado con éxito — ahora tienes todo ilimitado, para siempre. ¡Gracias!',
+    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`,
     tokens_out_title: 'Fichas agotadas', tokens_out_desc: (len)=>`Has usado tus fichas gratuitas para la Temporada de Escudería de ${len} carreras. Vuelve más tarde, o desbloquea todo sin límites.`,
     tokens_out_countdown_label: 'Próxima recarga en', tokens_out_unlock: 'Hazte Inmortal — 4€',
     premium_coming_soon_title: 'Desbloqueo premium', premium_coming_soon_desc: 'El pago real llegará pronto — por ahora esta parte todavía está en construcción.',
@@ -891,7 +891,7 @@ const I18N = {
     settings_streamer_mode: 'Modo Streamer', settings_streamer_mode_desc: 'Diseño pensado para OBS, con espacio dedicado a la cámara web.', settings_streamer_name: 'Nombre de Streamer',
     bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_hold: 'Mantienes la posición',
     bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones', bkt_lose_3: 'Pierdes 3 posiciones', bkt_gain_3_5: 'Ganas 3-5 posiciones',
-    dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '⚠️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado', bkt_gain_exact: (n)=>n===1?'Ganas 1 posición':`Ganas ${n} posiciones`, bkt_lose_exact: (n)=>n===1?'Pierdes 1 posición':`Pierdes ${n} posiciones`, bkt_gain_seconds: (s)=>`Ganas ${s} segundos`, bkt_lose_seconds: (s)=>`Pierdes ${s} segundos`,
+    dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado', bkt_gain_exact: (n)=>n===1?'Ganas 1 posición':`Ganas ${n} posiciones`, bkt_lose_exact: (n)=>n===1?'Pierdes 1 posición':`Pierdes ${n} posiciones`, bkt_gain_seconds: (s)=>`Ganas ${s} segundos`, bkt_lose_seconds: (s)=>`Pierdes ${s} segundos`,
     dret_career_totals: 'Números de carrera', dret_seasons: 'Temporadas', dret_total_wins: 'Victorias', dret_total_podiums: 'Podios',
     dret_total_points: (n)=>`${n} puntos totales en carrera`,
     dret_best_season: (age,pos,team)=>`Mejor temporada: a los ${age} años, P${pos} con ${team}`,
@@ -925,7 +925,7 @@ const I18N = {
     dcon_renew: 'Renovar', dcon_released: (team)=>`${team} no te renueva para la próxima temporada.`,
     dcon_offer: 'Oferta recibida', dcon_promotion: 'ascenso', dcon_pick: 'Toca para elegir',
     dcon_fallback_title: 'Reinicio desde Kart', dcon_fallback_desc: 'Ninguna escudería te quiere por ahora — te conformas con cualquier escudería de Kart y empiezas de nuevo desde ahí.',
-    se_visit_trophy_room: '🏆 Visita la Sala de Trofeos',
+    se_visit_trophy_room: '<img class=ico src=assets/icons/trophy.png> Visita la Sala de Trofeos',
     dact_eyebrow: 'Entre carreras', dact_title: '¿Qué haces antes de la próxima carrera?', dact_subtitle: 'Elige una: cada una tiene efectos distintos.',
     dact_training: 'Entrenamiento', dact_training_desc: 'Enfoque en el crecimiento personal. Te acerca al próximo punto de Rating, sin efecto en Fama o Reputación.',
     dact_simulator: 'Simulador y Análisis de Datos', dact_simulator_desc: 'Trabajas con los ingenieros: te acerca al próximo punto de Rating y mejora ligeramente la Reputación.',
@@ -941,7 +941,7 @@ const I18N = {
     dh_rating: 'RATING', dh_fama: 'FAMA', dh_reputazione: 'REPUTACIÓN',
     dh_teammate_title: 'Tú vs Compañero de Equipo', dh_you: 'TÚ', dh_teammate: 'COMPAÑERO',
     dh_rivalry_low: 'rivalidad baja', dh_rivalry_mid: 'rivalidad creciente', dh_rivalry_high: 'rivalidad intensa',
-    dse2_title: '🏁 Temporada terminada', dse2_final_pos: (p)=>`Posición final: P${p}`,
+    dse2_title: '<img class=ico src=assets/icons/checkered_flag.png> Temporada terminada', dse2_final_pos: (p)=>`Posición final: P${p}`,
     dse2_stats: (pts,w,pod)=>`${pts} puntos · ${w} victorias · ${pod} podios`,
     dse2_prestige_gained: (n)=>`+${n} puntos de prestigio ganados`, dse2_prestige_total: (n)=>`Prestigio total: ${n}`,
     dse2_new_age: (e)=>`Ahora tienes ${e} años.`, dse2_world_title: 'El mundo sigue moviéndose',
@@ -976,7 +976,7 @@ const I18N = {
     promo_banner_tagline: 'Estudio pequeño, juegos fuera de escala', promo_banner_cta: 'Saber más ↗',
     se_fs_title: "¿Te está gustando?", se_fs_body: "Este es el primer juego de FUORISCALA, un estudio independiente muy pequeño. Pásate a vernos — un clic, cero compromiso, y nos ayudas a hacer el próximo.",
     se_fs_cta: "Descubre FUORISCALA ↗",
-    share_trophy_title: '🏆 SALA DE TROFEOS', share_trophy_stats: (r,t,w)=>`${r}/${t} circuitos disputados  ·  ${w}/${t} ganados`,
+    share_trophy_title: '<img class=ico src=assets/icons/trophy.png> SALA DE TROFEOS', share_trophy_stats: (r,t,w)=>`${r}/${t} circuitos disputados  ·  ${w}/${t} ganados`,
     share_world_champion: 'CAMPEÓN DEL MUNDO', share_drivers_title: (team)=>`${team} — Título de Pilotos`,
     share_season_over: (pos)=>`Temporada terminada — P${pos} Constructores`, share_full_season: 'Temporada Completa (20 carreras)',
     share_quick_season: 'Temporada Rápida (10 carreras)', share_manager_tag: 'ROGUELIKE GP MANAGER',
@@ -990,7 +990,7 @@ const I18N = {
     pg_rain_expected: 'Lluvia prevista', pg_rain_risk: (p)=>`Riesgo de lluvia ${p}%`, pg_dry_track: 'Pista seca',
     pg_rating_gap: 'Diferencia de Rating con el Rival', pg_main_rival: 'Rival principal', pg_none_yet: 'Todavía ninguna',
     pg_lineup: (team)=>`Alineación — ${team}`, pg_team_rating: 'Rating del Equipo', pg_weather_forecast: 'Previsión Meteorológica',
-    pg_go_to_race: 'Ir a la Carrera →', pg_details_toggle: '🔍 Detalles — componentes, estadísticas, parrilla completa',
+    pg_go_to_race: 'Ir a la Carrera →', pg_details_toggle: '<img class=ico src=assets/icons/search.png> Detalles — componentes, estadísticas, parrilla completa',
     cat_aero_pack: 'Paquete Aerodinámico', cat_tire_supplier: 'Proveedor de Neumáticos',
     pcard_guaranteed: 'MEJORA GARANTIZADA', pcard_development: 'DESARROLLO', pcard_cost: 'Coste', pcard_no_risk: 'Sin riesgo',
     pitlane_extra_card_banner: (nome)=>`Disponible gracias a ${nome}`, pcard_discount_thanks: (nome)=>`Discount powered by ${nome}`,
@@ -1023,26 +1023,26 @@ const I18N = {
     upg_no_gain: 'Sin ganancia esta vez.', upg_gain_global: (n)=>`+${n} RATING repartido en todo el coche`,
     upg_gain_area: (n,a)=>`+${n} RATING en ${a}`, upg_continue: 'Continuar →',
     upcoming_title: 'Próximos Circuitos', upcoming_most_useful: 'COMPONENTE MÁS ÚTIL', upcoming_next: 'PRÓXIMA', upcoming_race: (n)=>`CARRERA ${n}`,
-    museum_title: '🏛️ Museo Dynasty', museum_tagline: 'Cada piloto y componente llevado hasta el final de una temporada, o sustituido por el camino, se queda aquí para siempre.',
+    museum_title: '<img class=ico src=assets/icons/temple.png>️ Museo Dynasty', museum_tagline: 'Cada piloto y componente llevado hasta el final de una temporada, o sustituido por el camino, se queda aquí para siempre.',
     museum_completion: 'COMPLETADO', museum_back: '← Volver', museum_drivers: 'Pilotos', museum_components: 'Componentes',
     museum_no_drivers: 'Todavía no has desbloqueado ningún piloto: llévalo hasta el final de una temporada, o sustitúyelo, para empezar la colección.',
     museum_no_components: 'Todavía no has desbloqueado ningún componente.',
-    tr_title: '🏆 Sala de Trofeos', tr_tagline: 'Un trofeo por cada circuito — dorado si ganado, gris si disputado, oculto si aún no visto.',
-    tr_raced: 'CIRCUITOS DISPUTADOS', tr_won: 'CIRCUITOS GANADOS', tr_share: '📤 Compartir Sala de Trofeos', tr_museum_btn: '🏛️ Museo Dynasty', tr_back: '← Volver',
+    tr_title: '<img class=ico src=assets/icons/trophy.png> Sala de Trofeos', tr_tagline: 'Un trofeo por cada circuito — dorado si ganado, gris si disputado, oculto si aún no visto.',
+    tr_raced: 'CIRCUITOS DISPUTADOS', tr_won: 'CIRCUITOS GANADOS', tr_share: '<img class=ico src=assets/icons/upload.png> Compartir Sala de Trofeos', tr_museum_btn: '<img class=ico src=assets/icons/temple.png>️ Museo Dynasty', tr_back: '← Volver',
     tr_unlock_first: '¡TROFEO DESBLOQUEADO!', tr_unlock_nth: (n)=>`${n}ª VICTORIA EN ESTE CIRCUITO`, tr_unlock_title: '¡VICTORIA!', tr_unlock_continue: 'Continuar →',
     tr_detail_participations: 'Participaciones', tr_detail_wins: 'Victorias', tr_detail_never: 'Aún no corrido aquí', tr_detail_close: 'Cerrar',
-    mss_eyebrow: (r,tot)=>`🏁 MID SEASON DRAFT — Carrera ${r}/${tot}`, mss_title: 'La única ventana de mercado de pilotos de la temporada',
+    mss_eyebrow: (r,tot)=>`<img class=ico src=assets/icons/checkered_flag.png> MID SEASON DRAFT — Carrera ${r}/${tot}`, mss_title: 'La única ventana de mercado de pilotos de la temporada',
     mss_subtitle: 'Puedes sustituir a ninguno, a uno solo, o a ambos pilotos: la elección es independiente para cada asiento y sigue siendo válida hasta la última carrera. Sin riesgo: si pagas el precio de scouting, obtienes al piloto. A partir de aquí, durante el resto de la temporada, los pilotos quedan fijos — el desarrollo de componentes se reanuda con normalidad desde el próximo pit lane.',
     mss_pilot_main: 'Piloto Principal', mss_pilot_second: 'Segundo Piloto', mss_confirm: 'Confirmar Elecciones y Continuar →',
     rcs_beat_single: (n)=>`Has vencido a tu rival, ${n}.`, rcs_lost_single: (n)=>`${n} te ha vencido en la clasificación.`,
     rcs_tied: 'Has terminado empatado con tu rival.', rcs_beat_all: (n)=>`Has vencido a todas tus rivales (${n}).`,
     rcs_lost_all: (n)=>`Tus rivales te han vencido a todas (${n}).`, rcs_mixed: (b,l)=>`Has vencido a ${b}, pero has perdido contra ${l}.`,
-    se_doppietta_pill: 'GRAN SLAM', se_doppietta_title: '🏆🏆 DOBLE TÍTULO MUNDIAL',
-    se_driver_champ_pill: 'CAMPEÓN DE PILOTOS', se_driver_champ_title: '🏆 CAMPEÓN DEL MUNDO DE PILOTOS',
-    se_constr_champ_pill: 'CAMPEÓN DE CONSTRUCTORES', se_constr_champ_title: '🏆 CAMPEÓN DEL MUNDO DE CONSTRUCTORES',
+    se_doppietta_pill: 'GRAN SLAM', se_doppietta_title: '<img class=ico src=assets/icons/trophy.png><img class=ico src=assets/icons/trophy.png> DOBLE TÍTULO MUNDIAL',
+    se_driver_champ_pill: 'CAMPEÓN DE PILOTOS', se_driver_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPEÓN DEL MUNDO DE PILOTOS',
+    se_constr_champ_pill: 'CAMPEÓN DE CONSTRUCTORES', se_constr_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPEÓN DEL MUNDO DE CONSTRUCTORES',
     se_end_pill: 'FIN DE TEMPORADA', se_end_top3: (n,p)=>`Enhorabuena, ${n} ha terminado P${p}`, se_end_other: (n,p)=>`${n} cierra la temporada en P${p}`,
     se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} cierra la temporada con ${pts} puntos totales, ${wins} victorias, ${pod} podios y ${dnf} retiros en ${tot} carreras. Presupuesto restante: ${budget}.`,
-    se_new_career: 'Nueva Carrera', se_share: '📤 Compartir Resultado', se_your_drivers: 'Tus Pilotos',
+    se_new_career: 'Nueva Carrera', se_share: '<img class=ico src=assets/icons/upload.png> Compartir Resultado', se_your_drivers: 'Tus Pilotos',
     se_pilot1: (n)=>`Piloto #1 — ${n}`, se_pilot2: (n)=>`Piloto #2 — ${n}`, se_drivers_pos: (p)=>`Posición de Pilotos: P${p}`,
     se_stats: (pts,wins,pod,dnf)=>`${pts} puntos · ${wins} victorias · ${pod} podios · ${dnf} retiros`,
     se_team_constr_pos: (team,pos)=>`Escudería <b>${team}</b> — Posición de Constructores: <b style="color:var(--cyan);">P${pos}</b>`,
@@ -1063,12 +1063,12 @@ const I18N = {
     race_result_you_badge: 'TÚ', race_result_rival_badge: 'RIVAL', race_result_no_events: 'Sin eventos destacables en este Gran Premio.',
     race_result_title: (n,tot)=>`Resultado Gran Premio ${n}/${tot}`, race_result_continue: 'Continuar →',
     prize_panel_title: 'Ganancias del Gran Premio', prize_collect_btn: 'Cobrar', prize_collect_continue_btn: 'Cobrar y continuar', prize_collected_btn: 'Cobrado ✓', prize_powered_by: (nome)=>`powered by ${nome}`,
-    race_result_why: '❓ Por qué has terminado así', race_result_finish_order: 'Orden de Llegada', race_result_20_drivers: '20 PILOTOS',
+    race_result_why: '<img class=ico src=assets/icons/question.png> Por qué has terminado así', race_result_finish_order: 'Orden de Llegada', race_result_20_drivers: '20 PILOTOS',
     race_result_th_pos: 'Pos', race_result_th_num: '#', race_result_th_driver: 'Piloto', race_result_th_team: 'Escudería', race_result_th_points: 'Puntos',
     race_result_event_log: 'Registro de Eventos de Carrera', race_result_show_full_log: (n)=>`Mostrar registro completo de la carrera (${n} eventos)`,
     rival_ahead: (n)=>`+${n} por delante`, rival_behind: (n)=>`${n} por recuperar`, rival_tied: 'empatado',
     rival_you_badge: 'TÚ', rival_constructor_points: 'puntos de constructores · fuerza',
-    rival_title_initial: '🎯 Tu Rivalidad', rival_title_new: '↗ Nueva Rivalidad',
+    rival_title_initial: '<img class=ico src=assets/icons/target.png> Tu Rivalidad', rival_title_new: '↗ Nueva Rivalidad',
     rival_subtitle_initial_plural: 'Según la fuerza de tu escudería, estas son tus escuderías rivales. Vencerlas es el primer objetivo de la temporada, incluso antes que el título.',
     rival_subtitle_initial_single: 'Según la fuerza de tu escudería, esta es tu escudería rival. Vencerla es el primer objetivo de la temporada, incluso antes que el título.',
     rival_subtitle_new: (names)=>`Has superado a ${names}: ya no hay partida con ellos.`,
@@ -1083,14 +1083,14 @@ const I18N = {
     sponsor_team_overview_toggle: 'Resumen del equipo',
     sponsor_headline: '¿Quién te acompaña este año?', sponsor_subtitle: 'La elección vale para toda la temporada y no se puede cambiar a mitad de camino.',
     naming_title: 'Ponle nombre a tu escudería', naming_optional: 'Opcional — si lo dejas vacío usaremos un nombre automático (ej. "Dynasty Racing").',
-    naming_placeholder: 'Ej. Nova Racing Team', naming_inspire: '🎲 Inspirar la escudería', naming_nation: 'Nacionalidad de la Escudería',
+    naming_placeholder: 'Ej. Nova Racing Team', naming_inspire: '<img class=ico src=assets/icons/dice.png> Inspirar la escudería', naming_nation: 'Nacionalidad de la Escudería',
     naming_confirm: 'Confirmar y empezar el Draft →',
     sl_choose: 'Elige la duración de la temporada', sl_subtitle: 'Un toque y pasas a elegir la dificultad.',
     sl_quick: 'TEMPORADA RÁPIDA', sl_quick_desc: 'El formato clásico: 10 Grandes Premios, pit lane completo (mejoras y scouting, piloto incluido) en cada carrera.', sl_quick_hint: 'Toca para elegir — Temporada Rápida',
     sl_full: 'TEMPORADA COMPLETA', sl_full_desc: 'El doble de Grandes Premios. Las mejoras de componentes siguen disponibles como siempre, pero el Segundo Piloto se puede cambiar una sola vez, en una ventana dedicada entre la carrera 10 y la 11.', sl_full_hint: 'Toca para elegir — Temporada Completa',
     sl_trophy_room: 'SALA DE TROFEOS', sl_raced: 'DISPUTADOS', sl_won: 'GANADOS', sl_trophy_desc: 'Un trofeo por cada circuito del mundo — revive tus victorias y descubre cuántos faltan para la colección completa.', sl_trophy_hint: 'Toca para abrir — Sala de Trofeos',
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETADO', sl_museum_desc: 'Pilotos y componentes llevados hasta el final de una temporada, o sustituidos por el camino, se quedan aquí para siempre.', sl_museum_hint: 'Toca para abrir — Museo Dynasty',
-    sl_garage: 'GARAGE', sl_garage_desc: 'Personaliza la librea del chasis con patrones desbloqueables completando logros.', sl_garage_soon: '🔒 PRÓXIMAMENTE',
+    sl_garage: 'GARAGE', sl_garage_desc: 'Personaliza la librea del chasis con patrones desbloqueables completando logros.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PRÓXIMAMENTE',
     diff_new_career: 'Nueva Carrera', diff_choose: 'Elige la dificultad',
     diff_subtitle: 'Solo afecta a los rerolls disponibles en el draft — un toque y empiezas.',
     diff_last_used: ' · última usada', diff_tap_hint: (l)=>`Toca para empezar — ${l}`,
@@ -1106,22 +1106,22 @@ const I18N = {
     hub_next_gp: 'Próximo Gran Premio', hub_rain: 'Lluvia', hub_safety_car: 'Safety Car',
     hub_overtake: 'Adelantamiento', hub_degradation: 'Degradación', hub_team_strength: 'FUERZA DE ESCUDERÍA (P1/P2)',
     hub_pos_drivers: 'POS. PILOTOS', hub_pos_constructors: 'POS. CONSTRUCTORES', hub_go_to_gp: 'Ir al Gran Premio →',
-    hub_rivalry: '🏆 Rivalidad', hub_calendar: '🗓️ Calendario de Temporada', hub_race_word: 'CARRERA',
-    hub_your_team: '🏎️ Tu Escudería', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento especial',
+    hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalidad', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Calendario de Temporada', hub_race_word: 'CARRERA',
+    hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Tu Escudería', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento especial',
     hub_weather: 'Clima', comp_driver1: 'Piloto #1', comp_driver2: 'Piloto #2', comp_engine: 'Motor',
     comp_chassis: 'Chasis', comp_aero: 'Aerodinámica', comp_tires: 'Neumáticos', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
-    title_continue: '▶ Continuar Temporada', title_new: 'Nueva Temporada', title_delete: '🗑 Borrar Partida',
-    title_cta: '🏁 Elige tu desafío y sal a pista — ', title_cta_bold: 'toca para empezar',
+    title_continue: '▶ Continuar Temporada', title_new: 'Nueva Temporada', title_delete: '<img class=ico src=assets/icons/trash.png> Borrar Partida',
+    title_cta: '<img class=ico src=assets/icons/checkered_flag.png> Elige tu desafío y sal a pista — ', title_cta_bold: 'toca para empezar',
     menu_new_career: 'Nueva Partida', menu_trophy_room: 'Sala de Trofeos — Escudería', menu_driver_trophy_room: 'Sala de Trofeos — Piloto', menu_museum: 'Museo Dynasty', menu_guide: 'Guía',
     menu_new_run: 'Nueva Partida', menu_new_run_confirm: '¿Seguro que quieres abandonar la partida actual y empezar de nuevo? El progreso no guardado se perderá.',
     menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos',
     menu_fullscreen: 'Pantalla Completa', menu_language: 'Idioma',
-    settings_title: '⚙️ Ajustes', settings_sfx_vol: 'Volumen de Efectos', settings_music_vol: 'Volumen de Música',
+    settings_title: '<img class=ico src=assets/icons/gear.png>️ Ajustes', settings_sfx_vol: 'Volumen de Efectos', settings_music_vol: 'Volumen de Música',
     settings_haptic: 'Vibración', settings_speed: 'Velocidad de Carrera Predeterminada', settings_decision_timer: 'Cuenta Atrás de Decisiones',
     settings_export: 'Exportar Partida (.json)', settings_import: 'Importar Partida (.json)', settings_install: 'Instalar la App',
     settings_reset: 'Restablecer Todo (Primera Apertura)', on: 'Activado', off: 'Desactivado',
-    credits_title: '🏢 Créditos', credits_tagline: 'Estudio pequeño. Juegos fuera de escala.',
+    credits_title: '<img class=ico src=assets/icons/building.png> Créditos', credits_tagline: 'Estudio pequeño. Juegos fuera de escala.',
     credits_first_game: 'El primer juego de FUORISCALA', credits_dev: 'Desarrollado y publicado por',
     credits_created: 'Creado por',
     hud_reroll: 'Reroll', hud_budget: 'Presupuesto', hud_sponsor: 'Patrocinador', hud_race: 'Carrera',
@@ -1644,11 +1644,11 @@ function showInstallPitchCard(){
   overlay.className = 'install-pitch-overlay';
   overlay.innerHTML = `
     <div class="install-pitch-card">
-      <div class="install-pitch-emoji">🏁</div>
+      <div class="install-pitch-emoji"><img class=ico src=assets/icons/checkered_flag.png></div>
       <div class="install-pitch-title">Ti sta piacendo Racing Dynasty?</div>
       <div class="install-pitch-body">Installalo sul tuo dispositivo: si apre come un'app vera, a schermo intero, con un'icona tutta sua — niente barra del browser, niente da digitare.</div>
       <div class="install-pitch-actions">
-        <button class="button primary" id="installPitchYes">📲 Installalo sul tuo dispositivo</button>
+        <button class="button primary" id="installPitchYes"><img class=ico src=assets/icons/mobile.png> Installalo sul tuo dispositivo</button>
         <button class="install-pitch-dismiss" id="installPitchNo">Magari dopo</button>
       </div>
     </div>`;
@@ -3807,7 +3807,7 @@ function buildPhaseLog(t, timeline){
   const dnfCausingEvents = new Set();
   (timeline.eventsByPhase[t]||[]).forEach(({slotKey,event,causedDnf})=>{
     const e = byKey[slotKey];
-    const emo = EVENT_EMOJI[event.categoria] || '⚠️';
+    const emo = EVENT_EMOJI[event.categoria] || '<img class=ico src=assets/icons/warning.png>️';
     const evNameLoc = evName(event.nome);
     if(causedDnf){
       dnfCausingEvents.add(slotKey);
@@ -3822,13 +3822,13 @@ function buildPhaseLog(t, timeline){
 
   entries.forEach(e=>{
     if(timeline.retiredAtPhase[e.slotKey]===t && !dnfCausingEvents.has(e.slotKey)){
-      lines.push({ tone:'neg', imp:true, sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`🔧 ${L} ${giro} — ${window.t('race_retirement', shortName(e.driverName), e.teamName)}${e.isPlayerTeam?window.t('race_your_driver_bang'):''}` });
+      lines.push({ tone:'neg', imp:true, sfx: e.isPlayerTeam?'dnf_crash':undefined, text:`<img class=ico src=assets/icons/wrench.png> ${L} ${giro} — ${window.t('race_retirement', shortName(e.driverName), e.teamName)}${e.isPlayerTeam?window.t('race_your_driver_bang'):''}` });
     }
   });
 
   if(t===timeline.safetyCarPhase) lines.push({ tone:'neu', imp:true, sfx:'safety_car', text:`${EMOJI_SAFETYCAR} ${L} ${giro} — ${window.t('race_safety_car_track')}` });
   if(timeline.safetyCarPhase!==null && t===timeline.safetyCarPhase+1) lines.push({ tone:'neu', text:`🟢 ${L} ${giro} — ${window.t('race_restart')}` });
-  if(t===timeline.weatherChangePhase) lines.push({ tone:'neu', imp:true, sfx: timeline.weatherAfter==='Bagnato'?'rain_start':undefined, text:`${timeline.weatherAfter==='Bagnato'?EMOJI_RAIN:'☀️'} ${L} ${giro} — ${window.t('race_weather_change', timeline.weatherAfter==='Bagnato'?window.t('weather_wet'):window.t('weather_dry'))}` });
+  if(t===timeline.weatherChangePhase) lines.push({ tone:'neu', imp:true, sfx: timeline.weatherAfter==='Bagnato'?'rain_start':undefined, text:`${timeline.weatherAfter==='Bagnato'?EMOJI_RAIN:'<img class=ico src=assets/icons/sun.png>️'} ${L} ${giro} — ${window.t('race_weather_change', timeline.weatherAfter==='Bagnato'?window.t('weather_wet'):window.t('weather_dry'))}` });
   if(timeline.pitByPhase[t] && timeline.pitByPhase[t].size>0){
     const playerPitting = (timeline.pitByPhase[t].has('PLAYER-1') || timeline.pitByPhase[t].has('PLAYER-2'));
     lines.push({ tone:'neu', sfx: playerPitting?'pit_stop':undefined, text:`${EMOJI_TIRE} ${L} ${giro} — ${window.t('race_pit_wave')}` });
@@ -3963,7 +3963,7 @@ function renderPedalTutorial(){
   app.innerHTML = `
   ${topbarHTML()}
   <div class="panel pedal-tutorial-panel">
-    <div class="eyebrow">🚦 ${t('pedal_tutorial_eyebrow')}</div>
+    <div class="eyebrow"><img class=ico src=assets/icons/traffic_light.png> ${t('pedal_tutorial_eyebrow')}</div>
     <h2 class="hdr" style="font-size:22px;">${t('pedal_tutorial_title')}</h2>
     <div class="dim" style="font-size:13px;margin-top:8px;line-height:1.5;">${t('pedal_tutorial_desc')}</div>
     <div class="pedal-tutorial-rows">
@@ -4345,15 +4345,15 @@ function computeLiveDecisions(timeline){
 const LIVE_DECISION_INFO_EN = {
   weather: { title:'The weather is changing', question:"Track conditions are changing right now. What do you do?",
     choices:[
-      { key:'box', label:'🛞 Change tires now', desc:'Risky: pull off the undercut and you gain ground, get it wrong and you lose positions.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Change tires now', desc:'Risky: pull off the undercut and you gain ground, get it wrong and you lose positions.' },
       { key:'stay', label:'⏳ Stay out one more lap', desc:'Risky, but you gain if the weather helps you.' },
-      { key:'splitstrategy', label:'🔀 Split strategies', desc:'One driver pits, the other stays out: cover both options.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver pits, the other stays out: cover both options.' },
     ]},
   safetycar: { title:'Safety Car on track', question:'The field bunches up. Do you take advantage?',
     choices:[
-      { key:'box', label:'🔧 Pit now', desc:'The undercut can pay off big, but get it wrong and you lose positions in traffic.' },
-      { key:'stay', label:'🚦 Stay out', desc:"Keep your position, but you'll have to stop later under normal conditions." },
-      { key:'restart', label:'⚡ Aggressive restart', desc:'Risk it all at the restart to gain positions immediately.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Pit now', desc:'The undercut can pay off big, but get it wrong and you lose positions in traffic.' },
+      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Stay out', desc:"Keep your position, but you'll have to stop later under normal conditions." },
+      { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Aggressive restart', desc:'Risk it all at the restart to gain positions immediately.' },
     ]},
   pit: { title:'Pit window', question:'When do you want to stop?',
     choices:[
@@ -4362,92 +4362,92 @@ const LIVE_DECISION_INFO_EN = {
     ]},
   aggression: { title:'Mid-race', question:'How do you want to approach this phase?',
     choices:[
-      { key:'aggressive', label:'🔥 Push', desc:'More chances to overtake, but more risk and wear.' },
-      { key:'safe',       label:'🛡️ Manage', desc:'Safer, but you stay where you are.' },
+      { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Push', desc:'More chances to overtake, but more risk and wear.' },
+      { key:'safe',       label:'<img class=ico src=assets/icons/shield.png>️ Manage', desc:'Safer, but you stay where you are.' },
     ]},
   teamorders: { title:'Team orders', question:'Your two drivers are close in the standings. What do you do?',
     choices:[
-      { key:'hold', label:'🤝 Hold position', desc:'No internal fight: safe, but no gain.' },
-      { key:'free', label:'⚔️ Let them race', desc:'Guaranteed show, but risk they damage each other.' },
+      { key:'hold', label:'<img class=ico src=assets/icons/handshake.png> Hold position', desc:'No internal fight: safe, but no gain.' },
+      { key:'free', label:'<img class=ico src=assets/icons/crossed_swords.png>️ Let them race', desc:'Guaranteed show, but risk they damage each other.' },
     ]},
   defend: { title:'A rival attacks you', question:"You've got an opponent behind you. How do you respond?",
     choices:[
-      { key:'defend',  label:'🛑 Defend firmly', desc:'Hold your position, but risk contact.' },
+      { key:'defend',  label:'<img class=ico src=assets/icons/stop.png> Defend firmly', desc:'Hold your position, but risk contact.' },
       { key:'letpass', label:'🟢 Let them by cleanly', desc:'Lose a position, but the race stays clean.' },
     ]},
   enginemode: { title:'Engine mode', question:'Do you want to push the engine beyond normal limits?',
     choices:[
-      { key:'push', label:'⚙️ Push mode', desc:'More pace, but more risk of failure.' },
-      { key:'save', label:'🔋 Conservative mode', desc:'Engine stays safe, but less performance.' },
+      { key:'push', label:'<img class=ico src=assets/icons/gear.png>️ Push mode', desc:'More pace, but more risk of failure.' },
+      { key:'save', label:'<img class=ico src=assets/icons/battery.png> Conservative mode', desc:'Engine stays safe, but less performance.' },
     ]},
   mechanical: { title:'Mechanical alarm', question:'A component is showing signs of failure. What do you do?',
     choices:[
-      { key:'nurse', label:'🩹 Nurse it carefully', desc:'Lose pace, but reduce retirement risk.' },
-      { key:'push',  label:'🔥 Keep pushing', desc:'No compromise, but you risk retiring.' },
+      { key:'nurse', label:'<img class=ico src=assets/icons/bandage.png> Nurse it carefully', desc:'Lose pace, but reduce retirement risk.' },
+      { key:'push',  label:'<img class=ico src=assets/icons/fire.png> Keep pushing', desc:'No compromise, but you risk retiring.' },
     ]},
   overtakedesperate: { title:'Overtaking chance', question:'The rival ahead hesitates for a moment. Do you risk everything to pass?',
     choices:[
-      { key:'try_overtake_desperate', label:'🎲 Try the desperate overtake', desc:'All or nothing: you could fly past or end up off track.' },
-      { key:'give_up_attack', label:'🛡️ Give up and manage', desc:'No risk, but the chance is gone.' },
+      { key:'try_overtake_desperate', label:'<img class=ico src=assets/icons/dice.png> Try the desperate overtake', desc:'All or nothing: you could fly past or end up off track.' },
+      { key:'give_up_attack', label:'<img class=ico src=assets/icons/shield.png>️ Give up and manage', desc:'No risk, but the chance is gone.' },
     ]},
   fuelgamble: { title:'Fuel gamble', question:'You could lighten the fuel load for extra pace. Do you try it?',
     choices:[
-      { key:'lighten_fuel', label:'⛽ Lighten the fuel load', desc:'All or nothing: much faster, but you risk running dry.' },
-      { key:'stay_conservative_fuel', label:'🛡️ Stay conservative', desc:'No risk, unchanged pace.' },
+      { key:'lighten_fuel', label:'<img class=ico src=assets/icons/fuel.png> Lighten the fuel load', desc:'All or nothing: much faster, but you risk running dry.' },
+      { key:'stay_conservative_fuel', label:'<img class=ico src=assets/icons/shield.png>️ Stay conservative', desc:'No risk, unchanged pace.' },
     ]},
   rivalmistake: { title:'The rival makes a mistake', question:'The car ahead just made an error. What do you do?',
     choices:[
-      { key:'attack_now', label:'⚡ Attack immediately', desc:"Capitalize while it lasts, but you risk pushing too hard." },
-      { key:'wait_confirm', label:'👀 Wait for confirmation', desc:'Safer, smaller but nearly guaranteed gain.' },
+      { key:'attack_now', label:'<img class=ico src=assets/icons/lightning.png> Attack immediately', desc:"Capitalize while it lasts, but you risk pushing too hard." },
+      { key:'wait_confirm', label:'<img class=ico src=assets/icons/eyes.png> Wait for confirmation', desc:'Safer, smaller but nearly guaranteed gain.' },
     ]},
   trackliminvestigation: { title:'Track limits under investigation', question:'Stewards are watching track limits. What do you do?',
     choices:[
-      { key:'push_limit', label:'🔥 Keep pushing the limit', desc:'More pace, but you risk a penalty.' },
-      { key:'play_safe_limit', label:'🛡️ Stay within safe margins', desc:'No risk, no gain.' },
+      { key:'push_limit', label:'<img class=ico src=assets/icons/fire.png> Keep pushing the limit', desc:'More pace, but you risk a penalty.' },
+      { key:'play_safe_limit', label:'<img class=ico src=assets/icons/shield.png>️ Stay within safe margins', desc:'No risk, no gain.' },
     ]},
   wheeltowheel: { title:'Wheel to wheel', question:"You're side by side with a rival in the corner. What do you do?",
     choices:[
-      { key:'hold_line', label:"🛑 Don't give up the space", desc:'You could hold them off, but risk contact.' },
+      { key:'hold_line', label:"<img class=ico src=assets/icons/stop.png> Don't give up the space", desc:'You could hold them off, but risk contact.' },
       { key:'give_room', label:'🟢 Give room', desc:'You lose a position, but the race stays clean.' },
     ]},
   doubleyellow: { title:'Double yellow flag', question:'Double yellow waved in your sector. What do you do?',
     choices:[
-      { key:'slow_down_yellow', label:'🐢 Slow down as required', desc:'No risk, no gain.' },
-      { key:'risk_pace_yellow', label:'🔥 Risk the pace anyway', desc:"You could gain, but a penalty is just around the corner." },
+      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Slow down as required', desc:'No risk, no gain.' },
+      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Risk the pace anyway', desc:"You could gain, but a penalty is just around the corner." },
     ]},
   engineersadvice: { title:'Advice from the engineers', question:'The pit wall suggests a setup tweak. Do you trust it?',
     choices:[
-      { key:'follow_advice', label:'📻 Follow the advice', desc:'Likely helps, low risk.' },
-      { key:'trust_instinct', label:'💪 Trust your instinct', desc:'You could gain more, but it\'s less certain.' },
+      { key:'follow_advice', label:'<img class=ico src=assets/icons/radio.png> Follow the advice', desc:'Likely helps, low risk.' },
+      { key:'trust_instinct', label:'<img class=ico src=assets/icons/muscle.png> Trust your instinct', desc:'You could gain more, but it\'s less certain.' },
     ]},
   finalpush: { title:'Final push', question:'A few laps to go. Do you risk everything for the result?',
     choices:[
-      { key:'all_or_nothing_push', label:'🎲 All or nothing', desc:"The race's defining moment: big reward or big risk." },
-      { key:'bring_home', label:'🏁 Bring the result home', desc:'No risk, position is safe.' },
+      { key:'all_or_nothing_push', label:'<img class=ico src=assets/icons/dice.png> All or nothing', desc:"The race's defining moment: big reward or big risk." },
+      { key:'bring_home', label:'<img class=ico src=assets/icons/checkered_flag.png> Bring the result home', desc:'No risk, position is safe.' },
     ]},
   backmarkertraffic: { title:'Backmarker traffic', question:'A slow backmarker is ahead of you. What do you do?',
     choices:[
-      { key:'overtake_backmarker', label:'⚡ Pass immediately', desc:'Quick gain, but you risk a mistake in the move.' },
+      { key:'overtake_backmarker', label:'<img class=ico src=assets/icons/lightning.png> Pass immediately', desc:'Quick gain, but you risk a mistake in the move.' },
       { key:'wait_for_space', label:'⏳ Wait for a clean gap', desc:'Slower, but safer.' },
     ]},
   brakebite: { title:'Brakes at the limit', question:'The brakes are running hotter than normal. What do you do?',
     choices:[
-      { key:'push_brakes', label:'🔥 Squeeze the brakes to the end', desc:'More pace, but you risk locking up.' },
-      { key:'manage_brakes', label:'🩹 Manage the braking', desc:'No risk, unchanged pace.' },
+      { key:'push_brakes', label:'<img class=ico src=assets/icons/fire.png> Squeeze the brakes to the end', desc:'More pace, but you risk locking up.' },
+      { key:'manage_brakes', label:'<img class=ico src=assets/icons/bandage.png> Manage the braking', desc:'No risk, unchanged pace.' },
     ]},
 };
 const LIVE_DECISION_INFO_ES = {
   weather: { title:'El clima está cambiando', question:'Las condiciones de pista cambian justo ahora. ¿Qué haces?',
     choices:[
-      { key:'box', label:'🛞 Cambia neumáticos ya', desc:'Arriesgado: si el undercut sale bien ganas terreno, si no pierdes posiciones.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Cambia neumáticos ya', desc:'Arriesgado: si el undercut sale bien ganas terreno, si no pierdes posiciones.' },
       { key:'stay', label:'⏳ Sigue una vuelta más', desc:'Arriesgas, pero ganas si el clima te ayuda.' },
-      { key:'splitstrategy', label:'🔀 Divide las estrategias', desc:'Un piloto entra, el otro sigue fuera: cubres ambas opciones.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto entra, el otro sigue fuera: cubres ambas opciones.' },
     ]},
   safetycar: { title:'Safety Car en pista', question:'El pelotón se compacta. ¿Lo aprovechas?',
     choices:[
-      { key:'box', label:'🔧 Entra a boxes', desc:'El undercut puede salir muy bien, pero si falla pierdes posiciones en el tráfico.' },
-      { key:'stay', label:'🚦 Sigue en pista', desc:'Mantienes la posición, pero tendrás que parar después en condiciones normales.' },
-      { key:'restart', label:'⚡ Reinicio agresivo', desc:'Arriesgas todo en la reanudación para ganar posiciones de inmediato.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra a boxes', desc:'El undercut puede salir muy bien, pero si falla pierdes posiciones en el tráfico.' },
+      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Sigue en pista', desc:'Mantienes la posición, pero tendrás que parar después en condiciones normales.' },
+      { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Reinicio agresivo', desc:'Arriesgas todo en la reanudación para ganar posiciones de inmediato.' },
     ]},
   pit: { title:'Ventana de parada', question:'¿Cuándo quieres parar en boxes?',
     choices:[
@@ -4456,92 +4456,92 @@ const LIVE_DECISION_INFO_ES = {
     ]},
   aggression: { title:'Mitad de carrera', question:'¿Cómo quieres afrontar esta fase?',
     choices:[
-      { key:'aggressive', label:'🔥 Aprieta', desc:'Más posibilidades de adelantar, pero más riesgo y desgaste.' },
-      { key:'safe',       label:'🛡️ Gestiona', desc:'Más seguro, pero te quedas donde estás.' },
+      { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Aprieta', desc:'Más posibilidades de adelantar, pero más riesgo y desgaste.' },
+      { key:'safe',       label:'<img class=ico src=assets/icons/shield.png>️ Gestiona', desc:'Más seguro, pero te quedas donde estás.' },
     ]},
   teamorders: { title:'Órdenes de equipo', question:'Tus dos pilotos están cerca en la clasificación. ¿Qué haces?',
     choices:[
-      { key:'hold', label:'🤝 Mantén la posición', desc:'Sin lucha interna: seguro, pero sin ganancia.' },
-      { key:'free', label:'⚔️ Déjalos luchar libremente', desc:'Espectáculo garantizado, pero riesgo de que se dañen entre ellos.' },
+      { key:'hold', label:'<img class=ico src=assets/icons/handshake.png> Mantén la posición', desc:'Sin lucha interna: seguro, pero sin ganancia.' },
+      { key:'free', label:'<img class=ico src=assets/icons/crossed_swords.png>️ Déjalos luchar libremente', desc:'Espectáculo garantizado, pero riesgo de que se dañen entre ellos.' },
     ]},
   defend: { title:'Un rival te ataca', question:'Tienes un adversario detrás. ¿Cómo respondes?',
     choices:[
-      { key:'defend',  label:'🛑 Defiende con decisión', desc:'Mantienes la posición, pero arriesgas un contacto.' },
+      { key:'defend',  label:'<img class=ico src=assets/icons/stop.png> Defiende con decisión', desc:'Mantienes la posición, pero arriesgas un contacto.' },
       { key:'letpass', label:'🟢 Déjalo pasar limpio', desc:'Pierdes una posición, pero la carrera sigue limpia.' },
     ]},
   enginemode: { title:'Modo motor', question:'¿Quieres exprimir el motor más de lo normal?',
     choices:[
-      { key:'push', label:'⚙️ Modo empuje', desc:'Más ritmo, pero más riesgo de avería.' },
-      { key:'save', label:'🔋 Modo conservador', desc:'Motor a salvo, pero menos rendimiento.' },
+      { key:'push', label:'<img class=ico src=assets/icons/gear.png>️ Modo empuje', desc:'Más ritmo, pero más riesgo de avería.' },
+      { key:'save', label:'<img class=ico src=assets/icons/battery.png> Modo conservador', desc:'Motor a salvo, pero menos rendimiento.' },
     ]},
   mechanical: { title:'Alarma mecánica', question:'Un componente muestra señales de fallo. ¿Qué haces?',
     choices:[
-      { key:'nurse', label:'🩹 Gestiona con cautela', desc:'Pierdes ritmo, pero reduces el riesgo de retirada.' },
-      { key:'push',  label:'🔥 Sigue apretando', desc:'Sin concesiones, pero arriesgas la retirada.' },
+      { key:'nurse', label:'<img class=ico src=assets/icons/bandage.png> Gestiona con cautela', desc:'Pierdes ritmo, pero reduces el riesgo de retirada.' },
+      { key:'push',  label:'<img class=ico src=assets/icons/fire.png> Sigue apretando', desc:'Sin concesiones, pero arriesgas la retirada.' },
     ]},
   overtakedesperate: { title:'Ocasión de adelantamiento', question:'El rival de delante duda un instante. ¿Arriesgas todo para pasarlo?',
     choices:[
-      { key:'try_overtake_desperate', label:'🎲 Intenta el adelantamiento desesperado', desc:'Todo o nada: puedes volar hacia adelante o irte fuera de pista.' },
-      { key:'give_up_attack', label:'🛡️ Renuncia y gestiona', desc:'Sin riesgo, pero la ocasión se esfuma.' },
+      { key:'try_overtake_desperate', label:'<img class=ico src=assets/icons/dice.png> Intenta el adelantamiento desesperado', desc:'Todo o nada: puedes volar hacia adelante o irte fuera de pista.' },
+      { key:'give_up_attack', label:'<img class=ico src=assets/icons/shield.png>️ Renuncia y gestiona', desc:'Sin riesgo, pero la ocasión se esfuma.' },
     ]},
   fuelgamble: { title:'Apuesta de combustible', question:'Podrías aligerar el depósito para ganar ritmo. ¿Lo intentas?',
     choices:[
-      { key:'lighten_fuel', label:'⛽ Aligera el depósito', desc:'Todo o nada: mucho más rápido, pero arriesgas quedarte sin combustible.' },
-      { key:'stay_conservative_fuel', label:'🛡️ Mantente prudente', desc:'Sin riesgo, ritmo sin cambios.' },
+      { key:'lighten_fuel', label:'<img class=ico src=assets/icons/fuel.png> Aligera el depósito', desc:'Todo o nada: mucho más rápido, pero arriesgas quedarte sin combustible.' },
+      { key:'stay_conservative_fuel', label:'<img class=ico src=assets/icons/shield.png>️ Mantente prudente', desc:'Sin riesgo, ritmo sin cambios.' },
     ]},
   rivalmistake: { title:'El rival se equivoca', question:'El coche de delante acaba de cometer un error. ¿Qué haces?',
     choices:[
-      { key:'attack_now', label:'⚡ Ataca de inmediato', desc:'Aprovecha mientras dure, pero arriesgas forzar demasiado.' },
-      { key:'wait_confirm', label:'👀 Espera confirmación', desc:'Más seguro, ganancia menor pero casi garantizada.' },
+      { key:'attack_now', label:'<img class=ico src=assets/icons/lightning.png> Ataca de inmediato', desc:'Aprovecha mientras dure, pero arriesgas forzar demasiado.' },
+      { key:'wait_confirm', label:'<img class=ico src=assets/icons/eyes.png> Espera confirmación', desc:'Más seguro, ganancia menor pero casi garantizada.' },
     ]},
   trackliminvestigation: { title:'Límites de pista bajo investigación', question:'Los comisarios vigilan los límites de pista. ¿Qué haces?',
     choices:[
-      { key:'push_limit', label:'🔥 Sigue apretando al límite', desc:'Más ritmo, pero arriesgas una penalización.' },
-      { key:'play_safe_limit', label:'🛡️ Mantente en márgenes seguros', desc:'Sin riesgo, sin ganancia.' },
+      { key:'push_limit', label:'<img class=ico src=assets/icons/fire.png> Sigue apretando al límite', desc:'Más ritmo, pero arriesgas una penalización.' },
+      { key:'play_safe_limit', label:'<img class=ico src=assets/icons/shield.png>️ Mantente en márgenes seguros', desc:'Sin riesgo, sin ganancia.' },
     ]},
   wheeltowheel: { title:'Rueda a rueda', question:'Estás lado a lado con un rival en la curva. ¿Qué haces?',
     choices:[
-      { key:'hold_line', label:'🛑 No cedas el espacio', desc:'Podrías mantenerlo atrás, pero arriesgas el contacto.' },
+      { key:'hold_line', label:'<img class=ico src=assets/icons/stop.png> No cedas el espacio', desc:'Podrías mantenerlo atrás, pero arriesgas el contacto.' },
       { key:'give_room', label:'🟢 Deja margen', desc:'Pierdes una posición, pero la carrera sigue limpia.' },
     ]},
   doubleyellow: { title:'Doble bandera amarilla', question:'Doble amarilla en tu sector. ¿Qué haces?',
     choices:[
-      { key:'slow_down_yellow', label:'🐢 Reduce como se pide', desc:'Sin riesgo, sin ganancia.' },
-      { key:'risk_pace_yellow', label:'🔥 Arriesga el ritmo de todos modos', desc:'Podrías ganar, pero una penalización está a la vuelta de la esquina.' },
+      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Reduce como se pide', desc:'Sin riesgo, sin ganancia.' },
+      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Arriesga el ritmo de todos modos', desc:'Podrías ganar, pero una penalización está a la vuelta de la esquina.' },
     ]},
   engineersadvice: { title:'Consejo de los ingenieros', question:'El muro te sugiere un ajuste de reglaje. ¿Confías?',
     choices:[
-      { key:'follow_advice', label:'📻 Sigue el consejo', desc:'Probablemente ayuda, riesgo bajo.' },
-      { key:'trust_instinct', label:'💪 Confía en tu instinto', desc:'Podrías ganar más, pero es más incierto.' },
+      { key:'follow_advice', label:'<img class=ico src=assets/icons/radio.png> Sigue el consejo', desc:'Probablemente ayuda, riesgo bajo.' },
+      { key:'trust_instinct', label:'<img class=ico src=assets/icons/muscle.png> Confía en tu instinto', desc:'Podrías ganar más, pero es más incierto.' },
     ]},
   finalpush: { title:'Último empujón', question:'Quedan pocas vueltas. ¿Te juegas todo por el resultado?',
     choices:[
-      { key:'all_or_nothing_push', label:'🎲 Todo o nada', desc:'El momento decisivo de la carrera: gran premio o gran riesgo.' },
-      { key:'bring_home', label:'🏁 Guarda el resultado', desc:'Sin riesgo, la posición está a salvo.' },
+      { key:'all_or_nothing_push', label:'<img class=ico src=assets/icons/dice.png> Todo o nada', desc:'El momento decisivo de la carrera: gran premio o gran riesgo.' },
+      { key:'bring_home', label:'<img class=ico src=assets/icons/checkered_flag.png> Guarda el resultado', desc:'Sin riesgo, la posición está a salvo.' },
     ]},
   backmarkertraffic: { title:'Tráfico de rezagados', question:'Tienes un rezagado lento delante. ¿Qué haces?',
     choices:[
-      { key:'overtake_backmarker', label:'⚡ Adelántalo de inmediato', desc:'Ganancia rápida, pero arriesgas un error en la maniobra.' },
+      { key:'overtake_backmarker', label:'<img class=ico src=assets/icons/lightning.png> Adelántalo de inmediato', desc:'Ganancia rápida, pero arriesgas un error en la maniobra.' },
       { key:'wait_for_space', label:'⏳ Espera el hueco adecuado', desc:'Más lento, pero más seguro.' },
     ]},
   brakebite: { title:'Frenos al límite', question:'Los frenos se calientan más de lo normal. ¿Qué haces?',
     choices:[
-      { key:'push_brakes', label:'🔥 Exprime los frenos hasta el final', desc:'Más ritmo, pero arriesgas un bloqueo.' },
-      { key:'manage_brakes', label:'🩹 Gestiona la frenada', desc:'Sin riesgo, ritmo sin cambios.' },
+      { key:'push_brakes', label:'<img class=ico src=assets/icons/fire.png> Exprime los frenos hasta el final', desc:'Más ritmo, pero arriesgas un bloqueo.' },
+      { key:'manage_brakes', label:'<img class=ico src=assets/icons/bandage.png> Gestiona la frenada', desc:'Sin riesgo, ritmo sin cambios.' },
     ]},
 };
 const LIVE_DECISION_INFO_IT_BASE = {
   weather: { title:'Il meteo sta cambiando', question:'Le condizioni di pista cambiano proprio ora. Che fai?',
     choices:[
-      { key:'box', label:'🛞 Cambia gomme subito', desc:'Rischioso: se l\'undercut riesce guadagni terreno, se va male perdi posizioni.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Cambia gomme subito', desc:'Rischioso: se l\'undercut riesce guadagni terreno, se va male perdi posizioni.' },
       { key:'stay', label:'⏳ Resta fuori un altro giro', desc:'Rischi, ma guadagni se il meteo ti aiuta.' },
-      { key:'splitstrategy', label:'🔀 Dividi le strategie', desc:'Un pilota entra, l\'altro resta fuori: copri entrambe le opzioni.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota entra, l\'altro resta fuori: copri entrambe le opzioni.' },
     ]},
   safetycar: { title:'Safety Car in pista', question:'Il gruppo si compatta. Ne approfitti?',
     choices:[
-      { key:'box', label:'🔧 Entra ai box', desc:'L\'undercut può ripagarsi alla grande, ma se va male perdi posizioni nel traffico.' },
-      { key:'stay', label:'🚦 Resta in pista', desc:'Mantieni la posizione, ma dovrai fermarti dopo in condizioni normali.' },
-      { key:'restart', label:'⚡ Ripartenza aggressiva', desc:'Rischi tutto al riavvio per guadagnare subito posizioni.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra ai box', desc:'L\'undercut può ripagarsi alla grande, ma se va male perdi posizioni nel traffico.' },
+      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Resta in pista', desc:'Mantieni la posizione, ma dovrai fermarti dopo in condizioni normali.' },
+      { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Ripartenza aggressiva', desc:'Rischi tutto al riavvio per guadagnare subito posizioni.' },
     ]},
   pit: { title:'Finestra di sosta', question:'Quando vuoi fermarti ai box?',
     choices:[
@@ -4550,78 +4550,78 @@ const LIVE_DECISION_INFO_IT_BASE = {
     ]},
   aggression: { title:'A metà gara', question:'Come vuoi affrontare questa fase?',
     choices:[
-      { key:'aggressive', label:'🔥 Spingi', desc:'Più possibilità di sorpasso, ma più rischio e usura.' },
-      { key:'safe',       label:'🛡️ Gestisci', desc:'Più sicuro, ma resti dove sei.' },
+      { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Spingi', desc:'Più possibilità di sorpasso, ma più rischio e usura.' },
+      { key:'safe',       label:'<img class=ico src=assets/icons/shield.png>️ Gestisci', desc:'Più sicuro, ma resti dove sei.' },
     ]},
   teamorders: { title:'Ordini di scuderia', question:'I tuoi due piloti sono vicini in classifica. Che fai?',
     choices:[
-      { key:'hold', label:'🤝 Tieni la posizione', desc:'Nessuna lotta interna: sicuro, ma nessun guadagno.' },
-      { key:'free', label:'⚔️ Lasciali liberi di lottare', desc:'Spettacolo garantito, ma rischio che si danneggino a vicenda.' },
+      { key:'hold', label:'<img class=ico src=assets/icons/handshake.png> Tieni la posizione', desc:'Nessuna lotta interna: sicuro, ma nessun guadagno.' },
+      { key:'free', label:'<img class=ico src=assets/icons/crossed_swords.png>️ Lasciali liberi di lottare', desc:'Spettacolo garantito, ma rischio che si danneggino a vicenda.' },
     ]},
   defend: { title:'Un rivale ti attacca', question:'Hai un avversario alle spalle. Come rispondi?',
     choices:[
-      { key:'defend',  label:'🛑 Difendi con decisione', desc:'Tieni la posizione, ma rischi un contatto.' },
+      { key:'defend',  label:'<img class=ico src=assets/icons/stop.png> Difendi con decisione', desc:'Tieni la posizione, ma rischi un contatto.' },
       { key:'letpass', label:'🟢 Lascialo passare pulito', desc:'Perdi una posizione, ma la gara resta pulita.' },
     ]},
   enginemode: { title:'Modalità motore', question:'Vuoi spingere il motore oltre il normale?',
     choices:[
-      { key:'push', label:'⚙️ Modalità spinta', desc:'Più passo, ma più rischio di guasto.' },
-      { key:'save', label:'🔋 Modalità conservativa', desc:'Motore al sicuro, ma meno prestazioni.' },
+      { key:'push', label:'<img class=ico src=assets/icons/gear.png>️ Modalità spinta', desc:'Più passo, ma più rischio di guasto.' },
+      { key:'save', label:'<img class=ico src=assets/icons/battery.png> Modalità conservativa', desc:'Motore al sicuro, ma meno prestazioni.' },
     ]},
   mechanical: { title:'Allarme meccanico', question:'Un componente dà segnali di cedimento. Che fai?',
     choices:[
-      { key:'nurse', label:'🩹 Gestisci con cautela', desc:'Perdi ritmo, ma riduci il rischio di ritiro.' },
-      { key:'push',  label:'🔥 Continua a spingere', desc:'Nessun compromesso, ma rischi il ritiro.' },
+      { key:'nurse', label:'<img class=ico src=assets/icons/bandage.png> Gestisci con cautela', desc:'Perdi ritmo, ma riduci il rischio di ritiro.' },
+      { key:'push',  label:'<img class=ico src=assets/icons/fire.png> Continua a spingere', desc:'Nessun compromesso, ma rischi il ritiro.' },
     ]},
   overtakedesperate: { title:'Occasione di sorpasso', question:'Il rivale davanti ha un attimo di esitazione. Rischi tutto per superarlo?',
     choices:[
-      { key:'try_overtake_desperate', label:'🎲 Tenta il sorpasso disperato', desc:'Tutto o niente: puoi volare avanti o finire fuori pista.' },
-      { key:'give_up_attack', label:'🛡️ Rinuncia e gestisci', desc:'Nessun rischio, ma l\'occasione sfuma.' },
+      { key:'try_overtake_desperate', label:'<img class=ico src=assets/icons/dice.png> Tenta il sorpasso disperato', desc:'Tutto o niente: puoi volare avanti o finire fuori pista.' },
+      { key:'give_up_attack', label:'<img class=ico src=assets/icons/shield.png>️ Rinuncia e gestisci', desc:'Nessun rischio, ma l\'occasione sfuma.' },
     ]},
   fuelgamble: { title:'Scommessa sul carburante', question:'Potresti alleggerire il serbatoio per guadagnare passo. Ci provi?',
     choices:[
-      { key:'lighten_fuel', label:'⛽ Alleggerisci il serbatoio', desc:'Tutto o niente: molto più veloce, ma rischi di restare a secco.' },
-      { key:'stay_conservative_fuel', label:'🛡️ Resta prudente', desc:'Nessun rischio, ritmo invariato.' },
+      { key:'lighten_fuel', label:'<img class=ico src=assets/icons/fuel.png> Alleggerisci il serbatoio', desc:'Tutto o niente: molto più veloce, ma rischi di restare a secco.' },
+      { key:'stay_conservative_fuel', label:'<img class=ico src=assets/icons/shield.png>️ Resta prudente', desc:'Nessun rischio, ritmo invariato.' },
     ]},
   rivalmistake: { title:'Il rivale sbaglia', question:'Chi hai davanti ha appena commesso un errore. Che fai?',
     choices:[
-      { key:'attack_now', label:'⚡ Attacca subito', desc:'Approfitta finché dura, ma rischi di forzare troppo.' },
-      { key:'wait_confirm', label:'👀 Aspetta conferma', desc:'Più sicuro, guadagno più piccolo ma quasi garantito.' },
+      { key:'attack_now', label:'<img class=ico src=assets/icons/lightning.png> Attacca subito', desc:'Approfitta finché dura, ma rischi di forzare troppo.' },
+      { key:'wait_confirm', label:'<img class=ico src=assets/icons/eyes.png> Aspetta conferma', desc:'Più sicuro, guadagno più piccolo ma quasi garantito.' },
     ]},
   trackliminvestigation: { title:'Track limits sotto investigazione', question:'I commissari stanno osservando i limiti di pista. Che fai?',
     choices:[
-      { key:'push_limit', label:'🔥 Continua a spingere al limite', desc:'Più ritmo, ma rischi una penalità.' },
-      { key:'play_safe_limit', label:'🛡️ Rientra nei margini sicuri', desc:'Nessun rischio, nessun guadagno.' },
+      { key:'push_limit', label:'<img class=ico src=assets/icons/fire.png> Continua a spingere al limite', desc:'Più ritmo, ma rischi una penalità.' },
+      { key:'play_safe_limit', label:'<img class=ico src=assets/icons/shield.png>️ Rientra nei margini sicuri', desc:'Nessun rischio, nessun guadagno.' },
     ]},
   wheeltowheel: { title:'Ruota a ruota', question:'Sei fianco a fianco con un rivale in curva. Che fai?',
     choices:[
-      { key:'hold_line', label:'🛑 Non cedere lo spazio', desc:'Puoi tenerlo dietro, ma rischi il contatto.' },
+      { key:'hold_line', label:'<img class=ico src=assets/icons/stop.png> Non cedere lo spazio', desc:'Puoi tenerlo dietro, ma rischi il contatto.' },
       { key:'give_room', label:'🟢 Lascia margine', desc:'Perdi una posizione, ma la gara resta pulita.' },
     ]},
   doubleyellow: { title:'Doppia bandiera gialla', question:'Doppia gialla sventolata sul tuo settore. Che fai?',
     choices:[
-      { key:'slow_down_yellow', label:'🐢 Rallenta come richiesto', desc:'Nessun rischio, nessun guadagno.' },
-      { key:'risk_pace_yellow', label:'🔥 Rischia comunque il ritmo', desc:'Puoi guadagnare, ma una penalità è dietro l\'angolo.' },
+      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Rallenta come richiesto', desc:'Nessun rischio, nessun guadagno.' },
+      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Rischia comunque il ritmo', desc:'Puoi guadagnare, ma una penalità è dietro l\'angolo.' },
     ]},
   engineersadvice: { title:'Consiglio dagli ingegneri', question:'Il muretto ti suggerisce una modifica all\'assetto guida. Ti fidi?',
     choices:[
-      { key:'follow_advice', label:'📻 Segui il consiglio', desc:'Probabilmente aiuta, rischio basso.' },
-      { key:'trust_instinct', label:'💪 Fidati del tuo istinto', desc:'Puoi guadagnare di più, ma è più incerto.' },
+      { key:'follow_advice', label:'<img class=ico src=assets/icons/radio.png> Segui il consiglio', desc:'Probabilmente aiuta, rischio basso.' },
+      { key:'trust_instinct', label:'<img class=ico src=assets/icons/muscle.png> Fidati del tuo istinto', desc:'Puoi guadagnare di più, ma è più incerto.' },
     ]},
   finalpush: { title:'Ultimo push', question:'Mancano pochi giri. Ti giochi tutto per il risultato?',
     choices:[
-      { key:'all_or_nothing_push', label:'🎲 Tutto o niente', desc:'Il momento clou della gara: grande premio o grande rischio.' },
-      { key:'bring_home', label:'🏁 Porta a casa il risultato', desc:'Nessun rischio, la posizione è al sicuro.' },
+      { key:'all_or_nothing_push', label:'<img class=ico src=assets/icons/dice.png> Tutto o niente', desc:'Il momento clou della gara: grande premio o grande rischio.' },
+      { key:'bring_home', label:'<img class=ico src=assets/icons/checkered_flag.png> Porta a casa il risultato', desc:'Nessun rischio, la posizione è al sicuro.' },
     ]},
   backmarkertraffic: { title:'Traffico dei doppiati', question:'Hai un doppiato lento davanti. Che fai?',
     choices:[
-      { key:'overtake_backmarker', label:'⚡ Sorpassalo subito', desc:'Guadagno rapido, ma rischi un errore nel sorpasso.' },
+      { key:'overtake_backmarker', label:'<img class=ico src=assets/icons/lightning.png> Sorpassalo subito', desc:'Guadagno rapido, ma rischi un errore nel sorpasso.' },
       { key:'wait_for_space', label:'⏳ Aspetta lo spazio giusto', desc:'Più lento, ma più sicuro.' },
     ]},
   brakebite: { title:'Freni al limite', question:'I freni iniziano a scaldare oltre il normale. Che fai?',
     choices:[
-      { key:'push_brakes', label:'🔥 Spremi i freni fino alla fine', desc:'Più ritmo, ma rischi un bloccaggio.' },
-      { key:'manage_brakes', label:'🩹 Gestisci la frenata', desc:'Nessun rischio, ritmo invariato.' },
+      { key:'push_brakes', label:'<img class=ico src=assets/icons/fire.png> Spremi i freni fino alla fine', desc:'Più ritmo, ma rischi un bloccaggio.' },
+      { key:'manage_brakes', label:'<img class=ico src=assets/icons/bandage.png> Gestisci la frenata', desc:'Nessun rischio, ritmo invariato.' },
     ]},
 };
 const LIVE_DECISION_INFO = new Proxy({}, { get:(t,k)=> {
@@ -5048,7 +5048,7 @@ function computeLiveRows(){
     const statusRaw = statusFor(key, t, timeline); // V0.9.7.8.31: valore interno, mai tradotto, usato solo per confronti
     let status = statusLabel(statusRaw);
     if(isFinalPhase){
-      status = statusRaw==='RITIRATO' ? window.t('status_retired_short') : '🏁';
+      status = statusRaw==='RITIRATO' ? window.t('status_retired_short') : '<img class=ico src=assets/icons/checkered_flag.png>';
     }
     // V0.9.9.12: distacco VERO, dal tempo cumulato reale della simulazione (non piu' una formula
     // finta legata solo alla posizione) — fallback alla vecchia formula solo se i dati non ci sono.
@@ -5521,7 +5521,7 @@ function renderSponsorChoice(){
   <div class="draft-turn-grid">${offers.map(sponsorCardHTML).join('')}</div>
   <div class="panel sponsor-reroll-panel">
     <button type="button" class="ghost" data-action="reroll-sponsor" ${canReroll?'':'disabled'} style="width:100%;">
-      🔍 ${window.t('sponsor_reroll_btn')} — ${fmtMIcon(state.sponsorRerollCost)}
+      <img class=ico src=assets/icons/search.png> ${window.t('sponsor_reroll_btn')} — ${fmtMIcon(state.sponsorRerollCost)}
     </button>
     <div class="dim" style="font-size:11px;margin-top:8px;line-height:1.5;">${window.t('sponsor_reroll_desc')}</div>
   </div>
@@ -6022,7 +6022,7 @@ function renderDriverActivity(){
   const hasInfluence = teamStatus==='parity' || teamStatus==='leader';
   const influenceCard = hasInfluence ? `
   <div class="card pickable" data-rarity="Legendary" data-action="pick-driver-activity" data-activity="development-request">
-    <span class="rarity-tag" data-rarity="Legendary">🔧 ${t('dact_devreq')}</span>
+    <span class="rarity-tag" data-rarity="Legendary"><img class=ico src=assets/icons/wrench.png> ${t('dact_devreq')}</span>
     <div class="ability" style="font-size:14px;">${t('dact_devreq_desc')}</div>
   </div>` : '';
   app.innerHTML = `
@@ -6046,7 +6046,7 @@ function renderDriverActivity(){
       <div class="ability" style="font-size:14px;">${t('dact_media_desc')}</div>
     </div>
     <div class="card pickable" data-rarity="Rare" data-action="pick-driver-activity" data-activity="team-event">
-      <span class="rarity-tag" data-rarity="Rare">🤝 ${t('dact_team_event')}</span>
+      <span class="rarity-tag" data-rarity="Rare"><img class=ico src=assets/icons/handshake.png> ${t('dact_team_event')}</span>
       <div class="ability" style="font-size:14px;">${t('dact_team_event_desc')}</div>
     </div>
   </div>
@@ -6161,7 +6161,7 @@ const COUNTRY_FLAG = {
   'Nuova Zelanda':'🇳🇿','Paesi Bassi':'🇳🇱','Polonia':'🇵🇱','Portogallo':'🇵🇹','Regno Unito':'🇬🇧',
   'Romania':'🇷🇴','Serbia':'🇷🇸','Spagna':'🇪🇸','Stati Uniti':'🇺🇸','Sudafrica':'🇿🇦','Svezia':'🇸🇪',
   'Svizzera':'🇨🇭','Thailandia':'🇹🇭','Turchia':'🇹🇷','Ungheria':'🇭🇺',
-  'Singapore':'🇸🇬','Repubblica Ceca':'🇨🇿','Irlanda':'🇮🇪','Sconosciuta':'🏳️'
+  'Singapore':'🇸🇬','Repubblica Ceca':'🇨🇿','Irlanda':'🇮🇪','Sconosciuta':'<img class=ico src=assets/icons/white_flag.png>️'
 };
 // V0.9.7.8.11 — PWA: tutti gli asset sono ora file separati in assets/, non piu' base64 incorporato.
 // slugify riproduce ESATTAMENTE la stessa normalizzazione usata per generare i nomi file su disco.
@@ -6171,11 +6171,11 @@ const GOAT_HELMET_FERRARI_SRC = 'assets/goat/goat-helmet-ferrari.png'; // V0.9.7
 // restituisce un <img> con la bandiera SVG; usare SOLO in contesti HTML (mai dentro un <option>,
 // che non puo' contenere immagini - per quel caso specifico vedi flagEmoji() sotto).
 function flag(country){
-  if(!country) return '<span class="flag-ico flag-ico-unknown" aria-hidden="true">🏳️</span>';
-  return `<img class="flag-ico" src="assets/flags/${slugify(country)}.svg" alt="" title="${nationLabel(country)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'flag-ico flag-ico-unknown',textContent:'🏳️'}))">`;
+  if(!country) return '<span class="flag-ico flag-ico-unknown" aria-hidden="true"><img class=ico src=assets/icons/white_flag.png>️</span>';
+  return `<img class="flag-ico" src="assets/flags/${slugify(country)}.svg" alt="" title="${nationLabel(country)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'flag-ico flag-ico-unknown',textContent:'<img class=ico src=assets/icons/white_flag.png>️'}))">`;
 }
 // versione testuale (emoji), da usare SOLO dove l'HTML non e' permesso: <option>, attributi title/alt, ecc.
-function flagEmoji(country){ return COUNTRY_FLAG[country] || '🏳️'; }
+function flagEmoji(country){ return COUNTRY_FLAG[country] || '<img class=ico src=assets/icons/white_flag.png>️'; }
 function displayArea(area){
   const map = { 'Motore':t('comp_engine'), 'Telaio':t('comp_chassis'), 'Aerodinamica':t('comp_aero'), 'Gomme':t('comp_tires'), 'Strategia':t('comp_strategist'), 'Piloti':t('comp_driver1') };
   return map[area] || area;
@@ -6188,10 +6188,10 @@ function teamFlag(teamId){
 
 // Emoji per categoria di evento (pioggia, degrado gomme, sorpassi, safety car, ecc.)
 const EVENT_EMOJI = {
-  'Meteo':'🌧️', 'Incidente':'💥', 'Tecnico':'🔧', 'Strategia':'🧠',
-  'Prestazione':'⚡', 'Direzione gara':'🚩', 'Narrativo':'✨'
+  'Meteo':'<img class=ico src=assets/icons/rain.png>️', 'Incidente':'<img class=ico src=assets/icons/explosion.png>', 'Tecnico':'<img class=ico src=assets/icons/wrench.png>', 'Strategia':'<img class=ico src=assets/icons/brain.png>',
+  'Prestazione':'<img class=ico src=assets/icons/lightning.png>', 'Direzione gara':'<img class=ico src=assets/icons/red_flag.png>', 'Narrativo':'<img class=ico src=assets/icons/sparkles.png>'
 };
-const EMOJI_RAIN = '🌧️', EMOJI_TIRE = '🛞', EMOJI_OVERTAKE = '🔀', EMOJI_SAFETYCAR = '🚨', EMOJI_FLAG_CHECKERED = '🏁';
+const EMOJI_RAIN = '<img class=ico src=assets/icons/rain.png>️', EMOJI_TIRE = '<img class=ico src=assets/icons/wheel.png>', EMOJI_OVERTAKE = '<img class=ico src=assets/icons/shuffle.png>', EMOJI_SAFETYCAR = '🚨', EMOJI_FLAG_CHECKERED = '<img class=ico src=assets/icons/checkered_flag.png>';
 
 const CAR_RARITY_COLOR = {
   debole:'#8B8D91', discreto:'#6FD62F', intermedio:'#22DCDC', ottimo:'#1892F5',
@@ -6573,20 +6573,20 @@ function renderPregara(){
   const weatherPct = circuit.probpioggia||0;
   const isWetForecast = circuit.clima==='Piovoso';
   const weatherLabel = isWetForecast ? window.t('pg_rain_expected') : (weatherPct>=40 ? window.t('pg_rain_risk', weatherPct) : window.t('pg_dry_track'));
-  const weatherIcon = isWetForecast||weatherPct>=40 ? '🌧️' : '☀️';
+  const weatherIcon = isWetForecast||weatherPct>=40 ? '<img class=ico src=assets/icons/rain.png>️' : '<img class=ico src=assets/icons/sun.png>️';
   const mainRivalId = (state.rivals||[])[0];
   const mainRivalTeam = mainRivalId ? state.aiTeams.find(x=>x.id===mainRivalId) : null;
   const rivalRowHTML = mainRivalTeam
     ? (()=>{ const gap = Math.round(teamRating - aiTeamStrength(mainRivalTeam));
         const gapColor = gap>=0 ? '#4CD97B' : 'var(--danger)';
         return `<div class="pregara-decisive-row">
-          <div class="pregara-decisive-icon">⚔️</div>
+          <div class="pregara-decisive-icon"><img class=ico src=assets/icons/crossed_swords.png>️</div>
           <div class="pregara-decisive-text"><div class="pregara-decisive-label">${window.t('pg_rating_gap')}</div><div class="pregara-decisive-sublabel">${mainRivalTeam.nome}</div></div>
           <div class="pregara-decisive-value" style="color:${gapColor};">${gap>=0?'+':''}${gap} <span style="font-size:12px;font-weight:700;">pt</span></div>
         </div>`;
       })()
     : `<div class="pregara-decisive-row">
-        <div class="pregara-decisive-icon">⚔️</div>
+        <div class="pregara-decisive-icon"><img class=ico src=assets/icons/crossed_swords.png>️</div>
         <div class="pregara-decisive-text"><div class="pregara-decisive-label">${window.t('pg_main_rival')}</div></div>
         <div class="pregara-decisive-value dim" style="font-size:13px;">${window.t('pg_none_yet')}</div>
       </div>`;
@@ -6600,7 +6600,7 @@ function renderPregara(){
     </div>
     <div class="panel pregara-decisive-panel">
       <div class="pregara-decisive-row">
-        <div class="pregara-decisive-icon">📊</div>
+        <div class="pregara-decisive-icon"><img class=ico src=assets/icons/chart.png></div>
         <div class="pregara-decisive-text"><div class="pregara-decisive-label">${window.t('pg_team_rating')}</div></div>
         <div class="pregara-decisive-value">${teamRating}</div>
       </div>
@@ -6904,7 +6904,7 @@ function renderModeSelect(){
     <div class="card pickable mode-select-card" data-rarity="Rare" data-action="go-to-season-length">
       <img class="mode-select-bg-img" src="assets/mode-select/team-season.webp" alt="">
       <div class="mode-select-top">
-        <span class="rarity-tag" data-rarity="Rare" style="font-size:11.5px;">🏎️ ${t('mode_select_team')}</span>
+        <span class="rarity-tag" data-rarity="Rare" style="font-size:11.5px;"><img class=ico src=assets/icons/race_car.png>️ ${t('mode_select_team')}</span>
       </div>
       <div class="mode-select-bottom-scrim">
         <div class="ability" style="font-size:14px;">${t('mode_select_team_desc')}</div>
@@ -6914,7 +6914,7 @@ function renderModeSelect(){
     <div class="card pickable garage-coming-soon mode-select-card" data-rarity="Legendary" data-action="request-password-gate" data-gate-for="driver-creation">
       <img class="mode-select-bg-img" src="assets/mode-select/driver-career.webp" alt="">
       <div class="mode-select-top">
-        <span class="rarity-tag" data-rarity="Legendary" style="font-size:11.5px;">🏁 ${t('mode_select_driver')}</span>
+        <span class="rarity-tag" data-rarity="Legendary" style="font-size:11.5px;"><img class=ico src=assets/icons/checkered_flag.png> ${t('mode_select_driver')}</span>
       </div>
       <div class="mode-select-bottom-scrim">
         <div class="ability" style="font-size:14px;">${t('mode_select_driver_desc')}</div>
@@ -8023,7 +8023,7 @@ function renderSeasonLength(){
     </div>
   </div>
   <div class="card pickable trophy-room-card garage-coming-soon" data-action="request-password-gate" data-gate-for="garage">
-    <span class="rarity-tag" data-rarity="Rare">🎨 ${t('sl_garage')}</span>
+    <span class="rarity-tag" data-rarity="Rare"><img class=ico src=assets/icons/palette.png> ${t('sl_garage')}</span>
     <div class="trophy-room-card-body">
       <div class="ability">${t('sl_garage_desc')}</div>
     </div>
@@ -8395,11 +8395,11 @@ function semaforoWidgetHTML(){
   state._synergyJustUnlocked = false;
   return `<div class="semaforo-widget${onFire?' semaforo-on-fire':''}${firstHighlight?' semaforo-first-highlight':''}">
     <div class="semaforo-title-row">
-      <div class="semaforo-title">${onFire?'🔥':'✨'} SEMAFORO SINERGIE${litCount?` · ${litCount} ${litCount>1?'ATTIVE':'ATTIVA'}`:''}${onFire?' · ON FIRE!':''}</div>
+      <div class="semaforo-title">${onFire?'<img class=ico src=assets/icons/fire.png>':'<img class=ico src=assets/icons/sparkles.png>'} SEMAFORO SINERGIE${litCount?` · ${litCount} ${litCount>1?'ATTIVE':'ATTIVA'}`:''}${onFire?' · ON FIRE!':''}</div>
       ${strengthHTML}
     </div>
     <div class="semaforo-row">${circlesHTML}</div>
-    ${firstHighlight ? '<div class="semaforo-first-tip">✨ Prima sinergia attivata! I pezzi con la stessa mentalità danno un bonus di rating quando sono insieme in squadra.</div>' : ''}
+    ${firstHighlight ? '<div class="semaforo-first-tip"><img class=ico src=assets/icons/sparkles.png> Prima sinergia attivata! I pezzi con la stessa mentalità danno un bonus di rating quando sono insieme in squadra.</div>' : ''}
   </div>`;
 }
 
@@ -8494,7 +8494,7 @@ function renderHub(){
   </details>
 
   <details class="hub-expand">
-    <summary>📊 Classifiche Complete</summary>
+    <summary><img class=ico src=assets/icons/chart.png> Classifiche Complete</summary>
     <div class="grid grid-2">
       <div class="panel">
         <div class="panel-title"><h3 class="hdr">Classifica Piloti</h3><span class="dim mono" style="font-size:11px;">20 PILOTI</span></div>
@@ -9337,7 +9337,7 @@ function renderDriverTrophyRoom(){
   app.innerHTML = `
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
-      <h1 class="hdr" style="font-size:30px;">🏁 ${t('mode_select_driver')}</h1>
+      <h1 class="hdr" style="font-size:30px;"><img class=ico src=assets/icons/checkered_flag.png> ${t('mode_select_driver')}</h1>
       <div class="tagline">${t('tr_tagline')}</div>
     </div>
   </div>
@@ -9394,7 +9394,7 @@ function garagePatternCardHTML(pattern){
   const revealed = garageRevealedPatternId===pattern.id;
   if(!unlocked){
     return `<div class="card garage-pattern-card locked" data-action="reveal-garage-pattern" data-pattern="${pattern.id}">
-      <div class="garage-pattern-swatch locked">🔒</div>
+      <div class="garage-pattern-swatch locked"><img class=ico src=assets/icons/lock.png></div>
       <div class="garage-pattern-name dim">${pattern.nome}</div>
       ${revealed
         ? `<div class="garage-pattern-req">Si sblocca con:<br><b style="color:var(--legendary);">${ach?achLoc.title:'?'}</b><br><span class="dim" style="font-size:10.5px;">${ach?achLoc.desc:''}</span></div>`
@@ -9457,7 +9457,7 @@ function renderGarage(){
   app.innerHTML = `
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
-      <h1 class="hdr" style="font-size:30px;">🎨 Garage</h1>
+      <h1 class="hdr" style="font-size:30px;"><img class=ico src=assets/icons/palette.png> Garage</h1>
       <div class="tagline">Sblocca livree completando obiettivi, scegli il colore, prova ogni fascia prima di decidere. La scelta resta valida in tutte le prossime carriere.</div>
     </div>
   </div>
@@ -9873,7 +9873,7 @@ function seasonTrophiesPanelHTML(){
   }).join('');
   return `
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">🏆 Trofei Vinti Questa Stagione</h3><span class="dim mono" style="font-size:11px;">${won.length}</span></div>
+    <div class="panel-title"><h3 class="hdr"><img class=ico src=assets/icons/trophy.png> Trofei Vinti Questa Stagione</h3><span class="dim mono" style="font-size:11px;">${won.length}</span></div>
     <div class="trophy-grid">${cardsHTML}</div>
   </div>`;
 }
@@ -10719,13 +10719,13 @@ function openSettings(){
       </div>
     </div>
     <button type="button" class="menu-item" id="sidebarHapticToggleBtn">📳 <span>${t('settings_haptic')}: ${audioSettings.hapticEnabled!==false?t('on'):t('off')}</span></button>
-    ${!isPremiumUser ? `<button type="button" class="menu-item" id="sidebarUnlockPremiumBtn" style="color:var(--amber);border-color:var(--amber);">✨ <span>${t('tokens_out_unlock')}</span></button>` : ''}
+    ${!isPremiumUser ? `<button type="button" class="menu-item" id="sidebarUnlockPremiumBtn" style="color:var(--amber);border-color:var(--amber);"><img class=ico src=assets/icons/sparkles.png> <span>${t('tokens_out_unlock')}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarStreamerToggleBtn"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0;color:#9146FF;"><path fill="currentColor" d="M4.5 2 3 5.5v14h5V22l3-2.5h4L20 15V2H4.5zm13.5 12-3 2.5h-4l-2.5 2v-2H5V4h13v10z"/><rect x="9" y="7" width="2" height="5" fill="currentColor"/><rect x="14" y="7" width="2" height="5" fill="currentColor"/></svg> <span>${t('settings_streamer_mode')}: ${isStreamerModeOn()?t('on'):t('off')}</span></button>
     ${isStreamerModeOn() ? `<button type="button" class="menu-item" id="sidebarStreamerNameBtn">✏️ <span>${t('settings_streamer_name')}: ${getStreamerName()}</span></button>` : ''}
-    <button type="button" class="menu-item" id="sidebarSpeedBtn">🚀 <span>${t('settings_speed')}: ${defaultRaceSpeed}×</span></button>
+    <button type="button" class="menu-item" id="sidebarSpeedBtn"><img class=ico src=assets/icons/rocket.png> <span>${t('settings_speed')}: ${defaultRaceSpeed}×</span></button>
     <button type="button" class="menu-item" id="sidebarDecisionTimerBtn">⏱️ <span>${t('settings_decision_timer')}: ${decisionTimerEnabled?t('on'):t('off')}</span></button>
-    ${!isStandaloneApp() ? `<button type="button" class="menu-item" id="sidebarInstallBtn" style="color:var(--legendary);">📲 <span>${t('settings_install')}</span></button>` : ''}
-    <button type="button" class="menu-item" id="sidebarFullResetBtn" style="color:var(--danger);">🗑️ <span>${t('settings_reset')}</span></button>
+    ${!isStandaloneApp() ? `<button type="button" class="menu-item" id="sidebarInstallBtn" style="color:var(--legendary);"><img class=ico src=assets/icons/mobile.png> <span>${t('settings_install')}</span></button>` : ''}
+    <button type="button" class="menu-item" id="sidebarFullResetBtn" style="color:var(--danger);"><img class=ico src=assets/icons/trash.png>️ <span>${t('settings_reset')}</span></button>
   `;
   // V0.9.7.8.32: controllo volume unificato (checkbox on/off + 5 tacche), non piu' toggle separato
   // e slider continuo — piu' semplice da usare, coerente con lo stile "menu fatto bene" richiesto.
@@ -10803,7 +10803,7 @@ function openSettings(){
   document.getElementById('sidebarSpeedBtn').addEventListener('click', ()=>{
     defaultRaceSpeed = defaultRaceSpeed===1 ? 2 : 1;
     saveDefaultRaceSpeed(defaultRaceSpeed);
-    document.getElementById('sidebarSpeedBtn').innerHTML = `🚀 <span>Velocità Gara Predefinita: ${defaultRaceSpeed}×</span>`;
+    document.getElementById('sidebarSpeedBtn').innerHTML = `<img class=ico src=assets/icons/rocket.png> <span>Velocità Gara Predefinita: ${defaultRaceSpeed}×</span>`;
   });
   document.getElementById('sidebarDecisionTimerBtn').addEventListener('click', ()=>{
     decisionTimerEnabled = !decisionTimerEnabled;
@@ -10988,12 +10988,12 @@ function guideSynergyStackDemoHTML(){
   if(currentLang==='en'){
     return `
     <div class="guide-special-demo">
-      <div class="gsd-title" style="color:${m.color};">⚡ Stacked synergies — 2 pairs of the same mentality</div>
+      <div class="gsd-title" style="color:${m.color};"><img class=ico src=assets/icons/lightning.png> Stacked synergies — 2 pairs of the same mentality</div>
       <div class="gsd-circles">${circle(true)}${circle(true)}</div>
       <div class="guide-section-body">If you have <b>2 pairs</b> (4 pieces in total) sharing the same "${lbl}" mentality, each pair's flat bonus is replaced by a <b>+45%</b> multiplier on the whole team's rating. With <b>3 or more pairs</b> of the same mentality, the multiplier rises to <b>+90%</b> — almost double the rating. It's one of the most powerful (and rarest to build) situations in the game: worth planning scouting and development around a single mentality if you already have 2-3 pieces sharing it.</div>
     </div>
     <div class="guide-special-demo semaforo-widget semaforo-on-fire" style="border:1px solid rgba(255,106,26,0.4);">
-      <div class="gsd-title" style="color:var(--amber);">🔥 "On fire" semaphore — 3+ different synergies together</div>
+      <div class="gsd-title" style="color:var(--amber);"><img class=ico src=assets/icons/fire.png> "On fire" semaphore — 3+ different synergies together</div>
       <div class="gsd-circles">${fireCircles}</div>
       <div class="guide-section-body">If instead you have <b>3 or more pairs of DIFFERENT mentalities</b> active at the same time (none repeated), the whole semaphore visually catches fire and the team gets an extra <b>+5%</b> rating, added on top of the flat bonuses each pair already earned. It's the sign your team is well-rounded in depth, not just stacked on a single mentality — keep an eye on it in the Hub and Pit Lane: if you see the semaphore light up like that, you're doing something right.</div>
     </div>`;
@@ -11001,24 +11001,24 @@ function guideSynergyStackDemoHTML(){
   if(currentLang==='es'){
     return `
     <div class="guide-special-demo">
-      <div class="gsd-title" style="color:${m.color};">⚡ Sinergias apiladas — 2 parejas de la misma mentalidad</div>
+      <div class="gsd-title" style="color:${m.color};"><img class=ico src=assets/icons/lightning.png> Sinergias apiladas — 2 parejas de la misma mentalidad</div>
       <div class="gsd-circles">${circle(true)}${circle(true)}</div>
       <div class="guide-section-body">Si tienes <b>2 parejas</b> (4 piezas en total) que comparten la misma mentalidad "${lbl}", el bonus fijo de cada pareja se sustituye por un multiplicador del <b>+45%</b> sobre el rating de toda la escudería. Con <b>3 o más parejas</b> de la misma mentalidad, el multiplicador sube al <b>+90%</b> — casi el doble del rating. Es una de las situaciones más poderosas (y más raras de conseguir) del juego: vale la pena planificar el scouting y el desarrollo en torno a una sola mentalidad si ya tienes 2-3 piezas que la comparten.</div>
     </div>
     <div class="guide-special-demo semaforo-widget semaforo-on-fire" style="border:1px solid rgba(255,106,26,0.4);">
-      <div class="gsd-title" style="color:var(--amber);">🔥 Semáforo "en llamas" — 3+ sinergias distintas juntas</div>
+      <div class="gsd-title" style="color:var(--amber);"><img class=ico src=assets/icons/fire.png> Semáforo "en llamas" — 3+ sinergias distintas juntas</div>
       <div class="gsd-circles">${fireCircles}</div>
       <div class="guide-section-body">Si en cambio tienes <b>3 o más parejas de mentalidades DISTINTAS</b> activas al mismo tiempo (ninguna repetida), todo el semáforo se enciende visualmente y la escudería recibe un <b>+5%</b> adicional de rating, sumado a los bonus fijos que cada pareja ya obtuvo. Es la señal de que tu equipo está bien equilibrado en profundidad, no solo apilado en una sola mentalidad — vigílalo en el Hub y en Pit Lane: si ves el semáforo encenderse así, estás haciendo algo bien.</div>
     </div>`;
   }
   return `
   <div class="guide-special-demo">
-    <div class="gsd-title" style="color:${m.color};">⚡ Sinergie impilate — 2 coppie della stessa mentalità</div>
+    <div class="gsd-title" style="color:${m.color};"><img class=ico src=assets/icons/lightning.png> Sinergie impilate — 2 coppie della stessa mentalità</div>
     <div class="gsd-circles">${circle(true)}${circle(true)}</div>
     <div class="guide-section-body">Se hai <b>2 coppie</b> (4 pezzi in tutto) che condividono la stessa mentalità "${lbl}", il bonus flat di ogni coppia viene sostituito da un moltiplicatore del <b>+45%</b> sul rating dell'intera scuderia. Con <b>3 o più coppie</b> della stessa mentalità, il moltiplicatore sale al <b>+90%</b> — quasi il doppio del rating. È una delle situazioni più potenti (e più rare da costruire) del gioco: vale la pena pianificare scouting e sviluppo attorno a un'unica mentalità se ti capitano già 2-3 pezzi che la condividono.</div>
   </div>
   <div class="guide-special-demo semaforo-widget semaforo-on-fire" style="border:1px solid rgba(255,106,26,0.4);">
-    <div class="gsd-title" style="color:var(--amber);">🔥 Semaforo "in fiamme" — 3+ sinergie diverse insieme</div>
+    <div class="gsd-title" style="color:var(--amber);"><img class=ico src=assets/icons/fire.png> Semaforo "in fiamme" — 3+ sinergie diverse insieme</div>
     <div class="gsd-circles">${fireCircles}</div>
     <div class="guide-section-body">Se invece hai <b>3 o più coppie di mentalità DIVERSE</b> attive contemporaneamente (nessuna ripetuta), l'intero semaforo prende fuoco visivamente e la scuderia riceve un ulteriore <b>+5%</b> di rating, sommato ai bonus flat già ottenuti da ciascuna coppia. È il segnale che la tua squadra è ben assortita in profondità, non solo su una singola mentalità — tienilo d'occhio nell'Hub e in Pit Lane: se vedi il semaforo animarsi così, stai facendo qualcosa di giusto.</div>
   </div>`;
