@@ -684,6 +684,19 @@ tr.former td:first-child{border-left-color:var(--dim);}
 /* ---- V0.7.2 menu persistente RIMOSSO in V0.9.4.1: sostituito dalla barra laterale (vedi sidebar.css) ---- */
 
 /* ---- V0.7.5: suspense e risultato upgrade ---- */
+/* V0.9.9.42: transizioni tra schermate, scelte da Gio dopo aver confrontato oltre 50 varianti.
+   Standard = passaggi tra schermate consecutive dello stesso flusso. Speciale = cambi di stato
+   importanti (fine stagione/carriera), usata con parsimonia. */
+.wrap.app-enter-standard{ animation: appSlideFadeLeft 0.35s ease forwards; }
+@keyframes appSlideFadeLeft{
+  from{ opacity:0; transform:translateX(28px); }
+  to{ opacity:1; transform:translateX(0); }
+}
+.wrap.app-enter-special{ animation: appColorWash 0.45s ease forwards; }
+@keyframes appColorWash{
+  from{ opacity:0; filter:saturate(0) brightness(1.6); }
+  to{ opacity:1; filter:saturate(1) brightness(1); }
+}
 .suspense-screen{
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center; padding:60px 20px; min-height:320px; cursor:pointer;

@@ -6654,7 +6654,25 @@ function render(){
     const fx = document.getElementById('celebrationFx');
     if(fx) fx.remove();
   }
+  // V0.9.9.42: transizione tra schermate — solo quando la FASE cambia davvero (non ad ogni piccolo
+  // aggiornamento in-place della stessa schermata). Speciale (Color Wash) riservata ai momenti di
+  // chiusura importanti, usata con parsimonia; standard (Slide Fade Left) per tutto il resto.
+  const SPECIAL_TRANSITION_PHASES = new Set(['season_end','driver-season-end','driver-retirement']);
+  const phaseChanged = state && state.phase !== window._lastRenderedPhase;
+  const transitionClass = phaseChanged
+    ? (SPECIAL_TRANSITION_PHASES.has(state.phase) ? 'app-enter-special' : 'app-enter-standard')
+    : null;
+  if(state) window._lastRenderedPhase = state.phase;
   renderInner();
+  if(transitionClass && app){
+    app.classList.remove('app-enter-standard','app-enter-special');
+    void app.offsetWidth; // forza il reflow, cosi' l'animazione riparte anche se la stessa classe era gia' stata usata
+    app.classList.add(transitionClass);
+    clearTimeout(window._transitionCleanupTimer);
+    window._transitionCleanupTimer = setTimeout(()=>{
+      app.classList.remove('app-enter-standard','app-enter-special');
+    }, 500);
+  }
   if(typeof updateSidebarVisibility==='function') updateSidebarVisibility();
   showGoatRevealIfPending();
   updateMusicForCurrentPhase(); // V0.9.7.8.10
