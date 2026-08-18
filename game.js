@@ -6493,7 +6493,7 @@ function pregaraLegendRow(label, item){
   const color = ratingBandColor(item.rating);
   return `<div class="legend-row"><span class="legend-swatch" style="background:${color};"></span><span class="legend-label">${label}</span><span class="legend-name dim">${item.nome}</span><span class="legend-rating mono" style="color:${color};">${item.rating}</span></div>`;
 }
-function pregaraSharedComponentsHTML(comp){
+function pregaraSharedComponentsHTML(comp, overrideTeam){
   const stratColor = ratingBandColor(comp.stratega.rating);
   return `
   <div class="panel pregara-shared">
@@ -6511,7 +6511,7 @@ function pregaraSharedComponentsHTML(comp){
         <div class="bulb-rating mono" style="color:${stratColor};">${comp.stratega.rating}</div>
       </div>
     </div>
-    ${semaforoWidgetHTML()}
+    ${semaforoWidgetHTML(overrideTeam)}
   </div>`;
 }
 
@@ -8358,10 +8358,12 @@ function semaforoHalfHTML(slot){
   return `<div class="sem-half" style="background:${m.color};" title="${slot.roleLabel} (${slot.item.nome}) · ${kindLabel}: ${m.label}"></div>`;
 }
 
-// V0.9.4.6.1: forza scuderia prima/dopo il bonus sinergie, per mostrare la freccia "senza -> con".
-// Richiede una squadra completa (fuori dal draft in corso, dove alcuni slot sono ancora vuoti).
-function teamStrengthBeforeAfterSynergy(){
-  const t = state.team;
+// V0.9.9.44: bug segnalato da Gio — mostrava sempre la sinergia del GIOCATORE anche quando si
+// guardava l'auto di un avversario (nessun parametro, sempre state.team fisso). Ora accetta la
+// squadra giusta; le IA non ricevono mai il bonus sinergia (solo il giocatore), quindi per loro
+// "prima" e "dopo" coincidono sempre e la freccia sparisce da sola (logica gia' esistente sotto).
+function teamStrengthBeforeAfterSynergy(overrideTeam){
+  const t = overrideTeam || state.team;
   if(!t || !t.pilotMain || !t.pilotSecond || !t.motore || !t.telaio || !t.aero || !t.gomme || !t.stratega) return null;
   const r1 = Math.round(weightedBase({pilota:t.pilotMain.rating, motore:t.motore.rating, telaio:t.telaio.rating, aero:t.aero.rating, gomme:t.gomme.rating, stratega:t.stratega.rating}));
   const r2 = Math.round(weightedBase({pilota:t.pilotSecond.rating, motore:t.motore.rating, telaio:t.telaio.rating, aero:t.aero.rating, gomme:t.gomme.rating, stratega:t.stratega.rating}));
@@ -8377,16 +8379,16 @@ function teamStrengthBeforeAfterSynergy(){
   return { withoutSynergy, withSynergy };
 }
 
-function semaforoWidgetHTML(){
-  const circles = semaforoCirclesData();
+function semaforoWidgetHTML(overrideTeam){
+  const circles = semaforoCirclesData(overrideTeam);
   if(!circles.length) return '';
-  const onFire = !!(state.team && state.team._synergyDiverseFire);
+  const onFire = !!((overrideTeam || state.team) && (overrideTeam || state.team)._synergyDiverseFire);
   const circlesHTML = circles.map(c=>{
     const glow = c.lit ? `style="--glow:${MENTALITA_DEFS[c.mentId].color};"` : '';
     return `<div class="sem-circle${c.lit?' full':''}${onFire?' on-fire':''}" ${glow}>${semaforoHalfHTML(c.a)}${semaforoHalfHTML(c.b)}</div>`;
   }).join('');
   const litCount = circles.filter(c=>c.lit).length;
-  const strength = teamStrengthBeforeAfterSynergy();
+  const strength = teamStrengthBeforeAfterSynergy(overrideTeam);
   const strengthHTML = (strength && strength.withSynergy !== strength.withoutSynergy)
     ? `<div class="semaforo-strength">${strength.withoutSynergy} <span class="semaforo-arrow">→</span> <b style="color:${teamStrengthColor(strength.withSynergy)};">${strength.withSynergy}</b></div>`
     : (strength ? `<div class="semaforo-strength dim">${strength.withSynergy}</div>` : '');
@@ -10569,13 +10571,14 @@ function openPasswordGate(target){
 // stagione/carriera, hub), mostra la sua auto con tutti i rating. Riusa pregaraCarPanelHTML, gia'
 // pronta, e normalizza la struttura dati diversa tra squadra giocatore e squadre IA.
 function showDriverCarDetail(slotKey, teamId){
-  let pilot, comp, teamName, carNumber;
+  let pilot, comp, teamName, carNumber, teamForSynergy;
   if(teamId==='PLAYER'){
     const isP1 = slotKey==='PLAYER-1';
     pilot = isP1 ? state.team.pilotMain : state.team.pilotSecond;
     comp = { motore:state.team.motore, telaio:state.team.telaio, aero:state.team.aero, gomme:state.team.gomme, stratega:state.team.stratega };
     teamName = teamDisplayName();
     carNumber = (state.grid && state.grid.find(g=>g.slotKey===slotKey) || {}).carNumber || (isP1?1:2);
+    teamForSynergy = state.team; // gia' quella giusta, nessuna costruzione necessaria
   } else {
     const aiTeam = state.aiTeams && state.aiTeams.find(t=>t.id===teamId);
     if(!aiTeam) return;
@@ -10586,11 +10589,15 @@ function showDriverCarDetail(slotKey, teamId){
     comp = aiTeam.components;
     teamName = aiTeam.nome;
     carNumber = (state.grid && state.grid.find(g=>g.slotKey===slotKey) || {}).carNumber || (isFirst?1:2);
+    // V0.9.9.44: bug segnalato da Gio — il pannello sinergie mostrava sempre quella del GIOCATORE
+    // anche guardando l'auto di un avversario. Costruiamo la squadra IA nella stessa forma attesa
+    // dalle funzioni sinergia (pilotMain/pilotSecond/motore/telaio/aero/gomme/stratega).
+    teamForSynergy = { pilotMain: aiTeam.drivers[0], pilotSecond: aiTeam.drivers[1], motore:comp.motore, telaio:comp.telaio, aero:comp.aero, gomme:comp.gomme, stratega:comp.stratega, _synergyBonus: aiTeam._synergyBonus };
   }
   if(!pilot || !comp) return;
   const panel = document.getElementById('driverDetailPanel');
   const body = document.getElementById('driverDetailBody');
-  body.innerHTML = pregaraCarPanelHTML(pilot, carNumber, comp, null, teamName) + pregaraSharedComponentsHTML(comp);
+  body.innerHTML = pregaraCarPanelHTML(pilot, carNumber, comp, null, teamName) + pregaraSharedComponentsHTML(comp, teamForSynergy);
   const closeBtn = document.getElementById('driverDetailCloseBtn');
   closeBtn.textContent = t('tr_detail_close');
   function onClose(){ panel.style.display = 'none'; closeBtn.removeEventListener('click', onClose); }
