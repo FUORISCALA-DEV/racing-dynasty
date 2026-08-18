@@ -4381,7 +4381,8 @@ const LIVE_DECISION_INFO_EN = {
     ]},
   safetycar: { title:'Safety Car on track', question:'The field bunches up. Do you take advantage?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Pit now', desc:'The undercut can pay off big, but get it wrong and you lose positions in traffic.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Pit now', desc:'Real pit stop, at a discount: fresh tyres and a much lower time cost than usual.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver really pits (discounted), the other stays out: cover both options.' },
       { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Stay out', desc:"Keep your position, but you'll have to stop later under normal conditions." },
       { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Aggressive restart', desc:'Risk it all at the restart to gain positions immediately.' },
     ]},
@@ -4475,7 +4476,8 @@ const LIVE_DECISION_INFO_ES = {
     ]},
   safetycar: { title:'Safety Car en pista', question:'El pelotón se compacta. ¿Lo aprovechas?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra a boxes', desc:'El undercut puede salir muy bien, pero si falla pierdes posiciones en el tráfico.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra a boxes', desc:'Parada real, con descuento: neumáticos nuevos y un coste en tiempo mucho más bajo de lo normal.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto entra de verdad (con descuento), el otro sigue fuera: cubres ambas opciones.' },
       { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Sigue en pista', desc:'Mantienes la posición, pero tendrás que parar después en condiciones normales.' },
       { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Reinicio agresivo', desc:'Arriesgas todo en la reanudación para ganar posiciones de inmediato.' },
     ]},
@@ -4569,7 +4571,8 @@ const LIVE_DECISION_INFO_IT_BASE = {
     ]},
   safetycar: { title:'Safety Car in pista', question:'Il gruppo si compatta. Ne approfitti?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra ai box', desc:'L\'undercut può ripagarsi alla grande, ma se va male perdi posizioni nel traffico.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra ai box', desc:'Pit stop vero, a prezzo scontato: gomme nuove e un costo in tempo molto piu basso del normale.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota entra ai box davvero (prezzo scontato), l\'altro resta fuori: copri entrambe le opzioni.' },
       { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Resta in pista', desc:'Mantieni la posizione, ma dovrai fermarti dopo in condizioni normali.' },
       { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Ripartenza aggressiva', desc:'Rischi tutto al riavvio per guadagnare subito posizioni.' },
     ]},
@@ -4736,6 +4739,38 @@ function decisionShiftFn(choiceKey){
 // ultimo), quel vantaggio/svantaggio non deve sparire nel nulla — diventa un distacco reale in
 // secondi, dato che ora abbiamo il tempo cumulato vero della simulazione.
 const TIME_PER_CLAMPED_POSITION = 1.2;
+// V0.9.9.55: pit stop VERO sotto Safety Car (non solo un esito narrativo scollegato) — costo reale
+// in secondi (stessa formula del pit vero, 10-12s in base al Team Principal) propagato su tutte le
+// fasi future, più azzeramento usura gomme come un pit stop vero. Proposta A+B discussa con Gio:
+// prima "Entra ai box" durante la Safety Car era solo un esito di posizione casuale, senza nessun
+// legame con la simulazione vera — ora sposta davvero le cose.
+function applyRealPitUnderSC(timeline, slotKey, tCurrent){
+  const comp = state.team; // stesso componente stratega usato per il costo vero del pit
+  const pitSkillFrac = comp.stratega.pitstop/100;
+  const cost = 12 - pitSkillFrac*2; // identica formula del pit vero sotto Safety Car
+  for(let phase=tCurrent+1; phase<PHASES.length; phase++){
+    const cumSnap = timeline.cumTimeByPhase[phase];
+    if(!cumSnap || cumSnap[slotKey]==null) continue;
+    cumSnap[slotKey] += cost;
+    const order = timeline.phaseOrders[phase];
+    if(!order) continue;
+    const isRacingAt = k => timeline.retiredAtPhase[k]==null || phase < timeline.retiredAtPhase[k];
+    const activeKeys = order.filter(isRacingAt);
+    const retiredKeys = order.filter(k => !isRacingAt(k));
+    activeKeys.sort((k1,k2)=> cumSnap[k1]-cumSnap[k2]);
+    timeline.phaseOrders[phase] = [...activeKeys, ...retiredKeys];
+  }
+  // gomme nuove da qui in avanti, come un vero pit stop
+  if(timeline.tireWearByPhase){
+    const wearNow = timeline.tireWearByPhase[tCurrent] ? (timeline.tireWearByPhase[tCurrent][slotKey]||0) : 0;
+    const reduction = Math.max(0, wearNow - 0.05);
+    for(let phase=tCurrent; phase<timeline.tireWearByPhase.length; phase++){
+      const snap = timeline.tireWearByPhase[phase];
+      if(snap && snap[slotKey]!=null) snap[slotKey] = Math.max(0.02, snap[slotKey]-reduction);
+    }
+  }
+  return cost;
+}
 function applyLiveDecision(type, choiceKey){
   const timeline = state.live.timeline;
   const t = state.live.phaseIndex;
@@ -4777,7 +4812,13 @@ function applyLiveDecision(type, choiceKey){
       if(timeline.retiredAtPhase[slotKey]!==null) return;
       const outcome = pickDecisionOutcome(bucketChoice[slotKey]);
       const { actualFirstShift, firstPhaseTimeBonus } = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(bucketChoice[slotKey]));
-      reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus };
+      // V0.9.9.55: solo chi va DAVVERO ai box (non il compagno che resta fuori) prende il costo/
+      // beneficio reale del pit sotto Safety Car — vero undercut, non solo un esito narrativo.
+      let realPitCost = null;
+      if(type==='safetycar' && bucketChoice[slotKey]==='box'){
+        realPitCost = applyRealPitUnderSC(timeline, slotKey, t);
+      }
+      reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus, realPitCost };
     });
     return reveal;
   }
@@ -4786,10 +4827,16 @@ function applyLiveDecision(type, choiceKey){
     if(timeline.retiredAtPhase[slotKey]!==null) return; // gia' ritirato: la scelta non ha piu' effetto
     const outcome = pickDecisionOutcome(choiceKey);
     const { actualFirstShift, firstPhaseTimeBonus } = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(choiceKey));
+    // V0.9.9.55: "Entra ai box" durante la Safety Car ora e' un vero pit stop (costo reale in
+    // secondi + gomme nuove), non solo un esito narrativo scollegato dalla simulazione.
+    let realPitCost = null;
+    if(type==='safetycar' && choiceKey==='box'){
+      realPitCost = applyRealPitUnderSC(timeline, slotKey, t);
+    }
     // V0.9.9.18/21: il testo mostrato usa lo shift VERO (dopo il limite ai bordi), non quello
     // nominale della scelta. Se sei gia' primo/ultimo e il guadagno/perdita non puo' tradursi in
     // posizioni, diventa un distacco in secondi (timeBonus) invece di sparire nel nulla.
-    reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus };
+    reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus, realPitCost };
   });
   return reveal;
 }
