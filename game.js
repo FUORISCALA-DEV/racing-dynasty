@@ -3477,6 +3477,24 @@ function simulateFullRace(){
   }
   const safetyCarPhase = rnd()<(circuit.probsc/100) ? (3+Math.floor(rnd()*4)) : null;
 
+  // V0.9.9.56: le IA possono REAGIRE alla Safety Car, non solo beneficiarne per coincidenza dello
+  // scaglionamento casuale — con una probabilita' (non tutte le squadre, non sempre), la prossima
+  // sosta ancora da fare viene spostata alla fase Safety Car. Lo sconto scatta da solo tramite la
+  // stessa formula del costo gia' usata per chiunque si fermi in quella fase (giocatore incluso).
+  // Il giocatore NON viene toccato qui — ha la sua scelta interattiva dal vivo (decisione Safety Car).
+  if(safetyCarPhase !== null){
+    entries.forEach(e=>{
+      if(e.isPlayerTeam) return;
+      const plan = pitPlan[e.slotKey];
+      if(rnd() > 0.6) return; // non tutte le squadre reagiscono, resta un vantaggio non garantito
+      if(plan.first > safetyCarPhase){
+        plan.first = safetyCarPhase;
+      } else if(plan.first !== safetyCarPhase && plan.second > safetyCarPhase){
+        plan.second = safetyCarPhase;
+      }
+    });
+  }
+
   // contesto di campionato prima di questa gara
   const seasonPodiumsBySlot = {}, seasonPosBySlot = {};
   entries.forEach(e=> seasonPodiumsBySlot[e.slotKey] = (state.driverStandings[e.slotKey] ? state.driverStandings[e.slotKey].podiums : 0));
