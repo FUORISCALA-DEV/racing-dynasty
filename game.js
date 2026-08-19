@@ -4427,31 +4427,31 @@ function computeLiveDecisions(timeline){
 const LIVE_DECISION_INFO_EN = {
   weather: { title:'The weather is changing', question:"Track conditions are changing right now. What do you do?",
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Change tires now', desc:'Real pit stop, normal full price: brings forward your next scheduled stop, fresh tyres for the conditions.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Change tires now', desc:'Real stop (full price): fresh tyres for the new conditions.' },
       { key:'stay', label:'⏳ Stay out one more lap', desc:'Risky, but you gain if the weather helps you.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver really pits (normal full price), the other keeps their original plan: cover both options.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver pits (full price), the other sticks to the plan.' },
     ]},
-  safetycar: { title:'Safety Car on track', question:'With everyone slowed behind the Safety Car, pitting costs much less than usual. Bring your stop forward here?',
+  safetycar: { title:'Safety Car on track', question:'Discounted stop under Safety Car. Bring it forward?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Pit now', desc:'Bring forward your next scheduled pit stop here, at a discount (fresh tyres, much lower time lost). You will not make another stop later for it.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver brings the stop forward here (discounted), the other keeps the original plan and pits later as planned.' },
-      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Stay out', desc:'You bring nothing forward: you will still pit later, when it is due, at the normal full price.' },
-      { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Aggressive restart', desc:'Risk it all at the restart to gain positions immediately.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Pit now', desc:'Stop brought forward at a discount: no second stop later.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver pits now (discount), the other sticks to the plan.' },
+      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Stay out', desc:'No change: normal stop later, full price.' },
+      { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Aggressive restart', desc:'Risk it all at the restart to gain positions.' },
     ]},
   pit: { title:'Pit window', question:'When do you want to stop?',
     choices:[
-      { key:'early', label:'⏪ Bring the stop forward', desc:'You pit right now (normal full price): fresh tyres sooner, but you\'ll need to make them last longer after.' },
-      { key:'late',  label:'⏩ Delay the stop', desc:'You push your next stop further into the race: staying out longer on more worn tyres.' },
+      { key:'early', label:'⏪ Bring the stop forward', desc:'You pit now (full price): fresh tyres sooner, but they\'ll need to last longer after.' },
+      { key:'late',  label:'⏩ Delay the stop', desc:'You push your stop later: longer stint on more worn tyres.' },
     ]},
   undercut: { title:'Undercut opportunity', question:'The rival ahead hasn\'t pitted yet. Try the undercut?',
     choices:[
-      { key:'attempt', label:'<img class=ico src=assets/icons/wrench.png> Try the undercut', desc:'You pit now, before them (normal full price): if it works, you come out ahead when they pit later on older tyres.' },
+      { key:'attempt', label:'<img class=ico src=assets/icons/wrench.png> Try the undercut', desc:'You pit now (full price): if it works, you come out ahead of them.' },
       { key:'wait',    label:'<img class=ico src=assets/icons/traffic_light.png> Wait', desc:'You stick to your original pit window, no change.' },
     ]},
   overcut: { title:'Overcut opportunity', question:'The rival ahead just pitted. Do you stay out?',
     choices:[
-      { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Stay out', desc:'You delay your stop: exploit clean air while they rejoin behind you on fresh tyres.' },
-      { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Follow them in', desc:'You pit right now too (normal full price), matching their window.' },
+      { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Stay out', desc:'You delay your stop: exploit clean air ahead of them.' },
+      { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Follow them in', desc:'You pit now too (full price), matching their window.' },
     ]},
   aggression: { title:'Mid-race', question:'How do you want to approach this phase?',
     choices:[
@@ -4503,10 +4503,10 @@ const LIVE_DECISION_INFO_EN = {
       { key:'hold_line', label:"<img class=ico src=assets/icons/stop.png> Don't give up the space", desc:'You could hold them off, but risk contact.' },
       { key:'give_room', label:'🟢 Give room', desc:'You lose a position, but the race stays clean.' },
     ]},
-  doubleyellow: { title:'Double yellow flag', question:'Double yellow waved in your sector: serious danger, everyone must slow down. What do you do?',
+  doubleyellow: { title:'Double yellow flag', question:'Double yellow: serious danger, everyone must slow down. What do you do?',
     choices:[
-      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Slow down as required', desc:'You slow as much as needed, same as everyone else: no risk, no real disadvantage since it applies equally to all.' },
-      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Slow the bare minimum', desc:'You try to lose as little time as possible: if race control does not notice you gain ground, but you risk a real penalty.' },
+      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Slow down as required', desc:'You slow like everyone else: no risk, no disadvantage.' },
+      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Slow the bare minimum', desc:'Minimum slowdown: you can gain, but risk a real penalty.' },
     ]},
   engineersadvice: { title:'Advice from the engineers', question:'The pit wall suggests a setup tweak. Do you trust it?',
     choices:[
@@ -4532,31 +4532,31 @@ const LIVE_DECISION_INFO_EN = {
 const LIVE_DECISION_INFO_ES = {
   weather: { title:'El clima está cambiando', question:'Las condiciones de pista cambian justo ahora. ¿Qué haces?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Cambia neumáticos ya', desc:'Parada real, precio completo normal: adelanta tu proxima parada programada, neumaticos frescos para las condiciones.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Cambia neumáticos ya', desc:'Parada real (precio completo): neumáticos frescos para las nuevas condiciones.' },
       { key:'stay', label:'⏳ Sigue una vuelta más', desc:'Arriesgas, pero ganas si el clima te ayuda.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto entra de verdad (precio completo normal), el otro mantiene su plan original: cubres ambas opciones.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto para (precio completo), el otro sigue el plan.' },
     ]},
-  safetycar: { title:'Safety Car en pista', question:'Con todos ralentizados detrás del Safety Car, parar en boxes cuesta mucho menos de lo normal. ¿Adelantas tu parada aquí?',
+  safetycar: { title:'Safety Car en pista', question:'Parada con descuento bajo Safety Car. ¿Adelantas?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra a boxes', desc:'Adelantas aqui tu proxima parada programada, con descuento (neumaticos nuevos, mucho menos tiempo perdido). No haras otra parada mas adelante por esto.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto adelanta aqui la parada (con descuento), el otro mantiene el plan original y parara mas adelante como estaba previsto.' },
-      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Sigue en pista', desc:'No adelantas nada: pararas igualmente mas adelante, cuando toque, al precio completo normal.' },
-      { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Reinicio agresivo', desc:'Arriesgas todo en la reanudación para ganar posiciones de inmediato.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra a boxes', desc:'Parada adelantada con descuento: sin segunda parada después.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto adelanta (descuento), el otro sigue el plan.' },
+      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Sigue en pista', desc:'Sin cambios: parada normal más adelante.' },
+      { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Reinicio agresivo', desc:'Arriesgas todo en el reinicio para ganar posiciones.' },
     ]},
   pit: { title:'Ventana de parada', question:'¿Cuándo quieres parar en boxes?',
     choices:[
-      { key:'early', label:'⏪ Adelanta la parada', desc:'Paras ahora mismo (precio completo normal): neumáticos frescos antes, pero tendrás que hacerlos durar más después.' },
-      { key:'late',  label:'⏩ Retrasa la parada', desc:'Aplazas tu próxima parada más adelante en la carrera: sigues en pista más tiempo con neumáticos más desgastados.' },
+      { key:'early', label:'⏪ Adelanta la parada', desc:'Paras ahora (precio completo): neumáticos frescos antes, duranán más después.' },
+      { key:'late',  label:'⏩ Retrasa la parada', desc:'Aplazas la parada: más tiempo en pista con neumáticos más desgastados.' },
     ]},
   undercut: { title:'Oportunidad de undercut', question:'El rival de delante aún no ha parado. ¿Intentas el undercut?',
     choices:[
-      { key:'attempt', label:'<img class=ico src=assets/icons/wrench.png> Intenta el undercut', desc:'Paras ahora tú, antes que él (precio completo normal): si funciona, sales delante cuando pare él con neumáticos más viejos.' },
+      { key:'attempt', label:'<img class=ico src=assets/icons/wrench.png> Intenta el undercut', desc:'Paras ahora (precio completo): si funciona, sales delante de él.' },
       { key:'wait',    label:'<img class=ico src=assets/icons/traffic_light.png> Espera', desc:'No cambias de plan: mantienes tu ventana de parada original.' },
     ]},
   overcut: { title:'Oportunidad de overcut', question:'El rival de delante acaba de parar en boxes. ¿Sigues fuera?',
     choices:[
-      { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Sigue fuera', desc:'Retrasas tu parada: aprovechas el aire limpio mientras él vuelve a pista detrás de ti con neumáticos frescos.' },
-      { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Persigue, entra también', desc:'Paras ahora tú también (precio completo normal), misma ventana que el rival.' },
+      { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Sigue fuera', desc:'Retrasas la parada: aprovechas el aire limpio delante de él.' },
+      { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Persigue, entra también', desc:'Paras ahora también (precio completo), misma ventana que el rival.' },
     ]},
   aggression: { title:'Mitad de carrera', question:'¿Cómo quieres afrontar esta fase?',
     choices:[
@@ -4608,10 +4608,10 @@ const LIVE_DECISION_INFO_ES = {
       { key:'hold_line', label:'<img class=ico src=assets/icons/stop.png> No cedas el espacio', desc:'Podrías mantenerlo atrás, pero arriesgas el contacto.' },
       { key:'give_room', label:'🟢 Deja margen', desc:'Pierdes una posición, pero la carrera sigue limpia.' },
     ]},
-  doubleyellow: { title:'Doble bandera amarilla', question:'Doble amarilla en tu sector: peligro grave, todos deben reducir la velocidad. ¿Qué haces?',
+  doubleyellow: { title:'Doble bandera amarilla', question:'Doble amarilla: peligro grave, todos deben reducir. ¿Qué haces?',
     choices:[
-      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Reduce como se exige', desc:'Reduces lo necesario, como todos los demás: sin riesgo, sin desventaja real ya que aplica igual para todos.' },
-      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Reduce lo mínimo indispensable', desc:'Intentas perder el menor tiempo posible: si la dirección de carrera no se da cuenta ganas terreno, pero arriesgas una penalización real.' },
+      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Reduce como se exige', desc:'Reduces como todos: sin riesgo, sin desventaja.' },
+      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Reduce lo mínimo indispensable', desc:'Reduces lo mínimo: puedes ganar, pero arriesgas una penalización real.' },
     ]},
   engineersadvice: { title:'Consejo de los ingenieros', question:'El muro te sugiere un ajuste de reglaje. ¿Confías?',
     choices:[
@@ -4637,31 +4637,31 @@ const LIVE_DECISION_INFO_ES = {
 const LIVE_DECISION_INFO_IT_BASE = {
   weather: { title:'Il meteo sta cambiando', question:'Le condizioni di pista cambiano proprio ora. Che fai?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Cambia gomme subito', desc:'Pit stop vero, prezzo pieno normale: anticipa la tua prossima sosta programmata, gomme fresche per le condizioni.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Cambia gomme subito', desc:'Sosta vera (prezzo pieno): gomme fresche per le nuove condizioni.' },
       { key:'stay', label:'⏳ Resta fuori un altro giro', desc:'Rischi, ma guadagni se il meteo ti aiuta.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota entra davvero ai box (prezzo pieno normale), l\'altro mantiene il piano originale: copri entrambe le opzioni.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota si ferma (prezzo pieno), l\'altro segue il piano originale.' },
     ]},
-  safetycar: { title:'Safety Car in pista', question:'Con tutti rallentati dietro la Safety Car, fermarsi ai box costa molto meno del solito. Anticipi la tua sosta qui?',
+  safetycar: { title:'Safety Car in pista', question:'Sosta scontata sotto Safety Car. Anticipi qui?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra ai box', desc:'Anticipi qui la tua prossima sosta programmata, a prezzo scontato (gomme nuove, tempo perso molto piu basso). Non farai un\'altra sosta piu avanti per questo.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota anticipa qui la sosta (prezzo scontato), l\'altro mantiene il piano originale e si fermera piu avanti come previsto.' },
-      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Resta in pista', desc:'Non anticipi nulla: ti fermerai comunque piu avanti, quando toccher\u00e0, al prezzo pieno normale.' },
-      { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Ripartenza aggressiva', desc:'Rischi tutto al riavvio per guadagnare subito posizioni.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra ai box', desc:'Sosta anticipata a prezzo scontato: niente doppia sosta dopo.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota anticipa (sconto), l\'altro segue il piano.' },
+      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Resta in pista', desc:'Nessun anticipo: sosta normale piu avanti.' },
+      { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Ripartenza aggressiva', desc:'Rischi tutto al riavvio per guadagnare posizioni.' },
     ]},
   pit: { title:'Finestra di sosta', question:'Quando vuoi fermarti ai box?',
     choices:[
-      { key:'early', label:'⏪ Anticipa la sosta', desc:'Ti fermi subito qui (prezzo pieno normale): gomme fresche prima, ma dovrai farle durare di piu dopo.' },
-      { key:'late',  label:'⏩ Ritarda la sosta', desc:'Rimandi la tua prossima sosta piu avanti nella gara: resti in pista piu a lungo con gomme piu consumate.' },
+      { key:'early', label:'⏪ Anticipa la sosta', desc:'Ti fermi ora (prezzo pieno): gomme fresche prima, ma dureranno di piu dopo.' },
+      { key:'late',  label:'⏩ Ritarda la sosta', desc:'Sposti la sosta piu avanti: resti in pista piu a lungo con gomme piu consumate.' },
     ]},
   undercut: { title:'Occasione di undercut', question:'Il rivale davanti non si e ancora fermato. Tenti l\'undercut?',
     choices:[
-      { key:'attempt', label:'<img class=ico src=assets/icons/wrench.png> Tenta l\'undercut', desc:'Ti fermi subito tu, prima di lui (prezzo pieno normale): se funziona, esci davanti quando si fermera lui con gomme piu vecchie.' },
+      { key:'attempt', label:'<img class=ico src=assets/icons/wrench.png> Tenta l\'undercut', desc:'Ti fermi ora (prezzo pieno): se funziona esci davanti a lui.' },
       { key:'wait',    label:'<img class=ico src=assets/icons/traffic_light.png> Aspetta', desc:'Non cambi programma: resti sulla tua finestra di sosta originale.' },
     ]},
   overcut: { title:'Occasione di overcut', question:'Il rivale davanti si e appena fermato ai box. Resti fuori?',
     choices:[
-      { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Resta fuori', desc:'Rimandi la tua sosta: sfrutti l\'aria pulita mentre lui rientra in pista dietro di te con gomme fresche.' },
-      { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Rincorri, entra anche tu', desc:'Ti fermi subito anche tu (prezzo pieno normale), stessa finestra del rivale.' },
+      { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Resta fuori', desc:'Rimandi la sosta: sfrutti l\'aria pulita davanti a lui.' },
+      { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Rincorri, entra anche tu', desc:'Ti fermi ora (prezzo pieno), stessa finestra del rivale.' },
     ]},
   aggression: { title:'A metà gara', question:'Come vuoi affrontare questa fase?',
     choices:[
@@ -4713,10 +4713,10 @@ const LIVE_DECISION_INFO_IT_BASE = {
       { key:'hold_line', label:'<img class=ico src=assets/icons/stop.png> Non cedere lo spazio', desc:'Puoi tenerlo dietro, ma rischi il contatto.' },
       { key:'give_room', label:'🟢 Lascia margine', desc:'Perdi una posizione, ma la gara resta pulita.' },
     ]},
-  doubleyellow: { title:'Doppia bandiera gialla', question:'Doppia gialla sventolata sul tuo settore: pericolo grave, tutti devono rallentare. Che fai?',
+  doubleyellow: { title:'Doppia bandiera gialla', question:'Doppia gialla: pericolo grave, tutti devono rallentare. Che fai?',
     choices:[
-      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Rallenta come richiesto', desc:'Rallenti quanto serve, come tutti gli altri: nessun rischio, nessuno svantaggio reale visto che vale per tutti allo stesso modo.' },
-      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Rallenta il minimo indispensabile', desc:'Provi a perdere meno tempo possibile: se la direzione gara non se ne accorge guadagni terreno, ma rischi una vera penalita.' },
+      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Rallenta come richiesto', desc:'Rallenti come tutti: nessun rischio, nessuno svantaggio.' },
+      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Rallenta il minimo indispensabile', desc:'Rallenti il minimo: puoi guadagnare, ma rischi una vera penalita.' },
     ]},
   engineersadvice: { title:'Consiglio dagli ingegneri', question:'Il muretto ti suggerisce una modifica all\'assetto guida. Ti fidi?',
     choices:[
@@ -5421,7 +5421,7 @@ function bucketsSummaryHTML(choiceKey){
   if(!buckets) return '';
   return buckets.map(b=>{
     const pct = Math.round(b.prob*100);
-    const cls = b.label.startsWith('gain') ? 'bkt-gain' : b.label.startsWith('lose') ? 'bkt-lose' : 'bkt-hold';
+    const cls = b.label.startsWith('gain') ? 'bkt-gain' : (b.label.startsWith('lose') || b.label==='retired') ? 'bkt-lose' : 'bkt-hold';
     return `<span class="decision-bucket-chip ${cls}">${pct}% ${t('bkt_'+b.label)}</span>`;
   }).join('');
 }
@@ -5438,7 +5438,7 @@ function liveDecisionRevealHTML(){
     const { bucketIdx, buckets, shift, timeBonus } = reveal.outcomes[slotKey];
     const activeIdx = reveal.highlightIdx[slotKey];
     const chipsHTML = buckets.map((b,i)=>{
-      const cls = b.label.startsWith('gain') ? 'bkt-gain' : b.label.startsWith('lose') ? 'bkt-lose' : 'bkt-hold';
+      const cls = b.label.startsWith('gain') ? 'bkt-gain' : (b.label.startsWith('lose') || b.label==='retired') ? 'bkt-lose' : 'bkt-hold';
       let stateCls, text;
       if(settled){
         stateCls = i===bucketIdx ? 'reveal-winner' : 'reveal-dimmed';
