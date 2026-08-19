@@ -331,8 +331,8 @@ const I18N = {
     stream_name_placeholder: 'Il tuo nome streamer', stream_confirm: 'Conferma',
     stream_continue_title: 'Modalità streamer', stream_continue_desc: (name)=>`Vuoi continuare in modalità streamer come ${name}?`,
     settings_streamer_mode: 'Modalità Streamer', settings_streamer_mode_desc: "Layout pensato per OBS, con spazio dedicato alla webcam.", settings_streamer_name: 'Nome Streamer',
-    bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_hold: 'Mantieni la posizione',
-    bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni', bkt_lose_3: 'Perdi 3 posizioni', bkt_gain_3_5: 'Guadagni 3-5 posizioni',
+    bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_gain_2_3: 'Guadagni 2-3 posizioni', bkt_hold: 'Mantieni la posizione',
+    bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni', bkt_lose_3: 'Perdi 3 posizioni', bkt_gain_3_5: 'Guadagni 3-5 posizioni', bkt_retired: 'Rischio ritiro', bkt_penalty: 'Penalità', bkt_gain_2: 'Guadagni 2 posizioni',
     dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito', bkt_gain_exact: (n)=>n===1?'Guadagni 1 posizione':`Guadagni ${n} posizioni`, bkt_lose_exact: (n)=>n===1?'Perdi 1 posizione':`Perdi ${n} posizioni`, bkt_gain_seconds: (s)=>`Guadagni ${s} secondi`, bkt_lose_seconds: (s)=>`Perdi ${s} secondi`,
     dret_career_totals: 'Numeri di carriera', dret_seasons: 'Stagioni', dret_total_wins: 'Vittorie', dret_total_podiums: 'Podi',
     dret_total_points: (n)=>`${n} punti totali in carriera`,
@@ -616,8 +616,8 @@ const I18N = {
     stream_name_placeholder: 'Your streamer name', stream_confirm: 'Confirm',
     stream_continue_title: 'Streamer mode', stream_continue_desc: (name)=>`Do you want to continue in streamer mode as ${name}?`,
     settings_streamer_mode: 'Streamer Mode', settings_streamer_mode_desc: 'Layout designed for OBS, with a dedicated webcam space.', settings_streamer_name: 'Streamer Name',
-    bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_hold: 'Hold position',
-    bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions', bkt_lose_3: 'Lose 3 positions', bkt_gain_3_5: 'Gain 3-5 positions',
+    bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_gain_2_3: 'Gain 2-3 positions', bkt_hold: 'Hold position',
+    bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions', bkt_lose_3: 'Lose 3 positions', bkt_gain_3_5: 'Gain 3-5 positions', bkt_retired: 'Retirement risk', bkt_penalty: 'Penalty', bkt_gain_2: 'Gain 2 positions',
     dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result', bkt_gain_exact: (n)=>n===1?'Gain 1 position':`Gain ${n} positions`, bkt_lose_exact: (n)=>n===1?'Lose 1 position':`Lose ${n} positions`, bkt_gain_seconds: (s)=>`Gain ${s} seconds`, bkt_lose_seconds: (s)=>`Lose ${s} seconds`,
     dret_career_totals: 'Career numbers', dret_seasons: 'Seasons', dret_total_wins: 'Wins', dret_total_podiums: 'Podiums',
     dret_total_points: (n)=>`${n} total career points`,
@@ -895,8 +895,8 @@ const I18N = {
     stream_name_placeholder: 'Tu nombre de streamer', stream_confirm: 'Confirmar',
     stream_continue_title: 'Modo streamer', stream_continue_desc: (name)=>`¿Quieres continuar en modo streamer como ${name}?`,
     settings_streamer_mode: 'Modo Streamer', settings_streamer_mode_desc: 'Diseño pensado para OBS, con espacio dedicado a la cámara web.', settings_streamer_name: 'Nombre de Streamer',
-    bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_hold: 'Mantienes la posición',
-    bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones', bkt_lose_3: 'Pierdes 3 posiciones', bkt_gain_3_5: 'Ganas 3-5 posiciones',
+    bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_gain_2_3: 'Ganas 2-3 posiciones', bkt_hold: 'Mantienes la posición',
+    bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones', bkt_lose_3: 'Pierdes 3 posiciones', bkt_gain_3_5: 'Ganas 3-5 posiciones', bkt_retired: 'Riesgo de retiro', bkt_penalty: 'Penalización', bkt_gain_2: 'Ganas 2 posiciones',
     dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado', bkt_gain_exact: (n)=>n===1?'Ganas 1 posición':`Ganas ${n} posiciones`, bkt_lose_exact: (n)=>n===1?'Pierdes 1 posición':`Pierdes ${n} posiciones`, bkt_gain_seconds: (s)=>`Ganas ${s} segundos`, bkt_lose_seconds: (s)=>`Pierdes ${s} segundos`,
     dret_career_totals: 'Números de carrera', dret_seasons: 'Temporadas', dret_total_wins: 'Victorias', dret_total_podiums: 'Podios',
     dret_total_points: (n)=>`${n} puntos totales en carrera`,
@@ -4389,7 +4389,10 @@ function hasRivalAheadJustPitted(timeline, phase){
     return rival && rivalAheadHasPitted(timeline, phase, key);
   });
 }
-const DECISION_CONTEXT_CHECK = { teamorders: driversAreClose, defend: hasRivalCloseBehind, wheeltowheel: hasRivalCloseBehind, overtakedesperate: hasRivalCloseAhead, rivalmistake: hasRivalCloseAhead, undercut: hasRivalAheadNotPitted, overcut: hasRivalAheadJustPitted };
+// V0.9.9.63: "Ultimo push" deve apparire DAVVERO verso la fine gara, non in qualunque fase a caso
+// come tutte le altre decisioni scriptate — segnalato durante la revisione del foglio con Gio.
+function isLateRacePhase(timeline, phase){ return phase>=8; }
+const DECISION_CONTEXT_CHECK = { teamorders: driversAreClose, defend: hasRivalCloseBehind, wheeltowheel: hasRivalCloseBehind, overtakedesperate: hasRivalCloseAhead, rivalmistake: hasRivalCloseAhead, undercut: hasRivalAheadNotPitted, overcut: hasRivalAheadJustPitted, finalpush: isLateRacePhase };
 
 function computeLiveDecisions(timeline){
   const candidates = [];
@@ -4452,7 +4455,7 @@ const LIVE_DECISION_INFO_EN = {
     ]},
   aggression: { title:'Mid-race', question:'How do you want to approach this phase?',
     choices:[
-      { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Push', desc:'More chances to overtake, but more risk and wear.' },
+      { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Push', desc:'More chances to overtake, but real extra tyre wear that carries over for the rest of the race.' },
       { key:'safe',       label:'<img class=ico src=assets/icons/shield.png>️ Manage', desc:'Safer, but you stay where you are.' },
     ]},
   teamorders: { title:'Team orders', question:'Your two drivers are close in the standings. What do you do?',
@@ -4500,10 +4503,10 @@ const LIVE_DECISION_INFO_EN = {
       { key:'hold_line', label:"<img class=ico src=assets/icons/stop.png> Don't give up the space", desc:'You could hold them off, but risk contact.' },
       { key:'give_room', label:'🟢 Give room', desc:'You lose a position, but the race stays clean.' },
     ]},
-  doubleyellow: { title:'Double yellow flag', question:'Double yellow waved in your sector. What do you do?',
+  doubleyellow: { title:'Double yellow flag', question:'Double yellow waved in your sector: serious danger, everyone must slow down. What do you do?',
     choices:[
-      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Slow down as required', desc:'No risk, no gain.' },
-      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Risk the pace anyway', desc:"You could gain, but a penalty is just around the corner." },
+      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Slow down as required', desc:'You slow as much as needed, same as everyone else: no risk, no real disadvantage since it applies equally to all.' },
+      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Slow the bare minimum', desc:'You try to lose as little time as possible: if race control does not notice you gain ground, but you risk a real penalty.' },
     ]},
   engineersadvice: { title:'Advice from the engineers', question:'The pit wall suggests a setup tweak. Do you trust it?',
     choices:[
@@ -4557,7 +4560,7 @@ const LIVE_DECISION_INFO_ES = {
     ]},
   aggression: { title:'Mitad de carrera', question:'¿Cómo quieres afrontar esta fase?',
     choices:[
-      { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Aprieta', desc:'Más posibilidades de adelantar, pero más riesgo y desgaste.' },
+      { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Aprieta', desc:'Más posibilidades de adelantar, pero desgaste extra real que se arrastra el resto de la carrera.' },
       { key:'safe',       label:'<img class=ico src=assets/icons/shield.png>️ Gestiona', desc:'Más seguro, pero te quedas donde estás.' },
     ]},
   teamorders: { title:'Órdenes de equipo', question:'Tus dos pilotos están cerca en la clasificación. ¿Qué haces?',
@@ -4605,10 +4608,10 @@ const LIVE_DECISION_INFO_ES = {
       { key:'hold_line', label:'<img class=ico src=assets/icons/stop.png> No cedas el espacio', desc:'Podrías mantenerlo atrás, pero arriesgas el contacto.' },
       { key:'give_room', label:'🟢 Deja margen', desc:'Pierdes una posición, pero la carrera sigue limpia.' },
     ]},
-  doubleyellow: { title:'Doble bandera amarilla', question:'Doble amarilla en tu sector. ¿Qué haces?',
+  doubleyellow: { title:'Doble bandera amarilla', question:'Doble amarilla en tu sector: peligro grave, todos deben reducir la velocidad. ¿Qué haces?',
     choices:[
-      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Reduce como se pide', desc:'Sin riesgo, sin ganancia.' },
-      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Arriesga el ritmo de todos modos', desc:'Podrías ganar, pero una penalización está a la vuelta de la esquina.' },
+      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Reduce como se exige', desc:'Reduces lo necesario, como todos los demás: sin riesgo, sin desventaja real ya que aplica igual para todos.' },
+      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Reduce lo mínimo indispensable', desc:'Intentas perder el menor tiempo posible: si la dirección de carrera no se da cuenta ganas terreno, pero arriesgas una penalización real.' },
     ]},
   engineersadvice: { title:'Consejo de los ingenieros', question:'El muro te sugiere un ajuste de reglaje. ¿Confías?',
     choices:[
@@ -4662,7 +4665,7 @@ const LIVE_DECISION_INFO_IT_BASE = {
     ]},
   aggression: { title:'A metà gara', question:'Come vuoi affrontare questa fase?',
     choices:[
-      { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Spingi', desc:'Più possibilità di sorpasso, ma più rischio e usura.' },
+      { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Spingi', desc:'Più possibilità di sorpasso, ma usura gomme extra vera che si porta dietro per il resto della gara.' },
       { key:'safe',       label:'<img class=ico src=assets/icons/shield.png>️ Gestisci', desc:'Più sicuro, ma resti dove sei.' },
     ]},
   teamorders: { title:'Ordini di scuderia', question:'I tuoi due piloti sono vicini in classifica. Che fai?',
@@ -4710,10 +4713,10 @@ const LIVE_DECISION_INFO_IT_BASE = {
       { key:'hold_line', label:'<img class=ico src=assets/icons/stop.png> Non cedere lo spazio', desc:'Puoi tenerlo dietro, ma rischi il contatto.' },
       { key:'give_room', label:'🟢 Lascia margine', desc:'Perdi una posizione, ma la gara resta pulita.' },
     ]},
-  doubleyellow: { title:'Doppia bandiera gialla', question:'Doppia gialla sventolata sul tuo settore. Che fai?',
+  doubleyellow: { title:'Doppia bandiera gialla', question:'Doppia gialla sventolata sul tuo settore: pericolo grave, tutti devono rallentare. Che fai?',
     choices:[
-      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Rallenta come richiesto', desc:'Nessun rischio, nessun guadagno.' },
-      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Rischia comunque il ritmo', desc:'Puoi guadagnare, ma una penalità è dietro l\'angolo.' },
+      { key:'slow_down_yellow', label:'<img class=ico src=assets/icons/turtle.png> Rallenta come richiesto', desc:'Rallenti quanto serve, come tutti gli altri: nessun rischio, nessuno svantaggio reale visto che vale per tutti allo stesso modo.' },
+      { key:'risk_pace_yellow', label:'<img class=ico src=assets/icons/fire.png> Rallenta il minimo indispensabile', desc:'Provi a perdere meno tempo possibile: se la direzione gara non se ne accorge guadagni terreno, ma rischi una vera penalita.' },
     ]},
   engineersadvice: { title:'Consiglio dagli ingegneri', question:'Il muretto ti suggerisce una modifica all\'assetto guida. Ti fidi?',
     choices:[
@@ -4755,13 +4758,13 @@ const DECISION_OUTCOME_BUCKETS = {
   wait:       [{ prob:1.00, label:'hold', min:0, max:0 }],
   stayout:    [{ prob:0.55, label:'gain_1', min:-1, max:-1 }, { prob:0.45, label:'hold', min:0, max:0 }],
   follow:     [{ prob:0.70, label:'hold', min:0, max:0 }, { prob:0.30, label:'lose_1', min:1, max:1 }],
-  aggressive: [{ prob:0.55, label:'gain_1_2', min:-2, max:-1 }, { prob:0.45, label:'lose_1', min:1, max:1 }],
+  aggressive: [{ prob:0.65, label:'gain_2_3', min:-3, max:-2 }, { prob:0.35, label:'lose_1', min:1, max:1 }],
   safe:       [{ prob:1.00, label:'hold', min:0, max:0 }],
   hold:       [{ prob:1.00, label:'hold', min:0, max:0 }],
   free:       [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.375, label:'hold', min:0, max:0 }, { prob:0.125, label:'lose_2', min:2, max:2 }],
-  defend:     [{ prob:0.60, label:'hold', min:0, max:0 }, { prob:0.40, label:'lose_2', min:2, max:2 }],
+  defend:     [{ prob:0.60, label:'hold', min:0, max:0 }, { prob:0.40, label:'lose_3', min:3, max:3 }],
   letpass:    [{ prob:1.00, label:'lose_1', min:1, max:1 }],
-  push:       [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.375, label:'hold', min:0, max:0 }, { prob:0.125, label:'lose_2', min:2, max:2 }],
+  push:       [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.40, label:'hold', min:0, max:0 }, { prob:0.10, label:'retired', min:0, max:0 }],
   nurse:      [{ prob:0.70, label:'hold', min:0, max:0 }, { prob:0.30, label:'lose_1', min:1, max:1 }],
   // V0.9.7.9.22: 10 nuove decisioni. Tre sono esplicitamente "tutto o niente" (swing enormi,
   // possono salvare o rovinare una gara): try_overtake_desperate, lighten_fuel, all_or_nothing_push.
@@ -4776,9 +4779,9 @@ const DECISION_OUTCOME_BUCKETS = {
   hold_line:              [{ prob:0.40, label:'gain_1', min:-1, max:-1 }, { prob:0.35, label:'hold', min:0, max:0 }, { prob:0.25, label:'lose_2', min:2, max:2 }],
   give_room:              [{ prob:1.00, label:'lose_1', min:1, max:1 }],
   slow_down_yellow:       [{ prob:1.00, label:'hold', min:0, max:0 }],
-  risk_pace_yellow:       [{ prob:0.70, label:'gain_1', min:-1, max:-1 }, { prob:0.30, label:'lose_2', min:2, max:2 }],
-  follow_advice:          [{ prob:0.65, label:'gain_1', min:-1, max:-1 }, { prob:0.35, label:'hold', min:0, max:0 }],
-  trust_instinct:         [{ prob:0.62, label:'gain_1_2', min:-2, max:-1 }, { prob:0.20, label:'hold', min:0, max:0 }, { prob:0.18, label:'lose_1', min:1, max:1 }],
+  risk_pace_yellow:       [{ prob:0.55, label:'gain_1_2', min:-2, max:-1 }, { prob:0.45, label:'lose_2', min:2, max:2 }],
+  follow_advice:          [{ prob:0.75, label:'gain_1', min:-1, max:-1 }, { prob:0.25, label:'hold', min:0, max:0 }],
+  trust_instinct:         [{ prob:0.40, label:'gain_2', min:-2, max:-2 }, { prob:0.20, label:'hold', min:0, max:0 }, { prob:0.40, label:'lose_2', min:2, max:2 }],
   all_or_nothing_push:    [{ prob:0.45, label:'gain_3_5', min:-5, max:-3 }, { prob:0.55, label:'lose_3', min:3, max:3 }],
   bring_home:             [{ prob:1.00, label:'hold', min:0, max:0 }],
   overtake_backmarker:    [{ prob:0.60, label:'gain_1', min:-1, max:-1 }, { prob:0.40, label:'lose_1', min:1, max:1 }],
@@ -5019,6 +5022,36 @@ function applyLiveDecision(type, choiceKey){
       realPitCost = applyRealPitStop(timeline, slotKey, t, false);
     } else if(type==='overcut' && choiceKey==='stayout'){
       delayFuturePitStop(timeline, slotKey, t);
+    }
+    // V0.9.9.63: due esiti ora hanno una conseguenza VERA, non solo narrativa — corretto durante
+    // la revisione del foglio decisioni con Gio.
+    const pickedLabel = outcome.buckets[outcome.bucketIdx].label;
+    if(type==='mechanical' && choiceKey==='push' && pickedLabel==='retired'){
+      // il pilota si ritira DAVVERO da questa fase in poi, come un ritiro naturale della simulazione
+      timeline.retiredAtPhase[slotKey] = t;
+    }
+    if((type==='trackliminvestigation' && choiceKey==='push_limit' && pickedLabel==='lose_2') ||
+       (type==='doubleyellow' && choiceKey==='risk_pace_yellow' && pickedLabel==='lose_2')){
+      // penalità VERA (stato "PENALITÀ" mostrato in classifica), non solo perdita di posizioni
+      if(!timeline.penaltyByPhase[t]) timeline.penaltyByPhase[t] = new Set();
+      timeline.penaltyByPhase[t].add(slotKey);
+    }
+    // V0.9.9.63: "Spingi" (aggression/aggressive) ora comporta un vero aumento di usura gomme
+    // propagato sulle fasi future — richiesto esplicitamente da Gio: spingere al limite deve
+    // poter compromettere davvero il resto della gara, non solo l'esito immediato di questa fase.
+    if(type==='aggression' && choiceKey==='aggressive' && timeline.tireWearByPhase){
+      const extraWear = 0.09 + rnd()*0.06; // 9-15% di usura extra, effetto reale non simbolico
+      for(let phase=t; phase<timeline.tireWearByPhase.length; phase++){
+        const snap = timeline.tireWearByPhase[phase];
+        if(snap && snap[slotKey]!=null) snap[slotKey] = Math.min(1, snap[slotKey]+extraWear);
+      }
+    }
+    // V0.9.9.63: obiettivo Liberi di Lottare — contiamo ogni volta che si sceglie "free" in
+    // teamorders (una volta per decisione, non per pilota coinvolto, altrimenti conterebbe doppio).
+    if(type==='teamorders' && choiceKey==='free' && slotKey===affectedSlots[0]){
+      const count = loadTeamBattleCount()+1;
+      saveTeamBattleCount(count);
+      if(count>=50) unlockAchievement('liberi-di-lottare');
     }
     // V0.9.9.18/21: il testo mostrato usa lo shift VERO (dopo il limite ai bordi), non quello
     // nominale della scelta. Se sei gia' primo/ultimo e il guadagno/perdita non puo' tradursi in
@@ -7594,6 +7627,7 @@ const ACHIEVEMENTS = [
   { id:'meta-sala-trofei', cat:'Medio', title:'Metà Sala Trofei', desc:'Vinci su cinque circuiti diversi.', en:{title:'Halfway Trophy Room', desc:'Win on five different circuits.'}, es:{title:'Sala de Trofeos a Mitad', desc:'Gana en cinco circuitos diferentes.'} },
   { id:'nato-per-soffrire', cat:'Medio', title:'Nato per Soffrire', desc:'Vinci con un Comeback King partito oltre la P10.', en:{title:'Born to Suffer', desc:'Win with a Comeback King starting beyond P10.'}, es:{title:'Nacido para Sufrir', desc:'Gana con un Comeback King partiendo más allá de la P10.'} },
   { id:'coro-a-due-voci', cat:'Medio', title:'Coro a Due Voci', desc:'Ottieni due coppie sinergiche della stessa mentalità.', en:{title:'Two-Voice Choir', desc:'Get two synergy pairs of the same mentality.'}, es:{title:'Coro a Dos Voces', desc:'Consigue dos parejas con sinergia de la misma mentalidad.'} },
+  { id:'liberi-di-lottare', cat:'Medio', title:'Liberi di Lottare', desc:'Lascia lottare liberamente i tuoi due piloti 50 volte, nella decisione "Ordini di scuderia".', en:{title:'Free to Fight', desc:'Let your two drivers fight it out freely 50 times, in the "Team Orders" decision.'}, es:{title:'Libres para Luchar', desc:'Deja que tus dos pilotos luchen libremente 50 veces, en la decisión "Órdenes de Equipo".'} },
   // Difficile
   { id:'dominio-assoluto', cat:'Difficile', title:'Dominio Assoluto', desc:'Vinci una stagione intera senza perdere un solo Gran Premio.', en:{title:'Absolute Dominance', desc:'Win an entire season without losing a single Grand Prix.'}, es:{title:'Dominio Absoluto', desc:'Gana una temporada entera sin perder un solo Gran Premio.'} },
   { id:'doppietta-perfetta', cat:'Difficile', title:'Doppietta Perfetta', desc:'Vinci Piloti e Costruttori nella stessa stagione.', en:{title:'Perfect Double', desc:'Win both Drivers\' and Constructors\' in the same season.'}, es:{title:'Doblete Perfecto', desc:'Gana Pilotos y Constructores en la misma temporada.'} },
@@ -12112,6 +12146,10 @@ let defaultRaceSpeed = loadDefaultRaceSpeed(); // V0.7.3: velocita' predefinita 
 // volta nella vita del gioco, non ripetuto ad ogni gara successiva.
 function loadSpeed2xCount(){ try{ return Number(localStorage.getItem('racingDynastySpeed2xCountV1')||'0'); }catch(e){ return 0; } }
 function saveSpeed2xCount(n){ try{ localStorage.setItem('racingDynastySpeed2xCountV1', String(n)); }catch(e){} }
+// V0.9.9.63: contatore "battaglie in gara" (scelta 'free' in teamorders) per l'obiettivo Liberi di
+// Lottare, richiesto durante la revisione del foglio decisioni con Gio — si sblocca a 50.
+function loadTeamBattleCount(){ try{ return Number(localStorage.getItem('racingDynastyTeamBattleCountV1')||'0'); }catch(e){ return 0; } }
+function saveTeamBattleCount(n){ try{ localStorage.setItem('racingDynastyTeamBattleCountV1', String(n)); }catch(e){} }
 function hasSpeed2xPromptShown(){ try{ return localStorage.getItem('racingDynastySpeed2xPromptShownV1')==='1'; }catch(e){ return false; } }
 function markSpeed2xPromptShown(){ try{ localStorage.setItem('racingDynastySpeed2xPromptShownV1','1'); }catch(e){} }
 let decisionTimerEnabled = true; // V0.9.3.2: countdown per le decisioni in gara, disattivabile dal menu
