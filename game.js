@@ -4329,7 +4329,7 @@ function renderStartLights(){
 // per davvero. Circa 1 gara su 5 non propone nessuna occasione scriptata: se va liscia, va liscia.
 const SCRIPTED_DECISION_TYPES = ['pit','aggression','teamorders','defend','enginemode','mechanical',
   'overtakedesperate','fuelgamble','rivalmistake','trackliminvestigation','wheeltowheel',
-  'doubleyellow','engineersadvice','finalpush','backmarkertraffic','brakebite'];
+  'doubleyellow','engineersadvice','finalpush','backmarkertraffic','brakebite','undercut','overcut'];
 
 // V0.9.3.4: alcune decisioni fanno un'affermazione precisa sulla situazione in pista (piloti vicini,
 // rivale alle spalle) — devono scattare solo quando e' davvero vero, altrimenti perdono credibilita'.
@@ -4358,7 +4358,38 @@ function hasRivalCloseAhead(timeline, phase){
     return ahead!=='PLAYER-1' && ahead!=='PLAYER-2';
   });
 }
-const DECISION_CONTEXT_CHECK = { teamorders: driversAreClose, defend: hasRivalCloseBehind, wheeltowheel: hasRivalCloseBehind, overtakedesperate: hasRivalCloseAhead, rivalmistake: hasRivalCloseAhead };
+// V0.9.9.61: trova il rivale SPECIFICO davanti (non solo un booleano) — serve per sapere se si e'
+// gia' fermato ai box o no, per le nuove decisioni undercut/overcut.
+function findRivalAheadSlot(timeline, phase, forSlotKey){
+  const order = timeline.phaseOrders[phase];
+  const i = order.indexOf(forSlotKey);
+  if(i<=0) return null;
+  const ahead = order[i-1];
+  return (ahead!=='PLAYER-1' && ahead!=='PLAYER-2') ? ahead : null;
+}
+function rivalAheadHasPitted(timeline, phase, forSlotKey){
+  const rival = findRivalAheadSlot(timeline, phase, forSlotKey);
+  if(!rival) return false;
+  for(let ph=0; ph<=phase; ph++){
+    if(timeline.pitByPhase[ph] && timeline.pitByPhase[ph].has(rival)) return true;
+  }
+  return false;
+}
+// condizione: c'e' un rivale vicino davanti che NON si e' ancora fermato (occasione di undercut)
+function hasRivalAheadNotPitted(timeline, phase){
+  return ['PLAYER-1','PLAYER-2'].some(key=>{
+    const rival = findRivalAheadSlot(timeline, phase, key);
+    return rival && !rivalAheadHasPitted(timeline, phase, key);
+  });
+}
+// condizione: c'e' un rivale vicino davanti che SI E' GIA' fermato di recente (occasione di overcut/rincorsa)
+function hasRivalAheadJustPitted(timeline, phase){
+  return ['PLAYER-1','PLAYER-2'].some(key=>{
+    const rival = findRivalAheadSlot(timeline, phase, key);
+    return rival && rivalAheadHasPitted(timeline, phase, key);
+  });
+}
+const DECISION_CONTEXT_CHECK = { teamorders: driversAreClose, defend: hasRivalCloseBehind, wheeltowheel: hasRivalCloseBehind, overtakedesperate: hasRivalCloseAhead, rivalmistake: hasRivalCloseAhead, undercut: hasRivalAheadNotPitted, overcut: hasRivalAheadJustPitted };
 
 function computeLiveDecisions(timeline){
   const candidates = [];
@@ -4393,9 +4424,9 @@ function computeLiveDecisions(timeline){
 const LIVE_DECISION_INFO_EN = {
   weather: { title:'The weather is changing', question:"Track conditions are changing right now. What do you do?",
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Change tires now', desc:'Risky: pull off the undercut and you gain ground, get it wrong and you lose positions.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Change tires now', desc:'Real pit stop, normal full price: brings forward your next scheduled stop, fresh tyres for the conditions.' },
       { key:'stay', label:'⏳ Stay out one more lap', desc:'Risky, but you gain if the weather helps you.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver pits, the other stays out: cover both options.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver really pits (normal full price), the other keeps their original plan: cover both options.' },
     ]},
   safetycar: { title:'Safety Car on track', question:'With everyone slowed behind the Safety Car, pitting costs much less than usual. Bring your stop forward here?',
     choices:[
@@ -4406,8 +4437,18 @@ const LIVE_DECISION_INFO_EN = {
     ]},
   pit: { title:'Pit window', question:'When do you want to stop?',
     choices:[
-      { key:'early', label:'⏪ Pit early', desc:"Fresh tires right away, but you'll have to manage them longer." },
-      { key:'late',  label:'⏩ Delay the stop', desc:'Stay out longer, risking wear.' },
+      { key:'early', label:'⏪ Bring the stop forward', desc:'You pit right now (normal full price): fresh tyres sooner, but you\'ll need to make them last longer after.' },
+      { key:'late',  label:'⏩ Delay the stop', desc:'You push your next stop further into the race: staying out longer on more worn tyres.' },
+    ]},
+  undercut: { title:'Undercut opportunity', question:'The rival ahead hasn\'t pitted yet. Try the undercut?',
+    choices:[
+      { key:'attempt', label:'<img class=ico src=assets/icons/wrench.png> Try the undercut', desc:'You pit now, before them (normal full price): if it works, you come out ahead when they pit later on older tyres.' },
+      { key:'wait',    label:'<img class=ico src=assets/icons/traffic_light.png> Wait', desc:'You stick to your original pit window, no change.' },
+    ]},
+  overcut: { title:'Overcut opportunity', question:'The rival ahead just pitted. Do you stay out?',
+    choices:[
+      { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Stay out', desc:'You delay your stop: exploit clean air while they rejoin behind you on fresh tyres.' },
+      { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Follow them in', desc:'You pit right now too (normal full price), matching their window.' },
     ]},
   aggression: { title:'Mid-race', question:'How do you want to approach this phase?',
     choices:[
@@ -4488,9 +4529,9 @@ const LIVE_DECISION_INFO_EN = {
 const LIVE_DECISION_INFO_ES = {
   weather: { title:'El clima está cambiando', question:'Las condiciones de pista cambian justo ahora. ¿Qué haces?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Cambia neumáticos ya', desc:'Arriesgado: si el undercut sale bien ganas terreno, si no pierdes posiciones.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Cambia neumáticos ya', desc:'Parada real, precio completo normal: adelanta tu proxima parada programada, neumaticos frescos para las condiciones.' },
       { key:'stay', label:'⏳ Sigue una vuelta más', desc:'Arriesgas, pero ganas si el clima te ayuda.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto entra, el otro sigue fuera: cubres ambas opciones.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto entra de verdad (precio completo normal), el otro mantiene su plan original: cubres ambas opciones.' },
     ]},
   safetycar: { title:'Safety Car en pista', question:'Con todos ralentizados detrás del Safety Car, parar en boxes cuesta mucho menos de lo normal. ¿Adelantas tu parada aquí?',
     choices:[
@@ -4501,8 +4542,18 @@ const LIVE_DECISION_INFO_ES = {
     ]},
   pit: { title:'Ventana de parada', question:'¿Cuándo quieres parar en boxes?',
     choices:[
-      { key:'early', label:'⏪ Adelanta la parada', desc:'Neumáticos frescos ya, pero tendrás que gestionarlos más tiempo.' },
-      { key:'late',  label:'⏩ Retrasa la parada', desc:'Sigues más tiempo en pista, arriesgando el desgaste.' },
+      { key:'early', label:'⏪ Adelanta la parada', desc:'Paras ahora mismo (precio completo normal): neumáticos frescos antes, pero tendrás que hacerlos durar más después.' },
+      { key:'late',  label:'⏩ Retrasa la parada', desc:'Aplazas tu próxima parada más adelante en la carrera: sigues en pista más tiempo con neumáticos más desgastados.' },
+    ]},
+  undercut: { title:'Oportunidad de undercut', question:'El rival de delante aún no ha parado. ¿Intentas el undercut?',
+    choices:[
+      { key:'attempt', label:'<img class=ico src=assets/icons/wrench.png> Intenta el undercut', desc:'Paras ahora tú, antes que él (precio completo normal): si funciona, sales delante cuando pare él con neumáticos más viejos.' },
+      { key:'wait',    label:'<img class=ico src=assets/icons/traffic_light.png> Espera', desc:'No cambias de plan: mantienes tu ventana de parada original.' },
+    ]},
+  overcut: { title:'Oportunidad de overcut', question:'El rival de delante acaba de parar en boxes. ¿Sigues fuera?',
+    choices:[
+      { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Sigue fuera', desc:'Retrasas tu parada: aprovechas el aire limpio mientras él vuelve a pista detrás de ti con neumáticos frescos.' },
+      { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Persigue, entra también', desc:'Paras ahora tú también (precio completo normal), misma ventana que el rival.' },
     ]},
   aggression: { title:'Mitad de carrera', question:'¿Cómo quieres afrontar esta fase?',
     choices:[
@@ -4583,9 +4634,9 @@ const LIVE_DECISION_INFO_ES = {
 const LIVE_DECISION_INFO_IT_BASE = {
   weather: { title:'Il meteo sta cambiando', question:'Le condizioni di pista cambiano proprio ora. Che fai?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Cambia gomme subito', desc:'Rischioso: se l\'undercut riesce guadagni terreno, se va male perdi posizioni.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wheel.png> Cambia gomme subito', desc:'Pit stop vero, prezzo pieno normale: anticipa la tua prossima sosta programmata, gomme fresche per le condizioni.' },
       { key:'stay', label:'⏳ Resta fuori un altro giro', desc:'Rischi, ma guadagni se il meteo ti aiuta.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota entra, l\'altro resta fuori: copri entrambe le opzioni.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota entra davvero ai box (prezzo pieno normale), l\'altro mantiene il piano originale: copri entrambe le opzioni.' },
     ]},
   safetycar: { title:'Safety Car in pista', question:'Con tutti rallentati dietro la Safety Car, fermarsi ai box costa molto meno del solito. Anticipi la tua sosta qui?',
     choices:[
@@ -4596,8 +4647,18 @@ const LIVE_DECISION_INFO_IT_BASE = {
     ]},
   pit: { title:'Finestra di sosta', question:'Quando vuoi fermarti ai box?',
     choices:[
-      { key:'early', label:'⏪ Anticipa la sosta', desc:'Gomme fresche subito, ma dovrai gestirle più a lungo.' },
-      { key:'late',  label:'⏩ Ritarda la sosta', desc:'Resti in pista più a lungo, rischiando l\'usura.' },
+      { key:'early', label:'⏪ Anticipa la sosta', desc:'Ti fermi subito qui (prezzo pieno normale): gomme fresche prima, ma dovrai farle durare di piu dopo.' },
+      { key:'late',  label:'⏩ Ritarda la sosta', desc:'Rimandi la tua prossima sosta piu avanti nella gara: resti in pista piu a lungo con gomme piu consumate.' },
+    ]},
+  undercut: { title:'Occasione di undercut', question:'Il rivale davanti non si e ancora fermato. Tenti l\'undercut?',
+    choices:[
+      { key:'attempt', label:'<img class=ico src=assets/icons/wrench.png> Tenta l\'undercut', desc:'Ti fermi subito tu, prima di lui (prezzo pieno normale): se funziona, esci davanti quando si fermera lui con gomme piu vecchie.' },
+      { key:'wait',    label:'<img class=ico src=assets/icons/traffic_light.png> Aspetta', desc:'Non cambi programma: resti sulla tua finestra di sosta originale.' },
+    ]},
+  overcut: { title:'Occasione di overcut', question:'Il rivale davanti si e appena fermato ai box. Resti fuori?',
+    choices:[
+      { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Resta fuori', desc:'Rimandi la tua sosta: sfrutti l\'aria pulita mentre lui rientra in pista dietro di te con gomme fresche.' },
+      { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Rincorri, entra anche tu', desc:'Ti fermi subito anche tu (prezzo pieno normale), stessa finestra del rivale.' },
     ]},
   aggression: { title:'A metà gara', question:'Come vuoi affrontare questa fase?',
     choices:[
@@ -4690,6 +4751,10 @@ const DECISION_OUTCOME_BUCKETS = {
   restart:    [{ prob:0.45, label:'gain_1_2', min:-2, max:-1 }, { prob:0.55, label:'lose_2', min:2, max:2 }],
   early:      [{ prob:0.60, label:'gain_1', min:-1, max:-1 }, { prob:0.40, label:'lose_1', min:1, max:1 }],
   late:       [{ prob:0.50, label:'gain_1_2', min:-2, max:-1 }, { prob:0.30, label:'hold', min:0, max:0 }, { prob:0.20, label:'lose_2', min:2, max:2 }],
+  attempt:    [{ prob:0.50, label:'gain_1_2', min:-2, max:-1 }, { prob:0.50, label:'lose_1', min:1, max:1 }],
+  wait:       [{ prob:1.00, label:'hold', min:0, max:0 }],
+  stayout:    [{ prob:0.55, label:'gain_1', min:-1, max:-1 }, { prob:0.45, label:'hold', min:0, max:0 }],
+  follow:     [{ prob:0.70, label:'hold', min:0, max:0 }, { prob:0.30, label:'lose_1', min:1, max:1 }],
   aggressive: [{ prob:0.55, label:'gain_1_2', min:-2, max:-1 }, { prob:0.45, label:'lose_1', min:1, max:1 }],
   safe:       [{ prob:1.00, label:'hold', min:0, max:0 }],
   hold:       [{ prob:1.00, label:'hold', min:0, max:0 }],
@@ -4796,23 +4861,60 @@ function cancelFuturePitStop(timeline, slotKey, tCurrent){
   }
 
   // annulliamo anche il reset gomme che sarebbe successo li' — la gomma continua a consumarsi
-  // dal punto vero, invece di ripartire una seconda volta da fresca
+  // dal punto vero, invece di ripartire una seconda volta da fresca. V0.9.9.60: FIX — il calcolo
+  // precedente confrontava male le fasi (l'usura cresce naturalmente comunque fase su fase, quindi
+  // il confronto dava sempre zero). Ora stimiamo il tasso di crescita "pulito" da un intervallo che
+  // non è esso stesso un punto di reset, per capire quanto sarebbe DAVVERO salita l'usura li'.
   if(timeline.tireWearByPhase){
-    const wearAtCancel = timeline.tireWearByPhase[cancelPhase] ? (timeline.tireWearByPhase[cancelPhase][slotKey]||0.05) : 0.05;
-    const wearJustBefore = timeline.tireWearByPhase[cancelPhase-1] ? (timeline.tireWearByPhase[cancelPhase-1][slotKey]||wearAtCancel) : wearAtCancel;
-    const undoDrop = Math.max(0, wearJustBefore - wearAtCancel); // quanto era "sceso" per il reset annullato
-    for(let phase=cancelPhase; phase<timeline.tireWearByPhase.length; phase++){
-      const snap = timeline.tireWearByPhase[phase];
+    const wSnap = timeline.tireWearByPhase;
+    const wearAtCancel = wSnap[cancelPhase] ? (wSnap[cancelPhase][slotKey]||0.05) : 0.05;
+    const wearBeforeCancel = wSnap[cancelPhase-1] ? (wSnap[cancelPhase-1][slotKey]||0) : 0;
+    let growthRate = 0.04; // valore di riserva se non stimabile
+    if(wSnap[cancelPhase+1] && wSnap[cancelPhase] && wSnap[cancelPhase+1][slotKey]!=null){
+      const g = wSnap[cancelPhase+1][slotKey] - wSnap[cancelPhase][slotKey];
+      if(g>0) growthRate = g;
+    }
+    const expectedWithoutReset = wearBeforeCancel + growthRate;
+    const undoDrop = Math.max(0, expectedWithoutReset - wearAtCancel);
+    for(let phase=cancelPhase; phase<wSnap.length; phase++){
+      const snap = wSnap[phase];
       if(snap && snap[slotKey]!=null) snap[slotKey] = Math.min(1, snap[slotKey]+undoDrop);
     }
   }
 }
-function applyRealPitUnderSC(timeline, slotKey, tCurrent){
-  cancelFuturePitStop(timeline, slotKey, tCurrent); // prima annulliamo la sosta futura, se c'e'
-  const comp = state.team; // stesso componente stratega usato per il costo vero del pit
-  const pitSkillFrac = comp.stratega.pitstop/100;
-  const cost = 12 - pitSkillFrac*2; // identica formula del pit vero sotto Safety Car
+// V0.9.9.61: generalizzata da applyRealPitUnderSC — riusabile per QUALUNQUE decisione live che
+// comporti un vero pit stop (non solo sotto Safety Car), con isDiscounted a scegliere la formula
+// di costo giusta e targetPhase a scegliere QUANDO succede davvero (utile per "ritarda la sosta",
+// che sposta la sosta piu' avanti, non la applica subito al momento della decisione).
+// Segnalato da Gio: "rivediamo tutte le azioni live che riguardano il pit stop".
+// V0.9.9.61: ritarda una sosta futura invece di annullarla — sposta il costo/reset gomme piu'
+// avanti nella gara (di default 3 fasi dopo quella cancellata, senza superare la penultima fase).
+// Usata da "ritarda la sosta" (pit) e "resta fuori" (overcut) — nessun costo pagato ORA, solo
+// gomme piu' consumate nel frattempo perche' la sosta arriva piu' tardi del previsto.
+function delayFuturePitStop(timeline, slotKey, tCurrent){
+  let cancelPhase = null;
   for(let phase=tCurrent+1; phase<PHASES.length; phase++){
+    if(timeline.pitByPhase[phase] && timeline.pitByPhase[phase].has(slotKey)){ cancelPhase = phase; break; }
+  }
+  if(cancelPhase===null) return; // nessuna sosta futura da ritardare
+  let newPhase = Math.min(cancelPhase+3, PHASES.length-2);
+  // V0.9.9.62: fix — se la nuova fase coincide con un'ALTRA sosta gia' esistente dello stesso
+  // pilota (es. la seconda sosta originale), il Set non duplica la presenza ma il costo verrebbe
+  // sommato una seconda volta li' senza che si veda dal conteggio fasi. Cerchiamo la prima fase
+  // libera scendendo all'indietro fino a trovarne una senza collisione.
+  while(newPhase>cancelPhase && timeline.pitByPhase[newPhase] && timeline.pitByPhase[newPhase].has(slotKey)){
+    newPhase--;
+  }
+  if(newPhase===cancelPhase || (timeline.pitByPhase[newPhase] && timeline.pitByPhase[newPhase].has(slotKey))) return; // nessun posto libero per ritardare
+  applyRealPitStop(timeline, slotKey, tCurrent, false, newPhase);
+}
+function applyRealPitStop(timeline, slotKey, tCurrent, isDiscounted, targetPhase){
+  if(targetPhase===undefined) targetPhase = tCurrent;
+  cancelFuturePitStop(timeline, slotKey, tCurrent); // prima annulliamo la sosta futura, se c'e'
+  const comp = state.team;
+  const pitSkillFrac = comp.stratega.pitstop/100;
+  const cost = isDiscounted ? (12 - pitSkillFrac*2) : (24 - pitSkillFrac*2);
+  for(let phase=targetPhase+1; phase<PHASES.length; phase++){
     const cumSnap = timeline.cumTimeByPhase[phase];
     if(!cumSnap || cumSnap[slotKey]==null) continue;
     cumSnap[slotKey] += cost;
@@ -4824,19 +4926,20 @@ function applyRealPitUnderSC(timeline, slotKey, tCurrent){
     activeKeys.sort((k1,k2)=> cumSnap[k1]-cumSnap[k2]);
     timeline.phaseOrders[phase] = [...activeKeys, ...retiredKeys];
   }
-  // gomme nuove da qui in avanti, come un vero pit stop
   if(timeline.tireWearByPhase){
-    const wearNow = timeline.tireWearByPhase[tCurrent] ? (timeline.tireWearByPhase[tCurrent][slotKey]||0) : 0;
+    const wearNow = timeline.tireWearByPhase[targetPhase] ? (timeline.tireWearByPhase[targetPhase][slotKey]||0) : 0;
     const reduction = Math.max(0, wearNow - 0.05);
-    for(let phase=tCurrent; phase<timeline.tireWearByPhase.length; phase++){
+    for(let phase=targetPhase; phase<timeline.tireWearByPhase.length; phase++){
       const snap = timeline.tireWearByPhase[phase];
       if(snap && snap[slotKey]!=null) snap[slotKey] = Math.max(0.02, snap[slotKey]-reduction);
     }
   }
-  // registriamo il pit VERO in questa fase, cosi' lo stato "BOX" e il log lo riflettono correttamente
-  if(!timeline.pitByPhase[tCurrent]) timeline.pitByPhase[tCurrent] = new Set();
-  timeline.pitByPhase[tCurrent].add(slotKey);
+  if(!timeline.pitByPhase[targetPhase]) timeline.pitByPhase[targetPhase] = new Set();
+  timeline.pitByPhase[targetPhase].add(slotKey);
   return cost;
+}
+function applyRealPitUnderSC(timeline, slotKey, tCurrent){
+  return applyRealPitStop(timeline, slotKey, tCurrent, true);
 }
 function applyLiveDecision(type, choiceKey){
   const timeline = state.live.timeline;
@@ -4879,11 +4982,14 @@ function applyLiveDecision(type, choiceKey){
       if(timeline.retiredAtPhase[slotKey]!==null) return;
       const outcome = pickDecisionOutcome(bucketChoice[slotKey]);
       const { actualFirstShift, firstPhaseTimeBonus } = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(bucketChoice[slotKey]));
-      // V0.9.9.55: solo chi va DAVVERO ai box (non il compagno che resta fuori) prende il costo/
-      // beneficio reale del pit sotto Safety Car — vero undercut, non solo un esito narrativo.
+      // V0.9.9.62: solo chi va DAVVERO ai box (non il compagno che resta fuori) prende il costo/
+      // beneficio reale del pit — vero undercut, non solo un esito narrativo. Esteso anche a
+      // "weather" (cambio gomme per meteo e' un pit stop vero quanto quello sotto Safety Car) —
+      // incoerenza trovata durante la revisione richiesta da Gio. Lo sconto Safety Car si applica
+      // solo se la decisione capita DAVVERO in quella fase, non sempre.
       let realPitCost = null;
-      if(type==='safetycar' && bucketChoice[slotKey]==='box'){
-        realPitCost = applyRealPitUnderSC(timeline, slotKey, t);
+      if((type==='safetycar' || type==='weather') && bucketChoice[slotKey]==='box'){
+        realPitCost = applyRealPitStop(timeline, slotKey, t, t===timeline.safetyCarPhase);
       }
       reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus, realPitCost };
     });
@@ -4894,11 +5000,25 @@ function applyLiveDecision(type, choiceKey){
     if(timeline.retiredAtPhase[slotKey]!==null) return; // gia' ritirato: la scelta non ha piu' effetto
     const outcome = pickDecisionOutcome(choiceKey);
     const { actualFirstShift, firstPhaseTimeBonus } = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(choiceKey));
-    // V0.9.9.55: "Entra ai box" durante la Safety Car ora e' un vero pit stop (costo reale in
-    // secondi + gomme nuove), non solo un esito narrativo scollegato dalla simulazione.
+    // V0.9.9.55/61: le scelte che comportano un vero pit stop (sotto Safety Car o normale) ora
+    // muovono DAVVERO la simulazione — costo reale in secondi + gomme nuove — non solo un esito
+    // narrativo scollegato. "Ritarda"/"resta fuori" spostano la sosta futura piu' avanti invece di
+    // applicarne una subito.
     let realPitCost = null;
     if(type==='safetycar' && choiceKey==='box'){
       realPitCost = applyRealPitUnderSC(timeline, slotKey, t);
+    } else if(type==='weather' && choiceKey==='box'){
+      realPitCost = applyRealPitStop(timeline, slotKey, t, t===timeline.safetyCarPhase);
+    } else if(type==='pit' && choiceKey==='early'){
+      realPitCost = applyRealPitStop(timeline, slotKey, t, false);
+    } else if(type==='pit' && choiceKey==='late'){
+      delayFuturePitStop(timeline, slotKey, t);
+    } else if(type==='undercut' && choiceKey==='attempt'){
+      realPitCost = applyRealPitStop(timeline, slotKey, t, false);
+    } else if(type==='overcut' && choiceKey==='follow'){
+      realPitCost = applyRealPitStop(timeline, slotKey, t, false);
+    } else if(type==='overcut' && choiceKey==='stayout'){
+      delayFuturePitStop(timeline, slotKey, t);
     }
     // V0.9.9.18/21: il testo mostrato usa lo shift VERO (dopo il limite ai bordi), non quello
     // nominale della scelta. Se sei gia' primo/ultimo e il guadagno/perdita non puo' tradursi in
