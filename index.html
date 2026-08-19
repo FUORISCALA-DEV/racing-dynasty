@@ -27,7 +27,8 @@
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 }
 *{box-sizing:border-box;}
-html,body{margin:0;padding:0;background:var(--void);color:var(--text);font-family:var(--font-ui);overflow-x:hidden;}
+html{margin:0;padding:0;overflow-x:hidden;}
+body{margin:0;padding:0;background:var(--void);color:var(--text);font-family:var(--font-ui);}
 /* V0.9.7.9.37: scrollbar a tema per tutta la pagina, invece di quella grigia di default del
    sistema — si nota soprattutto dentro il riquadro stretto della modalita' streamer, ma vale
    ovunque per coerenza visiva. */
@@ -134,7 +135,12 @@ h1,h2,h3{margin:0;font-weight:800;letter-spacing:0.02em;}
 .topbar{
   display:flex;justify-content:space-between;align-items:flex-end;gap:14px;
   border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px;flex-wrap:wrap;
+  position:sticky;top:0;z-index:50;background:var(--void);padding-top:12px;margin-top:-12px;
 }
+/* V0.9.9.66: in gara, l'area fissa si estende oltre il solo topbar — fino alle schede pilota con
+   l'usura gomme comprese, cosi' restano sempre visibili scorrendo la classifica sotto. */
+.live-sticky-header{ position:sticky; top:0; z-index:51; background:var(--void); align-self:stretch; flex-shrink:0; }
+.live-sticky-header .topbar{ position:static; background:transparent; padding-top:0; margin-top:0; }
 .brand{font-size:26px;line-height:1;}
 .brand small{display:block;font-size:11px;font-weight:600;letter-spacing:0.2em;color:var(--dim);
   text-transform:uppercase;margin-top:5px;transform:skewX(0deg);}

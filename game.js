@@ -1725,9 +1725,9 @@ const START_BUDGET = 20; // milioni
 // --- V0.2: difficoltà e reroll ---
 const DIFFICULTY_REROLLS = { facile:9, medio:6, difficile:3, hardcore:0 };
 const DIFFICULTY_ORDER = ['facile','medio','difficile','hardcore'];
-const DIFFICULTY_LABEL_IT = { facile:'Facile', medio:'Medio', difficile:'Difficile', hardcore:'Hardcore' };
-const DIFFICULTY_LABEL_EN = { facile:'Easy', medio:'Medium', difficile:'Hard', hardcore:'Hardcore' };
-const DIFFICULTY_LABEL_ES = { facile:'Fácil', medio:'Medio', difficile:'Difícil', hardcore:'Hardcore' };
+const DIFFICULTY_LABEL_IT = { facile:'Rookie', medio:'Racer', difficile:'Pro', hardcore:'Elite' };
+const DIFFICULTY_LABEL_EN = { facile:'Rookie', medio:'Racer', difficile:'Pro', hardcore:'Elite' };
+const DIFFICULTY_LABEL_ES = { facile:'Rookie', medio:'Racer', difficile:'Pro', hardcore:'Elite' };
 const DIFFICULTY_DESC_IT = {
   facile:'9 reroll nel draft: più margine per rifare le offerte che non ti convincono.',
   medio:'6 reroll nel draft: qualche seconda possibilità, ma le scelte contano davvero.',
@@ -3943,11 +3943,14 @@ function pedalReleaseShift(deltaMs){
 // V0.9.9.34: pulsante "Salta" ai semafori — tabella pesata DEDICATA, diversa da quella dei paddle
 // veri: niente mai "partenza perfetta" gratis (chi salta non ha dimostrato riflessi), pesantemente
 // sbilanciata verso partenze nella media. Stessi 4 esiti mostrati come "possibilita'" nell'animazione.
+// V0.9.9.66: su richiesta di Gio, aggiunta la partenza perfetta anche qui, ma rarissima (1/100) —
+// prima non usciva mai nemmeno per puro colpo di fortuna, ora un pizzico di fortuna resta possibile.
 const SKIP_START_WEIGHTS = [
   { shift:-2, weight:10 }, // partenza molto lenta
   { shift:-1, weight:15 }, // partenza lenta
-  { shift:0,  weight:55 }, // partenza nella media — di gran lunga la piu' probabile
+  { shift:0,  weight:54 }, // partenza nella media — di gran lunga la piu' probabile
   { shift:1,  weight:20 }, // buona partenza
+  { shift:2,  weight:1 },  // partenza perfetta — 1 su 100 esatto, un vero colpo di fortuna
 ];
 function pickSkipStartShift(){
   const total = SKIP_START_WEIGHTS.reduce((s,w)=>s+w.weight, 0);
@@ -3960,6 +3963,7 @@ const SKIP_START_BUCKETS = [
   { shift:-1, label:'late' },
   { shift:0,  label:'ok' },
   { shift:1,  label:'good' },
+  { shift:2,  label:'perfect' },
 ];
 function pedalResultLabel(shift){
   if(shift<=-3) return { text:t('pedal_result_falsestart'), cls:'pedal-bad' };
@@ -5749,6 +5753,15 @@ function liveLapTimeDisplay(circuit, tireWear){
   const secs = (total%60).toFixed(3).padStart(6,'0');
   return `${mins}:${secs}`;
 }
+// V0.9.9.66: l'usura gomme in pratica non supera quasi mai il 50% — segnalato da Gio. La barra ora
+// rappresenta visivamente l'intervallo 0-50% (50% di usura reale = barra piena), non 0-100%, e le
+// soglie colore sono ricalibrate sullo stesso intervallo pratico (prima quasi sempre verde, perché
+// le soglie 45%/75% erano tarate sul range teorico 0-100 mai davvero raggiunto).
+function tireWearVisual(wear){
+  const barWidthPct = Math.min(100, Math.round(wear*200)); // 50% di usura reale = barra piena
+  const wearCls = wear>=0.35 ? 'tire-wear-high' : wear>=0.20 ? 'tire-wear-mid' : 'tire-wear-low';
+  return { barWidthPct, wearCls };
+}
 function tireCardHTML(slotKey, timeline, phaseIdx, rows){
   const row = rows.find(r=>r.key===slotKey);
   if(!row) return '';
@@ -5756,7 +5769,7 @@ function tireCardHTML(slotKey, timeline, phaseIdx, rows){
     ? interpolatePerPhaseValue(timeline.tireWearByPhase, Math.floor(phaseIdx), Math.ceil(phaseIdx), phaseIdx-Math.floor(phaseIdx), slotKey)
     : 0;
   const wearPct = Math.round(wear*100);
-  const wearCls = wear>=0.75 ? 'tire-wear-high' : wear>=0.45 ? 'tire-wear-mid' : 'tire-wear-low';
+  const { barWidthPct, wearCls } = tireWearVisual(wear);
   const lapTime = liveLapTimeDisplay(timeline.circuit, wear);
   return `
   <div class="tire-card" id="tirecard-${slotKey}">
@@ -5766,7 +5779,7 @@ function tireCardHTML(slotKey, timeline, phaseIdx, rows){
       <span class="tire-card-lap mono">${lapTime}</span>
     </div>
     <div class="tire-wear-track">
-      <div class="tire-wear-fill ${wearCls}" id="tirewear-${slotKey}" style="width:${wearPct}%;"></div>
+      <div class="tire-wear-fill ${wearCls}" id="tirewear-${slotKey}" style="width:${barWidthPct}%;"></div>
     </div>
     <div class="tire-card-foot dim">${window.t('live_tire_wear_label')} ${wearPct}%</div>
   </div>`;
@@ -5805,6 +5818,7 @@ function renderRaceLiveInit(){
   <div id="liveRainFx" class="live-rain-fx ${rainActive?'active':''}">${raindropsHTML}</div>
   <div id="liveSunFx" class="live-sun-fx"></div>
   <div id="liveDecisionFx">${liveDecisionHTML()}</div>
+  <div class="live-sticky-header">
   <div class="topbar">
     <div class="brand hdr">${flag(timeline.circuit.paese)} ${timeline.circuit.nome}<small id="livePhaseName">${phase.name}</small></div>
     <div class="hud">
@@ -5820,9 +5834,10 @@ function renderRaceLiveInit(){
     <button class="ghost${state.live.speed===2?' speed-active':''}" data-action="speed-live" id="btnSpeed">Velocità ${state.live.speed}×</button>
     <button class="primary" data-action="skip-live">Salta al risultato →</button>
   </div>
+  ${tireCardsRowHTML(timeline, t, rows)}
+  </div>
   <div class="live-layout">
     <div class="panel live-board-panel">
-      ${tireCardsRowHTML(timeline, t, rows)}
       <div class="panel-title"><h3 class="hdr">Classifica Live</h3><span class="dim mono" style="font-size:11px;">20 PILOTI</span></div>
       <div class="live-head"><span>Pos</span><span>#</span><span>Pilota</span><span>Scuderia</span><span>Distacco</span><span>Stato</span><span></span></div>
       <div class="live-board" id="liveBoard" style="height:${rows.length*ROW_H}px;">${rowsHTML}</div>
@@ -5897,11 +5912,11 @@ function updateLiveBoard(){
       ? interpolatePerPhaseValue(timeline.tireWearByPhase, Math.floor(t), Math.ceil(t), t-Math.floor(t), slotKey)
       : 0;
     const wearPct = Math.round(wear*100);
-    const wearCls = wear>=0.75 ? 'tire-wear-high' : wear>=0.45 ? 'tire-wear-mid' : 'tire-wear-low';
+    const { barWidthPct, wearCls } = tireWearVisual(wear);
     card.querySelector('.tire-card-pos').textContent = 'P'+row.pos;
     card.querySelector('.tire-card-lap').textContent = liveLapTimeDisplay(timeline.circuit, wear);
     const fillEl = document.getElementById('tirewear-'+slotKey);
-    fillEl.style.width = wearPct+'%';
+    fillEl.style.width = barWidthPct+'%';
     fillEl.className = 'tire-wear-fill ' + wearCls;
     card.querySelector('.tire-card-foot').textContent = window.t('live_tire_wear_label') + ' ' + wearPct + '%';
   });
