@@ -536,6 +536,7 @@ const I18N = {
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETAMENTO', sl_museum_desc: 'Piloti e componenti portati fino in fondo a una stagione, o sostituiti lungo il percorso, restano qui per sempre.', sl_museum_hint: 'Tocca per aprire — Museo Dynasty',
     sl_garage: 'GARAGE', sl_garage_desc: 'Personalizza la livrea del telaio con pattern sbloccabili completando obiettivi.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PROSSIMAMENTE',
     sl_aiuto_coda: 'Aiuto in coda', sl_aiuto_coda_desc: 'Il prezzo della ricerca di mercato dipende dalla tua posizione: 1× (il minimo) se sei in fondo alla classifica, fino a 20× se sei in testa — il costo sale rapidamente man mano che ti avvicini alla vetta. Disattivato: sempre 5× fisso, qualunque sia la tua posizione.',
+    sl_riflessi_partenza: 'Riflessi alla partenza', sl_riflessi_partenza_desc: 'Attivo: alla partenza usi i paddle veri, la partenza dipende dai tuoi riflessi. Disattivo: partenza automatica, il semaforo mostra le probabilità senza bisogno di premere nulla.',
     diff_new_career: 'Nuova Carriera', diff_choose: 'Scegli la difficoltà',
     diff_subtitle: 'Incide solo sui reroll disponibili nel draft — un tocco e si parte.',
     diff_last_used: ' · ultima usata', diff_tap_hint: (l)=>`Tocca per avviare — ${l}`,
@@ -821,6 +822,7 @@ const I18N = {
     sl_museum: 'DYNASTY MUSEUM', sl_completion: 'COMPLETION', sl_museum_desc: 'Drivers and components carried through a full season, or replaced along the way, stay here forever.', sl_museum_hint: 'Tap to open — Dynasty Museum',
     sl_garage: 'GARAGE', sl_garage_desc: 'Customize your chassis livery with patterns unlockable by completing achievements.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> COMING SOON',
     sl_aiuto_coda: 'Catch-up help', sl_aiuto_coda_desc: 'Market research price depends on your standing: 1× (the minimum) if you are at the back, up to 20× if you are leading — cost rises sharply the closer you get to the top. Disabled: always a fixed 5×, regardless of your position.',
+    sl_riflessi_partenza: 'Start reflexes', sl_riflessi_partenza_desc: 'On: at the start you use the real paddles, the launch depends on your reflexes. Off: automatic start, the lights show the odds without needing to press anything.',
     diff_new_career: 'New Career', diff_choose: 'Choose difficulty',
     diff_subtitle: 'Only affects the rerolls available in the draft — one tap and you\'re off.',
     diff_last_used: ' · last used', diff_tap_hint: (l)=>`Tap to start — ${l}`,
@@ -1100,6 +1102,7 @@ const I18N = {
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETADO', sl_museum_desc: 'Pilotos y componentes llevados hasta el final de una temporada, o sustituidos por el camino, se quedan aquí para siempre.', sl_museum_hint: 'Toca para abrir — Museo Dynasty',
     sl_garage: 'GARAGE', sl_garage_desc: 'Personaliza la librea del chasis con patrones desbloqueables completando logros.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PRÓXIMAMENTE',
     sl_aiuto_coda: 'Ayuda de recuperación', sl_aiuto_coda_desc: 'El precio de la búsqueda de mercado depende de tu posición: 1× (el mínimo) si vas último, hasta 20× si vas líder — el coste sube rápidamente cuanto más te acercas a la cabeza. Desactivado: siempre 5× fijo, sea cual sea tu posición.',
+    sl_riflessi_partenza: 'Reflejos de salida', sl_riflessi_partenza_desc: 'Activo: en la salida usas los paddles reales, la salida depende de tus reflejos. Desactivo: salida automática, el semáforo muestra las probabilidades sin necesidad de pulsar nada.',
     diff_new_career: 'Nueva Carrera', diff_choose: 'Elige la dificultad',
     diff_subtitle: 'Solo afecta a los rerolls disponibles en el draft — un toque y empiezas.',
     diff_last_used: ' · última usada', diff_tap_hint: (l)=>`Toca para empezar — ${l}`,
@@ -2094,10 +2097,11 @@ function buildAIGrid(aiTeamsRaw, usedIds, difficulty){
 }
 
 /* ---------------- new run ---------------- */
-function newRun(difficulty, seasonLength, aiutoInCoda){
+function newRun(difficulty, seasonLength, aiutoInCoda, riflessiPartenza){
   difficulty = DIFFICULTY_REROLLS.hasOwnProperty(difficulty) ? difficulty : 'medio';
   seasonLength = (seasonLength===20) ? 20 : 10;
   aiutoInCoda = aiutoInCoda !== false; // default ON se non specificato
+  riflessiPartenza = riflessiPartenza !== false; // default ON se non specificato
   const usedIds = new Set();
   const shuffledCircuits = DATA.circuiti.slice().sort(()=>rnd()-0.5).slice(0,seasonLength)
     .map(c=> ({ ...c, giri: computeRaceLaps(c) })); // V0.5.1: giri reali dalla lunghezza del circuito
@@ -2114,6 +2118,7 @@ function newRun(difficulty, seasonLength, aiutoInCoda){
     difficulty,
     seasonLength,               // V0.7.5: 10 (Veloce) o 20 (Completa)
     aiutoInCoda,                 // V0.9.9.45: se attivo, il prezzo scouting scala con la posizione in classifica (1x-5x). Se disattivo, sempre 5x.
+    riflessiPartenza,             // V0.9.9.68: se attivo, partenza coi paddle veri; se disattivo, partenza automatica (come il vecchio tasto Salta)
     midSeasonSwapDone: false,   // V0.7.5: la finestra di cambio pilota a meta' stagione completa e' unica
     rerollsLeft: DIFFICULTY_REROLLS[difficulty],
     rerollsTotal: DIFFICULTY_REROLLS[difficulty],
@@ -4039,17 +4044,20 @@ function startLightsSequence(){
   state.phase = 'start_lights';
   state.startLights = { lit:0, off:false, offAt:null, pedals, slots, resolved:false, started:false, touchedOnce:false, showIdleHint:false };
   render();
-  attachPedalInputListeners();
-
-  // V0.9.9.14: FIX — i semafori NON partono piu' da soli: aspettano che il giocatore tenga premuti
-  // ENTRAMBI i paddle (uno solo non basta), poi la sequenza vera si accende. A prova di idiota: se
-  // dopo 3s non si e' ancora toccato nulla, un messaggio pulsante spiega cosa fare.
-  window._pedalIdleHintTimer = setTimeout(()=>{
-    if(state.phase==='start_lights' && state.startLights && !state.startLights.touchedOnce){
-      state.startLights.showIdleHint = true;
-      render();
-    }
-  }, 3000);
+  // V0.9.9.68: se "Riflessi alla partenza" è disattivo, niente listener paddle — si parte sempre
+  // in automatico, stessa logica del vecchio tasto Salta ma decisa a monte a inizio stagione.
+  if(state.riflessiPartenza !== false){
+    attachPedalInputListeners();
+    // V0.9.9.14: FIX — i semafori NON partono piu' da soli: aspettano che il giocatore tenga premuti
+    // ENTRAMBI i paddle (uno solo non basta), poi la sequenza vera si accende. A prova di idiota: se
+    // dopo 3s non si e' ancora toccato nulla, un messaggio pulsante spiega cosa fare.
+    window._pedalIdleHintTimer = setTimeout(()=>{
+      if(state.phase==='start_lights' && state.startLights && !state.startLights.touchedOnce){
+        state.startLights.showIdleHint = true;
+        render();
+      }
+    }, 3000);
+  }
 
   // V0.9.7.8.39: tempi ricalibrati sui delay REALI misurati nell'audio F1 fornito da Gio — non
   // piu' 480ms fissi (che risultavano quasi il doppio piu' veloci del vero e "immangiabili").
@@ -4079,6 +4087,11 @@ function startLightsSequence(){
   // V0.9.9.14: la sequenza vera si avvia da pedalPress() quando ENTRAMBI i paddle sono premuti,
   // non piu' qui in automatico.
   window._startLightsTick = tick;
+  // V0.9.9.68: ora che tick() e window._startLightsTick esistono davvero, possiamo avviare la
+  // modalità automatica in sicurezza se "Riflessi alla partenza" è disattivo.
+  if(state.riflessiPartenza === false){
+    skipStartLights();
+  }
 }
 function pedalKeyMap(){
   const slots = state.startLights?.slots || [];
@@ -4308,7 +4321,6 @@ function renderStartLights(){
     <div class="suspense-title ${sl.off?'lights-go':''}">${msg}</div>
     ${middleHTML}
     ${sl.showIdleHint && !sl.started ? `<div class="pedal-idle-hint">${single ? t('pedal_idle_hint_single') : t('pedal_idle_hint_double')}</div>` : ''}
-    ${!sl.started && !sl.skipMode ? `<button class="ghost pedal-skip-btn" data-action="skip-start-lights">${t('sl_skip_btn')}</button>` : ''}
   </div>
   `;
   bindActions();
@@ -8708,6 +8720,15 @@ function renderSeasonLength(){
       <button type="button" class="toggle-switch ${state.selectedAiutoInCoda!==false?'on':''}" data-action="toggle-aiuto-coda" aria-label="${t('sl_aiuto_coda')}"><span class="toggle-knob"></span></button>
     </div>
   </div>
+  <div class="card" style="margin-top:10px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+      <div>
+        <div style="font-weight:700;">${t('sl_riflessi_partenza')}</div>
+        <div class="dim" style="font-size:11.5px; margin-top:3px; line-height:1.4;">${t('sl_riflessi_partenza_desc')}</div>
+      </div>
+      <button type="button" class="toggle-switch ${state.selectedRiflessiPartenza!==false?'on':''}" data-action="toggle-riflessi-partenza" aria-label="${t('sl_riflessi_partenza')}"><span class="toggle-knob"></span></button>
+    </div>
+  </div>
   <div class="card pickable trophy-room-card garage-coming-soon" data-action="request-password-gate" data-gate-for="garage">
     <span class="rarity-tag" data-rarity="Rare"><img class=ico src=assets/icons/palette.png> ${t('sl_garage')}</span>
     <div class="trophy-room-card-body">
@@ -10996,6 +11017,10 @@ function onAction(e){
     state.selectedAiutoInCoda = state.selectedAiutoInCoda===false ? true : false;
     render();
   }
+  else if(action==='toggle-riflessi-partenza'){
+    state.selectedRiflessiPartenza = state.selectedRiflessiPartenza===false ? true : false;
+    render();
+  }
   else if(action==='choose-season-length'){
     state.selectedSeasonLength = parseInt(el.dataset.length,10)===20 ? 20 : 10;
     state.phase='difficulty';
@@ -11011,7 +11036,7 @@ function onAction(e){
     }
     state.selectedDifficulty = diff;
     consumeToken(len);
-    newRun(diff, len, state.selectedAiutoInCoda!==false);
+    newRun(diff, len, state.selectedAiutoInCoda!==false, state.selectedRiflessiPartenza!==false);
     state.phase='naming';
     render();
   }
