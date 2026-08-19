@@ -535,7 +535,7 @@ const I18N = {
     sl_trophy_room: 'SALA TROFEI', sl_raced: 'CORSI', sl_won: 'VINTI', sl_trophy_desc: 'Un trofeo per ogni circuito del mondo — rivivi le tue vittorie e scopri quanti ne mancano ancora alla collezione completa.', sl_trophy_hint: 'Tocca per aprire — Sala Trofei',
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETAMENTO', sl_museum_desc: 'Piloti e componenti portati fino in fondo a una stagione, o sostituiti lungo il percorso, restano qui per sempre.', sl_museum_hint: 'Tocca per aprire — Museo Dynasty',
     sl_garage: 'GARAGE', sl_garage_desc: 'Personalizza la livrea del telaio con pattern sbloccabili completando obiettivi.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PROSSIMAMENTE',
-    sl_aiuto_coda: 'Aiuto in coda', sl_aiuto_coda_desc: 'Se sei indietro in classifica, la ricerca di mercato costa quasi il pieno normale (fino a 1×). Avvicinandoti alla vetta il costo sale drasticamente, fino a 20× in testa. Disattivato: sempre 5×.',
+    sl_aiuto_coda: 'Aiuto in coda', sl_aiuto_coda_desc: 'Il prezzo della ricerca di mercato dipende dalla tua posizione: 1× (il minimo) se sei in fondo alla classifica, fino a 20× se sei in testa — il costo sale rapidamente man mano che ti avvicini alla vetta. Disattivato: sempre 5× fisso, qualunque sia la tua posizione.',
     diff_new_career: 'Nuova Carriera', diff_choose: 'Scegli la difficoltà',
     diff_subtitle: 'Incide solo sui reroll disponibili nel draft — un tocco e si parte.',
     diff_last_used: ' · ultima usata', diff_tap_hint: (l)=>`Tocca per avviare — ${l}`,
@@ -820,7 +820,7 @@ const I18N = {
     sl_trophy_room: 'TROPHY ROOM', sl_raced: 'RACED', sl_won: 'WON', sl_trophy_desc: 'A trophy for every circuit in the world — relive your wins and see how many are left for the full collection.', sl_trophy_hint: 'Tap to open — Trophy Room',
     sl_museum: 'DYNASTY MUSEUM', sl_completion: 'COMPLETION', sl_museum_desc: 'Drivers and components carried through a full season, or replaced along the way, stay here forever.', sl_museum_hint: 'Tap to open — Dynasty Museum',
     sl_garage: 'GARAGE', sl_garage_desc: 'Customize your chassis livery with patterns unlockable by completing achievements.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> COMING SOON',
-    sl_aiuto_coda: 'Catch-up help', sl_aiuto_coda_desc: 'If you are behind in the standings, market research costs almost the normal price (down to 1×). Approaching the lead, cost rises sharply, up to 20× in P1. Disabled: always 5×.',
+    sl_aiuto_coda: 'Catch-up help', sl_aiuto_coda_desc: 'Market research price depends on your standing: 1× (the minimum) if you are at the back, up to 20× if you are leading — cost rises sharply the closer you get to the top. Disabled: always a fixed 5×, regardless of your position.',
     diff_new_career: 'New Career', diff_choose: 'Choose difficulty',
     diff_subtitle: 'Only affects the rerolls available in the draft — one tap and you\'re off.',
     diff_last_used: ' · last used', diff_tap_hint: (l)=>`Tap to start — ${l}`,
@@ -1099,7 +1099,7 @@ const I18N = {
     sl_trophy_room: 'SALA DE TROFEOS', sl_raced: 'DISPUTADOS', sl_won: 'GANADOS', sl_trophy_desc: 'Un trofeo por cada circuito del mundo — revive tus victorias y descubre cuántos faltan para la colección completa.', sl_trophy_hint: 'Toca para abrir — Sala de Trofeos',
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETADO', sl_museum_desc: 'Pilotos y componentes llevados hasta el final de una temporada, o sustituidos por el camino, se quedan aquí para siempre.', sl_museum_hint: 'Toca para abrir — Museo Dynasty',
     sl_garage: 'GARAGE', sl_garage_desc: 'Personaliza la librea del chasis con patrones desbloqueables completando logros.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PRÓXIMAMENTE',
-    sl_aiuto_coda: 'Ayuda de recuperación', sl_aiuto_coda_desc: 'Si vas retrasado en la clasificación, la búsqueda de mercado cuesta casi el precio normal (hasta 1×). Al acercarte al liderato, el coste sube drásticamente, hasta 20× en P1. Desactivado: siempre 5×.',
+    sl_aiuto_coda: 'Ayuda de recuperación', sl_aiuto_coda_desc: 'El precio de la búsqueda de mercado depende de tu posición: 1× (el mínimo) si vas último, hasta 20× si vas líder — el coste sube rápidamente cuanto más te acercas a la cabeza. Desactivado: siempre 5× fijo, sea cual sea tu posición.',
     diff_new_career: 'Nueva Carrera', diff_choose: 'Elige la dificultad',
     diff_subtitle: 'Solo afecta a los rerolls disponibles en el draft — un toque y empiezas.',
     diff_last_used: ' · última usada', diff_tap_hint: (l)=>`Toca para empezar — ${l}`,
@@ -4397,11 +4397,11 @@ const LIVE_DECISION_INFO_EN = {
       { key:'stay', label:'⏳ Stay out one more lap', desc:'Risky, but you gain if the weather helps you.' },
       { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver pits, the other stays out: cover both options.' },
     ]},
-  safetycar: { title:'Safety Car on track', question:'The field bunches up. Do you take advantage?',
+  safetycar: { title:'Safety Car on track', question:'With everyone slowed behind the Safety Car, pitting costs much less than usual. Bring your stop forward here?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Pit now', desc:'Real pit stop, at a discount: fresh tyres and a much lower time cost than usual.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver really pits (discounted), the other stays out: cover both options.' },
-      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Stay out', desc:"Keep your position, but you'll have to stop later under normal conditions." },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Pit now', desc:'Bring forward your next scheduled pit stop here, at a discount (fresh tyres, much lower time lost). You will not make another stop later for it.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver brings the stop forward here (discounted), the other keeps the original plan and pits later as planned.' },
+      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Stay out', desc:'You bring nothing forward: you will still pit later, when it is due, at the normal full price.' },
       { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Aggressive restart', desc:'Risk it all at the restart to gain positions immediately.' },
     ]},
   pit: { title:'Pit window', question:'When do you want to stop?',
@@ -4492,11 +4492,11 @@ const LIVE_DECISION_INFO_ES = {
       { key:'stay', label:'⏳ Sigue una vuelta más', desc:'Arriesgas, pero ganas si el clima te ayuda.' },
       { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto entra, el otro sigue fuera: cubres ambas opciones.' },
     ]},
-  safetycar: { title:'Safety Car en pista', question:'El pelotón se compacta. ¿Lo aprovechas?',
+  safetycar: { title:'Safety Car en pista', question:'Con todos ralentizados detrás del Safety Car, parar en boxes cuesta mucho menos de lo normal. ¿Adelantas tu parada aquí?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra a boxes', desc:'Parada real, con descuento: neumáticos nuevos y un coste en tiempo mucho más bajo de lo normal.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto entra de verdad (con descuento), el otro sigue fuera: cubres ambas opciones.' },
-      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Sigue en pista', desc:'Mantienes la posición, pero tendrás que parar después en condiciones normales.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra a boxes', desc:'Adelantas aqui tu proxima parada programada, con descuento (neumaticos nuevos, mucho menos tiempo perdido). No haras otra parada mas adelante por esto.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto adelanta aqui la parada (con descuento), el otro mantiene el plan original y parara mas adelante como estaba previsto.' },
+      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Sigue en pista', desc:'No adelantas nada: pararas igualmente mas adelante, cuando toque, al precio completo normal.' },
       { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Reinicio agresivo', desc:'Arriesgas todo en la reanudación para ganar posiciones de inmediato.' },
     ]},
   pit: { title:'Ventana de parada', question:'¿Cuándo quieres parar en boxes?',
@@ -4587,11 +4587,11 @@ const LIVE_DECISION_INFO_IT_BASE = {
       { key:'stay', label:'⏳ Resta fuori un altro giro', desc:'Rischi, ma guadagni se il meteo ti aiuta.' },
       { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota entra, l\'altro resta fuori: copri entrambe le opzioni.' },
     ]},
-  safetycar: { title:'Safety Car in pista', question:'Il gruppo si compatta. Ne approfitti?',
+  safetycar: { title:'Safety Car in pista', question:'Con tutti rallentati dietro la Safety Car, fermarsi ai box costa molto meno del solito. Anticipi la tua sosta qui?',
     choices:[
-      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra ai box', desc:'Pit stop vero, a prezzo scontato: gomme nuove e un costo in tempo molto piu basso del normale.' },
-      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota entra ai box davvero (prezzo scontato), l\'altro resta fuori: copri entrambe le opzioni.' },
-      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Resta in pista', desc:'Mantieni la posizione, ma dovrai fermarti dopo in condizioni normali.' },
+      { key:'box', label:'<img class=ico src=assets/icons/wrench.png> Entra ai box', desc:'Anticipi qui la tua prossima sosta programmata, a prezzo scontato (gomme nuove, tempo perso molto piu basso). Non farai un\'altra sosta piu avanti per questo.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota anticipa qui la sosta (prezzo scontato), l\'altro mantiene il piano originale e si fermera piu avanti come previsto.' },
+      { key:'stay', label:'<img class=ico src=assets/icons/traffic_light.png> Resta in pista', desc:'Non anticipi nulla: ti fermerai comunque piu avanti, quando toccher\u00e0, al prezzo pieno normale.' },
       { key:'restart', label:'<img class=ico src=assets/icons/lightning.png> Ripartenza aggressiva', desc:'Rischi tutto al riavvio per guadagnare subito posizioni.' },
     ]},
   pit: { title:'Finestra di sosta', question:'Quando vuoi fermarti ai box?',
@@ -4762,7 +4762,53 @@ const TIME_PER_CLAMPED_POSITION = 1.2;
 // fasi future, più azzeramento usura gomme come un pit stop vero. Proposta A+B discussa con Gio:
 // prima "Entra ai box" durante la Safety Car era solo un esito di posizione casuale, senza nessun
 // legame con la simulazione vera — ora sposta davvero le cose.
+// V0.9.9.59: RISCRITTA — segnalato da Gio come bug serio: prima si limitava ad AGGIUNGERE il costo
+// del pit sotto SC, senza annullare la sosta gia' programmata piu' avanti nella simulazione. Il
+// giocatore si fermava DAVVERO due volte (una qui, una alla fase originale), pagando il costo due
+// volte — "tutti gli eventi live che riguardano il pit stop mi sfanculiano la gara". Ora la sosta
+// futura viene trovata e annullata per davvero (costo E reset gomme rimossi da dove sarebbe successa),
+// prima di applicare il vero pit sotto SC al suo posto.
+function cancelFuturePitStop(timeline, slotKey, tCurrent){
+  let cancelPhase = null;
+  for(let phase=tCurrent+1; phase<PHASES.length; phase++){
+    if(timeline.pitByPhase[phase] && timeline.pitByPhase[phase].has(slotKey)){ cancelPhase = phase; break; }
+  }
+  if(cancelPhase===null) return; // nessuna sosta futura programmata da annullare (es. l'ha gia' fatta prima)
+  timeline.pitByPhase[cancelPhase].delete(slotKey);
+
+  // ricalcoliamo quanto costo era stato aggiunto in quella fase (stessa formula usata per applicarlo,
+  // sapendo se ERA sotto Safety Car anche lei) e lo togliamo da tutte le fasi successive
+  const comp = state.team;
+  const pitSkillFrac = comp.stratega.pitstop/100;
+  const wasUnderSC = cancelPhase===timeline.safetyCarPhase;
+  const cancelledCost = wasUnderSC ? (12 - pitSkillFrac*2) : (24 - pitSkillFrac*2);
+  for(let phase=cancelPhase; phase<PHASES.length; phase++){
+    const cumSnap = timeline.cumTimeByPhase[phase];
+    if(!cumSnap || cumSnap[slotKey]==null) continue;
+    cumSnap[slotKey] -= cancelledCost;
+    const order = timeline.phaseOrders[phase];
+    if(!order) continue;
+    const isRacingAt = k => timeline.retiredAtPhase[k]==null || phase < timeline.retiredAtPhase[k];
+    const activeKeys = order.filter(isRacingAt);
+    const retiredKeys = order.filter(k => !isRacingAt(k));
+    activeKeys.sort((k1,k2)=> cumSnap[k1]-cumSnap[k2]);
+    timeline.phaseOrders[phase] = [...activeKeys, ...retiredKeys];
+  }
+
+  // annulliamo anche il reset gomme che sarebbe successo li' — la gomma continua a consumarsi
+  // dal punto vero, invece di ripartire una seconda volta da fresca
+  if(timeline.tireWearByPhase){
+    const wearAtCancel = timeline.tireWearByPhase[cancelPhase] ? (timeline.tireWearByPhase[cancelPhase][slotKey]||0.05) : 0.05;
+    const wearJustBefore = timeline.tireWearByPhase[cancelPhase-1] ? (timeline.tireWearByPhase[cancelPhase-1][slotKey]||wearAtCancel) : wearAtCancel;
+    const undoDrop = Math.max(0, wearJustBefore - wearAtCancel); // quanto era "sceso" per il reset annullato
+    for(let phase=cancelPhase; phase<timeline.tireWearByPhase.length; phase++){
+      const snap = timeline.tireWearByPhase[phase];
+      if(snap && snap[slotKey]!=null) snap[slotKey] = Math.min(1, snap[slotKey]+undoDrop);
+    }
+  }
+}
 function applyRealPitUnderSC(timeline, slotKey, tCurrent){
+  cancelFuturePitStop(timeline, slotKey, tCurrent); // prima annulliamo la sosta futura, se c'e'
   const comp = state.team; // stesso componente stratega usato per il costo vero del pit
   const pitSkillFrac = comp.stratega.pitstop/100;
   const cost = 12 - pitSkillFrac*2; // identica formula del pit vero sotto Safety Car
@@ -4787,6 +4833,9 @@ function applyRealPitUnderSC(timeline, slotKey, tCurrent){
       if(snap && snap[slotKey]!=null) snap[slotKey] = Math.max(0.02, snap[slotKey]-reduction);
     }
   }
+  // registriamo il pit VERO in questa fase, cosi' lo stato "BOX" e il log lo riflettono correttamente
+  if(!timeline.pitByPhase[tCurrent]) timeline.pitByPhase[tCurrent] = new Set();
+  timeline.pitByPhase[tCurrent].add(slotKey);
   return cost;
 }
 function applyLiveDecision(type, choiceKey){
