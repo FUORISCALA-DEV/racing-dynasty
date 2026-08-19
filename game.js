@@ -4329,7 +4329,8 @@ function renderStartLights(){
 // per davvero. Circa 1 gara su 5 non propone nessuna occasione scriptata: se va liscia, va liscia.
 const SCRIPTED_DECISION_TYPES = ['pit','aggression','teamorders','defend','enginemode','mechanical',
   'overtakedesperate','fuelgamble','rivalmistake','trackliminvestigation','wheeltowheel',
-  'doubleyellow','engineersadvice','finalpush','backmarkertraffic','brakebite','undercut','overcut'];
+  'doubleyellow','engineersadvice','finalpush','backmarkertraffic','brakebite','undercut','overcut',
+  'doublestack','graining','frontwing','constructorspoints','pitpriority','tyrecliff','rivalpitfake','debris'];
 
 // V0.9.3.4: alcune decisioni fanno un'affermazione precisa sulla situazione in pista (piloti vicini,
 // rivale alle spalle) — devono scattare solo quando e' davvero vero, altrimenti perdono credibilita'.
@@ -4392,7 +4393,24 @@ function hasRivalAheadJustPitted(timeline, phase){
 // V0.9.9.63: "Ultimo push" deve apparire DAVVERO verso la fine gara, non in qualunque fase a caso
 // come tutte le altre decisioni scriptate — segnalato durante la revisione del foglio con Gio.
 function isLateRacePhase(timeline, phase){ return phase>=8; }
-const DECISION_CONTEXT_CHECK = { teamorders: driversAreClose, defend: hasRivalCloseBehind, wheeltowheel: hasRivalCloseBehind, overtakedesperate: hasRivalCloseAhead, rivalmistake: hasRivalCloseAhead, undercut: hasRivalAheadNotPitted, overcut: hasRivalAheadJustPitted, finalpush: isLateRacePhase };
+// V0.9.9.65: controlli contestuali per le nuove decisioni che descrivono una situazione precisa —
+// devono apparire solo quando e' davvero vera, stesso principio gia' usato per teamorders/defend/ecc.
+function bothCarsNotPittedYet(timeline, phase){
+  const notPitted = (slotKey) => {
+    for(let ph=0; ph<=phase; ph++){
+      if(timeline.pitByPhase[ph] && timeline.pitByPhase[ph].has(slotKey)) return false;
+    }
+    return true;
+  };
+  return notPitted('PLAYER-1') && notPitted('PLAYER-2');
+}
+function bothCarsInPoints(timeline, phase){
+  const order = timeline.phaseOrders[phase] || [];
+  const posOf = (slotKey) => order.indexOf(slotKey)+1;
+  const p1 = posOf('PLAYER-1'), p2 = posOf('PLAYER-2');
+  return p1>=1 && p1<=10 && p2>=1 && p2<=10;
+}
+const DECISION_CONTEXT_CHECK = { teamorders: driversAreClose, defend: hasRivalCloseBehind, wheeltowheel: hasRivalCloseBehind, overtakedesperate: hasRivalCloseAhead, rivalmistake: hasRivalCloseAhead, undercut: hasRivalAheadNotPitted, overcut: hasRivalAheadJustPitted, finalpush: isLateRacePhase, doublestack: bothCarsNotPittedYet, pitpriority: bothCarsNotPittedYet, constructorspoints: bothCarsInPoints };
 
 function computeLiveDecisions(timeline){
   const candidates = [];
@@ -4452,6 +4470,52 @@ const LIVE_DECISION_INFO_EN = {
     choices:[
       { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Stay out', desc:'You delay your stop: exploit clean air ahead of them.' },
       { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Follow them in', desc:'You pit now too (full price), matching their window.' },
+    ]},
+  doublestack: { title:'Double stack', question:'Both cars ready to pit together. How do you handle it?',
+    choices:[
+      { key:'stack', label:'<img class=ico src=assets/icons/wrench.png> Stop both', desc:'Double stack together: the second loses a few seconds queuing.' },
+      { key:'priority', label:'<img class=ico src=assets/icons/traffic_light.png> Only the better placed', desc:'Only the car ahead stops, the other stays out.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Split strategies', desc:'One driver stops, the other sticks to the plan.' },
+    ]},
+  graining: { title:'Tyre graining', question:'Tyres are showing graining. What do you do?',
+    choices:[
+      { key:'push_through', label:'<img class=ico src=assets/icons/fire.png> Push through', desc:'Real extra tyre wear risk.' },
+      { key:'manage_graining', label:'<img class=ico src=assets/icons/shield.png> Manage the pace', desc:'Safer, tyres protected.' },
+    ]},
+  frontwing: { title:'Front wing damage', question:'Loss of front downforce. What do you do?',
+    choices:[
+      { key:'call_pits_wing', label:'<img class=ico src=assets/icons/wrench.png> Call it in', desc:'Real stop to repair.' },
+      { key:'continue_wing', label:'<img class=ico src=assets/icons/fire.png> Continue', desc:'Risk a worse failure.' },
+      { key:'compensate_wing', label:'<img class=ico src=assets/icons/gear.png> Compensate with pace', desc:'Middle ground, moderate risk.' },
+    ]},
+  constructorspoints: { title:'Constructors\' points zone', question:'Both in the points: risk it for more?',
+    choices:[
+      { key:'protect_double', label:'<img class=ico src=assets/icons/shield.png> Protect the finish', desc:'Safe, bank the points.' },
+      { key:'seek_points', label:'<img class=ico src=assets/icons/fire.png> Seek more points', desc:'Risk it for a bigger haul.' },
+      { key:'onecovers_points', label:'<img class=ico src=assets/icons/shuffle.png> One attacks, one covers', desc:'Compromise between the two cars.' },
+    ]},
+  pitpriority: { title:'Pit priority', question:'Both ready to stop at once. Who goes first?',
+    choices:[
+      { key:'priority_best', label:'<img class=ico src=assets/icons/trophy.png> Priority to the leader', desc:'Defends the higher position.' },
+      { key:'priority_tires', label:'<img class=ico src=assets/icons/wheel.png> Priority to worse tyres', desc:'Whoever needs it more goes first.' },
+      { key:'delay_both', label:'<img class=ico src=assets/icons/traffic_light.png> Delay both', desc:'No queue, stop comes later.' },
+    ]},
+  tyrecliff: { title:'Tyres at the cliff', question:'Tyres are about to fall off a cliff. What do you do?',
+    choices:[
+      { key:'box_now_cliff', label:'<img class=ico src=assets/icons/wrench.png> Box now', desc:'Real stop right away.' },
+      { key:'one_lap_cliff', label:'<img class=ico src=assets/icons/turtle.png> One more lap', desc:'Risk critical wear.' },
+      { key:'push_limit_cliff', label:'<img class=ico src=assets/icons/fire.png> Push to the limit', desc:'Very risky.' },
+    ]},
+  rivalpitfake: { title:'Possible pit bluff', question:'A rival is prepping their crew: is it real?',
+    choices:[
+      { key:'react_fake', label:'<img class=ico src=assets/icons/wrench.png> React and pit', desc:'You cover it, but lose time if it was a bluff.' },
+      { key:'dontfall_fake', label:'<img class=ico src=assets/icons/shield.png> Don\'t fall for it', desc:'Stick to plan, risky if it was real.' },
+      { key:'coverone_fake', label:'<img class=ico src=assets/icons/shuffle.png> Cover with one car', desc:'Compromise between both options.' },
+    ]},
+  debris: { title:'Track debris', question:'Debris reported on the racing line. What do you do?',
+    choices:[
+      { key:'maintain_debris', label:'<img class=ico src=assets/icons/fire.png> Maintain pace', desc:'Real risk of damage.' },
+      { key:'avoid_debris', label:'<img class=ico src=assets/icons/shield.png> Avoid the debris', desc:'Safer, costs you a bit.' },
     ]},
   aggression: { title:'Mid-race', question:'How do you want to approach this phase?',
     choices:[
@@ -4558,6 +4622,52 @@ const LIVE_DECISION_INFO_ES = {
       { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Sigue fuera', desc:'Retrasas la parada: aprovechas el aire limpio delante de él.' },
       { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Persigue, entra también', desc:'Paras ahora también (precio completo), misma ventana que el rival.' },
     ]},
+  doublestack: { title:'Doble parada', question:'Ambas listas para parar juntas. ¿Cómo lo gestionas?',
+    choices:[
+      { key:'stack', label:'<img class=ico src=assets/icons/wrench.png> Para las dos', desc:'Doble parada junta: la segunda pierde unos segundos en cola.' },
+      { key:'priority', label:'<img class=ico src=assets/icons/traffic_light.png> Solo la mejor situada', desc:'Solo para la de delante, la otra sigue fuera.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Divide las estrategias', desc:'Un piloto para, el otro sigue el plan.' },
+    ]},
+  graining: { title:'Graining en los neumáticos', question:'Los neumáticos muestran graining. ¿Qué haces?',
+    choices:[
+      { key:'push_through', label:'<img class=ico src=assets/icons/fire.png> Sigue apretando', desc:'Riesgo real de desgaste extra.' },
+      { key:'manage_graining', label:'<img class=ico src=assets/icons/shield.png> Gestiona el ritmo', desc:'Más seguro, neumáticos protegidos.' },
+    ]},
+  frontwing: { title:'Ala delantera dañada', question:'Pérdida de carga delantera. ¿Qué haces?',
+    choices:[
+      { key:'call_pits_wing', label:'<img class=ico src=assets/icons/wrench.png> Llámala a boxes', desc:'Parada real para reparar.' },
+      { key:'continue_wing', label:'<img class=ico src=assets/icons/fire.png> Continúa', desc:'Riesgo de una avería peor.' },
+      { key:'compensate_wing', label:'<img class=ico src=assets/icons/gear.png> Compensa con el ritmo', desc:'Término medio, riesgo moderado.' },
+    ]},
+  constructorspoints: { title:'Zona de puntos de Constructores', question:'Ambas puntuando: ¿arriesgas por más?',
+    choices:[
+      { key:'protect_double', label:'<img class=ico src=assets/icons/shield.png> Protege el resultado', desc:'Seguro, te llevas los puntos.' },
+      { key:'seek_points', label:'<img class=ico src=assets/icons/fire.png> Busca más puntos', desc:'Arriesgas por un botin mayor.' },
+      { key:'onecovers_points', label:'<img class=ico src=assets/icons/shuffle.png> Una ataca, una cubre', desc:'Compromiso entre los dos coches.' },
+    ]},
+  pitpriority: { title:'Prioridad en boxes', question:'Ambas listas para parar a la vez. ¿Quién va primero?',
+    choices:[
+      { key:'priority_best', label:'<img class=ico src=assets/icons/trophy.png> Prioridad al mejor situado', desc:'Defiende la posición más alta.' },
+      { key:'priority_tires', label:'<img class=ico src=assets/icons/wheel.png> Prioridad a peores neumáticos', desc:'Quien más lo necesita va primero.' },
+      { key:'delay_both', label:'<img class=ico src=assets/icons/traffic_light.png> Retrasa ambas', desc:'Sin cola, parada más adelante.' },
+    ]},
+  tyrecliff: { title:'Neumáticos al límite', question:'Los neumáticos están por caer en picado. ¿Qué haces?',
+    choices:[
+      { key:'box_now_cliff', label:'<img class=ico src=assets/icons/wrench.png> Boxes ya', desc:'Parada real inmediata.' },
+      { key:'one_lap_cliff', label:'<img class=ico src=assets/icons/turtle.png> Una vuelta más', desc:'Riesgo de desgaste crítico.' },
+      { key:'push_limit_cliff', label:'<img class=ico src=assets/icons/fire.png> Llévalos al límite', desc:'Muy arriesgado.' },
+    ]},
+  rivalpitfake: { title:'Posible amago en boxes', question:'Un rival prepara a sus mecánicos: ¿será real?',
+    choices:[
+      { key:'react_fake', label:'<img class=ico src=assets/icons/wrench.png> Reacciona y para', desc:'Te cubres, pero pierdes tiempo si era un amago.' },
+      { key:'dontfall_fake', label:'<img class=ico src=assets/icons/shield.png> No piques', desc:'Sigues el plan, arriesgado si era real.' },
+      { key:'coverone_fake', label:'<img class=ico src=assets/icons/shuffle.png> Cubre con un coche', desc:'Compromiso entre ambas opciones.' },
+    ]},
+  debris: { title:'Restos en pista', question:'Restos señalados en la trazada. ¿Qué haces?',
+    choices:[
+      { key:'maintain_debris', label:'<img class=ico src=assets/icons/fire.png> Mantén el ritmo', desc:'Riesgo real de daños.' },
+      { key:'avoid_debris', label:'<img class=ico src=assets/icons/shield.png> Evita los restos', desc:'Más seguro, pierdes algo.' },
+    ]},
   aggression: { title:'Mitad de carrera', question:'¿Cómo quieres afrontar esta fase?',
     choices:[
       { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Aprieta', desc:'Más posibilidades de adelantar, pero desgaste extra real que se arrastra el resto de la carrera.' },
@@ -4663,6 +4773,52 @@ const LIVE_DECISION_INFO_IT_BASE = {
       { key:'stayout', label:'<img class=ico src=assets/icons/traffic_light.png> Resta fuori', desc:'Rimandi la sosta: sfrutti l\'aria pulita davanti a lui.' },
       { key:'follow',  label:'<img class=ico src=assets/icons/wrench.png> Rincorri, entra anche tu', desc:'Ti fermi ora (prezzo pieno), stessa finestra del rivale.' },
     ]},
+  doublestack: { title:'Doppia sosta', question:'Entrambe pronte a fermarsi insieme. Come gestisci?',
+    choices:[
+      { key:'stack', label:'<img class=ico src=assets/icons/wrench.png> Ferma entrambe', desc:'Doppia sosta insieme: la seconda perde qualche secondo in coda.' },
+      { key:'priority', label:'<img class=ico src=assets/icons/traffic_light.png> Solo la meglio piazzata', desc:'Ferma solo chi e avanti, l\'altra resta fuori.' },
+      { key:'splitstrategy', label:'<img class=ico src=assets/icons/shuffle.png> Dividi le strategie', desc:'Un pilota si ferma, l\'altro segue il piano.' },
+    ]},
+  graining: { title:'Graining sulle gomme', question:'Le gomme mostrano graining. Che fai?',
+    choices:[
+      { key:'push_through', label:'<img class=ico src=assets/icons/fire.png> Spingi comunque', desc:'Rischi usura extra vera.' },
+      { key:'manage_graining', label:'<img class=ico src=assets/icons/shield.png> Gestisci il ritmo', desc:'Piu sicuro, gomme protette.' },
+    ]},
+  frontwing: { title:'Ala anteriore danneggiata', question:'Perdita di carico all\'anteriore. Che fai?',
+    choices:[
+      { key:'call_pits_wing', label:'<img class=ico src=assets/icons/wrench.png> Richiamala ai box', desc:'Sosta vera per riparare.' },
+      { key:'continue_wing', label:'<img class=ico src=assets/icons/fire.png> Continua', desc:'Rischi un guasto peggiore.' },
+      { key:'compensate_wing', label:'<img class=ico src=assets/icons/gear.png> Compensa col ritmo', desc:'Via di mezzo, rischio moderato.' },
+    ]},
+  constructorspoints: { title:'Zona punti Costruttori', question:'Entrambe a punti: rischi per il bottino?',
+    choices:[
+      { key:'protect_double', label:'<img class=ico src=assets/icons/shield.png> Proteggi il piazzamento', desc:'Sicuro, porti a casa i punti.' },
+      { key:'seek_points', label:'<img class=ico src=assets/icons/fire.png> Cerca piu punti', desc:'Rischi per guadagnare di piu.' },
+      { key:'onecovers_points', label:'<img class=ico src=assets/icons/shuffle.png> Una attacca, una copre', desc:'Compromesso tra le due vetture.' },
+    ]},
+  pitpriority: { title:'Priorita ai box', question:'Entrambe pronte per la sosta insieme. Chi va prima?',
+    choices:[
+      { key:'priority_best', label:'<img class=ico src=assets/icons/trophy.png> Priorita alla meglio piazzata', desc:'Difende la posizione piu alta.' },
+      { key:'priority_tires', label:'<img class=ico src=assets/icons/wheel.png> Priorita a gomme peggiori', desc:'Chi ne ha piu bisogno va prima.' },
+      { key:'delay_both', label:'<img class=ico src=assets/icons/traffic_light.png> Ritarda entrambe', desc:'Nessuna coda, sosta piu avanti.' },
+    ]},
+  tyrecliff: { title:'Gomme al limite', question:'Le gomme stanno per crollare. Che fai?',
+    choices:[
+      { key:'box_now_cliff', label:'<img class=ico src=assets/icons/wrench.png> Box immediato', desc:'Sosta vera subito.' },
+      { key:'one_lap_cliff', label:'<img class=ico src=assets/icons/turtle.png> Un altro giro', desc:'Rischi usura critica.' },
+      { key:'push_limit_cliff', label:'<img class=ico src=assets/icons/fire.png> Portale al limite', desc:'Molto rischioso.' },
+    ]},
+  rivalpitfake: { title:'Possibile finta ai box', question:'Un rivale prepara i meccanici: sara vero?',
+    choices:[
+      { key:'react_fake', label:'<img class=ico src=assets/icons/wrench.png> Reagisci e fermati', desc:'Ti copri, ma se era un bluff perdi tempo.' },
+      { key:'dontfall_fake', label:'<img class=ico src=assets/icons/shield.png> Non abboccare', desc:'Resti sul piano, rischi se era vero.' },
+      { key:'coverone_fake', label:'<img class=ico src=assets/icons/shuffle.png> Copri con una vettura', desc:'Compromesso tra le due opzioni.' },
+    ]},
+  debris: { title:'Detriti in pista', question:'Detriti segnalati sulla traiettoria. Che fai?',
+    choices:[
+      { key:'maintain_debris', label:'<img class=ico src=assets/icons/fire.png> Mantieni il ritmo', desc:'Rischi danni veri.' },
+      { key:'avoid_debris', label:'<img class=ico src=assets/icons/shield.png> Evita i detriti', desc:'Piu sicuro, perdi qualcosa.' },
+    ]},
   aggression: { title:'A metà gara', question:'Come vuoi affrontare questa fase?',
     choices:[
       { key:'aggressive', label:'<img class=ico src=assets/icons/fire.png> Spingi', desc:'Più possibilità di sorpasso, ma usura gomme extra vera che si porta dietro per il resto della gara.' },
@@ -4749,6 +4905,27 @@ const LIVE_DECISION_INFO = new Proxy({}, { get:(t,k)=> {
 // sia sapere ESATTAMENTE quale esito si e' verificato per il ballottaggio in gara.
 // shift negativo = guadagni posizioni, positivo = ne perdi, 0 = mantieni.
 const DECISION_OUTCOME_BUCKETS = {
+  stack:            [{ prob:0.40, label:'gain_1_2', min:-2, max:-1 }, { prob:0.35, label:'hold', min:0, max:0 }, { prob:0.25, label:'lose_1_2', min:1, max:2 }],
+  priority:         [{ prob:0.45, label:'gain_1', min:-1, max:-1 }, { prob:0.45, label:'hold', min:0, max:0 }, { prob:0.10, label:'lose_1', min:1, max:1 }],
+  push_through:     [{ prob:0.35, label:'gain_1', min:-1, max:-1 }, { prob:0.30, label:'hold', min:0, max:0 }, { prob:0.25, label:'lose_1', min:1, max:1 }, { prob:0.10, label:'lose_2', min:2, max:2 }],
+  manage_graining:  [{ prob:0.15, label:'gain_1', min:-1, max:-1 }, { prob:0.75, label:'hold', min:0, max:0 }, { prob:0.10, label:'lose_1', min:1, max:1 }],
+  call_pits_wing:   [{ prob:0.20, label:'hold', min:0, max:0 }, { prob:0.55, label:'lose_1', min:1, max:1 }, { prob:0.25, label:'lose_2', min:2, max:2 }],
+  continue_wing:    [{ prob:0.25, label:'gain_1', min:-1, max:-1 }, { prob:0.40, label:'hold', min:0, max:0 }, { prob:0.25, label:'lose_1', min:1, max:1 }, { prob:0.10, label:'lose_2', min:2, max:2 }],
+  compensate_wing:  [{ prob:0.40, label:'gain_1', min:-1, max:-1 }, { prob:0.20, label:'hold', min:0, max:0 }, { prob:0.25, label:'lose_1', min:1, max:1 }, { prob:0.15, label:'lose_2', min:2, max:2 }],
+  protect_double:   [{ prob:0.95, label:'hold', min:0, max:0 }, { prob:0.05, label:'lose_1', min:1, max:1 }],
+  seek_points:      [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.15, label:'gain_2', min:-2, max:-2 }, { prob:0.20, label:'hold', min:0, max:0 }, { prob:0.15, label:'lose_1', min:1, max:1 }],
+  onecovers_points: [{ prob:0.40, label:'gain_1', min:-1, max:-1 }, { prob:0.50, label:'hold', min:0, max:0 }, { prob:0.10, label:'lose_1', min:1, max:1 }],
+  priority_best:    [{ prob:0.40, label:'gain_1', min:-1, max:-1 }, { prob:0.50, label:'hold', min:0, max:0 }, { prob:0.10, label:'lose_1', min:1, max:1 }],
+  priority_tires:   [{ prob:0.45, label:'gain_1', min:-1, max:-1 }, { prob:0.40, label:'hold', min:0, max:0 }, { prob:0.15, label:'lose_1', min:1, max:1 }],
+  delay_both:       [{ prob:0.25, label:'gain_1', min:-1, max:-1 }, { prob:0.50, label:'hold', min:0, max:0 }, { prob:0.25, label:'lose_1', min:1, max:1 }],
+  box_now_cliff:    [{ prob:0.45, label:'gain_1', min:-1, max:-1 }, { prob:0.45, label:'hold', min:0, max:0 }, { prob:0.10, label:'lose_1', min:1, max:1 }],
+  one_lap_cliff:    [{ prob:0.35, label:'gain_1', min:-1, max:-1 }, { prob:0.35, label:'hold', min:0, max:0 }, { prob:0.20, label:'lose_1', min:1, max:1 }, { prob:0.10, label:'lose_2', min:2, max:2 }],
+  push_limit_cliff: [{ prob:0.45, label:'gain_1_2', min:-2, max:-1 }, { prob:0.15, label:'hold', min:0, max:0 }, { prob:0.25, label:'lose_1', min:1, max:1 }, { prob:0.15, label:'lose_2', min:2, max:2 }],
+  react_fake:       [{ prob:0.40, label:'gain_1', min:-1, max:-1 }, { prob:0.40, label:'hold', min:0, max:0 }, { prob:0.20, label:'lose_1', min:1, max:1 }],
+  dontfall_fake:    [{ prob:0.35, label:'gain_1', min:-1, max:-1 }, { prob:0.50, label:'hold', min:0, max:0 }, { prob:0.15, label:'lose_1', min:1, max:1 }],
+  coverone_fake:    [{ prob:0.40, label:'gain_1', min:-1, max:-1 }, { prob:0.50, label:'hold', min:0, max:0 }, { prob:0.10, label:'lose_1', min:1, max:1 }],
+  maintain_debris:  [{ prob:0.30, label:'gain_1', min:-1, max:-1 }, { prob:0.55, label:'hold', min:0, max:0 }, { prob:0.10, label:'lose_1', min:1, max:1 }, { prob:0.05, label:'lose_2', min:2, max:2 }],
+  avoid_debris:     [{ prob:0.90, label:'hold', min:0, max:0 }, { prob:0.10, label:'lose_1', min:1, max:1 }],
   box:        [{ prob:0.45, label:'gain_1_2', min:-2, max:-1 }, { prob:0.30, label:'hold', min:0, max:0 }, { prob:0.25, label:'lose_2', min:2, max:2 }],
   stay:       [{ prob:0.50, label:'gain_1', min:-1, max:-1 }, { prob:0.50, label:'lose_1', min:1, max:1 }],
   restart:    [{ prob:0.45, label:'gain_1_2', min:-2, max:-1 }, { prob:0.55, label:'lose_2', min:2, max:2 }],
@@ -4894,6 +5071,17 @@ function cancelFuturePitStop(timeline, slotKey, tCurrent){
 // avanti nella gara (di default 3 fasi dopo quella cancellata, senza superare la penultima fase).
 // Usata da "ritarda la sosta" (pit) e "resta fuori" (overcut) — nessun costo pagato ORA, solo
 // gomme piu' consumate nel frattempo perche' la sosta arriva piu' tardi del previsto.
+// V0.9.9.65: helper riusabile per applicare usura gomme extra VERA (non narrativa), propagata sulle
+// fasi future — stessa logica gia' usata per "Spingi" (aggression), ora condivisa da tutte le nuove
+// decisioni che comportano un rischio di usura reale (graining, gomme al limite, danno all'ala).
+function applyExtraWearFromPhase(timeline, slotKey, tCurrent, minAmt, maxAmt){
+  if(!timeline.tireWearByPhase) return;
+  const extraWear = minAmt + rnd()*(maxAmt-minAmt);
+  for(let phase=tCurrent; phase<timeline.tireWearByPhase.length; phase++){
+    const snap = timeline.tireWearByPhase[phase];
+    if(snap && snap[slotKey]!=null) snap[slotKey] = Math.min(1, snap[slotKey]+extraWear);
+  }
+}
 function delayFuturePitStop(timeline, slotKey, tCurrent){
   let cancelPhase = null;
   for(let phase=tCurrent+1; phase<PHASES.length; phase++){
@@ -4991,7 +5179,7 @@ function applyLiveDecision(type, choiceKey){
       // incoerenza trovata durante la revisione richiesta da Gio. Lo sconto Safety Car si applica
       // solo se la decisione capita DAVVERO in quella fase, non sempre.
       let realPitCost = null;
-      if((type==='safetycar' || type==='weather') && bucketChoice[slotKey]==='box'){
+      if((type==='safetycar' || type==='weather' || type==='doublestack') && bucketChoice[slotKey]==='box'){
         realPitCost = applyRealPitStop(timeline, slotKey, t, t===timeline.safetyCarPhase);
       }
       reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus, realPitCost };
@@ -5045,6 +5233,64 @@ function applyLiveDecision(type, choiceKey){
         const snap = timeline.tireWearByPhase[phase];
         if(snap && snap[slotKey]!=null) snap[slotKey] = Math.min(1, snap[slotKey]+extraWear);
       }
+    }
+    // V0.9.9.65: le 8 nuove decisioni selezionate dalle 30 proposte — agganciate alle stesse
+    // meccaniche vere (pit stop reale, usura gomme extra) dove ha senso, non solo narrativa.
+    if(type==='graining' && choiceKey==='push_through'){
+      applyExtraWearFromPhase(timeline, slotKey, t, 0.08, 0.13);
+    } else if(type==='tyrecliff' && choiceKey==='box_now_cliff'){
+      realPitCost = applyRealPitStop(timeline, slotKey, t, false);
+    } else if(type==='tyrecliff' && choiceKey==='one_lap_cliff'){
+      applyExtraWearFromPhase(timeline, slotKey, t, 0.10, 0.16);
+    } else if(type==='tyrecliff' && choiceKey==='push_limit_cliff'){
+      applyExtraWearFromPhase(timeline, slotKey, t, 0.15, 0.22);
+    } else if(type==='frontwing' && choiceKey==='call_pits_wing'){
+      realPitCost = applyRealPitStop(timeline, slotKey, t, false);
+    } else if(type==='frontwing' && choiceKey==='continue_wing'){
+      applyExtraWearFromPhase(timeline, slotKey, t, 0.08, 0.14);
+    } else if(type==='frontwing' && choiceKey==='compensate_wing'){
+      applyExtraWearFromPhase(timeline, slotKey, t, 0.05, 0.09);
+    } else if(type==='debris' && choiceKey==='maintain_debris'){
+      applyExtraWearFromPhase(timeline, slotKey, t, 0.04, 0.09);
+    } else if(type==='doublestack' && choiceKey==='stack'){
+      realPitCost = applyRealPitStop(timeline, slotKey, t, false);
+      // chi e' dietro nell'ordine attuale e' il "secondo" in coda, perde qualche secondo extra
+      const order = timeline.phaseOrders[t] || [];
+      const otherSlotDS = slotKey==='PLAYER-1' ? 'PLAYER-2' : 'PLAYER-1';
+      if(order.indexOf(slotKey) > order.indexOf(otherSlotDS)){
+        const queueCost = 3 + rnd()*3; // 3-6s extra per l'attesa in coda
+        for(let phase=t+1; phase<PHASES.length; phase++){
+          const cumSnap = timeline.cumTimeByPhase[phase];
+          if(cumSnap && cumSnap[slotKey]!=null) cumSnap[slotKey] += queueCost;
+        }
+      }
+    } else if(type==='doublestack' && choiceKey==='priority'){
+      const order = timeline.phaseOrders[t] || [];
+      const otherSlotDS = slotKey==='PLAYER-1' ? 'PLAYER-2' : 'PLAYER-1';
+      const myPos = order.indexOf(slotKey), otherPos = order.indexOf(otherSlotDS);
+      if(myPos>=0 && (otherPos<0 || myPos<otherPos)){
+        realPitCost = applyRealPitStop(timeline, slotKey, t, false); // sono il meglio piazzato, mi fermo davvero
+      }
+    } else if(type==='pitpriority' && choiceKey==='priority_best'){
+      const order = timeline.phaseOrders[t] || [];
+      const otherSlotPP = slotKey==='PLAYER-1' ? 'PLAYER-2' : 'PLAYER-1';
+      const myPos = order.indexOf(slotKey), otherPos = order.indexOf(otherSlotPP);
+      if(myPos>=0 && (otherPos<0 || myPos<otherPos)){
+        realPitCost = applyRealPitStop(timeline, slotKey, t, false);
+      } else {
+        delayFuturePitStop(timeline, slotKey, t);
+      }
+    } else if(type==='pitpriority' && choiceKey==='priority_tires'){
+      const otherSlotPP = slotKey==='PLAYER-1' ? 'PLAYER-2' : 'PLAYER-1';
+      const myWear = timeline.tireWearByPhase[t] ? (timeline.tireWearByPhase[t][slotKey]||0) : 0;
+      const otherWear = timeline.tireWearByPhase[t] ? (timeline.tireWearByPhase[t][otherSlotPP]||0) : 0;
+      if(myWear >= otherWear){
+        realPitCost = applyRealPitStop(timeline, slotKey, t, false); // gomme peggiori delle mie, priorita' a me
+      } else {
+        delayFuturePitStop(timeline, slotKey, t);
+      }
+    } else if(type==='pitpriority' && choiceKey==='delay_both'){
+      delayFuturePitStop(timeline, slotKey, t);
     }
     // V0.9.9.63: obiettivo Liberi di Lottare — contiamo ogni volta che si sceglie "free" in
     // teamorders (una volta per decisione, non per pilota coinvolto, altrimenti conterebbe doppio).
