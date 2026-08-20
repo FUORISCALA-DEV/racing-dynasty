@@ -226,6 +226,19 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .card.pickable{cursor:pointer;}
 .card.pickable:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(0,0,0,0.45);}
 /* V0.9.9.45: interruttore impostazioni run (Aiuto in coda e futuri) */
+/* V0.9.9.69: dialogo di Elio nel tutorial guidato */
+.elio-says{ display:flex; gap:12px; align-items:flex-start; margin:14px 0; }
+.elio-says-portrait{ width:64px; height:64px; border-radius:50%; object-fit:cover; flex-shrink:0; border:2px solid var(--immortal); }
+.elio-says-bubble{ background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px 14px; flex:1; }
+.elio-says-name{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.12em; color:var(--immortal); font-weight:700; margin-bottom:4px; }
+.elio-says-text{ font-size:14px; line-height:1.5; }
+.elio-says-rejection .elio-says-bubble{ border-color:#ff4d4d; background:rgba(255,77,77,0.08); }
+.elio-says-rejection .elio-says-portrait{ border-color:#ff4d4d; }
+.ingegnere-says-icon{ width:64px; height:64px; border-radius:50%; flex-shrink:0; background:var(--panel2); border:2px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:26px; color:var(--dim); }
+.ingegnere-says .elio-says-bubble{ background:var(--panel2); border-color:var(--line); }
+.ingegnere-says .elio-says-name{ color:var(--dim); }
+.tutorial-intro-wrap{ max-width:560px; margin:40px auto; padding:20px; }
+.tutorial-draft-option.pickable:hover{ border-color:var(--immortal); }
 .toggle-switch{
   position:relative; width:46px; height:26px; border-radius:14px; border:1px solid var(--line);
   background:var(--panel2); cursor:pointer; flex-shrink:0; transition:background .2s ease, border-color .2s ease;
@@ -2002,6 +2015,7 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
       <div class="menu-section-label">GIOCO</div>
       <button type="button" class="menu-item" id="menuHomeBtn">🏠 <span>Home</span></button>
       <button type="button" class="menu-item" id="menuNewCareerBtn" style="display:none;">🔄 <span>Nuova Carriera</span></button>
+      <button type="button" class="menu-item" id="menuTutorialBtn">🎓 <span>Tutorial</span></button>
 
       <div class="menu-section-label">PROGRESSI</div>
       <button type="button" class="menu-item" id="menuTrophyBtn">🏆 <span>Sala Trofei — Scuderia</span></button>

@@ -561,7 +561,20 @@ const I18N = {
     title_continue: '▶ Continua Stagione', title_new: 'Nuova Stagione', title_delete: '<img class=ico src=assets/icons/trash.png> Cancella Salvataggio',
     title_cta: '<img class=ico src=assets/icons/checkered_flag.png> Scegli la tua sfida e scendi in pista — ', title_cta_bold: 'premi per iniziare',
     // Menu laterale
-    menu_new_career: 'Nuova Run', menu_trophy_room: 'Sala Trofei — Scuderia', menu_driver_trophy_room: 'Sala Trofei — Pilota', menu_museum: 'Museo Dynasty', menu_guide: 'Guida',
+    menu_new_career: 'Nuova Run', menu_trophy_room: 'Sala Trofei — Scuderia', menu_driver_trophy_room: 'Sala Trofei — Pilota', menu_museum: 'Museo Dynasty', menu_guide: 'Guida', menu_tutorial: 'Tutorial',
+    tutorial_intro_ingegnere_text: 'Benvenuto nel modulo di addestramento tecnico. Il presente percorso guidato prevede tre sessioni di gara. Le fasi operative sono, in ordine: selezione dei componenti tecnici, selezione del personale pilota, selezione dello sponsor stagionale, gestione delle finestre di sviluppo pre-gara, gestione delle decisioni durante la sessione di gara. Si proceda con la prima fase operativa.',
+    tutorial_ingegnere_rejection: 'Selezione non ottimale. Si raccomanda di valutare nuovamente i parametri disponibili prima di procedere.',
+    tutorial_goat_reveal_text: 'Ah, eccoti. Finalmente qualcuno con un minimo di gusto. Dimmi: sei riuscito a restare sveglio per tutto quel discorso sui \"moduli operativi\"? Io mi ero quasi addormentato, e guidavo io la macchina. Comunque: sono Elio. Sì, proprio il pilota che hai appena scelto — parlo anche, non solo guido, con tuo grande sollievo immagino. Da qui in poi tocca a me. L\'ingegnere ha fatto il suo lavoro, ora si fa sul serio.',
+    tutorial_goat_reveal_cta: 'Continua →',
+    tutorial_intro_cta: 'Cominciamo →',
+    tutorial_draft_step_of: (a,b)=>`Scelta ${a} di ${b}`,
+    tutorial_draft_choose: (label)=>`Scegli: ${label}`,
+    tutorial_elio_rejection: 'Non è così che si vince. Se vuoi fare di testa tua, libero — ma non qui. Il tutorial serve per imparare, non per improvvisare.',
+    tutorial_first_launch_title: 'Vuoi fare il tutorial?',
+    tutorial_first_launch_desc: 'Tre gare guidate da un pilota leggendario, per imparare le basi prima di partire sul serio. Puoi rifarlo quando vuoi dal menu.',
+    tutorial_first_launch_yes: 'Sì, portami a scuola',
+    tutorial_first_launch_no: 'No, so già cosa fare',
+
     menu_new_run: 'Nuova Run', menu_new_run_confirm: 'Vuoi davvero abbandonare la run attuale e ricominciare da capo? Il progresso non salvato andrà perso.',
     menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti',
     menu_fullscreen: 'Schermo Intero', menu_language: 'Lingua',
@@ -845,7 +858,20 @@ const I18N = {
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
     title_continue: '▶ Continue Season', title_new: 'New Season', title_delete: '<img class=ico src=assets/icons/trash.png> Delete Save',
     title_cta: '<img class=ico src=assets/icons/checkered_flag.png> Choose your challenge and hit the track — ', title_cta_bold: 'tap to start',
-    menu_new_career: 'New Run', menu_trophy_room: 'Trophy Room — Team', menu_driver_trophy_room: 'Trophy Room — Driver', menu_museum: 'Dynasty Museum', menu_guide: 'Guide',
+    menu_new_career: 'New Run', menu_trophy_room: 'Trophy Room — Team', menu_driver_trophy_room: 'Trophy Room — Driver', menu_museum: 'Dynasty Museum', menu_guide: 'Guide', menu_tutorial: 'Tutorial',
+    tutorial_intro_ingegnere_text: 'Welcome to the technical training module. This guided path consists of three race sessions. The operational phases are, in order: technical component selection, driver personnel selection, seasonal sponsor selection, pre-race development window management, in-race decision management. Please proceed with the first operational phase.',
+    tutorial_ingegnere_rejection: 'Suboptimal selection. It is recommended to re-evaluate the available parameters before proceeding.',
+    tutorial_goat_reveal_text: 'Ah, there you are. Finally someone with a bit of taste. Tell me: did you manage to stay awake through that whole \"operational modules\" speech? I nearly fell asleep, and I was the one driving the car. Anyway: I\'m Elio. Yes, the very driver you just picked — I talk too, not just drive, much to your relief I imagine. From here on, it\'s my turn. The engineer did his job, now it\'s time to get serious.',
+    tutorial_goat_reveal_cta: 'Continue →',
+    tutorial_intro_cta: 'Let\'s start →',
+    tutorial_draft_step_of: (a,b)=>`Choice ${a} of ${b}`,
+    tutorial_draft_choose: (label)=>`Choose: ${label}`,
+    tutorial_elio_rejection: 'That\'s not how you win. If you want to do things your own way, fine — but not here. The tutorial is for learning, not for improvising.',
+    tutorial_first_launch_title: 'Want to do the tutorial?',
+    tutorial_first_launch_desc: 'Three guided races with a legendary driver, to learn the basics before going for real. You can redo it anytime from the menu.',
+    tutorial_first_launch_yes: 'Yes, teach me',
+    tutorial_first_launch_no: 'No, I already know what to do',
+
     menu_new_run: 'New Run', menu_new_run_confirm: 'Do you really want to abandon the current run and start over? Unsaved progress will be lost.',
     menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits',
     menu_fullscreen: 'Fullscreen', menu_language: 'Language',
@@ -1125,7 +1151,20 @@ const I18N = {
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
     title_continue: '▶ Continuar Temporada', title_new: 'Nueva Temporada', title_delete: '<img class=ico src=assets/icons/trash.png> Borrar Partida',
     title_cta: '<img class=ico src=assets/icons/checkered_flag.png> Elige tu desafío y sal a pista — ', title_cta_bold: 'toca para empezar',
-    menu_new_career: 'Nueva Partida', menu_trophy_room: 'Sala de Trofeos — Escudería', menu_driver_trophy_room: 'Sala de Trofeos — Piloto', menu_museum: 'Museo Dynasty', menu_guide: 'Guía',
+    menu_new_career: 'Nueva Partida', menu_trophy_room: 'Sala de Trofeos — Escudería', menu_driver_trophy_room: 'Sala de Trofeos — Piloto', menu_museum: 'Museo Dynasty', menu_guide: 'Guía', menu_tutorial: 'Tutorial',
+    tutorial_intro_ingegnere_text: 'Bienvenido al módulo de formación técnica. Este itinerario guiado consta de tres sesiones de carrera. Las fases operativas son, en orden: selección de componentes técnicos, selección de personal piloto, selección de patrocinador de temporada, gestión de ventanas de desarrollo previas a la carrera, gestión de decisiones durante la sesión de carrera. Proceda con la primera fase operativa.',
+    tutorial_ingegnere_rejection: 'Selección subóptima. Se recomienda reevaluar los parámetros disponibles antes de continuar.',
+    tutorial_goat_reveal_text: 'Ah, aquí estás. Por fin alguien con un poco de gusto. Dime: ¿conseguiste mantenerte despierto durante todo ese discurso sobre \"módulos operativos\"? Yo casi me quedo dormido, y eso que conducía el coche. En fin: soy Elio. Sí, el mismo piloto que acabas de elegir — también hablo, no solo conduzco, para tu gran alivio imagino. De aquí en adelante me toca a mí. El ingeniero ha hecho su trabajo, ahora va en serio.',
+    tutorial_goat_reveal_cta: 'Continuar →',
+    tutorial_intro_cta: 'Empecemos →',
+    tutorial_draft_step_of: (a,b)=>`Elección ${a} de ${b}`,
+    tutorial_draft_choose: (label)=>`Elige: ${label}`,
+    tutorial_elio_rejection: 'Así no se gana. Si quieres hacer las cosas a tu manera, adelante — pero no aquí. El tutorial es para aprender, no para improvisar.',
+    tutorial_first_launch_title: '¿Quieres hacer el tutorial?',
+    tutorial_first_launch_desc: 'Tres carreras guiadas por un piloto legendario, para aprender lo básico antes de ir en serio. Puedes repetirlo cuando quieras desde el menú.',
+    tutorial_first_launch_yes: 'Sí, enséñame',
+    tutorial_first_launch_no: 'No, ya sé qué hacer',
+
     menu_new_run: 'Nueva Partida', menu_new_run_confirm: '¿Seguro que quieres abandonar la partida actual y empezar de nuevo? El progreso no guardado se perderá.',
     menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos',
     menu_fullscreen: 'Pantalla Completa', menu_language: 'Idioma',
@@ -2097,6 +2136,101 @@ function buildAIGrid(aiTeamsRaw, usedIds, difficulty){
 }
 
 /* ---------------- new run ---------------- */
+// ============================================================
+// V0.9.9.69: TUTORIAL GUIDATO — 3 gare scriptate, narrate da Elio (che e' THE GOAT stesso, con
+// tutta la sua aria da fenomeno inarrivabile). Stato completamente separato dalla run vera: non
+// consuma gettoni, non conta per obiettivi/trofei/museo (controllato con state.isTutorialRun
+// ovunque questi sistemi scrivono un progresso permanente).
+// ============================================================
+const TUTORIAL_TEAM_NAME = 'Scuderia Apprendista';
+function startTutorialRun(){
+  const tutorialCircuits = DATA.circuiti.slice(0,3).map(c=> ({ ...c, giri: computeRaceLaps(c) }));
+  const aiTeamsRaw = DATA.scuderie.slice(0,9);
+  const aiTeams = buildAIGrid(aiTeamsRaw, new Set(['DRV-249']), 'facile'); // teniamo fuori l'id di THE GOAT dal pool IA
+  aiTeams.forEach(t=>{ t.virtualSponsor = SPONSOR_NAMES[0]; });
+
+  state = {
+    phase:'tutorial-intro',
+    isTutorialRun: true, // V0.9.9.69: controllato da achievement/token/museo per non scrivere nessun progresso vero
+    difficulty:'facile',
+    seasonLength: 3,
+    aiutoInCoda: true,
+    riflessiPartenza: true,
+    midSeasonSwapDone: true, // niente cambio pilota a meta' stagione nel tutorial, non serve
+    rerollsLeft: 0, rerollsTotal: 0,
+    budget: START_BUDGET,
+    raceIndex: 0,
+    calendar: tutorialCircuits,
+    aiTeams: aiTeams,
+    team: { pilotMain:null, pilotSecond:null, motore:null, telaio:null, aero:null, gomme:null, stratega:null, customName:TUTORIAL_TEAM_NAME, nation:'Italia' },
+    driverStandings: {}, constructorStandings: {}, // vuoti finche' la scelta guidata non completa la squadra
+    tutorialDraftStep: 0, // avanza attraverso le scelte guidate: motore, PILOTA (qui compare THE GOAT), telaio, aero, gomme, team principal, secondo pilota
+    tutorialElioMsg: null, // messaggio di rifiuto mostrato quando si sceglie l'opzione sbagliata
+    tutorialGoatFound: false, // V0.9.9.70: finche' e' false, si parla con la voce fredda dell'Ingegnere — poi prende il posto Elio
+    usedIds: new Set(['DRV-249']),
+    seasonTrophiesWon: [],
+  };
+  render();
+}
+// V0.9.9.69: componente di dialogo di Elio — riusa il ritratto di THE GOAT gia' esistente nella
+// Guida, cosi' non serve un nuovo asset. Tono: fenomeno alla guida, un po' altezzoso, sa di essere
+// il migliore e non fa nulla per nasconderlo — ma alla fine ti sta davvero insegnando qualcosa.
+// V0.9.9.70: la voce fredda e noiosa dell'Ingegnere del tutorial — usata SOLO prima che il
+// giocatore trovi THE GOAT nel draft. Deliberatamente asettica: nessun ritratto, tono da manuale,
+// in contrasto netto con Elio che arriva subito dopo con tutta la sua personalita'.
+function ingegnereSaysHTML(text){
+  return `
+  <div class="elio-says ingegnere-says">
+    <div class="ingegnere-says-icon">⚙</div>
+    <div class="elio-says-bubble">
+      <div class="elio-says-name">INGEGNERE DI PISTA</div>
+      <div class="elio-says-text">${text}</div>
+    </div>
+  </div>`;
+}
+function elioSaysHTML(text, opts){
+  opts = opts || {};
+  const cls = opts.rejection ? 'elio-says elio-says-rejection' : 'elio-says';
+  return `
+  <div class="${cls}">
+    <img class="elio-says-portrait" src="${GOAT_GUIDE_IMG_SRC}" alt="Elio">
+    <div class="elio-says-bubble">
+      <div class="elio-says-name">ELIO</div>
+      <div class="elio-says-text">${text}</div>
+    </div>
+  </div>`;
+}
+// V0.9.9.69: le 6 tappe della scelta guidata (sembra libera, ma solo il valore più alto delle 3
+// "passa" davvero) — un pool per categoria, sempre lo stesso ordine, cosi' il tutorial resta
+// identico ad ogni replay come richiesto.
+const TUTORIAL_DRAFT_STEPS = [
+  { key:'motore', label:'Motore', pool:()=>DATA.motori },
+  { key:'pilotMain', label:'Pilota Principale', pool:()=>DATA.piloti, isGoatStep:true },
+  { key:'telaio', label:'Telaio', pool:()=>DATA.telai },
+  { key:'aero', label:'Aerodinamica', pool:()=>DATA.aero },
+  { key:'gomme', label:'Gomme', pool:()=>DATA.gomme },
+  { key:'stratega', label:'Team Principal', pool:()=>DATA.strategi },
+  { key:'pilotSecond', label:'Secondo Pilota', pool:()=>DATA.piloti.filter(p=>p.nome!=='THE GOAT') },
+];
+function tutorialDraftOptions(stepIdx){
+  const step = TUTORIAL_DRAFT_STEPS[stepIdx];
+  // V0.9.9.70: il passo pilota principale mostra SEMPRE THE GOAT come una delle 3 opzioni (quella
+  // corretta) — non e' un pool casuale come gli altri, e' proprio quel momento a farlo comparire.
+  if(step.isGoatStep){
+    const goat = DATA.piloti.find(p=>p.nome==='THE GOAT');
+    const others = DATA.piloti.filter(p=>p.nome!=='THE GOAT').sort((a,b)=> a.nome.localeCompare(b.nome));
+    const byRating = others.slice().sort((a,b)=> a.rating-b.rating);
+    const low = byRating[Math.floor(byRating.length*0.25)];
+    const mid = byRating[Math.floor(byRating.length*0.55)];
+    return { step, options: [low, mid, goat], correctId: goat.id };
+  }
+  const sorted = step.pool().slice().sort((a,b)=> a.nome.localeCompare(b.nome)); // ordine stabile
+  const byRating = sorted.slice().sort((a,b)=> a.rating-b.rating);
+  const low = byRating[Math.floor(byRating.length*0.25)];
+  const mid = byRating[Math.floor(byRating.length*0.55)];
+  const high = byRating[byRating.length-1];
+  return { step, options: [low, mid, high], correctId: high.id };
+}
 function newRun(difficulty, seasonLength, aiutoInCoda, riflessiPartenza){
   difficulty = DIFFICULTY_REROLLS.hasOwnProperty(difficulty) ? difficulty : 'medio';
   seasonLength = (seasonLength===20) ? 20 : 10;
@@ -7416,6 +7550,9 @@ function renderInner(){
   if(state.phase==='streamer-continue-check') return renderStreamerContinueCheck();
   if(state.phase==='title') return renderTitle();
   if(state.phase==='difficulty') return renderDifficulty();
+  if(state.phase==='tutorial-intro') return renderTutorialIntro();
+  if(state.phase==='tutorial-draft') return renderTutorialDraft();
+  if(state.phase==='tutorial-goat-reveal') return renderTutorialGoatReveal();
   if(state.phase==='season-length') return renderSeasonLength();
   if(state.phase==='naming') return renderNaming();
   if(state.phase==='mode-select') return renderModeSelect();
@@ -8656,6 +8793,61 @@ function renderTitle(){
 // prima "Facile" era grigio (Common) e "Hardcore" platino (Immortal), due grigi troppo simili
 // sulla stessa schermata, e "Facile" non comunicava affatto "sicuro/verde" come ci si aspetterebbe.
 const DIFFICULTY_COLOR = { facile:'#4CD97B', medio:'#22DCDC', difficile:'#FF9F1C', hardcore:'#FF3B4E' };
+// V0.9.9.69: schermata di introduzione al tutorial — Elio si presenta, spiega bene (unica volta
+// con testo lungo, come richiesto: solo qui, poi solo indizi brevi).
+function renderTutorialIntro(){
+  app.innerHTML = `
+  <div class="wrap tutorial-intro-wrap">
+    ${ingegnereSaysHTML(t('tutorial_intro_ingegnere_text'))}
+    <div class="btnrow" style="margin-top:20px;">
+      <button class="primary" data-action="tutorial-draft-start" style="width:100%;">${t('tutorial_intro_cta')}</button>
+    </div>
+  </div>`;
+  bindActions();
+}
+// V0.9.9.69: scelta guidata — sembra un draft libero, ma solo l'opzione oggettivamente migliore
+// (rating piu' alto) fa avanzare davvero. Le altre due, se scelte, restano li' con un rifiuto di
+// Elio in carattere, senza mai bloccare o far fallire nulla — si riprova finche' non si sceglie giusto.
+function renderTutorialDraft(){
+  const stepIdx = state.tutorialDraftStep;
+  if(stepIdx >= TUTORIAL_DRAFT_STEPS.length){
+    state.phase = 'tutorial-sponsor';
+    render();
+    return;
+  }
+  const { step, options, correctId } = tutorialDraftOptions(stepIdx);
+  const optionsHTML = options.map(o=>{
+    return `<div class="card pickable tutorial-draft-option" data-action="tutorial-draft-pick" data-id="${o.id}" data-step="${stepIdx}">
+      <div style="font-weight:700;">${o.nome}</div>
+      <div class="dim mono" style="font-size:12px;margin-top:4px;">Rating ${o.rating}</div>
+    </div>`;
+  }).join('');
+  const rejectionHTML = state.tutorialElioMsg
+    ? (state.tutorialGoatFound ? elioSaysHTML(state.tutorialElioMsg, {rejection:true}) : ingegnereSaysHTML(state.tutorialElioMsg))
+    : '';
+  app.innerHTML = `
+  ${topbarHTML()}
+  <div class="wrap">
+    <div class="eyebrow">${t('tutorial_draft_step_of', stepIdx+1, TUTORIAL_DRAFT_STEPS.length)}</div>
+    <h2 class="hdr">${t('tutorial_draft_choose', step.label)}</h2>
+    ${rejectionHTML}
+    <div class="grid-3" style="margin-top:16px;">${optionsHTML}</div>
+  </div>`;
+  bindActions();
+}
+// V0.9.9.70: il momento clou del tutorial — appena il giocatore sceglie THE GOAT come pilota
+// principale, cambia narratore in diretta. Una schermata dedicata, non solo un messaggio in mezzo
+// al draft, perche' questo passaggio deve sentirsi come un vero cambio di marcia.
+function renderTutorialGoatReveal(){
+  app.innerHTML = `
+  <div class="wrap tutorial-intro-wrap">
+    ${elioSaysHTML(t('tutorial_goat_reveal_text'), {})}
+    <div class="btnrow" style="margin-top:20px;">
+      <button class="primary" data-action="tutorial-goat-reveal-continue" style="width:100%;">${t('tutorial_goat_reveal_cta')}</button>
+    </div>
+  </div>`;
+  bindActions();
+}
 function renderDifficulty(){
   const lastUsed = state.selectedDifficulty;
   const diffCards = DIFFICULTY_ORDER.map(d=>{
@@ -11021,6 +11213,35 @@ function onAction(e){
     state.selectedRiflessiPartenza = state.selectedRiflessiPartenza===false ? true : false;
     render();
   }
+  else if(action==='tutorial-draft-start'){
+    state.phase = 'tutorial-draft';
+    state.tutorialDraftStep = 0;
+    state.tutorialElioMsg = null;
+    render();
+  }
+  else if(action==='tutorial-draft-pick'){
+    const stepIdx = parseInt(el.dataset.step, 10);
+    const pickedId = el.dataset.id;
+    const { step, correctId } = tutorialDraftOptions(stepIdx);
+    if(pickedId === correctId){
+      const item = step.pool().find(p=>p.id===pickedId);
+      state.team[step.key] = {...item};
+      state.tutorialDraftStep++;
+      state.tutorialElioMsg = null;
+      if(step.isGoatStep){
+        // V0.9.9.70: momento clou — cambio narratore, schermata dedicata prima di riprendere il draft
+        state.tutorialGoatFound = true;
+        state.phase = 'tutorial-goat-reveal';
+      }
+    } else {
+      state.tutorialElioMsg = state.tutorialGoatFound ? t('tutorial_elio_rejection') : t('tutorial_ingegnere_rejection');
+    }
+    render();
+  }
+  else if(action==='tutorial-goat-reveal-continue'){
+    state.phase = 'tutorial-draft';
+    render();
+  }
   else if(action==='choose-season-length'){
     state.selectedSeasonLength = parseInt(el.dataset.length,10)===20 ? 20 : 10;
     state.phase='difficulty';
@@ -12299,7 +12520,7 @@ function applyStaticMenuTranslations(){
   const map = {
     menuHomeBtn: 'menu_home', menuNewCareerBtn: 'menu_new_career', menuTrophyBtn: 'menu_trophy_room', menuGuideBtn: 'menu_guide',
     menuAchievementsBtn: 'menu_achievements', menuSettingsBtn: 'menu_settings', menuCreditsBtn: 'menu_credits',
-    menuDriverTrophyBtn: 'menu_driver_trophy_room', menuMuseumBtn: 'menu_museum',
+    menuDriverTrophyBtn: 'menu_driver_trophy_room', menuMuseumBtn: 'menu_museum', menuTutorialBtn: 'menu_tutorial',
   };
   Object.entries(map).forEach(([id, key])=>{
     const el = document.getElementById(id);
@@ -12325,6 +12546,8 @@ function initSidebar(){
 
   document.getElementById('menuHomeBtn').addEventListener('click', goHome);
   document.getElementById('menuNewCareerBtn').addEventListener('click', newCareer);
+  const tutorialBtn = document.getElementById('menuTutorialBtn');
+  if(tutorialBtn) tutorialBtn.addEventListener('click', ()=>{ closeMenuPanel(); startTutorialRun(); });
   document.getElementById('menuTrophyBtn').addEventListener('click', openTrophies);
   const driverTrophyBtn = document.getElementById('menuDriverTrophyBtn');
   if(driverTrophyBtn) driverTrophyBtn.addEventListener('click', openDriverTrophies);
