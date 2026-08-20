@@ -424,6 +424,7 @@ const I18N = {
     share_quick_season: 'Stagione Veloce (10 gare)', share_manager_tag: 'ROGUELIKE GP MANAGER',
     share_wins: (n)=>`${n} vittorie`, share_podiums: (n)=>`${n} podi`, share_points: (n)=>`${n} punti`, share_stat_wins: 'Vittorie', share_stat_podiums: 'Podi', share_stat_points: 'Punti',
     share_dnfs: (n)=>`${n} ritiri`, share_champion_line: (n)=>`${n}, Campione`, share_beat_me: 'PROVA A BATTERMI',
+    share_constructors_won_line: 'Vittoria titolo costruttori', share_team_position_line: (pos)=>`P${pos}`, share_champion_short: 'Campione del mondo',
     share_season_trophies_title: (n)=>`TROFEI VINTI IN STAGIONE (${n})`, share_components_title: 'COMPONENTI DI SQUADRA', share_comp_motore: 'Motore', share_comp_telaio: 'Telaio', share_comp_aero: 'Aerodinamica', share_comp_gomme: 'Gomme', share_comp_stratega: 'Team Principal', share_sponsor_label: 'Sponsor di stagione',
     splash_presents: 'FUORISCALA presenta', splash_tap_continue: 'tocca per continuare',
     sl_races_word: 'GARE',
@@ -483,7 +484,7 @@ const I18N = {
     rcs_lost_all: (n)=>`Le tue rivali ti hanno battuto tutte (${n}).`, rcs_mixed: (b,l)=>`Hai battuto ${b}, ma perso da ${l}.`,
     se_doppietta_pill: 'DOPPIETTA', se_doppietta_title: '<img class=ico src=assets/icons/trophy.png><img class=ico src=assets/icons/trophy.png> DOPPIO TITOLO MONDIALE',
     se_driver_champ_pill: 'CAMPIONE PILOTI', se_driver_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPIONE DEL MONDO PILOTI',
-    se_constr_champ_pill: 'CAMPIONE COSTRUTTORI', se_constr_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPIONE DEL MONDO COSTRUTTORI',
+    se_constr_champ_pill: 'CAMPIONE COSTRUTTORI', se_constr_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPIONE DEL MONDO COSTRUTTORI', se_team_won_title: (team)=>`<img class=ico src=assets/icons/trophy.png> ${team}: Vittoria titolo costruttori`, se_team_position_title: (team,pos)=>`${team}: P${pos}`,
     se_end_pill: 'FINE STAGIONE', se_end_top3: (n,p)=>`Complimenti ${n} ha chiuso in P${p}`, se_end_other: (n,p)=>`${n} chiude la stagione in P${p}`,
     se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} chiude la stagione con ${pts} punti complessivi, ${wins} vittorie, ${pod} podi e ${dnf} ritiri su ${tot} gare. Budget residuo: ${budget}.`,
     se_new_career: 'Nuova Carriera', se_share: '<img class=ico src=assets/icons/upload.png> Condividi Risultato', se_your_drivers: 'I Tuoi Piloti',
@@ -727,6 +728,7 @@ const I18N = {
     share_quick_season: 'Quick Season (10 races)', share_manager_tag: 'ROGUELIKE GP MANAGER',
     share_wins: (n)=>`${n} wins`, share_podiums: (n)=>`${n} podiums`, share_points: (n)=>`${n} points`, share_stat_wins: 'Wins', share_stat_podiums: 'Podiums', share_stat_points: 'Points',
     share_dnfs: (n)=>`${n} retirements`, share_champion_line: (n)=>`${n}, Champion`, share_beat_me: 'TRY TO BEAT ME',
+    share_constructors_won_line: 'Constructors\' title won', share_team_position_line: (pos)=>`P${pos}`, share_champion_short: 'World champion',
     share_season_trophies_title: (n)=>`TROPHIES WON THIS SEASON (${n})`, share_components_title: 'TEAM COMPONENTS', share_comp_motore: 'Engine', share_comp_telaio: 'Chassis', share_comp_aero: 'Aero', share_comp_gomme: 'Tyres', share_comp_stratega: 'Team Principal', share_sponsor_label: 'Season sponsor',
     splash_presents: 'FUORISCALA presents', splash_tap_continue: 'tap to continue',
     sl_races_word: 'RACES',
@@ -786,7 +788,7 @@ const I18N = {
     rcs_lost_all: (n)=>`Your rivals all beat you (${n}).`, rcs_mixed: (b,l)=>`You beat ${b}, but lost to ${l}.`,
     se_doppietta_pill: 'GRAND SLAM', se_doppietta_title: '<img class=ico src=assets/icons/trophy.png><img class=ico src=assets/icons/trophy.png> DOUBLE WORLD TITLE',
     se_driver_champ_pill: 'DRIVERS\' CHAMPION', se_driver_champ_title: "<img class=ico src=assets/icons/trophy.png> DRIVERS' WORLD CHAMPION",
-    se_constr_champ_pill: 'CONSTRUCTORS\' CHAMPION', se_constr_champ_title: "<img class=ico src=assets/icons/trophy.png> CONSTRUCTORS' WORLD CHAMPION",
+    se_constr_champ_pill: 'CONSTRUCTORS\' CHAMPION', se_constr_champ_title: "<img class=ico src=assets/icons/trophy.png> CONSTRUCTORS' WORLD CHAMPION", se_team_won_title: (team)=>`<img class=ico src=assets/icons/trophy.png> ${team}: Constructors' title won`, se_team_position_title: (team,pos)=>`${team}: P${pos}`,
     se_end_pill: 'SEASON END', se_end_top3: (n,p)=>`Congratulations, ${n} finished P${p}`, se_end_other: (n,p)=>`${n} closes the season in P${p}`,
     se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} closes the season with ${pts} total points, ${wins} wins, ${pod} podiums and ${dnf} retirements across ${tot} races. Remaining budget: ${budget}.`,
     se_new_career: 'New Career', se_share: '<img class=ico src=assets/icons/upload.png> Share Result', se_your_drivers: 'Your Drivers',
@@ -1024,6 +1026,7 @@ const I18N = {
     share_quick_season: 'Temporada Rápida (10 carreras)', share_manager_tag: 'ROGUELIKE GP MANAGER',
     share_wins: (n)=>`${n} victorias`, share_podiums: (n)=>`${n} podios`, share_points: (n)=>`${n} puntos`, share_stat_wins: 'Victorias', share_stat_podiums: 'Podios', share_stat_points: 'Puntos',
     share_dnfs: (n)=>`${n} retiros`, share_champion_line: (n)=>`${n}, Campeón`, share_beat_me: 'INTENTA VENCERME',
+    share_constructors_won_line: 'Título de constructores', share_team_position_line: (pos)=>`P${pos}`, share_champion_short: 'Campeón del mundo',
     share_season_trophies_title: (n)=>`TROFEOS GANADOS ESTA TEMPORADA (${n})`, share_components_title: 'COMPONENTES DEL EQUIPO', share_comp_motore: 'Motor', share_comp_telaio: 'Chasis', share_comp_aero: 'Aerodinámica', share_comp_gomme: 'Neumáticos', share_comp_stratega: 'Team Principal', share_sponsor_label: 'Patrocinador de temporada',
     splash_presents: 'FUORISCALA presenta', splash_tap_continue: 'toca para continuar',
     sl_races_word: 'CARRERAS',
@@ -1083,7 +1086,7 @@ const I18N = {
     rcs_lost_all: (n)=>`Tus rivales te han vencido a todas (${n}).`, rcs_mixed: (b,l)=>`Has vencido a ${b}, pero has perdido contra ${l}.`,
     se_doppietta_pill: 'GRAN SLAM', se_doppietta_title: '<img class=ico src=assets/icons/trophy.png><img class=ico src=assets/icons/trophy.png> DOBLE TÍTULO MUNDIAL',
     se_driver_champ_pill: 'CAMPEÓN DE PILOTOS', se_driver_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPEÓN DEL MUNDO DE PILOTOS',
-    se_constr_champ_pill: 'CAMPEÓN DE CONSTRUCTORES', se_constr_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPEÓN DEL MUNDO DE CONSTRUCTORES',
+    se_constr_champ_pill: 'CAMPEÓN DE CONSTRUCTORES', se_constr_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPEÓN DEL MUNDO DE CONSTRUCTORES', se_team_won_title: (team)=>`<img class=ico src=assets/icons/trophy.png> ${team}: Título de constructores`, se_team_position_title: (team,pos)=>`${team}: P${pos}`,
     se_end_pill: 'FIN DE TEMPORADA', se_end_top3: (n,p)=>`Enhorabuena, ${n} ha terminado P${p}`, se_end_other: (n,p)=>`${n} cierra la temporada en P${p}`,
     se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} cierra la temporada con ${pts} puntos totales, ${wins} victorias, ${pod} podios y ${dnf} retiros en ${tot} carreras. Presupuesto restante: ${budget}.`,
     se_new_career: 'Nueva Carrera', se_share: '<img class=ico src=assets/icons/upload.png> Compartir Resultado', se_your_drivers: 'Tus Pilotos',
@@ -10652,6 +10655,33 @@ function loadImg(src){
   });
 }
 
+// V0.9.9.73: formato condiviso per le schermate finali — il FOCUS e' la scuderia, non il singolo
+// pilota, come richiesto esplicitamente da Gio con 3 esempi precisi. Riusata sia dalla carta
+// condivisibile (immagine) sia dalla schermata fine stagione a schermo, cosi' restano coerenti.
+function computeSeasonEndSummaryLines(){
+  const dstd = driverStandingsSorted();
+  const cstd = constructorStandingsSorted();
+  const constructorPos = cstd.findIndex(c=>c.teamId==='PLAYER')+1;
+  const isConstructorChamp = constructorPos===1;
+  const driverChamp = dstd[0];
+
+  const p1Pos = dstd.findIndex(d=>d.slotKey==='PLAYER-1' && !d.isFormer)+1;
+  const p2Pos = state.team.pilotSecond ? dstd.findIndex(d=>d.slotKey==='PLAYER-2' && !d.isFormer)+1 : null;
+  const p1IsChamp = driverChamp.isPlayerTeam && driverChamp.slotKey==='PLAYER-1';
+  const p2IsChamp = driverChamp.isPlayerTeam && driverChamp.slotKey==='PLAYER-2';
+
+  const drivers = [{ name: state.team.pilotMain.nome, pos: p1Pos, isChamp: p1IsChamp, slotKey:'PLAYER-1' }];
+  if(state.team.pilotSecond){
+    drivers.push({ name: state.team.pilotSecond.nome, pos: p2Pos, isChamp: p2IsChamp, slotKey:'PLAYER-2' });
+  }
+  return {
+    teamName: teamDisplayName(),
+    isConstructorChamp,
+    constructorPos,
+    drivers,
+    anyDriverChamp: p1IsChamp || p2IsChamp,
+  };
+}
 async function buildShareCardCanvas(){
   const dstd = driverStandingsSorted();
   const cstd = constructorStandingsSorted();
@@ -10669,9 +10699,10 @@ async function buildShareCardCanvas(){
     : Math.max(state.team.pilotMain.rating, state.team.pilotSecond.rating);
   const band = ratingBandKey(bestDriverRating);
 
+  const summary = computeSeasonEndSummaryLines();
   let title, subtitle;
-  if(isDriverChamp){ title = t('share_world_champion'); subtitle = t('share_drivers_title', teamDisplayName()); }
-  else { title = teamDisplayName().toUpperCase(); subtitle = t('share_season_over', constructorPos); }
+  title = summary.teamName.toUpperCase();
+  subtitle = summary.isConstructorChamp ? t('share_constructors_won_line') : t('share_team_position_line', summary.constructorPos);
   const metaLine = `${state.seasonLength===20?t('share_full_season'):t('share_quick_season')}  ·  ${DIFFICULTY_LABEL[state.difficulty]}`;
 
   const poseNum = isDriverChamp ? 1 : (2+Math.floor(rnd()*4));
@@ -10680,10 +10711,10 @@ async function buildShareCardCanvas(){
   const poseSrc = `assets/share-poses/pose${poseNum}_${poseBand}.webp`;
   const accent = isGoatChamp ? '#FF1801' : CAR_RARITY_COLOR[band];
 
-  // V0.9.9.48: RIDISEGNO COMPLETO su richiesta di Gio — la card era troppo lunga (troppi elementi
-  // semplicemente impilati in verticale). Stessa identica logica dati/asset di prima, riorganizzata
-  // in blocchi piu' compatti e densi, ispirandosi (senza seguirla alla lettera) a una bozza esterna.
-  const champLine = isDriverChamp ? t('share_champion_line', driverChamp.nome) : null;
+  // V0.9.9.73: il FOCUS e' la scuderia (titolo+sottotitolo sopra), non piu' il singolo pilota — su
+  // richiesta esplicita di Gio con esempi precisi. Una riga per ogni pilota, ciascuna col proprio
+  // risultato individuale (campione del mondo o posizione), mostrate sotto le statistiche.
+  const driverLines = summary.drivers.map(d => `${d.name}: ${d.isChamp ? t('share_champion_short') : 'P'+d.pos}`);
 
   const [logoImg, poseImg] = await Promise.all([loadImg(LOGO_DATA_URI), loadImg(poseSrc)]);
   const compRows = [
@@ -10722,7 +10753,7 @@ async function buildShareCardCanvas(){
 
   // statistiche: pannello compatto a 3 colonne + riga campione/ritiri sotto
   const statsY = cursor;
-  cursor += 92 + (champLine || !isDriverChamp ? 34 : 0) + 22;
+  cursor += 92 + (driverLines.length*26 + 12) + 22;
 
   // componenti + sponsor, stessa riga
   const compY = cursor;
@@ -10802,7 +10833,7 @@ async function buildShareCardCanvas(){
   // quattro righe impilate. La quarta info (campione/ritiri) resta sotto come riga singola.
   const statsPanelX = M, statsPanelW = W-2*M;
   ctx.fillStyle = 'rgba(255,255,255,0.035)';
-  roundRectPath(ctx, statsPanelX, statsY, statsPanelW, 92 + (champLine || !isDriverChamp ? 34 : 0), 14);
+  roundRectPath(ctx, statsPanelX, statsY, statsPanelW, 92 + (driverLines.length*26 + 12), 14);
   ctx.fill();
   const threeStats = [ [totalWins, t('share_stat_wins')], [totalPodiums, t('share_stat_podiums')], [totalPoints, t('share_stat_points')] ];
   const colW = statsPanelW/3;
@@ -10816,12 +10847,11 @@ async function buildShareCardCanvas(){
     if(i>0){ ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.beginPath(); ctx.moveTo(statsPanelX+colW*i,statsY+18); ctx.lineTo(statsPanelX+colW*i,statsY+74); ctx.stroke(); }
   });
   ctx.textAlign = 'left';
-  if(champLine || !isDriverChamp){
-    const lastLineText = isDriverChamp ? champLine : t('share_dnfs', totalDnfs);
+  driverLines.forEach((line, i)=>{
     ctx.fillStyle = '#d5d5da'; ctx.font = '700 19px -apple-system,sans-serif'; ctx.textAlign='center';
-    ctx.fillText(lastLineText, W/2, statsY+92+24);
+    ctx.fillText(line, W/2, statsY+92+24+i*26);
     ctx.textAlign='left';
-  }
+  });
 
   // componenti (sinistra, valore vicino all'etichetta) + sponsor (destra, logo grande) — stessa riga
   const compColW = statsPanelW*0.54;
@@ -11120,16 +11150,14 @@ function renderSeasonEnd(){
   const isDriverChamp = driverChamp.isPlayerTeam;
   const isConstructorChamp = constructorChamp.isPlayerTeam;
 
-  let pillText, heroTitle;
-  if(isDriverChamp && isConstructorChamp){ pillText=t('se_doppietta_pill'); heroTitle=t('se_doppietta_title'); }
-  else if(isDriverChamp){ pillText=t('se_driver_champ_pill'); heroTitle=t('se_driver_champ_title'); }
-  else if(isConstructorChamp){ pillText=t('se_constr_champ_pill'); heroTitle=t('se_constr_champ_title'); }
-  else {
-    pillText=t('se_end_pill');
-    const bestPos = Math.min(p1Pos,p2Pos);
-    const bestPilotName = (p1Pos<=p2Pos ? state.team.pilotMain : state.team.pilotSecond).nome;
-    heroTitle = bestPos<=3 ? t('se_end_top3', bestPilotName, bestPos) : t('se_end_other', bestPilotName, bestPos);
-  }
+  const summary = computeSeasonEndSummaryLines();
+  const pillText = summary.isConstructorChamp ? t('se_constr_champ_pill') : t('se_end_pill');
+  const heroTitle = summary.isConstructorChamp
+    ? t('se_team_won_title', summary.teamName)
+    : t('se_team_position_title', summary.teamName, summary.constructorPos);
+  const driverSummaryLinesHTML = summary.drivers.map(d=>
+    `<div class="se-driver-summary-line">${d.name}: <strong>${d.isChamp ? t('share_champion_short') : 'P'+d.pos}</strong></div>`
+  ).join('');
 
   // V0.9.7.8: fix bug segnalato da Gio — i totali ora includono anche le statistiche di eventuali
   // piloti sostituiti a stagione in corso (record EX), non solo i due sedili correnti.
@@ -11163,6 +11191,7 @@ function renderSeasonEnd(){
     <div class="hero-inner">
       <div class="pill">${pillText}</div>
       <h1 class="hdr" style="margin-top:14px;font-size:38px;">${heroTitle}</h1>
+      <div class="se-driver-summary" style="margin-top:10px;">${driverSummaryLinesHTML}</div>
       <div class="tagline">${t('se_summary', teamDisplayName(), totalPoints, totalWins, totalPodiums, totalDnfs, state.calendar.length, fmtMIcon(state.budget))}</div>
       <div class="tagline" style="margin-top:6px;">${rivalComparisonSentence()}</div>
       <div class="btnrow" style="justify-content:center;">
