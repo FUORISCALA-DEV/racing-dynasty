@@ -566,6 +566,10 @@ const I18N = {
     tutorial_ingegnere_rejection: 'Selezione non ottimale. Si raccomanda di valutare nuovamente i parametri disponibili prima di procedere.',
     tutorial_goat_reveal_text: 'Ah, eccoti. Finalmente qualcuno con un minimo di gusto. Dimmi: sei riuscito a restare sveglio per tutto quel discorso sui \"moduli operativi\"? Io mi ero quasi addormentato, e guidavo io la macchina. Comunque: sono Elio. Sì, proprio il pilota che hai appena scelto — parlo anche, non solo guido, con tuo grande sollievo immagino. Da qui in poi tocca a me. L\'ingegnere ha fatto il suo lavoro, ora si fa sul serio.',
     tutorial_goat_reveal_cta: 'Continua →',
+    tutorial_hint_pitlane: 'Qui decidi come spendere il budget: un upgrade garantito, o scouting per sostituire un componente. Scegli tu — questa volta niente scorciatoie.',
+    tutorial_complete_elio_text: 'Tre gare, sole, pioggia e una Safety Car — hai visto un bel po\' per essere all\'inizio. Il resto — undercut, priorita in Pit Lane, tutte le decisioni che non ti ho mostrato — lo trovi giocando davvero. Io ho fatto la mia parte. Ora tocca a te.',
+    tutorial_goat_rarity_text: 'Un\'ultima cosa, prima che te ne vada con la testa gonfia: nella run vera non mi troverai quasi mai nel draft. Sono un\'eccezione, circa 1 possibilita\' su 2000 a turno — potresti non incontrarmi mai più in una carriera intera. Goditi il ricordo.',
+    tutorial_complete_cta: 'Torna al menù →',
     tutorial_intro_cta: 'Cominciamo →',
     tutorial_draft_step_of: (a,b)=>`Scelta ${a} di ${b}`,
     tutorial_draft_choose: (label)=>`Scegli: ${label}`,
@@ -863,6 +867,10 @@ const I18N = {
     tutorial_ingegnere_rejection: 'Suboptimal selection. It is recommended to re-evaluate the available parameters before proceeding.',
     tutorial_goat_reveal_text: 'Ah, there you are. Finally someone with a bit of taste. Tell me: did you manage to stay awake through that whole \"operational modules\" speech? I nearly fell asleep, and I was the one driving the car. Anyway: I\'m Elio. Yes, the very driver you just picked — I talk too, not just drive, much to your relief I imagine. From here on, it\'s my turn. The engineer did his job, now it\'s time to get serious.',
     tutorial_goat_reveal_cta: 'Continue →',
+    tutorial_hint_pitlane: 'Here you decide how to spend the budget: a guaranteed upgrade, or scouting to replace a component. Your call this time — no shortcuts.',
+    tutorial_complete_elio_text: 'Three races, sun, rain and a Safety Car — quite a lot to see this early on. The rest — undercuts, Pit Lane priority, every decision I didn\'t show you — you\'ll find by actually playing. I\'ve done my part. Now it\'s your turn.',
+    tutorial_goat_rarity_text: 'One last thing, before you walk off with a swelled head: in a real run you\'ll almost never find me in the draft. I\'m an exception, about 1 in 2000 per turn — you might never meet me again in an entire career. Enjoy the memory.',
+    tutorial_complete_cta: 'Back to menu →',
     tutorial_intro_cta: 'Let\'s start →',
     tutorial_draft_step_of: (a,b)=>`Choice ${a} of ${b}`,
     tutorial_draft_choose: (label)=>`Choose: ${label}`,
@@ -1156,6 +1164,10 @@ const I18N = {
     tutorial_ingegnere_rejection: 'Selección subóptima. Se recomienda reevaluar los parámetros disponibles antes de continuar.',
     tutorial_goat_reveal_text: 'Ah, aquí estás. Por fin alguien con un poco de gusto. Dime: ¿conseguiste mantenerte despierto durante todo ese discurso sobre \"módulos operativos\"? Yo casi me quedo dormido, y eso que conducía el coche. En fin: soy Elio. Sí, el mismo piloto que acabas de elegir — también hablo, no solo conduzco, para tu gran alivio imagino. De aquí en adelante me toca a mí. El ingeniero ha hecho su trabajo, ahora va en serio.',
     tutorial_goat_reveal_cta: 'Continuar →',
+    tutorial_hint_pitlane: 'Aquí decides cómo gastar el presupuesto: una mejora garantizada, o scouting para sustituir un componente. Esta vez decides tú, sin atajos.',
+    tutorial_complete_elio_text: 'Tres carreras, sol, lluvia y un Safety Car — bastante para estar empezando. El resto — undercuts, prioridad en Pit Lane, cada decisión que no te enseñé — lo descubrirás jugando de verdad. Yo he hecho mi parte. Ahora te toca a ti.',
+    tutorial_goat_rarity_text: 'Una última cosa, antes de que te vayas con la cabeza hinchada: en una partida real casi nunca me encontrarás en el draft. Soy una excepción, alrededor de 1 posibilidad entre 2000 por turno — puede que no vuelvas a encontrarme en toda una carrera. Disfruta el recuerdo.',
+    tutorial_complete_cta: 'Volver al menú →',
     tutorial_intro_cta: 'Empecemos →',
     tutorial_draft_step_of: (a,b)=>`Elección ${a} de ${b}`,
     tutorial_draft_choose: (label)=>`Elige: ${label}`,
@@ -6715,7 +6727,7 @@ function applyAIUpgrades(){
 function advanceAfterPitlane(){
   state.raceIndex++;
   if(state.raceIndex >= state.calendar.length){
-    state.phase = 'season_end';
+    state.phase = state.isTutorialRun ? 'tutorial-complete' : 'season_end';
   } else {
     applyAIUpgrades();
     reevaluateRivals();
@@ -7574,9 +7586,11 @@ function renderInner(){
   if(state.phase==='title') return renderTitle();
   if(state.phase==='difficulty') return renderDifficulty();
   if(state.phase==='tutorial-intro') return renderTutorialIntro();
+  if(state.phase==='tutorial-first-launch-prompt') return renderTutorialFirstLaunchPrompt();
   if(state.phase==='tutorial-draft') return renderTutorialDraft();
   if(state.phase==='tutorial-goat-reveal') return renderTutorialGoatReveal();
   if(state.phase==='tutorial-sponsor') return renderTutorialSponsor();
+  if(state.phase==='tutorial-complete') return renderTutorialComplete();
   if(state.phase==='season-length') return renderSeasonLength();
   if(state.phase==='naming') return renderNaming();
   if(state.phase==='mode-select') return renderModeSelect();
@@ -8002,6 +8016,7 @@ function recordCircuitResult(circuitName, won){
   if(!trophyData[circuitName]) trophyData[circuitName] = { raced:0, won:0 };
   trophyData[circuitName].raced++;
   if(won) trophyData[circuitName].won++;
+  if(state && state.isTutorialRun) return; // V0.9.9.71: mutazione in memoria ok (serve al codice dopo), ma niente salvataggio vero
   saveTrophyData();
 }
 let trophyData = loadTrophyData(); // caricato una sola volta all'avvio, prima di qualunque carriera
@@ -8117,6 +8132,7 @@ function loadAchievementData(){
   }catch(e){ return JSON.parse(JSON.stringify(ACHIEVEMENT_DATA_DEFAULTS)); }
 }
 function saveAchievementData(){
+  if(state && state.isTutorialRun) return; // V0.9.9.71: il tutorial non scrive nessun progresso vero
   try{ localStorage.setItem(ACHIEVEMENT_SAVE_KEY, JSON.stringify(achievementData)); }catch(e){ /* ignorato */ }
   touchLocalProgress(); pushSaveToCloud();
 }
@@ -8200,6 +8216,7 @@ function recordCircuitRaced(circuitName){
 
 // V0.9.7.9: obiettivi legati alle sinergie — controllati ogni volta che la squadra cambia composizione
 function checkSynergyAchievements(){
+  if(state && state.isTutorialRun) return; // V0.9.9.71: il tutorial non scrive nessun progresso vero
   const t = state.team;
   if(!t) return;
   const pairs = activeSynergyPairs();
@@ -8229,6 +8246,7 @@ function checkCenerentolaAchievement(){
 // V0.9.7: obiettivi di Maestria — controllati ogni volta che museo/trofei/circuiti cambiano,
 // cosi' si sbloccano nel momento esatto in cui la condizione diventa vera, non solo a fine stagione
 function checkMasteryAchievements(){
+  if(state && state.isTutorialRun) return; // V0.9.9.71: il tutorial non scrive nessun progresso vero
   if(!isAchievementUnlocked('turista-instancabile')){
     if(achievementData.circuitsRaced.length >= 10) unlockAchievement('turista-instancabile');
   }
@@ -8528,7 +8546,7 @@ async function pullSaveFromCloud(){
     }
   }catch(e){ console.warn('Caricamento cloud non riuscito:', e); }
 }
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial','tutorial-first-launch-prompt','tutorial-intro','tutorial-draft','tutorial-goat-reveal','tutorial-sponsor','tutorial-complete']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -8822,6 +8840,20 @@ function renderTitle(){
 const DIFFICULTY_COLOR = { facile:'#4CD97B', medio:'#22DCDC', difficile:'#FF9F1C', hardcore:'#FF3B4E' };
 // V0.9.9.69: schermata di introduzione al tutorial — Elio si presenta, spiega bene (unica volta
 // con testo lungo, come richiesto: solo qui, poi solo indizi brevi).
+// V0.9.9.71: prompt al primissimo avvio — chiesto una volta sola, poi il tutorial resta comunque
+// raggiungibile dal menù a panino per chi cambia idea dopo.
+function renderTutorialFirstLaunchPrompt(){
+  app.innerHTML = `
+  <div class="wrap tutorial-intro-wrap">
+    <h2 class="hdr">${t('tutorial_first_launch_title')}</h2>
+    <div class="dim" style="margin-top:8px;line-height:1.5;">${t('tutorial_first_launch_desc')}</div>
+    <div class="btnrow" style="margin-top:20px;flex-direction:column;gap:10px;">
+      <button class="primary" data-action="tutorial-first-launch-yes" style="width:100%;">${t('tutorial_first_launch_yes')}</button>
+      <button class="ghost" data-action="tutorial-first-launch-no" style="width:100%;">${t('tutorial_first_launch_no')}</button>
+    </div>
+  </div>`;
+  bindActions();
+}
 function renderTutorialIntro(){
   app.innerHTML = `
   <div class="wrap tutorial-intro-wrap">
@@ -8896,6 +8928,19 @@ function renderTutorialSponsor(){
     <h2 class="hdr">${t('tutorial_sponsor_choose')}</h2>
     ${state.tutorialElioMsg ? elioSaysHTML(state.tutorialElioMsg, {rejection:true}) : ''}
     <div class="grid-2" style="margin-top:16px;">${optionsHTML}</div>
+  </div>`;
+  bindActions();
+}
+// V0.9.9.71: schermata di chiusura del tutorial — Elio saluta, e viene ricordata la rarita' vera
+// di THE GOAT (1 su 2000 nel gioco normale), cosi' il giocatore capisce che qui era un'eccezione.
+function renderTutorialComplete(){
+  app.innerHTML = `
+  <div class="wrap tutorial-intro-wrap">
+    ${elioSaysHTML(t('tutorial_complete_elio_text'), {})}
+    ${elioSaysHTML(t('tutorial_goat_rarity_text'), {})}
+    <div class="btnrow" style="margin-top:20px;">
+      <button class="primary" data-action="tutorial-complete-exit" style="width:100%;">${t('tutorial_complete_cta')}</button>
+    </div>
   </div>`;
   bindActions();
 }
@@ -10497,6 +10542,7 @@ function renderPitlane(){
     <h2 class="hdr" style="font-size:26px;">${window.t('pitlane_headline')}</h2>
     <div class="dim" style="font-size:14px;margin-top:8px;line-height:1.5;">${window.t('pitlane_subtitle')}</div>
   </div>
+  ${state.isTutorialRun ? elioSaysHTML(window.t('tutorial_hint_pitlane')) : ''}
   <div class="btnrow"><button class="ghost" data-action="skip-pitlane">${window.t('pitlane_skip')}</button></div>
   <div class="grid grid-3">${cards}</div>
   ${scoutNode ? pitlaneCardHTML(scoutNode) : ''}
@@ -11289,8 +11335,20 @@ function onAction(e){
     }
     render();
   }
+  else if(action==='tutorial-first-launch-yes'){
+    startTutorialRun();
+  }
+  else if(action==='tutorial-first-launch-no'){
+    state.phase = 'title';
+    render();
+    playIntroOnce();
+  }
   else if(action==='tutorial-goat-reveal-continue'){
     state.phase = 'tutorial-draft';
+    render();
+  }
+  else if(action==='tutorial-complete-exit'){
+    state = { phase:'title' }; // pulizia completa, nessun residuo dello stato tutorial
     render();
   }
   else if(action==='choose-season-length'){
@@ -11357,9 +11415,8 @@ function onAction(e){
       markStreamerAsked();
       setStreamerMode(false);
       syncStreamerFrameState();
-      state.phase = 'title';
+      state.phase = 'tutorial-first-launch-prompt'; // V0.9.9.71: solo al primissimo avvio
       render();
-      playIntroOnce();
     }
   }
   else if(action==='streamer-name-confirm'){
