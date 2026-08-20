@@ -5317,6 +5317,17 @@ function applyRealPitStop(timeline, slotKey, tCurrent, isDiscounted, targetPhase
 function applyRealPitUnderSC(timeline, slotKey, tCurrent){
   return applyRealPitStop(timeline, slotKey, tCurrent, true);
 }
+// V0.9.9.72: combinazioni tipo+scelta che toccano DAVVERO il tempo cumulato (pit reale o ritardo
+// sosta) — per queste, lo spostamento narrativo indipendente va saltato: il testo mostrato al
+// giocatore deve riflettere il risultato VERO (derivato dalla posizione prima/dopo), non un tiro
+// a parte che finisce sempre sovrastato dal costo reale (molto piu' grande in scala). Segnalato da
+// Gio come bug pesante: "mi dice che guadagno posizioni ma mi trovo dietro".
+const REAL_MECHANIC_CHOICES = new Set([
+  'safetycar|box','weather|box','pit|early','pit|late','undercut|attempt','overcut|follow','overcut|stayout',
+  'tyrecliff|box_now_cliff','frontwing|call_pits_wing','doublestack|stack','doublestack|priority',
+  'pitpriority|priority_best','pitpriority|priority_tires','pitpriority|delay_both',
+]);
+function isRealMechanicChoice(type, choiceKey){ return REAL_MECHANIC_CHOICES.has(type+'|'+choiceKey); }
 function applyLiveDecision(type, choiceKey){
   const timeline = state.live.timeline;
   const t = state.live.phaseIndex;
@@ -5356,26 +5367,53 @@ function applyLiveDecision(type, choiceKey){
     const bucketChoice = { 'PLAYER-1':'box', 'PLAYER-2':'stay' };
     slots.forEach(slotKey=>{
       if(timeline.retiredAtPhase[slotKey]!==null) return;
+      const isRealBox = (type==='safetycar' || type==='weather' || type==='doublestack') && bucketChoice[slotKey]==='box';
       const outcome = pickDecisionOutcome(bucketChoice[slotKey]);
-      const { actualFirstShift, firstPhaseTimeBonus } = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(bucketChoice[slotKey]));
-      // V0.9.9.62: solo chi va DAVVERO ai box (non il compagno che resta fuori) prende il costo/
-      // beneficio reale del pit — vero undercut, non solo un esito narrativo. Esteso anche a
-      // "weather" (cambio gomme per meteo e' un pit stop vero quanto quello sotto Safety Car) —
-      // incoerenza trovata durante la revisione richiesta da Gio. Lo sconto Safety Car si applica
-      // solo se la decisione capita DAVVERO in quella fase, non sempre.
-      let realPitCost = null;
-      if((type==='safetycar' || type==='weather' || type==='doublestack') && bucketChoice[slotKey]==='box'){
+      let actualFirstShift, firstPhaseTimeBonus, realPitCost = null;
+      if(isRealBox){
+        // V0.9.9.72: chi va DAVVERO ai box — niente spostamento narrativo indipendente, il
+        // risultato mostrato riflette il vero prima/dopo (altrimenti il costo reale, molto piu'
+        // grande in scala, lo sovrasta sempre e il testo mente sistematicamente).
+        const order = timeline.phaseOrders[t+1] || timeline.phaseOrders[t] || [];
+        const beforeRank = order.indexOf(slotKey);
         realPitCost = applyRealPitStop(timeline, slotKey, t, t===timeline.safetyCarPhase);
+        const orderAfter = timeline.phaseOrders[t+1] || timeline.phaseOrders[t] || [];
+        const afterRank = orderAfter.indexOf(slotKey);
+        actualFirstShift = (beforeRank>=0 && afterRank>=0) ? (beforeRank - afterRank) : 0;
+        firstPhaseTimeBonus = 0;
+      } else {
+        const shiftResult = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(bucketChoice[slotKey]));
+        actualFirstShift = shiftResult.actualFirstShift;
+        firstPhaseTimeBonus = shiftResult.firstPhaseTimeBonus;
       }
       reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus, realPitCost };
     });
     return reveal;
   }
 
+  // V0.9.9.72: cattura le posizioni di PARTENZA di tutti gli slot coinvolti, PRIMA che qualunque
+  // meccanica reale parta — se entrambi i piloti vanno ai box nella stessa scelta, il pit del primo
+  // non deve falsare la misurazione "prima" dell'altro (o viceversa per "dopo", vedi passaggio finale).
+  const realMechanic = isRealMechanicChoice(type, choiceKey);
+  const beforeRanks = {};
+  if(realMechanic){
+    const orderBefore = timeline.phaseOrders[t+1] || timeline.phaseOrders[t] || [];
+    affectedSlots.forEach(slotKey=>{ beforeRanks[slotKey] = orderBefore.indexOf(slotKey); });
+  }
   affectedSlots.forEach(slotKey=>{
     if(timeline.retiredAtPhase[slotKey]!==null) return; // gia' ritirato: la scelta non ha piu' effetto
     const outcome = pickDecisionOutcome(choiceKey);
-    const { actualFirstShift, firstPhaseTimeBonus } = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(choiceKey));
+    // V0.9.9.72: per le scelte che toccano DAVVERO il tempo cumulato (pit reale o ritardo sosta),
+    // saltiamo lo spostamento narrativo indipendente — altrimenti il costo reale (molto piu' grande
+    // in scala) lo sovrasta sempre e il testo mostrato al giocatore mente sistematicamente ("guadagni
+    // posizioni" quando in realta' finisce dietro). Il risultato mostrato viene invece calcolato dal
+    // vero prima/dopo, in un passaggio finale DOPO che tutti gli slot coinvolti hanno finito.
+    let actualFirstShift = 0, firstPhaseTimeBonus = 0;
+    if(!realMechanic){
+      const shiftResult = applyShiftAcrossPhases(slotKey, outcome.shift, decisionShiftFn(choiceKey));
+      actualFirstShift = shiftResult.actualFirstShift;
+      firstPhaseTimeBonus = shiftResult.firstPhaseTimeBonus;
+    }
     // V0.9.9.55/61: le scelte che comportano un vero pit stop (sotto Safety Car o normale) ora
     // muovono DAVVERO la simulazione — costo reale in secondi + gomme nuove — non solo un esito
     // narrativo scollegato. "Ritarda"/"resta fuori" spostano la sosta futura piu' avanti invece di
@@ -5489,6 +5527,21 @@ function applyLiveDecision(type, choiceKey){
     // posizioni, diventa un distacco in secondi (timeBonus) invece di sparire nel nulla.
     reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus, realPitCost };
   });
+  // V0.9.9.72: passaggio FINALE, DOPO che tutti gli slot coinvolti hanno completato le loro
+  // meccaniche reali — se entrambi i piloti vanno ai box nella stessa scelta, il pit del secondo
+  // sposta ANCHE la posizione relativa del primo, quindi il "dopo" va misurato solo qui, a tutto
+  // concluso, non dentro il ciclo di ciascuno slot (altrimenti il risultato mostrato al primo pilota
+  // processato risultava sistematicamente sbagliato di 1 posizione).
+  if(realMechanic){
+    const orderAfter = timeline.phaseOrders[t+1] || timeline.phaseOrders[t] || [];
+    affectedSlots.forEach(slotKey=>{
+      if(!reveal[slotKey]) return;
+      const afterRank = orderAfter.indexOf(slotKey);
+      const beforeRank = beforeRanks[slotKey];
+      reveal[slotKey].shift = (beforeRank>=0 && afterRank>=0) ? (beforeRank - afterRank) : 0;
+      reveal[slotKey].timeBonus = 0;
+    });
+  }
   return reveal;
 }
 
