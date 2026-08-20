@@ -2144,32 +2144,40 @@ function buildAIGrid(aiTeamsRaw, usedIds, difficulty){
 // ============================================================
 const TUTORIAL_TEAM_NAME = 'Scuderia Apprendista';
 function startTutorialRun(){
+  // V0.9.9.71: FIX robusto — invece di ricostruire lo state a mano (rischio di dimenticare campi,
+  // gia' successo 2 volte con crash a fine gara), chiamiamo la vera newRun() per avere uno state
+  // GARANTITO completo e corretto, poi sovrascriviamo solo i campi specifici del tutorial sopra.
+  newRun('facile', 10, true, true);
+
   const tutorialCircuits = DATA.circuiti.slice(0,3).map(c=> ({ ...c, giri: computeRaceLaps(c) }));
   const aiTeamsRaw = DATA.scuderie.slice(0,9);
   const aiTeams = buildAIGrid(aiTeamsRaw, new Set(['DRV-249']), 'facile'); // teniamo fuori l'id di THE GOAT dal pool IA
   aiTeams.forEach(t=>{ t.virtualSponsor = SPONSOR_NAMES[0]; });
 
-  state = {
-    phase:'tutorial-intro',
-    isTutorialRun: true, // V0.9.9.69: controllato da achievement/token/museo per non scrivere nessun progresso vero
-    difficulty:'facile',
-    seasonLength: 3,
-    aiutoInCoda: true,
-    riflessiPartenza: true,
-    midSeasonSwapDone: true, // niente cambio pilota a meta' stagione nel tutorial, non serve
-    rerollsLeft: 0, rerollsTotal: 0,
-    budget: START_BUDGET,
-    raceIndex: 0,
-    calendar: tutorialCircuits,
-    aiTeams: aiTeams,
-    team: { pilotMain:null, pilotSecond:null, motore:null, telaio:null, aero:null, gomme:null, stratega:null, customName:TUTORIAL_TEAM_NAME, nation:'Italia' },
-    driverStandings: {}, constructorStandings: {}, // vuoti finche' la scelta guidata non completa la squadra
-    tutorialDraftStep: 0, // avanza attraverso le scelte guidate: motore, PILOTA (qui compare THE GOAT), telaio, aero, gomme, team principal, secondo pilota
-    tutorialElioMsg: null, // messaggio di rifiuto mostrato quando si sceglie l'opzione sbagliata
-    tutorialGoatFound: false, // V0.9.9.70: finche' e' false, si parla con la voce fredda dell'Ingegnere — poi prende il posto Elio
-    usedIds: new Set(['DRV-249']),
-    seasonTrophiesWon: [],
-  };
+  state.phase = 'tutorial-intro';
+  state.isTutorialRun = true; // controllato da achievement/token/museo/salvataggio per non scrivere nessun progresso vero
+  state.seasonLength = 3;
+  state.midSeasonSwapDone = true; // niente cambio pilota a meta' stagione nel tutorial, non serve
+  state.calendar = tutorialCircuits;
+  state.aiTeams = aiTeams;
+  state.team = { pilotMain:null, pilotSecond:null, motore:null, telaio:null, aero:null, gomme:null, stratega:null, customName:TUTORIAL_TEAM_NAME, nation:'Italia' };
+  state.usedIds = new Set(['DRV-249']);
+  state.tutorialDraftStep = 0; // avanza attraverso le scelte guidate: motore, PILOTA (qui compare THE GOAT), telaio, aero, gomme, team principal, secondo pilota
+  state.tutorialElioMsg = null; // messaggio di rifiuto mostrato quando si sceglie l'opzione sbagliata
+  state.tutorialGoatFound = false; // finche' e' false, si parla con la voce fredda dell'Ingegnere — poi prende il posto Elio
+
+  // le classifiche delle 9 scuderie IA tutorial (diverse da quelle scelte da newRun())
+  state.driverStandings = {}; state.constructorStandings = {};
+  aiTeams.forEach(t=>{
+    state.constructorStandings[t.id] = { teamId:t.id, nome:t.nome, isPlayerTeam:false, points:0 };
+    t.drivers.forEach((d,slot)=>{
+      const slotKey = t.id+'-'+slot;
+      state.driverStandings[slotKey] = {
+        slotKey, teamId:t.id, teamNome:t.nome, driverId:d.id, nome:d.nome, naz:d.naz, carNumber:null,
+        isPlayerTeam:false, isFormer:false, points:0, wins:0, podiums:0, dnfs:0
+      };
+    });
+  });
   render();
 }
 // V0.9.9.69: componente di dialogo di Elio — riusa il ritratto di THE GOAT gia' esistente nella
@@ -8830,7 +8838,7 @@ function renderTutorialIntro(){
 function renderTutorialDraft(){
   const stepIdx = state.tutorialDraftStep;
   if(stepIdx >= TUTORIAL_DRAFT_STEPS.length){
-    if(!state.grid){ // solo la prima volta che arriviamo qui
+    if(!state.grid || state.grid.length===0){ // solo la prima volta che arriviamo qui
       applySynergyBonuses();
       buildGrid();
     }
