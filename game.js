@@ -567,7 +567,10 @@ const I18N = {
     tutorial_ingegnere_rejection: 'Selezione non ottimale. Si raccomanda di valutare nuovamente i parametri disponibili prima di procedere.',
     tutorial_goat_reveal_text: 'Ah, eccoti. Finalmente qualcuno con un minimo di gusto. Dimmi: sei riuscito a restare sveglio per tutto quel discorso sui \"moduli operativi\"? Io mi ero quasi addormentato, e guidavo io la macchina. Comunque: sono Elio. Sì, proprio il pilota che hai appena scelto — parlo anche, non solo guido, con tuo grande sollievo immagino. Da qui in poi tocca a me. L\'ingegnere ha fatto il suo lavoro, ora si fa sul serio.',
     tutorial_goat_reveal_cta: 'Continua →',
-    tutorial_hint_pitlane: 'Qui decidi come spendere il budget: un upgrade garantito, o scouting per sostituire un componente. Scegli tu — questa volta niente scorciatoie.',
+    tutorial_sponsor_choose: 'Scegli lo sponsor di stagione', tutorial_hint_pitlane: 'Qui decidi come spendere il budget: un upgrade garantito, o scouting per sostituire un componente. Scegli tu — questa volta niente scorciatoie.',
+    tutorial_draft_hint_reroll: 'Questa offerta non fa per te. Il pulsante per rigirare le carte è proprio lì — usalo, e vedi cosa succede.',
+    tutorial_draft_hint_components: 'Bene, ora tocca al resto della squadra. Motore, telaio, gomme e chi guida i box dal muretto: scegli quello che ti sembra più forte, uno alla volta.',
+    tutorial_draft_hint_synergy: 'Visto quel cerchio che si è acceso? Sono le sinergie: due pezzi con la stessa mentalità si accoppiano e ti danno un bonus di rating gratis a entrambi. Tienilo d\'occhio quando scegli.',
     tutorial_complete_elio_text: 'Tre gare, sole, pioggia e una Safety Car — hai visto un bel po\' per essere all\'inizio. Il resto — undercut, priorita in Pit Lane, tutte le decisioni che non ti ho mostrato — lo trovi giocando davvero. Io ho fatto la mia parte. Ora tocca a te.',
     tutorial_goat_rarity_text: 'Un\'ultima cosa, prima che te ne vada con la testa gonfia: nella run vera non mi troverai quasi mai nel draft. Sono un\'eccezione, circa 1 possibilita\' su 2000 a turno — potresti non incontrarmi mai più in una carriera intera. Goditi il ricordo.',
     tutorial_complete_cta: 'Torna al menù →',
@@ -869,7 +872,10 @@ const I18N = {
     tutorial_ingegnere_rejection: 'Suboptimal selection. It is recommended to re-evaluate the available parameters before proceeding.',
     tutorial_goat_reveal_text: 'Ah, there you are. Finally someone with a bit of taste. Tell me: did you manage to stay awake through that whole \"operational modules\" speech? I nearly fell asleep, and I was the one driving the car. Anyway: I\'m Elio. Yes, the very driver you just picked — I talk too, not just drive, much to your relief I imagine. From here on, it\'s my turn. The engineer did his job, now it\'s time to get serious.',
     tutorial_goat_reveal_cta: 'Continue →',
-    tutorial_hint_pitlane: 'Here you decide how to spend the budget: a guaranteed upgrade, or scouting to replace a component. Your call this time — no shortcuts.',
+    tutorial_sponsor_choose: 'Choose your season sponsor', tutorial_hint_pitlane: 'Here you decide how to spend the budget: a guaranteed upgrade, or scouting to replace a component. Your call this time — no shortcuts.',
+    tutorial_draft_hint_reroll: 'This offer isn\'t it. The reroll button is right there — use it, see what happens.',
+    tutorial_draft_hint_components: 'Good, now the rest of the team. Engine, chassis, tyres and whoever calls the shots from the pit wall: pick whatever looks strongest, one at a time.',
+    tutorial_draft_hint_synergy: 'Saw that circle light up? That\'s synergy: two pieces with the same mindset pair up and give both a free rating bonus. Keep an eye on it when you pick.',
     tutorial_complete_elio_text: 'Three races, sun, rain and a Safety Car — quite a lot to see this early on. The rest — undercuts, Pit Lane priority, every decision I didn\'t show you — you\'ll find by actually playing. I\'ve done my part. Now it\'s your turn.',
     tutorial_goat_rarity_text: 'One last thing, before you walk off with a swelled head: in a real run you\'ll almost never find me in the draft. I\'m an exception, about 1 in 2000 per turn — you might never meet me again in an entire career. Enjoy the memory.',
     tutorial_complete_cta: 'Back to menu →',
@@ -1167,7 +1173,10 @@ const I18N = {
     tutorial_ingegnere_rejection: 'Selección subóptima. Se recomienda reevaluar los parámetros disponibles antes de continuar.',
     tutorial_goat_reveal_text: 'Ah, aquí estás. Por fin alguien con un poco de gusto. Dime: ¿conseguiste mantenerte despierto durante todo ese discurso sobre \"módulos operativos\"? Yo casi me quedo dormido, y eso que conducía el coche. En fin: soy Elio. Sí, el mismo piloto que acabas de elegir — también hablo, no solo conduzco, para tu gran alivio imagino. De aquí en adelante me toca a mí. El ingeniero ha hecho su trabajo, ahora va en serio.',
     tutorial_goat_reveal_cta: 'Continuar →',
-    tutorial_hint_pitlane: 'Aquí decides cómo gastar el presupuesto: una mejora garantizada, o scouting para sustituir un componente. Esta vez decides tú, sin atajos.',
+    tutorial_sponsor_choose: 'Elige el patrocinador de temporada', tutorial_hint_pitlane: 'Aquí decides cómo gastar el presupuesto: una mejora garantizada, o scouting para sustituir un componente. Esta vez decides tú, sin atajos.',
+    tutorial_draft_hint_reroll: 'Esa oferta no es la buena. El botón para volver a girar está justo ahí — úsalo, y mira qué pasa.',
+    tutorial_draft_hint_components: 'Bien, ahora el resto del equipo. Motor, chasis, neumáticos y quien manda desde el muro: elige lo que te parezca más fuerte, uno por uno.',
+    tutorial_draft_hint_synergy: '¿Viste ese círculo que se encendió? Es la sinergia: dos piezas con la misma mentalidad se emparejan y dan un bono de rating gratis a ambas. Vigílalo cuando elijas.',
     tutorial_complete_elio_text: 'Tres carreras, sol, lluvia y un Safety Car — bastante para estar empezando. El resto — undercuts, prioridad en Pit Lane, cada decisión que no te enseñé — lo descubrirás jugando de verdad. Yo he hecho mi parte. Ahora te toca a ti.',
     tutorial_goat_rarity_text: 'Una última cosa, antes de que te vayas con la cabeza hinchada: en una partida real casi nunca me encontrarás en el draft. Soy una excepción, alrededor de 1 posibilidad entre 2000 por turno — puede que no vuelvas a encontrarme en toda una carrera. Disfruta el recuerdo.',
     tutorial_complete_cta: 'Volver al menú →',
@@ -2180,6 +2189,9 @@ function startTutorialRun(){
   state.tutorialDraftStep = 0; // avanza attraverso le scelte guidate: motore, PILOTA (qui compare THE GOAT), telaio, aero, gomme, team principal, secondo pilota
   state.tutorialElioMsg = null; // messaggio di rifiuto mostrato quando si sceglie l'opzione sbagliata
   state.tutorialGoatFound = false; // finche' e' false, si parla con la voce fredda dell'Ingegnere — poi prende il posto Elio
+  state.tutorialGoatRerollTarget = 2; // V0.9.9.74: THE GOAT compare garantito dopo ESATTAMENTE 2 reroll, come richiesto da Gio
+  state.tutorialRerollCount = 0;
+  state.tutorialWeakCategories = ['gomme','stratega']; // V0.9.9.74: 2 categorie lasciate deliberatamente sotto 85, da migliorare in Pit Lane
 
   // le classifiche delle 9 scuderie IA tutorial (diverse da quelle scelte da newRun())
   state.driverStandings = {}; state.constructorStandings = {};
@@ -2939,6 +2951,28 @@ function startDraftTurn(){
   state.draftOpenCategories.forEach(catKey=>{
     state.draftTurnOffers[catKey] = pickBestOfNDistinct(DRAFT_CATEGORY_DEFS[catKey].pool, 3, state.usedIds);
   });
+  // V0.9.9.74: sceneggiatura tutorial — su richiesta di Gio, il draft e' quello VERO (stesso motore,
+  // stessi reroll), ma pilotato: THE GOAT compare garantito nell'offerta pilota dopo il reroll
+  // scriptato (state.tutorialGoatRerollTarget), e i componenti sono potenziati internamente (pescati
+  // piu' volte, tenendo il migliore) tranne 2 categorie lasciate deliberatamente piu' deboli sotto
+  // 85 — cosi' il giocatore ha davvero margine di miglioramento reale da scoprire in Pit Lane.
+  if(state.isTutorialRun){
+    const goatAlreadyChosen = state.draftPilotsChosen.some(p=>p.nome==='THE GOAT');
+    if(!goatAlreadyChosen && state.draftPilotsChosen.length < 2 && state.tutorialRerollCount >= state.tutorialGoatRerollTarget){
+      const goat = DATA.piloti.find(p=>p.nome==='THE GOAT');
+      state.draftTurnOffers.pilota = {...goat};
+    }
+    const weakCats = state.tutorialWeakCategories || [];
+    state.draftOpenCategories.forEach(catKey=>{
+      if(weakCats.includes(catKey)) return; // lasciata debole di proposito, nessun boost
+      let best = state.draftTurnOffers[catKey];
+      for(let tries=0; tries<7; tries++){
+        const attempt = pickBestOfNDistinct(DRAFT_CATEGORY_DEFS[catKey].pool, 3, state.usedIds);
+        if(attempt && (!best || attempt.rating>best.rating)) best = attempt;
+      }
+      if(best) state.draftTurnOffers[catKey] = best;
+    });
+  }
   state.phase = 'draft';
   // V0.9.7.8.2: SFX #16 — reveal scalato sulla rarita' migliore tra le offerte di questo turno
   const allOffers = Object.values(state.draftTurnOffers);
@@ -2951,6 +2985,7 @@ function startDraftTurn(){
 function rerollDraftTurn(){
   if(state.rerollsLeft<=0){ playSfx('error_disabled'); return; } // V0.9.7.8.2
   state.rerollsLeft--;
+  if(state.isTutorialRun) state.tutorialRerollCount = (state.tutorialRerollCount||0) + 1;
   unlockAchievement('seconda-occasione'); // V0.9.7.9
   playRealSfx('audio/sfx_reroll.mp3'); // V0.9.7.8.14
   startDraftTurn();
@@ -3118,6 +3153,31 @@ function finalizeDraftPilots(){
   state.team.pilotSecond = sorted[1];
 }
 
+// V0.9.9.74: frasi di rifiuto quando si sceglie il pilota sbagliato nel draft tutorial — tono
+// scanzonato, un po' "cazzone", come richiesto da Gio. THE GOAT commenta gia' prima di essere
+// formalmente rivelato, quasi "sussurrando" dal telefono — un piccolo mistero prima della rivelazione.
+const TUTORIAL_WRONG_PILOT_QUIPS_IT = [
+  'Ehi ehi, calma. Quello lì? Simpatico, per carità, ma non è il nome che stai cercando. Prova un altro giro.',
+  'No no no. Fidati, io ne so qualcosa di chi vale la pena scegliere in un draft. E non è lui.',
+  'Interessante scelta. Sbagliata, ma interessante. Rigira ancora un po\'.',
+  'Ti do un indizio gratis: continua a girare. La risposta giusta non si nasconde troppo a lungo, promesso.',
+];
+const TUTORIAL_WRONG_PILOT_QUIPS_EN = [
+  'Whoa, easy there. That one? Nice guy, sure, but not the name you\'re looking for. Spin again.',
+  'No no no. Trust me, I know a thing or two about who\'s worth picking in a draft. And it\'s not him.',
+  'Interesting choice. Wrong, but interesting. Give it another spin.',
+  'Free hint: keep rerolling. The right answer isn\'t hiding for too long, promise.',
+];
+const TUTORIAL_WRONG_PILOT_QUIPS_ES = [
+  'Eh, tranquilo. ¿Ese? Simpático, sin duda, pero no es el nombre que buscas. Prueba otra vuelta.',
+  'No no no. Confía en mí, algo sé sobre a quién vale la pena elegir en un draft. Y no es él.',
+  'Elección interesante. Equivocada, pero interesante. Dale otra vuelta.',
+  'Te doy una pista gratis: sigue girando. La respuesta correcta no se esconde por mucho tiempo, lo prometo.',
+];
+function tutorialWrongPilotQuip(){
+  const arr = currentLang==='en' ? TUTORIAL_WRONG_PILOT_QUIPS_EN : (currentLang==='es' ? TUTORIAL_WRONG_PILOT_QUIPS_ES : TUTORIAL_WRONG_PILOT_QUIPS_IT);
+  return arr[Math.floor(rnd()*arr.length)];
+}
 function pickDraftTurnOption(id){
   let catKey = null;
   for(const k in state.draftTurnOffers){
@@ -3125,15 +3185,26 @@ function pickDraftTurnOption(id){
   }
   if(!catKey) return;
   const chosen = state.draftTurnOffers[catKey];
+  // V0.9.9.74: nel tutorial, il pilota si può scegliere SOLO quando è THE GOAT — qualunque altro
+  // tentativo viene rifiutato con una battuta invece di procedere.
+  if(state.isTutorialRun && catKey==='pilota' && chosen.nome!=='THE GOAT' && !state.tutorialGoatFound){
+    state.tutorialElioMsg = tutorialWrongPilotQuip();
+    render();
+    return;
+  }
   state.usedIds.add(chosen.id);
   if(catKey==='pilota'){
     playSfx('ui_confirm'); // V0.9.7.8.18: niente suono reale per i piloti, ripristinato il placeholder
     state.draftPilotsChosen.push(JSON.parse(JSON.stringify(chosen)));
     if(chosen.nome==='THE GOAT'){
-      state.pendingGoatReveal = true; // V0.9.7.6
-      achievementData.goatObtainedViaDraft = true; // V0.9.7.9: fortuna-sfacciata
-      if(achievementData.goatObtainedViaScouting) unlockAchievement('fortuna-sfacciata');
-      saveAchievementData();
+      if(state.isTutorialRun){
+        state.tutorialGoatJustPicked = true; // intercettato piu' sotto, mostra la rivelazione dedicata invece di quella normale
+      } else {
+        state.pendingGoatReveal = true; // V0.9.7.6
+        achievementData.goatObtainedViaDraft = true; // V0.9.7.9: fortuna-sfacciata
+        if(achievementData.goatObtainedViaScouting) unlockAchievement('fortuna-sfacciata');
+        saveAchievementData();
+      }
     }
   } else {
     state.team[catKey] = JSON.parse(JSON.stringify(chosen));
@@ -3159,8 +3230,21 @@ function pickDraftTurnOption(id){
     state.initialComponentRatings = { motore:state.team.motore.rating, telaio:state.team.telaio.rating, aero:state.team.aero.rating, gomme:state.team.gomme.rating, stratega:state.team.stratega.rating };
     unlockAchievement('primo-giorno'); // V0.9.7.9
     state.pendingPostSponsorPhase = state.pendingRivalNotice ? 'rival-announce' : 'hub';
-    state.sponsorOffers = generateSponsorOffers();
-    state.phase = 'sponsor-choice';
+    if(state.isTutorialRun){
+      state.phase = 'tutorial-sponsor'; // V0.9.9.74: sponsor guidato del tutorial, non quello vero
+    } else {
+      state.sponsorOffers = generateSponsorOffers();
+      state.phase = 'sponsor-choice';
+    }
+    render();
+  }
+  // V0.9.9.74: rivelazione dedicata del tutorial — intercetta DOPO che il turno ha gia' proceduto
+  // normalmente (draft o sponsor-choice), salva quella fase per riprenderla dopo la rivelazione.
+  if(state.tutorialGoatJustPicked){
+    state.tutorialGoatJustPicked = false;
+    state.tutorialGoatFound = true;
+    state.tutorialResumePhase = state.phase;
+    state.phase = 'tutorial-goat-reveal';
     render();
   }
 }
@@ -9161,8 +9245,8 @@ function draftLockedCardHTML(categoryLabel, item){
   </div>`;
 }
 
-function draftTurnCardHTML(categoryLabel, item, statKeys, synergyCatKey){
-  return `<div class="draft-turn-card">
+function draftTurnCardHTML(categoryLabel, item, statKeys, synergyCatKey, sparkle){
+  return `<div class="draft-turn-card${sparkle?' tutorial-sparkle':''}">
     <div class="draft-cat-label">${categoryLabel}</div>
     ${draftCardHTML(item, statKeys||[], '', synergyCatKey)}
   </div>`;
@@ -9171,8 +9255,9 @@ function draftTurnCardHTML(categoryLabel, item, statKeys, synergyCatKey){
 function renderDraft(){
   const showReroll = state.difficulty !== 'hardcore';
   const canReroll = state.rerollsLeft > 0;
+  const needsGoatReroll = state.isTutorialRun && state.draftPilotsChosen.length<2 && state.draftTurnOffers.pilota && state.draftTurnOffers.pilota.nome!=='THE GOAT';
   const rerollBtn = showReroll
-    ? `<button class="ghost" data-action="reroll-draft" ${canReroll?'':'disabled'}>${t('draft_reroll', state.rerollsLeft)}</button>`
+    ? `<button class="ghost${needsGoatReroll?' tutorial-sparkle-btn':''}" data-action="reroll-draft" ${canReroll?'':'disabled'}>${t('draft_reroll', state.rerollsLeft)}</button>`
     : `<span class="dim mono" style="font-size:11px;">${t('draft_hardcore_no_reroll')}</span>`;
 
   const doneDots = Array.from({length: state.draftPicksDone}, ()=>`<div class="dot done">✓</div>`).join('');
@@ -9184,11 +9269,13 @@ function renderDraft(){
   if(state.draftTurnOffers.pilota){
     const nth = state.draftPilotsChosen.length===0 ? '1º' : '2º';
     const pilotSynKey = state.draftPilotsChosen.length===0 ? 'pilotMain' : 'pilotSecond';
-    offerCards.push(draftTurnCardHTML(t('draft_pilot_nth', nth), state.draftTurnOffers.pilota, STAT_KEYS.pilotMain, pilotSynKey));
+    const pilotIsGoat = state.isTutorialRun && state.draftTurnOffers.pilota.nome==='THE GOAT';
+    offerCards.push(draftTurnCardHTML(t('draft_pilot_nth', nth), state.draftTurnOffers.pilota, STAT_KEYS.pilotMain, pilotSynKey, pilotIsGoat));
   }
   state.draftOpenCategories.forEach(catKey=>{
     const def = DRAFT_CATEGORY_DEFS[catKey];
-    offerCards.push(draftTurnCardHTML(def.label, state.draftTurnOffers[catKey], STAT_KEYS[catKey], catKey));
+    const sparkleComponent = state.isTutorialRun && (!state.tutorialWeakCategories||!state.tutorialWeakCategories.includes(catKey));
+    offerCards.push(draftTurnCardHTML(def.label, state.draftTurnOffers[catKey], STAT_KEYS[catKey], catKey, sparkleComponent));
   });
 
   // V0.9.4.2.3: le categorie gia' scelte restano visibili (bloccate), per il confronto con le nuove proposte
@@ -9202,6 +9289,23 @@ function renderDraft(){
     }
   });
 
+  const tutorialHintHTML = state.isTutorialRun ? (() => {
+    if(state.tutorialElioMsg){
+      const msg = state.tutorialElioMsg; state.tutorialElioMsg = null;
+      return state.tutorialGoatFound ? elioSaysHTML(msg, {rejection:true}) : ingegnereSaysHTML(msg);
+    }
+    if(needsGoatReroll) return ingegnereSaysHTML(t('tutorial_draft_hint_reroll'));
+    if(state.draftPilotsChosen.length<2) return ''; // GOAT appena trovato, il messaggio di rivelazione arriva dopo il pick
+    // V0.9.9.74: spiegazione del semaforo sinergie, mostrata una sola volta quando compare il primo
+    // cerchio acceso — richiesto da Gio per far capire come funziona durante il draft.
+    const circles = semaforoCirclesData();
+    if(circles.some(c=>c.lit) && !state.tutorialSynergyExplained){
+      state.tutorialSynergyExplained = true;
+      return elioSaysHTML(t('tutorial_draft_hint_synergy'));
+    }
+    return elioSaysHTML(t('tutorial_draft_hint_components'));
+  })() : '';
+
   app.innerHTML = `
   <div class="topbar">
     <div class="brand hdr">RACING DYNASTY<small>${t('draft_founding')} — Draft ${state.draftPicksDone+1}/${DRAFT_TOTAL_PICKS} · ${DIFFICULTY_LABEL[state.difficulty]}</small></div>
@@ -9210,6 +9314,7 @@ function renderDraft(){
     <div class="eyebrow">${t('draft_choose_one')}</div>
     <h2 class="hdr" style="font-size:22px;">${t('draft_headline')}</h2>
     <div class="dim" style="font-size:12px;margin-top:6px;">${t('draft_subtitle')}</div>
+    ${tutorialHintHTML}
     <div class="calendar">${doneDots}${nowDot}${restDots}</div>
     <div class="btnrow" style="margin-top:12px;margin-bottom:0;">${rerollBtn}</div>
   </div>
@@ -11393,10 +11498,7 @@ function onAction(e){
     render();
   }
   else if(action==='tutorial-draft-start'){
-    state.phase = 'tutorial-draft';
-    state.tutorialDraftStep = 0;
-    state.tutorialElioMsg = null;
-    render();
+    startDraftTurn();
   }
   else if(action==='tutorial-draft-pick'){
     const stepIdx = parseInt(el.dataset.step, 10);
@@ -11426,7 +11528,8 @@ function onAction(e){
     playIntroOnce();
   }
   else if(action==='tutorial-goat-reveal-continue'){
-    state.phase = 'tutorial-draft';
+    state.phase = state.tutorialResumePhase || 'draft';
+    state.tutorialResumePhase = null;
     render();
   }
   else if(action==='tutorial-complete-exit'){
@@ -11534,7 +11637,8 @@ function onAction(e){
     if(nome==='Voltrix'){
       state.sponsor = { nome:'Voltrix' };
       state.tutorialElioMsg = null;
-      state.phase = 'hub';
+      state.phase = state.pendingPostSponsorPhase || 'hub';
+      state.pendingPostSponsorPhase = null;
     } else {
       state.tutorialElioMsg = t('tutorial_elio_rejection');
     }
