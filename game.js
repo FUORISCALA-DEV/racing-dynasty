@@ -3518,6 +3518,14 @@ function applyOvertakeContest(provisional, prevOrder, byKey, circuit){
   provisional.sort((a,b)=> a.cumTime-b.cumTime);
 }
 
+// V0.9.9.70: meteo iniziale — rispetta lo script fisso del tutorial se attivo (gara 1 sole, gara 2
+// sole, gara 3 bagnato), altrimenti il normale calcolo dal clima del circuito.
+function raceWeatherBefore(circuit){
+  if(state.isTutorialRun){
+    return state.raceIndex===2 ? 'Bagnato' : 'Asciutto';
+  }
+  return circuit.clima==='Piovoso' ? 'Bagnato' : 'Asciutto';
+}
 // --- V0.7: qualifica calcolabile a parte, per la schermata pre-gara con le monoposto ---
 function runQualifying(){
   const circuit = state.calendar[state.raceIndex];
@@ -3526,7 +3534,7 @@ function runQualifying(){
     return { slotKey: live.slotKey, teamId: live.teamId, teamName: live.teamName, isPlayerTeam: live.isPlayerTeam,
       carNumber: live.carNumber, pilot: live.pilot, comp: live.components };
   });
-  const weatherBefore = circuit.clima==='Piovoso' ? 'Bagnato' : 'Asciutto';
+  const weatherBefore = raceWeatherBefore(circuit);
   const qScored = computeQualifying(entries, circuit, weatherBefore);
   qScored.sort((a,b)=> b.score-a.score);
   const gridPos = {}; qScored.forEach((q,i)=> gridPos[q.slotKey]=i+1);
@@ -3602,19 +3610,26 @@ function simulateFullRace(){
 
   // meteo e safety car (eventi globali di pista)
   const RAIN_DAMPENING = 0.5; // V0.9.3.4: piove troppo spesso lamentato dal giocatore — smorzamento globale
-  const weatherBefore = circuit.clima==='Piovoso' ? 'Bagnato' : 'Asciutto';
-  let weatherAfter = null, weatherChangePhase = null;
-  if(weatherBefore==='Asciutto' && circuit.clima!=='Variabile' && rnd()<(circuit.probpioggia/100)*RAIN_DAMPENING){
-    weatherAfter='Bagnato'; weatherChangePhase=4;
-  } else if(weatherBefore==='Bagnato' && rnd()<0.35){
-    // V0.9.3.1: prima mancava del tutto — una gara che inizia piovosa ora puo' davvero rasserenarsi
-    weatherAfter='Asciutto'; weatherChangePhase=4;
-  } else if(circuit.clima==='Variabile' && rnd()<0.5*RAIN_DAMPENING){
-    // il clima variabile puo' cambiare in entrambe le direzioni, non solo verso la pioggia
-    weatherAfter = weatherBefore==='Asciutto' ? 'Bagnato' : 'Asciutto';
-    weatherChangePhase=4;
+  const weatherBefore = raceWeatherBefore(circuit);
+  let weatherAfter = null, weatherChangePhase = null, safetyCarPhase = null;
+  if(state.isTutorialRun){
+    // V0.9.9.70: script fisso per le 3 gare del tutorial — gara 1 soleggiata, gara 2 inizia con
+    // sole e poi piove, gara 3 tutta bagnata con Safety Car garantita alla fase 4.
+    if(state.raceIndex===1){ weatherAfter='Bagnato'; weatherChangePhase=4; }
+    if(state.raceIndex===2){ safetyCarPhase=4; }
+  } else {
+    if(weatherBefore==='Asciutto' && circuit.clima!=='Variabile' && rnd()<(circuit.probpioggia/100)*RAIN_DAMPENING){
+      weatherAfter='Bagnato'; weatherChangePhase=4;
+    } else if(weatherBefore==='Bagnato' && rnd()<0.35){
+      // V0.9.3.1: prima mancava del tutto — una gara che inizia piovosa ora puo' davvero rasserenarsi
+      weatherAfter='Asciutto'; weatherChangePhase=4;
+    } else if(circuit.clima==='Variabile' && rnd()<0.5*RAIN_DAMPENING){
+      // il clima variabile puo' cambiare in entrambe le direzioni, non solo verso la pioggia
+      weatherAfter = weatherBefore==='Asciutto' ? 'Bagnato' : 'Asciutto';
+      weatherChangePhase=4;
+    }
+    safetyCarPhase = rnd()<(circuit.probsc/100) ? (3+Math.floor(rnd()*4)) : null;
   }
-  const safetyCarPhase = rnd()<(circuit.probsc/100) ? (3+Math.floor(rnd()*4)) : null;
 
   // V0.9.9.56: le IA possono REAGIRE alla Safety Car, non solo beneficiarne per coincidenza dello
   // scaglionamento casuale — con una probabilita' (non tutte le squadre, non sempre), la prossima
@@ -7553,6 +7568,7 @@ function renderInner(){
   if(state.phase==='tutorial-intro') return renderTutorialIntro();
   if(state.phase==='tutorial-draft') return renderTutorialDraft();
   if(state.phase==='tutorial-goat-reveal') return renderTutorialGoatReveal();
+  if(state.phase==='tutorial-sponsor') return renderTutorialSponsor();
   if(state.phase==='season-length') return renderSeasonLength();
   if(state.phase==='naming') return renderNaming();
   if(state.phase==='mode-select') return renderModeSelect();
@@ -7941,6 +7957,7 @@ function saveMuseumData(){
 }
 function unlockMuseumItem(catKey, item){
   if(!item || !item.id) return;
+  if(state && state.isTutorialRun) return; // V0.9.9.70: il tutorial non scrive nessun progresso vero
   const isPilot = (catKey==='pilotMain' || catKey==='pilotSecond');
   const bucket = isPilot ? museumData.piloti : museumData.componenti;
   if(!bucket[item.id]){
@@ -8114,6 +8131,7 @@ function syncLiveryUnlocksFromAchievements(){
 syncLiveryUnlocksFromAchievements();
 let __lastUnlockedAchievements = []; // per mostrare un piccolo avviso dopo l'ultimo sblocco
 function unlockAchievement(id){
+  if(state && state.isTutorialRun) return; // V0.9.9.70: il tutorial non scrive nessun progresso vero
   if(!achievementData.unlockedIds.includes(id)){
     achievementData.unlockedIds.push(id);
     __lastUnlockedAchievements.push(id);
@@ -8507,6 +8525,7 @@ function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
     if(state.isDriverCareer) return; // V0.9.7.9.5: mai sovrascrivere il salvataggio Carriera Scuderia — salvataggio dedicato non ancora costruito (punto 4+)
+    if(state.isTutorialRun) return; // V0.9.9.70: il tutorial non deve MAI sovrascrivere il salvataggio vero del giocatore
     if(state.phase==='season_end'){ deleteSave(); return; }
     const snapshot = { ...state, live: null, usedIds: Array.from(state.usedIds||[]) };
     localStorage.setItem(SAVE_KEY, JSON.stringify({ saveVersion:'0.9', savedAt: Date.now(), state: snapshot }));
@@ -8845,6 +8864,26 @@ function renderTutorialGoatReveal(){
     <div class="btnrow" style="margin-top:20px;">
       <button class="primary" data-action="tutorial-goat-reveal-continue" style="width:100%;">${t('tutorial_goat_reveal_cta')}</button>
     </div>
+  </div>`;
+  bindActions();
+}
+// V0.9.9.70: scelta sponsor guidata — stesso meccanismo del draft (sembra libera, solo una passa
+// davvero). Voltrix (potenzia TUTTE le categorie) e' la scelta ovvia, Nexora (solo strategia) resta
+// li' come diversivo con un rifiuto di Elio se scelto.
+function renderTutorialSponsor(){
+  const optionsHTML = ['Voltrix','Nexora'].map(nome=>{
+    const fx = SPONSOR_EFFECTS[nome];
+    return `<div class="card pickable tutorial-draft-option" data-action="tutorial-sponsor-pick" data-nome="${nome}">
+      <div style="font-weight:700;">${nome}</div>
+      <div class="dim" style="font-size:12px;margin-top:4px;">${sponsorEffectDescHTML(nome)}</div>
+    </div>`;
+  }).join('');
+  app.innerHTML = `
+  ${topbarHTML()}
+  <div class="wrap">
+    <h2 class="hdr">${t('tutorial_sponsor_choose')}</h2>
+    ${state.tutorialElioMsg ? elioSaysHTML(state.tutorialElioMsg, {rejection:true}) : ''}
+    <div class="grid-2" style="margin-top:16px;">${optionsHTML}</div>
   </div>`;
   bindActions();
 }
@@ -11339,6 +11378,17 @@ function onAction(e){
     if(!isStreamerModeOn()) playIntroOnce();
   }
   else if(action==='reroll-draft'){ rerollDraftTurn(); }
+  else if(action==='tutorial-sponsor-pick'){
+    const nome = el.dataset.nome;
+    if(nome==='Voltrix'){
+      state.sponsor = { nome:'Voltrix' };
+      state.tutorialElioMsg = null;
+      state.phase = 'hub';
+    } else {
+      state.tutorialElioMsg = t('tutorial_elio_rejection');
+    }
+    render();
+  }
   else if(action==='choose-sponsor'){
     const nome = el.dataset.nome;
     const offer = (state.sponsorOffers||[]).find(o=>o.nome===nome);
