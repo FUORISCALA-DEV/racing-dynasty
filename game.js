@@ -4156,7 +4156,7 @@ function applyStartShiftAcrossPhases(timeline, slotKey, shift){
 }
 
 function beginRaceWithLights(){
-  if(!hasPedalTutorialBeenSeen()){
+  if(!hasPedalTutorialBeenSeen() && !state.isTutorialRun){
     state.phase = 'pedal-tutorial';
     render();
     return;
@@ -7006,7 +7006,7 @@ const GOAT_HELMET_FERRARI_SRC = 'assets/goat/goat-helmet-ferrari.png'; // V0.9.7
 // che non puo' contenere immagini - per quel caso specifico vedi flagEmoji() sotto).
 function flag(country){
   if(!country) return '<span class="flag-ico flag-ico-unknown" aria-hidden="true"><img class=ico src=assets/icons/white_flag.png>️</span>';
-  return `<img class="flag-ico" src="assets/flags/${slugify(country)}.svg" alt="" title="${nationLabel(country)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'flag-ico flag-ico-unknown',textContent:'<img class=ico src=assets/icons/white_flag.png>️'}))">`;
+  return `<img class="flag-ico" src="assets/flags/${slugify(country)}.svg" alt="" title="${nationLabel(country)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'flag-ico flag-ico-unknown',innerHTML:'<img class=ico src=assets/icons/white_flag.png>️'}))">`;
 }
 // versione testuale (emoji), da usare SOLO dove l'HTML non e' permesso: <option>, attributi title/alt, ecc.
 function flagEmoji(country){ return COUNTRY_FLAG[country] || '<img class=ico src=assets/icons/white_flag.png>️'; }
@@ -8830,6 +8830,10 @@ function renderTutorialIntro(){
 function renderTutorialDraft(){
   const stepIdx = state.tutorialDraftStep;
   if(stepIdx >= TUTORIAL_DRAFT_STEPS.length){
+    if(!state.grid){ // solo la prima volta che arriviamo qui
+      applySynergyBonuses();
+      buildGrid();
+    }
     state.phase = 'tutorial-sponsor';
     render();
     return;
