@@ -1,1 +1,4 @@
-{"maintenanceMode": false, "unlockCode": "PITSTOP"}
+{
+  "maintenanceMode": true,
+  "unlockCode": "PITSTOP"
+}
