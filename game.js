@@ -13019,6 +13019,19 @@ function renderMaintenanceScreen(unlockCode){
   document.getElementById('maintenanceCodeSubmit').addEventListener('click', trySubmit);
   input.addEventListener('keydown', e=>{ if(e.key==='Enter') trySubmit(); });
 }
+function showMaintenanceActiveWatermark(){
+  const el = document.createElement('div');
+  el.id = 'maintenanceWatermark';
+  el.textContent = '🔧 MANUTENZIONE ATTIVA — ricordati di disattivarla';
+  el.style.cssText = `
+    position:fixed; top:0; left:0; right:0; z-index:99999; pointer-events:none;
+    background:repeating-linear-gradient(45deg, rgba(255,77,77,0.85), rgba(255,77,77,0.85) 14px, rgba(20,10,10,0.85) 14px, rgba(20,10,10,0.85) 28px);
+    color:#fff; font-family:-apple-system,sans-serif; font-weight:800;
+    text-align:center; padding:3px 8px; letter-spacing:0.03em; font-size:10px;
+    text-shadow:0 1px 2px rgba(0,0,0,0.6); box-shadow:0 2px 8px rgba(0,0,0,0.4);
+  `;
+  document.body.appendChild(el);
+}
 async function checkMaintenanceAndBoot(){
   let maintenanceActive = false, unlockCode = null;
   try{
@@ -13035,6 +13048,7 @@ async function checkMaintenanceAndBoot(){
     renderMaintenanceScreen(unlockCode);
   } else {
     bootGameNormally();
+    if(maintenanceActive) showMaintenanceActiveWatermark(); // V0.9.9.76: sbloccata ma ancora attiva — promemoria visibile
   }
 }
 checkMaintenanceAndBoot();
