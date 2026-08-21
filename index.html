@@ -29,6 +29,16 @@
 *{box-sizing:border-box;}
 html{margin:0;padding:0;overflow-x:hidden;overflow-y:auto;}
 body{margin:0;padding:0;background:var(--void);color:var(--text);font-family:var(--font-ui);}
+/* V0.9.9.77: barra di scroll personalizzata ambra, ma visibile SOLO durante lo scroll vero
+   dell'utente (classe .is-scrolling aggiunta/rimossa via JS su evento scroll) — non deve comparire
+   solo perché il contenuto della pagina cambia altezza da un ridisegno, quello dava fastidio. */
+html{ scrollbar-width:none; }
+html::-webkit-scrollbar{ width:10px; }
+html::-webkit-scrollbar-track{ background:transparent; }
+html::-webkit-scrollbar-thumb{ background:transparent; border-radius:5px; border:2px solid transparent; }
+html.is-scrolling{ scrollbar-width:thin; scrollbar-color:var(--amber) rgba(255,255,255,0.06); }
+html.is-scrolling::-webkit-scrollbar-track{ background:rgba(255,255,255,0.05); }
+html.is-scrolling::-webkit-scrollbar-thumb{ background:var(--amber); border:2px solid var(--void); }
 body{
   min-height:100vh;
   min-height:100dvh;

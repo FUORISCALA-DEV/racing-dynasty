@@ -13053,5 +13053,15 @@ async function checkMaintenanceAndBoot(){
 }
 checkMaintenanceAndBoot();
 
+// V0.9.9.77: la barra di scroll ambra personalizzata compare SOLO durante lo scroll vero
+// dell'utente, non quando il contenuto della pagina cambia altezza da un ridisegno — segnalato
+// da Gio come fastidioso ("lampeggiante"). Un solo listener passivo, sganciato da render().
+let __scrollHideTimer = null;
+window.addEventListener('scroll', ()=>{
+  document.documentElement.classList.add('is-scrolling');
+  clearTimeout(__scrollHideTimer);
+  __scrollHideTimer = setTimeout(()=>{ document.documentElement.classList.remove('is-scrolling'); }, 500);
+}, { passive:true });
+
 // V0.9.9.33: RIMOSSO lo schermo intero automatico al primo tocco su mobile — l'utente lo attiva
 // volontariamente dal pulsante dedicato, non deve essere forzato senza chiederlo.
