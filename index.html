@@ -29,14 +29,6 @@
 *{box-sizing:border-box;}
 html{margin:0;padding:0;overflow-x:hidden;overflow-y:auto;}
 body{margin:0;padding:0;background:var(--void);color:var(--text);font-family:var(--font-ui);}
-/* V0.9.7.9.37: scrollbar a tema per tutta la pagina, invece di quella grigia di default del
-   sistema — si nota soprattutto dentro il riquadro stretto della modalita' streamer, ma vale
-   ovunque per coerenza visiva. */
-html{ scrollbar-width:thin; scrollbar-color:var(--amber) rgba(255,255,255,0.06); }
-html::-webkit-scrollbar{ width:10px; }
-html::-webkit-scrollbar-track{ background:rgba(255,255,255,0.05); }
-html::-webkit-scrollbar-thumb{ background:var(--amber); border-radius:5px; border:2px solid var(--void); }
-html::-webkit-scrollbar-thumb:hover{ background:#ff8a4a; }
 body{
   min-height:100vh;
   min-height:100dvh;
