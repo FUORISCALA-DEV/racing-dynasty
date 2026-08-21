@@ -11600,8 +11600,9 @@ function onAction(e){
       markStreamerAsked();
       setStreamerMode(false);
       syncStreamerFrameState();
-      state.phase = 'tutorial-first-launch-prompt'; // V0.9.9.71: solo al primissimo avvio
+      state.phase = 'title'; // V0.9.9.75: tutorial tolto dal primo avvio su richiesta di Gio, resta solo nel menu dietro codice
       render();
+      playIntroOnce();
     }
   }
   else if(action==='streamer-name-confirm'){
@@ -11918,6 +11919,9 @@ function proceedToGatedContent(target){
     state.phase = 'garage';
     pushBackGuard();
     render();
+  } else if(target==='tutorial'){
+    closeMenuPanel();
+    startTutorialRun();
   }
 }
 function openPasswordGate(target){
@@ -12852,7 +12856,7 @@ function initSidebar(){
   document.getElementById('menuHomeBtn').addEventListener('click', goHome);
   document.getElementById('menuNewCareerBtn').addEventListener('click', newCareer);
   const tutorialBtn = document.getElementById('menuTutorialBtn');
-  if(tutorialBtn) tutorialBtn.addEventListener('click', ()=>{ closeMenuPanel(); startTutorialRun(); });
+  if(tutorialBtn) tutorialBtn.addEventListener('click', ()=>{ closeMenuPanel(); openPasswordGate('tutorial'); });
   document.getElementById('menuTrophyBtn').addEventListener('click', openTrophies);
   const driverTrophyBtn = document.getElementById('menuDriverTrophyBtn');
   if(driverTrophyBtn) driverTrophyBtn.addEventListener('click', openDriverTrophies);
@@ -12969,16 +12973,71 @@ function markSpeed2xPromptShown(){ try{ localStorage.setItem('racingDynastySpeed
 let decisionTimerEnabled = true; // V0.9.3.2: countdown per le decisioni in gara, disattivabile dal menu
 let trophyRoomPreviousPhase = 'title'; // V0.9.4: dove tornare chiudendo la sala trofei
 let museumPreviousPhase = 'title'; // V0.9.4.1: dove tornare chiudendo il Museo Dynasty
-state = { phase:'studio-splash', selectedDifficulty:'medio' };
-initSidebar();
-applyStaticMenuTranslations();
-render(); // V0.9.8.9: lo splash parte SUBITO, pulito — Supabase si inizializza un attimo dopo
-setTimeout(()=>{
-  initSupabase();
-  handlePremiumCheckoutReturn();
-}, 0);
-window.addEventListener('popstate', handleBackGesture);
-pushBackGuard(); // prima voce di cronologia, cosi' anche la primissima gesture back viene intercettata
+
+// V0.9.9.75: modalità manutenzione — controllata da un file di configurazione pubblico nel repository
+// (maintenance-config.json), aggiornabile da un pannello admin separato (mai pubblicato, resta un
+// file locale per via del token di accesso che contiene). Fail-open: se il file non si carica per
+// qualunque motivo (rete, file mancante, JSON rotto), il gioco parte comunque normalmente — la
+// manutenzione deve essere una scelta esplicita, mai un blocco accidentale.
+const MAINTENANCE_BYPASS_KEY = 'racingDynastyMaintenanceBypassV1';
+function bootGameNormally(){
+  state = { phase:'studio-splash', selectedDifficulty:'medio' };
+  initSidebar();
+  applyStaticMenuTranslations();
+  render(); // V0.9.8.9: lo splash parte SUBITO, pulito — Supabase si inizializza un attimo dopo
+  setTimeout(()=>{
+    initSupabase();
+    handlePremiumCheckoutReturn();
+  }, 0);
+  window.addEventListener('popstate', handleBackGesture);
+  pushBackGuard(); // prima voce di cronologia, cosi' anche la primissima gesture back viene intercettata
+}
+function renderMaintenanceScreen(unlockCode){
+  document.body.innerHTML = `
+  <div class="maintenance-wrap">
+    <img src="assets/maintenance-illustration.webp" alt="" class="maintenance-illustration">
+    <h1 class="maintenance-title">Racing Dynasty è in manutenzione</h1>
+    <div class="maintenance-desc">Stiamo sistemando qualcosa sotto il cofano. Torna tra poco.</div>
+    <div class="maintenance-unlock">
+      <input type="text" id="maintenanceCodeInput" placeholder="Hai un codice di accesso?" autocomplete="off" spellcheck="false">
+      <button type="button" id="maintenanceCodeSubmit">Entra comunque</button>
+      <div id="maintenanceCodeError" class="maintenance-error"></div>
+    </div>
+  </div>`;
+  const input = document.getElementById('maintenanceCodeInput');
+  const errorEl = document.getElementById('maintenanceCodeError');
+  function trySubmit(){
+    const val = input.value.trim();
+    if(val && val.toUpperCase()===String(unlockCode||'').toUpperCase()){
+      try{ localStorage.setItem(MAINTENANCE_BYPASS_KEY, unlockCode); }catch(e){}
+      window.location.reload(); // V0.9.9.75: DOM pulito, non riavviare nello stesso body che abbiamo appena sovrascritto
+    } else {
+      errorEl.textContent = 'Codice non valido.';
+      input.value = '';
+    }
+  }
+  document.getElementById('maintenanceCodeSubmit').addEventListener('click', trySubmit);
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter') trySubmit(); });
+}
+async function checkMaintenanceAndBoot(){
+  let maintenanceActive = false, unlockCode = null;
+  try{
+    const resp = await fetch('maintenance-config.json?t='+Date.now(), {cache:'no-store'});
+    if(resp.ok){
+      const cfg = await resp.json();
+      maintenanceActive = !!cfg.maintenanceMode;
+      unlockCode = cfg.unlockCode || null;
+    }
+  }catch(e){ /* fail-open: nessun blocco se il file non si carica */ }
+  let alreadyBypassed = false;
+  try{ alreadyBypassed = maintenanceActive && localStorage.getItem(MAINTENANCE_BYPASS_KEY)===unlockCode; }catch(e){}
+  if(maintenanceActive && !alreadyBypassed){
+    renderMaintenanceScreen(unlockCode);
+  } else {
+    bootGameNormally();
+  }
+}
+checkMaintenanceAndBoot();
 
 // V0.9.9.33: RIMOSSO lo schermo intero automatico al primo tocco su mobile — l'utente lo attiva
 // volontariamente dal pulsante dedicato, non deve essere forzato senza chiederlo.
