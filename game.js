@@ -4679,6 +4679,23 @@ function hasRivalAheadJustPitted(timeline, phase){
 // V0.9.9.63: "Ultimo push" deve apparire DAVVERO verso la fine gara, non in qualunque fase a caso
 // come tutte le altre decisioni scriptate — segnalato durante la revisione del foglio con Gio.
 function isLateRacePhase(timeline, phase){ return phase>=8; }
+// V0.9.9.80: le decisioni che offrono una sosta FACOLTATIVA (non scatenata da un evento vero come
+// meteo o Safety Car) devono apparire solo se ha ancora senso fermarsi — altrimenti si rischia di
+// proporre una terza sosta inutile quando il piano standard e' di 2 (segnalato da Gio: "non può
+// portare in nessuna condizione beneficio, es. terza sosta su gara asciutta se gli altri ne fanno
+// due normali"). Contiamo le soste VERE gia' fatte da ciascun pilota fino a questa fase: se
+// ENTRAMBI hanno gia' completato le loro 2 soste previste, niente piu' occasioni di sosta facoltativa.
+function countRealPitStopsSoFar(timeline, slotKey, uptoPhase){
+  let count = 0;
+  for(let ph=1; ph<=uptoPhase; ph++){
+    if(timeline.pitByPhase[ph] && timeline.pitByPhase[ph].has(slotKey)) count++;
+  }
+  return count;
+}
+function hasPitStopsRemaining(timeline, phase){
+  return ['PLAYER-1','PLAYER-2'].some(key=> countRealPitStopsSoFar(timeline, key, phase) < 2);
+}
+function combineChecks(a, b){ return (timeline,phase)=> a(timeline,phase) && b(timeline,phase); }
 // V0.9.9.65: controlli contestuali per le nuove decisioni che descrivono una situazione precisa —
 // devono apparire solo quando e' davvero vera, stesso principio gia' usato per teamorders/defend/ecc.
 function bothCarsNotPittedYet(timeline, phase){
@@ -4696,7 +4713,7 @@ function bothCarsInPoints(timeline, phase){
   const p1 = posOf('PLAYER-1'), p2 = posOf('PLAYER-2');
   return p1>=1 && p1<=10 && p2>=1 && p2<=10;
 }
-const DECISION_CONTEXT_CHECK = { teamorders: driversAreClose, defend: hasRivalCloseBehind, wheeltowheel: hasRivalCloseBehind, overtakedesperate: hasRivalCloseAhead, rivalmistake: hasRivalCloseAhead, undercut: hasRivalAheadNotPitted, overcut: hasRivalAheadJustPitted, finalpush: isLateRacePhase, doublestack: bothCarsNotPittedYet, pitpriority: bothCarsNotPittedYet, constructorspoints: bothCarsInPoints };
+const DECISION_CONTEXT_CHECK = { teamorders: driversAreClose, defend: hasRivalCloseBehind, wheeltowheel: hasRivalCloseBehind, overtakedesperate: hasRivalCloseAhead, rivalmistake: hasRivalCloseAhead, undercut: combineChecks(hasRivalAheadNotPitted, hasPitStopsRemaining), overcut: combineChecks(hasRivalAheadJustPitted, hasPitStopsRemaining), finalpush: isLateRacePhase, doublestack: combineChecks(bothCarsNotPittedYet, hasPitStopsRemaining), pitpriority: combineChecks(bothCarsNotPittedYet, hasPitStopsRemaining), constructorspoints: bothCarsInPoints, pit: hasPitStopsRemaining, tyrecliff: hasPitStopsRemaining, frontwing: hasPitStopsRemaining };
 
 function computeLiveDecisions(timeline){
   const candidates = [];
