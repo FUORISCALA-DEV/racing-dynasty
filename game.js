@@ -5493,7 +5493,8 @@ function applyLiveDecision(type, choiceKey){
         actualFirstShift = shiftResult.actualFirstShift;
         firstPhaseTimeBonus = shiftResult.firstPhaseTimeBonus;
       }
-      reveal[slotKey] = { bucketIdx:outcome.bucketIdx, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus, realPitCost };
+      const bucketIdxFinal = isRealBox ? closestBucketIdx(outcome.buckets, actualFirstShift) : outcome.bucketIdx;
+      reveal[slotKey] = { bucketIdx:bucketIdxFinal, buckets:outcome.buckets, shift:actualFirstShift, timeBonus:firstPhaseTimeBonus, realPitCost };
     });
     return reveal;
   }
@@ -5639,6 +5640,21 @@ function applyLiveDecision(type, choiceKey){
   // sposta ANCHE la posizione relativa del primo, quindi il "dopo" va misurato solo qui, a tutto
   // concluso, non dentro il ciclo di ciascuno slot (altrimenti il risultato mostrato al primo pilota
   // processato risultava sistematicamente sbagliato di 1 posizione).
+// V0.9.9.79: trova il bucket la cui etichetta descrive meglio il risultato VERO di una scelta con
+// meccanica reale — altrimenti l'animazione di rivelazione (quella che gira e si ferma su una
+// scelta) resta legata al tiro narrativo indipendente, mai aggiornato dal fix del risultato vero:
+// mostra "perdi 2 posizioni" mentre la classifica applica +6 o -11, un'incoerenza scoperta
+// controllando la card vera a schermo, non solo il numero. I bucket usano "negativo=guadagno",
+// il nostro shift usa "positivo=guadagno" — va invertito il segno prima del confronto.
+function closestBucketIdx(buckets, actualShift){
+  const target = -actualShift;
+  let bestIdx = 0, bestDist = Infinity;
+  buckets.forEach((b, i)=>{
+    const dist = target < b.min ? b.min-target : (target > b.max ? target-b.max : 0);
+    if(dist < bestDist){ bestDist = dist; bestIdx = i; }
+  });
+  return bestIdx;
+}
   if(realMechanic){
     const orderAfter = timeline.phaseOrders[downstreamPhaseFor(t)] || timeline.phaseOrders[t] || [];
     affectedSlots.forEach(slotKey=>{
@@ -5647,6 +5663,7 @@ function applyLiveDecision(type, choiceKey){
       const beforeRank = beforeRanks[slotKey];
       reveal[slotKey].shift = (beforeRank>=0 && afterRank>=0) ? (beforeRank - afterRank) : 0;
       reveal[slotKey].timeBonus = 0;
+      reveal[slotKey].bucketIdx = closestBucketIdx(reveal[slotKey].buckets, reveal[slotKey].shift);
     });
   }
   return reveal;
