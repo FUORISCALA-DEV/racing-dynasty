@@ -3573,7 +3573,19 @@ function baseDnfChance(entry, comp, circuit){
   return clamp(chance, 0.0008, 0.05);
 }
 
-function decidePit(t, pilot, plan){
+function decidePit(t, pilot, plan, isWeatherChangePhase, justPittedLastPhase){
+  if(isWeatherChangePhase && !justPittedLastPhase){
+    // V0.9.9.78: BUG CORRETTO — prima le IA seguivano SOLO un piano fisso (fase 3/7), ignorando
+    // completamente il meteo: se pioveva a meta' gara, restavano in pista con le gomme da asciutto
+    // fino al loro turno programmato, a volte per diverse fasi. Segnalato da Gio come "impossibile"
+    // (e spiega anche guadagni enormi del giocatore, dovuti alla mescola sbagliata delle IA, non a
+    // un bug nel calcolo del pit stop in se'). Ora quasi tutti reagiscono subito al cambio meteo,
+    // come farebbe un vero box radio — l'85% entra, il resto "scommette" restando fuori (realistico,
+    // capita anche nella F1 vera).
+    const trait = effectiveTrait(pilot);
+    if(trait.skipPitChance && rnd()<trait.skipPitChance) return false;
+    return rnd() < 0.85;
+  }
   if(plan){
     if(t!==plan.first && t!==plan.second) return false;
   } else if(t!==3 && t!==7){
@@ -3806,7 +3818,9 @@ function simulateFullRace(){
       const pilot = e.pilot, comp = e.comp;
 
       let pitPenalty = 0;
-      if(decidePit(t, pilot, pitPlan[e.slotKey])){
+      const isWeatherChangePhase = (t===weatherChangePhase);
+      const justPittedLastPhase = pitByPhase[t-1] && pitByPhase[t-1].has(e.slotKey);
+      if(decidePit(t, pilot, pitPlan[e.slotKey], isWeatherChangePhase, justPittedLastPhase)){
         pitThis.add(e.slotKey);
         // V0.9.9.36: costo pit stop realistico — normale 22-24s, sotto Safety Car 10-12s (l'auto
         // e' gia' rallentata dietro la Safety Car, quindi il tempo perso ai box e' molto minore),
@@ -5415,6 +5429,12 @@ const REAL_MECHANIC_CHOICES = new Set([
   'pitpriority|priority_best','pitpriority|priority_tires','pitpriority|delay_both',
 ]);
 function isRealMechanicChoice(type, choiceKey){ return REAL_MECHANIC_CHOICES.has(type+'|'+choiceKey); }
+// V0.9.9.78: il risultato mostrato per le decisioni con meccanica reale va misurato a VALLE
+// (qualche fase piu' avanti), non subito dopo — altrimenti non si vede ancora l'effetto vero della
+// scelta (es. chi resta con le gomme sbagliate sotto la pioggia inizia a perdere terreno solo dopo,
+// non nella fase immediatamente successiva). Segnalato da Gio: "deve segnarmi quante sono effettive
+// a valle del pit... nei giri successivi", non l'istantanea del turno subito dopo.
+function downstreamPhaseFor(t){ return Math.min(t+3, PHASES.length-1); }
 function applyLiveDecision(type, choiceKey){
   const timeline = state.live.timeline;
   const t = state.live.phaseIndex;
@@ -5461,10 +5481,10 @@ function applyLiveDecision(type, choiceKey){
         // V0.9.9.72: chi va DAVVERO ai box — niente spostamento narrativo indipendente, il
         // risultato mostrato riflette il vero prima/dopo (altrimenti il costo reale, molto piu'
         // grande in scala, lo sovrasta sempre e il testo mente sistematicamente).
-        const order = timeline.phaseOrders[t+1] || timeline.phaseOrders[t] || [];
+        const order = timeline.phaseOrders[downstreamPhaseFor(t)] || timeline.phaseOrders[t] || [];
         const beforeRank = order.indexOf(slotKey);
         realPitCost = applyRealPitStop(timeline, slotKey, t, t===timeline.safetyCarPhase);
-        const orderAfter = timeline.phaseOrders[t+1] || timeline.phaseOrders[t] || [];
+        const orderAfter = timeline.phaseOrders[downstreamPhaseFor(t)] || timeline.phaseOrders[t] || [];
         const afterRank = orderAfter.indexOf(slotKey);
         actualFirstShift = (beforeRank>=0 && afterRank>=0) ? (beforeRank - afterRank) : 0;
         firstPhaseTimeBonus = 0;
@@ -5484,7 +5504,7 @@ function applyLiveDecision(type, choiceKey){
   const realMechanic = isRealMechanicChoice(type, choiceKey);
   const beforeRanks = {};
   if(realMechanic){
-    const orderBefore = timeline.phaseOrders[t+1] || timeline.phaseOrders[t] || [];
+    const orderBefore = timeline.phaseOrders[downstreamPhaseFor(t)] || timeline.phaseOrders[t] || [];
     affectedSlots.forEach(slotKey=>{ beforeRanks[slotKey] = orderBefore.indexOf(slotKey); });
   }
   affectedSlots.forEach(slotKey=>{
@@ -5620,7 +5640,7 @@ function applyLiveDecision(type, choiceKey){
   // concluso, non dentro il ciclo di ciascuno slot (altrimenti il risultato mostrato al primo pilota
   // processato risultava sistematicamente sbagliato di 1 posizione).
   if(realMechanic){
-    const orderAfter = timeline.phaseOrders[t+1] || timeline.phaseOrders[t] || [];
+    const orderAfter = timeline.phaseOrders[downstreamPhaseFor(t)] || timeline.phaseOrders[t] || [];
     affectedSlots.forEach(slotKey=>{
       if(!reveal[slotKey]) return;
       const afterRank = orderAfter.indexOf(slotKey);
