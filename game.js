@@ -8440,7 +8440,7 @@ function renderModeSelect(){
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_team_hint')}</div>
       </div>
     </div>
-    <div class="card pickable mode-select-card" data-rarity="Immortal" data-action="open-daily-season-hub">
+    <div class="card pickable mode-select-card" data-rarity="Rare" data-action="open-daily-season-hub">
       <img class="mode-select-bg-img" src="assets/mode-select/daily-season.webp" alt="">
       <div class="mode-select-top">
         <span class="rarity-tag" data-rarity="Immortal" style="font-size:11.5px;"><img class=ico src=assets/icons/lightning.png> ${t('mode_select_daily')}</span>
