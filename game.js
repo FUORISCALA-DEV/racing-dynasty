@@ -2335,7 +2335,10 @@ async function loadDailyBestResultToday(){
     const today = todayDateStringUTC();
     const { data, error } = await supabaseClient.from('daily_leaderboard_view')
       .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at')
-      .eq('daily_date', today);
+      .eq('daily_date', today)
+      .order('points', { ascending:false }).order('budget_saved', { ascending:false })
+      .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
+      .order('completed_at', { ascending:true });
     if(error || !data){ dailyBestResultCache = null; return null; }
     const mio = data.find(r=>r.user_id===currentUser.id);
     if(!mio){ dailyBestResultCache = null; return null; }
@@ -8266,13 +8269,17 @@ async function loadAndRenderDailyLeaderboard(tab){
     let rows;
     if(tab==='daily'){
       const { data, error } = await supabaseClient.from('daily_leaderboard_view')
-        .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left')
-        .eq('daily_date', todayDateStringUTC());
+        .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left, completed_at')
+        .eq('daily_date', todayDateStringUTC())
+        .order('points', { ascending:false }).order('budget_saved', { ascending:false })
+        .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
+        .order('completed_at', { ascending:true });
       if(error) throw error;
       rows = (data||[]); // la vista arriva gia' ordinata correttamente
     } else {
       const { data, error } = await supabaseClient.from('daily_weighted_leaderboard_view')
-        .select('user_id, nickname, flag_code, giorni_giocati, punti_medi, budget_medio, componenti_medi');
+        .select('user_id, nickname, flag_code, giorni_giocati, punti_medi, budget_medio, componenti_medi')
+        .order('punti_medi', { ascending:false }).order('budget_medio', { ascending:false }).order('componenti_medi', { ascending:false });
       if(error) throw error;
       rows = (data||[]);
     }
@@ -8349,7 +8356,7 @@ function renderModeSelect(){
       </div>
       <div class="mode-select-bottom-scrim">
         <div class="daily-countdown" id="modeSelectDailyCountdown">--:--:--</div>
-        <div class="daily-trophy-row">${dailyTrophyRowHTML()}</div>
+        <div class="daily-trophy-row" id="modeSelectDailyTrophyRow">${dailyTrophyRowHTML()}</div>
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_daily_hint')}</div>
       </div>
     </div>
@@ -8357,6 +8364,10 @@ function renderModeSelect(){
   `;
   bindActions();
   startDailyCountdownTicker('modeSelectDailyCountdown');
+  loadDailyBestResultToday().then(()=>{
+    const row = document.getElementById('modeSelectDailyTrophyRow');
+    if(row) row.innerHTML = dailyTrophyRowHTML();
+  });
 }
 // V0.9.9.83: DAILY SEASON — le 4 fasce trofeo del giorno (completamento/top10/podio/vittoria).
 // Oro se già vinta oggi, grigia se la Daily di oggi e' stata giocata ma quella fascia non
