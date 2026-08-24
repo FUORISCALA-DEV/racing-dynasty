@@ -589,7 +589,7 @@ const I18N = {
     daily_nickname_err_invalid: 'Nickname non valido: 3-16 caratteri, solo lettere/numeri/trattini, niente termini offensivi.',
     daily_nickname_err_taken: 'Questo nickname è già stato preso, provane un altro.',
     daily_nickname_err_generic: 'Errore nel salvataggio, riprova.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche', daily_gp_count: (n)=>`${n} Gran Premi oggi`, daily_reroll_count: (n)=> n===0 ? 'Nessun reroll disponibile' : (n===1 ? '1 reroll disponibile' : `${n} reroll disponibili`),
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche', daily_gp_count: (n)=>`${n} Gran Premi oggi`, daily_status_done: 'Daily di oggi completata', daily_status_one: 'Hai vinto un titolo nella Daily di oggi', daily_status_both: 'Hai vinto ENTRAMBI i titoli nella Daily di oggi!', daily_reroll_count: (n)=> n===0 ? 'Nessun reroll disponibile' : (n===1 ? '1 reroll disponibile' : `${n} reroll disponibili`),
     daily_share_badge_today: 'classifica Daily di oggi', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} generale`,
     daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
@@ -913,7 +913,7 @@ const I18N = {
     daily_nickname_err_invalid: 'Invalid nickname: 3-16 characters, letters/numbers/dashes only, no offensive terms.',
     daily_nickname_err_taken: 'This nickname is already taken, try another one.',
     daily_nickname_err_generic: 'Save failed, try again.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards', daily_gp_count: (n)=>`${n} Grands Prix today`, daily_reroll_count: (n)=> n===0 ? 'No rerolls available' : (n===1 ? '1 reroll available' : `${n} rerolls available`),
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards', daily_gp_count: (n)=>`${n} Grands Prix today`, daily_status_done: "Today's Daily completed", daily_status_one: "You won a title in today's Daily", daily_status_both: "You won BOTH titles in today's Daily!", daily_reroll_count: (n)=> n===0 ? 'No rerolls available' : (n===1 ? '1 reroll available' : `${n} rerolls available`),
     daily_share_badge_today: "today's Daily leaderboard", daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} overall`,
     daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
@@ -1233,7 +1233,7 @@ const I18N = {
     daily_nickname_err_invalid: 'Nickname no válido: 3-16 caracteres, solo letras/números/guiones, sin términos ofensivos.',
     daily_nickname_err_taken: 'Este nickname ya está en uso, prueba otro.',
     daily_nickname_err_generic: 'Error al guardar, inténtalo de nuevo.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones', daily_gp_count: (n)=>`${n} Grandes Premios hoy`, daily_reroll_count: (n)=> n===0 ? 'Sin rerolls disponibles' : (n===1 ? '1 reroll disponible' : `${n} rerolls disponibles`),
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones', daily_gp_count: (n)=>`${n} Grandes Premios hoy`, daily_status_done: 'Daily de hoy completada', daily_status_one: 'Ganaste un título en la Daily de hoy', daily_status_both: '¡Ganaste AMBOS títulos en la Daily de hoy!', daily_reroll_count: (n)=> n===0 ? 'Sin rerolls disponibles' : (n===1 ? '1 reroll disponible' : `${n} rerolls disponibles`),
     daily_share_badge_today: 'clasificación Daily de hoy', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} general`,
     daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
@@ -2340,7 +2340,7 @@ async function loadDailyBestResultToday(){
   try{
     const today = todayDateStringUTC();
     const { data, error } = await supabaseClient.from('daily_leaderboard_view')
-      .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at')
+      .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at, won_constructor, won_driver')
       .eq('daily_date', today)
       .order('points', { ascending:false }).order('budget_saved', { ascending:false })
       .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
@@ -7196,12 +7196,15 @@ function saveDailySeasonResult(){
   const points = myConstructor ? myConstructor.points : 0;
   const componentsSum = ['motore','telaio','aero','gomme','stratega']
     .reduce((sum,key)=> sum + (state.team[key] ? state.team[key].rating : 0), 0);
+  const summary = computeSeasonEndSummaryLines(); // stessa logica della schermata fine stagione
   supabaseClient.from('daily_season_results').insert({
     user_id: currentUser.id,
     daily_date: state.dailySeasonDate || todayDateStringUTC(),
     season_length: state.seasonLength,
     points, budget_saved: state.budget, components_sum: componentsSum,
     rerolls_left: state.rerollsLeft || 0,
+    won_constructor: summary.isConstructorChamp,
+    won_driver: summary.anyDriverChamp,
   }).then(({error})=>{
     if(error) console.warn('Salvataggio risultato Daily non riuscito:', error.message);
     dailyBestResultCache = undefined; // forza il ricaricamento la prossima volta che serve
@@ -8370,8 +8373,10 @@ function renderDailySeasonHub(){
     <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:16px;">
     <div class="daily-gp-count" style="text-align:center;font-size:18px;margin-bottom:2px;">${t('daily_gp_count', todaysDailySeasonLength())}</div>
     <div class="daily-reroll-count" style="text-align:center;font-size:14px;margin-bottom:6px;">${t('daily_reroll_count', todaysDailyRerollCount())}</div>
-    <div class="daily-countdown" id="dailyHubCountdown" style="font-size:20px;text-align:center;margin-bottom:16px;">--:--:--</div>
-    <div class="daily-trophy-row" id="dailyHubTrophyRow" style="justify-content:center;gap:14px;margin-bottom:20px;">${dailyTrophyRowHTML(true)}</div>
+    <div class="daily-countdown-row" style="justify-content:center;margin-bottom:20px;">
+      <div class="daily-countdown" id="dailyHubCountdown" style="font-size:20px;">--:--:--</div>
+      <div id="dailyHubStatusBadge">${dailyStatusBadgeHTML()}</div>
+    </div>
     <div class="btnrow" style="flex-direction:column;gap:10px;">
       <button class="primary" data-action="daily-start-challenge" style="width:100%;">${t('daily_hub_start')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;">${t('daily_hub_leaderboard_today')}</button>
@@ -8382,8 +8387,9 @@ function renderDailySeasonHub(){
   bindActions();
   startDailyCountdownTicker('dailyHubCountdown');
   loadDailyBestResultToday().then(()=>{
-    const row = document.getElementById('dailyHubTrophyRow');
-    if(row) row.innerHTML = dailyTrophyRowHTML(true);
+    const badge = document.getElementById('dailyHubStatusBadge');
+    if(badge) badge.innerHTML = dailyStatusBadgeHTML();
+    updateDailyCountdownColor('dailyHubCountdown');
   });
 }
 function renderModeSelect(){
@@ -8411,8 +8417,10 @@ function renderModeSelect(){
       <div class="mode-select-bottom-scrim">
         <div class="daily-gp-count">${t('daily_gp_count', todaysDailySeasonLength())}</div>
         <div class="daily-reroll-count" style="font-size:12px;margin-bottom:4px;">${t('daily_reroll_count', todaysDailyRerollCount())}</div>
-        <div class="daily-countdown" id="modeSelectDailyCountdown">--:--:--</div>
-        <div class="daily-trophy-row" id="modeSelectDailyTrophyRow">${dailyTrophyRowHTML()}</div>
+        <div class="daily-countdown-row">
+          <div class="daily-countdown" id="modeSelectDailyCountdown">--:--:--</div>
+          <div id="modeSelectDailyStatusBadge">${dailyStatusBadgeHTML()}</div>
+        </div>
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_daily_hint')}</div>
       </div>
     </div>
@@ -8421,42 +8429,30 @@ function renderModeSelect(){
   bindActions();
   startDailyCountdownTicker('modeSelectDailyCountdown');
   loadDailyBestResultToday().then(()=>{
-    const row = document.getElementById('modeSelectDailyTrophyRow');
-    if(row) row.innerHTML = dailyTrophyRowHTML();
+    const badge = document.getElementById('modeSelectDailyStatusBadge');
+    if(badge) badge.innerHTML = dailyStatusBadgeHTML();
+    updateDailyCountdownColor('modeSelectDailyCountdown');
   });
 }
-// V0.9.9.83: DAILY SEASON — le 4 fasce trofeo del giorno (completamento/top10/podio/vittoria).
-// Oro se già vinta oggi, grigia se la Daily di oggi e' stata giocata ma quella fascia non
-// raggiunta, punto interrogativo se la Daily di oggi non e' mai stata tentata.
-const DAILY_TROPHY_TIERS = [
-  { key:'complete', icon:'trophy.png', labelKey:'daily_trophy_complete' },
-  { key:'top10',    icon:'trophy.png', labelKey:'daily_trophy_top10' },
-  { key:'podium',   icon:'trophy.png', labelKey:'daily_trophy_podium' },
-  { key:'win',      icon:'trophy.png', labelKey:'daily_trophy_win' },
-];
-function dailyTrophyRowHTML(showLabels){
+// V0.9.9.89: DAILY SEASON — sistema badge molto più semplice, richiesto da Gio al posto delle 4
+// fasce precedenti ("sono una merda toglili"). Niente se non ancora giocata oggi. Una spunta se
+// completata senza vincere nessun titolo. Spunta ORO se ha vinto un titolo (costruttori O piloti)
+// dentro quella Daily. DOPPIA spunta ORO in stile WhatsApp (due segni di spunta sovrapposti, non
+// due emoji separate) se ha vinto ENTRAMBI i titoli.
+function dailyStatusBadgeHTML(){
   const today = todayDateStringUTC();
   const playedToday = dailyBestResultCache && dailyBestResultCache.daily_date===today;
-  return DAILY_TROPHY_TIERS.map(tier=>{
-    let stateClass = 'daily-trophy-unknown';
-    let iconSrc = 'assets/icons/question.png';
-    if(playedToday){
-      const earned = dailyTierEarned(tier.key, dailyBestResultCache);
-      stateClass = earned ? 'daily-trophy-gold' : 'daily-trophy-gray';
-      iconSrc = `assets/icons/${tier.icon}`;
-    }
-    const label = showLabels ? `<div class="daily-trophy-caption">${t(tier.labelKey)}</div>` : '';
-    return `<div class="daily-trophy-item"><span class="daily-trophy-badge ${stateClass}" title="${t(tier.labelKey)}"><img src="${iconSrc}" alt=""></span>${label}</div>`;
-  }).join('');
-}
-function dailyTierEarned(tierKey, result){
-  if(!result) return false;
-  const rank = result.rank; // posizione nella classifica del giorno, 1-based
-  if(tierKey==='complete') return true; // se c'e' un risultato, la stagione e' stata completata
-  if(tierKey==='top10') return rank!==null && rank<=10;
-  if(tierKey==='podium') return rank!==null && rank<=3;
-  if(tierKey==='win') return rank===1;
-  return false;
+  if(!playedToday) return ''; // niente per chi deve ancora farla
+  const wonBoth = dailyBestResultCache.won_constructor && dailyBestResultCache.won_driver;
+  const wonOne = dailyBestResultCache.won_constructor || dailyBestResultCache.won_driver;
+  const checkSvg = `<svg viewBox="0 0 16 12" class="daily-check-mark"><path d="M1 6.5L5.5 11L15 1" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  if(wonBoth){
+    return `<div class="daily-status-badge daily-status-gold" title="${t('daily_status_both')}">${checkSvg}${checkSvg}</div>`;
+  } else if(wonOne){
+    return `<div class="daily-status-badge daily-status-gold" title="${t('daily_status_one')}">${checkSvg}</div>`;
+  } else {
+    return `<div class="daily-status-badge daily-status-plain" title="${t('daily_status_done')}">${checkSvg}</div>`;
+  }
 }
 let dailyBestResultCache = undefined; // undefined = non ancora controllato
 let __dailyCountdownTimer = null;
@@ -8482,6 +8478,15 @@ function startDailyCountdownTicker(elementId){
   }
   tick();
   __dailyCountdownTimer = setInterval(tick, 1000);
+}
+// V0.9.9.89: il countdown è colorato finché la Daily di oggi non è ancora stata giocata, grigio
+// spento una volta già corsa — chiesto da Gio per far capire a colpo d'occhio se c'è ancora da fare.
+function updateDailyCountdownColor(elementId){
+  const el = document.getElementById(elementId);
+  if(!el) return;
+  const today = todayDateStringUTC();
+  const playedToday = dailyBestResultCache && dailyBestResultCache.daily_date===today;
+  el.classList.toggle('daily-countdown-done', !!playedToday);
 }
 
 // ============================================================
