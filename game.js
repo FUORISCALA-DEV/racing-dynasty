@@ -582,6 +582,23 @@ const I18N = {
     tutorial_first_launch_desc: 'Tre gare guidate da un pilota leggendario, per imparare le basi prima di partire sul serio. Puoi rifarlo quando vuoi dal menu.',
     tutorial_first_launch_yes: 'Sì, portami a scuola',
     tutorial_first_launch_no: 'No, so già cosa fare',
+    daily_need_login_title: 'Serve un account', daily_need_login_desc: 'La Daily Season richiede un account Google — serve per contare una volta sola al giorno e per la classifica. Accedere ora?',
+    daily_nickname_title: 'Scegli il tuo nome da corsa', daily_nickname_desc: 'Comparirà nella classifica Daily, insieme alla tua bandiera. Non si può più cambiare dopo, quindi scegli con cura.',
+    daily_nickname_label: 'Nickname', daily_nickname_confirm: 'Conferma e inizia →',
+    daily_nickname_saving: 'Salvataggio in corso...',
+    daily_nickname_err_invalid: 'Nickname non valido: 3-16 caratteri, solo lettere/numeri/trattini, niente termini offensivi.',
+    daily_nickname_err_taken: 'Questo nickname è già stato preso, provane un altro.',
+    daily_nickname_err_generic: 'Errore nel salvataggio, riprova.',
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche',
+    daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
+    daily_trophy_podium: 'Sali sul podio oggi', daily_trophy_win: 'Vinci la Daily di oggi',
+    daily_countdown_label: (t)=>`Prossima Daily tra ${t}`,
+    daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per giocarla senza limiti.',
+    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi',
+    daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
+    daily_leaderboard_loading: 'Carico la classifica...', daily_leaderboard_error: 'Errore nel caricamento, riprova più tardi.',
+    daily_leaderboard_empty: 'Nessuno ha ancora giocato la Daily di oggi. Sii il primo!',
+    daily_leaderboard_weighted_empty: 'Nessuno ha ancora giocato abbastanza Daily (minimo 15 giorni) per comparire qui.',
 
     menu_new_run: 'Nuova Run', menu_new_run_confirm: 'Vuoi davvero abbandonare la run attuale e ricominciare da capo? Il progresso non salvato andrà perso.',
     menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti',
@@ -887,6 +904,23 @@ const I18N = {
     tutorial_first_launch_desc: 'Three guided races with a legendary driver, to learn the basics before going for real. You can redo it anytime from the menu.',
     tutorial_first_launch_yes: 'Yes, teach me',
     tutorial_first_launch_no: 'No, I already know what to do',
+    daily_need_login_title: 'Account required', daily_need_login_desc: 'Daily Season requires a Google account — needed to count once per day and for the leaderboard. Sign in now?',
+    daily_nickname_title: 'Choose your racing name', daily_nickname_desc: 'It will show up on the Daily leaderboard, along with your flag. It cannot be changed later, so choose carefully.',
+    daily_nickname_label: 'Nickname', daily_nickname_confirm: 'Confirm and start →',
+    daily_nickname_saving: 'Saving...',
+    daily_nickname_err_invalid: 'Invalid nickname: 3-16 characters, letters/numbers/dashes only, no offensive terms.',
+    daily_nickname_err_taken: 'This nickname is already taken, try another one.',
+    daily_nickname_err_generic: 'Save failed, try again.',
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards',
+    daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
+    daily_trophy_podium: 'Reach the podium today', daily_trophy_win: "Win today's Daily",
+    daily_countdown_label: (t)=>`Next Daily in ${t}`,
+    daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium to play it without limits.',
+    daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard",
+    daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
+    daily_leaderboard_loading: 'Loading leaderboard...', daily_leaderboard_error: 'Loading failed, try again later.',
+    daily_leaderboard_empty: "Nobody has played today's Daily yet. Be the first!",
+    daily_leaderboard_weighted_empty: "Nobody has played enough Dailies yet (minimum 15 days) to show up here.",
 
     menu_new_run: 'New Run', menu_new_run_confirm: 'Do you really want to abandon the current run and start over? Unsaved progress will be lost.',
     menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits',
@@ -1188,6 +1222,23 @@ const I18N = {
     tutorial_first_launch_desc: 'Tres carreras guiadas por un piloto legendario, para aprender lo básico antes de ir en serio. Puedes repetirlo cuando quieras desde el menú.',
     tutorial_first_launch_yes: 'Sí, enséñame',
     tutorial_first_launch_no: 'No, ya sé qué hacer',
+    daily_need_login_title: 'Se necesita una cuenta', daily_need_login_desc: 'La Daily Season requiere una cuenta de Google — necesaria para contar una sola vez al día y para la clasificación. ¿Iniciar sesión ahora?',
+    daily_nickname_title: 'Elige tu nombre de carrera', daily_nickname_desc: 'Aparecerá en la clasificación Daily, junto con tu bandera. No se puede cambiar después, así que elige con cuidado.',
+    daily_nickname_label: 'Nickname', daily_nickname_confirm: 'Confirmar y empezar →',
+    daily_nickname_saving: 'Guardando...',
+    daily_nickname_err_invalid: 'Nickname no válido: 3-16 caracteres, solo letras/números/guiones, sin términos ofensivos.',
+    daily_nickname_err_taken: 'Este nickname ya está en uso, prueba otro.',
+    daily_nickname_err_generic: 'Error al guardar, inténtalo de nuevo.',
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones',
+    daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
+    daily_trophy_podium: 'Sube al podio hoy', daily_trophy_win: 'Gana la Daily de hoy',
+    daily_countdown_label: (t)=>`Próxima Daily en ${t}`,
+    daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para jugarla sin límites.',
+    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy',
+    daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
+    daily_leaderboard_loading: 'Cargando clasificación...', daily_leaderboard_error: 'Error al cargar, inténtalo más tarde.',
+    daily_leaderboard_empty: 'Nadie ha jugado todavía la Daily de hoy. ¡Sé el primero!',
+    daily_leaderboard_weighted_empty: 'Nadie ha jugado suficientes Dailies todavía (mínimo 15 días) para aparecer aquí.',
 
     menu_new_run: 'Nueva Partida', menu_new_run_confirm: '¿Seguro que quieres abandonar la partida actual y empezar de nuevo? El progreso no guardado se perderá.',
     menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos',
@@ -1855,6 +1906,40 @@ const app = document.getElementById('app');
 
 /* ---------------- utilities ---------------- */
 function rnd(){ return Math.random(); }
+// V0.9.9.82: DAILY SEASON — generatore seedabile, per rendere l'intera stagione riproducibile a
+// partire dalla sola data odierna (stessa data = stessa sequenza di numeri per chiunque la calcoli,
+// senza bisogno di un server che la distribuisca). Sostituisce temporaneamente rnd() globale mentre
+// la Daily e' attiva — tutto il codice esistente (circuiti, IA, draft, simulazione gara) la riusa
+// automaticamente senza bisogno di toccare nient'altro.
+function mulberry32(seed){
+  return function(){
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function hashStringToSeed(str){
+  let h = 1779033703 ^ str.length;
+  for(let i=0; i<str.length; i++){
+    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  return (h ^ (h >>> 16)) >>> 0;
+}
+function todayDateStringUTC(){
+  const d = new Date();
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
+}
+let __realRnd = null; // salva Math.random-based rnd mentre la Daily e' attiva, per ripristinarla dopo
+function enterDailyRandomMode(dateStr){
+  __realRnd = rnd;
+  rnd = mulberry32(hashStringToSeed('racing-dynasty-daily-'+dateStr));
+}
+function exitDailyRandomMode(){
+  if(__realRnd) rnd = __realRnd;
+  __realRnd = null;
+}
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
 function fmtM(v){ return (v>=0?'':'-') + Math.abs(v).toFixed(1) + 'M'; }
 // V0.9.9.15: simbolo DynastyDollars — la valuta del gioco, non piu' euro/dollari impliciti.
@@ -2167,6 +2252,133 @@ function buildAIGrid(aiTeamsRaw, usedIds, difficulty){
 // ovunque questi sistemi scrivono un progresso permanente).
 // ============================================================
 const TUTORIAL_TEAM_NAME = 'Scuderia Apprendista';
+// V0.9.9.82: DAILY SEASON — stagione riproducibile dalla sola data odierna, uguale per chiunque la
+// giochi lo stesso giorno. Stesso schema collaudato del tutorial: newRun() per uno stato completo e
+// robusto (mai piu' campi dimenticati), poi sovrascriviamo solo calendario e lunghezza stagione.
+// V0.9.9.82: DAILY SEASON — nickname/bandiera collegati all'account, letti/scritti dalla tabella
+// daily_nicknames (schema fornito a Gio separatamente). Un record per utente, creato una sola volta.
+let dailyNicknameCache = undefined; // undefined = non ancora controllato, null = controllato e assente
+async function loadDailyNickname(){
+  if(!currentUser || !supabaseClient) { dailyNicknameCache = null; return null; }
+  try{
+    const { data, error } = await supabaseClient.from('daily_nicknames')
+      .select('nickname, flag_code').eq('user_id', currentUser.id).maybeSingle();
+    if(error){ console.warn('Caricamento nickname Daily non riuscito:', error.message); dailyNicknameCache = null; return null; }
+    dailyNicknameCache = data || null;
+    return dailyNicknameCache;
+  }catch(e){ console.warn('Caricamento nickname Daily non riuscito:', e); dailyNicknameCache = null; return null; }
+}
+async function saveDailyNickname(nickname, flagCountryName){
+  if(!currentUser || !supabaseClient) return { error:'not-logged-in' };
+  if(!isNicknameValid(nickname)) return { error:'invalid' };
+  const flagCode = (COUNTRY_FLAG[flagCountryName] || 'XX');
+  try{
+    const { error } = await supabaseClient.from('daily_nicknames').insert({
+      user_id: currentUser.id, nickname: nickname.trim(), flag_code: flagCode,
+    });
+    if(error){
+      if(error.code==='23505') return { error:'taken' }; // vincolo UNIQUE violato: nickname gia' preso
+      return { error:'unknown', detail:error.message };
+    }
+    dailyNicknameCache = { nickname:nickname.trim(), flag_code:flagCode };
+    return { ok:true };
+  }catch(e){ return { error:'unknown', detail:String(e) }; }
+}
+function renderDailyNicknameSetup(){
+  const nationOptions = Object.keys(COUNTRY_FLAG).filter(c=>c!=='Sconosciuta').sort((a,b)=>nationLabel(a).localeCompare(nationLabel(b)))
+    .map(c=> `<option value="${c}" ${c==='Italia'?'selected':''}>${nationLabel(c)}</option>`).join('');
+  app.innerHTML = `
+  <div class="wrap tutorial-intro-wrap">
+    <h2 class="hdr">${t('daily_nickname_title')}</h2>
+    <div class="dim" style="margin-top:8px;line-height:1.5;">${t('daily_nickname_desc')}</div>
+    <label class="dim" style="display:block;font-size:13.5px;text-transform:uppercase;letter-spacing:0.05em;margin-top:20px;margin-bottom:6px;">${t('daily_nickname_label')}</label>
+    <input type="text" id="dailyNicknameInput" maxlength="16" placeholder="es. SpeedRacer"
+      style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:15px;background:var(--panel2);
+      border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);">
+    <label class="dim" style="display:block;font-size:13.5px;text-transform:uppercase;letter-spacing:0.05em;margin-top:16px;margin-bottom:6px;">${t('naming_nation')}</label>
+    <div class="nation-select-row">
+      <span class="nation-flag-preview" id="dailyNationFlagPreview">${flag('Italia')}</span>
+      <select id="dailyNationSelect"
+        style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:15px;background:var(--panel2);
+        border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);">
+        ${nationOptions}
+      </select>
+    </div>
+    <div id="dailyNicknameError" class="maintenance-error" style="margin-top:10px;"></div>
+    <div class="btnrow" style="margin-top:20px;">
+      <button class="primary" data-action="daily-nickname-confirm" style="width:100%;">${t('daily_nickname_confirm')}</button>
+    </div>
+  </div>`;
+  bindActions();
+  document.getElementById('dailyNationSelect').addEventListener('change', (e)=>{
+    document.getElementById('dailyNationFlagPreview').innerHTML = flag(e.target.value);
+  });
+}
+// V0.9.9.83: DAILY SEASON — quanti tentativi ha già fatto oggi questo utente, per il controllo
+// gratuito (1 sola volta) / premium (illimitato).
+async function countDailyPlaysToday(){
+  if(!currentUser || !supabaseClient) return 0;
+  try{
+    const { count, error } = await supabaseClient.from('daily_season_results')
+      .select('id', { count:'exact', head:true })
+      .eq('user_id', currentUser.id).eq('daily_date', todayDateStringUTC());
+    if(error){ console.warn('Controllo tentativi Daily non riuscito:', error.message); return 0; }
+    return count || 0;
+  }catch(e){ console.warn('Controllo tentativi Daily non riuscito:', e); return 0; }
+}
+// il MIGLIOR risultato di oggi di questo utente, con la sua posizione vera nella classifica del
+// giorno (serve per colorare le 4 fasce trofeo oro/grigio) — usa la vista SQL gia' ordinata con lo
+// spareggio corretto (punti -> budget -> componenti -> reroll -> chi ha finito prima).
+async function loadDailyBestResultToday(){
+  if(!currentUser || !supabaseClient){ dailyBestResultCache = null; return null; }
+  try{
+    const today = todayDateStringUTC();
+    const { data, error } = await supabaseClient.from('daily_leaderboard_view')
+      .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at')
+      .eq('daily_date', today);
+    if(error || !data){ dailyBestResultCache = null; return null; }
+    const mio = data.find(r=>r.user_id===currentUser.id);
+    if(!mio){ dailyBestResultCache = null; return null; }
+    const rank = data.indexOf(mio) + 1; // la vista arriva gia' ordinata correttamente
+    dailyBestResultCache = { daily_date: today, rank, ...mio };
+    return dailyBestResultCache;
+  }catch(e){ console.warn('Caricamento risultato Daily non riuscito:', e); dailyBestResultCache = null; return null; }
+}
+async function enterDailySeasonFlow(){
+  if(!currentUser){
+    gameConfirm(t('daily_need_login_desc'), ()=>{ signInWithGoogle(); }, t('daily_need_login_title'));
+    return;
+  }
+  if(dailyNicknameCache === undefined){
+    await loadDailyNickname();
+  }
+  if(!dailyNicknameCache){
+    state.phase = 'daily-nickname-setup';
+    render();
+    return;
+  }
+  const playsToday = await countDailyPlaysToday();
+  if(playsToday >= 1 && !isPremiumUser){
+    gameConfirm(t('daily_already_played_desc'), ()=>{}, t('daily_already_played_title'));
+    return;
+  }
+  startDailySeasonRun();
+}
+function startDailySeasonRun(dateStr){
+  dateStr = dateStr || todayDateStringUTC();
+  enterDailyRandomMode(dateStr);
+  const seasonLength = 7 + Math.floor(rnd()*5); // 7-11 inclusi
+  newRun('medio', 10, true, true); // consuma la sua parte di sequenza per circuiti/IA, sovrascritti subito dopo
+  const dailyCircuits = DATA.circuiti.slice().sort(()=>rnd()-0.5).slice(0,seasonLength)
+    .map(c=> ({ ...c, giri: computeRaceLaps(c) }));
+  state.calendar = dailyCircuits;
+  state.seasonLength = seasonLength;
+  state.isDailySeason = true;
+  state.dailySeasonDate = dateStr;
+  exitDailyRandomMode(); // dal draft in poi si torna alla vera casualita' — vedi nota di design
+  state.phase = 'naming'; // stesso punto di ingresso della run normale dopo newRun()
+  render();
+}
 function startTutorialRun(){
   // V0.9.9.71: FIX robusto — invece di ricostruire lo state a mano (rischio di dimenticare campi,
   // gia' successo 2 volte con crash a fine gara), chiamiamo la vera newRun() per avere uno state
@@ -6918,9 +7130,32 @@ function applyAIUpgrades(){
   state.playerInvestedLastRace = false;
 }
 
+// V0.9.9.83: DAILY SEASON — salva il risultato a fine stagione, con tutti i dati per lo spareggio
+// richiesto (punti, budget risparmiato, somma componenti draft, reroll rimasti). Un record per ogni
+// tentativo — per i premium che rigiocano piu' volte lo stesso giorno, la classifica sceglie il
+// migliore in query (vista SQL), non qui: qui salviamo sempre, senza filtrare.
+function saveDailySeasonResult(){
+  if(!currentUser || !supabaseClient) return;
+  const cstd = constructorStandingsSorted();
+  const myConstructor = cstd.find(c=>c.teamId==='PLAYER');
+  const points = myConstructor ? myConstructor.points : 0;
+  const componentsSum = ['motore','telaio','aero','gomme','stratega']
+    .reduce((sum,key)=> sum + (state.team[key] ? state.team[key].rating : 0), 0);
+  supabaseClient.from('daily_season_results').insert({
+    user_id: currentUser.id,
+    daily_date: state.dailySeasonDate || todayDateStringUTC(),
+    season_length: state.seasonLength,
+    points, budget_saved: state.budget, components_sum: componentsSum,
+    rerolls_left: state.rerollsLeft || 0,
+  }).then(({error})=>{
+    if(error) console.warn('Salvataggio risultato Daily non riuscito:', error.message);
+    dailyBestResultCache = undefined; // forza il ricaricamento la prossima volta che serve
+  });
+}
 function advanceAfterPitlane(){
   state.raceIndex++;
   if(state.raceIndex >= state.calendar.length){
+    if(state.isDailySeason) saveDailySeasonResult();
     state.phase = state.isTutorialRun ? 'tutorial-complete' : 'season_end';
   } else {
     applyAIUpgrades();
@@ -7201,6 +7436,50 @@ function renderMidseasonSwap(){
    ============================================================ */
 /* ---------------- V0.7.1 (rifatta in V0.9.7): bandiere SVG al posto delle emoji — resa identica
    su ogni desktop/OS, invece delle sigle testuali (IT, DE...) che comparivano sui controlli nativi ---------------- */
+// V0.9.9.82: DAILY SEASON — filtro nickname. Normalizza la stringa (minuscolo, accenti rimossi,
+// spazi/punteggiatura fuori, sostituzioni leetspeak comuni tipo 0->o 1->i 3->e 4->a 5->s 7->t @->a
+// $->s) prima di confrontarla con una lista di blocco — resistente ai trucchi piu' comuni per
+// aggirare un controllo ingenuo. Copre slur razziali, riferimenti nazisti/Hitler e altri termini
+// gravemente offensivi in piu' lingue (italiano, inglese, spagnolo, francese, tedesco), non solo
+// le 3 lingue supportate dal gioco, come richiesto da Gio ("nelle varie lingue").
+const NICKNAME_BLOCKLIST = [
+  // riferimenti nazisti / genocidio
+  'hitler','nazi','nazista','fuhrer','fuehrer','terzoreich','thirdreich','holocaust','olocausto',
+  'auschwitz','swastika','svastica','kkk','klux',
+  // slur razziali/etnici (italiano, inglese, spagnolo, francese, tedesco)
+  'negro','negra','negri','negre','nigger','nigga','nigg','chink','gook','spic','wetback',
+  'kike','kraut','wop','dago','coon','sandnigger','towelhead','raghead',
+  'zingaro','zingara','zingari','terrone','terrona',
+  'mulatto','mulatta','negretto','negretta',
+  'judio','moro','mora','sudaca',
+  'bougnoule','bicot','niakoue',
+  'kanacke','kummelt',
+  // slur omofobi/transfobici comuni
+  'faggot','fag','frocio','froci','checca','ricchione','maricon','marica','travelo',
+  'tranny','shemale',
+  // abilismo grave
+  'mongoloide','mongolo','ritardato','retard','spastico','spastic',
+  // altri termini offensivi gravi comunemente usati come insulto etnico/religioso
+  'terrorista','terrorist','pedofilo','pedophile','stupratore','rapist',
+];
+function normalizeForProfanityCheck(str){
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'') // rimuove accenti
+    .replace(/0/g,'o').replace(/1/g,'i').replace(/3/g,'e').replace(/4/g,'a')
+    .replace(/5/g,'s').replace(/7/g,'t').replace(/@/g,'a').replace(/\$/g,'s')
+    .replace(/[^a-z0-9]/g,''); // via tutto il resto: spazi, punteggiatura, emoji
+}
+function isNicknameOffensive(nickname){
+  const norm = normalizeForProfanityCheck(nickname);
+  return NICKNAME_BLOCKLIST.some(bad => norm.includes(bad));
+}
+function isNicknameValid(nickname){
+  const trimmed = (nickname||'').trim();
+  if(trimmed.length<3 || trimmed.length>16) return false;
+  if(!/^[a-zA-Z0-9_\-\s]+$/.test(trimmed)) return false; // solo lettere/numeri/underscore/trattino/spazio, niente unicode ambiguo
+  if(isNicknameOffensive(trimmed)) return false;
+  return true;
+}
 const COUNTRY_FLAG = {
   'Argentina':'🇦🇷','Australia':'🇦🇺','Austria':'🇦🇹','Belgio':'🇧🇪','Brasile':'🇧🇷','Canada':'🇨🇦',
   'Cile':'🇨🇱','Cina':'🇨🇳','Colombia':'🇨🇴','Corea del Sud':'🇰🇷','Croazia':'🇭🇷','Danimarca':'🇩🇰',
@@ -7781,6 +8060,9 @@ function renderInner(){
   if(state.phase==='difficulty') return renderDifficulty();
   if(state.phase==='tutorial-intro') return renderTutorialIntro();
   if(state.phase==='tutorial-first-launch-prompt') return renderTutorialFirstLaunchPrompt();
+  if(state.phase==='daily-nickname-setup') return renderDailyNicknameSetup();
+  if(state.phase==='daily-season-hub') return renderDailySeasonHub();
+  if(state.phase==='daily-leaderboard') return renderDailyLeaderboard();
   if(state.phase==='tutorial-draft') return renderTutorialDraft();
   if(state.phase==='tutorial-goat-reveal') return renderTutorialGoatReveal();
   if(state.phase==='tutorial-sponsor') return renderTutorialSponsor();
@@ -7951,6 +8233,98 @@ const TEAM_INSPIRATION = [
   {nome:'Basalt Velocity', naz:'Italia'},
   {nome:'Summit Works', naz:'Germania'},
 ];
+// V0.9.9.83: DAILY SEASON — pagina hub, raggiunta cliccando la carta dalla scelta modalità.
+// Countdown + trofei del giorno, pulsante avvio (rispetta il limite gratuito/premium), accesso
+// alle due classifiche (giornaliera e ponderata).
+// V0.9.9.83: DAILY SEASON — classifica, sia giornaliera che ponderata. Le due viste SQL arrivano
+// gia' ordinate con lo spareggio corretto — qui ci limitiamo a disegnarle.
+function renderDailyLeaderboard(tab){
+  tab = tab || state.dailyLeaderboardTab || 'daily';
+  state.dailyLeaderboardTab = tab;
+  app.innerHTML = `
+  <div class="topbar">
+    <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON — ${tab==='daily' ? t('daily_hub_leaderboard_today') : t('daily_hub_leaderboard_weighted')}</small></div>
+  </div>
+  <div class="wrap">
+    <div class="btnrow" style="margin-bottom:14px;">
+      <button class="${tab==='daily'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="daily" style="flex:1;">${t('daily_hub_leaderboard_today')}</button>
+      <button class="${tab==='weighted'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="weighted" style="flex:1;">${t('daily_hub_leaderboard_weighted')}</button>
+    </div>
+    <div id="dailyLeaderboardContent" class="dim" style="text-align:center;padding:30px 0;">${t('daily_leaderboard_loading')}</div>
+    <div class="btnrow" style="margin-top:16px;">
+      <button class="ghost" data-action="open-daily-season-hub" style="width:100%;">${t('daily_hub_back')}</button>
+    </div>
+  </div>`;
+  bindActions();
+  loadAndRenderDailyLeaderboard(tab);
+}
+async function loadAndRenderDailyLeaderboard(tab){
+  const contentEl = document.getElementById('dailyLeaderboardContent');
+  if(!contentEl) return; // schermata gia' cambiata
+  if(!supabaseClient){ contentEl.innerHTML = `<div class="dim">${t('daily_leaderboard_error')}</div>`; return; }
+  try{
+    let rows;
+    if(tab==='daily'){
+      const { data, error } = await supabaseClient.from('daily_leaderboard_view')
+        .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left')
+        .eq('daily_date', todayDateStringUTC());
+      if(error) throw error;
+      rows = (data||[]); // la vista arriva gia' ordinata correttamente
+    } else {
+      const { data, error } = await supabaseClient.from('daily_weighted_leaderboard_view')
+        .select('user_id, nickname, flag_code, giorni_giocati, punti_medi, budget_medio, componenti_medi');
+      if(error) throw error;
+      rows = (data||[]);
+    }
+    const el = document.getElementById('dailyLeaderboardContent'); // ricontrolla, l'attesa potrebbe averla rimossa
+    if(!el) return;
+    if(rows.length===0){ el.innerHTML = `<div class="dim">${t(tab==='daily' ? 'daily_leaderboard_empty' : 'daily_leaderboard_weighted_empty')}</div>`; return; }
+    el.className = '';
+    el.innerHTML = rows.map((r,i)=>{
+      const mio = currentUser && r.user_id===currentUser.id;
+      const statoText = tab==='daily'
+        ? `${r.points} pt · ${fmtM(r.budget_saved)} · ${r.components_sum}`
+        : `${r.punti_medi.toFixed(1)} pt medi · ${r.giorni_giocati}g`;
+      return `<div class="daily-leaderboard-row ${mio?'daily-leaderboard-row-mine':''}">
+        <span class="daily-leaderboard-rank">${i+1}</span>
+        ${flag(nationFromFlagCode(r.flag_code))}
+        <span class="daily-leaderboard-nick">${r.nickname}</span>
+        <span class="daily-leaderboard-stat dim">${statoText}</span>
+      </div>`;
+    }).join('');
+  }catch(e){
+    const el = document.getElementById('dailyLeaderboardContent');
+    if(el) el.innerHTML = `<div class="dim">${t('daily_leaderboard_error')}</div>`;
+    console.warn('Caricamento classifica Daily non riuscito:', e);
+  }
+}
+function nationFromFlagCode(code){
+  const entry = Object.entries(COUNTRY_FLAG).find(([nome,c])=>c===code);
+  return entry ? entry[0] : 'Sconosciuta';
+}
+function renderDailySeasonHub(){
+  app.innerHTML = `
+  <div class="topbar">
+    <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON</small></div>
+  </div>
+  <div class="wrap">
+    <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:16px;">
+    <div class="daily-countdown" id="dailyHubCountdown" style="font-size:20px;text-align:center;margin-bottom:16px;">--:--:--</div>
+    <div class="daily-trophy-row" id="dailyHubTrophyRow" style="justify-content:center;gap:14px;margin-bottom:20px;">${dailyTrophyRowHTML()}</div>
+    <div class="btnrow" style="flex-direction:column;gap:10px;">
+      <button class="primary" data-action="daily-start-challenge" style="width:100%;">${t('daily_hub_start')}</button>
+      <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;">${t('daily_hub_leaderboard_today')}</button>
+      <button class="ghost" data-action="open-daily-leaderboard" data-tab="weighted" style="width:100%;">${t('daily_hub_leaderboard_weighted')}</button>
+      <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('daily_hub_back')}</button>
+    </div>
+  </div>`;
+  bindActions();
+  startDailyCountdownTicker('dailyHubCountdown');
+  loadDailyBestResultToday().then(()=>{
+    const row = document.getElementById('dailyHubTrophyRow');
+    if(row) row.innerHTML = dailyTrophyRowHTML();
+  });
+}
 function renderModeSelect(){
   app.innerHTML = `
   <div class="panel">
@@ -7968,19 +8342,78 @@ function renderModeSelect(){
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_team_hint')}</div>
       </div>
     </div>
-    <div class="card pickable garage-coming-soon mode-select-card" data-rarity="Legendary" data-action="request-password-gate" data-gate-for="driver-creation">
-      <img class="mode-select-bg-img" src="assets/mode-select/driver-career.webp" alt="">
+    <div class="card pickable mode-select-card" data-rarity="Immortal" data-action="open-daily-season-hub">
+      <img class="mode-select-bg-img" src="assets/mode-select/daily-season.webp" alt="">
       <div class="mode-select-top">
-        <span class="rarity-tag" data-rarity="Legendary" style="font-size:11.5px;"><img class=ico src=assets/icons/checkered_flag.png> ${t('mode_select_driver')}</span>
+        <span class="rarity-tag" data-rarity="Immortal" style="font-size:11.5px;"><img class=ico src=assets/icons/lightning.png> ${t('mode_select_daily')}</span>
       </div>
       <div class="mode-select-bottom-scrim">
-        <div class="ability" style="font-size:14px;">${t('mode_select_driver_desc')}</div>
-        <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;font-size:12px;">${t('sl_garage_soon')}</div>
+        <div class="daily-countdown" id="modeSelectDailyCountdown">--:--:--</div>
+        <div class="daily-trophy-row">${dailyTrophyRowHTML()}</div>
+        <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_daily_hint')}</div>
       </div>
     </div>
   </div>
   `;
   bindActions();
+  startDailyCountdownTicker('modeSelectDailyCountdown');
+}
+// V0.9.9.83: DAILY SEASON — le 4 fasce trofeo del giorno (completamento/top10/podio/vittoria).
+// Oro se già vinta oggi, grigia se la Daily di oggi e' stata giocata ma quella fascia non
+// raggiunta, punto interrogativo se la Daily di oggi non e' mai stata tentata.
+const DAILY_TROPHY_TIERS = [
+  { key:'complete', icon:'trophy.png', labelKey:'daily_trophy_complete' },
+  { key:'top10',    icon:'trophy.png', labelKey:'daily_trophy_top10' },
+  { key:'podium',   icon:'trophy.png', labelKey:'daily_trophy_podium' },
+  { key:'win',      icon:'trophy.png', labelKey:'daily_trophy_win' },
+];
+function dailyTrophyRowHTML(){
+  const today = todayDateStringUTC();
+  const playedToday = dailyBestResultCache && dailyBestResultCache.daily_date===today;
+  return DAILY_TROPHY_TIERS.map(tier=>{
+    let stateClass = 'daily-trophy-unknown';
+    let iconSrc = 'assets/icons/question.png';
+    if(playedToday){
+      const earned = dailyTierEarned(tier.key, dailyBestResultCache);
+      stateClass = earned ? 'daily-trophy-gold' : 'daily-trophy-gray';
+      iconSrc = `assets/icons/${tier.icon}`;
+    }
+    return `<span class="daily-trophy-badge ${stateClass}" title="${t(tier.labelKey)}"><img src="${iconSrc}" alt=""></span>`;
+  }).join('');
+}
+function dailyTierEarned(tierKey, result){
+  if(!result) return false;
+  const rank = result.rank; // posizione nella classifica del giorno, 1-based
+  if(tierKey==='complete') return true; // se c'e' un risultato, la stagione e' stata completata
+  if(tierKey==='top10') return rank!==null && rank<=10;
+  if(tierKey==='podium') return rank!==null && rank<=3;
+  if(tierKey==='win') return rank===1;
+  return false;
+}
+let dailyBestResultCache = undefined; // undefined = non ancora controllato
+let __dailyCountdownTimer = null;
+function msUntilNextUTCMidnight(){
+  const now = new Date();
+  const nextMidnight = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()+1, 0,0,0,0);
+  return nextMidnight - now.getTime();
+}
+function formatCountdown(ms){
+  if(ms<0) ms = 0;
+  const totalSec = Math.floor(ms/1000);
+  const h = String(Math.floor(totalSec/3600)).padStart(2,'0');
+  const m = String(Math.floor((totalSec%3600)/60)).padStart(2,'0');
+  const s = String(totalSec%60).padStart(2,'0');
+  return `${h}:${m}:${s}`;
+}
+function startDailyCountdownTicker(elementId){
+  clearInterval(__dailyCountdownTimer);
+  function tick(){
+    const el = document.getElementById(elementId);
+    if(!el){ clearInterval(__dailyCountdownTimer); return; } // schermata cambiata, ci fermiamo da soli
+    el.textContent = t('daily_countdown_label', formatCountdown(msUntilNextUTCMidnight()));
+  }
+  tick();
+  __dailyCountdownTimer = setInterval(tick, 1000);
 }
 
 // ============================================================
@@ -8740,7 +9173,7 @@ async function pullSaveFromCloud(){
     }
   }catch(e){ console.warn('Caricamento cloud non riuscito:', e); }
 }
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial','tutorial-first-launch-prompt','tutorial-intro','tutorial-draft','tutorial-goat-reveal','tutorial-sponsor','tutorial-complete']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial','tutorial-first-launch-prompt','tutorial-intro','tutorial-draft','tutorial-goat-reveal','tutorial-sponsor','tutorial-complete','daily-nickname-setup','daily-season-hub','daily-leaderboard']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -11572,6 +12005,36 @@ function onAction(e){
       state.tutorialElioMsg = state.tutorialGoatFound ? t('tutorial_elio_rejection') : t('tutorial_ingegnere_rejection');
     }
     render();
+  }
+  else if(action==='open-daily-season-hub'){
+    state.phase = 'daily-season-hub';
+    render();
+  }
+  else if(action==='open-daily-leaderboard'){
+    state.phase = 'daily-leaderboard';
+    renderDailyLeaderboard(el.dataset.tab);
+  }
+  else if(action==='daily-start-challenge'){
+    enterDailySeasonFlow();
+  }
+  else if(action==='daily-nickname-confirm'){
+    const nickname = document.getElementById('dailyNicknameInput').value.trim();
+    const nation = document.getElementById('dailyNationSelect').value;
+    const errorEl = document.getElementById('dailyNicknameError');
+    if(!isNicknameValid(nickname)){
+      errorEl.textContent = t('daily_nickname_err_invalid');
+      return;
+    }
+    errorEl.textContent = t('daily_nickname_saving');
+    saveDailyNickname(nickname, nation).then(res=>{
+      if(res.ok){
+        startDailySeasonRun();
+      } else if(res.error==='taken'){
+        errorEl.textContent = t('daily_nickname_err_taken');
+      } else {
+        errorEl.textContent = t('daily_nickname_err_generic');
+      }
+    });
   }
   else if(action==='tutorial-first-launch-yes'){
     startTutorialRun();
