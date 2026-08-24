@@ -594,7 +594,7 @@ const I18N = {
     daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
     daily_trophy_podium: 'Sali sul podio oggi', daily_trophy_win: 'Vinci la Daily di oggi',
-    daily_countdown_label: (t)=>`Prossima Daily tra ${t}`,
+    daily_countdown_label: (t)=>`Prossima Daily tra ${t}`, daily_countdown_label_todo: (t)=>`Hai ancora ${t} per tentare la run`,
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per giocarla senza limiti.',
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
@@ -918,7 +918,7 @@ const I18N = {
     daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
     daily_trophy_podium: 'Reach the podium today', daily_trophy_win: "Win today's Daily",
-    daily_countdown_label: (t)=>`Next Daily in ${t}`,
+    daily_countdown_label: (t)=>`Next Daily in ${t}`, daily_countdown_label_todo: (t)=>`You still have ${t} to attempt the run`,
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium to play it without limits.',
     daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard",
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
@@ -1238,7 +1238,7 @@ const I18N = {
     daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
     daily_trophy_podium: 'Sube al podio hoy', daily_trophy_win: 'Gana la Daily de hoy',
-    daily_countdown_label: (t)=>`Próxima Daily en ${t}`,
+    daily_countdown_label: (t)=>`Próxima Daily en ${t}`, daily_countdown_label_todo: (t)=>`Todavía tienes ${t} para intentar la run`,
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para jugarla sin límites.',
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
@@ -8505,7 +8505,10 @@ function startDailyCountdownTicker(elementId){
   function tick(){
     const el = document.getElementById(elementId);
     if(!el){ clearInterval(__dailyCountdownTimer); return; } // schermata cambiata, ci fermiamo da soli
-    el.textContent = t('daily_countdown_label', formatCountdown(msUntilNextUTCMidnight()));
+    const today = todayDateStringUTC();
+    const playedToday = dailyBestResultCache && dailyBestResultCache.daily_date===today;
+    const label = playedToday ? 'daily_countdown_label' : 'daily_countdown_label_todo';
+    el.textContent = t(label, formatCountdown(msUntilNextUTCMidnight()));
   }
   tick();
   __dailyCountdownTimer = setInterval(tick, 1000);
