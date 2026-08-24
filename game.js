@@ -590,6 +590,11 @@ const I18N = {
     daily_nickname_err_taken: 'Questo nickname è già stato preso, provane un altro.',
     daily_nickname_err_generic: 'Errore nel salvataggio, riprova.',
     mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche', daily_gp_count: (n)=>`${n} Gran Premi oggi`,
+    daily_share_headline: (nick)=>`${nick} ha completato la Daily di oggi!`,
+    daily_share_rank_today: (pts)=>`in classifica oggi · ${pts} punti`,
+    daily_share_rank_weighted: (r,tot)=>`#${r} su ${tot} in classifica generale`,
+    daily_share_cta_title: 'GIOCALA ANCHE TU', daily_share_cta_sub: (t)=>`Hai ancora ${t} prima che cambi`,
+    daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
     daily_trophy_podium: 'Sali sul podio oggi', daily_trophy_win: 'Vinci la Daily di oggi',
     daily_countdown_label: (t)=>`Prossima Daily tra ${t}`,
@@ -912,6 +917,11 @@ const I18N = {
     daily_nickname_err_taken: 'This nickname is already taken, try another one.',
     daily_nickname_err_generic: 'Save failed, try again.',
     mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards', daily_gp_count: (n)=>`${n} Grands Prix today`,
+    daily_share_headline: (nick)=>`${nick} completed today's Daily!`,
+    daily_share_rank_today: (pts)=>`on today's leaderboard · ${pts} points`,
+    daily_share_rank_weighted: (r,tot)=>`#${r} of ${tot} on the overall leaderboard`,
+    daily_share_cta_title: 'PLAY IT TOO', daily_share_cta_sub: (t)=>`You still have ${t} before it changes`,
+    daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
     daily_trophy_podium: 'Reach the podium today', daily_trophy_win: "Win today's Daily",
     daily_countdown_label: (t)=>`Next Daily in ${t}`,
@@ -1230,6 +1240,11 @@ const I18N = {
     daily_nickname_err_taken: 'Este nickname ya está en uso, prueba otro.',
     daily_nickname_err_generic: 'Error al guardar, inténtalo de nuevo.',
     mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones', daily_gp_count: (n)=>`${n} Grandes Premios hoy`,
+    daily_share_headline: (nick)=>`¡${nick} completó la Daily de hoy!`,
+    daily_share_rank_today: (pts)=>`en la clasificación de hoy · ${pts} puntos`,
+    daily_share_rank_weighted: (r,tot)=>`#${r} de ${tot} en la clasificación general`,
+    daily_share_cta_title: 'JUÉGALA TÚ TAMBIÉN', daily_share_cta_sub: (t)=>`Aún tienes ${t} antes de que cambie`,
+    daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
     daily_trophy_podium: 'Sube al podio hoy', daily_trophy_win: 'Gana la Daily de hoy',
     daily_countdown_label: (t)=>`Próxima Daily en ${t}`,
@@ -8327,7 +8342,7 @@ function renderDailySeasonHub(){
     <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:16px;">
     <div class="daily-gp-count" style="text-align:center;font-size:18px;margin-bottom:6px;">${t('daily_gp_count', todaysDailySeasonLength())}</div>
     <div class="daily-countdown" id="dailyHubCountdown" style="font-size:20px;text-align:center;margin-bottom:16px;">--:--:--</div>
-    <div class="daily-trophy-row" id="dailyHubTrophyRow" style="justify-content:center;gap:14px;margin-bottom:20px;">${dailyTrophyRowHTML()}</div>
+    <div class="daily-trophy-row" id="dailyHubTrophyRow" style="justify-content:center;gap:14px;margin-bottom:20px;">${dailyTrophyRowHTML(true)}</div>
     <div class="btnrow" style="flex-direction:column;gap:10px;">
       <button class="primary" data-action="daily-start-challenge" style="width:100%;">${t('daily_hub_start')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;">${t('daily_hub_leaderboard_today')}</button>
@@ -8339,7 +8354,7 @@ function renderDailySeasonHub(){
   startDailyCountdownTicker('dailyHubCountdown');
   loadDailyBestResultToday().then(()=>{
     const row = document.getElementById('dailyHubTrophyRow');
-    if(row) row.innerHTML = dailyTrophyRowHTML();
+    if(row) row.innerHTML = dailyTrophyRowHTML(true);
   });
 }
 function renderModeSelect(){
@@ -8389,7 +8404,7 @@ const DAILY_TROPHY_TIERS = [
   { key:'podium',   icon:'trophy.png', labelKey:'daily_trophy_podium' },
   { key:'win',      icon:'trophy.png', labelKey:'daily_trophy_win' },
 ];
-function dailyTrophyRowHTML(){
+function dailyTrophyRowHTML(showLabels){
   const today = todayDateStringUTC();
   const playedToday = dailyBestResultCache && dailyBestResultCache.daily_date===today;
   return DAILY_TROPHY_TIERS.map(tier=>{
@@ -8400,7 +8415,8 @@ function dailyTrophyRowHTML(){
       stateClass = earned ? 'daily-trophy-gold' : 'daily-trophy-gray';
       iconSrc = `assets/icons/${tier.icon}`;
     }
-    return `<span class="daily-trophy-badge ${stateClass}" title="${t(tier.labelKey)}"><img src="${iconSrc}" alt=""></span>`;
+    const label = showLabels ? `<div class="daily-trophy-caption">${t(tier.labelKey)}</div>` : '';
+    return `<div class="daily-trophy-item"><span class="daily-trophy-badge ${stateClass}" title="${t(tier.labelKey)}"><img src="${iconSrc}" alt=""></span>${label}</div>`;
   }).join('');
 }
 function dailyTierEarned(tierKey, result){
@@ -11642,13 +11658,97 @@ async function shareTrophyRoomCard(){
   }
 }
 
+// V0.9.9.86: carta condivisibile DEDICATA alla Daily Season — diversa da quella di una stagione
+// normale, come richiesto da Gio: mostra la posizione vera in classifica di oggi (e in quella
+// generale se disponibile), con un invito a chi la vede a giocarla anch'egli prima che scada.
+async function buildDailyShareCardCanvas(){
+  await loadDailyBestResultToday();
+  const dailyRank = dailyBestResultCache ? dailyBestResultCache.rank : null;
+  let weightedRank = null, weightedTotal = null;
+  if(currentUser && supabaseClient){
+    try{
+      const { data } = await supabaseClient.from('daily_weighted_leaderboard_view')
+        .select('user_id').order('punti_medi', { ascending:false }).order('budget_medio', { ascending:false }).order('componenti_medi', { ascending:false });
+      if(data){
+        const idx = data.findIndex(r=>r.user_id===currentUser.id);
+        if(idx>=0){ weightedRank = idx+1; weightedTotal = data.length; }
+      }
+    }catch(e){ /* silenzioso: la carta funziona comunque senza questo dato */ }
+  }
+
+  const cstd = constructorStandingsSorted();
+  const myConstructor = cstd.find(c=>c.teamId==='PLAYER');
+  const points = myConstructor ? myConstructor.points : 0;
+  const nickname = dailyNicknameCache ? dailyNicknameCache.nickname : teamDisplayName();
+
+  const W = 720, M = 36;
+  const cv = document.createElement('canvas');
+  let ctx = cv.getContext('2d');
+  const [logoImg] = await Promise.all([loadImg(LOGO_DATA_URI)]);
+
+  let cursor = 28;
+  const logoW = Math.round(W*0.40), logoH = Math.round(logoImg.height*(logoW/logoImg.width));
+  const logoY = cursor; cursor += logoH + 4;
+  const subY = cursor; cursor += 24;
+  cursor += 14;
+  const dividerY = cursor; cursor += 30;
+  const headlineY = cursor; cursor += 50;
+  const rankBlockY = cursor; cursor += 130;
+  const weightedY = weightedRank!==null ? cursor : null;
+  if(weightedRank!==null) cursor += 40;
+  cursor += 20;
+  const statsY = cursor; cursor += 70;
+  const boxY0 = cursor, boxY1 = boxY0+80; cursor = boxY1+28;
+  const H = cursor;
+
+  cv.width = W; cv.height = H;
+  ctx = cv.getContext('2d');
+
+  const accent = '#FF6A1A';
+  ctx.fillStyle = '#08090c'; ctx.fillRect(0,0,W,H);
+  const grad = ctx.createRadialGradient(W*0.5,H*0.4,0, W*0.5,H*0.4, H*0.8);
+  grad.addColorStop(0, accent+'40'); grad.addColorStop(1, '#08090c00');
+  ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+  for(let i=-H;i<W;i+=34){ ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i+H,H); ctx.stroke(); }
+  for(let cx=0; cx<W; cx+=16){ ctx.fillStyle = (cx/16)%2===0 ? '#ebebeb' : '#121318'; ctx.fillRect(cx,0,16,7); }
+
+  ctx.drawImage(logoImg, (W-logoW)/2, logoY, logoW, logoH);
+  ctx.fillStyle = '#8c8c94'; ctx.font = '15px -apple-system,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('DAILY SEASON', W/2, subY+14);
+  ctx.strokeStyle = '#2a2c31'; ctx.beginPath(); ctx.moveTo(M,dividerY); ctx.lineTo(W-M,dividerY); ctx.stroke();
+
+  ctx.fillStyle = '#e8e8ec'; ctx.font = '700 26px -apple-system,sans-serif';
+  ctx.fillText(t('daily_share_headline', nickname), W/2, headlineY);
+
+  ctx.fillStyle = accent; ctx.font = '900 92px -apple-system,sans-serif';
+  ctx.fillText(dailyRank!==null ? '#'+dailyRank : '—', W/2, rankBlockY+80);
+  ctx.fillStyle = '#93939b'; ctx.font = '600 16px -apple-system,sans-serif';
+  ctx.fillText(t('daily_share_rank_today', points), W/2, rankBlockY+110);
+
+  if(weightedRank!==null){
+    ctx.fillStyle = '#d5d5da'; ctx.font = '700 20px -apple-system,sans-serif';
+    ctx.fillText(t('daily_share_rank_weighted', weightedRank, weightedTotal), W/2, weightedY+20);
+  }
+
+  ctx.fillStyle = accent+'22'; roundRectPath(ctx, M, boxY0, W-2*M, boxY1-boxY0, 12); ctx.fill();
+  ctx.strokeStyle = accent; ctx.lineWidth = 2.5; roundRectPath(ctx, M, boxY0, W-2*M, boxY1-boxY0, 12); ctx.stroke();
+  ctx.fillStyle = accent; ctx.font = '900 22px -apple-system,sans-serif';
+  ctx.fillText(t('daily_share_cta_title'), W/2, boxY0+34);
+  ctx.fillStyle = '#c9c9d0'; ctx.font = '600 15px -apple-system,sans-serif';
+  ctx.fillText(t('daily_share_cta_sub', formatCountdown(msUntilNextUTCMidnight())), W/2, boxY0+60);
+  ctx.textAlign = 'left';
+  return cv;
+}
 async function shareResultCard(){
   try{
-    const cv = await buildShareCardCanvas();
+    const cv = state.isDailySeason ? await buildDailyShareCardCanvas() : await buildShareCardCanvas();
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
-    const fileName = 'racing-dynasty-risultato.png';
+    const fileName = state.isDailySeason ? 'racing-dynasty-daily.png' : 'racing-dynasty-risultato.png';
     const gameUrl = 'https://fuoriscala-dev.github.io/racing-dynasty/';
-    const shareText = `Ho appena chiuso una stagione su Racing Dynasty — prova a battermi!\n${gameUrl}`;
+    const shareText = state.isDailySeason
+      ? t('daily_share_text', gameUrl)
+      : `Ho appena chiuso una stagione su Racing Dynasty — prova a battermi!\n${gameUrl}`;
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
       await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText, url: gameUrl });
     } else {
