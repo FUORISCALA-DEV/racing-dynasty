@@ -2339,12 +2339,26 @@ async function loadDailyBestResultToday(){
   if(!currentUser || !supabaseClient){ dailyBestResultCache = null; return null; }
   try{
     const today = todayDateStringUTC();
-    const { data, error } = await supabaseClient.from('daily_leaderboard_view')
+    // V0.9.9.92: FIX CRITICO — stesso ripiego del salvataggio. Se la vista sul database non e'
+    // ancora stata aggiornata con le colonne titolo (SQL non ancora eseguito), la richiesta con
+    // quei campi falliva DEL TUTTO, impedendo di vedere anche solo il rank/punteggio (che invece
+    // non dipendono affatto da quelle colonne). Ora riproviamo subito senza, in caso di errore.
+    let { data, error } = await supabaseClient.from('daily_leaderboard_view')
       .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at, won_constructor, won_driver')
       .eq('daily_date', today)
       .order('points', { ascending:false }).order('budget_saved', { ascending:false })
       .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
       .order('completed_at', { ascending:true });
+    if(error){
+      console.warn('Lettura Daily coi campi titolo non riuscita, riprovo senza:', error.message);
+      const retry = await supabaseClient.from('daily_leaderboard_view')
+        .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at')
+        .eq('daily_date', today)
+        .order('points', { ascending:false }).order('budget_saved', { ascending:false })
+        .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
+        .order('completed_at', { ascending:true });
+      data = retry.data; error = retry.error;
+    }
     if(error || !data){ dailyBestResultCache = null; return null; }
     const mio = data.find(r=>r.user_id===currentUser.id);
     if(!mio){ dailyBestResultCache = null; return null; }
@@ -7198,19 +7212,34 @@ function saveDailySeasonResult(){
   const componentsSum = ['motore','telaio','aero','gomme','stratega']
     .reduce((sum,key)=> sum + (state.team[key] ? state.team[key].rating : 0), 0);
   const summary = computeSeasonEndSummaryLines(); // stessa logica della schermata fine stagione
-  __dailySaveInFlight = supabaseClient.from('daily_season_results').insert({
+  const baseRow = {
     user_id: currentUser.id,
     daily_date: state.dailySeasonDate || todayDateStringUTC(),
     season_length: state.seasonLength,
     points, budget_saved: state.budget, components_sum: componentsSum,
     rerolls_left: state.rerollsLeft || 0,
-    won_constructor: summary.isConstructorChamp,
-    won_driver: summary.anyDriverChamp,
-  }).then(({error})=>{
-    if(error) console.warn('Salvataggio risultato Daily non riuscito:', error.message);
-    dailyBestResultCache = undefined; // forza il ricaricamento la prossima volta che serve
-    __dailySaveInFlight = null;
-  });
+  };
+  // V0.9.9.92: FIX CRITICO — se le colonne won_constructor/won_driver non esistono ancora sul
+  // database (SQL non ancora eseguito), l'inserimento falliva DEL TUTTO in silenzio, perdendo
+  // l'intero risultato della Daily appena giocata, non solo il dato dei titoli. Ora se il primo
+  // tentativo (coi nuovi campi) fallisce, riproviamo SUBITO senza quei campi — il risultato
+  // principale si salva comunque, i titoli restano semplicemente non tracciati finche' Gio non
+  // esegue lo script SQL.
+  __dailySaveInFlight = supabaseClient.from('daily_season_results')
+    .insert({ ...baseRow, won_constructor: summary.isConstructorChamp, won_driver: summary.anyDriverChamp })
+    .then(({error})=>{
+      if(!error){
+        dailyBestResultCache = undefined;
+        __dailySaveInFlight = null;
+        return;
+      }
+      console.warn('Salvataggio Daily coi campi titolo non riuscito, riprovo senza:', error.message);
+      return supabaseClient.from('daily_season_results').insert(baseRow).then(({error:error2})=>{
+        if(error2) console.warn('Salvataggio Daily non riuscito nemmeno col ripiego:', error2.message);
+        dailyBestResultCache = undefined;
+        __dailySaveInFlight = null;
+      });
+    });
 }
 function advanceAfterPitlane(){
   state.raceIndex++;
