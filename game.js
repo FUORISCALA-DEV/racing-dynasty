@@ -594,7 +594,7 @@ const I18N = {
     daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
     daily_trophy_podium: 'Sali sul podio oggi', daily_trophy_win: 'Vinci la Daily di oggi',
-    daily_countdown_label: (t)=>`Prossima Daily tra ${t}`, daily_countdown_label_todo: (t)=>`Hai ancora ${t} per tentare la run`,
+    daily_countdown_label: (t)=>`Prossima Daily tra ${t}`, daily_countdown_label_todo: (t)=>`Hai ancora ${t} per tentare la run`, daily_locked_trophies: (n)=> n===1 ? 'Ti manca 1 trofeo vinto per sbloccare la Daily Season' : `Ti mancano ${n} trofei vinti per sbloccare la Daily Season`, daily_locked_doppietta: 'Ti serve anche una Stagione Scuderia vinta sia come pilota che come costruttore (anche insieme) per sbloccare la Daily Season',
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per giocarla senza limiti.',
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
@@ -918,7 +918,7 @@ const I18N = {
     daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
     daily_trophy_podium: 'Reach the podium today', daily_trophy_win: "Win today's Daily",
-    daily_countdown_label: (t)=>`Next Daily in ${t}`, daily_countdown_label_todo: (t)=>`You still have ${t} to attempt the run`,
+    daily_countdown_label: (t)=>`Next Daily in ${t}`, daily_countdown_label_todo: (t)=>`You still have ${t} to attempt the run`, daily_locked_trophies: (n)=> n===1 ? 'You need 1 more trophy to unlock Daily Season' : `You need ${n} more trophies to unlock Daily Season`, daily_locked_doppietta: 'You also need a Team Season won as both driver and constructor champion (can be together) to unlock Daily Season',
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium to play it without limits.',
     daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard",
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
@@ -1238,7 +1238,7 @@ const I18N = {
     daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
     daily_trophy_podium: 'Sube al podio hoy', daily_trophy_win: 'Gana la Daily de hoy',
-    daily_countdown_label: (t)=>`Próxima Daily en ${t}`, daily_countdown_label_todo: (t)=>`Todavía tienes ${t} para intentar la run`,
+    daily_countdown_label: (t)=>`Próxima Daily en ${t}`, daily_countdown_label_todo: (t)=>`Todavía tienes ${t} para intentar la run`, daily_locked_trophies: (n)=> n===1 ? 'Te falta 1 trofeo para desbloquear la Daily Season' : `Te faltan ${n} trofeos para desbloquear la Daily Season`, daily_locked_doppietta: 'También necesitas una Temporada de Escudería ganada como piloto y como constructor (pueden ser juntos) para desbloquear la Daily Season',
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para jugarla sin límites.',
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
@@ -2368,6 +2368,7 @@ async function loadDailyBestResultToday(){
   }catch(e){ console.warn('Caricamento risultato Daily non riuscito:', e); dailyBestResultCache = null; return null; }
 }
 async function enterDailySeasonFlow(){
+  if(!isDailySeasonUnlocked()) return; // rete di sicurezza, la carta bloccata non dovrebbe nemmeno arrivare qui
   if(!currentUser){
     gameConfirm(t('daily_need_login_desc'), ()=>{ signInWithGoogle(); }, t('daily_need_login_title'));
     return;
@@ -8440,11 +8441,12 @@ function renderModeSelect(){
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_team_hint')}</div>
       </div>
     </div>
-    <div class="card pickable mode-select-card" data-rarity="Rare" data-action="open-daily-season-hub">
-      <img class="mode-select-bg-img" src="assets/mode-select/daily-season.webp" alt="">
+    <div class="card pickable mode-select-card ${isDailySeasonUnlocked()?'':'mode-select-card-locked'}" data-rarity="Rare" data-action="${isDailySeasonUnlocked()?'open-daily-season-hub':'daily-locked-info'}">
+      ${isDailySeasonUnlocked() ? `<img class="mode-select-bg-img" src="assets/mode-select/daily-season.webp" alt="">` : ''}
       <div class="mode-select-top">
         <span class="rarity-tag" data-rarity="Immortal" style="font-size:11.5px;"><img class=ico src=assets/icons/lightning.png> ${t('mode_select_daily')}</span>
       </div>
+      ${isDailySeasonUnlocked() ? `
       <div class="mode-select-bottom-scrim">
         <div class="daily-gp-count">${t('daily_gp_count', todaysDailySeasonLength())}</div>
         <div class="daily-reroll-count" style="font-size:12px;margin-bottom:4px;">${t('daily_reroll_count', todaysDailyRerollCount())}</div>
@@ -8453,17 +8455,20 @@ function renderModeSelect(){
           <div id="modeSelectDailyStatusBadge">${dailyStatusBadgeHTML()}</div>
         </div>
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_daily_hint')}</div>
-      </div>
+      </div>` : `
+      <div class="mode-select-locked-center">${dailySeasonLockedMessageHTML()}</div>`}
     </div>
   </div>
   `;
   bindActions();
-  startDailyCountdownTicker('modeSelectDailyCountdown');
-  loadDailyBestResultToday().then(()=>{
-    const badge = document.getElementById('modeSelectDailyStatusBadge');
-    if(badge) badge.innerHTML = dailyStatusBadgeHTML();
-    updateDailyCountdownColor('modeSelectDailyCountdown');
-  });
+  if(isDailySeasonUnlocked()){
+    startDailyCountdownTicker('modeSelectDailyCountdown');
+    loadDailyBestResultToday().then(()=>{
+      const badge = document.getElementById('modeSelectDailyStatusBadge');
+      if(badge) badge.innerHTML = dailyStatusBadgeHTML();
+      updateDailyCountdownColor('modeSelectDailyCountdown');
+    });
+  }
 }
 // V0.9.9.89: DAILY SEASON — sistema badge molto più semplice, richiesto da Gio al posto delle 4
 // fasce precedenti ("sono una merda toglili"). Niente se non ancora giocata oggi. Una spunta se
@@ -8713,7 +8718,7 @@ function saveMuseumData(){
 }
 function unlockMuseumItem(catKey, item){
   if(!item || !item.id) return;
-  if(state && state.isTutorialRun) return; // V0.9.9.70: il tutorial non scrive nessun progresso vero
+  if(state && (state.isTutorialRun || state.isDailySeason)) return; // V0.9.9.70: il tutorial non scrive nessun progresso vero
   const isPilot = (catKey==='pilotMain' || catKey==='pilotSecond');
   const bucket = isPilot ? museumData.piloti : museumData.componenti;
   if(!bucket[item.id]){
@@ -8750,7 +8755,7 @@ function recordCircuitResult(circuitName, won){
   if(!trophyData[circuitName]) trophyData[circuitName] = { raced:0, won:0 };
   trophyData[circuitName].raced++;
   if(won) trophyData[circuitName].won++;
-  if(state && state.isTutorialRun) return; // V0.9.9.71: mutazione in memoria ok (serve al codice dopo), ma niente salvataggio vero
+  if(state && (state.isTutorialRun || state.isDailySeason)) return; // V0.9.9.71: mutazione in memoria ok (serve al codice dopo), ma niente salvataggio vero
   saveTrophyData();
 }
 let trophyData = loadTrophyData(); // caricato una sola volta all'avvio, prima di qualunque carriera
@@ -8866,7 +8871,7 @@ function loadAchievementData(){
   }catch(e){ return JSON.parse(JSON.stringify(ACHIEVEMENT_DATA_DEFAULTS)); }
 }
 function saveAchievementData(){
-  if(state && state.isTutorialRun) return; // V0.9.9.71: il tutorial non scrive nessun progresso vero
+  if(state && (state.isTutorialRun || state.isDailySeason)) return; // V0.9.9.71: il tutorial non scrive nessun progresso vero
   try{ localStorage.setItem(ACHIEVEMENT_SAVE_KEY, JSON.stringify(achievementData)); }catch(e){ /* ignorato */ }
   touchLocalProgress(); pushSaveToCloud();
 }
@@ -8889,7 +8894,7 @@ function syncLiveryUnlocksFromAchievements(){
 syncLiveryUnlocksFromAchievements();
 let __lastUnlockedAchievements = []; // per mostrare un piccolo avviso dopo l'ultimo sblocco
 function unlockAchievement(id){
-  if(state && state.isTutorialRun) return; // V0.9.9.70: il tutorial non scrive nessun progresso vero
+  if(state && (state.isTutorialRun || state.isDailySeason)) return; // V0.9.9.70: il tutorial non scrive nessun progresso vero
   if(!achievementData.unlockedIds.includes(id)){
     achievementData.unlockedIds.push(id);
     __lastUnlockedAchievements.push(id);
@@ -8950,7 +8955,7 @@ function recordCircuitRaced(circuitName){
 
 // V0.9.7.9: obiettivi legati alle sinergie — controllati ogni volta che la squadra cambia composizione
 function checkSynergyAchievements(){
-  if(state && state.isTutorialRun) return; // V0.9.9.71: il tutorial non scrive nessun progresso vero
+  if(state && (state.isTutorialRun || state.isDailySeason)) return; // V0.9.9.71: il tutorial non scrive nessun progresso vero
   const t = state.team;
   if(!t) return;
   const pairs = activeSynergyPairs();
@@ -8980,7 +8985,7 @@ function checkCenerentolaAchievement(){
 // V0.9.7: obiettivi di Maestria — controllati ogni volta che museo/trofei/circuiti cambiano,
 // cosi' si sbloccano nel momento esatto in cui la condizione diventa vera, non solo a fine stagione
 function checkMasteryAchievements(){
-  if(state && state.isTutorialRun) return; // V0.9.9.71: il tutorial non scrive nessun progresso vero
+  if(state && (state.isTutorialRun || state.isDailySeason)) return; // V0.9.9.71: il tutorial non scrive nessun progresso vero
   if(!isAchievementUnlocked('turista-instancabile')){
     if(achievementData.circuitsRaced.length >= 10) unlockAchievement('turista-instancabile');
   }
@@ -9099,6 +9104,28 @@ const TOKEN_STATE_KEY = 'racingDynastyTokensV1';
 const TOKEN_REFILL_MS = 12*60*60*1000; // 12 ore
 const FULL_TOKENS = { t10:2, t20:1 };
 let isPremiumUser = false; // aggiornato dopo il login, leggendo la tabella 'profiles'
+// V0.9.9.95: DAILY SEASON — sblocco richiesto da Gio: 10 obiettivi diversi vinti in qualunque
+// modalità, E almeno una doppietta (titolo pilota + titolo scuderia insieme, anche nella stessa
+// stagione) in una Stagione Scuderia normale. Riusa l'obiettivo 'doppietta-perfetta' già esistente
+// — ora che achievement/museo/trofei sono bloccati anche durante la Daily (appena corretto), non
+// può mai essere vinto DENTRO una Daily, quindi la condizione resta sempre "stagione scuderia vera".
+const DAILY_UNLOCK_TROPHY_COUNT = 10;
+function dailySeasonTrophiesUnlockedCount(){ return achievementData.unlockedIds.length; }
+function isDailySeasonUnlocked(){
+  return dailySeasonTrophiesUnlockedCount() >= DAILY_UNLOCK_TROPHY_COUNT
+    && achievementData.unlockedIds.includes('doppietta-perfetta');
+}
+function dailySeasonLockedMessageHTML(){
+  const missingTrophies = Math.max(0, DAILY_UNLOCK_TROPHY_COUNT - dailySeasonTrophiesUnlockedCount());
+  const missingDoppietta = !achievementData.unlockedIds.includes('doppietta-perfetta');
+  if(missingTrophies>0 && missingDoppietta){
+    return `<div>${t('daily_locked_trophies', missingTrophies)}</div><div style="margin-top:8px;">${t('daily_locked_doppietta')}</div>`;
+  } else if(missingTrophies>0){
+    return t('daily_locked_trophies', missingTrophies);
+  } else {
+    return t('daily_locked_doppietta');
+  }
+}
 
 function getTokenState(){
   try{
@@ -9286,6 +9313,7 @@ function saveGame(){
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
     if(state.isDriverCareer) return; // V0.9.7.9.5: mai sovrascrivere il salvataggio Carriera Scuderia — salvataggio dedicato non ancora costruito (punto 4+)
     if(state.isTutorialRun) return; // V0.9.9.70: il tutorial non deve MAI sovrascrivere il salvataggio vero del giocatore
+    if(state.isDailySeason) return; // V0.9.9.95: stesso motivo, mai per la Daily
     if(state.phase==='season_end'){ deleteSave(); return; }
     const snapshot = { ...state, live: null, usedIds: Array.from(state.usedIds||[]) };
     localStorage.setItem(SAVE_KEY, JSON.stringify({ saveVersion:'0.9', savedAt: Date.now(), state: snapshot }));
@@ -12160,7 +12188,11 @@ function onAction(e){
     }
     render();
   }
+  else if(action==='daily-locked-info'){
+    gameConfirm(dailySeasonLockedMessageHTML().replace(/<[^>]+>/g,' ').trim(), ()=>{}, t('mode_select_daily'));
+  }
   else if(action==='open-daily-season-hub'){
+    if(!isDailySeasonUnlocked()) return;
     state.phase = 'daily-season-hub';
     render();
   }
