@@ -589,7 +589,7 @@ const I18N = {
     daily_nickname_err_invalid: 'Nickname non valido: 3-16 caratteri, solo lettere/numeri/trattini, niente termini offensivi.',
     daily_nickname_err_taken: 'Questo nickname è già stato preso, provane un altro.',
     daily_nickname_err_generic: 'Errore nel salvataggio, riprova.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche',
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche', daily_gp_count: (n)=>`${n} Gran Premi oggi`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
     daily_trophy_podium: 'Sali sul podio oggi', daily_trophy_win: 'Vinci la Daily di oggi',
     daily_countdown_label: (t)=>`Prossima Daily tra ${t}`,
@@ -911,7 +911,7 @@ const I18N = {
     daily_nickname_err_invalid: 'Invalid nickname: 3-16 characters, letters/numbers/dashes only, no offensive terms.',
     daily_nickname_err_taken: 'This nickname is already taken, try another one.',
     daily_nickname_err_generic: 'Save failed, try again.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards',
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards', daily_gp_count: (n)=>`${n} Grands Prix today`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
     daily_trophy_podium: 'Reach the podium today', daily_trophy_win: "Win today's Daily",
     daily_countdown_label: (t)=>`Next Daily in ${t}`,
@@ -1229,7 +1229,7 @@ const I18N = {
     daily_nickname_err_invalid: 'Nickname no válido: 3-16 caracteres, solo letras/números/guiones, sin términos ofensivos.',
     daily_nickname_err_taken: 'Este nickname ya está en uso, prueba otro.',
     daily_nickname_err_generic: 'Error al guardar, inténtalo de nuevo.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones',
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones', daily_gp_count: (n)=>`${n} Grandes Premios hoy`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
     daily_trophy_podium: 'Sube al podio hoy', daily_trophy_win: 'Gana la Daily de hoy',
     daily_countdown_label: (t)=>`Próxima Daily en ${t}`,
@@ -2366,6 +2366,15 @@ async function enterDailySeasonFlow(){
     return;
   }
   startDailySeasonRun();
+}
+// V0.9.9.85: calcola SOLO quanti GP ha la Daily di oggi, senza avviarla davvero — serve per farlo
+// vedere prima di entrare, cosi' il giocatore sa se ha tempo per finirla, come richiesto da Gio.
+function todaysDailySeasonLength(dateStr){
+  dateStr = dateStr || todayDateStringUTC();
+  enterDailyRandomMode(dateStr);
+  const seasonLength = 7 + Math.floor(rnd()*5); // stesso identico calcolo di startDailySeasonRun
+  exitDailyRandomMode();
+  return seasonLength;
 }
 function startDailySeasonRun(dateStr){
   dateStr = dateStr || todayDateStringUTC();
@@ -8316,6 +8325,7 @@ function renderDailySeasonHub(){
   </div>
   <div class="wrap">
     <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:16px;">
+    <div class="daily-gp-count" style="text-align:center;font-size:18px;margin-bottom:6px;">${t('daily_gp_count', todaysDailySeasonLength())}</div>
     <div class="daily-countdown" id="dailyHubCountdown" style="font-size:20px;text-align:center;margin-bottom:16px;">--:--:--</div>
     <div class="daily-trophy-row" id="dailyHubTrophyRow" style="justify-content:center;gap:14px;margin-bottom:20px;">${dailyTrophyRowHTML()}</div>
     <div class="btnrow" style="flex-direction:column;gap:10px;">
@@ -8355,6 +8365,7 @@ function renderModeSelect(){
         <span class="rarity-tag" data-rarity="Immortal" style="font-size:11.5px;"><img class=ico src=assets/icons/lightning.png> ${t('mode_select_daily')}</span>
       </div>
       <div class="mode-select-bottom-scrim">
+        <div class="daily-gp-count">${t('daily_gp_count', todaysDailySeasonLength())}</div>
         <div class="daily-countdown" id="modeSelectDailyCountdown">--:--:--</div>
         <div class="daily-trophy-row" id="modeSelectDailyTrophyRow">${dailyTrophyRowHTML()}</div>
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_daily_hint')}</div>
