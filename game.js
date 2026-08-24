@@ -589,7 +589,7 @@ const I18N = {
     daily_nickname_err_invalid: 'Nickname non valido: 3-16 caratteri, solo lettere/numeri/trattini, niente termini offensivi.',
     daily_nickname_err_taken: 'Questo nickname è già stato preso, provane un altro.',
     daily_nickname_err_generic: 'Errore nel salvataggio, riprova.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche', daily_gp_count: (n)=>`${n} Gran Premi oggi`,
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche', daily_gp_count: (n)=>`${n} Gran Premi oggi`, daily_reroll_count: (n)=> n===0 ? 'Nessun reroll disponibile' : (n===1 ? '1 reroll disponibile' : `${n} reroll disponibili`),
     daily_share_badge_today: 'classifica Daily di oggi', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} generale`,
     daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
@@ -913,7 +913,7 @@ const I18N = {
     daily_nickname_err_invalid: 'Invalid nickname: 3-16 characters, letters/numbers/dashes only, no offensive terms.',
     daily_nickname_err_taken: 'This nickname is already taken, try another one.',
     daily_nickname_err_generic: 'Save failed, try again.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards', daily_gp_count: (n)=>`${n} Grands Prix today`,
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards', daily_gp_count: (n)=>`${n} Grands Prix today`, daily_reroll_count: (n)=> n===0 ? 'No rerolls available' : (n===1 ? '1 reroll available' : `${n} rerolls available`),
     daily_share_badge_today: "today's Daily leaderboard", daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} overall`,
     daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
@@ -1233,7 +1233,7 @@ const I18N = {
     daily_nickname_err_invalid: 'Nickname no válido: 3-16 caracteres, solo letras/números/guiones, sin términos ofensivos.',
     daily_nickname_err_taken: 'Este nickname ya está en uso, prueba otro.',
     daily_nickname_err_generic: 'Error al guardar, inténtalo de nuevo.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones', daily_gp_count: (n)=>`${n} Grandes Premios hoy`,
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones', daily_gp_count: (n)=>`${n} Grandes Premios hoy`, daily_reroll_count: (n)=> n===0 ? 'Sin rerolls disponibles' : (n===1 ? '1 reroll disponible' : `${n} rerolls disponibles`),
     daily_share_badge_today: 'clasificación Daily de hoy', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} general`,
     daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
@@ -2375,6 +2375,42 @@ async function enterDailySeasonFlow(){
 }
 // V0.9.9.85: calcola SOLO quanti GP ha la Daily di oggi, senza avviarla davvero — serve per farlo
 // vedere prima di entrare, cosi' il giocatore sa se ha tempo per finirla, come richiesto da Gio.
+// V0.9.9.88: DAILY SEASON — reroll del giorno. Mai piu' di 7, a volte anche 0, ma sempre un numero
+// diverso da quelli usati dalle difficoltà normali (facile:9 medio:6 difficile:3 hardcore:0) — 0
+// resta comunque possibile perché richiesto esplicitamente da Gio, escludiamo solo 3 e 6 (gli altri
+// valori "presi" da una difficoltà specifica all'interno del range 0-7). Stessa probabilità per
+// ognuno, e mai lo stesso valore del giorno prima — VERO, non approssimato: ogni giorno esclude il
+// valore VERO di ieri (calcolato ricorsivamente all'indietro fino a una data base fissa), non un
+// suo calcolo indipendente che potrebbe divergere da quanto mostrato davvero ieri.
+const DAILY_REROLL_POOL = [0,1,2,4,5,7];
+const DAILY_REROLL_EPOCH = '2025-01-01'; // caso base della ricorsione: prima di questa data nessun vincolo
+function dailyRerollValueForDate(dateStr, excludeValue){
+  enterDailyRandomMode(dateStr+'-reroll'); // stream separato, non condiviso con circuiti/lunghezza
+  let pool = DAILY_REROLL_POOL;
+  if(excludeValue!==undefined && excludeValue!==null) pool = pool.filter(v=>v!==excludeValue);
+  const val = pool[Math.floor(rnd()*pool.length)];
+  exitDailyRandomMode();
+  return val;
+}
+function previousDailyDateString(dateStr){
+  const d = new Date(dateStr+'T00:00:00Z');
+  d.setUTCDate(d.getUTCDate()-1);
+  return d.toISOString().slice(0,10);
+}
+const __dailyRerollMemo = {};
+function todaysDailyRerollCount(dateStr){
+  dateStr = dateStr || todayDateStringUTC();
+  if(__dailyRerollMemo[dateStr]!==undefined) return __dailyRerollMemo[dateStr];
+  if(dateStr <= DAILY_REROLL_EPOCH){
+    const val = dailyRerollValueForDate(dateStr);
+    __dailyRerollMemo[dateStr] = val;
+    return val;
+  }
+  const yesterdayTrueValue = todaysDailyRerollCount(previousDailyDateString(dateStr)); // ricorsione vera
+  const val = dailyRerollValueForDate(dateStr, yesterdayTrueValue);
+  __dailyRerollMemo[dateStr] = val;
+  return val;
+}
 function todaysDailySeasonLength(dateStr){
   dateStr = dateStr || todayDateStringUTC();
   enterDailyRandomMode(dateStr);
@@ -2391,6 +2427,7 @@ function startDailySeasonRun(dateStr){
     .map(c=> ({ ...c, giri: computeRaceLaps(c) }));
   state.calendar = dailyCircuits;
   state.seasonLength = seasonLength;
+  state.rerollsLeft = todaysDailyRerollCount(dateStr); // stream separato, sicuro chiamarlo qui
   state.isDailySeason = true;
   state.dailySeasonDate = dateStr;
   exitDailyRandomMode(); // dal draft in poi si torna alla vera casualita' — vedi nota di design
@@ -8331,7 +8368,8 @@ function renderDailySeasonHub(){
   </div>
   <div class="wrap">
     <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:16px;">
-    <div class="daily-gp-count" style="text-align:center;font-size:18px;margin-bottom:6px;">${t('daily_gp_count', todaysDailySeasonLength())}</div>
+    <div class="daily-gp-count" style="text-align:center;font-size:18px;margin-bottom:2px;">${t('daily_gp_count', todaysDailySeasonLength())}</div>
+    <div class="daily-reroll-count" style="text-align:center;font-size:14px;margin-bottom:6px;">${t('daily_reroll_count', todaysDailyRerollCount())}</div>
     <div class="daily-countdown" id="dailyHubCountdown" style="font-size:20px;text-align:center;margin-bottom:16px;">--:--:--</div>
     <div class="daily-trophy-row" id="dailyHubTrophyRow" style="justify-content:center;gap:14px;margin-bottom:20px;">${dailyTrophyRowHTML(true)}</div>
     <div class="btnrow" style="flex-direction:column;gap:10px;">
@@ -8372,6 +8410,7 @@ function renderModeSelect(){
       </div>
       <div class="mode-select-bottom-scrim">
         <div class="daily-gp-count">${t('daily_gp_count', todaysDailySeasonLength())}</div>
+        <div class="daily-reroll-count" style="font-size:12px;margin-bottom:4px;">${t('daily_reroll_count', todaysDailyRerollCount())}</div>
         <div class="daily-countdown" id="modeSelectDailyCountdown">--:--:--</div>
         <div class="daily-trophy-row" id="modeSelectDailyTrophyRow">${dailyTrophyRowHTML()}</div>
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_daily_hint')}</div>
