@@ -2202,7 +2202,29 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
 <script src="game.js"></script>
 <script>
 if("serviceWorker" in navigator){
-  window.addEventListener("load", ()=> navigator.serviceWorker.register("sw.js").catch(()=>{}));
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("sw.js").then(reg=>{
+      // V0.9.9.90: i browser controllano se sw.js e' cambiato solo ogni tanto (fino a 24 ore) per
+      // conto proprio — troppo lento per un gioco aggiornato spesso. Forziamo il controllo ogni
+      // volta che l'app torna visibile (riapri l'app, cambi scheda e torni), non solo al primo
+      // caricamento. Segnalato da Gio: "aggiorno aggiorno ma la schermata rimane uguale".
+      document.addEventListener("visibilitychange", ()=>{
+        if(document.visibilityState==="visible") reg.update().catch(()=>{});
+      });
+      // appena un nuovo service worker prende il controllo, la pagina ricarica da sola — l'utente
+      // non deve piu' capire di dover forzare manualmente nulla. Ma solo per un vero AGGIORNAMENTO,
+      // non per la primissima attivazione (altrimenti chi visita il sito la prima volta in assoluto
+      // vedrebbe una ricarica in piu' inutile, dato che nessun service worker controllava ancora).
+      let avevaGiaUnControllerAllInizio = !!navigator.serviceWorker.controller;
+      let ricaricaGiaFatta = false;
+      navigator.serviceWorker.addEventListener("controllerchange", ()=>{
+        if(!avevaGiaUnControllerAllInizio){ avevaGiaUnControllerAllInizio = true; return; }
+        if(ricaricaGiaFatta) return;
+        ricaricaGiaFatta = true;
+        window.location.reload();
+      });
+    }).catch(()=>{});
+  });
 }
 </script>
 </body>
