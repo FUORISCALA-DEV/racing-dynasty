@@ -2203,6 +2203,25 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
   </div>
 </div>
 
+<div id="redeemCodePanel" class="sidebar-settings-overlay" style="display:none;">
+  <div class="sidebar-settings-window">
+    <div class="sidebar-settings-title">
+      <span id="redeemCodeTitle">🎁 Codice Premium</span>
+    </div>
+    <div class="sidebar-settings-body" style="padding:16px;">
+      <div id="redeemCodeMessage" class="dim" style="font-size:14px;line-height:1.5;margin-bottom:14px;"></div>
+      <input type="text" id="redeemCodeInput" maxlength="20" autocomplete="off" spellcheck="false"
+        style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:16px;background:var(--panel2);
+        border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);letter-spacing:0.1em;text-align:center;text-transform:uppercase;">
+      <div id="redeemCodeError" class="dim" style="font-size:12px;color:var(--danger);margin-top:8px;min-height:16px;"></div>
+      <div class="btnrow" style="margin-top:10px;">
+        <button type="button" class="primary" id="redeemCodeSubmitBtn">Riscatta</button>
+        <button type="button" class="ghost" id="redeemCodeCancelBtn">Annulla</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="vendor/supabase.js"></script>
 <script src="game.js"></script>
 <script>
