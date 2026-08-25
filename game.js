@@ -326,7 +326,7 @@ const I18N = {
     premium_choice_message: 'Hai un codice premium ricevuto da uno streamer o da un amico, oppure vuoi procedere con l\'acquisto?',
     premium_choice_code_btn: '🎁 Ho un codice', premium_choice_pay_btn: '💳 Procedi al pagamento', premium_choice_cancel_btn: 'Annulla', redeem_code_message: 'Se hai ricevuto un codice premium, inseriscilo qui sotto.',
     redeem_code_checking: 'Verifica in corso...', redeem_code_invalid: 'Codice non valido o già usato.', redeem_code_error: 'Errore di connessione, riprova.',
-    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`,
+    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`, sl_token_refill_in: (t)=>`Prossimo gettone tra ${t}`,
     tokens_out_title: 'Gettoni esauriti', tokens_out_desc: (len)=>`Hai finito i gettoni gratuiti per la Stagione Scuderia da ${len} gare. Torna più tardi, oppure sblocca tutto senza limiti.`,
     tokens_out_countdown_label: 'Prossima ricarica tra', tokens_out_unlock: 'Diventa Immortale — 3,99€',
     premium_coming_soon_title: 'Sblocco premium', premium_coming_soon_desc: 'Il pagamento vero arriverà a breve — per ora questa parte è ancora in costruzione.',
@@ -657,7 +657,7 @@ const I18N = {
     premium_choice_message: 'Do you have a premium code from a streamer or friend, or would you like to proceed with the purchase?',
     premium_choice_code_btn: '🎁 I have a code', premium_choice_pay_btn: '💳 Proceed to payment', premium_choice_cancel_btn: 'Cancel', redeem_code_message: 'If you received a premium code, enter it below.',
     redeem_code_checking: 'Checking...', redeem_code_invalid: 'Invalid or already used code.', redeem_code_error: 'Connection error, try again.',
-    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`,
+    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`, sl_token_refill_in: (t)=>`Next token in ${t}`,
     tokens_out_title: 'Out of tokens', tokens_out_desc: (len)=>`You've used up your free tokens for the ${len}-race Team Season. Come back later, or unlock everything with no limits.`,
     tokens_out_countdown_label: 'Next refill in', tokens_out_unlock: 'Become Immortal — €3.99',
     premium_coming_soon_title: 'Premium unlock', premium_coming_soon_desc: "Real payment is coming soon — this part is still under construction for now.",
@@ -982,7 +982,7 @@ const I18N = {
     premium_choice_message: '¿Tienes un código premium de un streamer o amigo, o quieres proceder con la compra?',
     premium_choice_code_btn: '🎁 Tengo un código', premium_choice_pay_btn: '💳 Proceder al pago', premium_choice_cancel_btn: 'Cancelar', redeem_code_message: 'Si has recibido un código premium, introdúcelo aquí abajo.',
     redeem_code_checking: 'Comprobando...', redeem_code_invalid: 'Código no válido o ya usado.', redeem_code_error: 'Error de conexión, inténtalo de nuevo.',
-    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`,
+    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`, sl_token_refill_in: (t)=>`Próxima ficha en ${t}`,
     tokens_out_title: 'Fichas agotadas', tokens_out_desc: (len)=>`Has usado tus fichas gratuitas para la Temporada de Escudería de ${len} carreras. Vuelve más tarde, o desbloquea todo sin límites.`,
     tokens_out_countdown_label: 'Próxima recarga en', tokens_out_unlock: 'Hazte Inmortal — 3,99€',
     premium_coming_soon_title: 'Desbloqueo premium', premium_coming_soon_desc: 'El pago real llegará pronto — por ahora esta parte todavía está en construcción.',
@@ -9793,14 +9793,21 @@ function renderDifficulty(){
   bindActions();
 }
 
+let __slTokenCountdownTimer = null;
 function renderSeasonLength(){
   const tokenState = checkAndApplyTokenRefill();
+  const refillMs = getTokenRefillCountdownMs();
+  // V0.9.9.102: timer di ripristino gettoni mostrato DIRETTAMENTE sulla carta, non solo dopo aver
+  // già provato e fallito (schermata "gettoni esauriti") — segnalato da un tester: "manca un timer
+  // del ripristino gettoni sulle card".
+  const countdownHTML = (esaurito, lunghezza) => (!isPremiumUser && esaurito && refillMs>0)
+    ? `<div class="dim mono" style="font-size:10.5px;margin-top:2px;color:var(--amber);" id="slTokenCountdown${lunghezza}">${t('sl_token_refill_in', formatCountdown(refillMs))}</div>` : '';
   const tokenChip10 = isPremiumUser
     ? `<div class="dim mono" style="font-size:11px;color:var(--legendary);margin-top:4px;">${t('sl_unlimited')}</div>`
-    : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t10, FULL_TOKENS.t10)}</div>`;
+    : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t10, FULL_TOKENS.t10)}</div>${countdownHTML(tokenState.t10<=0, 10)}`;
   const tokenChip20 = isPremiumUser
     ? `<div class="dim mono" style="font-size:11px;color:var(--legendary);margin-top:4px;">${t('sl_unlimited')}</div>`
-    : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t20, FULL_TOKENS.t20)}</div>`;
+    : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t20, FULL_TOKENS.t20)}</div>${countdownHTML(tokenState.t20<=0, 20)}`;
   app.innerHTML = `
   <div class="panel">
     <div class="eyebrow">${t('diff_new_career')}</div>
@@ -9851,6 +9858,19 @@ function renderSeasonLength(){
   <div class="btnrow"><button class="ghost" data-action="go-to-mode-select">${t('back_to_mode_select')}</button></div>
   `;
   bindActions();
+  if(!isPremiumUser && (tokenState.t10<=0 || tokenState.t20<=0)){
+    clearInterval(__slTokenCountdownTimer);
+    __slTokenCountdownTimer = setInterval(()=>{
+      const el10 = document.getElementById('slTokenCountdown10');
+      const el20 = document.getElementById('slTokenCountdown20');
+      if(!el10 && !el20){ clearInterval(__slTokenCountdownTimer); return; } // schermata cambiata
+      const msOra = getTokenRefillCountdownMs();
+      if(msOra<=0){ if(state.phase==='season-length') render(); return; } // ripristinati, ridisegna con i gettoni pieni
+      const testo = t('sl_token_refill_in', formatCountdown(msOra));
+      if(el10) el10.textContent = testo;
+      if(el20) el20.textContent = testo;
+    }, 1000);
+  }
 }
 
 function statBar(label, val){
@@ -12753,6 +12773,10 @@ function openRedeemCodePanel(){
     try{
       const { data, error } = await supabaseClient.functions.invoke('redeem-premium-code', { body:{ code } });
       if(error || !data || !data.ok){
+        // V0.9.9.102: log dettagliato per poter diagnosticare — un tester ha segnalato "i codici
+        // amici non vanno" ma senza questo non e' possibile distinguere un vero codice sbagliato
+        // da un problema di configurazione (funzione non pubblicata, autenticazione, rete...).
+        console.warn('Riscatto codice premium non riuscito:', { error, data, code });
         errorEl.textContent = t('redeem_code_invalid');
         submitBtn.disabled = false;
         return;
