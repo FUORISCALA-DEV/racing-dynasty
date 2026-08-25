@@ -204,9 +204,10 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .mode-select-bg-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 15%; z-index:0; }
 .mode-select-top{
   position:relative; z-index:2; padding:12px 12px 20px;
-  background:linear-gradient(to bottom, rgba(8,8,11,0.85) 0%, rgba(8,8,11,0.55) 55%, transparent 100%);
+  background:linear-gradient(to bottom, rgba(8,8,11,0.92) 0%, rgba(8,8,11,0.8) 70%, rgba(8,8,11,0.3) 90%, transparent 100%);
 }
 .mode-select-top .rarity-tag{ background:rgba(8,8,11,0.9); box-shadow:0 1px 4px rgba(0,0,0,0.4); }
+.daily-top-stats{ margin-top:8px; text-shadow:0 1px 3px rgba(0,0,0,0.7); display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
 .mode-select-bottom-scrim{
   position:absolute; left:0; right:0; bottom:0; z-index:2; padding:28px 14px 14px;
   background:linear-gradient(to top, rgba(8,8,11,0.97) 0%, rgba(8,8,11,0.88) 45%, rgba(8,8,11,0.35) 80%, transparent 100%);
@@ -256,8 +257,9 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 /* V0.9.9.83: countdown e riga trofei nella carta Daily Season */
 .daily-countdown{ font-family:var(--font-mono); font-size:15px; font-weight:700; color:var(--amber); letter-spacing:0.04em; transition:color 0.3s; }
 .daily-countdown.daily-countdown-done{ color:var(--dim); }
-.daily-gp-count{ font-family:var(--font-mono); font-weight:700; color:var(--text); letter-spacing:0.02em; }
-.daily-reroll-count{ font-family:var(--font-mono); color:var(--dim); }
+.daily-gp-count{ font-family:var(--font-mono); font-weight:700; color:var(--text); letter-spacing:0.02em; font-size:13px; }
+.daily-reroll-count{ font-family:var(--font-mono); color:var(--dim); font-size:13px; }
+.daily-reroll-count::before{ content:'·'; margin-right:8px; color:var(--dim); }
 .daily-countdown-row{ display:flex; align-items:center; gap:10px; }
 .daily-status-badge{ display:flex; gap:1px; padding:3px 7px; border-radius:20px; background:rgba(255,255,255,0.08); }
 .daily-status-badge.daily-status-gold{ background:rgba(255,200,60,0.16); }

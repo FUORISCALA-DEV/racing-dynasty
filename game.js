@@ -8445,11 +8445,14 @@ function renderModeSelect(){
       ${isDailySeasonUnlocked() ? `<img class="mode-select-bg-img" src="assets/mode-select/daily-season.webp" alt="">` : ''}
       <div class="mode-select-top">
         <span class="rarity-tag" data-rarity="Immortal" style="font-size:11.5px;"><img class=ico src=assets/icons/lightning.png> ${t('mode_select_daily')}</span>
+        ${isDailySeasonUnlocked() ? `
+        <div class="daily-top-stats">
+          <span class="daily-gp-count">${t('daily_gp_count', todaysDailySeasonLength())}</span>
+          <span class="daily-reroll-count">${t('daily_reroll_count', todaysDailyRerollCount())}</span>
+        </div>` : ''}
       </div>
       ${isDailySeasonUnlocked() ? `
       <div class="mode-select-bottom-scrim">
-        <div class="daily-gp-count">${t('daily_gp_count', todaysDailySeasonLength())}</div>
-        <div class="daily-reroll-count" style="font-size:12px;margin-bottom:4px;">${t('daily_reroll_count', todaysDailyRerollCount())}</div>
         <div class="daily-countdown-row">
           <div class="daily-countdown" id="modeSelectDailyCountdown">--:--:--</div>
           <div id="modeSelectDailyStatusBadge">${dailyStatusBadgeHTML()}</div>
