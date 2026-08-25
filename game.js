@@ -321,6 +321,7 @@ const I18N = {
     premium_need_login_title: 'Serve un account', premium_need_login_desc: 'Per sbloccare il premium serve prima accedere con Google — lo colleghiamo al tuo acquisto. Vuoi accedere ora?',
     premium_checkout_error_title: 'Qualcosa non ha funzionato', premium_checkout_error_desc: 'Non siamo riusciti ad aprire la pagina di pagamento. Riprova tra poco.',
     premium_unlocked_title: '<img class=ico src=assets/icons/party.png> Premium sbloccato!', premium_unlocked_desc: 'Pagamento andato a buon fine — hai tutto illimitato, per sempre. Grazie!',
+    premium_thankyou_title: 'Grazie per aver acquistato Racing Dynasty', premium_thankyou_desc: 'Sei ufficialmente Immortale. Nessun limite giornaliero, Daily Season senza restrizioni, e tutto quello che sbloccherai in futuro — per sempre.', premium_thankyou_continue: 'Torna in pista →',
     sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`,
     tokens_out_title: 'Gettoni esauriti', tokens_out_desc: (len)=>`Hai finito i gettoni gratuiti per la Stagione Scuderia da ${len} gare. Torna più tardi, oppure sblocca tutto senza limiti.`,
     tokens_out_countdown_label: 'Prossima ricarica tra', tokens_out_unlock: 'Diventa Immortale — 3,99€',
@@ -647,6 +648,7 @@ const I18N = {
     premium_need_login_title: 'Account required', premium_need_login_desc: 'To unlock premium you need to sign in with Google first — we link it to your purchase. Sign in now?',
     premium_checkout_error_title: 'Something went wrong', premium_checkout_error_desc: "We couldn't open the payment page. Please try again shortly.",
     premium_unlocked_title: '<img class=ico src=assets/icons/party.png> Premium unlocked!', premium_unlocked_desc: 'Payment successful — you now have everything unlimited, forever. Thank you!',
+    premium_thankyou_title: 'Thank you for purchasing Racing Dynasty', premium_thankyou_desc: "You're officially Immortal. No more daily limits, unlimited Daily Season, and everything we add in the future — forever.", premium_thankyou_continue: 'Back to the track →',
     sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`,
     tokens_out_title: 'Out of tokens', tokens_out_desc: (len)=>`You've used up your free tokens for the ${len}-race Team Season. Come back later, or unlock everything with no limits.`,
     tokens_out_countdown_label: 'Next refill in', tokens_out_unlock: 'Become Immortal — €3.99',
@@ -967,6 +969,7 @@ const I18N = {
     premium_need_login_title: 'Se necesita una cuenta', premium_need_login_desc: 'Para desbloquear el premium primero hay que iniciar sesión con Google — lo vinculamos a tu compra. ¿Iniciar sesión ahora?',
     premium_checkout_error_title: 'Algo no ha funcionado', premium_checkout_error_desc: 'No hemos podido abrir la página de pago. Vuelve a intentarlo en breve.',
     premium_unlocked_title: '<img class=ico src=assets/icons/party.png> ¡Premium desbloqueado!', premium_unlocked_desc: 'Pago realizado con éxito — ahora tienes todo ilimitado, para siempre. ¡Gracias!',
+    premium_thankyou_title: 'Gracias por comprar Racing Dynasty', premium_thankyou_desc: 'Ahora eres oficialmente Inmortal. Sin límites diarios, Daily Season sin restricciones, y todo lo que añadamos en el futuro — para siempre.', premium_thankyou_continue: 'Vuelve a la pista →',
     sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`,
     tokens_out_title: 'Fichas agotadas', tokens_out_desc: (len)=>`Has usado tus fichas gratuitas para la Temporada de Escudería de ${len} carreras. Vuelve más tarde, o desbloquea todo sin límites.`,
     tokens_out_countdown_label: 'Próxima recarga en', tokens_out_unlock: 'Hazte Inmortal — 3,99€',
@@ -8153,6 +8156,7 @@ function renderInner(){
   if(state.phase==='daily-nickname-setup') return renderDailyNicknameSetup();
   if(state.phase==='daily-season-hub') return renderDailySeasonHub();
   if(state.phase==='daily-leaderboard') return renderDailyLeaderboard();
+  if(state.phase==='premium-thank-you') return renderPremiumThankYou();
   if(state.phase==='tutorial-draft') return renderTutorialDraft();
   if(state.phase==='tutorial-goat-reveal') return renderTutorialGoatReveal();
   if(state.phase==='tutorial-sponsor') return renderTutorialSponsor();
@@ -9214,9 +9218,10 @@ async function startPremiumCheckout(){
   }
 }
 
-// V0.9.8.5: al ritorno da Stripe (dopo il pagamento), l'indirizzo contiene ?premium_success=1 o
+// V0.9.9.98: al ritorno da Stripe (dopo il pagamento), l'indirizzo contiene ?premium_success=1 o
 // ?premium_cancelled=1. Puliamo l'indirizzo e, se e' andata bene, ricontrolliamo lo stato premium
-// (con un piccolo ritardo: il webhook di conferma potrebbe metterci un attimo ad arrivare).
+// (con un piccolo ritardo: il webhook di conferma potrebbe metterci un attimo ad arrivare) — solo
+// quando e' davvero confermato mostriamo la schermata di ringraziamento vera, non prima.
 function handlePremiumCheckoutReturn(){
   const params = new URLSearchParams(window.location.search);
   if(params.has('premium_success')){
@@ -9224,16 +9229,33 @@ function handlePremiumCheckoutReturn(){
     setTimeout(async ()=>{
       await fetchPremiumStatus();
       if(isPremiumUser){
-        gameConfirm(t('premium_unlocked_desc'), ()=>{}, t('premium_unlocked_title'));
+        state.premiumThankYouResumePhase = state.phase;
+        state.phase = 'premium-thank-you';
+        render();
       } else {
         // il webhook a volte impiega qualche secondo in piu': un secondo tentativo
-        setTimeout(async ()=>{ await fetchPremiumStatus(); render(); }, 4000);
+        setTimeout(async ()=>{
+          await fetchPremiumStatus();
+          if(isPremiumUser){ state.premiumThankYouResumePhase = state.phase; state.phase = 'premium-thank-you'; }
+          render();
+        }, 4000);
       }
-      render();
     }, 1500);
   } else if(params.has('premium_cancelled')){
     window.history.replaceState({}, '', window.location.pathname);
   }
+}
+function renderPremiumThankYou(){
+  app.innerHTML = `
+  <div class="wrap" style="padding:0;">
+    <img src="assets/premium/thank-you.webp" alt="" style="width:100%;height:60vh;object-fit:cover;object-position:top;display:block;">
+    <div style="padding:24px;text-align:center;">
+      <h2 class="hdr" style="font-size:26px;margin-bottom:10px;">${t('premium_thankyou_title')}</h2>
+      <div class="dim" style="font-size:14.5px;line-height:1.6;margin-bottom:24px;">${t('premium_thankyou_desc')}</div>
+      <button class="primary" data-action="premium-thankyou-continue" style="width:100%;">${t('premium_thankyou_continue')}</button>
+    </div>
+  </div>`;
+  bindActions();
 }
 
 const CLOUD_SAVE_TABLE = 'saves';
@@ -9310,7 +9332,7 @@ async function pullSaveFromCloud(){
     }
   }catch(e){ console.warn('Caricamento cloud non riuscito:', e); }
 }
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial','tutorial-first-launch-prompt','tutorial-intro','tutorial-draft','tutorial-goat-reveal','tutorial-sponsor','tutorial-complete','daily-nickname-setup','daily-season-hub','daily-leaderboard']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial','tutorial-first-launch-prompt','tutorial-intro','tutorial-draft','tutorial-goat-reveal','tutorial-sponsor','tutorial-complete','daily-nickname-setup','daily-season-hub','daily-leaderboard','premium-thank-you']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -12189,6 +12211,11 @@ function onAction(e){
     } else {
       state.tutorialElioMsg = state.tutorialGoatFound ? t('tutorial_elio_rejection') : t('tutorial_ingegnere_rejection');
     }
+    render();
+  }
+  else if(action==='premium-thankyou-continue'){
+    state.phase = state.premiumThankYouResumePhase || 'title';
+    state.premiumThankYouResumePhase = null;
     render();
   }
   else if(action==='daily-locked-info'){
