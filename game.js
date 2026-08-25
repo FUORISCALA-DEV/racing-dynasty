@@ -597,7 +597,7 @@ const I18N = {
     daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
     daily_trophy_podium: 'Sali sul podio oggi', daily_trophy_win: 'Vinci la Daily di oggi',
-    daily_countdown_label: (t)=>`Prossima Daily tra ${t}`, daily_countdown_label_todo: (t)=>`Hai ancora ${t} per tentare la run`, daily_locked_trophies: (n)=> n===1 ? 'Ti manca 1 trofeo vinto per sbloccare la Daily Season' : `Ti mancano ${n} trofei vinti per sbloccare la Daily Season`, daily_locked_doppietta: 'Ti serve anche una Stagione Scuderia vinta sia come pilota che come costruttore (anche insieme) per sbloccare la Daily Season',
+    daily_countdown_label: (t)=>`Prossima Daily tra ${t}`, daily_countdown_label_todo: (t)=>`Hai ancora ${t} per tentare la run`, daily_locked_trophies: (n)=> n===1 ? 'Ti manca 1 trofeo vinto per sbloccare la Daily Season' : `Ti mancano ${n} trofei vinti per sbloccare la Daily Season`, daily_locked_doppietta: 'Ti serve anche una Stagione Scuderia vinta sia come pilota che come costruttore (anche insieme) per sbloccare la Daily Season', daily_locked_titles_v2: 'Ti serve anche aver vinto sia il titolo Costruttori che il titolo Piloti in una Stagione Scuderia (anche in stagioni diverse)', daily_locked_row_constructor: 'Titolo Costruttori', daily_locked_row_driver: 'Titolo Piloti', daily_locked_tap_hint: 'Tocca per i dettagli',
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per giocarla senza limiti.',
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
@@ -924,7 +924,7 @@ const I18N = {
     daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
     daily_trophy_podium: 'Reach the podium today', daily_trophy_win: "Win today's Daily",
-    daily_countdown_label: (t)=>`Next Daily in ${t}`, daily_countdown_label_todo: (t)=>`You still have ${t} to attempt the run`, daily_locked_trophies: (n)=> n===1 ? 'You need 1 more trophy to unlock Daily Season' : `You need ${n} more trophies to unlock Daily Season`, daily_locked_doppietta: 'You also need a Team Season won as both driver and constructor champion (can be together) to unlock Daily Season',
+    daily_countdown_label: (t)=>`Next Daily in ${t}`, daily_countdown_label_todo: (t)=>`You still have ${t} to attempt the run`, daily_locked_trophies: (n)=> n===1 ? 'You need 1 more trophy to unlock Daily Season' : `You need ${n} more trophies to unlock Daily Season`, daily_locked_doppietta: 'You also need a Team Season won as both driver and constructor champion (can be together) to unlock Daily Season', daily_locked_titles_v2: 'You also need to have won both the Constructors title and the Drivers title in a Team Season (can be different seasons)', daily_locked_row_constructor: "Constructors' title", daily_locked_row_driver: "Drivers' title", daily_locked_tap_hint: 'Tap for details',
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium to play it without limits.',
     daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard",
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
@@ -1247,7 +1247,7 @@ const I18N = {
     daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
     daily_trophy_podium: 'Sube al podio hoy', daily_trophy_win: 'Gana la Daily de hoy',
-    daily_countdown_label: (t)=>`Próxima Daily en ${t}`, daily_countdown_label_todo: (t)=>`Todavía tienes ${t} para intentar la run`, daily_locked_trophies: (n)=> n===1 ? 'Te falta 1 trofeo para desbloquear la Daily Season' : `Te faltan ${n} trofeos para desbloquear la Daily Season`, daily_locked_doppietta: 'También necesitas una Temporada de Escudería ganada como piloto y como constructor (pueden ser juntos) para desbloquear la Daily Season',
+    daily_countdown_label: (t)=>`Próxima Daily en ${t}`, daily_countdown_label_todo: (t)=>`Todavía tienes ${t} para intentar la run`, daily_locked_trophies: (n)=> n===1 ? 'Te falta 1 trofeo para desbloquear la Daily Season' : `Te faltan ${n} trofeos para desbloquear la Daily Season`, daily_locked_doppietta: 'También necesitas una Temporada de Escudería ganada como piloto y como constructor (pueden ser juntos) para desbloquear la Daily Season', daily_locked_titles_v2: 'También necesitas haber ganado tanto el título de Constructores como el de Pilotos en una Temporada de Escudería (pueden ser temporadas distintas)', daily_locked_row_constructor: 'Título Constructores', daily_locked_row_driver: 'Título Pilotos', daily_locked_tap_hint: 'Toca para más detalles',
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para jugarla sin límites.',
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
@@ -8452,7 +8452,7 @@ function renderModeSelect(){
       </div>
     </div>
     <div class="card pickable mode-select-card ${isDailySeasonUnlocked()?'':'mode-select-card-locked'}" data-rarity="Rare" data-action="${isDailySeasonUnlocked()?'open-daily-season-hub':'daily-locked-info'}">
-      ${isDailySeasonUnlocked() ? `<img class="mode-select-bg-img" src="assets/mode-select/daily-season.webp" alt="">` : ''}
+      <img class="mode-select-bg-img ${isDailySeasonUnlocked()?'':'mode-select-bg-img-locked'}" src="assets/mode-select/daily-season.webp" alt="">
       <div class="mode-select-top">
         <span class="rarity-tag" data-rarity="Immortal" style="font-size:11.5px;"><img class=ico src=assets/icons/lightning.png> ${t('mode_select_daily')}</span>
         ${isDailySeasonUnlocked() ? `
@@ -8469,7 +8469,12 @@ function renderModeSelect(){
         </div>
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_daily_hint')}</div>
       </div>` : `
-      <div class="mode-select-locked-center">${dailySeasonLockedMessageHTML()}</div>`}
+      <div class="mode-select-bottom-scrim daily-locked-quick-scrim">
+        <div class="daily-locked-quick-row"><span class="daily-locked-quick-icon">🏆</span><span>${dailySeasonTrophiesUnlockedCount()}/${DAILY_UNLOCK_TROPHY_COUNT}</span></div>
+        <div class="daily-locked-quick-row"><span class="daily-locked-quick-icon">${hasWonConstructorTitle()?'✅':'❌'}</span><span data-lang-text="daily_locked_row_constructor">${t('daily_locked_row_constructor')}</span></div>
+        <div class="daily-locked-quick-row"><span class="daily-locked-quick-icon">${hasWonDriverTitle()?'✅':'❌'}</span><span>${t('daily_locked_row_driver')}</span></div>
+        <div class="card-tap-hint" style="font-size:11px;margin-top:6px;">${t('daily_locked_tap_hint')}</div>
+      </div>`}
     </div>
   </div>
   `;
@@ -9041,6 +9046,18 @@ function checkSeasonEndAchievements(){
 
   // stagione / dominio
   if(isDriverChamp && isConstructorChamp) unlockAchievement('doppietta-perfetta');
+  // V0.9.9.96: DAILY SEASON — tracciamento separato dei due titoli, indipendenti tra loro (non serve
+  // più vincerli nella stessa stagione, come chiarito da Gio: "posso farle anche tutte e due insieme"
+  // implicava che farle insieme fosse un modo IN PIÙ, non l'unico). Usato sia per lo sblocco della
+  // Daily Season sia per i due indicatori rapidi mostrati sulla carta.
+  if(!state.isTutorialRun && !state.isDailySeason){
+    if(isConstructorChamp && !achievementData.everWonConstructorTitle){
+      achievementData.everWonConstructorTitle = true; saveAchievementData();
+    }
+    if(isDriverChamp && !achievementData.everWonDriverTitle){
+      achievementData.everWonDriverTitle = true; saveAchievementData();
+    }
+  }
   if(wonEveryRace) unlockAchievement('dominio-assoluto');
   if(isConstructorChamp && typeof startRating==='number' && startRating<55) unlockAchievement('dal-nulla-all-olimpo');
   if(isConstructorChamp && state.budget < 5) unlockAchievement('ultimo-centesimo');
@@ -9124,20 +9141,20 @@ let isPremiumUser = false; // aggiornato dopo il login, leggendo la tabella 'pro
 // può mai essere vinto DENTRO una Daily, quindi la condizione resta sempre "stagione scuderia vera".
 const DAILY_UNLOCK_TROPHY_COUNT = 10;
 function dailySeasonTrophiesUnlockedCount(){ return achievementData.unlockedIds.length; }
+function hasWonConstructorTitle(){ return !!achievementData.everWonConstructorTitle || achievementData.unlockedIds.includes('doppietta-perfetta'); }
+function hasWonDriverTitle(){ return !!achievementData.everWonDriverTitle || achievementData.unlockedIds.includes('doppietta-perfetta'); }
 function isDailySeasonUnlocked(){
   return dailySeasonTrophiesUnlockedCount() >= DAILY_UNLOCK_TROPHY_COUNT
-    && achievementData.unlockedIds.includes('doppietta-perfetta');
+    && hasWonConstructorTitle() && hasWonDriverTitle();
 }
 function dailySeasonLockedMessageHTML(){
   const missingTrophies = Math.max(0, DAILY_UNLOCK_TROPHY_COUNT - dailySeasonTrophiesUnlockedCount());
-  const missingDoppietta = !achievementData.unlockedIds.includes('doppietta-perfetta');
-  if(missingTrophies>0 && missingDoppietta){
-    return `<div>${t('daily_locked_trophies', missingTrophies)}</div><div style="margin-top:8px;">${t('daily_locked_doppietta')}</div>`;
-  } else if(missingTrophies>0){
-    return t('daily_locked_trophies', missingTrophies);
-  } else {
-    return t('daily_locked_doppietta');
-  }
+  const missingConstructor = !hasWonConstructorTitle();
+  const missingDriver = !hasWonDriverTitle();
+  const parti = [];
+  if(missingTrophies>0) parti.push(t('daily_locked_trophies', missingTrophies));
+  if(missingConstructor || missingDriver) parti.push(t('daily_locked_titles_v2'));
+  return parti.map(p=>`<div style="margin-top:8px;">${p}</div>`).join('');
 }
 
 function getTokenState(){

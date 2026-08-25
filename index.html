@@ -267,9 +267,12 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .daily-status-plain .daily-check-mark path{ stroke:#c9c9d0; }
 .daily-status-gold .daily-check-mark path{ stroke:#ffc83c; }
 .daily-status-gold .daily-check-mark:nth-child(2){ margin-left:-9px; }
-.mode-select-card-locked{ background:#1a1c20; display:flex; flex-direction:column; }
-.mode-select-card-locked .mode-select-top{ position:static; }
-.mode-select-locked-center{ flex:1; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px; color:var(--dim); font-size:13px; line-height:1.5; }
+.mode-select-card-locked{ display:flex; flex-direction:column; }
+.mode-select-card-locked .mode-select-top{ position:relative; }
+.mode-select-bg-img-locked{ filter:grayscale(1) brightness(0.75); }
+.daily-locked-quick-scrim{ display:flex; flex-direction:column; gap:9px; }
+.daily-locked-quick-row{ display:flex; align-items:center; gap:9px; font-size:13.5px; font-weight:700; color:var(--text); }
+.daily-locked-quick-icon{ font-size:15px; width:20px; text-align:center; flex-shrink:0; }
 .daily-leaderboard-row{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-bottom:1px solid var(--line); }
 .daily-leaderboard-row-mine{ background:rgba(255,106,26,0.1); border-radius:8px; }
 .daily-leaderboard-rank{ font-family:var(--font-mono); font-weight:700; width:24px; text-align:right; color:var(--dim); }
