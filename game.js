@@ -6099,7 +6099,15 @@ function resolveLiveDecision(choiceKey){
       let readLen = 0;
       slotKeys.forEach(slotKey=>{
         const { bucketIdx, buckets, shift, timeBonus } = outcomes[slotKey];
-        const label = shift!==0 ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift))
+        // V0.9.9.102: BUG CORRETTO — il segno di "shift" ha convenzione OPPOSTA tra scelte
+        // narrative (bucket: negativo=guadagno) e scelte a meccanica reale (positivo=guadagno,
+        // stabilito quando ho corretto il calcolo del risultato vero). Usare qui shift<0 come
+        // controllo universale era sbagliato per le scelte a meccanica reale, causando testo
+        // "guadagni"/"perdi" scambiato rispetto al colore vero (segnalato da un tester con
+        // screenshot). Corretto derivando guadagno/perdita dall'etichetta del bucket GIA' scelto
+        // correttamente (buckets[bucketIdx].label), sempre coerente qualunque sia la provenienza.
+        const eraDavveroGuadagno = buckets[bucketIdx].label.startsWith('gain');
+        const label = shift!==0 ? t(eraDavveroGuadagno ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift))
           : (timeBonus ? t(timeBonus<0 ? 'bkt_gain_seconds' : 'bkt_lose_seconds', Math.abs(timeBonus).toFixed(1)) : t('bkt_hold'));
         readLen += label.length;
       });
@@ -6366,7 +6374,7 @@ function liveDecisionRevealHTML(){
         stateCls = i===bucketIdx ? 'reveal-winner' : 'reveal-dimmed';
         // V0.9.7.9.26: sulla chip vincente mostriamo il numero ESATTO uscito (es. "Guadagni 2
         // posizioni"), non piu' il range generico ("1-2") — quello serve solo prima di sapere.
-        text = (i===bucketIdx) ? (shift!==0 ? t(shift<0 ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift))
+        text = (i===bucketIdx) ? (shift!==0 ? t(buckets[bucketIdx].label.startsWith('gain') ? 'bkt_gain_exact' : 'bkt_lose_exact', Math.abs(shift))
           : (timeBonus ? t(timeBonus<0 ? 'bkt_gain_seconds' : 'bkt_lose_seconds', Math.abs(timeBonus).toFixed(1)) : t('bkt_hold'))) : t('bkt_'+b.label);
       } else {
         stateCls = i===activeIdx ? 'reveal-active' : 'reveal-idle';
