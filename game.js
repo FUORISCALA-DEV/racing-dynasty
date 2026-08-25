@@ -322,7 +322,9 @@ const I18N = {
     premium_checkout_error_title: 'Qualcosa non ha funzionato', premium_checkout_error_desc: 'Non siamo riusciti ad aprire la pagina di pagamento. Riprova tra poco.',
     premium_unlocked_title: '<img class=ico src=assets/icons/party.png> Premium sbloccato!', premium_unlocked_desc: 'Pagamento andato a buon fine — hai tutto illimitato, per sempre. Grazie!',
     premium_thankyou_title: 'Grazie per aver acquistato Racing Dynasty', premium_thankyou_desc: 'Sei ufficialmente Immortale. Nessun limite giornaliero, Daily Season senza restrizioni, e tutto quello che sbloccherai in futuro — per sempre.', premium_thankyou_continue: 'Torna in pista →',
-    redeem_code_menu_item: 'Ho un codice premium', redeem_code_message: 'Se hai ricevuto un codice premium, inseriscilo qui sotto.',
+    redeem_code_menu_item: 'Ho un codice premium',
+    premium_choice_message: 'Hai un codice premium ricevuto da uno streamer o da un amico, oppure vuoi procedere con l\'acquisto?',
+    premium_choice_code_btn: '🎁 Ho un codice', premium_choice_pay_btn: '💳 Procedi al pagamento', premium_choice_cancel_btn: 'Annulla', redeem_code_message: 'Se hai ricevuto un codice premium, inseriscilo qui sotto.',
     redeem_code_checking: 'Verifica in corso...', redeem_code_invalid: 'Codice non valido o già usato.', redeem_code_error: 'Errore di connessione, riprova.',
     sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`,
     tokens_out_title: 'Gettoni esauriti', tokens_out_desc: (len)=>`Hai finito i gettoni gratuiti per la Stagione Scuderia da ${len} gare. Torna più tardi, oppure sblocca tutto senza limiti.`,
@@ -651,7 +653,9 @@ const I18N = {
     premium_checkout_error_title: 'Something went wrong', premium_checkout_error_desc: "We couldn't open the payment page. Please try again shortly.",
     premium_unlocked_title: '<img class=ico src=assets/icons/party.png> Premium unlocked!', premium_unlocked_desc: 'Payment successful — you now have everything unlimited, forever. Thank you!',
     premium_thankyou_title: 'Thank you for purchasing Racing Dynasty', premium_thankyou_desc: "You're officially Immortal. No more daily limits, unlimited Daily Season, and everything we add in the future — forever.", premium_thankyou_continue: 'Back to the track →',
-    redeem_code_menu_item: 'I have a premium code', redeem_code_message: 'If you received a premium code, enter it below.',
+    redeem_code_menu_item: 'I have a premium code',
+    premium_choice_message: 'Do you have a premium code from a streamer or friend, or would you like to proceed with the purchase?',
+    premium_choice_code_btn: '🎁 I have a code', premium_choice_pay_btn: '💳 Proceed to payment', premium_choice_cancel_btn: 'Cancel', redeem_code_message: 'If you received a premium code, enter it below.',
     redeem_code_checking: 'Checking...', redeem_code_invalid: 'Invalid or already used code.', redeem_code_error: 'Connection error, try again.',
     sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`,
     tokens_out_title: 'Out of tokens', tokens_out_desc: (len)=>`You've used up your free tokens for the ${len}-race Team Season. Come back later, or unlock everything with no limits.`,
@@ -974,7 +978,9 @@ const I18N = {
     premium_checkout_error_title: 'Algo no ha funcionado', premium_checkout_error_desc: 'No hemos podido abrir la página de pago. Vuelve a intentarlo en breve.',
     premium_unlocked_title: '<img class=ico src=assets/icons/party.png> ¡Premium desbloqueado!', premium_unlocked_desc: 'Pago realizado con éxito — ahora tienes todo ilimitado, para siempre. ¡Gracias!',
     premium_thankyou_title: 'Gracias por comprar Racing Dynasty', premium_thankyou_desc: 'Ahora eres oficialmente Inmortal. Sin límites diarios, Daily Season sin restricciones, y todo lo que añadamos en el futuro — para siempre.', premium_thankyou_continue: 'Vuelve a la pista →',
-    redeem_code_menu_item: 'Tengo un código premium', redeem_code_message: 'Si has recibido un código premium, introdúcelo aquí abajo.',
+    redeem_code_menu_item: 'Tengo un código premium',
+    premium_choice_message: '¿Tienes un código premium de un streamer o amigo, o quieres proceder con la compra?',
+    premium_choice_code_btn: '🎁 Tengo un código', premium_choice_pay_btn: '💳 Proceder al pago', premium_choice_cancel_btn: 'Cancelar', redeem_code_message: 'Si has recibido un código premium, introdúcelo aquí abajo.',
     redeem_code_checking: 'Comprobando...', redeem_code_invalid: 'Código no válido o ya usado.', redeem_code_error: 'Error de conexión, inténtalo de nuevo.',
     sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`,
     tokens_out_title: 'Fichas agotadas', tokens_out_desc: (len)=>`Has usado tus fichas gratuitas para la Temporada de Escudería de ${len} carreras. Vuelve más tarde, o desbloquea todo sin límites.`,
@@ -12164,7 +12170,7 @@ function onAction(e){
   else if(action==='sign-in-google'){ signInWithGoogle(); }
   else if(action==='sign-out-user'){ signOutUser(); }
   else if(action==='unlock-premium-placeholder'){
-    startPremiumCheckout();
+    openPremiumChoicePanel();
   }
   else if(action==='request-password-gate'){
     openPasswordGate(el.dataset.gateFor);
@@ -12687,6 +12693,31 @@ function proceedToGatedContent(target){
 // V0.9.9.99: riscatto codici premium gratuiti (per amici/streamer) — chiama la funzione server
 // dedicata (redeem-premium-code), mai una verifica lato client: il codice va controllato e
 // consumato in modo sicuro, altrimenti basterebbe leggere il codice sorgente per trovarne uno.
+// V0.9.9.101: prima di andare dritti su Stripe, mostriamo una scelta — richiesto da Gio: chi ha
+// un codice gratuito non deve rischiare di pagare per sbaglio cliccando "Diventa Immortale".
+function openPremiumChoicePanel(){
+  document.getElementById('premiumChoiceMessage').textContent = t('premium_choice_message');
+  document.getElementById('premiumChoiceCodeBtn').textContent = t('premium_choice_code_btn');
+  document.getElementById('premiumChoicePayBtn').textContent = t('premium_choice_pay_btn');
+  document.getElementById('premiumChoiceCancelBtn').textContent = t('premium_choice_cancel_btn');
+  const panel = document.getElementById('premiumChoicePanel');
+  const codeBtn = document.getElementById('premiumChoiceCodeBtn');
+  const payBtn = document.getElementById('premiumChoicePayBtn');
+  const cancelBtn = document.getElementById('premiumChoiceCancelBtn');
+  function cleanup(){
+    panel.style.display = 'none';
+    codeBtn.removeEventListener('click', onCode);
+    payBtn.removeEventListener('click', onPay);
+    cancelBtn.removeEventListener('click', onCancel);
+  }
+  function onCode(){ cleanup(); openRedeemCodePanel(); }
+  function onPay(){ cleanup(); startPremiumCheckout(); }
+  function onCancel(){ cleanup(); }
+  codeBtn.addEventListener('click', onCode);
+  payBtn.addEventListener('click', onPay);
+  cancelBtn.addEventListener('click', onCancel);
+  panel.style.display = 'flex';
+}
 function openRedeemCodePanel(){
   document.getElementById('redeemCodeMessage').textContent = t('redeem_code_message');
   document.getElementById('redeemCodeInput').value = '';
@@ -12983,7 +13014,7 @@ function openSettings(){
   if(unlockPremiumBtn) unlockPremiumBtn.addEventListener('click', ()=>{
     closeSettingsPanel();
     closeMenuPanel();
-    startPremiumCheckout();
+    openPremiumChoicePanel();
   });
   const redeemCodeBtn = document.querySelector('[data-action="open-redeem-code"]');
   if(redeemCodeBtn) redeemCodeBtn.addEventListener('click', ()=>{

@@ -2225,6 +2225,22 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
   </div>
 </div>
 
+<div id="premiumChoicePanel" class="sidebar-settings-overlay" style="display:none;">
+  <div class="sidebar-settings-window">
+    <div class="sidebar-settings-title">
+      <span><img class=ico src=assets/icons/sparkles.png> <span id="premiumChoiceTitle">Diventa Immortale</span></span>
+    </div>
+    <div class="sidebar-settings-body" style="padding:16px;">
+      <div id="premiumChoiceMessage" class="dim" style="font-size:14px;line-height:1.5;margin-bottom:16px;"></div>
+      <div class="btnrow" style="flex-direction:column;gap:10px;">
+        <button type="button" class="ghost" id="premiumChoiceCodeBtn" style="width:100%;"></button>
+        <button type="button" class="primary" id="premiumChoicePayBtn" style="width:100%;"></button>
+        <button type="button" class="ghost" id="premiumChoiceCancelBtn" style="width:100%;"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="vendor/supabase.js"></script>
 <script src="game.js"></script>
 <script>
