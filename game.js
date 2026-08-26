@@ -8599,8 +8599,8 @@ async function loadAndRenderDailyLeaderboard(tab){
       rows = [...(data||[]), ...bot].sort((a,b)=> computeDailyFinalScore(b) - computeDailyFinalScore(a));
     } else {
       const { data, error } = await supabaseClient.from('daily_weighted_leaderboard_view')
-        .select('user_id, nickname, flag_code, giorni_giocati, punti_medi, budget_medio, componenti_medi')
-        .order('punti_medi', { ascending:false }).order('budget_medio', { ascending:false }).order('componenti_medi', { ascending:false });
+        .select('user_id, nickname, flag_code, giorni_giocati, rating_medio')
+        .order('rating_medio', { ascending:false });
       if(error) throw error;
       rows = (data||[]);
     }
@@ -8617,7 +8617,7 @@ async function loadAndRenderDailyLeaderboard(tab){
       const mio = currentUser && r.user_id===currentUser.id;
       const statoText = isDettagliata
         ? computeDailyFinalScore(r).toLocaleString('it-IT')
-        : `${r.punti_medi.toFixed(1)} pt medi · ${r.giorni_giocati}g`;
+        : `${Math.round(r.rating_medio).toLocaleString('it-IT')} · ${r.giorni_giocati}g`;
       const clickAttr = isDettagliata ? `data-action="toggle-daily-row-detail" data-row-idx="${i}"` : '';
       // V0.9.9.111: più risalto allo score (non più "dim", ora grassetto e colorato), coccarda per
       // i primi 3, sfondo distinto per la top 10 — richiesto da Gio dopo i test dal vivo.
@@ -11804,7 +11804,7 @@ async function buildShareCardCanvas(){
     if(currentUser && supabaseClient){
       try{
         const { data } = await supabaseClient.from('daily_weighted_leaderboard_view')
-          .select('user_id').order('punti_medi', { ascending:false }).order('budget_medio', { ascending:false }).order('componenti_medi', { ascending:false });
+          .select('user_id').order('rating_medio', { ascending:false });
         if(data){
           const idx = data.findIndex(r=>r.user_id===currentUser.id);
           if(idx>=0){ dailyWeightedRank = idx+1; dailyWeightedTotal = data.length; }
