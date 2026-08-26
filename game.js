@@ -326,7 +326,7 @@ const I18N = {
     premium_choice_message: 'Hai un codice premium ricevuto da uno streamer o da un amico, oppure vuoi procedere con l\'acquisto?',
     premium_choice_code_btn: '🎁 Ho un codice', premium_choice_pay_btn: '💳 Procedi al pagamento', premium_choice_cancel_btn: 'Annulla', redeem_code_message: 'Se hai ricevuto un codice premium, inseriscilo qui sotto.',
     redeem_code_checking: 'Verifica in corso...', redeem_code_invalid: 'Codice non valido o già usato.', redeem_code_error: 'Errore di connessione, riprova.',
-    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`, sl_token_refill_in: (t)=>`Prossimo gettone tra ${t}`,
+    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`, sl_token_refill_at: (h)=>`Nuovi gettoni disponibili alle ${h}`,
     tokens_out_title: 'Gettoni esauriti', tokens_out_desc: (len)=>`Hai finito i gettoni gratuiti per la Stagione Scuderia da ${len} gare. Torna più tardi, oppure sblocca tutto senza limiti.`,
     tokens_out_countdown_label: 'Prossima ricarica tra', tokens_out_unlock: 'Diventa Immortale — 3,99€',
     premium_coming_soon_title: 'Sblocco premium', premium_coming_soon_desc: 'Il pagamento vero arriverà a breve — per ora questa parte è ancora in costruzione.',
@@ -602,7 +602,7 @@ const I18N = {
     daily_countdown_label: (t)=>`Prossima Daily tra ${t}`, daily_countdown_label_todo: (t)=>`Hai ancora ${t} per tentare la run`, daily_locked_trophies: (n)=> n===1 ? 'Ti manca 1 trofeo vinto per sbloccare la Daily Season' : `Ti mancano ${n} trofei vinti per sbloccare la Daily Season`, daily_locked_doppietta: 'Ti serve anche una Stagione Scuderia vinta sia come pilota che come costruttore (anche insieme) per sbloccare la Daily Season', daily_locked_titles_v2: 'Ti serve anche aver vinto sia il titolo Costruttori che il titolo Piloti in una Stagione Scuderia (anche in stagioni diverse)', daily_locked_row_constructor: 'Titolo Costruttori', daily_locked_row_driver: 'Titolo Piloti', daily_locked_tap_hint: 'Tocca per i dettagli',
     daily_detail_points: 'Punti', daily_score_points_word: 'punti', daily_detail_driver_pos: 'Posizione Piloti', daily_detail_constructor_pos: 'Posizione Costruttori',
     daily_detail_gap: 'Gap dal rivale', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (iniziale → finale)', daily_detail_platinum: 'Componenti Immortal',
-    daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per giocarla senza limiti.',
+    daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per avere fino a 3 tentativi al giorno.', daily_max_attempts_title: 'Hai esaurito i tentativi', daily_max_attempts_desc: 'Hai già usato tutti e 3 i tentativi di oggi. Torna domani per riprovare.', daily_confirm_new_attempt_title: 'Nuovo tentativo?', daily_confirm_new_attempt_desc: 'Hai già un risultato salvato per oggi. Iniziando un nuovo tentativo, quello precedente verrà eliminato per sempre — non potrai tornare indietro. Solo l\'ultimo tentativo conta in classifica. Procedere?',
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
     daily_leaderboard_loading: 'Carico la classifica...', daily_leaderboard_error: 'Errore nel caricamento, riprova più tardi.',
@@ -659,7 +659,7 @@ const I18N = {
     premium_choice_message: 'Do you have a premium code from a streamer or friend, or would you like to proceed with the purchase?',
     premium_choice_code_btn: '🎁 I have a code', premium_choice_pay_btn: '💳 Proceed to payment', premium_choice_cancel_btn: 'Cancel', redeem_code_message: 'If you received a premium code, enter it below.',
     redeem_code_checking: 'Checking...', redeem_code_invalid: 'Invalid or already used code.', redeem_code_error: 'Connection error, try again.',
-    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`, sl_token_refill_in: (t)=>`Next token in ${t}`,
+    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`, sl_token_refill_at: (h)=>`New tokens available at ${h}`,
     tokens_out_title: 'Out of tokens', tokens_out_desc: (len)=>`You've used up your free tokens for the ${len}-race Team Season. Come back later, or unlock everything with no limits.`,
     tokens_out_countdown_label: 'Next refill in', tokens_out_unlock: 'Become Immortal — €3.99',
     premium_coming_soon_title: 'Premium unlock', premium_coming_soon_desc: "Real payment is coming soon — this part is still under construction for now.",
@@ -933,7 +933,7 @@ const I18N = {
     daily_countdown_label: (t)=>`Next Daily in ${t}`, daily_countdown_label_todo: (t)=>`You still have ${t} to attempt the run`, daily_locked_trophies: (n)=> n===1 ? 'You need 1 more trophy to unlock Daily Season' : `You need ${n} more trophies to unlock Daily Season`, daily_locked_doppietta: 'You also need a Team Season won as both driver and constructor champion (can be together) to unlock Daily Season', daily_locked_titles_v2: 'You also need to have won both the Constructors title and the Drivers title in a Team Season (can be different seasons)', daily_locked_row_constructor: "Constructors' title", daily_locked_row_driver: "Drivers' title", daily_locked_tap_hint: 'Tap for details',
     daily_detail_points: 'Points', daily_score_points_word: 'points', daily_detail_driver_pos: 'Drivers Position', daily_detail_constructor_pos: 'Constructors Position',
     daily_detail_gap: 'Gap from rival', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (initial → final)', daily_detail_platinum: 'Immortal components',
-    daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium to play it without limits.',
+    daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium for up to 3 attempts per day.', daily_max_attempts_title: 'No attempts left', daily_max_attempts_desc: "You've already used all 3 attempts today. Come back tomorrow to try again.", daily_confirm_new_attempt_title: 'New attempt?', daily_confirm_new_attempt_desc: "You already have a saved result for today. Starting a new attempt will permanently delete the previous one — this can't be undone. Only your last attempt counts on the leaderboard. Proceed?",
     daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Last Daily', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
     daily_leaderboard_loading: 'Loading leaderboard...', daily_leaderboard_error: 'Loading failed, try again later.',
@@ -986,7 +986,7 @@ const I18N = {
     premium_choice_message: '¿Tienes un código premium de un streamer o amigo, o quieres proceder con la compra?',
     premium_choice_code_btn: '🎁 Tengo un código', premium_choice_pay_btn: '💳 Proceder al pago', premium_choice_cancel_btn: 'Cancelar', redeem_code_message: 'Si has recibido un código premium, introdúcelo aquí abajo.',
     redeem_code_checking: 'Comprobando...', redeem_code_invalid: 'Código no válido o ya usado.', redeem_code_error: 'Error de conexión, inténtalo de nuevo.',
-    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`, sl_token_refill_in: (t)=>`Próxima ficha en ${t}`,
+    sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`, sl_token_refill_at: (h)=>`Nuevas fichas disponibles a las ${h}`,
     tokens_out_title: 'Fichas agotadas', tokens_out_desc: (len)=>`Has usado tus fichas gratuitas para la Temporada de Escudería de ${len} carreras. Vuelve más tarde, o desbloquea todo sin límites.`,
     tokens_out_countdown_label: 'Próxima recarga en', tokens_out_unlock: 'Hazte Inmortal — 3,99€',
     premium_coming_soon_title: 'Desbloqueo premium', premium_coming_soon_desc: 'El pago real llegará pronto — por ahora esta parte todavía está en construcción.',
@@ -1260,7 +1260,7 @@ const I18N = {
     daily_countdown_label: (t)=>`Próxima Daily en ${t}`, daily_countdown_label_todo: (t)=>`Todavía tienes ${t} para intentar la run`, daily_locked_trophies: (n)=> n===1 ? 'Te falta 1 trofeo para desbloquear la Daily Season' : `Te faltan ${n} trofeos para desbloquear la Daily Season`, daily_locked_doppietta: 'También necesitas una Temporada de Escudería ganada como piloto y como constructor (pueden ser juntos) para desbloquear la Daily Season', daily_locked_titles_v2: 'También necesitas haber ganado tanto el título de Constructores como el de Pilotos en una Temporada de Escudería (pueden ser temporadas distintas)', daily_locked_row_constructor: 'Título Constructores', daily_locked_row_driver: 'Título Pilotos', daily_locked_tap_hint: 'Toca para más detalles',
     daily_detail_points: 'Puntos', daily_score_points_word: 'puntos', daily_detail_driver_pos: 'Posición Pilotos', daily_detail_constructor_pos: 'Posición Constructores',
     daily_detail_gap: 'Diferencia del rival', daily_detail_budget: 'Presupuesto', daily_detail_rating: 'Rating (inicial → final)', daily_detail_platinum: 'Componentes Immortal',
-    daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para jugarla sin límites.',
+    daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para tener hasta 3 intentos al día.', daily_max_attempts_title: 'Has agotado los intentos', daily_max_attempts_desc: 'Ya has usado los 3 intentos de hoy. Vuelve mañana para intentarlo de nuevo.', daily_confirm_new_attempt_title: '¿Nuevo intento?', daily_confirm_new_attempt_desc: 'Ya tienes un resultado guardado para hoy. Si empiezas un nuevo intento, el anterior se eliminará para siempre — no podrás deshacerlo. Solo cuenta el último intento en la clasificación. ¿Continuar?',
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Daily en Vivo', daily_hub_leaderboard_yesterday: 'Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
     daily_leaderboard_loading: 'Cargando clasificación...', daily_leaderboard_error: 'Error al cargar, inténtalo más tarde.',
@@ -2353,6 +2353,17 @@ async function countDailyPlaysToday(){
     return count || 0;
   }catch(e){ console.warn('Controllo tentativi Daily non riuscito:', e); return 0; }
 }
+// V0.9.9.110: DAILY SEASON — max 3 tentativi al giorno per i premium (i non-premium restano a 1
+// come sempre). Solo l'ULTIMO tentativo conta in classifica: iniziando uno nuovo, il precedente
+// viene eliminato per sempre dal database, non solo nascosto — non e' possibile tornare indietro.
+async function deleteDailyResultsForToday(){
+  if(!currentUser || !supabaseClient) return;
+  try{
+    const { error } = await supabaseClient.from('daily_season_results')
+      .delete().eq('user_id', currentUser.id).eq('daily_date', todayDateStringUTC());
+    if(error) console.warn('Eliminazione risultato Daily precedente non riuscita:', error.message);
+  }catch(e){ console.warn('Eliminazione risultato Daily precedente non riuscita:', e); }
+}
 // il MIGLIOR risultato di oggi di questo utente, con la sua posizione vera nella classifica del
 // giorno (serve per colorare le 4 fasce trofeo oro/grigio) — usa la vista SQL gia' ordinata con lo
 // spareggio corretto (punti -> budget -> componenti -> reroll -> chi ha finito prima).
@@ -2364,7 +2375,7 @@ async function loadDailyBestResultToday(){
     // punteggio a più fattori (final_score). Se la vista non e' ancora stata aggiornata (SQL non
     // ancora eseguito), riproviamo con la selezione/ordinamento vecchio, cosi' funziona comunque.
     let { data, error } = await supabaseClient.from('daily_leaderboard_view')
-      .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at, won_constructor, won_driver, driver_position, constructor_position, gap_from_rival, initial_rating, platinum_parts, final_score')
+      .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at, won_constructor, won_driver, driver_position, constructor_position, gap_from_rival, initial_rating, platinum_parts, attempt_number, final_score')
       .eq('daily_date', today)
       .order('final_score', { ascending:false });
     if(error){
@@ -2385,6 +2396,7 @@ async function loadDailyBestResultToday(){
     return dailyBestResultCache;
   }catch(e){ console.warn('Caricamento risultato Daily non riuscito:', e); dailyBestResultCache = null; return null; }
 }
+const DAILY_MAX_PREMIUM_ATTEMPTS = 3;
 async function enterDailySeasonFlow(){
   if(!isDailySeasonUnlocked()) return; // rete di sicurezza, la carta bloccata non dovrebbe nemmeno arrivare qui
   if(!currentUser){
@@ -2404,6 +2416,21 @@ async function enterDailySeasonFlow(){
     gameConfirm(t('daily_already_played_desc'), ()=>{}, t('daily_already_played_title'));
     return;
   }
+  if(isPremiumUser && playsToday >= DAILY_MAX_PREMIUM_ATTEMPTS){
+    gameConfirm(t('daily_max_attempts_desc'), ()=>{}, t('daily_max_attempts_title'));
+    return;
+  }
+  if(isPremiumUser && playsToday >= 1){
+    // 2° o 3° tentativo: serve conferma esplicita, il precedente viene eliminato per sempre e non
+    // si può tornare indietro — come concordato con Gio.
+    gameConfirm(t('daily_confirm_new_attempt_desc'), async ()=>{
+      await deleteDailyResultsForToday();
+      state.dailySeasonAttemptNumber = playsToday + 1;
+      startDailySeasonRun();
+    }, t('daily_confirm_new_attempt_title'));
+    return;
+  }
+  state.dailySeasonAttemptNumber = 1;
   startDailySeasonRun();
 }
 // V0.9.9.85: calcola SOLO quanti GP ha la Daily di oggi, senza avviarla davvero — serve per farlo
@@ -2530,7 +2557,12 @@ function computeDailyFinalScore(r){
     + 0.11*budgetScore + 0.11*platinoScore + 0.05*ratingIniScore;
   const puntiComponente = Math.min(1, (r.points ?? 0) / DAILY_SCORE_POINTS_MAX) * (DAILY_SCORE_MAX - DAILY_SCORE_SECONDARY_MAX);
   const secondarioComponente = (secondario0a100/100) * DAILY_SCORE_SECONDARY_MAX;
-  return Math.round(puntiComponente + secondarioComponente);
+  // V0.9.9.110: leggera penalità per numero di tentativo (max 3 per i premium) — -1% per ogni
+  // tentativo dopo il primo, così non conviene "spammare" tentativi senza conseguenze, ma la
+  // differenza resta piccola (concordato con Gio).
+  const numeroTentativo = r.attempt_number ?? 1;
+  const fattorePenalita = 1 - Math.max(0, numeroTentativo-1) * 0.01;
+  return Math.round((puntiComponente + secondarioComponente) * fattorePenalita);
 }
 // meccanismo che li fa apparire gradualmente nel corso della giornata invece che tutti insieme.
 function visibleDailyBotsForDate(dateStr){
@@ -7342,7 +7374,7 @@ function saveDailySeasonResult(){
   // V0.9.9.103: DAILY SEASON — nuovo sistema di punteggio a più fattori, richiesto da Gio dopo le
   // note dei tester. I punti restano SEMPRE dominanti (garantito lato database, non qui) — questi
   // sono solo i dati grezzi, il calcolo del punteggio vero avviene nella vista SQL.
-  const dstd = driverStandingsSorted();
+  const dstd = driverStandingsSorted().filter(d=>!d.isFormer);
   const myDriverIdx = dstd.findIndex(d=>d.isPlayerTeam);
   const driverPosition = myDriverIdx>=0 ? myDriverIdx+1 : null;
   const constructorPosition = myConstructorIdx>=0 ? myConstructorIdx+1 : null;
@@ -7368,6 +7400,7 @@ function saveDailySeasonResult(){
     rerolls_left: state.rerollsLeft || 0,
     driver_position: driverPosition, constructor_position: constructorPosition,
     gap_from_rival: gapFromRival, initial_rating: initialRating, platinum_parts: platinumParts,
+    attempt_number: state.dailySeasonAttemptNumber || 1,
   };
   // V0.9.9.92/103: FIX CRITICO a 3 livelli — se qualche colonna non esiste ancora sul database (SQL
   // non ancora eseguito), l'inserimento falliva DEL TUTTO in silenzio, perdendo l'intero risultato
@@ -8520,7 +8553,7 @@ async function loadAndRenderDailyLeaderboard(tab){
     if(tab==='daily' || tab==='yesterday'){
       const dataRiferimento = tab==='daily' ? todayDateStringUTC() : previousDailyDateString(todayDateStringUTC());
       let { data, error } = await supabaseClient.from('daily_leaderboard_view')
-        .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left, completed_at, driver_position, constructor_position, gap_from_rival, initial_rating, platinum_parts, final_score')
+        .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left, completed_at, driver_position, constructor_position, gap_from_rival, initial_rating, platinum_parts, attempt_number, final_score')
         .eq('daily_date', dataRiferimento)
         .order('final_score', { ascending:false });
       if(error){
@@ -9968,21 +10001,25 @@ function renderDifficulty(){
   bindActions();
 }
 
-let __slTokenCountdownTimer = null;
+let __slTokenRefillCheckTimer = null;
 function renderSeasonLength(){
   const tokenState = checkAndApplyTokenRefill();
   const refillMs = getTokenRefillCountdownMs();
-  // V0.9.9.102: timer di ripristino gettoni mostrato DIRETTAMENTE sulla carta, non solo dopo aver
-  // già provato e fallito (schermata "gettoni esauriti") — segnalato da un tester: "manca un timer
-  // del ripristino gettoni sulle card".
-  const countdownHTML = (esaurito, lunghezza) => (!isPremiumUser && esaurito && refillMs>0)
-    ? `<div class="dim mono" style="font-size:10.5px;margin-top:2px;color:var(--amber);" id="slTokenCountdown${lunghezza}">${t('sl_token_refill_in', formatCountdown(refillMs))}</div>` : '';
+  // V0.9.9.110: messaggio con orario fisso invece del countdown live, richiesto da Gio — "nuovi
+  // gettoni disponibili alle ore X" in base all'orario LOCALE del dispositivo, non un conto alla
+  // rovescia che si aggiorna al secondo.
+  const orarioRipristino = refillMs>0 ? new Date(Date.now()+refillMs) : null;
+  const orarioTesto = orarioRipristino
+    ? String(orarioRipristino.getHours()).padStart(2,'0')+':'+String(orarioRipristino.getMinutes()).padStart(2,'0')
+    : '';
+  const countdownHTML = (esaurito) => (!isPremiumUser && esaurito && refillMs>0)
+    ? `<div class="dim mono" style="font-size:10.5px;margin-top:2px;color:var(--amber);">${t('sl_token_refill_at', orarioTesto)}</div>` : '';
   const tokenChip10 = isPremiumUser
     ? `<div class="dim mono" style="font-size:11px;color:var(--legendary);margin-top:4px;">${t('sl_unlimited')}</div>`
-    : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t10, FULL_TOKENS.t10)}</div>${countdownHTML(tokenState.t10<=0, 10)}`;
+    : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t10, FULL_TOKENS.t10)}</div>${countdownHTML(tokenState.t10<=0)}`;
   const tokenChip20 = isPremiumUser
     ? `<div class="dim mono" style="font-size:11px;color:var(--legendary);margin-top:4px;">${t('sl_unlimited')}</div>`
-    : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t20, FULL_TOKENS.t20)}</div>${countdownHTML(tokenState.t20<=0, 20)}`;
+    : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t20, FULL_TOKENS.t20)}</div>${countdownHTML(tokenState.t20<=0)}`;
   app.innerHTML = `
   <div class="panel">
     <div class="eyebrow">${t('diff_new_career')}</div>
@@ -10033,18 +10070,12 @@ function renderSeasonLength(){
   <div class="btnrow"><button class="ghost" data-action="go-to-mode-select">${t('back_to_mode_select')}</button></div>
   `;
   bindActions();
+  clearInterval(__slTokenRefillCheckTimer);
   if(!isPremiumUser && (tokenState.t10<=0 || tokenState.t20<=0)){
-    clearInterval(__slTokenCountdownTimer);
-    __slTokenCountdownTimer = setInterval(()=>{
-      const el10 = document.getElementById('slTokenCountdown10');
-      const el20 = document.getElementById('slTokenCountdown20');
-      if(!el10 && !el20){ clearInterval(__slTokenCountdownTimer); return; } // schermata cambiata
-      const msOra = getTokenRefillCountdownMs();
-      if(msOra<=0){ if(state.phase==='season-length') render(); return; } // ripristinati, ridisegna con i gettoni pieni
-      const testo = t('sl_token_refill_in', formatCountdown(msOra));
-      if(el10) el10.textContent = testo;
-      if(el20) el20.textContent = testo;
-    }, 1000);
+    __slTokenRefillCheckTimer = setInterval(()=>{
+      if(state.phase!=='season-length'){ clearInterval(__slTokenRefillCheckTimer); return; } // schermata cambiata
+      if(getTokenRefillCountdownMs()<=0) render(); // ripristinati, ridisegna con i gettoni pieni
+    }, 20000);
   }
 }
 
@@ -12961,11 +12992,20 @@ function openRedeemCodePanel(){
     errorEl.textContent = t('redeem_code_checking');
     try{
       const { data, error } = await supabaseClient.functions.invoke('redeem-premium-code', { body:{ code } });
-      if(error || !data || !data.ok){
-        // V0.9.9.102: log dettagliato per poter diagnosticare — un tester ha segnalato "i codici
-        // amici non vanno" ma senza questo non e' possibile distinguere un vero codice sbagliato
-        // da un problema di configurazione (funzione non pubblicata, autenticazione, rete...).
-        console.warn('Riscatto codice premium non riuscito:', { error, data, code });
+      // V0.9.9.110: BUG POTENZIALE — prima qualunque causa (funzione irraggiungibile, problema di
+      // rete/autenticazione, O un vero "codice non valido") mostrava lo STESSO messaggio generico,
+      // rendendo impossibile per un tester distinguere un problema di configurazione da un codice
+      // davvero sbagliato. Ora distinguiamo: 'error' e' un problema di INVOCAZIONE (la funzione
+      // non ha nemmeno risposto correttamente — funzione non pubblicata, rete, CORS...), mentre
+      // 'data.error' e' la risposta VERA della funzione (quella ha risposto, e ha detto perche').
+      if(error){
+        console.warn('Chiamata alla funzione redeem-premium-code non riuscita (problema di invocazione, non di codice):', error, code);
+        errorEl.textContent = t('redeem_code_error');
+        submitBtn.disabled = false;
+        return;
+      }
+      if(!data || !data.ok){
+        console.warn('Funzione redeem-premium-code ha risposto con un errore vero:', data, code);
         errorEl.textContent = t('redeem_code_invalid');
         submitBtn.disabled = false;
         return;
