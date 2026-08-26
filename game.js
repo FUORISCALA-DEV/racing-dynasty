@@ -372,7 +372,7 @@ const I18N = {
     dcon_renew: 'Rinnova', dcon_released: (team)=>`${team} non ti rinnova per la prossima stagione.`,
     dcon_offer: 'Offerta ricevuta', dcon_promotion: 'promozione', dcon_pick: 'Tocca per scegliere',
     dcon_fallback_title: 'Ripartenza dal Kart', dcon_fallback_desc: 'Nessuna scuderia ti vuole per ora — ti sistemi con una scuderia Kart qualunque e riparti da lì.',
-    se_visit_trophy_room: '<img class=ico src=assets/icons/trophy.png> Visita la Sala Trofei',
+    se_visit_trophy_room: '<img class=ico src=assets/icons/trophy.png> Visita la Sala Trofei', se_view_daily_leaderboard: '<img class=ico src=assets/icons/trophy.png> Vedi la classifica Daily',
     dact_eyebrow: 'Tra una gara e l\'altra', dact_title: 'Cosa fai prima della prossima gara?', dact_subtitle: 'Scegline una: ognuna ha effetti diversi.',
     dact_training: 'Allenamento', dact_training_desc: 'Focus sulla crescita personale. Avvicina il prossimo punto Rating, nessun effetto su Fama o Reputazione.',
     dact_simulator: 'Simulatore e Analisi Dati', dact_simulator_desc: 'Lavori con gli ingegneri: avvicina il prossimo punto Rating e migliora leggermente la Reputazione.',
@@ -541,8 +541,8 @@ const I18N = {
     sl_trophy_room: 'SALA TROFEI', sl_raced: 'CORSI', sl_won: 'VINTI', sl_trophy_desc: 'Un trofeo per ogni circuito del mondo — rivivi le tue vittorie e scopri quanti ne mancano ancora alla collezione completa.', sl_trophy_hint: 'Tocca per aprire — Sala Trofei',
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETAMENTO', sl_museum_desc: 'Piloti e componenti portati fino in fondo a una stagione, o sostituiti lungo il percorso, restano qui per sempre.', sl_museum_hint: 'Tocca per aprire — Museo Dynasty',
     sl_garage: 'GARAGE', sl_garage_desc: 'Personalizza la livrea del telaio con pattern sbloccabili completando obiettivi.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PROSSIMAMENTE',
-    sl_aiuto_coda: 'Aiuto in coda', sl_aiuto_coda_desc: 'Il prezzo della ricerca di mercato dipende dalla tua posizione: 1× (il minimo) se sei in fondo alla classifica, fino a 20× se sei in testa — il costo sale rapidamente man mano che ti avvicini alla vetta. Disattivato: sempre 5× fisso, qualunque sia la tua posizione.',
-    sl_riflessi_partenza: 'Riflessi alla partenza', sl_riflessi_partenza_desc: 'Attivo: alla partenza usi i paddle veri, la partenza dipende dai tuoi riflessi. Disattivo: partenza automatica, il semaforo mostra le probabilità senza bisogno di premere nulla.',
+    sl_aiuto_coda: 'Aiuto in coda', sl_aiuto_coda_desc_on: 'Il prezzo della ricerca di mercato dipende dalla tua posizione: 1× (il minimo) se sei in fondo alla classifica, fino a 20× se sei in testa — il costo sale rapidamente man mano che ti avvicini alla vetta.', sl_aiuto_coda_desc_off: 'Il prezzo della ricerca di mercato è sempre 5× fisso, qualunque sia la tua posizione in classifica.',
+    sl_riflessi_partenza: 'Riflessi alla partenza', sl_riflessi_partenza_desc_on: 'Alla partenza usi i paddle veri, il risultato dipende dai tuoi riflessi.', sl_riflessi_partenza_desc_off: 'Partenza automatica: il semaforo mostra le probabilità senza bisogno di premere nulla.',
     diff_new_career: 'Nuova Carriera', diff_choose: 'Scegli la difficoltà',
     diff_subtitle: 'Incide solo sui reroll disponibili nel draft — un tocco e si parte.',
     diff_last_used: ' · ultima usata', diff_tap_hint: (l)=>`Tocca per avviare — ${l}`,
@@ -603,7 +603,7 @@ const I18N = {
     daily_detail_points: 'Punti', daily_score_points_word: 'punti', daily_detail_driver_pos: 'Posizione Piloti', daily_detail_constructor_pos: 'Posizione Costruttori',
     daily_detail_gap: 'Gap dal rivale', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (iniziale → finale)', daily_detail_platinum: 'Componenti Immortal',
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per giocarla senza limiti.',
-    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Ultima Daily',
+    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
     daily_leaderboard_loading: 'Carico la classifica...', daily_leaderboard_error: 'Errore nel caricamento, riprova più tardi.',
     daily_leaderboard_empty: 'Nessuno ha ancora giocato la Daily di oggi. Sii il primo!',
@@ -705,7 +705,7 @@ const I18N = {
     dcon_renew: 'Renew', dcon_released: (team)=>`${team} won't renew you for next season.`,
     dcon_offer: 'Offer received', dcon_promotion: 'promotion', dcon_pick: 'Tap to choose',
     dcon_fallback_title: 'Restart from Kart', dcon_fallback_desc: "No team wants you right now — you settle for any Kart team and start over from there.",
-    se_visit_trophy_room: '<img class=ico src=assets/icons/trophy.png> Visit the Trophy Room',
+    se_visit_trophy_room: '<img class=ico src=assets/icons/trophy.png> Visit the Trophy Room', se_view_daily_leaderboard: '<img class=ico src=assets/icons/trophy.png> View Daily leaderboard',
     dact_eyebrow: 'Between races', dact_title: 'What do you do before the next race?', dact_subtitle: "Pick one: each has different effects.",
     dact_training: 'Training', dact_training_desc: "Focus on personal growth. Moves you closer to the next Rating point, no effect on Fame or Reputation.",
     dact_simulator: 'Simulator and Data Analysis', dact_simulator_desc: "You work with the engineers: closer to the next Rating point and a small Reputation boost.",
@@ -874,8 +874,8 @@ const I18N = {
     sl_trophy_room: 'TROPHY ROOM', sl_raced: 'RACED', sl_won: 'WON', sl_trophy_desc: 'A trophy for every circuit in the world — relive your wins and see how many are left for the full collection.', sl_trophy_hint: 'Tap to open — Trophy Room',
     sl_museum: 'DYNASTY MUSEUM', sl_completion: 'COMPLETION', sl_museum_desc: 'Drivers and components carried through a full season, or replaced along the way, stay here forever.', sl_museum_hint: 'Tap to open — Dynasty Museum',
     sl_garage: 'GARAGE', sl_garage_desc: 'Customize your chassis livery with patterns unlockable by completing achievements.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> COMING SOON',
-    sl_aiuto_coda: 'Catch-up help', sl_aiuto_coda_desc: 'Market research price depends on your standing: 1× (the minimum) if you are at the back, up to 20× if you are leading — cost rises sharply the closer you get to the top. Disabled: always a fixed 5×, regardless of your position.',
-    sl_riflessi_partenza: 'Start reflexes', sl_riflessi_partenza_desc: 'On: at the start you use the real paddles, the launch depends on your reflexes. Off: automatic start, the lights show the odds without needing to press anything.',
+    sl_aiuto_coda: 'Catch-up help', sl_aiuto_coda_desc_on: 'Market research price depends on your standing: 1× (the minimum) if you are at the back, up to 20× if you are leading — cost rises sharply the closer you get to the top.', sl_aiuto_coda_desc_off: 'Market research price is always a fixed 5×, regardless of your standing.',
+    sl_riflessi_partenza: 'Start reflexes', sl_riflessi_partenza_desc_on: 'At the start you use the real paddles, the launch depends on your reflexes.', sl_riflessi_partenza_desc_off: 'Automatic start: the lights show the odds without needing to press anything.',
     diff_new_career: 'New Career', diff_choose: 'Choose difficulty',
     diff_subtitle: 'Only affects the rerolls available in the draft — one tap and you\'re off.',
     diff_last_used: ' · last used', diff_tap_hint: (l)=>`Tap to start — ${l}`,
@@ -934,7 +934,7 @@ const I18N = {
     daily_detail_points: 'Points', daily_score_points_word: 'points', daily_detail_driver_pos: 'Drivers Position', daily_detail_constructor_pos: 'Constructors Position',
     daily_detail_gap: 'Gap from rival', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (initial → final)', daily_detail_platinum: 'Immortal components',
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium to play it without limits.',
-    daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Last Daily',
+    daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Last Daily', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
     daily_leaderboard_loading: 'Loading leaderboard...', daily_leaderboard_error: 'Loading failed, try again later.',
     daily_leaderboard_empty: "Nobody has played today's Daily yet. Be the first!",
@@ -1032,7 +1032,7 @@ const I18N = {
     dcon_renew: 'Renovar', dcon_released: (team)=>`${team} no te renueva para la próxima temporada.`,
     dcon_offer: 'Oferta recibida', dcon_promotion: 'ascenso', dcon_pick: 'Toca para elegir',
     dcon_fallback_title: 'Reinicio desde Kart', dcon_fallback_desc: 'Ninguna escudería te quiere por ahora — te conformas con cualquier escudería de Kart y empiezas de nuevo desde ahí.',
-    se_visit_trophy_room: '<img class=ico src=assets/icons/trophy.png> Visita la Sala de Trofeos',
+    se_visit_trophy_room: '<img class=ico src=assets/icons/trophy.png> Visita la Sala de Trofeos', se_view_daily_leaderboard: '<img class=ico src=assets/icons/trophy.png> Ver clasificación Daily',
     dact_eyebrow: 'Entre carreras', dact_title: '¿Qué haces antes de la próxima carrera?', dact_subtitle: 'Elige una: cada una tiene efectos distintos.',
     dact_training: 'Entrenamiento', dact_training_desc: 'Enfoque en el crecimiento personal. Te acerca al próximo punto de Rating, sin efecto en Fama o Reputación.',
     dact_simulator: 'Simulador y Análisis de Datos', dact_simulator_desc: 'Trabajas con los ingenieros: te acerca al próximo punto de Rating y mejora ligeramente la Reputación.',
@@ -1201,8 +1201,8 @@ const I18N = {
     sl_trophy_room: 'SALA DE TROFEOS', sl_raced: 'DISPUTADOS', sl_won: 'GANADOS', sl_trophy_desc: 'Un trofeo por cada circuito del mundo — revive tus victorias y descubre cuántos faltan para la colección completa.', sl_trophy_hint: 'Toca para abrir — Sala de Trofeos',
     sl_museum: 'MUSEO DYNASTY', sl_completion: 'COMPLETADO', sl_museum_desc: 'Pilotos y componentes llevados hasta el final de una temporada, o sustituidos por el camino, se quedan aquí para siempre.', sl_museum_hint: 'Toca para abrir — Museo Dynasty',
     sl_garage: 'GARAGE', sl_garage_desc: 'Personaliza la librea del chasis con patrones desbloqueables completando logros.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PRÓXIMAMENTE',
-    sl_aiuto_coda: 'Ayuda de recuperación', sl_aiuto_coda_desc: 'El precio de la búsqueda de mercado depende de tu posición: 1× (el mínimo) si vas último, hasta 20× si vas líder — el coste sube rápidamente cuanto más te acercas a la cabeza. Desactivado: siempre 5× fijo, sea cual sea tu posición.',
-    sl_riflessi_partenza: 'Reflejos de salida', sl_riflessi_partenza_desc: 'Activo: en la salida usas los paddles reales, la salida depende de tus reflejos. Desactivo: salida automática, el semáforo muestra las probabilidades sin necesidad de pulsar nada.',
+    sl_aiuto_coda: 'Ayuda de recuperación', sl_aiuto_coda_desc_on: 'El precio de la búsqueda de mercado depende de tu posición: 1× (el mínimo) si vas último, hasta 20× si vas líder — el coste sube rápidamente cuanto más te acercas a la cabeza.', sl_aiuto_coda_desc_off: 'El precio de la búsqueda de mercado es siempre 5× fijo, sea cual sea tu posición.',
+    sl_riflessi_partenza: 'Reflejos de salida', sl_riflessi_partenza_desc_on: 'En la salida usas los paddles reales, el resultado depende de tus reflejos.', sl_riflessi_partenza_desc_off: 'Salida automática: el semáforo muestra las probabilidades sin necesidad de pulsar nada.',
     diff_new_career: 'Nueva Carrera', diff_choose: 'Elige la dificultad',
     diff_subtitle: 'Solo afecta a los rerolls disponibles en el draft — un toque y empiezas.',
     diff_last_used: ' · última usada', diff_tap_hint: (l)=>`Toca para empezar — ${l}`,
@@ -1261,7 +1261,7 @@ const I18N = {
     daily_detail_points: 'Puntos', daily_score_points_word: 'puntos', daily_detail_driver_pos: 'Posición Pilotos', daily_detail_constructor_pos: 'Posición Constructores',
     daily_detail_gap: 'Diferencia del rival', daily_detail_budget: 'Presupuesto', daily_detail_rating: 'Rating (inicial → final)', daily_detail_platinum: 'Componentes Immortal',
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para jugarla sin límites.',
-    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Daily en Vivo', daily_hub_leaderboard_yesterday: 'Última Daily',
+    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Daily en Vivo', daily_hub_leaderboard_yesterday: 'Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
     daily_leaderboard_loading: 'Cargando clasificación...', daily_leaderboard_error: 'Error al cargar, inténtalo más tarde.',
     daily_leaderboard_empty: 'Nadie ha jugado todavía la Daily de hoy. ¡Sé el primero!',
@@ -8602,10 +8602,11 @@ function renderDailySeasonHub(){
     <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:16px;">
     <div class="daily-gp-count" style="text-align:center;font-size:18px;margin-bottom:2px;">${t('daily_gp_count', todaysDailySeasonLength())}</div>
     <div class="daily-reroll-count" style="text-align:center;font-size:14px;margin-bottom:6px;">${t('daily_reroll_count', todaysDailyRerollCount())}</div>
-    <div class="daily-countdown-row" style="justify-content:center;margin-bottom:20px;">
+    <div class="daily-countdown-row" style="justify-content:center;margin-bottom:14px;">
       <div class="daily-countdown" id="dailyHubCountdown" style="font-size:20px;">--:--:--</div>
       <div id="dailyHubStatusBadge">${dailyStatusBadgeHTML()}</div>
     </div>
+    <div class="dim" style="text-align:center;font-size:12px;line-height:1.5;margin-bottom:20px;padding:0 8px;">${t('daily_fairness_note')}</div>
     <div class="btnrow" style="flex-direction:column;gap:10px;">
       <button class="primary" data-action="daily-start-challenge" style="width:100%;">${t('daily_hub_start')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;"><span class="live-dot"></span>${t('daily_hub_leaderboard_live')}</button>
@@ -10008,7 +10009,7 @@ function renderSeasonLength(){
     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
       <div>
         <div style="font-weight:700;">${t('sl_aiuto_coda')}</div>
-        <div class="dim" style="font-size:11.5px; margin-top:3px; line-height:1.4;">${t('sl_aiuto_coda_desc')}</div>
+        <div class="dim" style="font-size:11.5px; margin-top:3px; line-height:1.4;">${state.selectedAiutoInCoda!==false ? t('sl_aiuto_coda_desc_on') : t('sl_aiuto_coda_desc_off')}</div>
       </div>
       <button type="button" class="toggle-switch ${state.selectedAiutoInCoda!==false?'on':''}" data-action="toggle-aiuto-coda" aria-label="${t('sl_aiuto_coda')}"><span class="toggle-knob"></span></button>
     </div>
@@ -10017,7 +10018,7 @@ function renderSeasonLength(){
     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
       <div>
         <div style="font-weight:700;">${t('sl_riflessi_partenza')}</div>
-        <div class="dim" style="font-size:11.5px; margin-top:3px; line-height:1.4;">${t('sl_riflessi_partenza_desc')}</div>
+        <div class="dim" style="font-size:11.5px; margin-top:3px; line-height:1.4;">${state.selectedRiflessiPartenza!==false ? t('sl_riflessi_partenza_desc_on') : t('sl_riflessi_partenza_desc_off')}</div>
       </div>
       <button type="button" class="toggle-switch ${state.selectedRiflessiPartenza!==false?'on':''}" data-action="toggle-riflessi-partenza" aria-label="${t('sl_riflessi_partenza')}"><span class="toggle-knob"></span></button>
     </div>
@@ -12227,7 +12228,7 @@ function renderSeasonEnd(){
       <div class="btnrow" style="justify-content:center;">
         <button class="primary" data-action="go-to-mode-select">${t('se_new_career')}</button>
         <button class="ghost" data-action="share-result-card">${t('se_share')}</button>
-        <button class="ghost" data-action="open-trophy-room">${t('se_visit_trophy_room')}</button>
+        ${state.isDailySeason ? `<button class="ghost" data-action="go-to-daily-live-leaderboard">${t('se_view_daily_leaderboard')}</button>` : `<button class="ghost" data-action="open-trophy-room">${t('se_visit_trophy_room')}</button>`}
       </div>
     </div>
   </div>
@@ -12464,6 +12465,11 @@ function onAction(e){
   }
   else if(action==='daily-locked-info'){
     gameConfirm(dailySeasonLockedMessageHTML().replace(/<[^>]+>/g,' ').trim(), ()=>{}, t('mode_select_daily'));
+  }
+  else if(action==='go-to-daily-live-leaderboard'){
+    state.phase = 'daily-leaderboard';
+    state.dailyLeaderboardTab = 'daily'; // 'daily' = Daily Live
+    render();
   }
   else if(action==='open-daily-season-hub'){
     if(!isDailySeasonUnlocked()) return;
@@ -13313,7 +13319,13 @@ function closeSettingsPanel(){
 // sempre coerenti anche se in futuro cambiano i numeri (pesi, rarita', mentalita').
 function guideRarityLegendHTML(){
   const mockRatings = { Common:58, Rare:71, Epic:83, Legendary:92, Immortal:100 };
-  const mocks = RARITY_ORDER.map(r=> `<div class="guide-rarity-mock${r==='Immortal'?' immortal':''}" style="border-top-color:${rarityColor(r)};">
+  // V0.9.9.109: BUG CORRETTO — RARITY_ORDER ha 7 fasce (retaggio di un sistema poi compresso a 5,
+  // vedi commento su rarityColor), ma il resto del gioco (schede, colori) usa solo queste 5 da
+  // tempo. Iterare sulla lista vecchia produceva "undefined" e tessere grige per le 2 fasce ormai
+  // inesistenti (Uncommon, Mythic) — segnalato da un tester. Uso qui le stesse identiche 5 fasce
+  // vere di rarityColor()/mockRatings, non piu' la lista obsoleta.
+  const fasceVere = ['Common','Rare','Epic','Legendary','Immortal'];
+  const mocks = fasceVere.map(r=> `<div class="guide-rarity-mock${r==='Immortal'?' immortal':''}" style="border-top-color:${rarityColor(r)};">
     <span class="grm-tag" style="color:${rarityColor(r)};background:${rarityColor(r)}22;">${r}</span>
     <div class="grm-rating">${mockRatings[r]}</div>
   </div>`).join('');
