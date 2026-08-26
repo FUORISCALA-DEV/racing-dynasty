@@ -10874,25 +10874,17 @@ function renderRaceResult(){
   </div>
   `;
   bindActions();
-  // V0.9.9.112: sblocco trofeo più "epico" — richiesto da Gio (suono, nome pilota enorme, chiusura
-  // automatica dopo 3 secondi). Il suono/timer partono solo la PRIMA volta che questo specifico
-  // trofeo appare, non ad ogni ri-rendering della schermata (altrimenti si ripeterebbe in loop).
+  // V0.9.9.114: SOLO il suono resta a scomparsa automatica dopo 3 secondi rimossa su richiesta di
+  // Gio ("la voglio solo cliccando continua, niente roba a tempo") — parte solo la PRIMA volta che
+  // questo specifico trofeo appare, non ad ogni ri-rendering della schermata.
   if(state.lastTrophyUnlock && !state.trophyUnlockDismissed && !__trophyUnlockEffectsTriggered){
     __trophyUnlockEffectsTriggered = true;
     playRealSfx('audio/sfx_victory_fanfare.mp3');
-    clearTimeout(__trophyUnlockAutoDismissTimer);
-    __trophyUnlockAutoDismissTimer = setTimeout(()=>{
-      if(state.lastTrophyUnlock && !state.trophyUnlockDismissed){
-        state.trophyUnlockDismissed = true;
-        render();
-      }
-    }, 3000);
   } else if(!state.lastTrophyUnlock || state.trophyUnlockDismissed){
     __trophyUnlockEffectsTriggered = false; // pronto per il prossimo trofeo
   }
 }
 let __trophyUnlockEffectsTriggered = false;
-let __trophyUnlockAutoDismissTimer = null;
 
 function currentItemCardHTML(item){
   if(!item) return '';
@@ -12823,7 +12815,7 @@ function onAction(e){
     else goToPitlaneOrEnd();
   }
   else if(action==='dismiss-championship-victory'){ state.championshipVictoryData = null; render(); }
-  else if(action==='dismiss-trophy-unlock'){ clearTimeout(__trophyUnlockAutoDismissTimer); state.trophyUnlockDismissed = true; render(); }
+  else if(action==='dismiss-trophy-unlock'){ state.trophyUnlockDismissed = true; render(); }
   else if(action==='confirm-upgrade-invest'){
     const idx = el.dataset.idx;
     const n = window._pitOptions[idx];
