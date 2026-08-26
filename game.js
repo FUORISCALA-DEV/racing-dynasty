@@ -603,7 +603,7 @@ const I18N = {
     daily_detail_points: 'Punti', daily_detail_driver_pos: 'Posizione Piloti', daily_detail_constructor_pos: 'Posizione Costruttori',
     daily_detail_gap: 'Gap dal rivale', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (iniziale → finale)', daily_detail_platinum: 'Componenti Immortal',
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per giocarla senza limiti.',
-    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi',
+    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Daily di Ieri',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
     daily_leaderboard_loading: 'Carico la classifica...', daily_leaderboard_error: 'Errore nel caricamento, riprova più tardi.',
     daily_leaderboard_empty: 'Nessuno ha ancora giocato la Daily di oggi. Sii il primo!',
@@ -934,7 +934,7 @@ const I18N = {
     daily_detail_points: 'Points', daily_detail_driver_pos: 'Drivers Position', daily_detail_constructor_pos: 'Constructors Position',
     daily_detail_gap: 'Gap from rival', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (initial → final)', daily_detail_platinum: 'Immortal components',
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium to play it without limits.',
-    daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard",
+    daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: "Yesterday's Daily",
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
     daily_leaderboard_loading: 'Loading leaderboard...', daily_leaderboard_error: 'Loading failed, try again later.',
     daily_leaderboard_empty: "Nobody has played today's Daily yet. Be the first!",
@@ -1261,7 +1261,7 @@ const I18N = {
     daily_detail_points: 'Puntos', daily_detail_driver_pos: 'Posición Pilotos', daily_detail_constructor_pos: 'Posición Constructores',
     daily_detail_gap: 'Diferencia del rival', daily_detail_budget: 'Presupuesto', daily_detail_rating: 'Rating (inicial → final)', daily_detail_platinum: 'Componentes Immortal',
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para jugarla sin límites.',
-    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy',
+    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Daily en Vivo', daily_hub_leaderboard_yesterday: 'Daily de Ayer',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
     daily_leaderboard_loading: 'Cargando clasificación...', daily_leaderboard_error: 'Error al cargar, inténtalo más tarde.',
     daily_leaderboard_empty: 'Nadie ha jugado todavía la Daily de hoy. ¡Sé el primero!',
@@ -2443,6 +2443,93 @@ function todaysDailyRerollCount(dateStr){
   const val = dailyRerollValueForDate(dateStr, yesterdayTrueValue);
   __dailyRerollMemo[dateStr] = val;
   return val;
+}
+
+// V0.9.9.104: DAILY SEASON — 50 bot generati in modo deterministico per popolare la classifica fin
+// da subito, richiesto da Gio. Stesso giorno = stessi bot per tutti (nessuna differenza tra
+// dispositivi/giocatori), e compaiono gradualmente nell'arco delle 24h invece che tutti insieme a
+// mezzanotte — cosi' la classifica sembra viva, non un elenco statico sparato tutto insieme.
+const DAILY_BOT_COUNT = 50;
+const DAILY_BOT_NICKNAMES = [
+  'RossoVeloce','SprintKing','ApexHunter','PitLaneGhost','TurboNaz','DriftMaster','GripZone','RedlineRacer',
+  'FastLap99','CircuitoBlu','VelocitaPura','NitroWolf','SlipstreamX','PoleSitter','ChequeredFlag','BoxBoxGo',
+  'AeroDynamix','MidfieldHero','TrackDemon','RubberBurn','FormulaFox','GearJammer','CamberKing','DownforceDan',
+  'PaddockPro','RaceCraft','OvertakeOwl','TyreWhisperer','FuelSaverX','SafetyCarFan','QualiKing','LastCorner',
+  'SectorThree','DRSZone','KerbHopper','WingCommander','BrakeLaterX','ThrottleFull','CleanAirRacer','DirtyAirDodge',
+  'PitCrewChief','StrategyMind','UndercutKing','OvercutQueen','GridWalker','FormationLap','SafetyFirst','RiskyMove',
+  'ChampionChase','TitleHunter'
+];
+const DAILY_BOT_FLAGS = ['🇮🇹','🇬🇧','🇩🇪','🇫🇷','🇪🇸','🇳🇱','🇧🇪','🇦🇹','🇧🇷','🇦🇺','🇨🇦','🇯🇵','🇵🇹','🇫🇮','🇸🇪','🇩🇰','🇺🇸','🇲🇽','🇨🇭','🇵🇱'];
+function generateDailyBots(dateStr){
+  dateStr = dateStr || todayDateStringUTC();
+  enterDailyRandomMode(dateStr+'-bots'); // stream separato, non condiviso col resto della Daily
+  const bots = [];
+  for(let i=0; i<DAILY_BOT_COUNT; i++){
+    // distribuzione a livelli: 5 elite, 15 forti, 20 medi, 10 deboli — una classifica credibile,
+    // non tutti allo stesso livello ne' tutti fortissimi (scoraggerebbe, non ispirerebbe)
+    let livello;
+    if(i < 5) livello = 'elite';
+    else if(i < 20) livello = 'forte';
+    else if(i < 40) livello = 'medio';
+    else livello = 'debole';
+
+    const range = {
+      elite:  { punti:[190,255], driverPos:[1,3],  ctorPos:[1,2],  budget:[20,45], ratingFin:[420,480], ratingIni:[300,380], platino:[3,5] },
+      forte:  { punti:[130,190], driverPos:[3,8],  ctorPos:[2,4],  budget:[10,28], ratingFin:[370,430], ratingIni:[280,360], platino:[1,3] },
+      medio:  { punti:[70,130],  driverPos:[7,14], ctorPos:[4,7],  budget:[3,18],  ratingFin:[320,380], ratingIni:[260,340], platino:[0,2] },
+      debole: { punti:[10,70],   driverPos:[13,20],ctorPos:[6,10], budget:[0,10],  ratingFin:[270,330], ratingIni:[240,320], platino:[0,1] },
+    }[livello];
+    const ri = (range2)=> range2[0] + Math.floor(rnd()*(range2[1]-range2[0]+1));
+    const punti = ri(range.punti);
+    const ratingFinale = ri(range.ratingFin);
+    const ratingIniziale = Math.min(ratingFinale-10, ri(range.ratingIni));
+    const gap = -30 + Math.floor(rnd()*61); // gap dal rivale: puo' essere sia positivo che negativo, indipendente dal livello
+
+    bots.push({
+      isBot: true,
+      user_id: `bot-${dateStr}-${i}`,
+      nickname: DAILY_BOT_NICKNAMES[i % DAILY_BOT_NICKNAMES.length] + (i>=DAILY_BOT_NICKNAMES.length ? (Math.floor(i/DAILY_BOT_NICKNAMES.length)+1) : ''),
+      flag_code: DAILY_BOT_FLAGS[Math.floor(rnd()*DAILY_BOT_FLAGS.length)],
+      points: punti,
+      budget_saved: ri(range.budget),
+      components_sum: ratingFinale,
+      driver_position: ri(range.driverPos),
+      constructor_position: ri(range.ctorPos),
+      gap_from_rival: gap,
+      initial_rating: ratingIniziale,
+      platinum_parts: ri(range.platino),
+      rerolls_left: Math.floor(rnd()*8),
+      completed_at: dateStr+'T12:00:00Z',
+      // orario di comparsa nell'arco delle 24h UTC di quel giorno — 0 = mezzanotte, 24 = fine giornata
+      revealHourUTC: rnd()*24,
+    });
+  }
+  exitDailyRandomMode();
+  return bots;
+}
+// Stessa IDENTICA formula della vista SQL daily_leaderboard_view — necessaria qui perche' i bot
+// non passano mai dal database, ma devono ordinarsi in classifica con lo stesso criterio esatto.
+function computeDailyFinalScore(r){
+  const driverScore = Math.max(0, (21 - (r.driver_position ?? 20)) / 20 * 100);
+  const ctorScore = Math.max(0, (11 - (r.constructor_position ?? 10)) / 10 * 100);
+  const ratingScore = Math.min(100, (r.components_sum ?? 0) / 500 * 100);
+  const gapScore = Math.max(0, Math.min(100, 50 + (r.gap_from_rival ?? 0) / 2));
+  const budgetScore = Math.min(100, (r.budget_saved ?? 0) / 60 * 100);
+  const platinoScore = (r.platinum_parts ?? 0) / 5 * 100;
+  const ratingIniScore = Math.min(100, (r.initial_rating ?? 0) / 500 * 100);
+  const secondario = 0.19*driverScore + 0.19*ctorScore + 0.19*ratingScore + 0.16*gapScore
+    + 0.11*budgetScore + 0.11*platinoScore + 0.05*ratingIniScore;
+  return (r.points ?? 0) * 1000 + secondario;
+}
+// meccanismo che li fa apparire gradualmente nel corso della giornata invece che tutti insieme.
+function visibleDailyBotsForDate(dateStr){
+  const bots = generateDailyBots(dateStr);
+  const oggi = todayDateStringUTC();
+  if(dateStr < oggi) return bots; // giorno gia' passato: sono comparsi tutti, la giornata e' finita
+  if(dateStr > oggi) return []; // giorno futuro: nessuno ancora
+  const now = new Date();
+  const oreTrascorseOggi = now.getUTCHours() + now.getUTCMinutes()/60 + now.getUTCSeconds()/3600;
+  return bots.filter(b => b.revealHourUTC <= oreTrascorseOggi);
 }
 function todaysDailySeasonLength(dateStr){
   dateStr = dateStr || todayDateStringUTC();
@@ -8394,14 +8481,16 @@ const TEAM_INSPIRATION = [
 function renderDailyLeaderboard(tab){
   tab = tab || state.dailyLeaderboardTab || 'daily';
   state.dailyLeaderboardTab = tab;
+  const titoloTab = tab==='daily' ? t('daily_hub_leaderboard_live') : tab==='yesterday' ? t('daily_hub_leaderboard_yesterday') : t('daily_hub_leaderboard_weighted');
   app.innerHTML = `
   <div class="topbar">
-    <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON — ${tab==='daily' ? t('daily_hub_leaderboard_today') : t('daily_hub_leaderboard_weighted')}</small></div>
+    <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON — ${titoloTab}</small></div>
   </div>
   <div class="wrap">
     <div class="btnrow" style="margin-bottom:14px;">
-      <button class="${tab==='daily'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="daily" style="flex:1;">${t('daily_hub_leaderboard_today')}</button>
-      <button class="${tab==='weighted'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="weighted" style="flex:1;">${t('daily_hub_leaderboard_weighted')}</button>
+      <button class="${tab==='daily'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="daily" style="flex:1;font-size:12px;">${t('daily_hub_leaderboard_live')}</button>
+      <button class="${tab==='yesterday'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="yesterday" style="flex:1;font-size:12px;">${t('daily_hub_leaderboard_yesterday')}</button>
+      <button class="${tab==='weighted'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="weighted" style="flex:1;font-size:12px;">${t('daily_hub_leaderboard_weighted')}</button>
     </div>
     <div id="dailyLeaderboardContent" class="dim" style="text-align:center;padding:30px 0;">${t('daily_leaderboard_loading')}</div>
     <div class="btnrow" style="margin-top:16px;">
@@ -8417,23 +8506,29 @@ async function loadAndRenderDailyLeaderboard(tab){
   if(!supabaseClient){ contentEl.innerHTML = `<div class="dim">${t('daily_leaderboard_error')}</div>`; return; }
   try{
     let rows;
-    if(tab==='daily'){
+    if(tab==='daily' || tab==='yesterday'){
+      const dataRiferimento = tab==='daily' ? todayDateStringUTC() : previousDailyDateString(todayDateStringUTC());
       let { data, error } = await supabaseClient.from('daily_leaderboard_view')
         .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left, completed_at, driver_position, constructor_position, gap_from_rival, initial_rating, platinum_parts, final_score')
-        .eq('daily_date', todayDateStringUTC())
+        .eq('daily_date', dataRiferimento)
         .order('final_score', { ascending:false });
       if(error){
         console.warn('Lettura classifica col nuovo punteggio non riuscita, riprovo con quello vecchio:', error.message);
         const retry = await supabaseClient.from('daily_leaderboard_view')
           .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left, completed_at')
-          .eq('daily_date', todayDateStringUTC())
+          .eq('daily_date', dataRiferimento)
           .order('points', { ascending:false }).order('budget_saved', { ascending:false })
           .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
           .order('completed_at', { ascending:true });
         data = retry.data; error = retry.error;
       }
       if(error) throw error;
-      rows = (data||[]); // la vista arriva gia' ordinata correttamente
+      // V0.9.9.104: mescoliamo i giocatori veri con i 50 bot del giorno (tutti visibili se e' "ieri",
+      // solo quelli il cui orario di comparsa e' gia' passato se e' "oggi/live") — poi riordiniamo
+      // tutti insieme per punteggio finale, cosi' i bot si intrecciano nella classifica vera invece
+      // di stare per forza in fondo o in cima.
+      const bot = visibleDailyBotsForDate(dataRiferimento).map(b => ({ ...b, final_score: b.final_score ?? computeDailyFinalScore(b) }));
+      rows = [...(data||[]), ...bot].sort((a,b)=> (b.final_score ?? computeDailyFinalScore(b)) - (a.final_score ?? computeDailyFinalScore(a)));
     } else {
       const { data, error } = await supabaseClient.from('daily_weighted_leaderboard_view')
         .select('user_id, nickname, flag_code, giorni_giocati, punti_medi, budget_medio, componenti_medi')
@@ -8443,18 +8538,19 @@ async function loadAndRenderDailyLeaderboard(tab){
     }
     const el = document.getElementById('dailyLeaderboardContent'); // ricontrolla, l'attesa potrebbe averla rimossa
     if(!el) return;
-    if(rows.length===0){ el.innerHTML = `<div class="dim">${t(tab==='daily' ? 'daily_leaderboard_empty' : 'daily_leaderboard_weighted_empty')}</div>`; return; }
+    const isDettagliata = tab==='daily' || tab==='yesterday';
+    if(rows.length===0){ el.innerHTML = `<div class="dim">${t(isDettagliata ? 'daily_leaderboard_empty' : 'daily_leaderboard_weighted_empty')}</div>`; return; }
     el.className = '';
     // V0.9.9.103: righe della classifica giornaliera cliccabili — al tocco mostrano i valori
     // "splittati" (tutti i 7 fattori separati) invece del solo totale, richiesto da Gio.
     __dailyLeaderboardRowsCache = rows;
     el.innerHTML = rows.map((r,i)=>{
       const mio = currentUser && r.user_id===currentUser.id;
-      const statoText = tab==='daily'
+      const statoText = isDettagliata
         ? `${r.points} pt · ${fmtM(r.budget_saved)} · ${r.components_sum}`
         : `${r.punti_medi.toFixed(1)} pt medi · ${r.giorni_giocati}g`;
-      const clickAttr = tab==='daily' ? `data-action="toggle-daily-row-detail" data-row-idx="${i}"` : '';
-      return `<div class="daily-leaderboard-row ${mio?'daily-leaderboard-row-mine':''}" ${clickAttr} style="${tab==='daily'?'cursor:pointer;':''}">
+      const clickAttr = isDettagliata ? `data-action="toggle-daily-row-detail" data-row-idx="${i}"` : '';
+      return `<div class="daily-leaderboard-row ${mio?'daily-leaderboard-row-mine':''}" ${clickAttr} style="${isDettagliata?'cursor:pointer;':''}">
         <span class="daily-leaderboard-rank">${i+1}</span>
         ${flag(nationFromFlagCode(r.flag_code))}
         <span class="daily-leaderboard-nick">${r.nickname}</span>
@@ -8462,7 +8558,7 @@ async function loadAndRenderDailyLeaderboard(tab){
       </div>
       <div class="daily-leaderboard-detail" id="dailyRowDetail${i}" style="display:none;"></div>`;
     }).join('');
-    if(tab==='daily') bindActions(); // V0.9.9.103: le righe sono ora cliccabili, servono i listener veri
+    if(isDettagliata) bindActions(); // V0.9.9.103: le righe sono ora cliccabili, servono i listener veri
   }catch(e){
     const el = document.getElementById('dailyLeaderboardContent');
     if(el) el.innerHTML = `<div class="dim">${t('daily_leaderboard_error')}</div>`;
@@ -8501,7 +8597,8 @@ function renderDailySeasonHub(){
     </div>
     <div class="btnrow" style="flex-direction:column;gap:10px;">
       <button class="primary" data-action="daily-start-challenge" style="width:100%;">${t('daily_hub_start')}</button>
-      <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;">${t('daily_hub_leaderboard_today')}</button>
+      <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;">${t('daily_hub_leaderboard_live')}</button>
+      <button class="ghost" data-action="open-daily-leaderboard" data-tab="yesterday" style="width:100%;">${t('daily_hub_leaderboard_yesterday')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="weighted" style="width:100%;">${t('daily_hub_leaderboard_weighted')}</button>
       <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('daily_hub_back')}</button>
     </div>
