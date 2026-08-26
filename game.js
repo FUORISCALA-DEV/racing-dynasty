@@ -8558,7 +8558,7 @@ async function loadAndRenderDailyLeaderboard(tab){
     el.innerHTML = rows.map((r,i)=>{
       const mio = currentUser && r.user_id===currentUser.id;
       const statoText = isDettagliata
-        ? `${computeDailyFinalScore(r)} / ${DAILY_SCORE_MAX}`
+        ? computeDailyFinalScore(r).toLocaleString('it-IT')
         : `${r.punti_medi.toFixed(1)} pt medi · ${r.giorni_giocati}g`;
       const clickAttr = isDettagliata ? `data-action="toggle-daily-row-detail" data-row-idx="${i}"` : '';
       return `<div class="daily-leaderboard-row ${mio?'daily-leaderboard-row-mine':''}" ${clickAttr} style="${isDettagliata?'cursor:pointer;':''}">
