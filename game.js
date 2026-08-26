@@ -603,7 +603,7 @@ const I18N = {
     daily_detail_points: 'Punti', daily_detail_driver_pos: 'Posizione Piloti', daily_detail_constructor_pos: 'Posizione Costruttori',
     daily_detail_gap: 'Gap dal rivale', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (iniziale → finale)', daily_detail_platinum: 'Componenti Immortal',
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per giocarla senza limiti.',
-    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Daily di Ieri',
+    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Ultima Daily',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
     daily_leaderboard_loading: 'Carico la classifica...', daily_leaderboard_error: 'Errore nel caricamento, riprova più tardi.',
     daily_leaderboard_empty: 'Nessuno ha ancora giocato la Daily di oggi. Sii il primo!',
@@ -934,7 +934,7 @@ const I18N = {
     daily_detail_points: 'Points', daily_detail_driver_pos: 'Drivers Position', daily_detail_constructor_pos: 'Constructors Position',
     daily_detail_gap: 'Gap from rival', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (initial → final)', daily_detail_platinum: 'Immortal components',
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium to play it without limits.',
-    daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: "Yesterday's Daily",
+    daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Last Daily',
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
     daily_leaderboard_loading: 'Loading leaderboard...', daily_leaderboard_error: 'Loading failed, try again later.',
     daily_leaderboard_empty: "Nobody has played today's Daily yet. Be the first!",
@@ -1261,7 +1261,7 @@ const I18N = {
     daily_detail_points: 'Puntos', daily_detail_driver_pos: 'Posición Pilotos', daily_detail_constructor_pos: 'Posición Constructores',
     daily_detail_gap: 'Diferencia del rival', daily_detail_budget: 'Presupuesto', daily_detail_rating: 'Rating (inicial → final)', daily_detail_platinum: 'Componentes Immortal',
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para jugarla sin límites.',
-    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Daily en Vivo', daily_hub_leaderboard_yesterday: 'Daily de Ayer',
+    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Daily en Vivo', daily_hub_leaderboard_yesterday: 'Última Daily',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
     daily_leaderboard_loading: 'Cargando clasificación...', daily_leaderboard_error: 'Error al cargar, inténtalo más tarde.',
     daily_leaderboard_empty: 'Nadie ha jugado todavía la Daily de hoy. ¡Sé el primero!',
@@ -8488,7 +8488,7 @@ function renderDailyLeaderboard(tab){
   </div>
   <div class="wrap">
     <div class="btnrow" style="margin-bottom:14px;">
-      <button class="${tab==='daily'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="daily" style="flex:1;font-size:12px;">${t('daily_hub_leaderboard_live')}</button>
+      <button class="${tab==='daily'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="daily" style="flex:1;font-size:12px;"><span class="live-dot"></span>${t('daily_hub_leaderboard_live')}</button>
       <button class="${tab==='yesterday'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="yesterday" style="flex:1;font-size:12px;">${t('daily_hub_leaderboard_yesterday')}</button>
       <button class="${tab==='weighted'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="weighted" style="flex:1;font-size:12px;">${t('daily_hub_leaderboard_weighted')}</button>
     </div>
@@ -8597,7 +8597,7 @@ function renderDailySeasonHub(){
     </div>
     <div class="btnrow" style="flex-direction:column;gap:10px;">
       <button class="primary" data-action="daily-start-challenge" style="width:100%;">${t('daily_hub_start')}</button>
-      <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;">${t('daily_hub_leaderboard_live')}</button>
+      <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;"><span class="live-dot"></span>${t('daily_hub_leaderboard_live')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="yesterday" style="width:100%;">${t('daily_hub_leaderboard_yesterday')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="weighted" style="width:100%;">${t('daily_hub_leaderboard_weighted')}</button>
       <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('daily_hub_back')}</button>
