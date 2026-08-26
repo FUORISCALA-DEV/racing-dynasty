@@ -600,6 +600,8 @@ const I18N = {
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
     daily_trophy_podium: 'Sali sul podio oggi', daily_trophy_win: 'Vinci la Daily di oggi',
     daily_countdown_label: (t)=>`Prossima Daily tra ${t}`, daily_countdown_label_todo: (t)=>`Hai ancora ${t} per tentare la run`, daily_locked_trophies: (n)=> n===1 ? 'Ti manca 1 trofeo vinto per sbloccare la Daily Season' : `Ti mancano ${n} trofei vinti per sbloccare la Daily Season`, daily_locked_doppietta: 'Ti serve anche una Stagione Scuderia vinta sia come pilota che come costruttore (anche insieme) per sbloccare la Daily Season', daily_locked_titles_v2: 'Ti serve anche aver vinto sia il titolo Costruttori che il titolo Piloti in una Stagione Scuderia (anche in stagioni diverse)', daily_locked_row_constructor: 'Titolo Costruttori', daily_locked_row_driver: 'Titolo Piloti', daily_locked_tap_hint: 'Tocca per i dettagli',
+    daily_detail_points: 'Punti', daily_detail_driver_pos: 'Posizione Piloti', daily_detail_constructor_pos: 'Posizione Costruttori',
+    daily_detail_gap: 'Gap dal rivale', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (iniziale → finale)', daily_detail_platinum: 'Componenti Immortal',
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per giocarla senza limiti.',
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
@@ -929,6 +931,8 @@ const I18N = {
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
     daily_trophy_podium: 'Reach the podium today', daily_trophy_win: "Win today's Daily",
     daily_countdown_label: (t)=>`Next Daily in ${t}`, daily_countdown_label_todo: (t)=>`You still have ${t} to attempt the run`, daily_locked_trophies: (n)=> n===1 ? 'You need 1 more trophy to unlock Daily Season' : `You need ${n} more trophies to unlock Daily Season`, daily_locked_doppietta: 'You also need a Team Season won as both driver and constructor champion (can be together) to unlock Daily Season', daily_locked_titles_v2: 'You also need to have won both the Constructors title and the Drivers title in a Team Season (can be different seasons)', daily_locked_row_constructor: "Constructors' title", daily_locked_row_driver: "Drivers' title", daily_locked_tap_hint: 'Tap for details',
+    daily_detail_points: 'Points', daily_detail_driver_pos: 'Drivers Position', daily_detail_constructor_pos: 'Constructors Position',
+    daily_detail_gap: 'Gap from rival', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (initial → final)', daily_detail_platinum: 'Immortal components',
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium to play it without limits.',
     daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard",
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
@@ -1254,6 +1258,8 @@ const I18N = {
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
     daily_trophy_podium: 'Sube al podio hoy', daily_trophy_win: 'Gana la Daily de hoy',
     daily_countdown_label: (t)=>`Próxima Daily en ${t}`, daily_countdown_label_todo: (t)=>`Todavía tienes ${t} para intentar la run`, daily_locked_trophies: (n)=> n===1 ? 'Te falta 1 trofeo para desbloquear la Daily Season' : `Te faltan ${n} trofeos para desbloquear la Daily Season`, daily_locked_doppietta: 'También necesitas una Temporada de Escudería ganada como piloto y como constructor (pueden ser juntos) para desbloquear la Daily Season', daily_locked_titles_v2: 'También necesitas haber ganado tanto el título de Constructores como el de Pilotos en una Temporada de Escudería (pueden ser temporadas distintas)', daily_locked_row_constructor: 'Título Constructores', daily_locked_row_driver: 'Título Pilotos', daily_locked_tap_hint: 'Toca para más detalles',
+    daily_detail_points: 'Puntos', daily_detail_driver_pos: 'Posición Pilotos', daily_detail_constructor_pos: 'Posición Constructores',
+    daily_detail_gap: 'Diferencia del rival', daily_detail_budget: 'Presupuesto', daily_detail_rating: 'Rating (inicial → final)', daily_detail_platinum: 'Componentes Immortal',
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para jugarla sin límites.',
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
@@ -2354,18 +2360,15 @@ async function loadDailyBestResultToday(){
   if(!currentUser || !supabaseClient){ dailyBestResultCache = null; return null; }
   try{
     const today = todayDateStringUTC();
-    // V0.9.9.92: FIX CRITICO — stesso ripiego del salvataggio. Se la vista sul database non e'
-    // ancora stata aggiornata con le colonne titolo (SQL non ancora eseguito), la richiesta con
-    // quei campi falliva DEL TUTTO, impedendo di vedere anche solo il rank/punteggio (che invece
-    // non dipendono affatto da quelle colonne). Ora riproviamo subito senza, in caso di errore.
+    // V0.9.9.92/103: FIX CRITICO — stesso ripiego del salvataggio, ora anche per il nuovo
+    // punteggio a più fattori (final_score). Se la vista non e' ancora stata aggiornata (SQL non
+    // ancora eseguito), riproviamo con la selezione/ordinamento vecchio, cosi' funziona comunque.
     let { data, error } = await supabaseClient.from('daily_leaderboard_view')
-      .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at, won_constructor, won_driver')
+      .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at, won_constructor, won_driver, driver_position, constructor_position, gap_from_rival, initial_rating, platinum_parts, final_score')
       .eq('daily_date', today)
-      .order('points', { ascending:false }).order('budget_saved', { ascending:false })
-      .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
-      .order('completed_at', { ascending:true });
+      .order('final_score', { ascending:false });
     if(error){
-      console.warn('Lettura Daily coi campi titolo non riuscita, riprovo senza:', error.message);
+      console.warn('Lettura Daily col nuovo punteggio non riuscita, riprovo con quello vecchio:', error.message);
       const retry = await supabaseClient.from('daily_leaderboard_view')
         .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at')
         .eq('daily_date', today)
@@ -7231,24 +7234,52 @@ let __dailySaveInFlight = null; // tracciata così la carta condivisibile può a
 function saveDailySeasonResult(){
   if(!currentUser || !supabaseClient) return;
   const cstd = constructorStandingsSorted();
-  const myConstructor = cstd.find(c=>c.teamId==='PLAYER');
+  const myConstructorIdx = cstd.findIndex(c=>c.teamId==='PLAYER');
+  const myConstructor = myConstructorIdx>=0 ? cstd[myConstructorIdx] : null;
   const points = myConstructor ? myConstructor.points : 0;
   const componentsSum = ['motore','telaio','aero','gomme','stratega']
     .reduce((sum,key)=> sum + (state.team[key] ? state.team[key].rating : 0), 0);
   const summary = computeSeasonEndSummaryLines(); // stessa logica della schermata fine stagione
+
+  // V0.9.9.103: DAILY SEASON — nuovo sistema di punteggio a più fattori, richiesto da Gio dopo le
+  // note dei tester. I punti restano SEMPRE dominanti (garantito lato database, non qui) — questi
+  // sono solo i dati grezzi, il calcolo del punteggio vero avviene nella vista SQL.
+  const dstd = driverStandingsSorted();
+  const myDriverIdx = dstd.findIndex(d=>d.isPlayerTeam);
+  const driverPosition = myDriverIdx>=0 ? myDriverIdx+1 : null;
+  const constructorPosition = myConstructorIdx>=0 ? myConstructorIdx+1 : null;
+  let gapFromRival = 0;
+  if(myConstructor && cstd.length>1){
+    const rivali = cstd.filter(c=>c.teamId!=='PLAYER');
+    let minAbsGap = Infinity;
+    rivali.forEach(c=>{
+      const g = myConstructor.points - c.points;
+      if(Math.abs(g) < minAbsGap){ minAbsGap = Math.abs(g); gapFromRival = g; }
+    });
+  }
+  const initialRating = state.initialComponentRatings
+    ? Object.values(state.initialComponentRatings).reduce((s,v)=>s+v, 0) : null;
+  const platinumParts = ['motore','telaio','aero','gomme','stratega']
+    .filter(key => state.team[key] && state.team[key].rating>=100).length;
+
   const baseRow = {
     user_id: currentUser.id,
     daily_date: state.dailySeasonDate || todayDateStringUTC(),
     season_length: state.seasonLength,
     points, budget_saved: state.budget, components_sum: componentsSum,
     rerolls_left: state.rerollsLeft || 0,
+    driver_position: driverPosition, constructor_position: constructorPosition,
+    gap_from_rival: gapFromRival, initial_rating: initialRating, platinum_parts: platinumParts,
   };
-  // V0.9.9.92: FIX CRITICO — se le colonne won_constructor/won_driver non esistono ancora sul
-  // database (SQL non ancora eseguito), l'inserimento falliva DEL TUTTO in silenzio, perdendo
-  // l'intero risultato della Daily appena giocata, non solo il dato dei titoli. Ora se il primo
-  // tentativo (coi nuovi campi) fallisce, riproviamo SUBITO senza quei campi — il risultato
-  // principale si salva comunque, i titoli restano semplicemente non tracciati finche' Gio non
-  // esegue lo script SQL.
+  // V0.9.9.92/103: FIX CRITICO a 3 livelli — se qualche colonna non esiste ancora sul database (SQL
+  // non ancora eseguito), l'inserimento falliva DEL TUTTO in silenzio, perdendo l'intero risultato
+  // della Daily. Ora riproviamo progressivamente con meno campi, cosi' il risultato minimo si salva
+  // sempre, qualunque script SQL Gio abbia gia' eseguito o meno.
+  const minimalRow = {
+    user_id: baseRow.user_id, daily_date: baseRow.daily_date, season_length: baseRow.season_length,
+    points: baseRow.points, budget_saved: baseRow.budget_saved, components_sum: baseRow.components_sum,
+    rerolls_left: baseRow.rerolls_left,
+  };
   __dailySaveInFlight = supabaseClient.from('daily_season_results')
     .insert({ ...baseRow, won_constructor: summary.isConstructorChamp, won_driver: summary.anyDriverChamp })
     .then(({error})=>{
@@ -7257,11 +7288,19 @@ function saveDailySeasonResult(){
         __dailySaveInFlight = null;
         return;
       }
-      console.warn('Salvataggio Daily coi campi titolo non riuscito, riprovo senza:', error.message);
+      console.warn('Salvataggio Daily completo non riuscito, riprovo senza titoli:', error.message);
       return supabaseClient.from('daily_season_results').insert(baseRow).then(({error:error2})=>{
-        if(error2) console.warn('Salvataggio Daily non riuscito nemmeno col ripiego:', error2.message);
-        dailyBestResultCache = undefined;
-        __dailySaveInFlight = null;
+        if(!error2){
+          dailyBestResultCache = undefined;
+          __dailySaveInFlight = null;
+          return;
+        }
+        console.warn('Ripiego intermedio non riuscito, riprovo con i soli campi di base:', error2.message);
+        return supabaseClient.from('daily_season_results').insert(minimalRow).then(({error:error3})=>{
+          if(error3) console.warn('Salvataggio Daily non riuscito nemmeno col ripiego minimo:', error3.message);
+          dailyBestResultCache = undefined;
+          __dailySaveInFlight = null;
+        });
       });
     });
 }
@@ -8379,12 +8418,20 @@ async function loadAndRenderDailyLeaderboard(tab){
   try{
     let rows;
     if(tab==='daily'){
-      const { data, error } = await supabaseClient.from('daily_leaderboard_view')
-        .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left, completed_at')
+      let { data, error } = await supabaseClient.from('daily_leaderboard_view')
+        .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left, completed_at, driver_position, constructor_position, gap_from_rival, initial_rating, platinum_parts, final_score')
         .eq('daily_date', todayDateStringUTC())
-        .order('points', { ascending:false }).order('budget_saved', { ascending:false })
-        .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
-        .order('completed_at', { ascending:true });
+        .order('final_score', { ascending:false });
+      if(error){
+        console.warn('Lettura classifica col nuovo punteggio non riuscita, riprovo con quello vecchio:', error.message);
+        const retry = await supabaseClient.from('daily_leaderboard_view')
+          .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left, completed_at')
+          .eq('daily_date', todayDateStringUTC())
+          .order('points', { ascending:false }).order('budget_saved', { ascending:false })
+          .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
+          .order('completed_at', { ascending:true });
+        data = retry.data; error = retry.error;
+      }
       if(error) throw error;
       rows = (data||[]); // la vista arriva gia' ordinata correttamente
     } else {
@@ -8398,23 +8445,42 @@ async function loadAndRenderDailyLeaderboard(tab){
     if(!el) return;
     if(rows.length===0){ el.innerHTML = `<div class="dim">${t(tab==='daily' ? 'daily_leaderboard_empty' : 'daily_leaderboard_weighted_empty')}</div>`; return; }
     el.className = '';
+    // V0.9.9.103: righe della classifica giornaliera cliccabili — al tocco mostrano i valori
+    // "splittati" (tutti i 7 fattori separati) invece del solo totale, richiesto da Gio.
+    __dailyLeaderboardRowsCache = rows;
     el.innerHTML = rows.map((r,i)=>{
       const mio = currentUser && r.user_id===currentUser.id;
       const statoText = tab==='daily'
         ? `${r.points} pt · ${fmtM(r.budget_saved)} · ${r.components_sum}`
         : `${r.punti_medi.toFixed(1)} pt medi · ${r.giorni_giocati}g`;
-      return `<div class="daily-leaderboard-row ${mio?'daily-leaderboard-row-mine':''}">
+      const clickAttr = tab==='daily' ? `data-action="toggle-daily-row-detail" data-row-idx="${i}"` : '';
+      return `<div class="daily-leaderboard-row ${mio?'daily-leaderboard-row-mine':''}" ${clickAttr} style="${tab==='daily'?'cursor:pointer;':''}">
         <span class="daily-leaderboard-rank">${i+1}</span>
         ${flag(nationFromFlagCode(r.flag_code))}
         <span class="daily-leaderboard-nick">${r.nickname}</span>
         <span class="daily-leaderboard-stat dim">${statoText}</span>
-      </div>`;
+      </div>
+      <div class="daily-leaderboard-detail" id="dailyRowDetail${i}" style="display:none;"></div>`;
     }).join('');
+    if(tab==='daily') bindActions(); // V0.9.9.103: le righe sono ora cliccabili, servono i listener veri
   }catch(e){
     const el = document.getElementById('dailyLeaderboardContent');
     if(el) el.innerHTML = `<div class="dim">${t('daily_leaderboard_error')}</div>`;
     console.warn('Caricamento classifica Daily non riuscito:', e);
   }
+}
+let __dailyLeaderboardRowsCache = [];
+function dailyRowDetailHTML(r){
+  const righe = [
+    [t('daily_detail_points'), `${r.points ?? '—'} pt`],
+    [t('daily_detail_driver_pos'), r.driver_position ? `P${r.driver_position}/20` : '—'],
+    [t('daily_detail_constructor_pos'), r.constructor_position ? `P${r.constructor_position}/10` : '—'],
+    [t('daily_detail_gap'), r.gap_from_rival!=null ? (r.gap_from_rival>0?'+':'')+r.gap_from_rival+' pt' : '—'],
+    [t('daily_detail_budget'), r.budget_saved!=null ? fmtM(r.budget_saved) : '—'],
+    [t('daily_detail_rating'), (r.initial_rating!=null && r.components_sum!=null) ? `${r.initial_rating} → ${r.components_sum}` : '—'],
+    [t('daily_detail_platinum'), r.platinum_parts!=null ? `${r.platinum_parts}/5` : '—'],
+  ];
+  return righe.map(([label,val])=>`<div class="daily-detail-row"><span class="dim">${label}</span><span>${val}</span></div>`).join('');
 }
 function nationFromFlagCode(code){
   const entry = Object.entries(COUNTRY_FLAG).find(([nome,c])=>c===code);
@@ -12278,6 +12344,15 @@ function onAction(e){
   else if(action==='open-redeem-code'){
     closeMenuPanel();
     openRedeemCodePanel();
+  }
+  else if(action==='toggle-daily-row-detail'){
+    const idx = Number(el.dataset.rowIdx);
+    const detailEl = document.getElementById('dailyRowDetail'+idx);
+    if(!detailEl) return;
+    const aperto = detailEl.style.display !== 'none';
+    if(aperto){ detailEl.style.display = 'none'; return; }
+    const r = __dailyLeaderboardRowsCache[idx];
+    if(r){ detailEl.innerHTML = dailyRowDetailHTML(r); detailEl.style.display = 'block'; }
   }
   else if(action==='daily-locked-info'){
     gameConfirm(dailySeasonLockedMessageHTML().replace(/<[^>]+>/g,' ').trim(), ()=>{}, t('mode_select_daily'));
