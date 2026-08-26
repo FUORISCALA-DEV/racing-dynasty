@@ -1148,6 +1148,30 @@ tr.rival{ background:rgba(177,67,243,0.07); border-left:2px solid #B143F3; }
 .decision-btn-label{ font-weight:800; font-size:14px; }
 .decision-btn-desc{ font-size:12px; opacity:0.75; margin-top:4px; }
 .decision-bucket-row{ display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
+/* V0.9.9.113: CELEBRAZIONE VITTORIA CAMPIONATO — freeze frame, sfondo semi-trasparente per
+   lasciare intravedere i fuochi VERI (renderCelebrationFx, già esistenti) sotto/attorno. */
+.cv-fullscreen{
+  position:fixed; inset:0; z-index:9998; background:rgba(5,6,10,0.55);
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  animation: trophyFullscreenFadeIn 0.4s ease forwards;
+}
+.cv-freeze-frame{
+  position:relative; text-align:center; max-width:440px; width:100%;
+  display:flex; flex-direction:column; align-items:center;
+  animation: cvFreezeZoomIn 0.55s cubic-bezier(.2,.85,.3,1.1) forwards;
+}
+@keyframes cvFreezeZoomIn{ 0%{ transform:scale(1.15); opacity:0.4; } 100%{ transform:scale(1); opacity:1; } }
+.cv-pose-img{ max-height:44vh; width:auto; filter:drop-shadow(0 18px 30px rgba(0,0,0,0.6)); }
+.cv-badge{
+  margin-top:10px; font-size:26px; font-weight:900; letter-spacing:-0.01em; color:#ffc83c;
+  text-shadow:0 0 22px rgba(255,200,60,0.6), 0 4px 14px rgba(0,0,0,0.6);
+  opacity:0; transform:scale(0.75); animation: victoryTitlePop 0.5s cubic-bezier(.2,.9,.3,1.4) 0.3s forwards;
+}
+.cv-badge-grandslam{ color:#fff; text-shadow:0 0 26px rgba(255,60,60,0.7), 0 4px 14px rgba(0,0,0,0.6); }
+.cv-sub{
+  margin-top:6px; font-size:14px; color:#e8e8ec;
+  opacity:0; animation: victoryFadeUp 0.5s ease 0.55s forwards;
+}
 /* V0.9.9.112: DECISIONE COME EVENTO — richiesto da Gio per le decisioni ad alto rischio, così un
    momento del genere si nota subito anche a schermo intero, il tipo di cosa per cui uno streamer
    urla "ASPETTA". Vignette rossa pulsante sullo sfondo, bordo rosso acceso sulla carta, badge

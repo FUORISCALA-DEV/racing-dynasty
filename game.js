@@ -500,6 +500,10 @@ const I18N = {
     se_th_pos: 'Pos', se_th_driver: 'Pilota', se_th_team: 'Scuderia', se_th_points: 'Punti',
     se_you_badge: 'TU', se_ex_badge: 'EX', se_rival_badge: 'RIVALE',
     se_footer: 'Ogni nuova run genera un nuovo draft di piloti e componenti — la stagione in corso viene salvata automaticamente.',
+    cv_driver_champ_title: 'CAMPIONE DEL MONDO PILOTI', cv_driver_champ_sub: (nome)=>`${nome} è Campione del Mondo!`,
+    cv_constructor_champ_title: 'CAMPIONI COSTRUTTORI', cv_constructor_champ_sub: (team)=>`${team} vince il titolo Costruttori!`,
+    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} e ${team} — entrambi i titoli in una stagione!`,
+    cv_continue: 'Continua →',
     expl_retired: 'Ritirato — nessun punto raccolto in questo Gran Premio.',
     expl_gained: (grid,pos,delta)=>`Partito P${grid}, arrivato P${pos}: <b>+${delta} posizion${delta===1?'e':'i'}</b> guadagnat${delta===1?'a':'e'} in gara.`,
     expl_lost: (grid,pos,delta)=>`Partito P${grid}, arrivato P${pos}: <b>${delta} posizion${delta===-1?'e':'i'}</b> perse in gara.`,
@@ -833,6 +837,10 @@ const I18N = {
     se_th_pos: 'Pos', se_th_driver: 'Driver', se_th_team: 'Team', se_th_points: 'Points',
     se_you_badge: 'YOU', se_ex_badge: 'EX', se_rival_badge: 'RIVAL',
     se_footer: 'Every new run generates a new draft of drivers and components — the current season is saved automatically.',
+    cv_driver_champ_title: 'WORLD DRIVERS CHAMPION', cv_driver_champ_sub: (nome)=>`${nome} is World Champion!`,
+    cv_constructor_champ_title: 'CONSTRUCTORS CHAMPIONS', cv_constructor_champ_sub: (team)=>`${team} wins the Constructors title!`,
+    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} and ${team} — both titles in one season!`,
+    cv_continue: 'Continue →',
     expl_retired: 'Retired — no points scored in this Grand Prix.',
     expl_gained: (grid,pos,delta)=>`Started P${grid}, finished P${pos}: <b>+${delta} position${delta===1?'':'s'}</b> gained in the race.`,
     expl_lost: (grid,pos,delta)=>`Started P${grid}, finished P${pos}: <b>${delta} position${delta===-1?'':'s'}</b> lost in the race.`,
@@ -1160,6 +1168,10 @@ const I18N = {
     se_th_pos: 'Pos', se_th_driver: 'Piloto', se_th_team: 'Escudería', se_th_points: 'Puntos',
     se_you_badge: 'TÚ', se_ex_badge: 'EX', se_rival_badge: 'RIVAL',
     se_footer: 'Cada nueva run genera un nuevo draft de pilotos y componentes — la temporada en curso se guarda automáticamente.',
+    cv_driver_champ_title: 'CAMPEÓN DEL MUNDO DE PILOTOS', cv_driver_champ_sub: (nome)=>`¡${nome} es Campeón del Mundo!`,
+    cv_constructor_champ_title: 'CAMPEONES DE CONSTRUCTORES', cv_constructor_champ_sub: (team)=>`¡${team} gana el título de Constructores!`,
+    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} y ${team} — ¡ambos títulos en una temporada!`,
+    cv_continue: 'Continuar →',
     expl_retired: 'Retirado — sin puntos en este Gran Premio.',
     expl_gained: (grid,pos,delta)=>`Salió P${grid}, terminó P${pos}: <b>+${delta} posición${delta===1?'':'es'}</b> ganada${delta===1?'':'s'} en carrera.`,
     expl_lost: (grid,pos,delta)=>`Salió P${grid}, terminó P${pos}: <b>${delta} posición${delta===-1?'':'es'}</b> perdida${delta===-1?'':'s'} en carrera.`,
@@ -10619,6 +10631,37 @@ function constructorStandingsSorted(){
 // V0.9.7: banner vittoria — "VITTORIA!" come messaggio primario, etichetta trofeo come sottotitolo.
 // Due varianti di festeggiamento: raggi+trofeo per il primo trofeo su un circuito (evento raro,
 // merita piu' peso), streak di velocita' per le vittorie successive sullo stesso circuito.
+// V0.9.9.113: CELEBRAZIONE VITTORIA CAMPIONATO — punto 3 della lista social di Gio ("quando vinci":
+// freeze, fuochi, niente replay — "inutile" a suo parere). Distinta dalla vittoria gara singola
+// (trofeo circuito): questa è la culminazione dell'intera stagione, molto più grande. "Freeze frame"
+// realizzato con le stesse pose pilota già usate per le carte condivisibili (una posa statica e
+// drammatica È già un fermo immagine, coerente con l'idea "freeze" senza dover animare nulla).
+// I fuochi VERI sono quelli già esistenti (renderCelebrationFx, molto più elaborati di quanto
+// avrei potuto improvvisare) — qui c'è solo il freeze frame, con sfondo semi-trasparente per
+// lasciarli intravedere attorno, non un secondo sistema di fuochi ridondante.
+function championshipVictoryHTML(){
+  if(!state.championshipVictoryData) return '';
+  const { isDriverChamp, isConstructorChamp, poseSrc, teamName, driverName } = state.championshipVictoryData;
+  const isGrandSlam = isDriverChamp && isConstructorChamp;
+  const titleText = isGrandSlam ? t('cv_grand_slam_title')
+    : isDriverChamp ? t('cv_driver_champ_title')
+    : t('cv_constructor_champ_title');
+  const subText = isGrandSlam ? t('cv_grand_slam_sub', driverName, teamName)
+    : isDriverChamp ? t('cv_driver_champ_sub', driverName)
+    : t('cv_constructor_champ_sub', teamName);
+  return `
+  <div class="cv-fullscreen" data-action="dismiss-championship-victory" id="championshipVictoryOverlay">
+    <div class="cv-freeze-frame">
+      <img src="${poseSrc}" alt="" class="cv-pose-img">
+      <div class="cv-badge ${isGrandSlam?'cv-badge-grandslam':''}">${titleText}</div>
+      <div class="cv-sub">${subText}</div>
+      <div class="btnrow" style="justify-content:center;margin-top:20px;position:relative;z-index:6;">
+        <button class="primary" data-action="dismiss-championship-victory">${t('cv_continue')}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
 function trophyUnlockBannerHTML(){
   const tw = state.lastTrophyUnlock;
   if(!tw) return '';
@@ -12249,6 +12292,25 @@ function renderSeasonEnd(){
   const isConstructorChamp = constructorChamp.isPlayerTeam;
 
   const summary = computeSeasonEndSummaryLines();
+
+  // V0.9.9.113: celebrazione vittoria campionato — attivata una sola volta per stagione, solo se
+  // davvero vinto almeno un titolo, non per ogni singola visita/ri-rendering della schermata.
+  if((isDriverChamp || isConstructorChamp) && !state.championshipVictoryShown){
+    state.championshipVictoryShown = true;
+    const bestDriverRating = isDriverChamp
+      ? (driverChamp.slotKey==='PLAYER-1' ? state.team.pilotMain.rating : state.team.pilotSecond.rating)
+      : Math.max(state.team.pilotMain.rating, state.team.pilotSecond.rating);
+    const band = ratingBandKey(bestDriverRating);
+    const poseNum = isDriverChamp ? 1 : (2+Math.floor(rnd()*4));
+    const isGoatChamp = isDriverChamp && driverChamp.nome==='THE GOAT';
+    const poseBand = isGoatChamp ? 'goat_ferrari' : band;
+    state.championshipVictoryData = {
+      isDriverChamp, isConstructorChamp,
+      poseSrc: `assets/share-poses/pose${poseNum}_${poseBand}.webp`,
+      teamName: summary.teamName,
+      driverName: driverChamp.nome,
+    };
+  }
   const pillText = summary.isConstructorChamp ? t('se_constr_champ_pill') : t('se_end_pill');
   const heroTitle = summary.isConstructorChamp
     ? t('se_team_won_title', summary.teamName)
@@ -12284,6 +12346,7 @@ function renderSeasonEnd(){
   const trophyBand = champPilotRating!==null ? ratingBandKey(champPilotRating) : null;
 
   app.innerHTML = `
+  ${championshipVictoryHTML()}
   <div class="hero season-champ-hero ${isDriverChamp?'has-trophy':''}">
     ${isDriverChamp ? `<img src="assets/trophies/${trophyBand}.png" alt="" class="champ-trophy-img">` : ''}
     <div class="hero-inner">
@@ -12343,7 +12406,14 @@ function renderSeasonEnd(){
   if(isDriverChamp || isConstructorChamp){
     renderCelebrationFx(isDriverChamp, isConstructorChamp, state.team.nation);
   }
+  if(state.championshipVictoryData && !__championshipVictorySoundPlayed){
+    __championshipVictorySoundPlayed = true;
+    playRealSfx('audio/sfx_victory_fanfare.mp3');
+  } else if(!state.championshipVictoryData){
+    __championshipVictorySoundPlayed = false; // pronto per la prossima stagione
+  }
 }
+let __championshipVictorySoundPlayed = false;
 
 /* ---------------- event binding ---------------- */
 function bindActions(){
@@ -12752,6 +12822,7 @@ function onAction(e){
     if(state.isDriverCareer) goToDriverHubOrSeasonEnd();
     else goToPitlaneOrEnd();
   }
+  else if(action==='dismiss-championship-victory'){ state.championshipVictoryData = null; render(); }
   else if(action==='dismiss-trophy-unlock'){ clearTimeout(__trophyUnlockAutoDismissTimer); state.trophyUnlockDismissed = true; render(); }
   else if(action==='confirm-upgrade-invest'){
     const idx = el.dataset.idx;
