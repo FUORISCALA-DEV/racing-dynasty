@@ -2509,6 +2509,15 @@ function generateDailyBots(dateStr){
 }
 // Stessa IDENTICA formula della vista SQL daily_leaderboard_view — necessaria qui perche' i bot
 // non passano mai dal database, ma devono ordinarsi in classifica con lo stesso criterio esatto.
+// V0.9.9.107: DAILY SEASON — punteggio ora su scala 0-10000 (10000 = run assolutamente perfetta),
+// richiesto da Gio. 473 = massimo punti teorico (11 gare, entrambi i piloti sempre 1°-2° ogni gara,
+// 25+18=43 punti a gara). I pesi sono calibrati mate maticamente: ogni punto vero vale ~21.1 sulla
+// scala, il fattore secondario (tutti e 6 gli altri elementi insieme) puo' valere al massimo 20 —
+// quindi anche UN SOLO punto di differenza vince sempre su qualunque combinazione degli altri 6
+// fattori, la garanzia "chi fa più punti è sempre davanti" resta vera al 100% anche arrotondata.
+const DAILY_SCORE_MAX = 10000;
+const DAILY_SCORE_POINTS_MAX = 473;
+const DAILY_SCORE_SECONDARY_MAX = 20;
 function computeDailyFinalScore(r){
   const driverScore = Math.max(0, (21 - (r.driver_position ?? 20)) / 20 * 100);
   const ctorScore = Math.max(0, (11 - (r.constructor_position ?? 10)) / 10 * 100);
@@ -2517,9 +2526,11 @@ function computeDailyFinalScore(r){
   const budgetScore = Math.min(100, (r.budget_saved ?? 0) / 60 * 100);
   const platinoScore = (r.platinum_parts ?? 0) / 5 * 100;
   const ratingIniScore = Math.min(100, (r.initial_rating ?? 0) / 500 * 100);
-  const secondario = 0.19*driverScore + 0.19*ctorScore + 0.19*ratingScore + 0.16*gapScore
+  const secondario0a100 = 0.19*driverScore + 0.19*ctorScore + 0.19*ratingScore + 0.16*gapScore
     + 0.11*budgetScore + 0.11*platinoScore + 0.05*ratingIniScore;
-  return (r.points ?? 0) * 1000 + secondario;
+  const puntiComponente = Math.min(1, (r.points ?? 0) / DAILY_SCORE_POINTS_MAX) * (DAILY_SCORE_MAX - DAILY_SCORE_SECONDARY_MAX);
+  const secondarioComponente = (secondario0a100/100) * DAILY_SCORE_SECONDARY_MAX;
+  return Math.round(puntiComponente + secondarioComponente);
 }
 // meccanismo che li fa apparire gradualmente nel corso della giornata invece che tutti insieme.
 function visibleDailyBotsForDate(dateStr){
@@ -8527,8 +8538,8 @@ async function loadAndRenderDailyLeaderboard(tab){
       // solo quelli il cui orario di comparsa e' gia' passato se e' "oggi/live") — poi riordiniamo
       // tutti insieme per punteggio finale, cosi' i bot si intrecciano nella classifica vera invece
       // di stare per forza in fondo o in cima.
-      const bot = visibleDailyBotsForDate(dataRiferimento).map(b => ({ ...b, final_score: b.final_score ?? computeDailyFinalScore(b) }));
-      rows = [...(data||[]), ...bot].sort((a,b)=> (b.final_score ?? computeDailyFinalScore(b)) - (a.final_score ?? computeDailyFinalScore(a)));
+      const bot = visibleDailyBotsForDate(dataRiferimento);
+      rows = [...(data||[]), ...bot].sort((a,b)=> computeDailyFinalScore(b) - computeDailyFinalScore(a));
     } else {
       const { data, error } = await supabaseClient.from('daily_weighted_leaderboard_view')
         .select('user_id, nickname, flag_code, giorni_giocati, punti_medi, budget_medio, componenti_medi')
@@ -8547,7 +8558,7 @@ async function loadAndRenderDailyLeaderboard(tab){
     el.innerHTML = rows.map((r,i)=>{
       const mio = currentUser && r.user_id===currentUser.id;
       const statoText = isDettagliata
-        ? `${r.points} ${t('daily_score_points_word')}`
+        ? `${computeDailyFinalScore(r)} / ${DAILY_SCORE_MAX}`
         : `${r.punti_medi.toFixed(1)} pt medi · ${r.giorni_giocati}g`;
       const clickAttr = isDettagliata ? `data-action="toggle-daily-row-detail" data-row-idx="${i}"` : '';
       return `<div class="daily-leaderboard-row ${mio?'daily-leaderboard-row-mine':''}" ${clickAttr} style="${isDettagliata?'cursor:pointer;':''}">
