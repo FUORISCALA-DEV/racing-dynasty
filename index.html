@@ -275,14 +275,17 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .daily-locked-quick-icon{ font-size:15px; width:20px; text-align:center; flex-shrink:0; }
 .daily-leaderboard-row{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-bottom:1px solid var(--line); }
 .daily-leaderboard-row-mine{ background:rgba(255,106,26,0.1); border-radius:8px; }
+.daily-leaderboard-row-top10{ background:rgba(255,255,255,0.035); }
+.daily-leaderboard-row-top10.daily-leaderboard-row-mine{ background:rgba(255,106,26,0.16); }
+.daily-leaderboard-rank{ font-family:var(--font-mono); font-weight:700; width:28px; text-align:center; color:var(--dim); font-size:15px; }
+.daily-leaderboard-stat{ font-size:12px; text-align:right; white-space:nowrap; }
+.daily-leaderboard-score{ font-size:16px; font-weight:800; color:var(--signal); font-family:var(--font-mono); }
 .daily-leaderboard-detail{ padding:8px 12px 12px 40px; background:rgba(255,255,255,0.03); border-bottom:1px solid var(--line); }
 .daily-detail-row{ display:flex; justify-content:space-between; font-size:12px; padding:3px 0; }
 .live-dot{ display:inline-block; width:8px; height:8px; border-radius:50%; background:#2ecc71; margin-right:6px;
   box-shadow:0 0 6px #2ecc71; animation:live-dot-blink 1.4s ease-in-out infinite; vertical-align:middle; }
 @keyframes live-dot-blink{ 0%,100%{ opacity:1; } 50%{ opacity:0.25; } }
-.daily-leaderboard-rank{ font-family:var(--font-mono); font-weight:700; width:24px; text-align:right; color:var(--dim); }
 .daily-leaderboard-nick{ flex:1; font-weight:700; }
-.daily-leaderboard-stat{ font-size:12px; text-align:right; white-space:nowrap; }
 /* V0.9.9.74: luccichio verde tutorial — indica cosa cliccare, senza bloccare nulla di visivo sotto */
 @keyframes tutorialSparklePulse{
   0%,100%{ box-shadow:0 0 0px 0px rgba(60,220,120,0.0), 0 0 8px 2px rgba(60,220,120,0.25); }

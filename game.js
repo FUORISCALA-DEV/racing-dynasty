@@ -603,7 +603,7 @@ const I18N = {
     daily_detail_points: 'Punti', daily_score_points_word: 'punti', daily_detail_driver_pos: 'Posizione Piloti', daily_detail_constructor_pos: 'Posizione Costruttori',
     daily_detail_gap: 'Gap dal rivale', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (iniziale → finale)', daily_detail_platinum: 'Componenti Immortal',
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per avere fino a 3 tentativi al giorno.', daily_max_attempts_title: 'Hai esaurito i tentativi', daily_max_attempts_desc: 'Hai già usato tutti e 3 i tentativi di oggi. Torna domani per riprovare.', daily_confirm_new_attempt_title: 'Nuovo tentativo?', daily_confirm_new_attempt_desc: 'Hai già un risultato salvato per oggi. Iniziando un nuovo tentativo, quello precedente verrà eliminato per sempre — non potrai tornare indietro. Solo l\'ultimo tentativo conta in classifica. Procedere?',
-    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
+    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Classifica Daily Live', daily_hub_leaderboard_yesterday: 'Classifica Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
     daily_leaderboard_loading: 'Carico la classifica...', daily_leaderboard_error: 'Errore nel caricamento, riprova più tardi.',
     daily_leaderboard_empty: 'Nessuno ha ancora giocato la Daily di oggi. Sii il primo!',
@@ -934,7 +934,7 @@ const I18N = {
     daily_detail_points: 'Points', daily_score_points_word: 'points', daily_detail_driver_pos: 'Drivers Position', daily_detail_constructor_pos: 'Constructors Position',
     daily_detail_gap: 'Gap from rival', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (initial → final)', daily_detail_platinum: 'Immortal components',
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium for up to 3 attempts per day.', daily_max_attempts_title: 'No attempts left', daily_max_attempts_desc: "You've already used all 3 attempts today. Come back tomorrow to try again.", daily_confirm_new_attempt_title: 'New attempt?', daily_confirm_new_attempt_desc: "You already have a saved result for today. Starting a new attempt will permanently delete the previous one — this can't be undone. Only your last attempt counts on the leaderboard. Proceed?",
-    daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live', daily_hub_leaderboard_yesterday: 'Last Daily', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
+    daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live Leaderboard', daily_hub_leaderboard_yesterday: 'Last Daily Leaderboard', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
     daily_leaderboard_loading: 'Loading leaderboard...', daily_leaderboard_error: 'Loading failed, try again later.',
     daily_leaderboard_empty: "Nobody has played today's Daily yet. Be the first!",
@@ -1261,7 +1261,7 @@ const I18N = {
     daily_detail_points: 'Puntos', daily_score_points_word: 'puntos', daily_detail_driver_pos: 'Posición Pilotos', daily_detail_constructor_pos: 'Posición Constructores',
     daily_detail_gap: 'Diferencia del rival', daily_detail_budget: 'Presupuesto', daily_detail_rating: 'Rating (inicial → final)', daily_detail_platinum: 'Componentes Immortal',
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para tener hasta 3 intentos al día.', daily_max_attempts_title: 'Has agotado los intentos', daily_max_attempts_desc: 'Ya has usado los 3 intentos de hoy. Vuelve mañana para intentarlo de nuevo.', daily_confirm_new_attempt_title: '¿Nuevo intento?', daily_confirm_new_attempt_desc: 'Ya tienes un resultado guardado para hoy. Si empiezas un nuevo intento, el anterior se eliminará para siempre — no podrás deshacerlo. Solo cuenta el último intento en la clasificación. ¿Continuar?',
-    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Daily en Vivo', daily_hub_leaderboard_yesterday: 'Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
+    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Clasificación Daily en Vivo', daily_hub_leaderboard_yesterday: 'Clasificación Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
     daily_leaderboard_loading: 'Cargando clasificación...', daily_leaderboard_error: 'Error al cargar, inténtalo más tarde.',
     daily_leaderboard_empty: 'Nadie ha jugado todavía la Daily de hoy. ¡Sé el primero!',
@@ -8531,15 +8531,15 @@ function renderDailyLeaderboard(tab){
     <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON — ${titoloTab}</small></div>
   </div>
   <div class="wrap">
+    <div class="btnrow" style="margin-bottom:10px;">
+      <button class="ghost" data-action="open-daily-season-hub" style="width:100%;">${t('daily_hub_back')}</button>
+    </div>
     <div class="btnrow" style="margin-bottom:14px;">
       <button class="${tab==='daily'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="daily" style="flex:1;font-size:12px;"><span class="live-dot"></span>${t('daily_hub_leaderboard_live')}</button>
       <button class="${tab==='yesterday'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="yesterday" style="flex:1;font-size:12px;">${t('daily_hub_leaderboard_yesterday')}</button>
       <button class="${tab==='weighted'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="weighted" style="flex:1;font-size:12px;">${t('daily_hub_leaderboard_weighted')}</button>
     </div>
     <div id="dailyLeaderboardContent" class="dim" style="text-align:center;padding:30px 0;">${t('daily_leaderboard_loading')}</div>
-    <div class="btnrow" style="margin-top:16px;">
-      <button class="ghost" data-action="open-daily-season-hub" style="width:100%;">${t('daily_hub_back')}</button>
-    </div>
   </div>`;
   bindActions();
   loadAndRenderDailyLeaderboard(tab);
@@ -8589,16 +8589,21 @@ async function loadAndRenderDailyLeaderboard(tab){
     // "splittati" (tutti i 7 fattori separati) invece del solo totale, richiesto da Gio.
     __dailyLeaderboardRowsCache = rows;
     el.innerHTML = rows.map((r,i)=>{
+      const posizione = i+1;
       const mio = currentUser && r.user_id===currentUser.id;
       const statoText = isDettagliata
         ? computeDailyFinalScore(r).toLocaleString('it-IT')
         : `${r.punti_medi.toFixed(1)} pt medi · ${r.giorni_giocati}g`;
       const clickAttr = isDettagliata ? `data-action="toggle-daily-row-detail" data-row-idx="${i}"` : '';
-      return `<div class="daily-leaderboard-row ${mio?'daily-leaderboard-row-mine':''}" ${clickAttr} style="${isDettagliata?'cursor:pointer;':''}">
-        <span class="daily-leaderboard-rank">${i+1}</span>
+      // V0.9.9.111: più risalto allo score (non più "dim", ora grassetto e colorato), coccarda per
+      // i primi 3, sfondo distinto per la top 10 — richiesto da Gio dopo i test dal vivo.
+      const coccarda = posizione===1?'🥇':posizione===2?'🥈':posizione===3?'🥉':'';
+      const classeTop10 = posizione<=10 ? 'daily-leaderboard-row-top10' : '';
+      return `<div class="daily-leaderboard-row ${classeTop10} ${mio?'daily-leaderboard-row-mine':''}" ${clickAttr} style="${isDettagliata?'cursor:pointer;':''}">
+        <span class="daily-leaderboard-rank">${coccarda || posizione}</span>
         ${flag(nationFromFlagCode(r.flag_code))}
         <span class="daily-leaderboard-nick">${r.nickname}</span>
-        <span class="daily-leaderboard-stat dim">${statoText}</span>
+        <span class="daily-leaderboard-stat daily-leaderboard-score">${statoText}</span>
       </div>
       <div class="daily-leaderboard-detail" id="dailyRowDetail${i}" style="display:none;"></div>`;
     }).join('');
