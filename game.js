@@ -4461,7 +4461,7 @@ function finalizeRaceScoring(timeline){
     if(secondLastOrder && secondLastOrder[0]!==winnerEntry.slotKey) state.everLostLeadInFinalPhase = true;
     if(!state.seasonTrophiesWon) state.seasonTrophiesWon = [];
     if(!state.seasonTrophiesWon.includes(circuit.nome)) state.seasonTrophiesWon.push(circuit.nome);
-    state.lastTrophyUnlock = { circuitName: circuit.nome, isFirstTime: !hadTrophyBefore, totalWins: trophyData[circuit.nome].won };
+    state.lastTrophyUnlock = { circuitName: circuit.nome, isFirstTime: !hadTrophyBefore, totalWins: trophyData[circuit.nome].won, winnerName: winnerPilot.nome };
     state.trophyUnlockDismissed = false;
   } else {
     state.lastTrophyUnlock = null;
@@ -10639,13 +10639,14 @@ function trophyUnlockBannerHTML(){
     return `<div class="victory-streak" style="top:${top}%;width:${width}px;--c:${c};--dur:${dur}s;--del:${del}s;transform:rotate(${angle}deg);"></div>`;
   }).join('');
   return `
-  <div class="trophy-unlock-fullscreen" data-action="dismiss-trophy-unlock">
+  <div class="trophy-unlock-fullscreen" data-action="dismiss-trophy-unlock" id="trophyUnlockOverlay">
     <div class="trophy-unlock-fullscreen-card">
       <div class="victory-vignette"></div>
       <div class="victory-rays"></div>
       <div class="victory-streaks">${streaks}</div>
       <img src="${img}" alt="" class="victory-trophy-pop victory-trophy-pop-lg">
       <div class="victory-title">${t('tr_unlock_title')}</div>
+      <div class="victory-winner-name">${tw.winnerName || ''}</div>
       <div class="victory-sub">
         <div class="trophy-unlock-label">${subLabel}</div>
         <div class="dim">${tw.circuitName}</div>
@@ -10830,7 +10831,25 @@ function renderRaceResult(){
   </div>
   `;
   bindActions();
+  // V0.9.9.112: sblocco trofeo più "epico" — richiesto da Gio (suono, nome pilota enorme, chiusura
+  // automatica dopo 3 secondi). Il suono/timer partono solo la PRIMA volta che questo specifico
+  // trofeo appare, non ad ogni ri-rendering della schermata (altrimenti si ripeterebbe in loop).
+  if(state.lastTrophyUnlock && !state.trophyUnlockDismissed && !__trophyUnlockEffectsTriggered){
+    __trophyUnlockEffectsTriggered = true;
+    playRealSfx('audio/sfx_victory_fanfare.mp3');
+    clearTimeout(__trophyUnlockAutoDismissTimer);
+    __trophyUnlockAutoDismissTimer = setTimeout(()=>{
+      if(state.lastTrophyUnlock && !state.trophyUnlockDismissed){
+        state.trophyUnlockDismissed = true;
+        render();
+      }
+    }, 3000);
+  } else if(!state.lastTrophyUnlock || state.trophyUnlockDismissed){
+    __trophyUnlockEffectsTriggered = false; // pronto per il prossimo trofeo
+  }
 }
+let __trophyUnlockEffectsTriggered = false;
+let __trophyUnlockAutoDismissTimer = null;
 
 function currentItemCardHTML(item){
   if(!item) return '';
@@ -12733,7 +12752,7 @@ function onAction(e){
     if(state.isDriverCareer) goToDriverHubOrSeasonEnd();
     else goToPitlaneOrEnd();
   }
-  else if(action==='dismiss-trophy-unlock'){ state.trophyUnlockDismissed = true; render(); }
+  else if(action==='dismiss-trophy-unlock'){ clearTimeout(__trophyUnlockAutoDismissTimer); state.trophyUnlockDismissed = true; render(); }
   else if(action==='confirm-upgrade-invest'){
     const idx = el.dataset.idx;
     const n = window._pitOptions[idx];
