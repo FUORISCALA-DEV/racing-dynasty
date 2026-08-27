@@ -13299,7 +13299,13 @@ function onAction(e){
     if(r){ detailEl.innerHTML = dailyRowDetailHTML(r); detailEl.style.display = 'block'; }
   }
   else if(action==='daily-locked-info'){
-    gameConfirm(dailySeasonLockedMessageHTML().replace(/<[^>]+>/g,' ').trim(), ()=>{}, t('mode_select_daily'));
+    // V0.9.9.138: BUG CORRETTO — segnalato da Gio: il pulsante "Conferma" del popup "Accedi con
+    // Google" non faceva nulla, si comportava come "Annulla". Causa: questo gestore passava sempre
+    // una funzione vuota come azione di conferma, corretto per il caso puramente informativo (mostra
+    // solo i progressi mancanti), ma sbagliato ora che la stessa schermata mostra anche il prompt di
+    // login quando non si è autenticati — in quel caso "Conferma" deve davvero avviare il login.
+    const azioneConferma = currentUser ? ()=>{} : ()=>{ signInWithGoogle(); };
+    gameConfirm(dailySeasonLockedMessageHTML().replace(/<[^>]+>/g,' ').trim(), azioneConferma, t('mode_select_daily'));
   }
   else if(action==='go-to-daily-live-leaderboard'){
     state.phase = 'daily-leaderboard';
