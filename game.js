@@ -8406,7 +8406,20 @@ function renderPregara(){
 /* ============================================================
    RENDERING
    ============================================================ */
+// V0.9.9.128: chiamata dallo script inline in index.html quando un aggiornamento del service
+// worker diventa disponibile — controlla SUBITO se siamo già in un momento sicuro (schermata
+// titolo), senza dover aspettare il prossimo cambio di schermata per accorgersene.
+window.__swReloadWhenSafe = function(){
+  if(state && state.phase==='title') window.location.reload();
+};
 function render(){
+  // V0.9.9.128: ricarica differita per aggiornamento service worker — richiesto da Gio ("cambio
+  // scheda e il gioco riparte dallo splash, non dovrebbe"). Ricarica SOLO quando si è sulla
+  // schermata titolo (nessun progresso attivo da interrompere), non nel mezzo di una sessione.
+  if(window.__pendingSwReload && state && state.phase==='title'){
+    window.location.reload();
+    return;
+  }
   // V0.9.7.1: l'overlay di festeggiamento (fuochi/coriandoli di fine stagione) vive fuori dal
   // normale ciclo di render (appeso a document.body, con animazioni CSS infinite) — se il giocatore
   // lascia lo schermo di fine stagione con QUALSIASI navigazione, va rimosso qui, in un unico punto

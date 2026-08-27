@@ -2332,8 +2332,13 @@ if("serviceWorker" in navigator){
       navigator.serviceWorker.addEventListener("controllerchange", ()=>{
         if(!avevaGiaUnControllerAllInizio){ avevaGiaUnControllerAllInizio = true; return; }
         if(ricaricaGiaFatta) return;
-        ricaricaGiaFatta = true;
-        window.location.reload();
+        // V0.9.9.128: BUG CORRETTO — segnalato da Gio ("cambio scheda e il gioco riparte dallo
+        // splash, non dovrebbe"). Prima si ricaricava SUBITO, interrompendo una sessione attiva nel
+        // mezzo di qualunque cosa si stesse facendo. Ora aspetta un momento sicuro (window.__swReloadWhenSafe,
+        // controllato da game.js ad ogni cambio di schermata) — la ricarica avviene solo quando si
+        // torna alla schermata titolo o altri punti senza progresso attivo da interrompere.
+        window.__pendingSwReload = true;
+        if(typeof window.__swReloadWhenSafe === 'function') window.__swReloadWhenSafe();
       });
     }).catch(()=>{});
   });
