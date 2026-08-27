@@ -624,7 +624,7 @@ const I18N = {
     friends_checking: 'Verifica in corso...', friends_error_invalid: 'Codice non valido.', friends_error_self: 'Non puoi aggiungere te stesso.',
     friends_already: 'Eravate già amici.', friends_added: 'Amico aggiunto!',
     friends_list_title: 'I tuoi amici', friends_list_loading: 'Caricamento...', friends_list_empty: 'Non hai ancora amici — condividi il tuo codice per iniziare.',
-    friends_unknown_nick: 'Giocatore', friends_not_synced_yet: 'La scheda di questo amico non è ancora sincronizzata — si aggiornerà automaticamente al suo prossimo accesso al gioco.',
+    friends_unknown_nick: 'Giocatore', friends_not_synced_yet: 'La scheda di questo amico non è ancora sincronizzata — si aggiornerà automaticamente al suo prossimo accesso al gioco.', friends_remove_btn: 'Rimuovi amico', friends_remove_confirm_title: 'Rimuovere amico?', friends_remove_confirm_desc: (nome)=>`Rimuovere ${nome} dai tuoi amici? Potrai aggiungerlo di nuovo in futuro con un nuovo codice.`,
     friends_stat_wins: 'Gare vinte', friends_stat_missing_trophies: 'Trofei Mancanti', friends_stat_museum: 'Completamento Museo',
     friends_stat_achievements: 'Obiettivi', friends_stat_rating: 'Rating',
 
@@ -973,7 +973,7 @@ const I18N = {
     friends_checking: 'Checking...', friends_error_invalid: 'Invalid code.', friends_error_self: "You can't add yourself.",
     friends_already: 'You were already friends.', friends_added: 'Friend added!',
     friends_list_title: 'Your friends', friends_list_loading: 'Loading...', friends_list_empty: "You don't have friends yet — share your code to get started.",
-    friends_unknown_nick: 'Player', friends_not_synced_yet: "This friend's card isn't synced yet — it will update automatically the next time they open the game.",
+    friends_unknown_nick: 'Player', friends_not_synced_yet: "This friend's card isn't synced yet — it will update automatically the next time they open the game.", friends_remove_btn: 'Remove friend', friends_remove_confirm_title: 'Remove friend?', friends_remove_confirm_desc: (nome)=>`Remove ${nome} from your friends? You can add them again later with a new code.`,
     friends_stat_wins: 'Races won', friends_stat_missing_trophies: 'Missing trophies', friends_stat_museum: 'Museum completion',
     friends_stat_achievements: 'Achievements', friends_stat_rating: 'Rating',
 
@@ -1318,7 +1318,7 @@ const I18N = {
     friends_checking: 'Comprobando...', friends_error_invalid: 'Código no válido.', friends_error_self: 'No puedes añadirte a ti mismo.',
     friends_already: 'Ya erais amigos.', friends_added: '¡Amigo añadido!',
     friends_list_title: 'Tus amigos', friends_list_loading: 'Cargando...', friends_list_empty: 'Aún no tienes amigos — comparte tu código para empezar.',
-    friends_unknown_nick: 'Jugador', friends_not_synced_yet: 'La ficha de este amigo aún no está sincronizada — se actualizará automáticamente la próxima vez que abra el juego.',
+    friends_unknown_nick: 'Jugador', friends_not_synced_yet: 'La ficha de este amigo aún no está sincronizada — se actualizará automáticamente la próxima vez que abra el juego.', friends_remove_btn: 'Eliminar amigo', friends_remove_confirm_title: '¿Eliminar amigo?', friends_remove_confirm_desc: (nome)=>`¿Eliminar a ${nome} de tus amigos? Podrás añadirlo de nuevo más tarde con un nuevo código.`,
     friends_stat_wins: 'Carreras ganadas', friends_stat_missing_trophies: 'Trofeos que faltan', friends_stat_museum: 'Completado del Museo',
     friends_stat_achievements: 'Logros', friends_stat_rating: 'Rating',
 
@@ -8652,7 +8652,8 @@ function renderFriendsHub(){
 }
 function friendDetailHTML(f){
   if(f.nonSincronizzato){
-    return `<div class="dim" style="text-align:center;padding:10px 6px;font-size:12.5px;line-height:1.5;">${t('friends_not_synced_yet')}</div>`;
+    return `<div class="dim" style="text-align:center;padding:10px 6px;font-size:12.5px;line-height:1.5;">${t('friends_not_synced_yet')}</div>
+    <div class="btnrow" style="margin-top:8px;"><button class="ghost" data-action="remove-friend" data-friend-user-id="${f.user_id}" style="width:100%;font-size:11.5px;color:var(--danger);border-color:var(--danger);">${t('friends_remove_btn')}</button></div>`;
   }
   const righe = [
     [t('friends_stat_wins'), `${f.circuiti_vinti}`],
@@ -8661,7 +8662,8 @@ function friendDetailHTML(f){
     [t('friends_stat_achievements'), `${f.obiettivi_sbloccati}/${f.obiettivi_totali}`],
     [t('friends_stat_rating'), f.rating_medio!=null ? Math.round(f.rating_medio).toLocaleString('it-IT') : '—'],
   ];
-  return righe.map(([label,val])=>`<div class="daily-detail-row"><span class="dim">${label}</span><span>${val}</span></div>`).join('');
+  return righe.map(([label,val])=>`<div class="daily-detail-row"><span class="dim">${label}</span><span>${val}</span></div>`).join('')
+    + `<div class="btnrow" style="margin-top:8px;"><button class="ghost" data-action="remove-friend" data-friend-user-id="${f.user_id}" style="width:100%;font-size:11.5px;color:var(--danger);border-color:var(--danger);">${t('friends_remove_btn')}</button></div>`;
 }
 
 function renderDailyLeaderboard(tab){
@@ -9826,6 +9828,21 @@ async function loadMyFriendIdsSet(){
     if(error || !data) return new Set();
     return new Set(data.map(r => r.user_id_a===currentUser.id ? r.user_id_b : r.user_id_a));
   }catch(e){ return new Set(); }
+}
+// V0.9.9.124: SISTEMA AMICI — eliminazione, richiesta da Gio. L'amicizia è una singola riga
+// condivisa (non due separate per i due utenti), quindi eliminarla la rimuove per entrambi i lati
+// — comportamento corretto per "rimuovi amico" (diversamente da un blocco unilaterale, che qui non
+// esiste). Prova a eliminare in entrambi i possibili ordinamenti della coppia, dato che non
+// sappiamo a priori se l'amico è "A" o "B" nella riga.
+async function removeFriend(amicoUserId){
+  if(!currentUser || !supabaseClient) return { ok:false };
+  try{
+    const [uidA, uidB] = [currentUser.id, amicoUserId].sort();
+    const { error } = await supabaseClient.from('friendships')
+      .delete().eq('user_id_a', uidA).eq('user_id_b', uidB);
+    if(error){ console.warn('Eliminazione amicizia non riuscita:', error.message); return { ok:false }; }
+    return { ok:true };
+  }catch(e){ console.warn('Eliminazione amicizia non riuscita:', e); return { ok:false }; }
 }
 async function loadMyFriendsList(){
   if(!currentUser || !supabaseClient) return [];
@@ -13012,7 +13029,31 @@ function onAction(e){
     const aperto = detailEl.style.display !== 'none';
     if(aperto){ detailEl.style.display = 'none'; return; }
     const f = __friendsListCache[idx];
-    if(f){ detailEl.innerHTML = friendDetailHTML(f); detailEl.style.display = 'block'; }
+    if(f){ detailEl.innerHTML = friendDetailHTML(f); detailEl.style.display = 'block'; bindActions(); }
+  }
+  else if(action==='remove-friend'){
+    const amicoUserId = el.dataset.friendUserId;
+    const f = __friendsListCache.find(x=>x.user_id===amicoUserId);
+    const nomeAmico = f?.nickname || t('friends_unknown_nick');
+    gameConfirm(t('friends_remove_confirm_desc', nomeAmico), async ()=>{
+      const risultato = await removeFriend(amicoUserId);
+      if(risultato.ok){
+        loadMyFriendsList().then(lista=>{
+          __friendsListCache = lista;
+          const listEl = document.getElementById('friendsListContent');
+          if(!listEl) return;
+          if(lista.length===0){ listEl.innerHTML = `<div class="dim">${t('friends_list_empty')}</div>`; return; }
+          listEl.innerHTML = lista.map((f,i)=>`
+            <div class="daily-leaderboard-row" data-action="toggle-friend-detail" data-friend-idx="${i}" style="cursor:pointer;">
+              <span class="daily-leaderboard-nick">${f.nickname || t('friends_unknown_nick')}</span>
+              <span class="daily-leaderboard-score">${f.rating_medio!=null ? Math.round(f.rating_medio).toLocaleString('it-IT') : '—'}</span>
+            </div>
+            <div class="daily-leaderboard-detail" id="friendDetail${i}" style="display:none;"></div>
+          `).join('');
+          bindActions();
+        });
+      }
+    }, t('friends_remove_confirm_title'));
   }
   else if(action==='toggle-daily-row-detail'){
     const idx = Number(el.dataset.rowIdx);
