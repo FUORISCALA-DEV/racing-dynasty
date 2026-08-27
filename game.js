@@ -621,7 +621,7 @@ const I18N = {
     profile_edit_nickname_desc: 'Puoi cambiarlo una volta ogni 30 giorni.',
     profile_edit_nickname_confirm: 'Salva modifiche', profile_edit_nickname_cancel: 'Annulla',
     profile_nickname_cooldown_title: 'Non ancora', profile_nickname_cooldown: (n)=> n===1 ? 'Potrai cambiare di nuovo il nickname tra 1 giorno.' : `Potrai cambiare di nuovo il nickname tra ${n} giorni.`,
- friends_badge_label: 'AMICI', friends_my_code_title: 'Il tuo codice invito', friends_my_code_desc: 'Condividilo con un amico (WhatsApp, Discord...) — lo inserisce lui per aggiungerti.',
+ friends_badge_label: 'AMICI', premium_badge_tooltip: 'Membro Immortale', friends_my_code_title: 'Il tuo codice invito', friends_my_code_desc: 'Condividilo con un amico (WhatsApp, Discord...) — lo inserisce lui per aggiungerti.',
     friends_copy_code: 'Copia', friends_code_copied: 'Copiato!', friends_code_error: 'Errore',
     friends_share_btn: 'Condividi', friends_share_generating: '...', friends_share_cta: 'Aggiungimi con questo codice',
     friends_share_text: (url,code)=>`Gioca a Racing Dynasty e aggiungimi come amico con questo codice: ${code}\n${url}`,
@@ -976,7 +976,7 @@ const I18N = {
     profile_edit_nickname_desc: 'You can change it once every 30 days.',
     profile_edit_nickname_confirm: 'Save changes', profile_edit_nickname_cancel: 'Cancel',
     profile_nickname_cooldown_title: 'Not yet', profile_nickname_cooldown: (n)=> n===1 ? 'You can change your nickname again in 1 day.' : `You can change your nickname again in ${n} days.`,
- friends_badge_label: 'FRIEND', friends_my_code_title: 'Your invite code', friends_my_code_desc: 'Share it with a friend (WhatsApp, Discord...) — they enter it to add you.',
+ friends_badge_label: 'FRIEND', premium_badge_tooltip: 'Immortal Member', friends_my_code_title: 'Your invite code', friends_my_code_desc: 'Share it with a friend (WhatsApp, Discord...) — they enter it to add you.',
     friends_copy_code: 'Copy', friends_code_copied: 'Copied!', friends_code_error: 'Error',
     friends_share_btn: 'Share', friends_share_generating: '...', friends_share_cta: 'Add me with this code',
     friends_share_text: (url,code)=>`Play Racing Dynasty and add me as a friend with this code: ${code}\n${url}`,
@@ -1327,7 +1327,7 @@ const I18N = {
     profile_edit_nickname_desc: 'Puedes cambiarlo una vez cada 30 días.',
     profile_edit_nickname_confirm: 'Guardar cambios', profile_edit_nickname_cancel: 'Cancelar',
     profile_nickname_cooldown_title: 'Todavía no', profile_nickname_cooldown: (n)=> n===1 ? 'Podrás cambiar tu apodo de nuevo en 1 día.' : `Podrás cambiar tu apodo de nuevo en ${n} días.`,
- friends_badge_label: 'AMIGOS', friends_my_code_title: 'Tu código de invitación', friends_my_code_desc: 'Compártelo con un amigo (WhatsApp, Discord...) — lo introduce para añadirte.',
+ friends_badge_label: 'AMIGOS', premium_badge_tooltip: 'Miembro Immortal', friends_my_code_title: 'Tu código de invitación', friends_my_code_desc: 'Compártelo con un amigo (WhatsApp, Discord...) — lo introduce para añadirte.',
     friends_copy_code: 'Copiar', friends_code_copied: '¡Copiado!', friends_code_error: 'Error',
     friends_share_btn: 'Compartir', friends_share_generating: '...', friends_share_cta: 'Añádeme con este código',
     friends_share_text: (url,code)=>`Juega a Racing Dynasty y añádeme como amigo con este código: ${code}\n${url}`,
@@ -8738,7 +8738,7 @@ function renderFriendsHub(){
     if(lista.length===0){ el.innerHTML = `<div class="dim">${t('friends_list_empty')}</div>`; return; }
     el.innerHTML = lista.map((f,i)=>`
       <div class="daily-leaderboard-row" data-action="toggle-friend-detail" data-friend-idx="${i}" style="cursor:pointer;">
-        <span class="daily-leaderboard-nick">${f.nickname || t('friends_unknown_nick')}</span>
+        <span class="daily-leaderboard-nick">${f.nickname || t('friends_unknown_nick')}${premiumBadgeHTML(f.is_premium)}</span>
         <span class="daily-leaderboard-score">${f.rating_medio!=null ? Math.round(f.rating_medio).toLocaleString('it-IT') : '—'}</span>
       </div>
       <div class="daily-leaderboard-detail" id="friendDetail${i}" style="display:none;"></div>
@@ -8777,6 +8777,11 @@ function renderMyProfile(){
     </div>
   </div>`;
   bindActions();
+}
+// V0.9.9.131: badge premium (moneta D) — richiesto da Gio, "sia nelle classifiche che nella lista
+// amici usiamo la moneta D come badge per chi ha premium". Funzione unica riusata ovunque serva.
+function premiumBadgeHTML(isPremium){
+  return isPremium ? `<img class="dynasty-dollar-icon premium-badge-icon" src="assets/currency/dynasty_dollar.png" alt="Premium" title="${t('premium_badge_tooltip')}">` : '';
 }
 function friendDetailHTML(f){
   if(f.nonSincronizzato){
@@ -8858,6 +8863,10 @@ async function loadAndRenderDailyLeaderboard(tab){
     const isDettagliata = tab==='daily' || tab==='yesterday';
     if(rows.length===0){ el.innerHTML = `<div class="dim">${t(isDettagliata ? 'daily_leaderboard_empty' : 'daily_leaderboard_weighted_empty')}</div>`; return; }
     el.className = '';
+    // V0.9.9.131: badge premium (moneta D) — escludiamo i bot (mai premium reale, e non hanno un
+    // vero user_id da cercare nel database).
+    const idVeriMostrati = rows.filter(r=>!r.isBot).map(r=>r.user_id);
+    const idPremiumSet = await loadPremiumUserIdsSet(idVeriMostrati);
     // V0.9.9.103: righe della classifica giornaliera cliccabili — al tocco mostrano i valori
     // "splittati" (tutti i 7 fattori separati) invece del solo totale, richiesto da Gio.
     __dailyLeaderboardRowsCache = rows;
@@ -8874,10 +8883,11 @@ async function loadAndRenderDailyLeaderboard(tab){
       const classeTop10 = posizione<=10 ? 'daily-leaderboard-row-top10' : '';
       // V0.9.9.117: badge "AMICI" in viola (stesso colore già usato per i rivali), richiesto da Gio
       const badgeAmico = idAmiciSet.has(r.user_id) ? `<span class="friend-badge">${t('friends_badge_label')}</span>` : '';
+      const badgePremium = premiumBadgeHTML(idPremiumSet.has(r.user_id));
       return `<div class="daily-leaderboard-row ${classeTop10} ${mio?'daily-leaderboard-row-mine':''}" ${clickAttr} style="${isDettagliata?'cursor:pointer;':''}">
         <span class="daily-leaderboard-rank">${coccarda || posizione}</span>
         ${flag(nationFromFlagCode(r.flag_code))}
-        <span class="daily-leaderboard-nick">${r.nickname}${badgeAmico}</span>
+        <span class="daily-leaderboard-nick">${r.nickname}${badgeAmico}${badgePremium}</span>
         <span class="daily-leaderboard-stat daily-leaderboard-score">${statoText}</span>
       </div>
       <div class="daily-leaderboard-detail" id="dailyRowDetail${i}" style="display:none;"></div>`;
@@ -9737,6 +9747,10 @@ async function fetchPremiumStatus(){
       .maybeSingle();
     if(error){ console.warn('Lettura stato premium non riuscita:', error.message); return; }
     isPremiumUser = !!(data && data.is_premium);
+    // V0.9.9.131: sincronizza subito lo stato premium nelle statistiche pubbliche — cosi' il badge
+    // (moneta D) nelle classifiche/lista amici si aggiorna appena il premium viene sbloccato,
+    // qualunque sia il punto che ha chiamato questa funzione (login, dopo acquisto, dopo codice).
+    if(typeof pushPublicStatsToCloud==='function') pushPublicStatsToCloud();
   }catch(e){ console.warn('Lettura stato premium non riuscita:', e); }
 }
 
@@ -9848,6 +9862,7 @@ function pushPublicStatsToCloud(){
       const { error } = await supabaseClient.from('player_public_stats').upsert({
         user_id: currentUser.id,
         nickname: dailyNicknameCache || null,
+        is_premium: !!isPremiumUser,
         ...stats,
         updated_at: new Date().toISOString(),
       });
@@ -9960,6 +9975,17 @@ async function redeemFriendCode(code){
 }
 // V0.9.9.117: insieme leggero dei soli ID amici (senza statistiche) — usato per evidenziare le
 // righe amico nelle classifiche, dove non servono i dettagli completi.
+// V0.9.9.131: recupera lo stato premium (per il badge moneta D) di un insieme di giocatori — usato
+// nelle classifiche, dove serve sapere chi ha premium tra TUTTI i giocatori mostrati, non solo gli amici.
+async function loadPremiumUserIdsSet(userIds){
+  if(!supabaseClient || userIds.length===0) return new Set();
+  try{
+    const { data, error } = await supabaseClient.from('player_public_stats')
+      .select('user_id, is_premium').in('user_id', userIds).eq('is_premium', true);
+    if(error || !data) return new Set();
+    return new Set(data.map(r=>r.user_id));
+  }catch(e){ return new Set(); }
+}
 async function loadMyFriendIdsSet(){
   if(!currentUser || !supabaseClient) return new Set();
   try{
@@ -10003,7 +10029,7 @@ async function loadMyFriendsList(){
     // SEMPRE dagli amici veri (idAmici), con le statistiche unite quando ci sono e zero/sconosciuto
     // quando mancano — un amico non sparisce mai solo perche' non ha ancora sincronizzato nulla.
     const { data: stats, error: statsError } = await supabaseClient.from('player_public_stats')
-      .select('user_id, circuiti_vinti, circuiti_totali, completamento_museo_pct, obiettivi_sbloccati, obiettivi_totali')
+      .select('user_id, circuiti_vinti, circuiti_totali, completamento_museo_pct, obiettivi_sbloccati, obiettivi_totali, is_premium')
       .in('user_id', idAmici);
     if(statsError) console.warn('Caricamento statistiche amici non riuscito (proseguo con valori di default):', statsError.message);
     const statsPerUtente = {};
@@ -10041,6 +10067,7 @@ async function loadMyFriendsList(){
         completamento_museo_pct: s?.completamento_museo_pct ?? 0,
         obiettivi_sbloccati: s?.obiettivi_sbloccati ?? 0,
         obiettivi_totali: s?.obiettivi_totali ?? ACHIEVEMENTS.length,
+        is_premium: !!s?.is_premium,
         rating_medio: ratingPerUtente[uid] ?? null,
       };
     });
@@ -13149,7 +13176,7 @@ function onAction(e){
         if(lista.length===0){ el.innerHTML = `<div class="dim">${t('friends_list_empty')}</div>`; return; }
         el.innerHTML = lista.map((f,i)=>`
           <div class="daily-leaderboard-row" data-action="toggle-friend-detail" data-friend-idx="${i}" style="cursor:pointer;">
-            <span class="daily-leaderboard-nick">${f.nickname || t('friends_unknown_nick')}</span>
+            <span class="daily-leaderboard-nick">${f.nickname || t('friends_unknown_nick')}${premiumBadgeHTML(f.is_premium)}</span>
             <span class="daily-leaderboard-score">${f.rating_medio!=null ? Math.round(f.rating_medio).toLocaleString('it-IT') : '—'}</span>
           </div>
           <div class="daily-leaderboard-detail" id="friendDetail${i}" style="display:none;"></div>
@@ -13181,7 +13208,7 @@ function onAction(e){
           if(lista.length===0){ listEl.innerHTML = `<div class="dim">${t('friends_list_empty')}</div>`; return; }
           listEl.innerHTML = lista.map((f,i)=>`
             <div class="daily-leaderboard-row" data-action="toggle-friend-detail" data-friend-idx="${i}" style="cursor:pointer;">
-              <span class="daily-leaderboard-nick">${f.nickname || t('friends_unknown_nick')}</span>
+              <span class="daily-leaderboard-nick">${f.nickname || t('friends_unknown_nick')}${premiumBadgeHTML(f.is_premium)}</span>
               <span class="daily-leaderboard-score">${f.rating_medio!=null ? Math.round(f.rating_medio).toLocaleString('it-IT') : '—'}</span>
             </div>
             <div class="daily-leaderboard-detail" id="friendDetail${i}" style="display:none;"></div>
