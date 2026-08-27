@@ -9513,7 +9513,14 @@ let isPremiumUser = false; // aggiornato dopo il login, leggendo la tabella 'pro
 // — ora che achievement/museo/trofei sono bloccati anche durante la Daily (appena corretto), non
 // può mai essere vinto DENTRO una Daily, quindi la condizione resta sempre "stagione scuderia vera".
 const DAILY_UNLOCK_TROPHY_COUNT = 10;
-function dailySeasonTrophiesUnlockedCount(){ return achievementData.unlockedIds.length; }
+// V0.9.9.123: BUG CORRETTO — segnalato da un tester con screenshot (13/10 pur avendo vinto solo 3
+// gare su 10). Questa funzione contava achievementData.unlockedIds.length (OBIETTIVI generali
+// sbloccati, es. "prima gara giocata"), non i trofei VINTI come dice esplicitamente il testo
+// mostrato ("Ti mancano N trofei vinti"). Corretto contando i circuiti dove trophyData[nome].won
+// è almeno 1 — il vero significato di "trofeo vinto".
+function dailySeasonTrophiesUnlockedCount(){
+  return Object.values(trophyData).filter(c => (c.won||0) > 0).length;
+}
 function hasWonConstructorTitle(){ return !!achievementData.everWonConstructorTitle || achievementData.unlockedIds.includes('doppietta-perfetta'); }
 function hasWonDriverTitle(){ return !!achievementData.everWonDriverTitle || achievementData.unlockedIds.includes('doppietta-perfetta'); }
 function isDailySeasonUnlocked(){
@@ -12531,11 +12538,17 @@ function renderCelebrationFx(showConfetti, showFireworks, nation){
   const overlay = document.createElement('div');
   overlay.id = 'celebrationFx';
   let html = '';
+  // V0.9.9.123: RIDOTTA la densità (era 323 elementi animati insieme nel caso peggiore — 70
+  // coriandoli + 11 fuochi da 22 scintille ciascuno), segnalato da Gio come causa di lag su
+  // telefono, oltre a dare l'impressione che i festeggiamenti "non si fermino" (probabilmente per
+  // colpa dello stesso carico pesante, non perché mancasse la pulizia — quella già esisteva ed è
+  // già centralizzata in render()). Stesso stile visivo, solo meno denso: un compromesso, non
+  // tornati alla versione precedente che piaceva meno.
   if(showConfetti){
     const pieces = [];
     const goldTones = ['#FFD700','#FFEE99','#F7B800','#FFFFFF','#FFAA00'];
-    for(let i=0;i<70;i++){
-      const left = (i*4.2)%100;
+    for(let i=0;i<32;i++){
+      const left = (i*3.1+2)%100;
       const delay = ((i*7)%24)*0.3;                // scaglionato ma NON legato alla posizione orizzontale (niente effetto "spara coriandoli")
       const dur = 4.5 + (i%5)*0.5;                // caduta piu' lenta e naturale
       const sway = 12 + (i%4)*6;                  // ondeggiamento contenuto, non un'oscillazione brusca
@@ -12549,12 +12562,12 @@ function renderCelebrationFx(showConfetti, showFireworks, nation){
   if(showFireworks){
     const colors = nationFireworkColors(nation);
     const burstCenters = [];
-    for(let i=0;i<11;i++){
-      burstCenters.push({ left: 12 + (i*11)%76, top: 10 + (i*15)%52, delay: i*0.7 + Math.random()*0.3 });
+    for(let i=0;i<6;i++){
+      burstCenters.push({ left: 14 + (i*13)%72, top: 12 + (i*17)%50, delay: i*0.9 + Math.random()*0.3 });
     }
     const bursts = burstCenters.map((c,bi)=>{
       const color = colors[bi%colors.length];
-      const sparkCount = 22;
+      const sparkCount = 14;
       const sparks = [];
       for(let s=0;s<sparkCount;s++){
         const angle = (s/sparkCount)*2*Math.PI;
@@ -12648,9 +12661,19 @@ function renderSeasonEnd(){
       driverName: driverChamp.nome,
     };
   }
-  const pillText = summary.isConstructorChamp ? t('se_constr_champ_pill') : t('se_end_pill');
-  const heroTitle = summary.isConstructorChamp
-    ? t('se_team_won_title', summary.teamName)
+  // V0.9.9.123: integrati i testi della celebrazione Grand Slam (piaciuti a Gio: "puoi usarli per
+  // sostituire o integrare quelli che ci sono già") anche nella normale pagina di fine stagione —
+  // prima il caso "solo titolo Piloti" (senza Costruttori) non aveva un pillText/heroTitle dedicato,
+  // mostrava semplicemente "FINE STAGIONE" generico, un'occasione persa per festeggiare.
+  const isGrandSlamEnd = summary.isConstructorChamp && summary.anyDriverChamp;
+  const pillText = isGrandSlamEnd ? t('cv_grand_slam_title')
+    : summary.isConstructorChamp ? t('se_constr_champ_pill')
+    : summary.anyDriverChamp ? t('cv_driver_champ_title')
+    : t('se_end_pill');
+  const driverChampName = summary.drivers.find(d=>d.isChamp)?.name;
+  const heroTitle = isGrandSlamEnd ? t('cv_grand_slam_sub', driverChampName, summary.teamName)
+    : summary.isConstructorChamp ? t('se_team_won_title', summary.teamName)
+    : summary.anyDriverChamp ? t('cv_driver_champ_sub', driverChampName)
     : t('se_team_position_title', summary.teamName, summary.constructorPos);
   const driverSummaryLinesHTML = summary.drivers.map(d=>
     `<div class="se-driver-summary-line">${d.name}: <strong>${d.isChamp ? t('share_champion_short') : 'P'+d.pos}</strong></div>`
