@@ -567,12 +567,17 @@ tr.cmp-same td:nth-child(3),tr.cmp-same td:nth-child(4){color:var(--dim);}
 .title-logo{max-width:min(480px,88%);width:100%;height:auto;display:block;margin:0 auto;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.55));}
 .title-logo-wrap{position:relative;display:inline-block;max-width:min(480px,88%);width:100%;overflow:hidden;}
 .title-logo-wrap::after{
-  content:"";position:absolute;top:0;left:-60%;width:35%;height:100%;
-  background:linear-gradient(75deg, transparent, rgba(255,255,255,0.32), transparent);
+  content:""; position:absolute; top:0; left:0; width:100%; height:100%;
+  background:linear-gradient(75deg, transparent 42%, rgba(255,255,255,0.55) 50%, transparent 58%);
+  background-size:280% 100%; background-position:200% 0; background-repeat:no-repeat;
+  -webkit-mask-image:url(assets/logo.png); mask-image:url(assets/logo.png);
+  -webkit-mask-size:100% 100%; mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+  -webkit-mask-position:center; mask-position:center;
   animation:logoShine 3.4s ease-in-out infinite; animation-delay:0.8s; pointer-events:none;
 }
 @keyframes logoShine{
-  0%{left:-60%;} 30%{left:130%;} 100%{left:130%;}
+  0%{background-position:200% 0;} 30%{background-position:-120% 0;} 100%{background-position:-120% 0;}
 }
 .title-hero{
   cursor:pointer; transition:border-color .15s ease;
