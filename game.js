@@ -609,7 +609,7 @@ const I18N = {
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per avere fino a 3 tentativi al giorno.', daily_max_attempts_title: 'Hai esaurito i tentativi', daily_max_attempts_desc: 'Hai già usato tutti e 3 i tentativi di oggi. Torna domani per riprovare.', daily_confirm_new_attempt_title: 'Nuovo tentativo?', daily_confirm_new_attempt_desc: 'Hai già un risultato salvato per oggi. Iniziando un nuovo tentativo, quello precedente verrà eliminato per sempre — non potrai tornare indietro. Solo l\'ultimo tentativo conta in classifica. Procedere?',
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Classifica Daily Live', daily_hub_leaderboard_yesterday: 'Classifica Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
-    friends_my_code_title: 'Il tuo codice invito', friends_my_code_desc: 'Condividilo con un amico (WhatsApp, Discord...) — lo inserisce lui per aggiungerti.',
+    friends_hub_button: 'Amici', friends_my_code_title: 'Il tuo codice invito', friends_my_code_desc: 'Condividilo con un amico (WhatsApp, Discord...) — lo inserisce lui per aggiungerti.',
     friends_copy_code: 'Copia', friends_code_copied: 'Copiato!', friends_code_error: 'Errore',
     friends_add_title: 'Aggiungi un amico', friends_add_btn: 'Aggiungi',
     friends_checking: 'Verifica in corso...', friends_error_invalid: 'Codice non valido.', friends_error_self: 'Non puoi aggiungere te stesso.',
@@ -954,7 +954,7 @@ const I18N = {
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium for up to 3 attempts per day.', daily_max_attempts_title: 'No attempts left', daily_max_attempts_desc: "You've already used all 3 attempts today. Come back tomorrow to try again.", daily_confirm_new_attempt_title: 'New attempt?', daily_confirm_new_attempt_desc: "You already have a saved result for today. Starting a new attempt will permanently delete the previous one — this can't be undone. Only your last attempt counts on the leaderboard. Proceed?",
     daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live Leaderboard', daily_hub_leaderboard_yesterday: 'Last Daily Leaderboard', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
-    friends_my_code_title: 'Your invite code', friends_my_code_desc: 'Share it with a friend (WhatsApp, Discord...) — they enter it to add you.',
+    friends_hub_button: 'Friends', friends_my_code_title: 'Your invite code', friends_my_code_desc: 'Share it with a friend (WhatsApp, Discord...) — they enter it to add you.',
     friends_copy_code: 'Copy', friends_code_copied: 'Copied!', friends_code_error: 'Error',
     friends_add_title: 'Add a friend', friends_add_btn: 'Add',
     friends_checking: 'Checking...', friends_error_invalid: 'Invalid code.', friends_error_self: "You can't add yourself.",
@@ -1295,7 +1295,7 @@ const I18N = {
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para tener hasta 3 intentos al día.', daily_max_attempts_title: 'Has agotado los intentos', daily_max_attempts_desc: 'Ya has usado los 3 intentos de hoy. Vuelve mañana para intentarlo de nuevo.', daily_confirm_new_attempt_title: '¿Nuevo intento?', daily_confirm_new_attempt_desc: 'Ya tienes un resultado guardado para hoy. Si empiezas un nuevo intento, el anterior se eliminará para siempre — no podrás deshacerlo. Solo cuenta el último intento en la clasificación. ¿Continuar?',
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Clasificación Daily en Vivo', daily_hub_leaderboard_yesterday: 'Clasificación Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
-    friends_my_code_title: 'Tu código de invitación', friends_my_code_desc: 'Compártelo con un amigo (WhatsApp, Discord...) — lo introduce para añadirte.',
+    friends_hub_button: 'Amigos', friends_my_code_title: 'Tu código de invitación', friends_my_code_desc: 'Compártelo con un amigo (WhatsApp, Discord...) — lo introduce para añadirte.',
     friends_copy_code: 'Copiar', friends_code_copied: '¡Copiado!', friends_code_error: 'Error',
     friends_add_title: 'Añadir un amigo', friends_add_btn: 'Añadir',
     friends_checking: 'Comprobando...', friends_error_invalid: 'Código no válido.', friends_error_self: 'No puedes añadirte a ti mismo.',
@@ -8609,7 +8609,7 @@ function renderFriendsHub(){
       <div id="friendsListContent" class="dim" style="text-align:center;padding:20px 0;">${t('friends_list_loading')}</div>
     </div>
     <div class="btnrow" style="margin-top:16px;">
-      <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('daily_hub_back')}</button>
+      <button class="ghost" data-action="open-daily-season-hub" style="width:100%;">${t('daily_hub_back')}</button>
     </div>
   </div>`;
   bindActions();
@@ -8771,6 +8771,7 @@ function renderDailySeasonHub(){
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;"><span class="live-dot"></span>${t('daily_hub_leaderboard_live')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="yesterday" style="width:100%;">${t('daily_hub_leaderboard_yesterday')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="weighted" style="width:100%;">${t('daily_hub_leaderboard_weighted')}</button>
+      <button class="ghost" data-action="open-friends-hub" style="width:100%;">👥 ${t('friends_hub_button')}</button>
       <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('daily_hub_back')}</button>
     </div>
   </div>`;
@@ -12846,6 +12847,10 @@ function onAction(e){
     state.phase = 'daily-season-hub';
     render();
   }
+  else if(action==='open-friends-hub'){
+    state.phase = 'friends-hub';
+    render();
+  }
   else if(action==='open-daily-leaderboard'){
     state.phase = 'daily-leaderboard';
     renderDailyLeaderboard(el.dataset.tab);
@@ -14320,8 +14325,6 @@ function initSidebar(){
   if(guideBtn) guideBtn.addEventListener('click', openGuide);
   const achBtn = document.getElementById('menuAchievementsBtn');
   if(achBtn) achBtn.addEventListener('click', openAchievements);
-  const friendsBtn = document.getElementById('menuFriendsBtn');
-  if(friendsBtn) friendsBtn.addEventListener('click', ()=>{ closeMenuPanel(); state.phase='friends-hub'; render(); });
   document.getElementById('menuSettingsBtn').addEventListener('click', openSettings);
   const creditsBtn = document.getElementById('menuCreditsBtn');
   if(creditsBtn) creditsBtn.addEventListener('click', openCredits);
