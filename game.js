@@ -8997,7 +8997,7 @@ function renderDailySeasonHub(){
     </div>
   </div>
   <div class="wrap">
-    <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;object-position:center 75%;border-radius:12px;margin-bottom:16px;">
+    <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:280px;object-fit:cover;object-position:center 60%;border-radius:12px;margin-bottom:16px;">
     <div class="daily-gp-count" style="text-align:center;font-size:18px;margin-bottom:2px;">${t('daily_gp_count', todaysDailySeasonLength())}</div>
     <div class="daily-reroll-count" style="text-align:center;font-size:14px;margin-bottom:6px;">${t('daily_reroll_count', todaysDailyRerollCount())}</div>
     <div id="dailyHubStatusBadge" style="display:flex;justify-content:center;margin-bottom:8px;">${dailyStatusBadgeHTML()}</div>
