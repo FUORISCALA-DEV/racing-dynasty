@@ -617,7 +617,7 @@ const I18N = {
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per avere fino a 3 tentativi al giorno.', daily_max_attempts_title: 'Hai esaurito i tentativi', daily_max_attempts_desc: 'Hai già usato tutti e 3 i tentativi di oggi. Torna domani per riprovare.', daily_confirm_new_attempt_title: 'Nuovo tentativo?', daily_confirm_new_attempt_desc: 'Hai già un risultato salvato per oggi. Iniziando un nuovo tentativo, quello precedente verrà eliminato per sempre — non potrai tornare indietro. Solo l\'ultimo tentativo conta in classifica. Procedere?',
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_continue: 'Continua la Daily di oggi →', daily_hub_new_run: 'Nuova run (abbandona la precedente)',
     daily_new_run_confirm_title: 'Nuova run?', daily_new_run_confirm_desc: 'Il progresso della run attuale andrà perso per sempre, e verrà usato un gettone Daily. Vuoi procedere?',
-    daily_token_counter: (usati,tot)=>`Gettoni Daily: ${usati}/${tot}`, daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Classifica Daily Live', daily_hub_leaderboard_yesterday: 'Classifica Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
+    daily_token_counter: (rimasti,tot)=>`Gettoni Daily: ${rimasti}/${tot}`, daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Classifica Daily Live', daily_hub_leaderboard_yesterday: 'Classifica Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: 'Indietro', daily_hub_leaderboard_live_short: 'Live', daily_hub_leaderboard_yesterday_short: 'Ieri', daily_hub_leaderboard_weighted_short: 'Generale',
     friends_hub_button: 'Amici',
     profile_hub_button: 'Il mio profilo', profile_title: 'Il mio profilo',
@@ -976,7 +976,7 @@ const I18N = {
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium for up to 3 attempts per day.', daily_max_attempts_title: 'No attempts left', daily_max_attempts_desc: "You've already used all 3 attempts today. Come back tomorrow to try again.", daily_confirm_new_attempt_title: 'New attempt?', daily_confirm_new_attempt_desc: "You already have a saved result for today. Starting a new attempt will permanently delete the previous one — this can't be undone. Only your last attempt counts on the leaderboard. Proceed?",
     daily_hub_start: "Start today's Daily →", daily_hub_continue: "Continue today's Daily →", daily_hub_new_run: 'New run (abandon current one)',
     daily_new_run_confirm_title: 'New run?', daily_new_run_confirm_desc: "Progress on your current run will be lost for good, and a Daily token will be used. Proceed?",
-    daily_token_counter: (usati,tot)=>`Daily tokens: ${usati}/${tot}`, daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live Leaderboard', daily_hub_leaderboard_yesterday: 'Last Daily Leaderboard', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
+    daily_token_counter: (rimasti,tot)=>`Daily tokens: ${rimasti}/${tot}`, daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live Leaderboard', daily_hub_leaderboard_yesterday: 'Last Daily Leaderboard', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: 'Back', daily_hub_leaderboard_live_short: 'Live', daily_hub_leaderboard_yesterday_short: 'Yesterday', daily_hub_leaderboard_weighted_short: 'Overall',
     friends_hub_button: 'Friends',
     profile_hub_button: 'My profile', profile_title: 'My profile',
@@ -1331,7 +1331,7 @@ const I18N = {
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para tener hasta 3 intentos al día.', daily_max_attempts_title: 'Has agotado los intentos', daily_max_attempts_desc: 'Ya has usado los 3 intentos de hoy. Vuelve mañana para intentarlo de nuevo.', daily_confirm_new_attempt_title: '¿Nuevo intento?', daily_confirm_new_attempt_desc: 'Ya tienes un resultado guardado para hoy. Si empiezas un nuevo intento, el anterior se eliminará para siempre — no podrás deshacerlo. Solo cuenta el último intento en la clasificación. ¿Continuar?',
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_continue: 'Continuar la Daily de hoy →', daily_hub_new_run: 'Nueva run (abandona la anterior)',
     daily_new_run_confirm_title: '¿Nueva run?', daily_new_run_confirm_desc: 'El progreso de la run actual se perderá para siempre, y se usará una ficha Daily. ¿Continuar?',
-    daily_token_counter: (usati,tot)=>`Fichas Daily: ${usati}/${tot}`, daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Clasificación Daily en Vivo', daily_hub_leaderboard_yesterday: 'Clasificación Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
+    daily_token_counter: (rimasti,tot)=>`Fichas Daily: ${rimasti}/${tot}`, daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Clasificación Daily en Vivo', daily_hub_leaderboard_yesterday: 'Clasificación Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: 'Volver', daily_hub_leaderboard_live_short: 'Live', daily_hub_leaderboard_yesterday_short: 'Ayer', daily_hub_leaderboard_weighted_short: 'General',
     friends_hub_button: 'Amigos',
     profile_hub_button: 'Mi perfil', profile_title: 'Mi perfil',
@@ -9034,8 +9034,12 @@ function renderDailySeasonHub(){
   // spendendo un gettone — mostrato SOLO se c'è davvero una run da abbandonare E restano gettoni.
   countDailyPlaysToday().then(tentativiUsatiOggi=>{
     const massimo = isPremiumUser ? DAILY_MAX_PREMIUM_ATTEMPTS : 1;
+    const gettoniRimasti = Math.max(0, massimo - tentativiUsatiOggi);
     const counterEl = document.getElementById('dailyHubTokenCounter');
-    if(counterEl) counterEl.textContent = t('daily_token_counter', Math.min(tentativiUsatiOggi, massimo), massimo);
+    // V0.9.9.152: BUG CORRETTO — segnalato da Gio, "gettoni Daily 3/3 è equivoco, sembra che li ho
+    // tutti ma in realtà non ne ho". Mostrava usati/totale, ma la lettura naturale di "X/Y" è
+    // "quanti ne ho disponibili", non "quanti ne ho consumati". Ora mostra i RIMASTI.
+    if(counterEl) counterEl.textContent = t('daily_token_counter', gettoniRimasti, massimo);
     const slotEl = document.getElementById('dailyHubNewRunSlot');
     if(slotEl && salvataggioDaily && tentativiUsatiOggi < massimo){
       slotEl.innerHTML = `<button class="ghost" data-action="daily-new-run-instead" style="width:100%;color:var(--amber);border-color:var(--amber);">${t('daily_hub_new_run')}</button>`;
