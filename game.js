@@ -624,7 +624,7 @@ const I18N = {
     friends_checking: 'Verifica in corso...', friends_error_invalid: 'Codice non valido.', friends_error_self: 'Non puoi aggiungere te stesso.',
     friends_already: 'Eravate già amici.', friends_added: 'Amico aggiunto!',
     friends_list_title: 'I tuoi amici', friends_list_loading: 'Caricamento...', friends_list_empty: 'Non hai ancora amici — condividi il tuo codice per iniziare.',
-    friends_unknown_nick: 'Giocatore',
+    friends_unknown_nick: 'Giocatore', friends_not_synced_yet: 'La scheda di questo amico non è ancora sincronizzata — si aggiornerà automaticamente al suo prossimo accesso al gioco.',
     friends_stat_wins: 'Gare vinte', friends_stat_missing_trophies: 'Trofei Mancanti', friends_stat_museum: 'Completamento Museo',
     friends_stat_achievements: 'Obiettivi', friends_stat_rating: 'Rating',
 
@@ -973,7 +973,7 @@ const I18N = {
     friends_checking: 'Checking...', friends_error_invalid: 'Invalid code.', friends_error_self: "You can't add yourself.",
     friends_already: 'You were already friends.', friends_added: 'Friend added!',
     friends_list_title: 'Your friends', friends_list_loading: 'Loading...', friends_list_empty: "You don't have friends yet — share your code to get started.",
-    friends_unknown_nick: 'Player',
+    friends_unknown_nick: 'Player', friends_not_synced_yet: "This friend's card isn't synced yet — it will update automatically the next time they open the game.",
     friends_stat_wins: 'Races won', friends_stat_missing_trophies: 'Missing trophies', friends_stat_museum: 'Museum completion',
     friends_stat_achievements: 'Achievements', friends_stat_rating: 'Rating',
 
@@ -1318,7 +1318,7 @@ const I18N = {
     friends_checking: 'Comprobando...', friends_error_invalid: 'Código no válido.', friends_error_self: 'No puedes añadirte a ti mismo.',
     friends_already: 'Ya erais amigos.', friends_added: '¡Amigo añadido!',
     friends_list_title: 'Tus amigos', friends_list_loading: 'Cargando...', friends_list_empty: 'Aún no tienes amigos — comparte tu código para empezar.',
-    friends_unknown_nick: 'Jugador',
+    friends_unknown_nick: 'Jugador', friends_not_synced_yet: 'La ficha de este amigo aún no está sincronizada — se actualizará automáticamente la próxima vez que abra el juego.',
     friends_stat_wins: 'Carreras ganadas', friends_stat_missing_trophies: 'Trofeos que faltan', friends_stat_museum: 'Completado del Museo',
     friends_stat_achievements: 'Logros', friends_stat_rating: 'Rating',
 
@@ -8651,6 +8651,9 @@ function renderFriendsHub(){
   });
 }
 function friendDetailHTML(f){
+  if(f.nonSincronizzato){
+    return `<div class="dim" style="text-align:center;padding:10px 6px;font-size:12.5px;line-height:1.5;">${t('friends_not_synced_yet')}</div>`;
+  }
   const righe = [
     [t('friends_stat_wins'), `${f.circuiti_vinti}`],
     [t('friends_stat_missing_trophies'), `${Math.max(0, f.circuiti_totali - f.circuiti_vinti)}`],
@@ -9728,50 +9731,49 @@ async function getOrCreateMyFriendCode(){
 // schema già collaudato di buildShareCardCanvas/shareResultCard, qui semplificato per un'immagine
 // quadrata (formato social) invece della carta verticale.
 async function buildFriendCodeShareCanvas(code){
-  const fasce = ['debole','discreto','intermedio','ottimo','eccellente','legendary','immortal'];
-  const bandCasuale = fasce[Math.floor(Math.random()*fasce.length)];
-  const poseNumCasuale = 1 + Math.floor(Math.random()*5);
-  const poseSrc = `assets/share-poses/pose${poseNumCasuale}_${bandCasuale}.webp`;
-  const accent = CAR_RARITY_COLOR[bandCasuale];
+  // V0.9.9.122: RIMOSSE le pose vittoria (trofeo in mano), richiesto da Gio — "la scheda che si
+  // condivide per il codice amico non deve avere pose vittoria". Sostituite con scene neutre di
+  // squadra/allenamento (stessa cartella assets/driver-scenes usata altrove nel gioco per momenti
+  // di carriera), tono adatto a un invito di amicizia, non a un trionfo.
+  const sceneCasuali = ['team-event', 'training'];
+  const sceneScelta = sceneCasuali[Math.floor(Math.random()*sceneCasuali.length)];
+  const sceneSrc = `assets/driver-scenes/${sceneScelta}.webp`;
 
-  const [logoImg, poseImg] = await Promise.all([loadImg(LOGO_DATA_URI), loadImg(poseSrc)]);
+  const [logoImg, sceneImg] = await Promise.all([loadImg(LOGO_DATA_URI), loadImg(sceneSrc)]);
 
   const S = 1080; // immagine quadrata, formato social
   const cv = document.createElement('canvas');
   cv.width = S; cv.height = S;
   const ctx = cv.getContext('2d');
 
-  // sfondo scuro con un alone del colore della fascia dietro la posa
-  const bg = ctx.createRadialGradient(S/2, S*0.42, S*0.1, S/2, S*0.42, S*0.65);
-  bg.addColorStop(0, accent+'33'); bg.addColorStop(1, '#0d0d0f');
-  ctx.fillStyle = bg; ctx.fillRect(0, 0, S, S);
+  // la scena riempie tutto il quadrato (cover, ritagliata al centro se le proporzioni non combaciano)
+  const scala = Math.max(S/sceneImg.width, S/sceneImg.height);
+  const sw = sceneImg.width*scala, sh = sceneImg.height*scala;
+  ctx.drawImage(sceneImg, (S-sw)/2, (S-sh)/2, sw, sh);
+
+  // scurita dall'alto (per il logo) e soprattutto in basso (per il codice, ben leggibile)
+  const scrim = ctx.createLinearGradient(0, 0, 0, S);
+  scrim.addColorStop(0, 'rgba(5,6,8,0.55)'); scrim.addColorStop(0.35, 'rgba(5,6,8,0.05)');
+  scrim.addColorStop(0.7, 'rgba(5,6,8,0.15)'); scrim.addColorStop(1, 'rgba(5,6,8,0.94)');
+  ctx.fillStyle = scrim; ctx.fillRect(0, 0, S, S);
 
   // logo in alto, centrato
-  const logoW = S*0.42, logoH = logoImg.height*(logoW/logoImg.width);
-  ctx.globalAlpha = 0.92;
-  ctx.drawImage(logoImg, (S-logoW)/2, 46, logoW, logoH);
+  const logoW = S*0.4, logoH = logoImg.height*(logoW/logoImg.width);
+  ctx.globalAlpha = 0.95;
+  ctx.drawImage(logoImg, (S-logoW)/2, 44, logoW, logoH);
   ctx.globalAlpha = 1;
 
-  // posa pilota, grande, centrata verticalmente nella zona centrale
-  const poseH = S*0.62, poseW = poseImg.width*(poseH/poseImg.height);
-  ctx.save();
-  ctx.filter = 'blur(22px)'; ctx.globalAlpha = 0.35;
-  ctx.drawImage(poseImg, (S-poseW)/2, S*0.22, poseW, poseH);
-  ctx.restore();
-  ctx.drawImage(poseImg, (S-poseW)/2, S*0.20, poseW, poseH);
-
-  // codice in grande, tematizzato col colore della fascia, in basso
+  // codice in grande, arancione (colore firma del gioco, non legato a una fascia specifica dato
+  // che non c'è più un componente/pilota a cui riferirsi), in basso
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(8,8,11,0.88)';
-  ctx.fillRect(0, S*0.855, S, S*0.145);
-  ctx.fillStyle = accent;
-  ctx.font = '900 64px -apple-system,sans-serif';
-  ctx.shadowColor = accent; ctx.shadowBlur = 24;
-  ctx.fillText(code, S/2, S*0.925);
+  ctx.fillStyle = '#ff6a1a';
+  ctx.font = '900 66px -apple-system,sans-serif';
+  ctx.shadowColor = '#ff6a1a'; ctx.shadowBlur = 26;
+  ctx.fillText(code, S/2, S*0.90);
   ctx.shadowBlur = 0;
-  ctx.fillStyle = '#c9c9d0';
-  ctx.font = '600 20px -apple-system,sans-serif';
-  ctx.fillText(t('friends_share_cta'), S/2, S*0.965);
+  ctx.fillStyle = '#e4e4e8';
+  ctx.font = '600 21px -apple-system,sans-serif';
+  ctx.fillText(t('friends_share_cta'), S/2, S*0.945);
   ctx.textAlign = 'left';
 
   return cv;
@@ -9868,6 +9870,7 @@ async function loadMyFriendsList(){
       return {
         user_id: uid,
         nickname: nicknamePerUtente[uid] || null,
+        nonSincronizzato: !s, // V0.9.9.122: mai sincronizzato (nessuna riga trovata), non "zero vero"
         circuiti_vinti: s?.circuiti_vinti ?? 0,
         circuiti_totali: s?.circuiti_totali ?? DATA.circuiti.length,
         completamento_museo_pct: s?.completamento_museo_pct ?? 0,
