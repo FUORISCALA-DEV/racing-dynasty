@@ -9822,18 +9822,55 @@ async function loadMyFriendsList(){
     if(error || !amicizie){ console.warn('Caricamento amici non riuscito:', error?.message); return []; }
     const idAmici = amicizie.map(r => r.user_id_a===currentUser.id ? r.user_id_b : r.user_id_a);
     if(idAmici.length===0) return [];
+
+    // V0.9.9.121: BUG CORRETTO — segnalato da Gio, un amico con amicizia vera (confermata dal
+    // badge in classifica) non compariva nella lista amici. Causa: la lista partiva dalle
+    // statistiche pubbliche (player_public_stats), che un amico ottiene solo dopo aver sbloccato
+    // qualcosa (trofeo/museo/obiettivo) — se non l'ha ancora fatto, la sua riga li' non esiste
+    // affatto, e spariva del tutto dalla lista anche se l'amicizia era reale. Ora la lista parte
+    // SEMPRE dagli amici veri (idAmici), con le statistiche unite quando ci sono e zero/sconosciuto
+    // quando mancano — un amico non sparisce mai solo perche' non ha ancora sincronizzato nulla.
     const { data: stats, error: statsError } = await supabaseClient.from('player_public_stats')
-      .select('user_id, nickname, circuiti_vinti, circuiti_totali, completamento_museo_pct, obiettivi_sbloccati, obiettivi_totali')
+      .select('user_id, circuiti_vinti, circuiti_totali, completamento_museo_pct, obiettivi_sbloccati, obiettivi_totali')
       .in('user_id', idAmici);
-    if(statsError){ console.warn('Caricamento statistiche amici non riuscito:', statsError.message); return []; }
-    // il Rating vive nella vista classifica generale già esistente (5° dato, separato dagli altri 4)
-    let ratingPerUtente = {};
+    if(statsError) console.warn('Caricamento statistiche amici non riuscito (proseguo con valori di default):', statsError.message);
+    const statsPerUtente = {};
+    (stats||[]).forEach(s => { statsPerUtente[s.user_id] = s; });
+
+    // nickname E rating vivono insieme nella vista classifica generale già esistente e già
+    // verificata funzionante per mostrare nickname di ALTRI giocatori (non solo il proprio) —
+    // più sicuro che interrogare direttamente daily_nicknames, dove i permessi non sono verificati
+    let nicknamePerUtente = {}, ratingPerUtente = {};
     try{
       const { data: ratingData } = await supabaseClient.from('daily_weighted_leaderboard_view')
-        .select('user_id, rating_medio').in('user_id', idAmici);
-      (ratingData||[]).forEach(r => { ratingPerUtente[r.user_id] = r.rating_medio; });
-    }catch(e){ /* silenzioso: la lista amici funziona comunque senza il rating */ }
-    return (stats||[]).map(s => ({ ...s, rating_medio: ratingPerUtente[s.user_id] ?? null }));
+        .select('user_id, nickname, rating_medio').in('user_id', idAmici);
+      (ratingData||[]).forEach(r => { ratingPerUtente[r.user_id] = r.rating_medio; nicknamePerUtente[r.user_id] = r.nickname; });
+    }catch(e){ /* silenzioso: la lista amici funziona comunque senza rating/nickname da qui */ }
+    // ripiego: se un amico non ha ancora 15 run Daily (non compare nella vista sopra, che li
+    // richiede), proviamo comunque a recuperare almeno il nickname da una qualunque sua Daily
+    // passata, non solo quella di oggi
+    const mancantiNickname = idAmici.filter(uid => !nicknamePerUtente[uid]);
+    if(mancantiNickname.length>0){
+      try{
+        const { data: nickData } = await supabaseClient.from('daily_leaderboard_view')
+          .select('user_id, nickname').in('user_id', mancantiNickname).limit(mancantiNickname.length);
+        (nickData||[]).forEach(n => { nicknamePerUtente[n.user_id] = n.nickname; });
+      }catch(e){ /* silenzioso */ }
+    }
+
+    return idAmici.map(uid => {
+      const s = statsPerUtente[uid];
+      return {
+        user_id: uid,
+        nickname: nicknamePerUtente[uid] || null,
+        circuiti_vinti: s?.circuiti_vinti ?? 0,
+        circuiti_totali: s?.circuiti_totali ?? DATA.circuiti.length,
+        completamento_museo_pct: s?.completamento_museo_pct ?? 0,
+        obiettivi_sbloccati: s?.obiettivi_sbloccati ?? 0,
+        obiettivi_totali: s?.obiettivi_totali ?? ACHIEVEMENTS.length,
+        rating_medio: ratingPerUtente[uid] ?? null,
+      };
+    });
   }catch(e){ console.warn('Caricamento amici non riuscito:', e); return []; }
 }
 
