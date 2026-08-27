@@ -34,6 +34,16 @@ body{margin:0;padding:0;background:var(--void);color:var(--text);font-family:var
    -webkit-user-select serve per Safari/iOS, dove questa proprietà ha ancora bisogno del prefisso. */
 *{ -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
 input, textarea, [contenteditable="true"]{ -webkit-user-select:text; user-select:text; -webkit-touch-callout:default; }
+/* V0.9.9.145: rinforzo specifico per le immagini — richiesto da Gio, la pressione prolungata su
+   smartphone apriva ancora "copia/scarica/condividi" nonostante la regola generale sopra. Su
+   iOS/Safari, le immagini a volte richiedono anche -webkit-user-drag (blocca il gesto di
+   trascinamento che innesca il menu) oltre a touch-callout, e pointer-events sull'immagine stessa
+   con un genitore cliccabile funziona comunque per i tocchi normali. */
+img{
+  -webkit-touch-callout:none; -webkit-user-select:none; user-select:none;
+  -webkit-user-drag:none; user-drag:none;
+  pointer-events:none;
+}
 /* V0.9.9.77: barra di scroll personalizzata ambra, ma visibile SOLO durante lo scroll vero
    dell'utente (classe .is-scrolling aggiunta/rimossa via JS su evento scroll) — non deve comparire
    solo perché il contenuto della pagina cambia altezza da un ridisegno, quello dava fastidio. */
