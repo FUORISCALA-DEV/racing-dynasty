@@ -261,12 +261,14 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .daily-reroll-count{ font-family:var(--font-mono); color:var(--dim); font-size:13px; }
 .daily-reroll-count::before{ content:'·'; margin-right:8px; color:var(--dim); }
 .daily-countdown-row{ display:flex; align-items:center; gap:10px; }
-.daily-status-badge{ display:flex; gap:1px; padding:3px 7px; border-radius:20px; background:rgba(255,255,255,0.08); }
+.daily-status-badge{ display:flex; align-items:center; gap:6px; padding:5px 12px; border-radius:20px; background:rgba(255,255,255,0.08); }
 .daily-status-badge.daily-status-gold{ background:rgba(255,200,60,0.16); }
-.daily-check-mark{ width:15px; height:12px; }
+.daily-check-mark{ width:15px; height:12px; flex-shrink:0; }
 .daily-status-plain .daily-check-mark path{ stroke:#c9c9d0; }
 .daily-status-gold .daily-check-mark path{ stroke:#ffc83c; }
 .daily-status-gold .daily-check-mark:nth-child(2){ margin-left:-9px; }
+.daily-status-text{ font-size:12.5px; font-weight:700; white-space:nowrap; }
+.daily-status-gold .daily-status-text{ color:#ffc83c; }
 .mode-select-card-locked{ display:flex; flex-direction:column; }
 .mode-select-card-locked .mode-select-top{ position:relative; }
 .mode-select-bg-img-locked{ filter:grayscale(1) brightness(0.75); }

@@ -604,7 +604,9 @@ const I18N = {
     daily_nickname_err_invalid: 'Nickname non valido: 3-16 caratteri, solo lettere/numeri/trattini, niente termini offensivi.',
     daily_nickname_err_taken: 'Questo nickname è già stato preso, provane un altro.',
     daily_nickname_err_generic: 'Errore nel salvataggio, riprova.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche', daily_gp_count: (n)=>`${n} Gran Premi oggi`, daily_status_done: 'Daily di oggi completata', share_daily_meta: (n)=>`Daily Season · ${n} Gran Premi`, daily_status_one: 'Hai vinto un titolo nella Daily di oggi', daily_status_both: 'Hai vinto ENTRAMBI i titoli nella Daily di oggi!', daily_reroll_count: (n)=> n===0 ? 'Nessun reroll disponibile' : (n===1 ? '1 reroll disponibile' : `${n} reroll disponibili`),
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche', daily_gp_count: (n)=>`${n} Gran Premi oggi`, daily_status_done: 'Daily di oggi completata', share_daily_meta: (n)=>`Daily Season · ${n} Gran Premi`, daily_status_one: 'Hai vinto un titolo nella Daily di oggi', daily_status_both: 'Hai vinto ENTRAMBI i titoli nella Daily di oggi!',
+    daily_status_text_grandslam: 'Grand Slam — entrambi i titoli!', daily_status_text_won_constructor: 'Vittoria titolo Costruttori',
+    daily_status_text_won_driver: 'Vittoria titolo Piloti', daily_status_text_positions: (c,d)=>`Costruttori P${c} · Miglior pilota P${d}`, daily_reroll_count: (n)=> n===0 ? 'Nessun reroll disponibile' : (n===1 ? '1 reroll disponibile' : `${n} reroll disponibili`),
     daily_share_badge_today: 'classifica Daily di oggi', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} generale`,
     daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
@@ -961,7 +963,9 @@ const I18N = {
     daily_nickname_err_invalid: 'Invalid nickname: 3-16 characters, letters/numbers/dashes only, no offensive terms.',
     daily_nickname_err_taken: 'This nickname is already taken, try another one.',
     daily_nickname_err_generic: 'Save failed, try again.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards', daily_gp_count: (n)=>`${n} Grands Prix today`, daily_status_done: "Today's Daily completed", share_daily_meta: (n)=>`Daily Season · ${n} Grands Prix`, daily_status_one: "You won a title in today's Daily", daily_status_both: "You won BOTH titles in today's Daily!", daily_reroll_count: (n)=> n===0 ? 'No rerolls available' : (n===1 ? '1 reroll available' : `${n} rerolls available`),
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards', daily_gp_count: (n)=>`${n} Grands Prix today`, daily_status_done: "Today's Daily completed", share_daily_meta: (n)=>`Daily Season · ${n} Grands Prix`, daily_status_one: "You won a title in today's Daily", daily_status_both: "You won BOTH titles in today's Daily!",
+    daily_status_text_grandslam: 'Grand Slam — both titles!', daily_status_text_won_constructor: "Constructors' title won",
+    daily_status_text_won_driver: "Drivers' title won", daily_status_text_positions: (c,d)=>`Constructors P${c} · Best driver P${d}`, daily_reroll_count: (n)=> n===0 ? 'No rerolls available' : (n===1 ? '1 reroll available' : `${n} rerolls available`),
     daily_share_badge_today: "today's Daily leaderboard", daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} overall`,
     daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
@@ -1314,7 +1318,9 @@ const I18N = {
     daily_nickname_err_invalid: 'Nickname no válido: 3-16 caracteres, solo letras/números/guiones, sin términos ofensivos.',
     daily_nickname_err_taken: 'Este nickname ya está en uso, prueba otro.',
     daily_nickname_err_generic: 'Error al guardar, inténtalo de nuevo.',
-    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones', daily_gp_count: (n)=>`${n} Grandes Premios hoy`, daily_status_done: 'Daily de hoy completada', share_daily_meta: (n)=>`Daily Season · ${n} Grandes Premios`, daily_status_one: 'Ganaste un título en la Daily de hoy', daily_status_both: '¡Ganaste AMBOS títulos en la Daily de hoy!', daily_reroll_count: (n)=> n===0 ? 'Sin rerolls disponibles' : (n===1 ? '1 reroll disponible' : `${n} rerolls disponibles`),
+    mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones', daily_gp_count: (n)=>`${n} Grandes Premios hoy`, daily_status_done: 'Daily de hoy completada', share_daily_meta: (n)=>`Daily Season · ${n} Grandes Premios`, daily_status_one: 'Ganaste un título en la Daily de hoy', daily_status_both: '¡Ganaste AMBOS títulos en la Daily de hoy!',
+    daily_status_text_grandslam: 'Grand Slam — ¡ambos títulos!', daily_status_text_won_constructor: 'Título Constructores ganado',
+    daily_status_text_won_driver: 'Título Pilotos ganado', daily_status_text_positions: (c,d)=>`Constructores P${c} · Mejor piloto P${d}`, daily_reroll_count: (n)=> n===0 ? 'Sin rerolls disponibles' : (n===1 ? '1 reroll disponible' : `${n} rerolls disponibles`),
     daily_share_badge_today: 'clasificación Daily de hoy', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} general`,
     daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
@@ -8980,12 +8986,12 @@ function renderDailySeasonHub(){
     <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON</small></div>
   </div>
   <div class="wrap">
-    <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:16px;">
+    <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;object-position:center 75%;border-radius:12px;margin-bottom:16px;">
     <div class="daily-gp-count" style="text-align:center;font-size:18px;margin-bottom:2px;">${t('daily_gp_count', todaysDailySeasonLength())}</div>
     <div class="daily-reroll-count" style="text-align:center;font-size:14px;margin-bottom:6px;">${t('daily_reroll_count', todaysDailyRerollCount())}</div>
+    <div id="dailyHubStatusBadge" style="display:flex;justify-content:center;margin-bottom:8px;">${dailyStatusBadgeHTML()}</div>
     <div class="daily-countdown-row" style="justify-content:center;margin-bottom:6px;">
       <div class="daily-countdown" id="dailyHubCountdown" style="font-size:20px;">--:--:--</div>
-      <div id="dailyHubStatusBadge">${dailyStatusBadgeHTML()}</div>
     </div>
     <div class="dim" id="dailyHubTokenCounter" style="text-align:center;font-size:12px;margin-bottom:14px;"></div>
     <div class="dim" style="text-align:center;font-size:12px;line-height:1.5;margin-bottom:20px;padding:0 8px;">${t('daily_fairness_note')}</div>
@@ -9092,12 +9098,21 @@ function dailyStatusBadgeHTML(){
   const wonBoth = dailyBestResultCache.won_constructor && dailyBestResultCache.won_driver;
   const wonOne = dailyBestResultCache.won_constructor || dailyBestResultCache.won_driver;
   const checkSvg = `<svg viewBox="0 0 16 12" class="daily-check-mark"><path d="M1 6.5L5.5 11L15 1" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  // V0.9.9.141: TESTO CELEBRATIVO aggiunto — richiesto da Gio: prima c'erano solo simboli di spunta
+  // senza alcuna spiegazione visibile di cosa significassero. Ora un vero riassunto testuale di cosa
+  // si è ottenuto nella Daily di oggi, invece del solo tooltip nascosto.
+  const posC = dailyBestResultCache.constructor_position, posD = dailyBestResultCache.driver_position;
+  let testoRiassunto;
+  if(wonBoth) testoRiassunto = t('daily_status_text_grandslam');
+  else if(dailyBestResultCache.won_constructor) testoRiassunto = t('daily_status_text_won_constructor');
+  else if(dailyBestResultCache.won_driver) testoRiassunto = t('daily_status_text_won_driver');
+  else testoRiassunto = t('daily_status_text_positions', posC||'—', posD||'—');
   if(wonBoth){
-    return `<div class="daily-status-badge daily-status-gold" title="${t('daily_status_both')}">${checkSvg}${checkSvg}</div>`;
+    return `<div class="daily-status-badge daily-status-gold" title="${t('daily_status_both')}">${checkSvg}${checkSvg}<span class="daily-status-text">${testoRiassunto}</span></div>`;
   } else if(wonOne){
-    return `<div class="daily-status-badge daily-status-gold" title="${t('daily_status_one')}">${checkSvg}</div>`;
+    return `<div class="daily-status-badge daily-status-gold" title="${t('daily_status_one')}">${checkSvg}<span class="daily-status-text">${testoRiassunto}</span></div>`;
   } else {
-    return `<div class="daily-status-badge daily-status-plain" title="${t('daily_status_done')}">${checkSvg}</div>`;
+    return `<div class="daily-status-badge daily-status-plain" title="${t('daily_status_done')}">${checkSvg}<span class="daily-status-text">${testoRiassunto}</span></div>`;
   }
 }
 let dailyBestResultCache = undefined; // undefined = non ancora controllato
