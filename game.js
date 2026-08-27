@@ -608,7 +608,7 @@ const I18N = {
     daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
     daily_trophy_podium: 'Sali sul podio oggi', daily_trophy_win: 'Vinci la Daily di oggi',
-    daily_countdown_label: (t)=>`Prossima Daily tra ${t}`, daily_countdown_label_todo: (t)=>`Hai ancora ${t} per tentare la run`, daily_locked_trophies: (n)=> n===1 ? 'Ti manca 1 trofeo vinto per sbloccare la Daily Season' : `Ti mancano ${n} trofei vinti per sbloccare la Daily Season`, daily_locked_doppietta: 'Ti serve anche una Stagione Scuderia vinta sia come pilota che come costruttore (anche insieme) per sbloccare la Daily Season', daily_locked_titles_v2: 'Ti serve anche aver vinto sia il titolo Costruttori che il titolo Piloti in una Stagione Scuderia (anche in stagioni diverse)', daily_locked_row_constructor: 'Titolo Costruttori', daily_locked_row_driver: 'Titolo Piloti', daily_locked_tap_hint: 'Tocca per i dettagli',
+    daily_countdown_label: (t)=>`Prossima Daily tra ${t}`, daily_countdown_label_todo: (t)=>`Hai ancora ${t} per tentare la run`, daily_locked_trophies: (n)=> n===1 ? 'Ti manca 1 trofeo vinto per sbloccare la Daily Season' : `Ti mancano ${n} trofei vinti per sbloccare la Daily Season`, daily_locked_doppietta: 'Ti serve anche una Stagione Scuderia vinta sia come pilota che come costruttore (anche insieme) per sbloccare la Daily Season', daily_locked_titles_v2: 'Ti serve anche aver vinto sia il titolo Costruttori che il titolo Piloti in una Stagione Scuderia (anche in stagioni diverse)', daily_locked_row_constructor: 'Titolo Costruttori', daily_locked_row_driver: 'Titolo Piloti', daily_locked_tap_hint: 'Tocca per i dettagli', daily_locked_need_login: 'Accedi con Google per sbloccare gli obiettivi della Daily',
     daily_detail_points: 'Punti', daily_score_points_word: 'punti', daily_detail_driver_pos: 'Posizione Piloti', daily_detail_constructor_pos: 'Posizione Costruttori',
     daily_detail_gap: 'Gap dal rivale', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (iniziale → finale)', daily_detail_platinum: 'Componenti Immortal',
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per avere fino a 3 tentativi al giorno.', daily_max_attempts_title: 'Hai esaurito i tentativi', daily_max_attempts_desc: 'Hai già usato tutti e 3 i tentativi di oggi. Torna domani per riprovare.', daily_confirm_new_attempt_title: 'Nuovo tentativo?', daily_confirm_new_attempt_desc: 'Hai già un risultato salvato per oggi. Iniziando un nuovo tentativo, quello precedente verrà eliminato per sempre — non potrai tornare indietro. Solo l\'ultimo tentativo conta in classifica. Procedere?',
@@ -957,7 +957,7 @@ const I18N = {
     daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
     daily_trophy_podium: 'Reach the podium today', daily_trophy_win: "Win today's Daily",
-    daily_countdown_label: (t)=>`Next Daily in ${t}`, daily_countdown_label_todo: (t)=>`You still have ${t} to attempt the run`, daily_locked_trophies: (n)=> n===1 ? 'You need 1 more trophy to unlock Daily Season' : `You need ${n} more trophies to unlock Daily Season`, daily_locked_doppietta: 'You also need a Team Season won as both driver and constructor champion (can be together) to unlock Daily Season', daily_locked_titles_v2: 'You also need to have won both the Constructors title and the Drivers title in a Team Season (can be different seasons)', daily_locked_row_constructor: "Constructors' title", daily_locked_row_driver: "Drivers' title", daily_locked_tap_hint: 'Tap for details',
+    daily_countdown_label: (t)=>`Next Daily in ${t}`, daily_countdown_label_todo: (t)=>`You still have ${t} to attempt the run`, daily_locked_trophies: (n)=> n===1 ? 'You need 1 more trophy to unlock Daily Season' : `You need ${n} more trophies to unlock Daily Season`, daily_locked_doppietta: 'You also need a Team Season won as both driver and constructor champion (can be together) to unlock Daily Season', daily_locked_titles_v2: 'You also need to have won both the Constructors title and the Drivers title in a Team Season (can be different seasons)', daily_locked_row_constructor: "Constructors' title", daily_locked_row_driver: "Drivers' title", daily_locked_tap_hint: 'Tap for details', daily_locked_need_login: 'Sign in with Google to unlock the Daily objectives',
     daily_detail_points: 'Points', daily_score_points_word: 'points', daily_detail_driver_pos: 'Drivers Position', daily_detail_constructor_pos: 'Constructors Position',
     daily_detail_gap: 'Gap from rival', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (initial → final)', daily_detail_platinum: 'Immortal components',
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium for up to 3 attempts per day.', daily_max_attempts_title: 'No attempts left', daily_max_attempts_desc: "You've already used all 3 attempts today. Come back tomorrow to try again.", daily_confirm_new_attempt_title: 'New attempt?', daily_confirm_new_attempt_desc: "You already have a saved result for today. Starting a new attempt will permanently delete the previous one — this can't be undone. Only your last attempt counts on the leaderboard. Proceed?",
@@ -1302,7 +1302,7 @@ const I18N = {
     daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
     daily_trophy_podium: 'Sube al podio hoy', daily_trophy_win: 'Gana la Daily de hoy',
-    daily_countdown_label: (t)=>`Próxima Daily en ${t}`, daily_countdown_label_todo: (t)=>`Todavía tienes ${t} para intentar la run`, daily_locked_trophies: (n)=> n===1 ? 'Te falta 1 trofeo para desbloquear la Daily Season' : `Te faltan ${n} trofeos para desbloquear la Daily Season`, daily_locked_doppietta: 'También necesitas una Temporada de Escudería ganada como piloto y como constructor (pueden ser juntos) para desbloquear la Daily Season', daily_locked_titles_v2: 'También necesitas haber ganado tanto el título de Constructores como el de Pilotos en una Temporada de Escudería (pueden ser temporadas distintas)', daily_locked_row_constructor: 'Título Constructores', daily_locked_row_driver: 'Título Pilotos', daily_locked_tap_hint: 'Toca para más detalles',
+    daily_countdown_label: (t)=>`Próxima Daily en ${t}`, daily_countdown_label_todo: (t)=>`Todavía tienes ${t} para intentar la run`, daily_locked_trophies: (n)=> n===1 ? 'Te falta 1 trofeo para desbloquear la Daily Season' : `Te faltan ${n} trofeos para desbloquear la Daily Season`, daily_locked_doppietta: 'También necesitas una Temporada de Escudería ganada como piloto y como constructor (pueden ser juntos) para desbloquear la Daily Season', daily_locked_titles_v2: 'También necesitas haber ganado tanto el título de Constructores como el de Pilotos en una Temporada de Escudería (pueden ser temporadas distintas)', daily_locked_row_constructor: 'Título Constructores', daily_locked_row_driver: 'Título Pilotos', daily_locked_tap_hint: 'Toca para más detalles', daily_locked_need_login: 'Inicia sesión con Google para desbloquear los objetivos de la Daily',
     daily_detail_points: 'Puntos', daily_score_points_word: 'puntos', daily_detail_driver_pos: 'Posición Pilotos', daily_detail_constructor_pos: 'Posición Constructores',
     daily_detail_gap: 'Diferencia del rival', daily_detail_budget: 'Presupuesto', daily_detail_rating: 'Rating (inicial → final)', daily_detail_platinum: 'Componentes Immortal',
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para tener hasta 3 intentos al día.', daily_max_attempts_title: 'Has agotado los intentos', daily_max_attempts_desc: 'Ya has usado los 3 intentos de hoy. Vuelve mañana para intentarlo de nuevo.', daily_confirm_new_attempt_title: '¿Nuevo intento?', daily_confirm_new_attempt_desc: 'Ya tienes un resultado guardado para hoy. Si empiezas un nuevo intento, el anterior se eliminará para siempre — no podrás deshacerlo. Solo cuenta el último intento en la clasificación. ¿Continuar?',
@@ -8843,13 +8843,16 @@ function renderModeSelect(){
           <div id="modeSelectDailyStatusBadge">${dailyStatusBadgeHTML()}</div>
         </div>
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_daily_hint')}</div>
+      </div>` : (!currentUser ? `
+      <div class="mode-select-bottom-scrim daily-locked-quick-scrim">
+        <div class="dim" style="font-size:12.5px;line-height:1.5;text-align:center;padding:4px 0;">${t('daily_locked_need_login')}</div>
       </div>` : `
       <div class="mode-select-bottom-scrim daily-locked-quick-scrim">
         <div class="daily-locked-quick-row"><span class="daily-locked-quick-icon">🏆</span><span>${dailySeasonTrophiesUnlockedCount()}/${DAILY_UNLOCK_TROPHY_COUNT}</span></div>
         <div class="daily-locked-quick-row"><span class="daily-locked-quick-icon">${hasWonConstructorTitle()?'✅':'❌'}</span><span data-lang-text="daily_locked_row_constructor">${t('daily_locked_row_constructor')}</span></div>
         <div class="daily-locked-quick-row"><span class="daily-locked-quick-icon">${hasWonDriverTitle()?'✅':'❌'}</span><span>${t('daily_locked_row_driver')}</span></div>
         <div class="card-tap-hint" style="font-size:11px;margin-top:6px;">${t('daily_locked_tap_hint')}</div>
-      </div>`}
+      </div>`)}
     </div>
   </div>
   `;
@@ -9526,10 +9529,19 @@ function dailySeasonTrophiesUnlockedCount(){
 function hasWonConstructorTitle(){ return !!achievementData.everWonConstructorTitle || achievementData.unlockedIds.includes('doppietta-perfetta'); }
 function hasWonDriverTitle(){ return !!achievementData.everWonDriverTitle || achievementData.unlockedIds.includes('doppietta-perfetta'); }
 function isDailySeasonUnlocked(){
+  // V0.9.9.126: richiesto anche il login — richiesto da Gio ("senza login nessun accesso alla
+  // scheda daily, la si vede grigia, senza obiettivi per sbloccarla"). Prima i requisiti si
+  // basavano solo su dati locali (trofei/obiettivi), che esistono anche senza account, mostrando
+  // progressi che poi comunque non bastavano a giocare davvero (serve il login per salvare i
+  // risultati Daily).
+  if(!currentUser) return false;
   return dailySeasonTrophiesUnlockedCount() >= DAILY_UNLOCK_TROPHY_COUNT
     && hasWonConstructorTitle() && hasWonDriverTitle();
 }
 function dailySeasonLockedMessageHTML(){
+  if(!currentUser){
+    return `<div>${t('daily_locked_need_login')}</div>`;
+  }
   const missingTrophies = Math.max(0, DAILY_UNLOCK_TROPHY_COUNT - dailySeasonTrophiesUnlockedCount());
   const missingConstructor = !hasWonConstructorTitle();
   const missingDriver = !hasWonDriverTitle();
