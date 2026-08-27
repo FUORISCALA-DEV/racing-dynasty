@@ -609,6 +609,16 @@ const I18N = {
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per avere fino a 3 tentativi al giorno.', daily_max_attempts_title: 'Hai esaurito i tentativi', daily_max_attempts_desc: 'Hai già usato tutti e 3 i tentativi di oggi. Torna domani per riprovare.', daily_confirm_new_attempt_title: 'Nuovo tentativo?', daily_confirm_new_attempt_desc: 'Hai già un risultato salvato per oggi. Iniziando un nuovo tentativo, quello precedente verrà eliminato per sempre — non potrai tornare indietro. Solo l\'ultimo tentativo conta in classifica. Procedere?',
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Classifica Daily Live', daily_hub_leaderboard_yesterday: 'Classifica Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
+    friends_my_code_title: 'Il tuo codice invito', friends_my_code_desc: 'Condividilo con un amico (WhatsApp, Discord...) — lo inserisce lui per aggiungerti.',
+    friends_copy_code: 'Copia', friends_code_copied: 'Copiato!', friends_code_error: 'Errore',
+    friends_add_title: 'Aggiungi un amico', friends_add_btn: 'Aggiungi',
+    friends_checking: 'Verifica in corso...', friends_error_invalid: 'Codice non valido.', friends_error_self: 'Non puoi aggiungere te stesso.',
+    friends_already: 'Eravate già amici.', friends_added: 'Amico aggiunto!',
+    friends_list_title: 'I tuoi amici', friends_list_loading: 'Caricamento...', friends_list_empty: 'Non hai ancora amici — condividi il tuo codice per iniziare.',
+    friends_unknown_nick: 'Giocatore',
+    friends_stat_wins: 'Gare vinte', friends_stat_missing_trophies: 'Trofei Mancanti', friends_stat_museum: 'Completamento Museo',
+    friends_stat_achievements: 'Obiettivi', friends_stat_rating: 'Rating',
+
     daily_leaderboard_loading: 'Carico la classifica...', daily_leaderboard_error: 'Errore nel caricamento, riprova più tardi.',
     daily_leaderboard_empty: 'Nessuno ha ancora giocato la Daily di oggi. Sii il primo!',
     daily_leaderboard_weighted_empty: 'Nessuno ha ancora giocato abbastanza Daily (minimo 15 giorni) per comparire qui.',
@@ -944,6 +954,16 @@ const I18N = {
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium for up to 3 attempts per day.', daily_max_attempts_title: 'No attempts left', daily_max_attempts_desc: "You've already used all 3 attempts today. Come back tomorrow to try again.", daily_confirm_new_attempt_title: 'New attempt?', daily_confirm_new_attempt_desc: "You already have a saved result for today. Starting a new attempt will permanently delete the previous one — this can't be undone. Only your last attempt counts on the leaderboard. Proceed?",
     daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live Leaderboard', daily_hub_leaderboard_yesterday: 'Last Daily Leaderboard', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
+    friends_my_code_title: 'Your invite code', friends_my_code_desc: 'Share it with a friend (WhatsApp, Discord...) — they enter it to add you.',
+    friends_copy_code: 'Copy', friends_code_copied: 'Copied!', friends_code_error: 'Error',
+    friends_add_title: 'Add a friend', friends_add_btn: 'Add',
+    friends_checking: 'Checking...', friends_error_invalid: 'Invalid code.', friends_error_self: "You can't add yourself.",
+    friends_already: 'You were already friends.', friends_added: 'Friend added!',
+    friends_list_title: 'Your friends', friends_list_loading: 'Loading...', friends_list_empty: "You don't have friends yet — share your code to get started.",
+    friends_unknown_nick: 'Player',
+    friends_stat_wins: 'Races won', friends_stat_missing_trophies: 'Missing trophies', friends_stat_museum: 'Museum completion',
+    friends_stat_achievements: 'Achievements', friends_stat_rating: 'Rating',
+
     daily_leaderboard_loading: 'Loading leaderboard...', daily_leaderboard_error: 'Loading failed, try again later.',
     daily_leaderboard_empty: "Nobody has played today's Daily yet. Be the first!",
     daily_leaderboard_weighted_empty: "Nobody has played enough Dailies yet (minimum 15 days) to show up here.",
@@ -1275,6 +1295,16 @@ const I18N = {
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para tener hasta 3 intentos al día.', daily_max_attempts_title: 'Has agotado los intentos', daily_max_attempts_desc: 'Ya has usado los 3 intentos de hoy. Vuelve mañana para intentarlo de nuevo.', daily_confirm_new_attempt_title: '¿Nuevo intento?', daily_confirm_new_attempt_desc: 'Ya tienes un resultado guardado para hoy. Si empiezas un nuevo intento, el anterior se eliminará para siempre — no podrás deshacerlo. Solo cuenta el último intento en la clasificación. ¿Continuar?',
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Clasificación Daily en Vivo', daily_hub_leaderboard_yesterday: 'Clasificación Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
+    friends_my_code_title: 'Tu código de invitación', friends_my_code_desc: 'Compártelo con un amigo (WhatsApp, Discord...) — lo introduce para añadirte.',
+    friends_copy_code: 'Copiar', friends_code_copied: '¡Copiado!', friends_code_error: 'Error',
+    friends_add_title: 'Añadir un amigo', friends_add_btn: 'Añadir',
+    friends_checking: 'Comprobando...', friends_error_invalid: 'Código no válido.', friends_error_self: 'No puedes añadirte a ti mismo.',
+    friends_already: 'Ya erais amigos.', friends_added: '¡Amigo añadido!',
+    friends_list_title: 'Tus amigos', friends_list_loading: 'Cargando...', friends_list_empty: 'Aún no tienes amigos — comparte tu código para empezar.',
+    friends_unknown_nick: 'Jugador',
+    friends_stat_wins: 'Carreras ganadas', friends_stat_missing_trophies: 'Trofeos que faltan', friends_stat_museum: 'Completado del Museo',
+    friends_stat_achievements: 'Logros', friends_stat_rating: 'Rating',
+
     daily_leaderboard_loading: 'Cargando clasificación...', daily_leaderboard_error: 'Error al cargar, inténtalo más tarde.',
     daily_leaderboard_empty: 'Nadie ha jugado todavía la Daily de hoy. ¡Sé el primero!',
     daily_leaderboard_weighted_empty: 'Nadie ha jugado suficientes Dailies todavía (mínimo 15 días) para aparecer aquí.',
@@ -8370,6 +8400,7 @@ function renderInner(){
   if(state.phase==='daily-nickname-setup') return renderDailyNicknameSetup();
   if(state.phase==='daily-season-hub') return renderDailySeasonHub();
   if(state.phase==='daily-leaderboard') return renderDailyLeaderboard();
+  if(state.phase==='friends-hub') return renderFriendsHub();
   if(state.phase==='premium-thank-you') return renderPremiumThankYou();
   if(state.phase==='tutorial-draft') return renderTutorialDraft();
   if(state.phase==='tutorial-goat-reveal') return renderTutorialGoatReveal();
@@ -8546,6 +8577,72 @@ const TEAM_INSPIRATION = [
 // alle due classifiche (giornaliera e ponderata).
 // V0.9.9.83: DAILY SEASON — classifica, sia giornaliera che ponderata. Le due viste SQL arrivano
 // gia' ordinate con lo spareggio corretto — qui ci limitiamo a disegnarle.
+// V0.9.9.115: SISTEMA AMICI — schermata principale: codice invito da condividere, campo per
+// aggiungere un amico, lista amici con le 5 statistiche al click (stesso schema già collaudato
+// della classifica Daily).
+let __friendsListCache = [];
+function renderFriendsHub(){
+  app.innerHTML = `
+  <div class="topbar">
+    <div class="brand hdr">RACING DYNASTY<small>AMICI</small></div>
+  </div>
+  <div class="wrap">
+    <div class="panel">
+      <div style="font-weight:700;margin-bottom:6px;">${t('friends_my_code_title')}</div>
+      <div class="dim" style="font-size:12px;margin-bottom:10px;">${t('friends_my_code_desc')}</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div class="mono" id="myFriendCodeDisplay" style="flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:16px;letter-spacing:0.05em;text-align:center;">···</div>
+        <button class="ghost" data-action="copy-friend-code" style="flex-shrink:0;">${t('friends_copy_code')}</button>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:12px;">
+      <div style="font-weight:700;margin-bottom:6px;">${t('friends_add_title')}</div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="friendCodeInput" maxlength="12" autocomplete="off" spellcheck="false"
+          placeholder="RD-XXXXXX" style="flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);text-transform:uppercase;">
+        <button class="primary" data-action="submit-friend-code" style="flex-shrink:0;">${t('friends_add_btn')}</button>
+      </div>
+      <div class="dim" id="friendCodeError" style="font-size:12px;color:var(--danger);margin-top:8px;min-height:16px;"></div>
+    </div>
+    <div class="panel" style="margin-top:12px;">
+      <div style="font-weight:700;margin-bottom:10px;">${t('friends_list_title')}</div>
+      <div id="friendsListContent" class="dim" style="text-align:center;padding:20px 0;">${t('friends_list_loading')}</div>
+    </div>
+    <div class="btnrow" style="margin-top:16px;">
+      <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('daily_hub_back')}</button>
+    </div>
+  </div>`;
+  bindActions();
+  getOrCreateMyFriendCode().then(codice=>{
+    const el = document.getElementById('myFriendCodeDisplay');
+    if(el) el.textContent = codice || t('friends_code_error');
+  });
+  loadMyFriendsList().then(lista=>{
+    __friendsListCache = lista;
+    const el = document.getElementById('friendsListContent');
+    if(!el) return;
+    if(lista.length===0){ el.innerHTML = `<div class="dim">${t('friends_list_empty')}</div>`; return; }
+    el.innerHTML = lista.map((f,i)=>`
+      <div class="daily-leaderboard-row" data-action="toggle-friend-detail" data-friend-idx="${i}" style="cursor:pointer;">
+        <span class="daily-leaderboard-nick">${f.nickname || t('friends_unknown_nick')}</span>
+        <span class="daily-leaderboard-score">${f.rating_medio!=null ? Math.round(f.rating_medio).toLocaleString('it-IT') : '—'}</span>
+      </div>
+      <div class="daily-leaderboard-detail" id="friendDetail${i}" style="display:none;"></div>
+    `).join('');
+    bindActions();
+  });
+}
+function friendDetailHTML(f){
+  const righe = [
+    [t('friends_stat_wins'), `${f.circuiti_vinti}`],
+    [t('friends_stat_missing_trophies'), `${Math.max(0, f.circuiti_totali - f.circuiti_vinti)}`],
+    [t('friends_stat_museum'), `${f.completamento_museo_pct}%`],
+    [t('friends_stat_achievements'), `${f.obiettivi_sbloccati}/${f.obiettivi_totali}`],
+    [t('friends_stat_rating'), f.rating_medio!=null ? Math.round(f.rating_medio).toLocaleString('it-IT') : '—'],
+  ];
+  return righe.map(([label,val])=>`<div class="daily-detail-row"><span class="dim">${label}</span><span>${val}</span></div>`).join('');
+}
+
 function renderDailyLeaderboard(tab){
   tab = tab || state.dailyLeaderboardTab || 'daily';
   state.dailyLeaderboardTab = tab;
@@ -8983,7 +9080,7 @@ function loadMuseumData(){
 }
 function saveMuseumData(){
   try{ localStorage.setItem(MUSEUM_SAVE_KEY, JSON.stringify(museumData)); }catch(e){ /* ignorato */ }
-  touchLocalProgress(); pushSaveToCloud();
+  touchLocalProgress(); pushSaveToCloud(); pushPublicStatsToCloud();
 }
 function unlockMuseumItem(catKey, item){
   if(!item || !item.id) return;
@@ -9018,7 +9115,7 @@ function loadTrophyData(){
 }
 function saveTrophyData(){
   try{ localStorage.setItem(TROPHY_SAVE_KEY, JSON.stringify(trophyData)); }catch(e){ /* ignorato */ }
-  touchLocalProgress(); pushSaveToCloud();
+  touchLocalProgress(); pushSaveToCloud(); pushPublicStatsToCloud();
 }
 function recordCircuitResult(circuitName, won){
   if(!trophyData[circuitName]) trophyData[circuitName] = { raced:0, won:0 };
@@ -9041,7 +9138,7 @@ function loadDriverTrophyData(){
 }
 function saveDriverTrophyData(){
   try{ localStorage.setItem(DRIVER_TROPHY_SAVE_KEY, JSON.stringify(driverTrophyData)); }catch(e){ /* ignorato */ }
-  touchLocalProgress(); pushSaveToCloud();
+  touchLocalProgress(); pushSaveToCloud(); pushPublicStatsToCloud();
 }
 function recordDriverCircuitResult(circuitName, won){
   if(!driverTrophyData[circuitName]) driverTrophyData[circuitName] = { raced:0, won:0 };
@@ -9142,7 +9239,7 @@ function loadAchievementData(){
 function saveAchievementData(){
   if(state && (state.isTutorialRun || state.isDailySeason)) return; // V0.9.9.71: il tutorial non scrive nessun progresso vero
   try{ localStorage.setItem(ACHIEVEMENT_SAVE_KEY, JSON.stringify(achievementData)); }catch(e){ /* ignorato */ }
-  touchLocalProgress(); pushSaveToCloud();
+  touchLocalProgress(); pushSaveToCloud(); pushPublicStatsToCloud();
 }
 let achievementData = loadAchievementData();
 // V0.9.7.8.7: FIX — un obiettivo gia' sbloccato PRIMA che esistesse questo aggancio (partite
@@ -9545,6 +9642,97 @@ function getLocalProgressTouchedAt(){
   try{ return Number(localStorage.getItem(LOCAL_PROGRESS_TOUCHED_KEY)||0); }catch(e){ return 0; }
 }
 let __cloudSyncDebounceTimer = null;
+
+// V0.9.9.115: SISTEMA AMICI — le 5 statistiche pubbliche vengono calcolate qui dai dati già
+// tracciati in locale (trofei, museo, obiettivi), e sincronizzate verso una piccola tabella
+// dedicata leggibile dagli amici — non l'intero salvataggio (che resta privato).
+function computePublicStats(){
+  const circuitiVinti = Object.values(trophyData).reduce((s,c)=>s+(c.won||0), 0);
+  const circuitiTotali = DATA.circuiti.length;
+  const totalPiloti = DATA.piloti.length;
+  const totalComponenti = DATA.motori.length + DATA.telai.length + DATA.aero.length + DATA.gomme.length + DATA.strategi.length;
+  const unlockedPiloti = Object.keys(museumData.piloti).length;
+  const unlockedComponenti = Object.keys(museumData.componenti).length;
+  const totalMuseo = totalPiloti + totalComponenti;
+  const unlockedMuseo = unlockedPiloti + unlockedComponenti;
+  const pctMuseo = totalMuseo>0 ? Math.round(unlockedMuseo/totalMuseo*100) : 0;
+  return {
+    circuiti_vinti: circuitiVinti,
+    circuiti_totali: circuitiTotali,
+    completamento_museo_pct: pctMuseo,
+    obiettivi_sbloccati: achievementData.unlockedIds.length,
+    obiettivi_totali: ACHIEVEMENTS.length,
+  };
+}
+function pushPublicStatsToCloud(){
+  if(!currentUser || !supabaseClient) return;
+  clearTimeout(__publicStatsSyncDebounceTimer);
+  __publicStatsSyncDebounceTimer = setTimeout(async ()=>{
+    try{
+      const stats = computePublicStats();
+      const { error } = await supabaseClient.from('player_public_stats').upsert({
+        user_id: currentUser.id,
+        nickname: dailyNicknameCache || null,
+        ...stats,
+        updated_at: new Date().toISOString(),
+      });
+      if(error) console.warn('Sincronizzazione statistiche pubbliche non riuscita:', error.message);
+    }catch(e){ console.warn('Sincronizzazione statistiche pubbliche non riuscita:', e); }
+  }, 2500);
+}
+let __publicStatsSyncDebounceTimer = null;
+
+// V0.9.9.115: SISTEMA AMICI — codice invito personale. Generato in modo casuale al primo bisogno
+// (non serve una funzione server per QUESTO passaggio: creare il PROPRIO codice non è unesima
+// operazione sensibile, la sicurezza vera sta nel RISCATTO del codice di qualcun altro, che invece
+// passa sempre dalla funzione server).
+let myFriendCodeCache = undefined; // undefined = non ancora controllato
+async function getOrCreateMyFriendCode(){
+  if(myFriendCodeCache !== undefined) return myFriendCodeCache;
+  if(!currentUser || !supabaseClient){ myFriendCodeCache = null; return null; }
+  try{
+    const { data: esistente } = await supabaseClient.from('friend_invite_codes')
+      .select('code').eq('user_id', currentUser.id).maybeSingle();
+    if(esistente){ myFriendCodeCache = esistente.code; return myFriendCodeCache; }
+    const nuovoCodice = 'RD-' + Array.from({length:6}, ()=> '23456789ABCDEFGHJKMNPQRSTUVWXYZ'[Math.floor(Math.random()*31)]).join('');
+    const { error } = await supabaseClient.from('friend_invite_codes').insert({ user_id: currentUser.id, code: nuovoCodice });
+    if(error){ console.warn('Creazione codice invito non riuscita:', error.message); myFriendCodeCache = null; return null; }
+    myFriendCodeCache = nuovoCodice;
+    return myFriendCodeCache;
+  }catch(e){ console.warn('Creazione codice invito non riuscita:', e); myFriendCodeCache = null; return null; }
+}
+async function redeemFriendCode(code){
+  if(!currentUser || !supabaseClient) return { ok:false, error:'not_authenticated' };
+  try{
+    const { data, error } = await supabaseClient.functions.invoke('add-friend-by-code', { body:{ code } });
+    if(error){ console.warn('Chiamata add-friend-by-code non riuscita (problema di invocazione):', error); return { ok:false, error:'invocation_error' }; }
+    if(!data || !data.ok){ console.warn('add-friend-by-code ha risposto con un errore vero:', data); return { ok:false, error: data?.error || 'unknown' }; }
+    return { ok:true, alreadyFriends: !!data.alreadyFriends };
+  }catch(e){ console.warn('Riscatto codice amico non riuscito:', e); return { ok:false, error:'exception' }; }
+}
+async function loadMyFriendsList(){
+  if(!currentUser || !supabaseClient) return [];
+  try{
+    const { data: amicizie, error } = await supabaseClient.from('friendships')
+      .select('user_id_a, user_id_b')
+      .or(`user_id_a.eq.${currentUser.id},user_id_b.eq.${currentUser.id}`);
+    if(error || !amicizie){ console.warn('Caricamento amici non riuscito:', error?.message); return []; }
+    const idAmici = amicizie.map(r => r.user_id_a===currentUser.id ? r.user_id_b : r.user_id_a);
+    if(idAmici.length===0) return [];
+    const { data: stats, error: statsError } = await supabaseClient.from('player_public_stats')
+      .select('user_id, nickname, circuiti_vinti, circuiti_totali, completamento_museo_pct, obiettivi_sbloccati, obiettivi_totali')
+      .in('user_id', idAmici);
+    if(statsError){ console.warn('Caricamento statistiche amici non riuscito:', statsError.message); return []; }
+    // il Rating vive nella vista classifica generale già esistente (5° dato, separato dagli altri 4)
+    let ratingPerUtente = {};
+    try{
+      const { data: ratingData } = await supabaseClient.from('daily_weighted_leaderboard_view')
+        .select('user_id, rating_medio').in('user_id', idAmici);
+      (ratingData||[]).forEach(r => { ratingPerUtente[r.user_id] = r.rating_medio; });
+    }catch(e){ /* silenzioso: la lista amici funziona comunque senza il rating */ }
+    return (stats||[]).map(s => ({ ...s, rating_medio: ratingPerUtente[s.user_id] ?? null }));
+  }catch(e){ console.warn('Caricamento amici non riuscito:', e); return []; }
+}
 
 function pushSaveToCloud(){
   if(!currentUser || !supabaseClient) return;
@@ -12583,6 +12771,59 @@ function onAction(e){
     closeMenuPanel();
     openRedeemCodePanel();
   }
+  else if(action==='copy-friend-code'){
+    const displayEl = document.getElementById('myFriendCodeDisplay');
+    const testo = displayEl ? displayEl.textContent : '';
+    if(testo && testo !== '···'){
+      navigator.clipboard?.writeText(testo).then(()=>{
+        const testoOriginale = el.textContent;
+        el.textContent = t('friends_code_copied');
+        setTimeout(()=>{ el.textContent = testoOriginale; }, 1500);
+      }).catch(()=>{});
+    }
+  }
+  else if(action==='submit-friend-code'){
+    const input = document.getElementById('friendCodeInput');
+    const errorEl = document.getElementById('friendCodeError');
+    const code = input ? input.value.trim() : '';
+    if(!code) return;
+    if(!currentUser){
+      gameConfirm(t('daily_need_login_desc'), ()=>{ signInWithGoogle(); }, t('daily_need_login_title'));
+      return;
+    }
+    if(errorEl) errorEl.textContent = t('friends_checking');
+    redeemFriendCode(code).then(risultato=>{
+      if(!risultato.ok){
+        if(errorEl) errorEl.textContent = risultato.error==='cannot_friend_yourself' ? t('friends_error_self') : t('friends_error_invalid');
+        return;
+      }
+      if(input) input.value = '';
+      if(errorEl) errorEl.textContent = risultato.alreadyFriends ? t('friends_already') : t('friends_added');
+      loadMyFriendsList().then(lista=>{
+        __friendsListCache = lista;
+        const el = document.getElementById('friendsListContent');
+        if(!el) return;
+        if(lista.length===0){ el.innerHTML = `<div class="dim">${t('friends_list_empty')}</div>`; return; }
+        el.innerHTML = lista.map((f,i)=>`
+          <div class="daily-leaderboard-row" data-action="toggle-friend-detail" data-friend-idx="${i}" style="cursor:pointer;">
+            <span class="daily-leaderboard-nick">${f.nickname || t('friends_unknown_nick')}</span>
+            <span class="daily-leaderboard-score">${f.rating_medio!=null ? Math.round(f.rating_medio).toLocaleString('it-IT') : '—'}</span>
+          </div>
+          <div class="daily-leaderboard-detail" id="friendDetail${i}" style="display:none;"></div>
+        `).join('');
+        bindActions();
+      });
+    });
+  }
+  else if(action==='toggle-friend-detail'){
+    const idx = Number(el.dataset.friendIdx);
+    const detailEl = document.getElementById('friendDetail'+idx);
+    if(!detailEl) return;
+    const aperto = detailEl.style.display !== 'none';
+    if(aperto){ detailEl.style.display = 'none'; return; }
+    const f = __friendsListCache[idx];
+    if(f){ detailEl.innerHTML = friendDetailHTML(f); detailEl.style.display = 'block'; }
+  }
   else if(action==='toggle-daily-row-detail'){
     const idx = Number(el.dataset.rowIdx);
     const detailEl = document.getElementById('dailyRowDetail'+idx);
@@ -14079,6 +14320,8 @@ function initSidebar(){
   if(guideBtn) guideBtn.addEventListener('click', openGuide);
   const achBtn = document.getElementById('menuAchievementsBtn');
   if(achBtn) achBtn.addEventListener('click', openAchievements);
+  const friendsBtn = document.getElementById('menuFriendsBtn');
+  if(friendsBtn) friendsBtn.addEventListener('click', ()=>{ closeMenuPanel(); state.phase='friends-hub'; render(); });
   document.getElementById('menuSettingsBtn').addEventListener('click', openSettings);
   const creditsBtn = document.getElementById('menuCreditsBtn');
   if(creditsBtn) creditsBtn.addEventListener('click', openCredits);
