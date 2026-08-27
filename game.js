@@ -618,7 +618,7 @@ const I18N = {
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_continue: 'Continua la Daily di oggi →', daily_hub_new_run: 'Nuova run (abbandona la precedente)',
     daily_new_run_confirm_title: 'Nuova run?', daily_new_run_confirm_desc: 'Il progresso della run attuale andrà perso per sempre, e verrà usato un gettone Daily. Vuoi procedere?',
     daily_token_counter: (usati,tot)=>`Gettoni Daily: ${usati}/${tot}`, daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Classifica Daily Live', daily_hub_leaderboard_yesterday: 'Classifica Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
-    daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
+    daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: 'Indietro', daily_hub_leaderboard_live_short: 'Live', daily_hub_leaderboard_yesterday_short: 'Ieri', daily_hub_leaderboard_weighted_short: 'Generale',
     friends_hub_button: 'Amici',
     profile_hub_button: 'Il mio profilo', profile_title: 'Il mio profilo',
     profile_edit_nickname: 'Modifica nickname', profile_edit_nickname_title: 'Modifica il tuo nickname',
@@ -977,7 +977,7 @@ const I18N = {
     daily_hub_start: "Start today's Daily →", daily_hub_continue: "Continue today's Daily →", daily_hub_new_run: 'New run (abandon current one)',
     daily_new_run_confirm_title: 'New run?', daily_new_run_confirm_desc: "Progress on your current run will be lost for good, and a Daily token will be used. Proceed?",
     daily_token_counter: (usati,tot)=>`Daily tokens: ${usati}/${tot}`, daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live Leaderboard', daily_hub_leaderboard_yesterday: 'Last Daily Leaderboard', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
-    daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
+    daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: 'Back', daily_hub_leaderboard_live_short: 'Live', daily_hub_leaderboard_yesterday_short: 'Yesterday', daily_hub_leaderboard_weighted_short: 'Overall',
     friends_hub_button: 'Friends',
     profile_hub_button: 'My profile', profile_title: 'My profile',
     profile_edit_nickname: 'Edit nickname', profile_edit_nickname_title: 'Edit your nickname',
@@ -1332,7 +1332,7 @@ const I18N = {
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_continue: 'Continuar la Daily de hoy →', daily_hub_new_run: 'Nueva run (abandona la anterior)',
     daily_new_run_confirm_title: '¿Nueva run?', daily_new_run_confirm_desc: 'El progreso de la run actual se perderá para siempre, y se usará una ficha Daily. ¿Continuar?',
     daily_token_counter: (usati,tot)=>`Fichas Daily: ${usati}/${tot}`, daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Clasificación Daily en Vivo', daily_hub_leaderboard_yesterday: 'Clasificación Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
-    daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
+    daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: 'Volver', daily_hub_leaderboard_live_short: 'Live', daily_hub_leaderboard_yesterday_short: 'Ayer', daily_hub_leaderboard_weighted_short: 'General',
     friends_hub_button: 'Amigos',
     profile_hub_button: 'Mi perfil', profile_title: 'Mi perfil',
     profile_edit_nickname: 'Editar apodo', profile_edit_nickname_title: 'Edita tu apodo',
@@ -8760,6 +8760,7 @@ let __friendsListCache = [];
 function renderFriendsHub(){
   app.innerHTML = `
   <div class="topbar">
+    <button class="topbar-back-btn" data-action="friends-hub-back">← ${t('daily_hub_back')}</button>
     <div class="brand hdr">RACING DYNASTY<small>AMICI</small></div>
   </div>
   <div class="wrap">
@@ -8784,9 +8785,6 @@ function renderFriendsHub(){
     <div class="panel" style="margin-top:12px;">
       <div style="font-weight:700;margin-bottom:10px;">${t('friends_list_title')}</div>
       <div id="friendsListContent" class="dim" style="text-align:center;padding:20px 0;">${t('friends_list_loading')}</div>
-    </div>
-    <div class="btnrow" style="margin-top:16px;">
-      <button class="ghost" data-action="friends-hub-back" style="width:100%;">${t('daily_hub_back')}</button>
     </div>
   </div>`;
   bindActions();
@@ -8819,6 +8817,7 @@ function renderMyProfile(){
   const giorniAttesa = daysUntilNicknameCanChange();
   app.innerHTML = `
   <div class="topbar">
+    <button class="topbar-back-btn" data-action="my-profile-hub-back">← ${t('daily_hub_back')}</button>
     <div class="brand hdr">RACING DYNASTY<small>${t('profile_title')}</small></div>
   </div>
   <div class="wrap">
@@ -8834,9 +8833,6 @@ function renderMyProfile(){
       <div class="daily-detail-row"><span class="dim">${t('friends_stat_missing_trophies')}</span><span>${Math.max(0, stats.circuiti_totali - stats.circuiti_vinti)}</span></div>
       <div class="daily-detail-row"><span class="dim">${t('friends_stat_museum')}</span><span>${stats.completamento_museo_pct}%</span></div>
       <div class="daily-detail-row"><span class="dim">${t('friends_stat_achievements')}</span><span>${stats.obiettivi_sbloccati}/${stats.obiettivi_totali}</span></div>
-    </div>
-    <div class="btnrow" style="margin-top:16px;">
-      <button class="ghost" data-action="my-profile-hub-back" style="width:100%;">${t('daily_hub_back')}</button>
     </div>
   </div>`;
   bindActions();
@@ -8868,12 +8864,10 @@ function renderDailyLeaderboard(tab){
   const titoloTab = tab==='daily' ? t('daily_hub_leaderboard_live') : tab==='yesterday' ? t('daily_hub_leaderboard_yesterday') : t('daily_hub_leaderboard_weighted');
   app.innerHTML = `
   <div class="topbar">
+    <button class="topbar-back-btn" data-action="open-daily-season-hub">← ${t('daily_hub_back')}</button>
     <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON — ${titoloTab}</small></div>
   </div>
   <div class="wrap">
-    <div class="btnrow" style="margin-bottom:10px;">
-      <button class="ghost" data-action="open-daily-season-hub" style="width:100%;">${t('daily_hub_back')}</button>
-    </div>
     <div class="btnrow" style="margin-bottom:14px;">
       <button class="${tab==='daily'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="daily" style="flex:1;font-size:12px;"><span class="live-dot"></span>${t('daily_hub_leaderboard_live')}</button>
       <button class="${tab==='yesterday'?'primary':'ghost'}" data-action="open-daily-leaderboard" data-tab="yesterday" style="flex:1;font-size:12px;">${t('daily_hub_leaderboard_yesterday')}</button>
@@ -8983,6 +8977,7 @@ function renderDailySeasonHub(){
   const salvataggioDaily = loadDailyGameSave(); // V0.9.9.132: run interrotta da riprendere?
   app.innerHTML = `
   <div class="topbar">
+    <button class="topbar-back-btn" data-action="go-to-mode-select">← ${t('daily_hub_back')}</button>
     <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON</small></div>
   </div>
   <div class="wrap">
@@ -9000,12 +8995,15 @@ function renderDailySeasonHub(){
         ? `<button class="primary" data-action="daily-continue-run" style="width:100%;">${t('daily_hub_continue')}</button>`
         : `<button class="primary" data-action="daily-start-challenge" style="width:100%;">${t('daily_hub_start')}</button>`}
       <div id="dailyHubNewRunSlot"></div>
-      <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;"><span class="live-dot"></span>${t('daily_hub_leaderboard_live')}</button>
-      <button class="ghost" data-action="open-daily-leaderboard" data-tab="yesterday" style="width:100%;">${t('daily_hub_leaderboard_yesterday')}</button>
-      <button class="ghost" data-action="open-daily-leaderboard" data-tab="weighted" style="width:100%;">${t('daily_hub_leaderboard_weighted')}</button>
-      <button class="ghost" data-action="open-my-profile" style="width:100%;">👤 ${t('profile_hub_button')}</button>
-      <button class="ghost" data-action="open-friends-hub" style="width:100%;">👥 ${t('friends_hub_button')}</button>
-      <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('daily_hub_back')}</button>
+    </div>
+    <div class="btnrow" style="gap:8px;margin-top:10px;">
+      <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="flex:1;font-size:11.5px;padding:10px 4px;"><span class="live-dot"></span>${t('daily_hub_leaderboard_live_short')}</button>
+      <button class="ghost" data-action="open-daily-leaderboard" data-tab="yesterday" style="flex:1;font-size:11.5px;padding:10px 4px;">${t('daily_hub_leaderboard_yesterday_short')}</button>
+      <button class="ghost" data-action="open-daily-leaderboard" data-tab="weighted" style="flex:1;font-size:11.5px;padding:10px 4px;">${t('daily_hub_leaderboard_weighted_short')}</button>
+    </div>
+    <div class="btnrow" style="gap:8px;margin-top:8px;">
+      <button class="ghost" data-action="open-my-profile" style="flex:1;">👤 ${t('profile_hub_button')}</button>
+      <button class="ghost" data-action="open-friends-hub" style="flex:1;">👥 ${t('friends_hub_button')}</button>
     </div>
   </div>`;
   bindActions();

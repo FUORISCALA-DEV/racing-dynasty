@@ -161,6 +161,15 @@ h1,h2,h3{margin:0;font-weight:800;letter-spacing:0.02em;}
   border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px;flex-wrap:wrap;
   position:sticky;top:0;z-index:50;background:var(--void);padding-top:12px;margin-top:-12px;
 }
+/* V0.9.9.147: pulsante indietro consistente — richiesto da Gio: "il tasto indietro deve essere in
+   una posizione simile in ogni schermata in modo che il giocatore sappia dove guardare". Piccolo,
+   nella topbar (già uno schema fisso in cima usato da più schermate), sempre nello stesso punto. */
+.topbar-back-btn{
+  background:none; border:none; color:var(--dim); font-family:var(--font-mono); font-size:12px;
+  font-weight:700; letter-spacing:0.03em; cursor:pointer; padding:4px 0; order:-1; flex-basis:100%;
+  text-align:left;
+}
+.topbar-back-btn:hover{ color:var(--text); }
 /* V0.9.9.66: in gara, l'area fissa si estende oltre il solo topbar — fino alle schede pilota con
    l'usura gomme comprese, cosi' restano sempre visibili scorrendo la classifica sotto. */
 .live-sticky-header{ position:sticky; top:0; z-index:51; background:var(--void); align-self:stretch; flex-shrink:0; }
