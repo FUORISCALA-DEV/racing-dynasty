@@ -3804,7 +3804,18 @@ function pickDraftTurnOption(id){
     if(state.isTutorialRun){
       state.phase = 'tutorial-sponsor'; // V0.9.9.74: sponsor guidato del tutorial, non quello vero
     } else {
-      state.sponsorOffers = generateSponsorOffers();
+      // V0.9.9.134: BUG CRITICO CORRETTO — segnalato da Gio con un test dettagliato: le offerte
+      // sponsor NON erano affatto deterministiche, nonostante il resto della Daily lo fosse. Causa:
+      // exitDailyRandomMode() veniva chiamata PRIMA che il giocatore raggiungesse davvero questa
+      // schermata (che arriva dopo l'interazione dell'utente col draft, ben oltre la sequenza
+      // sincrona di startDailySeasonRun) — generateSponsorOffers() usava quindi vera casualità.
+      if(state.isDailySeason){
+        enterDailyRandomMode(state.dailySeasonDate + '-sponsors-initial');
+        state.sponsorOffers = generateSponsorOffers();
+        exitDailyRandomMode();
+      } else {
+        state.sponsorOffers = generateSponsorOffers();
+      }
       state.phase = 'sponsor-choice';
     }
     render();
@@ -13497,9 +13508,15 @@ function onAction(e){
     state.budget = Math.round((state.budget - cost)*10)/10;
     const alreadyShown = new Set((state.sponsorOffers||[]).map(o=>o.nome));
     const pool = SPONSOR_NAMES.filter(n=>!alreadyShown.has(n));
-    // V0.9.9.125: BUG CORRETTO — segnalato da Gio, il testo diceva "da 2 a 4" ma la formula vera
-    // dava solo 1 o 2 (mai 3 o 4). Sostituita con la distribuzione pesata richiesta: 30% -> 1,
-    // 50% -> 2, 15% -> 3, 5% -> 4.
+    // V0.9.9.134: BUG CRITICO CORRETTO — stessa causa della generazione sponsor iniziale: questa
+    // azione avviene per interazione dell'utente, ben dopo che exitDailyRandomMode() era già stata
+    // chiamata. Ogni ricerca di mercato usa ora un seed dedicato basato sul suo numero progressivo
+    // (1ª, 2ª, 3ª...) — così CHIUNQUE stia facendo la propria Nª ricerca di mercato quel giorno
+    // ottiene lo stesso risultato, indipendentemente da quando la fa.
+    if(state.isDailySeason){
+      state.dailyMarketResearchCount = (state.dailyMarketResearchCount||0) + 1;
+      enterDailyRandomMode(state.dailySeasonDate + '-sponsors-reroll-' + state.dailyMarketResearchCount);
+    }
     const rTiro = rnd()*100;
     const nuoviRichiesti = rTiro<30 ? 1 : rTiro<80 ? 2 : rTiro<95 ? 3 : 4;
     const addCount = Math.min(nuoviRichiesti, pool.length); // mai piu' di quanti ne restano nel pool
@@ -13508,6 +13525,7 @@ function onAction(e){
       const newOffers = newNames.map(nome => ({ nome, effect: SPONSOR_EFFECTS[nome] }));
       state.sponsorOffers = [...state.sponsorOffers, ...newOffers];
     }
+    if(state.isDailySeason) exitDailyRandomMode();
     state.sponsorRerollCost = cost * 2;
     playSfx('ui_click');
     render();
