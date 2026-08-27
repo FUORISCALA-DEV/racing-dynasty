@@ -2036,14 +2036,21 @@ function todayDateStringUTC(){
   const d = new Date();
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
 }
-let __realRnd = null; // salva Math.random-based rnd mentre la Daily e' attiva, per ripristinarla dopo
+// V0.9.9.135: BUG CRITICO CORRETTO — trovato durante la verifica del determinismo completo
+// richiesta da Gio. __realRnd era una SINGOLA variabile globale, non una vera pila: se
+// enterDailyRandomMode() veniva chiamata mentre eravamo GIÀ dentro un blocco seedato (annidamento
+// — capita con todaysDailyRerollCount(), chiamata da dentro startDailySeasonRun() mentre il blocco
+// principale del draft è ancora attivo), la chiamata interna sovrascriveva/azzerava lo stato di
+// quella esterna, lasciando "rnd" bloccato sulla modalità seedata invece di tornare a vera casualità
+// una volta usciti da entrambe. Corretto con una vera pila: ogni livello di annidamento si ripristina
+// esattamente al livello sottostante, qualunque sia la profondità.
+let __rndStack = [];
 function enterDailyRandomMode(dateStr){
-  __realRnd = rnd;
+  __rndStack.push(rnd);
   rnd = mulberry32(hashStringToSeed('racing-dynasty-daily-'+dateStr));
 }
 function exitDailyRandomMode(){
-  if(__realRnd) rnd = __realRnd;
-  __realRnd = null;
+  if(__rndStack.length>0) rnd = __rndStack.pop();
 }
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
 function fmtM(v){ return (v>=0?'':'-') + Math.abs(v).toFixed(1) + 'M'; }
@@ -3514,6 +3521,17 @@ function renderDriverHub(){
 
 function startDraftTurn(){
   state.draftTurnOffers = {};
+  // V0.9.9.135: BUG CRITICO CORRETTO — la causa vera e più profonda del problema di determinismo
+  // segnalato da Gio: solo il PRIMISSIMO turno del draft (generato dentro newRun(), mentre la
+  // modalità seedata era ancora attiva) era davvero deterministico. OGNI turno successivo veniva
+  // generato al momento del click su un'opzione — ben dopo che exitDailyRandomMode() era già stata
+  // chiamata alla fine di startDailySeasonRun() — usando quindi vera casualità. Ora ogni turno usa
+  // un seed dedicato basato sul suo numero progressivo, così il turno N di CHIUNQUE dà le stesse
+  // identiche offerte, non solo il primo.
+  if(state.isDailySeason){
+    state.dailyDraftTurnCounter = (state.dailyDraftTurnCounter||0) + 1;
+    enterDailyRandomMode(state.dailySeasonDate + '-draft-turn-' + state.dailyDraftTurnCounter);
+  }
   if(state.draftPilotsChosen.length < 2){
     // V0.9.4.2.3: la rarita' ridotta viene dai pesi (RATING_BANDS), non dal togliere il "meglio di N" al giocatore
     // (altrimenti l'IA, che lo mantiene, risulterebbe ingiustamente piu' forte di un giocatore che pesca a caso)
@@ -3522,6 +3540,7 @@ function startDraftTurn(){
   state.draftOpenCategories.forEach(catKey=>{
     state.draftTurnOffers[catKey] = pickBestOfNDistinct(DRAFT_CATEGORY_DEFS[catKey].pool, 3, state.usedIds);
   });
+  if(state.isDailySeason) exitDailyRandomMode();
   // V0.9.9.74: sceneggiatura tutorial — su richiesta di Gio, il draft e' quello VERO (stesso motore,
   // stessi reroll), ma pilotato: THE GOAT compare garantito nell'offerta pilota dopo il reroll
   // scriptato (state.tutorialGoatRerollTarget), e i componenti sono potenziati internamente (pescati
