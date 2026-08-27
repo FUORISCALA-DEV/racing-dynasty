@@ -76,6 +76,11 @@ function onAuthStateResolved(event){
     if(typeof fetchPremiumStatus==='function') fetchPremiumStatus().then(()=>{
       if(state && (state.phase==='title' || state.phase==='season-length')) render();
     });
+    // V0.9.9.121: sincronizzazione statistiche pubbliche AL LOGIN — segnalato da Gio: senza
+    // questo, chi ha progressi vecchi (da prima che esistesse il sistema amici) resta a zero
+    // nella scheda finché non sblocca qualcosa di NUOVO, dato che prima la sincronizzazione
+    // partiva solo sugli eventi futuri (trofeo/museo/obiettivo), mai su quanto già presente.
+    if(typeof pushPublicStatsToCloud==='function') pushPublicStatsToCloud();
   }
   if(!currentUser) isPremiumUser = false; // logout: torna alla condizione gratuita finche' non si ri-loggano
   // V0.9.8.8: NON ri-renderizziamo durante 'studio-splash' — quella schermata non mostra nulla di
