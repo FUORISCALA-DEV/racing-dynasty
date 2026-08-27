@@ -508,7 +508,7 @@ const I18N = {
     se_footer: 'Ogni nuova run genera un nuovo draft di piloti e componenti — la stagione in corso viene salvata automaticamente.',
     cv_driver_champ_title: 'CAMPIONE DEL MONDO PILOTI', cv_driver_champ_sub: (nome)=>`${nome} è Campione del Mondo!`,
     cv_constructor_champ_title: 'CAMPIONI COSTRUTTORI', cv_constructor_champ_sub: (team)=>`${team} vince il titolo Costruttori!`,
-    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} e ${team} — entrambi i titoli in una stagione!`,
+    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} e ${team} — entrambi i titoli in una stagione!`, se_share_before_new_title: 'Condividere prima?', se_share_before_new_desc: 'Vuoi condividere il risultato di questa stagione prima di iniziarne una nuova?',
     cv_continue: 'Continua →',
     expl_retired: 'Ritirato — nessun punto raccolto in questo Gran Premio.',
     expl_gained: (grid,pos,delta)=>`Partito P${grid}, arrivato P${pos}: <b>+${delta} posizion${delta===1?'e':'i'}</b> guadagnat${delta===1?'a':'e'} in gara.`,
@@ -869,7 +869,7 @@ const I18N = {
     se_footer: 'Every new run generates a new draft of drivers and components — the current season is saved automatically.',
     cv_driver_champ_title: 'WORLD DRIVERS CHAMPION', cv_driver_champ_sub: (nome)=>`${nome} is World Champion!`,
     cv_constructor_champ_title: 'CONSTRUCTORS CHAMPIONS', cv_constructor_champ_sub: (team)=>`${team} wins the Constructors title!`,
-    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} and ${team} — both titles in one season!`,
+    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} and ${team} — both titles in one season!`, se_share_before_new_title: 'Share first?', se_share_before_new_desc: 'Would you like to share this season\'s result before starting a new one?',
     cv_continue: 'Continue →',
     expl_retired: 'Retired — no points scored in this Grand Prix.',
     expl_gained: (grid,pos,delta)=>`Started P${grid}, finished P${pos}: <b>+${delta} position${delta===1?'':'s'}</b> gained in the race.`,
@@ -1224,7 +1224,7 @@ const I18N = {
     se_footer: 'Cada nueva run genera un nuevo draft de pilotos y componentes — la temporada en curso se guarda automáticamente.',
     cv_driver_champ_title: 'CAMPEÓN DEL MUNDO DE PILOTOS', cv_driver_champ_sub: (nome)=>`¡${nome} es Campeón del Mundo!`,
     cv_constructor_champ_title: 'CAMPEONES DE CONSTRUCTORES', cv_constructor_champ_sub: (team)=>`¡${team} gana el título de Constructores!`,
-    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} y ${team} — ¡ambos títulos en una temporada!`,
+    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} y ${team} — ¡ambos títulos en una temporada!`, se_share_before_new_title: '¿Compartir primero?', se_share_before_new_desc: '¿Quieres compartir el resultado de esta temporada antes de empezar una nueva?',
     cv_continue: 'Continuar →',
     expl_retired: 'Retirado — sin puntos en este Gran Premio.',
     expl_gained: (grid,pos,delta)=>`Salió P${grid}, terminó P${pos}: <b>+${delta} posición${delta===1?'':'es'}</b> ganada${delta===1?'':'s'} en carrera.`,
@@ -12947,10 +12947,15 @@ function renderSeasonEnd(){
 
   const summary = computeSeasonEndSummaryLines();
 
-  // V0.9.9.113: celebrazione vittoria campionato — attivata una sola volta per stagione, solo se
-  // davvero vinto almeno un titolo, non per ogni singola visita/ri-rendering della schermata.
-  if((isDriverChamp || isConstructorChamp) && !state.championshipVictoryShown){
-    state.championshipVictoryShown = true;
+  // V0.9.9.142: RISTRUTTURATO su richiesta esplicita di Gio — rimosso l'overlay separato
+  // (championshipVictoryHTML), che causava un vero e proprio scontro visivo: il pilota nell'overlay
+  // (viola, corretto) si sovrapponeva al VECCHIO sistema trofeo della schermata normale sottostante
+  // (rosa/magenta, un colore ormai fuori uso — l'immagine assets/trophies/eccellente.png non era mai
+  // stata aggiornata quando lo schema colori del gioco è cambiato). Ora la LOGICA di selezione posa
+  // (corretta) vive direttamente nella schermata normale, sostituendo il vecchio sistema trofeo —
+  // un solo pilota mostrato, non più due sovrapposti.
+  let heroPoseData = null;
+  if(isDriverChamp || isConstructorChamp){
     const bestDriverRating = isDriverChamp
       ? (driverChamp.slotKey==='PLAYER-1' ? state.team.pilotMain.rating : state.team.pilotSecond.rating)
       : Math.max(state.team.pilotMain.rating, state.team.pilotSecond.rating);
@@ -12958,11 +12963,15 @@ function renderSeasonEnd(){
     const poseNum = isDriverChamp ? 1 : (2+Math.floor(rnd()*4));
     const isGoatChamp = isDriverChamp && driverChamp.nome==='THE GOAT';
     const poseBand = isGoatChamp ? 'goat_ferrari' : band;
-    state.championshipVictoryData = {
-      isDriverChamp, isConstructorChamp,
+    // l'ALTRO pilota (non il campione) — richiesto da Gio: "un'aggiunta, tenere anche la posizione
+    // dell'altro pilota" nel nuovo testo
+    const altroSlotKey = driverChamp.slotKey==='PLAYER-1' ? 'PLAYER-2' : 'PLAYER-1';
+    const altroPilota = dstd.find(d=>d.slotKey===altroSlotKey && !d.isFormer);
+    const altroPos = dstd.findIndex(d=>d.slotKey===altroSlotKey && !d.isFormer)+1;
+    heroPoseData = {
       poseSrc: `assets/share-poses/pose${poseNum}_${poseBand}.webp`,
-      teamName: summary.teamName,
-      driverName: driverChamp.nome,
+      altroPilotaNome: altroPilota ? altroPilota.nome : null,
+      altroPilotaPos: altroPos>0 ? altroPos : null,
     };
   }
   // V0.9.9.123: integrati i testi della celebrazione Grand Slam (piaciuti a Gio: "puoi usarli per
@@ -12975,9 +12984,14 @@ function renderSeasonEnd(){
     : summary.anyDriverChamp ? t('cv_driver_champ_title')
     : t('se_end_pill');
   const driverChampName = summary.drivers.find(d=>d.isChamp)?.name;
-  const heroTitle = isGrandSlamEnd ? t('cv_grand_slam_sub', driverChampName, summary.teamName)
+  // V0.9.9.142: aggiunta la posizione dell'altro pilota al testo, richiesto da Gio ("un'aggiunta,
+  // tenere anche la posizione dell'altro pilota") — se disponibile, altrimenti il testo resta come
+  // prima (nessun secondo pilota valido, es. sostituito durante la stagione).
+  const altroPilotaSuffix = heroPoseData && heroPoseData.altroPilotaNome && heroPoseData.altroPilotaPos
+    ? ` ${heroPoseData.altroPilotaNome}: P${heroPoseData.altroPilotaPos}.` : '';
+  const heroTitle = isGrandSlamEnd ? t('cv_grand_slam_sub', driverChampName, summary.teamName) + altroPilotaSuffix
     : summary.isConstructorChamp ? t('se_team_won_title', summary.teamName)
-    : summary.anyDriverChamp ? t('cv_driver_champ_sub', driverChampName)
+    : summary.anyDriverChamp ? t('cv_driver_champ_sub', driverChampName) + altroPilotaSuffix
     : t('se_team_position_title', summary.teamName, summary.constructorPos);
   const driverSummaryLinesHTML = summary.drivers.map(d=>
     `<div class="se-driver-summary-line">${d.name}: <strong>${d.isChamp ? t('share_champion_short') : 'P'+d.pos}</strong></div>`
@@ -13004,15 +13018,9 @@ function renderSeasonEnd(){
     return `<tr class="${cls}"><td><span class="pos ${posCls}">P${i+1}</span></td><td>${teamFlag(c.teamId)} ${c.nome}${c.isPlayerTeam?` <span class="badge-event">${t('se_you_badge')}</span>`:rivalBadge}</td><td class="mono">${c.points}</td></tr>`;
   }).join('');
 
-  const champPilotRating = isDriverChamp
-    ? (driverChamp.slotKey==='PLAYER-1' ? state.team.pilotMain.rating : state.team.pilotSecond.rating)
-    : null;
-  const trophyBand = champPilotRating!==null ? ratingBandKey(champPilotRating) : null;
-
   app.innerHTML = `
-  ${championshipVictoryHTML()}
-  <div class="hero season-champ-hero ${isDriverChamp?'has-trophy':''}">
-    ${isDriverChamp ? `<img src="assets/trophies/${trophyBand}.png" alt="" class="champ-trophy-img">` : ''}
+  <div class="hero season-champ-hero ${heroPoseData?'has-trophy':''}">
+    ${heroPoseData ? `<img src="${heroPoseData.poseSrc}" alt="" class="champ-trophy-img">` : ''}
     <div class="hero-inner">
       <div class="pill">${pillText}</div>
       <h1 class="hdr" style="margin-top:14px;font-size:38px;">${heroTitle}</h1>
@@ -13020,8 +13028,8 @@ function renderSeasonEnd(){
       <div class="tagline">${t('se_summary', teamDisplayName(), totalPoints, totalWins, totalPodiums, totalDnfs, state.calendar.length, fmtMIcon(state.budget))}</div>
       <div class="tagline" style="margin-top:6px;">${rivalComparisonSentence()}</div>
       <div class="btnrow" style="justify-content:center;">
-        <button class="primary" data-action="go-to-mode-select">${t('se_new_career')}</button>
-        <button class="ghost" data-action="share-result-card">${t('se_share')}</button>
+        <button class="ghost" data-action="se-new-career-confirm">${t('se_new_career')}</button>
+        <button class="primary se-share-pulse" data-action="share-result-card">${t('se_share')}</button>
         ${state.isDailySeason ? `<button class="ghost" data-action="go-to-daily-live-leaderboard">${t('se_view_daily_leaderboard')}</button>` : `<button class="ghost" data-action="open-trophy-room">${t('se_visit_trophy_room')}</button>`}
       </div>
     </div>
@@ -13070,14 +13078,13 @@ function renderSeasonEnd(){
   if(isDriverChamp || isConstructorChamp){
     renderCelebrationFx(isDriverChamp, isConstructorChamp, state.team.nation);
   }
-  if(state.championshipVictoryData && !__championshipVictorySoundPlayed){
-    __championshipVictorySoundPlayed = true;
+  // V0.9.9.142: suono agganciato al sistema unificato (non più al vecchio overlay separato, ormai
+  // rimosso — il suo state.championshipVictoryData non viene più impostato da nessuna parte).
+  if((isDriverChamp || isConstructorChamp) && !state.championshipVictorySoundPlayedThisSeason){
+    state.championshipVictorySoundPlayedThisSeason = true;
     playRealSfx('audio/sfx_victory_fanfare.mp3');
-  } else if(!state.championshipVictoryData){
-    __championshipVictorySoundPlayed = false; // pronto per la prossima stagione
   }
 }
-let __championshipVictorySoundPlayed = false;
 
 /* ---------------- event binding ---------------- */
 function bindActions(){
@@ -13734,6 +13741,17 @@ function onAction(e){
       if(!isStandaloneApp()) setTimeout(showInstallPitchCard, 600); // V0.9.7.8.20
     });
   }
+  else if(action==='se-new-career-confirm'){
+    // V0.9.9.142: richiesto da Gio — "se il player preme nuova stagione deve chiedergli se vuole
+    // condividere il risultato di questa, se si avvia condivisione, se no va alla schermata nuova
+    // carriera". Se sceglie di condividere, DOPO la condivisione procede comunque a nuova carriera
+    // (non lo lascia bloccato sulla schermata di fine stagione).
+    gameConfirm(t('se_share_before_new_desc'), ()=>{
+      shareResultCard().then(()=>{ state.phase='mode-select'; render(); });
+    }, t('se_share_before_new_title'), ()=>{
+      state.phase='mode-select'; render();
+    });
+  }
   else if(action==='open-trophy-room'){
     trophyRoomPreviousPhase = state.phase;
     state.phase = 'trophy-room';
@@ -14073,7 +14091,7 @@ function showSponsorInfo(){
   panel.style.display = 'flex';
   pushBackGuard();
 }
-function gameConfirm(message, onConfirm, title){
+function gameConfirm(message, onConfirm, title, onCancel){
   document.getElementById('gameConfirmTitle').textContent = title || 'Conferma';
   document.getElementById('gameConfirmMessage').textContent = message;
   const panel = document.getElementById('gameConfirmPanel');
@@ -14085,7 +14103,7 @@ function gameConfirm(message, onConfirm, title){
     noBtn.removeEventListener('click', onNo);
   }
   function onYes(){ cleanup(); onConfirm(); }
-  function onNo(){ cleanup(); }
+  function onNo(){ cleanup(); if(onCancel) onCancel(); }
   yesBtn.addEventListener('click', onYes);
   noBtn.addEventListener('click', onNo);
   panel.style.display = 'flex';
