@@ -81,6 +81,7 @@ function onAuthStateResolved(event){
     // nella scheda finché non sblocca qualcosa di NUOVO, dato che prima la sincronizzazione
     // partiva solo sugli eventi futuri (trofeo/museo/obiettivo), mai su quanto già presente.
     if(typeof pushPublicStatsToCloud==='function') pushPublicStatsToCloud();
+    if(typeof riscattaCodiceAmicoInSospesoSeCe==='function') riscattaCodiceAmicoInSospesoSeCe();
   }
   if(!currentUser) isPremiumUser = false; // logout: torna alla condizione gratuita finche' non si ri-loggano
   // V0.9.8.8: NON ri-renderizziamo durante 'studio-splash' — quella schermata non mostra nulla di
@@ -628,7 +629,7 @@ const I18N = {
     friends_share_error: 'Non sono riuscito a generare l\'immagine. Riprova.',
     friends_add_title: 'Aggiungi un amico', friends_add_btn: 'Aggiungi',
     friends_checking: 'Verifica in corso...', friends_error_invalid: 'Codice non valido.', friends_error_self: 'Non puoi aggiungere te stesso.',
-    friends_already: 'Eravate già amici.', friends_added: 'Amico aggiunto!',
+    friends_already: 'Eravate già amici.', friends_added: 'Amico aggiunto!', friends_added_via_link_title: 'Amico aggiunto!', friends_added_via_link: 'Il tuo amico è stato aggiunto automaticamente tramite il link.',
     friends_list_title: 'I tuoi amici', friends_list_loading: 'Caricamento...', friends_list_empty: 'Non hai ancora amici — condividi il tuo codice per iniziare.',
     friends_unknown_nick: 'Giocatore', friends_not_synced_yet: 'La scheda di questo amico non è ancora sincronizzata — si aggiornerà automaticamente al suo prossimo accesso al gioco.', friends_remove_btn: 'Rimuovi amico', friends_remove_confirm_title: 'Rimuovere amico?', friends_remove_confirm_desc: (nome)=>`Rimuovere ${nome} dai tuoi amici? Potrai aggiungerlo di nuovo in futuro con un nuovo codice.`,
     friends_stat_wins: 'Gare vinte', friends_stat_missing_trophies: 'Trofei Mancanti', friends_stat_museum: 'Completamento Museo',
@@ -983,7 +984,7 @@ const I18N = {
     friends_share_error: "Couldn't generate the image. Try again.",
     friends_add_title: 'Add a friend', friends_add_btn: 'Add',
     friends_checking: 'Checking...', friends_error_invalid: 'Invalid code.', friends_error_self: "You can't add yourself.",
-    friends_already: 'You were already friends.', friends_added: 'Friend added!',
+    friends_already: 'You were already friends.', friends_added: 'Friend added!', friends_added_via_link_title: 'Friend added!', friends_added_via_link: 'Your friend was added automatically via the link.',
     friends_list_title: 'Your friends', friends_list_loading: 'Loading...', friends_list_empty: "You don't have friends yet — share your code to get started.",
     friends_unknown_nick: 'Player', friends_not_synced_yet: "This friend's card isn't synced yet — it will update automatically the next time they open the game.", friends_remove_btn: 'Remove friend', friends_remove_confirm_title: 'Remove friend?', friends_remove_confirm_desc: (nome)=>`Remove ${nome} from your friends? You can add them again later with a new code.`,
     friends_stat_wins: 'Races won', friends_stat_missing_trophies: 'Missing trophies', friends_stat_museum: 'Museum completion',
@@ -1334,7 +1335,7 @@ const I18N = {
     friends_share_error: 'No se pudo generar la imagen. Inténtalo de nuevo.',
     friends_add_title: 'Añadir un amigo', friends_add_btn: 'Añadir',
     friends_checking: 'Comprobando...', friends_error_invalid: 'Código no válido.', friends_error_self: 'No puedes añadirte a ti mismo.',
-    friends_already: 'Ya erais amigos.', friends_added: '¡Amigo añadido!',
+    friends_already: 'Ya erais amigos.', friends_added: '¡Amigo añadido!', friends_added_via_link_title: '¡Amigo añadido!', friends_added_via_link: 'Tu amigo se ha añadido automáticamente a través del enlace.',
     friends_list_title: 'Tus amigos', friends_list_loading: 'Cargando...', friends_list_empty: 'Aún no tienes amigos — comparte tu código para empezar.',
     friends_unknown_nick: 'Jugador', friends_not_synced_yet: 'La ficha de este amigo aún no está sincronizada — se actualizará automáticamente la próxima vez que abra el juego.', friends_remove_btn: 'Eliminar amigo', friends_remove_confirm_title: '¿Eliminar amigo?', friends_remove_confirm_desc: (nome)=>`¿Eliminar a ${nome} de tus amigos? Podrás añadirlo de nuevo más tarde con un nuevo código.`,
     friends_stat_wins: 'Carreras ganadas', friends_stat_missing_trophies: 'Trofeos que faltan', friends_stat_museum: 'Completado del Museo',
@@ -9932,7 +9933,7 @@ async function shareFriendCode(code){
     const cv = await buildFriendCodeShareCanvas(code);
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
     const fileName = 'racing-dynasty-amico.png';
-    const gameUrl = 'https://fuoriscala-dev.github.io/racing-dynasty/';
+    const gameUrl = `https://fuoriscala-dev.github.io/racing-dynasty/?friend=${encodeURIComponent(code)}`;
     const shareText = t('friends_share_text', gameUrl, code);
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
       await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText, url: gameUrl });
@@ -14872,7 +14873,36 @@ function determinePhaseAfterSplash(){
   if(isStreamerModeOn() && !isEmbeddedStreamerInstance()) return 'streamer-continue-check';
   return 'title';
 }
+// V0.9.9.130: SISTEMA AMICI — link diretto che apre il gioco e propone di aggiungere l'amico in
+// automatico, richiesto da Gio. Il codice viene letto dall'URL (?friend=RD-XXXXXX), salvato in modo
+// persistente (sopravvive anche al redirect fisico del login Google, stesso meccanismo già usato
+// per altri scopi in questo file), e riscattato in automatico non appena l'utente risulta loggato.
+function catturaCodiceAmicoDaUrl(){
+  try{
+    const params = new URLSearchParams(window.location.search);
+    const codice = params.get('friend');
+    if(codice){
+      sessionStorage.setItem('rdPendingFriendCode', codice.trim().toUpperCase());
+      // puliamo l'URL, cosi' non resta visibile e non si ripete ad ogni refresh futuro
+      const urlPulito = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, '', urlPulito);
+    }
+  }catch(e){ /* ignorato */ }
+}
+async function riscattaCodiceAmicoInSospesoSeCe(){
+  let codice;
+  try{ codice = sessionStorage.getItem('rdPendingFriendCode'); }catch(e){ return; }
+  if(!codice || !currentUser) return;
+  try{ sessionStorage.removeItem('rdPendingFriendCode'); }catch(e){}
+  const risultato = await redeemFriendCode(codice);
+  if(risultato.ok){
+    gameConfirm(t(risultato.alreadyFriends ? 'friends_already' : 'friends_added_via_link'), ()=>{}, t('friends_added_via_link_title'));
+  }
+  // se fallisce silenziosamente non disturbiamo con un errore — l'utente non ha nemmeno cliccato
+  // "aggiungi" attivamente, un errore imprevisto qui sarebbe piu' confuso che utile
+}
 function bootGameNormally(){
+  catturaCodiceAmicoDaUrl();
   if(hasLangBeenChosen()){
     // già visto lo splash in una visita precedente — si salta del tutto, si va dritti alla fase giusta
     const faseIniziale = determinePhaseAfterSplash();
