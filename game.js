@@ -9956,7 +9956,7 @@ async function shareFriendCode(code){
     const gameUrl = `https://fuoriscala-dev.github.io/racing-dynasty/?friend=${encodeURIComponent(code)}`;
     const shareText = t('friends_share_text', gameUrl, code);
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
-      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText, url: gameUrl });
+      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
     } else {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -12710,7 +12710,7 @@ async function shareTrophyRoomCard(){
     const gameUrl = 'https://fuoriscala-dev.github.io/racing-dynasty/';
     const shareText = `La mia Sala Trofei su Racing Dynasty — prova a battermi!\n${gameUrl}`;
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
-      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText, url: gameUrl });
+      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
     } else {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -12736,7 +12736,7 @@ async function shareResultCard(){
       ? t('daily_share_text', gameUrl)
       : `Ho appena chiuso una stagione su Racing Dynasty — prova a battermi!\n${gameUrl}`;
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
-      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText, url: gameUrl });
+      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
     } else {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
