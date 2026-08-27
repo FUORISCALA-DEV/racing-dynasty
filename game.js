@@ -614,7 +614,13 @@ const I18N = {
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per avere fino a 3 tentativi al giorno.', daily_max_attempts_title: 'Hai esaurito i tentativi', daily_max_attempts_desc: 'Hai già usato tutti e 3 i tentativi di oggi. Torna domani per riprovare.', daily_confirm_new_attempt_title: 'Nuovo tentativo?', daily_confirm_new_attempt_desc: 'Hai già un risultato salvato per oggi. Iniziando un nuovo tentativo, quello precedente verrà eliminato per sempre — non potrai tornare indietro. Solo l\'ultimo tentativo conta in classifica. Procedere?',
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Classifica Daily Live', daily_hub_leaderboard_yesterday: 'Classifica Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
-    friends_hub_button: 'Amici', friends_badge_label: 'AMICI', friends_my_code_title: 'Il tuo codice invito', friends_my_code_desc: 'Condividilo con un amico (WhatsApp, Discord...) — lo inserisce lui per aggiungerti.',
+    friends_hub_button: 'Amici',
+    profile_hub_button: 'Il mio profilo', profile_title: 'Il mio profilo',
+    profile_edit_nickname: 'Modifica nickname', profile_edit_nickname_title: 'Modifica il tuo nickname',
+    profile_edit_nickname_desc: 'Puoi cambiarlo una volta ogni 30 giorni.',
+    profile_edit_nickname_confirm: 'Salva modifiche', profile_edit_nickname_cancel: 'Annulla',
+    profile_nickname_cooldown_title: 'Non ancora', profile_nickname_cooldown: (n)=> n===1 ? 'Potrai cambiare di nuovo il nickname tra 1 giorno.' : `Potrai cambiare di nuovo il nickname tra ${n} giorni.`,
+ friends_badge_label: 'AMICI', friends_my_code_title: 'Il tuo codice invito', friends_my_code_desc: 'Condividilo con un amico (WhatsApp, Discord...) — lo inserisce lui per aggiungerti.',
     friends_copy_code: 'Copia', friends_code_copied: 'Copiato!', friends_code_error: 'Errore',
     friends_share_btn: 'Condividi', friends_share_generating: '...', friends_share_cta: 'Aggiungimi con questo codice',
     friends_share_text: (url,code)=>`Gioca a Racing Dynasty e aggiungimi come amico con questo codice: ${code}\n${url}`,
@@ -963,7 +969,13 @@ const I18N = {
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium for up to 3 attempts per day.', daily_max_attempts_title: 'No attempts left', daily_max_attempts_desc: "You've already used all 3 attempts today. Come back tomorrow to try again.", daily_confirm_new_attempt_title: 'New attempt?', daily_confirm_new_attempt_desc: "You already have a saved result for today. Starting a new attempt will permanently delete the previous one — this can't be undone. Only your last attempt counts on the leaderboard. Proceed?",
     daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live Leaderboard', daily_hub_leaderboard_yesterday: 'Last Daily Leaderboard', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
-    friends_hub_button: 'Friends', friends_badge_label: 'FRIEND', friends_my_code_title: 'Your invite code', friends_my_code_desc: 'Share it with a friend (WhatsApp, Discord...) — they enter it to add you.',
+    friends_hub_button: 'Friends',
+    profile_hub_button: 'My profile', profile_title: 'My profile',
+    profile_edit_nickname: 'Edit nickname', profile_edit_nickname_title: 'Edit your nickname',
+    profile_edit_nickname_desc: 'You can change it once every 30 days.',
+    profile_edit_nickname_confirm: 'Save changes', profile_edit_nickname_cancel: 'Cancel',
+    profile_nickname_cooldown_title: 'Not yet', profile_nickname_cooldown: (n)=> n===1 ? 'You can change your nickname again in 1 day.' : `You can change your nickname again in ${n} days.`,
+ friends_badge_label: 'FRIEND', friends_my_code_title: 'Your invite code', friends_my_code_desc: 'Share it with a friend (WhatsApp, Discord...) — they enter it to add you.',
     friends_copy_code: 'Copy', friends_code_copied: 'Copied!', friends_code_error: 'Error',
     friends_share_btn: 'Share', friends_share_generating: '...', friends_share_cta: 'Add me with this code',
     friends_share_text: (url,code)=>`Play Racing Dynasty and add me as a friend with this code: ${code}\n${url}`,
@@ -1308,7 +1320,13 @@ const I18N = {
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para tener hasta 3 intentos al día.', daily_max_attempts_title: 'Has agotado los intentos', daily_max_attempts_desc: 'Ya has usado los 3 intentos de hoy. Vuelve mañana para intentarlo de nuevo.', daily_confirm_new_attempt_title: '¿Nuevo intento?', daily_confirm_new_attempt_desc: 'Ya tienes un resultado guardado para hoy. Si empiezas un nuevo intento, el anterior se eliminará para siempre — no podrás deshacerlo. Solo cuenta el último intento en la clasificación. ¿Continuar?',
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Clasificación Daily en Vivo', daily_hub_leaderboard_yesterday: 'Clasificación Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
-    friends_hub_button: 'Amigos', friends_badge_label: 'AMIGOS', friends_my_code_title: 'Tu código de invitación', friends_my_code_desc: 'Compártelo con un amigo (WhatsApp, Discord...) — lo introduce para añadirte.',
+    friends_hub_button: 'Amigos',
+    profile_hub_button: 'Mi perfil', profile_title: 'Mi perfil',
+    profile_edit_nickname: 'Editar apodo', profile_edit_nickname_title: 'Edita tu apodo',
+    profile_edit_nickname_desc: 'Puedes cambiarlo una vez cada 30 días.',
+    profile_edit_nickname_confirm: 'Guardar cambios', profile_edit_nickname_cancel: 'Cancelar',
+    profile_nickname_cooldown_title: 'Todavía no', profile_nickname_cooldown: (n)=> n===1 ? 'Podrás cambiar tu apodo de nuevo en 1 día.' : `Podrás cambiar tu apodo de nuevo en ${n} días.`,
+ friends_badge_label: 'AMIGOS', friends_my_code_title: 'Tu código de invitación', friends_my_code_desc: 'Compártelo con un amigo (WhatsApp, Discord...) — lo introduce para añadirte.',
     friends_copy_code: 'Copiar', friends_code_copied: '¡Copiado!', friends_code_error: 'Error',
     friends_share_btn: 'Compartir', friends_share_generating: '...', friends_share_cta: 'Añádeme con este código',
     friends_share_text: (url,code)=>`Juega a Racing Dynasty y añádeme como amigo con este código: ${code}\n${url}`,
@@ -2348,11 +2366,37 @@ async function loadDailyNickname(){
   if(!currentUser || !supabaseClient) { dailyNicknameCache = null; return null; }
   try{
     const { data, error } = await supabaseClient.from('daily_nicknames')
-      .select('nickname, flag_code').eq('user_id', currentUser.id).maybeSingle();
+      .select('nickname, flag_code, nickname_changed_at').eq('user_id', currentUser.id).maybeSingle();
     if(error){ console.warn('Caricamento nickname Daily non riuscito:', error.message); dailyNicknameCache = null; return null; }
     dailyNicknameCache = data || null;
     return dailyNicknameCache;
   }catch(e){ console.warn('Caricamento nickname Daily non riuscito:', e); dailyNicknameCache = null; return null; }
+}
+// V0.9.9.127: MODIFICA NICKNAME — richiesto da Gio, max una volta ogni 30 giorni.
+const NICKNAME_CHANGE_COOLDOWN_DAYS = 30;
+function daysUntilNicknameCanChange(){
+  if(!dailyNicknameCache || !dailyNicknameCache.nickname_changed_at) return 0; // mai cambiato: sempre permesso
+  const msTrascorsi = Date.now() - new Date(dailyNicknameCache.nickname_changed_at).getTime();
+  const giorniTrascorsi = msTrascorsi / (1000*60*60*24);
+  return Math.max(0, Math.ceil(NICKNAME_CHANGE_COOLDOWN_DAYS - giorniTrascorsi));
+}
+async function updateDailyNickname(nickname, flagCountryName){
+  if(!currentUser || !supabaseClient) return { error:'not-logged-in' };
+  if(!isNicknameValid(nickname)) return { error:'invalid' };
+  if(daysUntilNicknameCanChange() > 0) return { error:'cooldown', giorniRimasti: daysUntilNicknameCanChange() };
+  const flagCode = (COUNTRY_FLAG[flagCountryName] || 'XX');
+  try{
+    const adesso = new Date().toISOString();
+    const { error } = await supabaseClient.from('daily_nicknames')
+      .update({ nickname: nickname.trim(), flag_code: flagCode, nickname_changed_at: adesso })
+      .eq('user_id', currentUser.id);
+    if(error){
+      if(error.code==='23505') return { error:'taken' };
+      return { error:'unknown', detail:error.message };
+    }
+    dailyNicknameCache = { nickname:nickname.trim(), flag_code:flagCode, nickname_changed_at:adesso };
+    return { ok:true };
+  }catch(e){ return { error:'unknown', detail:String(e) }; }
 }
 async function saveDailyNickname(nickname, flagCountryName){
   if(!currentUser || !supabaseClient) return { error:'not-logged-in' };
@@ -2369,6 +2413,42 @@ async function saveDailyNickname(nickname, flagCountryName){
     dailyNicknameCache = { nickname:nickname.trim(), flag_code:flagCode };
     return { ok:true };
   }catch(e){ return { error:'unknown', detail:String(e) }; }
+}
+// V0.9.9.127: schermata modifica nickname — stesso markup del setup iniziale, precompilato coi
+// valori attuali. Non dovrebbe mai essere raggiungibile durante il periodo di attesa (la matita
+// nel profilo si nasconde in quel caso), ma per sicurezza il controllo vero avviene comunque lato
+// server (updateDailyNickname), non solo qui.
+function renderEditNicknameSetup(){
+  const nazioneAttuale = Object.keys(COUNTRY_FLAG).find(c => COUNTRY_FLAG[c] === (dailyNicknameCache?.flag_code)) || 'Italia';
+  const nationOptions = Object.keys(COUNTRY_FLAG).filter(c=>c!=='Sconosciuta').sort((a,b)=>nationLabel(a).localeCompare(nationLabel(b)))
+    .map(c=> `<option value="${c}" ${c===nazioneAttuale?'selected':''}>${nationLabel(c)}</option>`).join('');
+  app.innerHTML = `
+  <div class="wrap tutorial-intro-wrap">
+    <h2 class="hdr">${t('profile_edit_nickname_title')}</h2>
+    <div class="dim" style="margin-top:8px;line-height:1.5;">${t('profile_edit_nickname_desc')}</div>
+    <label class="dim" style="display:block;font-size:13.5px;text-transform:uppercase;letter-spacing:0.05em;margin-top:20px;margin-bottom:6px;">${t('daily_nickname_label')}</label>
+    <input type="text" id="dailyNicknameInput" maxlength="16" value="${dailyNicknameCache?.nickname || ''}"
+      style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:15px;background:var(--panel2);
+      border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);">
+    <label class="dim" style="display:block;font-size:13.5px;text-transform:uppercase;letter-spacing:0.05em;margin-top:16px;margin-bottom:6px;">${t('naming_nation')}</label>
+    <div class="nation-select-row">
+      <span class="nation-flag-preview" id="dailyNationFlagPreview">${flag(nazioneAttuale)}</span>
+      <select id="dailyNationSelect"
+        style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:15px;background:var(--panel2);
+        border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);">
+        ${nationOptions}
+      </select>
+    </div>
+    <div id="dailyNicknameError" class="maintenance-error" style="margin-top:10px;"></div>
+    <div class="btnrow" style="margin-top:20px;">
+      <button class="primary" data-action="edit-nickname-confirm" style="width:100%;">${t('profile_edit_nickname_confirm')}</button>
+      <button class="ghost" data-action="my-profile-back" style="width:100%;">${t('profile_edit_nickname_cancel')}</button>
+    </div>
+  </div>`;
+  bindActions();
+  document.getElementById('dailyNationSelect').addEventListener('change', (e)=>{
+    document.getElementById('dailyNationFlagPreview').innerHTML = flag(e.target.value);
+  });
 }
 function renderDailyNicknameSetup(){
   const nationOptions = Object.keys(COUNTRY_FLAG).filter(c=>c!=='Sconosciuta').sort((a,b)=>nationLabel(a).localeCompare(nationLabel(b)))
@@ -8418,6 +8498,8 @@ function renderInner(){
   if(state.phase==='daily-season-hub') return renderDailySeasonHub();
   if(state.phase==='daily-leaderboard') return renderDailyLeaderboard();
   if(state.phase==='friends-hub') return renderFriendsHub();
+  if(state.phase==='my-profile') return renderMyProfile();
+  if(state.phase==='edit-nickname') return renderEditNicknameSetup();
   if(state.phase==='premium-thank-you') return renderPremiumThankYou();
   if(state.phase==='tutorial-draft') return renderTutorialDraft();
   if(state.phase==='tutorial-goat-reveal') return renderTutorialGoatReveal();
@@ -8650,6 +8732,38 @@ function renderFriendsHub(){
     bindActions();
   });
 }
+// V0.9.9.127: SCHERMATA "IL MIO PROFILO" — richiesto da Gio ("una tessera come quella degli amici
+// con tutte le statistiche con una icona matita per modificare il nick, max una volta ogni 30
+// giorni"). Le 5 statistiche sono le STESSE della scheda amico, ma calcolate direttamente dai dati
+// locali (non serve interrogare il cloud, sono già qui).
+function renderMyProfile(){
+  const stats = computePublicStats();
+  const nickname = dailyNicknameCache ? dailyNicknameCache.nickname : t('friends_unknown_nick');
+  const giorniAttesa = daysUntilNicknameCanChange();
+  app.innerHTML = `
+  <div class="topbar">
+    <div class="brand hdr">RACING DYNASTY<small>${t('profile_title')}</small></div>
+  </div>
+  <div class="wrap">
+    <div class="panel">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+        <div style="font-size:22px;font-weight:800;">${nickname}</div>
+        <button class="ghost" data-action="open-edit-nickname" style="padding:6px 10px;flex-shrink:0;" aria-label="${t('profile_edit_nickname')}">✏️</button>
+      </div>
+      ${giorniAttesa>0 ? `<div class="dim" style="text-align:center;font-size:11px;margin-top:6px;">${t('profile_nickname_cooldown', giorniAttesa)}</div>` : ''}
+    </div>
+    <div class="panel" style="margin-top:12px;">
+      <div class="daily-detail-row"><span class="dim">${t('friends_stat_wins')}</span><span>${stats.circuiti_vinti}</span></div>
+      <div class="daily-detail-row"><span class="dim">${t('friends_stat_missing_trophies')}</span><span>${Math.max(0, stats.circuiti_totali - stats.circuiti_vinti)}</span></div>
+      <div class="daily-detail-row"><span class="dim">${t('friends_stat_museum')}</span><span>${stats.completamento_museo_pct}%</span></div>
+      <div class="daily-detail-row"><span class="dim">${t('friends_stat_achievements')}</span><span>${stats.obiettivi_sbloccati}/${stats.obiettivi_totali}</span></div>
+    </div>
+    <div class="btnrow" style="margin-top:16px;">
+      <button class="ghost" data-action="open-daily-season-hub" style="width:100%;">${t('daily_hub_back')}</button>
+    </div>
+  </div>`;
+  bindActions();
+}
 function friendDetailHTML(f){
   if(f.nonSincronizzato){
     return `<div class="dim" style="text-align:center;padding:10px 6px;font-size:12.5px;line-height:1.5;">${t('friends_not_synced_yet')}</div>
@@ -8797,6 +8911,7 @@ function renderDailySeasonHub(){
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;"><span class="live-dot"></span>${t('daily_hub_leaderboard_live')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="yesterday" style="width:100%;">${t('daily_hub_leaderboard_yesterday')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="weighted" style="width:100%;">${t('daily_hub_leaderboard_weighted')}</button>
+      <button class="ghost" data-action="open-my-profile" style="width:100%;">👤 ${t('profile_hub_button')}</button>
       <button class="ghost" data-action="open-friends-hub" style="width:100%;">👥 ${t('friends_hub_button')}</button>
       <button class="ghost" data-action="go-to-mode-select" style="width:100%;">${t('daily_hub_back')}</button>
     </div>
@@ -13099,6 +13214,46 @@ function onAction(e){
   }
   else if(action==='daily-start-challenge'){
     enterDailySeasonFlow();
+  }
+  else if(action==='open-my-profile'){
+    if(dailyNicknameCache === undefined) { loadDailyNickname().then(()=>{ if(state.phase==='my-profile') render(); }); }
+    state.phase = 'my-profile';
+    render();
+  }
+  else if(action==='my-profile-back'){
+    state.phase = 'my-profile';
+    render();
+  }
+  else if(action==='open-edit-nickname'){
+    const giorniAttesa = daysUntilNicknameCanChange();
+    if(giorniAttesa > 0){
+      gameConfirm(t('profile_nickname_cooldown', giorniAttesa), ()=>{}, t('profile_nickname_cooldown_title'));
+      return;
+    }
+    state.phase = 'edit-nickname';
+    render();
+  }
+  else if(action==='edit-nickname-confirm'){
+    const nickname = document.getElementById('dailyNicknameInput').value.trim();
+    const nation = document.getElementById('dailyNationSelect').value;
+    const errorEl = document.getElementById('dailyNicknameError');
+    if(!isNicknameValid(nickname)){
+      errorEl.textContent = t('daily_nickname_err_invalid');
+      return;
+    }
+    errorEl.textContent = t('daily_nickname_saving');
+    updateDailyNickname(nickname, nation).then(res=>{
+      if(res.ok){
+        state.phase = 'my-profile';
+        render();
+      } else if(res.error==='taken'){
+        errorEl.textContent = t('daily_nickname_err_taken');
+      } else if(res.error==='cooldown'){
+        errorEl.textContent = t('profile_nickname_cooldown', res.giorniRimasti);
+      } else {
+        errorEl.textContent = t('daily_nickname_err_generic');
+      }
+    });
   }
   else if(action==='daily-nickname-confirm'){
     const nickname = document.getElementById('dailyNicknameInput').value.trim();
