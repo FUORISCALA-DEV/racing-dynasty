@@ -2395,9 +2395,12 @@ async function updateDailyNickname(nickname, flagCountryName){
   const flagCode = (COUNTRY_FLAG[flagCountryName] || 'XX');
   try{
     const adesso = new Date().toISOString();
+    // V0.9.9.139: UPSERT invece di UPDATE — un UPDATE su una riga inesistente non fa nulla in
+    // modo silenzioso (nessun errore, ma nessuna riga scritta). Ora chi modifica il nickname per
+    // la PRIMA volta tramite la matita (senza essere mai passato dal setup Daily) funziona
+    // correttamente, non solo chi ne aveva già uno.
     const { error } = await supabaseClient.from('daily_nicknames')
-      .update({ nickname: nickname.trim(), flag_code: flagCode, nickname_changed_at: adesso })
-      .eq('user_id', currentUser.id);
+      .upsert({ user_id: currentUser.id, nickname: nickname.trim(), flag_code: flagCode, nickname_changed_at: adesso });
     if(error){
       if(error.code==='23505') return { error:'taken' };
       return { error:'unknown', detail:error.message };
@@ -2435,7 +2438,7 @@ function renderEditNicknameSetup(){
     <h2 class="hdr">${t('profile_edit_nickname_title')}</h2>
     <div class="dim" style="margin-top:8px;line-height:1.5;">${t('profile_edit_nickname_desc')}</div>
     <label class="dim" style="display:block;font-size:13.5px;text-transform:uppercase;letter-spacing:0.05em;margin-top:20px;margin-bottom:6px;">${t('daily_nickname_label')}</label>
-    <input type="text" id="dailyNicknameInput" maxlength="16" value="${dailyNicknameCache?.nickname || ''}"
+    <input type="text" id="dailyNicknameInput" maxlength="16" value="${dailyNicknameCache?.nickname || sanitizeNicknameForPrefill(currentUser?.name) || ''}"
       style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:15px;background:var(--panel2);
       border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--font-ui);">
     <label class="dim" style="display:block;font-size:13.5px;text-transform:uppercase;letter-spacing:0.05em;margin-top:16px;margin-bottom:6px;">${t('naming_nation')}</label>
@@ -7945,6 +7948,16 @@ function isNicknameOffensive(nickname){
   const norm = normalizeForProfanityCheck(nickname);
   return NICKNAME_BLOCKLIST.some(bad => norm.includes(bad));
 }
+// V0.9.9.139: pulizia nome per la precompilazione — un nome Google spesso supera i 16 caratteri o
+// contiene accenti/caratteri non ammessi (isNicknameValid accetta solo lettere/numeri/spazio/trattino).
+// Senza questo, chi vede il proprio nome precompilato e salva senza modificare nulla si troverebbe
+// un errore "nickname non valido" senza capire perché.
+function sanitizeNicknameForPrefill(nomeGrezzo){
+  if(!nomeGrezzo) return '';
+  const senzaAccenti = nomeGrezzo.normalize('NFD').replace(/[\u0300-\u036f]/g,''); // "José" -> "Jose"
+  const pulito = senzaAccenti.replace(/[^a-zA-Z0-9_\-\s]/g, '').trim();
+  return pulito.slice(0, 16);
+}
 function isNicknameValid(nickname){
   const trimmed = (nickname||'').trim();
   if(trimmed.length<3 || trimmed.length>16) return false;
@@ -8761,7 +8774,7 @@ function renderFriendsHub(){
       <div id="friendsListContent" class="dim" style="text-align:center;padding:20px 0;">${t('friends_list_loading')}</div>
     </div>
     <div class="btnrow" style="margin-top:16px;">
-      <button class="ghost" data-action="open-daily-season-hub" style="width:100%;">${t('daily_hub_back')}</button>
+      <button class="ghost" data-action="friends-hub-back" style="width:100%;">${t('daily_hub_back')}</button>
     </div>
   </div>`;
   bindActions();
@@ -8790,7 +8803,7 @@ function renderFriendsHub(){
 // locali (non serve interrogare il cloud, sono già qui).
 function renderMyProfile(){
   const stats = computePublicStats();
-  const nickname = dailyNicknameCache ? dailyNicknameCache.nickname : t('friends_unknown_nick');
+  const nickname = dailyNicknameCache?.nickname || currentUser?.name || t('friends_unknown_nick');
   const giorniAttesa = daysUntilNicknameCanChange();
   app.innerHTML = `
   <div class="topbar">
@@ -8811,7 +8824,7 @@ function renderMyProfile(){
       <div class="daily-detail-row"><span class="dim">${t('friends_stat_achievements')}</span><span>${stats.obiettivi_sbloccati}/${stats.obiettivi_totali}</span></div>
     </div>
     <div class="btnrow" style="margin-top:16px;">
-      <button class="ghost" data-action="open-daily-season-hub" style="width:100%;">${t('daily_hub_back')}</button>
+      <button class="ghost" data-action="my-profile-hub-back" style="width:100%;">${t('daily_hub_back')}</button>
     </div>
   </div>`;
   bindActions();
@@ -9902,7 +9915,11 @@ function pushPublicStatsToCloud(){
       const stats = computePublicStats();
       const { error } = await supabaseClient.from('player_public_stats').upsert({
         user_id: currentUser.id,
-        nickname: dailyNicknameCache || null,
+        // V0.9.9.139: BUG PREESISTENTE CORRETTO — veniva inviato l'intero oggetto cache
+        // (nickname+flag_code+data) invece della sola stringa nickname. Aggiunto anche il fallback
+        // al nome Google per chi non ha ancora scelto un nickname Daily, richiesto da Gio ("gli
+        // amici dovrebbero esserci per tutti, anche per chi non ha accesso alle daily").
+        nickname: dailyNicknameCache?.nickname || currentUser.name || null,
         is_premium: !!isPremiumUser,
         ...stats,
         updated_at: new Date().toISOString(),
@@ -13318,6 +13335,7 @@ function onAction(e){
     render();
   }
   else if(action==='open-friends-hub'){
+    friendsHubPreviousPhase = state.phase;
     state.phase = 'friends-hub';
     render();
   }
@@ -13336,11 +13354,20 @@ function onAction(e){
   }
   else if(action==='open-my-profile'){
     if(dailyNicknameCache === undefined) { loadDailyNickname().then(()=>{ if(state.phase==='my-profile') render(); }); }
+    myProfilePreviousPhase = state.phase;
     state.phase = 'my-profile';
     render();
   }
   else if(action==='my-profile-back'){
     state.phase = 'my-profile';
+    render();
+  }
+  else if(action==='friends-hub-back'){
+    state.phase = friendsHubPreviousPhase || 'title';
+    render();
+  }
+  else if(action==='my-profile-hub-back'){
+    state.phase = myProfilePreviousPhase || 'title';
     render();
   }
   else if(action==='open-edit-nickname'){
@@ -14865,6 +14892,16 @@ function initSidebar(){
   if(guideBtn) guideBtn.addEventListener('click', openGuide);
   const achBtn = document.getElementById('menuAchievementsBtn');
   if(achBtn) achBtn.addEventListener('click', openAchievements);
+  const friendsBtn = document.getElementById('menuFriendsBtn');
+  if(friendsBtn) friendsBtn.addEventListener('click', ()=>{ closeMenuPanel(); friendsHubPreviousPhase = state.phase; state.phase='friends-hub'; render(); });
+  const myProfileBtn = document.getElementById('menuMyProfileBtn');
+  if(myProfileBtn) myProfileBtn.addEventListener('click', ()=>{
+    closeMenuPanel();
+    if(dailyNicknameCache === undefined) { loadDailyNickname().then(()=>{ if(state.phase==='my-profile') render(); }); }
+    myProfilePreviousPhase = state.phase;
+    state.phase = 'my-profile';
+    render();
+  });
   document.getElementById('menuSettingsBtn').addEventListener('click', openSettings);
   const creditsBtn = document.getElementById('menuCreditsBtn');
   if(creditsBtn) creditsBtn.addEventListener('click', openCredits);
@@ -14971,6 +15008,8 @@ function hasSpeed2xPromptShown(){ try{ return localStorage.getItem('racingDynast
 function markSpeed2xPromptShown(){ try{ localStorage.setItem('racingDynastySpeed2xPromptShownV1','1'); }catch(e){} }
 let decisionTimerEnabled = true; // V0.9.3.2: countdown per le decisioni in gara, disattivabile dal menu
 let trophyRoomPreviousPhase = 'title'; // V0.9.4: dove tornare chiudendo la sala trofei
+let friendsHubPreviousPhase = 'title'; // V0.9.9.139: dove tornare chiudendo Amici — accessibile da più punti ora
+let myProfilePreviousPhase = 'title'; // V0.9.9.139: stesso motivo, per Il mio profilo
 let museumPreviousPhase = 'title'; // V0.9.4.1: dove tornare chiudendo il Museo Dynasty
 
 // V0.9.9.75: modalità manutenzione — controllata da un file di configurazione pubblico nel repository
