@@ -10696,6 +10696,12 @@ function renderDifficulty(){
   }).join('');
 
   app.innerHTML = `
+  <div class="topbar">
+    <div class="topbar-left-group">
+      ${backChevronBtnHTML('go-to-season-length')}
+      <div class="brand hdr">RACING DYNASTY<small>${t('diff_choose')}</small></div>
+    </div>
+  </div>
   <div class="panel">
     <div class="eyebrow">${t('diff_new_career')}</div>
     <h2 class="hdr" style="font-size:24px;">${t('diff_choose')}</h2>
