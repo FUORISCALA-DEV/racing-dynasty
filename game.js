@@ -613,7 +613,9 @@ const I18N = {
     daily_detail_points: 'Punti', daily_score_points_word: 'punti', daily_detail_driver_pos: 'Posizione Piloti', daily_detail_constructor_pos: 'Posizione Costruttori',
     daily_detail_gap: 'Gap dal rivale', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (iniziale → finale)', daily_detail_platinum: 'Componenti Immortal',
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per avere fino a 3 tentativi al giorno.', daily_max_attempts_title: 'Hai esaurito i tentativi', daily_max_attempts_desc: 'Hai già usato tutti e 3 i tentativi di oggi. Torna domani per riprovare.', daily_confirm_new_attempt_title: 'Nuovo tentativo?', daily_confirm_new_attempt_desc: 'Hai già un risultato salvato per oggi. Iniziando un nuovo tentativo, quello precedente verrà eliminato per sempre — non potrai tornare indietro. Solo l\'ultimo tentativo conta in classifica. Procedere?',
-    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_continue: 'Continua la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Classifica Daily Live', daily_hub_leaderboard_yesterday: 'Classifica Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
+    daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_continue: 'Continua la Daily di oggi →', daily_hub_new_run: 'Nuova run (abbandona la precedente)',
+    daily_new_run_confirm_title: 'Nuova run?', daily_new_run_confirm_desc: 'Il progresso della run attuale andrà perso per sempre, e verrà usato un gettone Daily. Vuoi procedere?',
+    daily_token_counter: (usati,tot)=>`Gettoni Daily: ${usati}/${tot}`, daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Classifica Daily Live', daily_hub_leaderboard_yesterday: 'Classifica Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
     friends_hub_button: 'Amici',
     profile_hub_button: 'Il mio profilo', profile_title: 'Il mio profilo',
@@ -968,7 +970,9 @@ const I18N = {
     daily_detail_points: 'Points', daily_score_points_word: 'points', daily_detail_driver_pos: 'Drivers Position', daily_detail_constructor_pos: 'Constructors Position',
     daily_detail_gap: 'Gap from rival', daily_detail_budget: 'Budget', daily_detail_rating: 'Rating (initial → final)', daily_detail_platinum: 'Immortal components',
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium for up to 3 attempts per day.', daily_max_attempts_title: 'No attempts left', daily_max_attempts_desc: "You've already used all 3 attempts today. Come back tomorrow to try again.", daily_confirm_new_attempt_title: 'New attempt?', daily_confirm_new_attempt_desc: "You already have a saved result for today. Starting a new attempt will permanently delete the previous one — this can't be undone. Only your last attempt counts on the leaderboard. Proceed?",
-    daily_hub_start: "Start today's Daily →", daily_hub_continue: "Continue today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live Leaderboard', daily_hub_leaderboard_yesterday: 'Last Daily Leaderboard', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
+    daily_hub_start: "Start today's Daily →", daily_hub_continue: "Continue today's Daily →", daily_hub_new_run: 'New run (abandon current one)',
+    daily_new_run_confirm_title: 'New run?', daily_new_run_confirm_desc: "Progress on your current run will be lost for good, and a Daily token will be used. Proceed?",
+    daily_token_counter: (usati,tot)=>`Daily tokens: ${usati}/${tot}`, daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live Leaderboard', daily_hub_leaderboard_yesterday: 'Last Daily Leaderboard', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
     friends_hub_button: 'Friends',
     profile_hub_button: 'My profile', profile_title: 'My profile',
@@ -1319,7 +1323,9 @@ const I18N = {
     daily_detail_points: 'Puntos', daily_score_points_word: 'puntos', daily_detail_driver_pos: 'Posición Pilotos', daily_detail_constructor_pos: 'Posición Constructores',
     daily_detail_gap: 'Diferencia del rival', daily_detail_budget: 'Presupuesto', daily_detail_rating: 'Rating (inicial → final)', daily_detail_platinum: 'Componentes Immortal',
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para tener hasta 3 intentos al día.', daily_max_attempts_title: 'Has agotado los intentos', daily_max_attempts_desc: 'Ya has usado los 3 intentos de hoy. Vuelve mañana para intentarlo de nuevo.', daily_confirm_new_attempt_title: '¿Nuevo intento?', daily_confirm_new_attempt_desc: 'Ya tienes un resultado guardado para hoy. Si empiezas un nuevo intento, el anterior se eliminará para siempre — no podrás deshacerlo. Solo cuenta el último intento en la clasificación. ¿Continuar?',
-    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_continue: 'Continuar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Clasificación Daily en Vivo', daily_hub_leaderboard_yesterday: 'Clasificación Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
+    daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_continue: 'Continuar la Daily de hoy →', daily_hub_new_run: 'Nueva run (abandona la anterior)',
+    daily_new_run_confirm_title: '¿Nueva run?', daily_new_run_confirm_desc: 'El progreso de la run actual se perderá para siempre, y se usará una ficha Daily. ¿Continuar?',
+    daily_token_counter: (usati,tot)=>`Fichas Daily: ${usati}/${tot}`, daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Clasificación Daily en Vivo', daily_hub_leaderboard_yesterday: 'Clasificación Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
     friends_hub_button: 'Amigos',
     profile_hub_button: 'Mi perfil', profile_title: 'Mi perfil',
@@ -8977,15 +8983,17 @@ function renderDailySeasonHub(){
     <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:16px;">
     <div class="daily-gp-count" style="text-align:center;font-size:18px;margin-bottom:2px;">${t('daily_gp_count', todaysDailySeasonLength())}</div>
     <div class="daily-reroll-count" style="text-align:center;font-size:14px;margin-bottom:6px;">${t('daily_reroll_count', todaysDailyRerollCount())}</div>
-    <div class="daily-countdown-row" style="justify-content:center;margin-bottom:14px;">
+    <div class="daily-countdown-row" style="justify-content:center;margin-bottom:6px;">
       <div class="daily-countdown" id="dailyHubCountdown" style="font-size:20px;">--:--:--</div>
       <div id="dailyHubStatusBadge">${dailyStatusBadgeHTML()}</div>
     </div>
+    <div class="dim" id="dailyHubTokenCounter" style="text-align:center;font-size:12px;margin-bottom:14px;"></div>
     <div class="dim" style="text-align:center;font-size:12px;line-height:1.5;margin-bottom:20px;padding:0 8px;">${t('daily_fairness_note')}</div>
     <div class="btnrow" style="flex-direction:column;gap:10px;">
       ${salvataggioDaily
         ? `<button class="primary" data-action="daily-continue-run" style="width:100%;">${t('daily_hub_continue')}</button>`
         : `<button class="primary" data-action="daily-start-challenge" style="width:100%;">${t('daily_hub_start')}</button>`}
+      <div id="dailyHubNewRunSlot"></div>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="daily" style="width:100%;"><span class="live-dot"></span>${t('daily_hub_leaderboard_live')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="yesterday" style="width:100%;">${t('daily_hub_leaderboard_yesterday')}</button>
       <button class="ghost" data-action="open-daily-leaderboard" data-tab="weighted" style="width:100%;">${t('daily_hub_leaderboard_weighted')}</button>
@@ -9000,6 +9008,19 @@ function renderDailySeasonHub(){
     const badge = document.getElementById('dailyHubStatusBadge');
     if(badge) badge.innerHTML = dailyStatusBadgeHTML();
     updateDailyCountdownColor('dailyHubCountdown');
+  });
+  // V0.9.9.140: contatore gettoni Daily (x/3 premium, x/1 free) e pulsante "Nuova run" — richiesti
+  // da Gio. Il pulsante "Nuova run" abbandona il salvataggio locale in corso e ne avvia uno nuovo
+  // spendendo un gettone — mostrato SOLO se c'è davvero una run da abbandonare E restano gettoni.
+  countDailyPlaysToday().then(tentativiUsatiOggi=>{
+    const massimo = isPremiumUser ? DAILY_MAX_PREMIUM_ATTEMPTS : 1;
+    const counterEl = document.getElementById('dailyHubTokenCounter');
+    if(counterEl) counterEl.textContent = t('daily_token_counter', Math.min(tentativiUsatiOggi, massimo), massimo);
+    const slotEl = document.getElementById('dailyHubNewRunSlot');
+    if(slotEl && salvataggioDaily && tentativiUsatiOggi < massimo){
+      slotEl.innerHTML = `<button class="ghost" data-action="daily-new-run-instead" style="width:100%;color:var(--amber);border-color:var(--amber);">${t('daily_hub_new_run')}</button>`;
+      bindActions();
+    }
   });
 }
 function renderModeSelect(){
@@ -13351,6 +13372,12 @@ function onAction(e){
     if(!salvataggio){ enterDailySeasonFlow(); return; } // ripiego: se nel frattempo è sparito, avvia normalmente
     state = salvataggio.state;
     render();
+  }
+  else if(action==='daily-new-run-instead'){
+    gameConfirm(t('daily_new_run_confirm_desc'), ()=>{
+      deleteDailyGameSave();
+      enterDailySeasonFlow();
+    }, t('daily_new_run_confirm_title'));
   }
   else if(action==='open-my-profile'){
     if(dailyNicknameCache === undefined) { loadDailyNickname().then(()=>{ if(state.phase==='my-profile') render(); }); }
