@@ -609,7 +609,7 @@ const I18N = {
     daily_already_played_title: 'Hai già giocato oggi', daily_already_played_desc: 'La Daily gratuita si gioca una volta al giorno. Torna domani, oppure sblocca il premium per avere fino a 3 tentativi al giorno.', daily_max_attempts_title: 'Hai esaurito i tentativi', daily_max_attempts_desc: 'Hai già usato tutti e 3 i tentativi di oggi. Torna domani per riprovare.', daily_confirm_new_attempt_title: 'Nuovo tentativo?', daily_confirm_new_attempt_desc: 'Hai già un risultato salvato per oggi. Iniziando un nuovo tentativo, quello precedente verrà eliminato per sempre — non potrai tornare indietro. Solo l\'ultimo tentativo conta in classifica. Procedere?',
     daily_hub_start: 'Avvia la Daily di oggi →', daily_hub_leaderboard_today: 'Classifica di oggi', daily_hub_leaderboard_live: 'Classifica Daily Live', daily_hub_leaderboard_yesterday: 'Classifica Ultima Daily', daily_fairness_note: 'Stesso calendario, stessa lunghezza stagione, stesse offerte di scuderie per tutti — sfida i tuoi amici ad armi pari: solo le tue scelte fanno la differenza.',
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
-    friends_hub_button: 'Amici', friends_my_code_title: 'Il tuo codice invito', friends_my_code_desc: 'Condividilo con un amico (WhatsApp, Discord...) — lo inserisce lui per aggiungerti.',
+    friends_hub_button: 'Amici', friends_badge_label: 'AMICI', friends_my_code_title: 'Il tuo codice invito', friends_my_code_desc: 'Condividilo con un amico (WhatsApp, Discord...) — lo inserisce lui per aggiungerti.',
     friends_copy_code: 'Copia', friends_code_copied: 'Copiato!', friends_code_error: 'Errore',
     friends_add_title: 'Aggiungi un amico', friends_add_btn: 'Aggiungi',
     friends_checking: 'Verifica in corso...', friends_error_invalid: 'Codice non valido.', friends_error_self: 'Non puoi aggiungere te stesso.',
@@ -954,7 +954,7 @@ const I18N = {
     daily_already_played_title: 'Already played today', daily_already_played_desc: 'The free Daily is played once per day. Come back tomorrow, or unlock premium for up to 3 attempts per day.', daily_max_attempts_title: 'No attempts left', daily_max_attempts_desc: "You've already used all 3 attempts today. Come back tomorrow to try again.", daily_confirm_new_attempt_title: 'New attempt?', daily_confirm_new_attempt_desc: "You already have a saved result for today. Starting a new attempt will permanently delete the previous one — this can't be undone. Only your last attempt counts on the leaderboard. Proceed?",
     daily_hub_start: "Start today's Daily →", daily_hub_leaderboard_today: "Today's leaderboard", daily_hub_leaderboard_live: 'Daily Live Leaderboard', daily_hub_leaderboard_yesterday: 'Last Daily Leaderboard', daily_fairness_note: 'Same calendar, same season length, same team offers for everyone — challenge your friends on equal ground: only your choices make the difference.',
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
-    friends_hub_button: 'Friends', friends_my_code_title: 'Your invite code', friends_my_code_desc: 'Share it with a friend (WhatsApp, Discord...) — they enter it to add you.',
+    friends_hub_button: 'Friends', friends_badge_label: 'FRIEND', friends_my_code_title: 'Your invite code', friends_my_code_desc: 'Share it with a friend (WhatsApp, Discord...) — they enter it to add you.',
     friends_copy_code: 'Copy', friends_code_copied: 'Copied!', friends_code_error: 'Error',
     friends_add_title: 'Add a friend', friends_add_btn: 'Add',
     friends_checking: 'Checking...', friends_error_invalid: 'Invalid code.', friends_error_self: "You can't add yourself.",
@@ -1295,7 +1295,7 @@ const I18N = {
     daily_already_played_title: 'Ya has jugado hoy', daily_already_played_desc: 'La Daily gratuita se juega una vez al día. Vuelve mañana, o desbloquea premium para tener hasta 3 intentos al día.', daily_max_attempts_title: 'Has agotado los intentos', daily_max_attempts_desc: 'Ya has usado los 3 intentos de hoy. Vuelve mañana para intentarlo de nuevo.', daily_confirm_new_attempt_title: '¿Nuevo intento?', daily_confirm_new_attempt_desc: 'Ya tienes un resultado guardado para hoy. Si empiezas un nuevo intento, el anterior se eliminará para siempre — no podrás deshacerlo. Solo cuenta el último intento en la clasificación. ¿Continuar?',
     daily_hub_start: 'Iniciar la Daily de hoy →', daily_hub_leaderboard_today: 'Clasificación de hoy', daily_hub_leaderboard_live: 'Clasificación Daily en Vivo', daily_hub_leaderboard_yesterday: 'Clasificación Última Daily', daily_fairness_note: 'Mismo calendario, misma duración de temporada, mismas ofertas de escuderías para todos — desafía a tus amigos en igualdad de condiciones: solo tus decisiones marcan la diferencia.',
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
-    friends_hub_button: 'Amigos', friends_my_code_title: 'Tu código de invitación', friends_my_code_desc: 'Compártelo con un amigo (WhatsApp, Discord...) — lo introduce para añadirte.',
+    friends_hub_button: 'Amigos', friends_badge_label: 'AMIGOS', friends_my_code_title: 'Tu código de invitación', friends_my_code_desc: 'Compártelo con un amigo (WhatsApp, Discord...) — lo introduce para añadirte.',
     friends_copy_code: 'Copiar', friends_code_copied: '¡Copiado!', friends_code_error: 'Error',
     friends_add_title: 'Añadir un amigo', friends_add_btn: 'Añadir',
     friends_checking: 'Comprobando...', friends_error_invalid: 'Código no válido.', friends_error_self: 'No puedes añadirte a ti mismo.',
@@ -8670,6 +8670,7 @@ async function loadAndRenderDailyLeaderboard(tab){
   if(!contentEl) return; // schermata gia' cambiata
   if(!supabaseClient){ contentEl.innerHTML = `<div class="dim">${t('daily_leaderboard_error')}</div>`; return; }
   try{
+    const idAmiciSet = await loadMyFriendIdsSet(); // V0.9.9.117: per evidenziare gli amici in viola
     let rows;
     if(tab==='daily' || tab==='yesterday'){
       const dataRiferimento = tab==='daily' ? todayDateStringUTC() : previousDailyDateString(todayDateStringUTC());
@@ -8720,10 +8721,12 @@ async function loadAndRenderDailyLeaderboard(tab){
       // i primi 3, sfondo distinto per la top 10 — richiesto da Gio dopo i test dal vivo.
       const coccarda = posizione===1?'🥇':posizione===2?'🥈':posizione===3?'🥉':'';
       const classeTop10 = posizione<=10 ? 'daily-leaderboard-row-top10' : '';
+      // V0.9.9.117: badge "AMICI" in viola (stesso colore già usato per i rivali), richiesto da Gio
+      const badgeAmico = idAmiciSet.has(r.user_id) ? `<span class="friend-badge">${t('friends_badge_label')}</span>` : '';
       return `<div class="daily-leaderboard-row ${classeTop10} ${mio?'daily-leaderboard-row-mine':''}" ${clickAttr} style="${isDettagliata?'cursor:pointer;':''}">
         <span class="daily-leaderboard-rank">${coccarda || posizione}</span>
         ${flag(nationFromFlagCode(r.flag_code))}
-        <span class="daily-leaderboard-nick">${r.nickname}</span>
+        <span class="daily-leaderboard-nick">${r.nickname}${badgeAmico}</span>
         <span class="daily-leaderboard-stat daily-leaderboard-score">${statoText}</span>
       </div>
       <div class="daily-leaderboard-detail" id="dailyRowDetail${i}" style="display:none;"></div>`;
@@ -9710,6 +9713,18 @@ async function redeemFriendCode(code){
     if(!data || !data.ok){ console.warn('add-friend-by-code ha risposto con un errore vero:', data); return { ok:false, error: data?.error || 'unknown' }; }
     return { ok:true, alreadyFriends: !!data.alreadyFriends };
   }catch(e){ console.warn('Riscatto codice amico non riuscito:', e); return { ok:false, error:'exception' }; }
+}
+// V0.9.9.117: insieme leggero dei soli ID amici (senza statistiche) — usato per evidenziare le
+// righe amico nelle classifiche, dove non servono i dettagli completi.
+async function loadMyFriendIdsSet(){
+  if(!currentUser || !supabaseClient) return new Set();
+  try{
+    const { data, error } = await supabaseClient.from('friendships')
+      .select('user_id_a, user_id_b')
+      .or(`user_id_a.eq.${currentUser.id},user_id_b.eq.${currentUser.id}`);
+    if(error || !data) return new Set();
+    return new Set(data.map(r => r.user_id_a===currentUser.id ? r.user_id_b : r.user_id_a));
+  }catch(e){ return new Set(); }
 }
 async function loadMyFriendsList(){
   if(!currentUser || !supabaseClient) return [];
@@ -13568,7 +13583,6 @@ function openSettings(){
     </div>
     <button type="button" class="menu-item" id="sidebarHapticToggleBtn">📳 <span>${t('settings_haptic')}: ${audioSettings.hapticEnabled!==false?t('on'):t('off')}</span></button>
     ${!isPremiumUser ? `<button type="button" class="menu-item" id="sidebarUnlockPremiumBtn" style="color:var(--amber);border-color:var(--amber);"><img class=ico src=assets/icons/sparkles.png> <span>${t('tokens_out_unlock')}</span></button>` : ''}
-    ${!isPremiumUser ? `<button type="button" class="menu-item" data-action="open-redeem-code" style="font-size:12.5px;"><span>${t('redeem_code_menu_item')}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarStreamerToggleBtn"><svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0;color:#9146FF;"><path fill="currentColor" d="M4.5 2 3 5.5v14h5V22l3-2.5h4L20 15V2H4.5zm13.5 12-3 2.5h-4l-2.5 2v-2H5V4h13v10z"/><rect x="9" y="7" width="2" height="5" fill="currentColor"/><rect x="14" y="7" width="2" height="5" fill="currentColor"/></svg> <span>${t('settings_streamer_mode')}: ${isStreamerModeOn()?t('on'):t('off')}</span></button>
     ${isStreamerModeOn() ? `<button type="button" class="menu-item" id="sidebarStreamerNameBtn">✏️ <span>${t('settings_streamer_name')}: ${getStreamerName()}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarSpeedBtn"><img class=ico src=assets/icons/rocket.png> <span>${t('settings_speed')}: ${defaultRaceSpeed}×</span></button>
