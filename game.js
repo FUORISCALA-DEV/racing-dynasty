@@ -3659,8 +3659,14 @@ function unpairedMentalities(excludeCatKey){
 // percentuale sull'INTERA squadra: 2 coppie stesso colore = +45%, 3 coppie stesso colore = +90%.
 // Cosi' anche una squadra di pezzi scarsissimi puo' arrivare a competere per il titolo se il giocatore
 // punta tutto su un solo colore. Il bonus precedente viene sempre rimosso e ricalcolato da zero.
-const SYNERGY_STACK_PCT = { 2:0.45, 3:0.90 };
-const SYNERGY_DIVERSE_BONUS_PCT = 0.05; // V0.9.4.6.2: 3+ sinergie diverse attive (nessuno stack) -> +5% a tutta la squadra
+// V0.9.9.136: RIBILANCIATO — concordato con Gio, i valori precedenti (45%/90%) portavano quasi
+// chiunque al tetto massimo di rating (100), rendendo il bonus troppo forte rispetto alla difficolta'
+// reale di ottenere l'accoppiamento. Nuovi valori pensati sulla difficolta' vera di ciascuna
+// combinazione: 2 coppie stesso colore (4 pezzi su 7, richiede reroll mirati) e 3 coppie (6 pezzi su
+// 7, quasi l'intera squadra dedicata) sono molto piu' rari e impegnativi di quanto il vecchio bonus
+// rispecchiasse.
+const SYNERGY_STACK_PCT = { 2:0.18, 3:0.32 };
+const SYNERGY_DIVERSE_BONUS_PCT = 0.08; // V0.9.9.136: da 5% a 8% — premia un po' di piu' la varieta'
 
 function applySynergyBonuses(){
   const t = state.team;
