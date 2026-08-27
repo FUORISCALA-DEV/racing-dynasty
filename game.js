@@ -538,7 +538,7 @@ const I18N = {
     sponsor_desc_tecnico: (cat)=>`Sblocca da subito gli upgrade "${cat}" normalmente riservati agli sponsor. Nessun bonus economico diretto.`,
     sponsor_desc_secondario_amount: '+0.3M a gara', sponsor_desc_secondario_rest: ', fisso, garantito, senza alcuna condizione.',
     sponsor_choose_subtitle: 'Scegli il tuo sponsor per la stagione', sponsor_choose_one: "Scegli una sola offerta per l'intera stagione",
-    sponsor_reroll_btn: 'Ricerca di mercato', sponsor_reroll_desc: 'Le ricerche di mercato costano budget scuderia, ma possono far comparire sponsor nuovi — da 2 a 4 ogni volta.',
+    sponsor_reroll_btn: 'Ricerca di mercato', sponsor_reroll_desc: 'Le ricerche di mercato costano budget scuderia, ma possono far comparire sponsor nuovi — da 1 a 4 ogni volta.',
     sponsor_team_overview_toggle: 'Panoramica scuderia',
     sponsor_headline: 'Chi ti accompagna quest\'anno?', sponsor_subtitle: 'La scelta vale per tutta la stagione e non si può cambiare a metà strada.',
     naming_title: 'Dai un nome alla tua scuderia', naming_optional: 'Facoltativo — se lo lasci vuoto useremo un nome automatico (es. "Dynasty Racing").',
@@ -889,7 +889,7 @@ const I18N = {
     sponsor_desc_tecnico: (cat)=>`Immediately unlocks "${cat}" upgrades normally reserved for sponsors. No direct economic bonus.`,
     sponsor_desc_secondario_amount: '+0.3M per race', sponsor_desc_secondario_rest: ', fixed, guaranteed, no conditions.',
     sponsor_choose_subtitle: 'Choose your sponsor for the season', sponsor_choose_one: 'Choose only one offer for the whole season',
-    sponsor_reroll_btn: 'Market research', sponsor_reroll_desc: 'Market research costs team budget, but can bring up new sponsors — 2 to 4 every time.',
+    sponsor_reroll_btn: 'Market research', sponsor_reroll_desc: 'Market research costs team budget, but can bring up new sponsors — 1 to 4 every time.',
     sponsor_team_overview_toggle: 'Team overview',
     sponsor_headline: "Who's with you this year?", sponsor_subtitle: "The choice applies for the whole season and can't be changed midway.",
     naming_title: 'Name your team', naming_optional: 'Optional — if you leave it blank we\'ll use an automatic name (e.g. "Dynasty Racing").',
@@ -1234,7 +1234,7 @@ const I18N = {
     sponsor_desc_tecnico: (cat)=>`Desbloquea de inmediato las mejoras de "${cat}" normalmente reservadas a los patrocinadores. Sin bonus económico directo.`,
     sponsor_desc_secondario_amount: '+0.3M por carrera', sponsor_desc_secondario_rest: ', fijo, garantizado, sin condiciones.',
     sponsor_choose_subtitle: 'Elige tu patrocinador para la temporada', sponsor_choose_one: 'Elige solo una oferta para toda la temporada',
-    sponsor_reroll_btn: 'Estudio de mercado', sponsor_reroll_desc: 'Los estudios de mercado cuestan presupuesto del equipo, pero pueden traer nuevos patrocinadores — de 2 a 4 cada vez.',
+    sponsor_reroll_btn: 'Estudio de mercado', sponsor_reroll_desc: 'Los estudios de mercado cuestan presupuesto del equipo, pero pueden traer nuevos patrocinadores — de 1 a 4 cada vez.',
     sponsor_team_overview_toggle: 'Resumen del equipo',
     sponsor_headline: '¿Quién te acompaña este año?', sponsor_subtitle: 'La elección vale para toda la temporada y no se puede cambiar a mitad de camino.',
     naming_title: 'Ponle nombre a tu escudería', naming_optional: 'Opcional — si lo dejas vacío usaremos un nombre automático (ej. "Dynasty Racing").',
@@ -13253,7 +13253,12 @@ function onAction(e){
     state.budget = Math.round((state.budget - cost)*10)/10;
     const alreadyShown = new Set((state.sponsorOffers||[]).map(o=>o.nome));
     const pool = SPONSOR_NAMES.filter(n=>!alreadyShown.has(n));
-    const addCount = Math.min(1 + Math.floor(rnd()*2), pool.length); // 1 o 2, ma mai piu' di quanti ne restano
+    // V0.9.9.125: BUG CORRETTO — segnalato da Gio, il testo diceva "da 2 a 4" ma la formula vera
+    // dava solo 1 o 2 (mai 3 o 4). Sostituita con la distribuzione pesata richiesta: 30% -> 1,
+    // 50% -> 2, 15% -> 3, 5% -> 4.
+    const rTiro = rnd()*100;
+    const nuoviRichiesti = rTiro<30 ? 1 : rTiro<80 ? 2 : rTiro<95 ? 3 : 4;
+    const addCount = Math.min(nuoviRichiesti, pool.length); // mai piu' di quanti ne restano nel pool
     if(addCount>0){
       const newNames = weightedSampleDistinct(pool.map(n=>({id:n,nome:n,costo:1})), addCount, 'costo', new Set()).map(o=>o.nome);
       const newOffers = newNames.map(nome => ({ nome, effect: SPONSOR_EFFECTS[nome] }));
