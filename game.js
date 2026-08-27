@@ -10141,6 +10141,15 @@ function renderStreamerContinueCheck(){
 
 function renderTitle(){
   const existingSave = loadGame();
+  // V0.9.9.120: BUG CRITICO CORRETTO — segnalato da Gio, "schermo nero fisso". Un salvataggio
+  // esistente ma con dati incompleti (es. manca calendar) mandava in crash renderTitle() subito,
+  // schermo bloccato senza nessun modo di andare avanti. Ora un salvataggio invalido/incompleto
+  // viene trattato come "nessun salvataggio", invece di far crashare tutta la schermata.
+  if(existingSave && (!existingSave.state || !existingSave.state.calendar || !Array.isArray(existingSave.state.calendar))){
+    console.warn('Salvataggio esistente incompleto (manca calendar) — trattato come non valido.');
+    deleteSave();
+    return renderTitle();
+  }
   if(existingSave){
     const s = existingSave.state;
     app.innerHTML = `
