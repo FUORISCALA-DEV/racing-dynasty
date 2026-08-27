@@ -161,16 +161,18 @@ h1,h2,h3{margin:0;font-weight:800;letter-spacing:0.02em;}
   border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px;flex-wrap:wrap;
   position:sticky;top:0;z-index:50;background:var(--void);padding-top:12px;margin-top:-12px;
 }
-/* V0.9.9.149: pulsante indietro in stile iOS — richiesto da Gio: "come l'indietro di iphone, un
-   minore messo bene con il suo spazio, senza testo". Chevron pulito, area di tocco generosa,
-   allineato a sinistra, sempre nello stesso punto in ogni schermata che lo usa. */
+/* V0.9.9.150: raggruppati chevron e testo insieme — richiesto da Gio: "i testi della topbar ora
+   sono sotto la chevron, devono essere a fianco, alla giusta distanza". Prima il chevron era forzato
+   su una riga propria (flex-basis:100%), e il testo sotto; ora stanno fianco a fianco con uno spazio
+   controllato, non più spinti agli estremi opposti della topbar (che userebbe space-between). */
+.topbar-left-group{ display:flex; align-items:center; gap:8px; }
 .topbar-back-btn{
-  background:none; border:none; color:var(--text); cursor:pointer; order:-1; flex-basis:100%;
-  display:flex; align-items:center; justify-content:flex-start;
-  width:40px; height:32px; padding:0; margin-bottom:2px;
+  background:none; border:none; color:var(--text); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  width:28px; height:28px; padding:0; flex-shrink:0;
 }
 .topbar-back-btn:hover .ios-back-chevron{ opacity:0.7; }
-.ios-back-chevron{ width:13px; height:22px; }
+.ios-back-chevron{ width:12px; height:20px; }
 /* V0.9.9.66: in gara, l'area fissa si estende oltre il solo topbar — fino alle schede pilota con
    l'usura gomme comprese, cosi' restano sempre visibili scorrendo la classifica sotto. */
 .live-sticky-header{ position:sticky; top:0; z-index:51; background:var(--void); align-self:stretch; flex-shrink:0; }

@@ -8768,8 +8768,10 @@ let __friendsListCache = [];
 function renderFriendsHub(){
   app.innerHTML = `
   <div class="topbar">
-    ${backChevronBtnHTML('friends-hub-back')}
-    <div class="brand hdr">RACING DYNASTY<small>AMICI</small></div>
+    <div class="topbar-left-group">
+      ${backChevronBtnHTML('friends-hub-back')}
+      <div class="brand hdr">RACING DYNASTY<small>AMICI</small></div>
+    </div>
   </div>
   <div class="wrap">
     <div class="panel">
@@ -8825,8 +8827,10 @@ function renderMyProfile(){
   const giorniAttesa = daysUntilNicknameCanChange();
   app.innerHTML = `
   <div class="topbar">
-    ${backChevronBtnHTML('my-profile-hub-back')}
-    <div class="brand hdr">RACING DYNASTY<small>${t('profile_title')}</small></div>
+    <div class="topbar-left-group">
+      ${backChevronBtnHTML('my-profile-hub-back')}
+      <div class="brand hdr">RACING DYNASTY<small>${t('profile_title')}</small></div>
+    </div>
   </div>
   <div class="wrap">
     <div class="panel">
@@ -8872,8 +8876,10 @@ function renderDailyLeaderboard(tab){
   const titoloTab = tab==='daily' ? t('daily_hub_leaderboard_live') : tab==='yesterday' ? t('daily_hub_leaderboard_yesterday') : t('daily_hub_leaderboard_weighted');
   app.innerHTML = `
   <div class="topbar">
-    ${backChevronBtnHTML('open-daily-season-hub')}
-    <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON — ${titoloTab}</small></div>
+    <div class="topbar-left-group">
+      ${backChevronBtnHTML('open-daily-season-hub')}
+      <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON — ${titoloTab}</small></div>
+    </div>
   </div>
   <div class="wrap">
     <div class="btnrow" style="margin-bottom:14px;">
@@ -8985,8 +8991,10 @@ function renderDailySeasonHub(){
   const salvataggioDaily = loadDailyGameSave(); // V0.9.9.132: run interrotta da riprendere?
   app.innerHTML = `
   <div class="topbar">
-    ${backChevronBtnHTML('go-to-mode-select')}
-    <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON</small></div>
+    <div class="topbar-left-group">
+      ${backChevronBtnHTML('go-to-mode-select')}
+      <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON</small></div>
+    </div>
   </div>
   <div class="wrap">
     <img src="assets/mode-select/daily-season.webp" alt="" style="width:100%;height:220px;object-fit:cover;object-position:center 75%;border-radius:12px;margin-bottom:16px;">
@@ -9038,8 +9046,10 @@ function renderDailySeasonHub(){
 function renderModeSelect(){
   app.innerHTML = `
   <div class="topbar">
-    ${backChevronBtnHTML('mode-select-back-to-title')}
-    <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_title')}</small></div>
+    <div class="topbar-left-group">
+      ${backChevronBtnHTML('mode-select-back-to-title')}
+      <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_title')}</small></div>
+    </div>
   </div>
   <div class="panel">
     <div class="eyebrow" style="font-size:14px;">${t('diff_new_career')}</div>
@@ -10717,8 +10727,10 @@ function renderSeasonLength(){
     : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t20, FULL_TOKENS.t20)}</div>${countdownHTML(tokenState.t20<=0)}`;
   app.innerHTML = `
   <div class="topbar">
-    ${backChevronBtnHTML('go-to-mode-select')}
-    <div class="brand hdr">RACING DYNASTY<small>${t('sl_choose')}</small></div>
+    <div class="topbar-left-group">
+      ${backChevronBtnHTML('go-to-mode-select')}
+      <div class="brand hdr">RACING DYNASTY<small>${t('sl_choose')}</small></div>
+    </div>
   </div>
   <div class="panel">
     <div class="eyebrow">${t('diff_new_career')}</div>
@@ -12099,8 +12111,10 @@ function renderMuseumDynasty(){
 
   app.innerHTML = `
   <div class="topbar">
-    ${backChevronBtnHTML('close-museum')}
-    <div class="brand hdr">RACING DYNASTY<small>${t('museum_title')}</small></div>
+    <div class="topbar-left-group">
+      ${backChevronBtnHTML('close-museum')}
+      <div class="brand hdr">RACING DYNASTY<small>${t('museum_title')}</small></div>
+    </div>
   </div>
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
@@ -12136,8 +12150,10 @@ function renderTrophyRoom(){
 
   app.innerHTML = `
   <div class="topbar">
-    ${backChevronBtnHTML('close-trophy-room')}
-    <div class="brand hdr">RACING DYNASTY<small>${t('tr_title')}</small></div>
+    <div class="topbar-left-group">
+      ${backChevronBtnHTML('close-trophy-room')}
+      <div class="brand hdr">RACING DYNASTY<small>${t('tr_title')}</small></div>
+    </div>
   </div>
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
@@ -12174,8 +12190,10 @@ function renderDriverTrophyRoom(){
 
   app.innerHTML = `
   <div class="topbar">
-    ${backChevronBtnHTML('close-driver-trophy-room')}
-    <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_driver')}</small></div>
+    <div class="topbar-left-group">
+      ${backChevronBtnHTML('close-driver-trophy-room')}
+      <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_driver')}</small></div>
+    </div>
   </div>
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
