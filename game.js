@@ -3656,7 +3656,7 @@ function unpairedMentalities(excludeCatKey){
 
 // V0.9.4.6.1: bonus ristrutturato — una coppia isolata (qualsiasi colore) da +3 flat ai suoi 2 pezzi,
 // come prima. Ma se hai PIU' coppie DELLO STESSO colore (accumulo mirato), il bonus diventa una
-// percentuale sull'INTERA squadra: 2 coppie stesso colore = +45%, 3 coppie stesso colore = +90%.
+// percentuale sull'INTERA squadra (valori originali, poi ribilanciati — vedi nota V0.9.9.136 sotto).
 // Cosi' anche una squadra di pezzi scarsissimi puo' arrivare a competere per il titolo se il giocatore
 // punta tutto su un solo colore. Il bonus precedente viene sempre rimosso e ricalcolato da zero.
 // V0.9.9.136: RIBILANCIATO — concordato con Gio, i valori precedenti (45%/90%) portavano quasi
@@ -9397,7 +9397,7 @@ const ACHIEVEMENTS = [
   { id:'dominio-assoluto', cat:'Difficile', title:'Dominio Assoluto', desc:'Vinci una stagione intera senza perdere un solo Gran Premio.', en:{title:'Absolute Dominance', desc:'Win an entire season without losing a single Grand Prix.'}, es:{title:'Dominio Absoluto', desc:'Gana una temporada entera sin perder un solo Gran Premio.'} },
   { id:'doppietta-perfetta', cat:'Difficile', title:'Doppietta Perfetta', desc:'Vinci Piloti e Costruttori nella stessa stagione.', en:{title:'Perfect Double', desc:'Win both Drivers\' and Constructors\' in the same season.'}, es:{title:'Doblete Perfecto', desc:'Gana Pilotos y Constructores en la misma temporada.'} },
   { id:'senza-rete-di-sicurezza', cat:'Difficile', title:'Senza Rete di Sicurezza', desc:'Vinci una stagione a difficoltà Hardcore.', en:{title:'No Safety Net', desc:'Win a season on Hardcore difficulty.'}, es:{title:'Sin Red de Seguridad', desc:'Gana una temporada en dificultad Hardcore.'} },
-  { id:'risonanza-totale', cat:'Difficile', title:'Risonanza Totale', desc:'Attiva 3 o più coppie della stessa mentalità (+90%).', en:{title:'Total Resonance', desc:'Activate 3 or more pairs of the same mentality (+90%).'}, es:{title:'Resonancia Total', desc:'Activa 3 o más parejas de la misma mentalidad (+90%).'} },
+  { id:'risonanza-totale', cat:'Difficile', title:'Risonanza Totale', desc:'Attiva 3 o più coppie della stessa mentalità (+32%).', en:{title:'Total Resonance', desc:'Activate 3 or more pairs of the same mentality (+32%).'}, es:{title:'Resonancia Total', desc:'Activa 3 o más parejas de la misma mentalidad (+32%).'} },
   { id:'dal-nulla-all-olimpo', cat:'Difficile', title:'Dal Nulla all\'Olimpo', desc:'Vinci il titolo Costruttori partendo da rating scuderia sotto 55 al Draft.', en:{title:'From Nothing to Olympus', desc:'Win the Constructors\' title starting from a team rating below 55 at the Draft.'}, es:{title:'De la Nada al Olimpo', desc:'Gana el título de Constructores partiendo de un rating de escudería inferior a 55 en el Draft.'} },
   { id:'collezionista-assoluto', cat:'Difficile', title:'Collezionista Assoluto', desc:'Completa la Sala Trofei al 100%.', en:{title:'Ultimate Collector', desc:'Complete the Trophy Room 100%.'}, es:{title:'Coleccionista Absoluto', desc:'Completa la Sala de Trofeos al 100%.'} },
   { id:'anima-della-scuderia', cat:'Difficile', title:'Anima della Scuderia', desc:'Completa il Museo Dynasty con ogni pilota e componente del gioco.', en:{title:'Soul of the Team', desc:'Complete the Dynasty Museum with every driver and component in the game.'}, es:{title:'Alma de la Escudería', desc:'Completa el Museo Dynasty con todos los pilotos y componentes del juego.'} },
@@ -14385,12 +14385,12 @@ function guideSynergyStackDemoHTML(){
     <div class="guide-special-demo">
       <div class="gsd-title" style="color:${m.color};"><img class=ico src=assets/icons/lightning.png> Stacked synergies — 2 pairs of the same mentality</div>
       <div class="gsd-circles">${circle(true)}${circle(true)}</div>
-      <div class="guide-section-body">If you have <b>2 pairs</b> (4 pieces in total) sharing the same "${lbl}" mentality, each pair's flat bonus is replaced by a <b>+45%</b> multiplier on the whole team's rating. With <b>3 or more pairs</b> of the same mentality, the multiplier rises to <b>+90%</b> — almost double the rating. It's one of the most powerful (and rarest to build) situations in the game: worth planning scouting and development around a single mentality if you already have 2-3 pieces sharing it.</div>
+      <div class="guide-section-body">If you have <b>2 pairs</b> (4 pieces in total) sharing the same "${lbl}" mentality, each pair's flat bonus is replaced by a <b>+18%</b> multiplier on the whole team's rating. With <b>3 or more pairs</b> of the same mentality, the multiplier rises to <b>+32%</b>. It's one of the most demanding situations to build in the game (needs up to 6 out of 7 pieces sharing the same mentality): worth planning scouting and development around a single mentality if you already have 2-3 pieces sharing it.</div>
     </div>
     <div class="guide-special-demo semaforo-widget semaforo-on-fire" style="border:1px solid rgba(255,106,26,0.4);">
       <div class="gsd-title" style="color:var(--amber);"><img class=ico src=assets/icons/fire.png> "On fire" semaphore — 3+ different synergies together</div>
       <div class="gsd-circles">${fireCircles}</div>
-      <div class="guide-section-body">If instead you have <b>3 or more pairs of DIFFERENT mentalities</b> active at the same time (none repeated), the whole semaphore visually catches fire and the team gets an extra <b>+5%</b> rating, added on top of the flat bonuses each pair already earned. It's the sign your team is well-rounded in depth, not just stacked on a single mentality — keep an eye on it in the Hub and Pit Lane: if you see the semaphore light up like that, you're doing something right.</div>
+      <div class="guide-section-body">If instead you have <b>3 or more pairs of DIFFERENT mentalities</b> active at the same time (none repeated), the whole semaphore visually catches fire and the team gets an extra <b>+8%</b> rating, added on top of the flat bonuses each pair already earned. It's the sign your team is well-rounded in depth, not just stacked on a single mentality — keep an eye on it in the Hub and Pit Lane: if you see the semaphore light up like that, you're doing something right.</div>
     </div>`;
   }
   if(currentLang==='es'){
@@ -14398,24 +14398,24 @@ function guideSynergyStackDemoHTML(){
     <div class="guide-special-demo">
       <div class="gsd-title" style="color:${m.color};"><img class=ico src=assets/icons/lightning.png> Sinergias apiladas — 2 parejas de la misma mentalidad</div>
       <div class="gsd-circles">${circle(true)}${circle(true)}</div>
-      <div class="guide-section-body">Si tienes <b>2 parejas</b> (4 piezas en total) que comparten la misma mentalidad "${lbl}", el bonus fijo de cada pareja se sustituye por un multiplicador del <b>+45%</b> sobre el rating de toda la escudería. Con <b>3 o más parejas</b> de la misma mentalidad, el multiplicador sube al <b>+90%</b> — casi el doble del rating. Es una de las situaciones más poderosas (y más raras de conseguir) del juego: vale la pena planificar el scouting y el desarrollo en torno a una sola mentalidad si ya tienes 2-3 piezas que la comparten.</div>
+      <div class="guide-section-body">Si tienes <b>2 parejas</b> (4 piezas en total) que comparten la misma mentalidad "${lbl}", el bonus fijo de cada pareja se sustituye por un multiplicador del <b>+18%</b> sobre el rating de toda la escudería. Con <b>3 o más parejas</b> de la misma mentalidad, el multiplicador sube al <b>+32%</b>. Es una de las situaciones más exigentes de conseguir del juego (requiere hasta 6 de 7 piezas con la misma mentalidad): vale la pena planificar el scouting y el desarrollo en torno a una sola mentalidad si ya tienes 2-3 piezas que la comparten.</div>
     </div>
     <div class="guide-special-demo semaforo-widget semaforo-on-fire" style="border:1px solid rgba(255,106,26,0.4);">
       <div class="gsd-title" style="color:var(--amber);"><img class=ico src=assets/icons/fire.png> Semáforo "en llamas" — 3+ sinergias distintas juntas</div>
       <div class="gsd-circles">${fireCircles}</div>
-      <div class="guide-section-body">Si en cambio tienes <b>3 o más parejas de mentalidades DISTINTAS</b> activas al mismo tiempo (ninguna repetida), todo el semáforo se enciende visualmente y la escudería recibe un <b>+5%</b> adicional de rating, sumado a los bonus fijos que cada pareja ya obtuvo. Es la señal de que tu equipo está bien equilibrado en profundidad, no solo apilado en una sola mentalidad — vigílalo en el Hub y en Pit Lane: si ves el semáforo encenderse así, estás haciendo algo bien.</div>
+      <div class="guide-section-body">Si en cambio tienes <b>3 o más parejas de mentalidades DISTINTAS</b> activas al mismo tiempo (ninguna repetida), todo el semáforo se enciende visualmente y la escudería recibe un <b>+8%</b> adicional de rating, sumado a los bonus fijos que cada pareja ya obtuvo. Es la señal de que tu equipo está bien equilibrado en profundidad, no solo apilado en una sola mentalidad — vigílalo en el Hub y en Pit Lane: si ves el semáforo encenderse así, estás haciendo algo bien.</div>
     </div>`;
   }
   return `
   <div class="guide-special-demo">
     <div class="gsd-title" style="color:${m.color};"><img class=ico src=assets/icons/lightning.png> Sinergie impilate — 2 coppie della stessa mentalità</div>
     <div class="gsd-circles">${circle(true)}${circle(true)}</div>
-    <div class="guide-section-body">Se hai <b>2 coppie</b> (4 pezzi in tutto) che condividono la stessa mentalità "${lbl}", il bonus flat di ogni coppia viene sostituito da un moltiplicatore del <b>+45%</b> sul rating dell'intera scuderia. Con <b>3 o più coppie</b> della stessa mentalità, il moltiplicatore sale al <b>+90%</b> — quasi il doppio del rating. È una delle situazioni più potenti (e più rare da costruire) del gioco: vale la pena pianificare scouting e sviluppo attorno a un'unica mentalità se ti capitano già 2-3 pezzi che la condividono.</div>
+    <div class="guide-section-body">Se hai <b>2 coppie</b> (4 pezzi in tutto) che condividono la stessa mentalità "${lbl}", il bonus flat di ogni coppia viene sostituito da un moltiplicatore del <b>+18%</b> sul rating dell'intera scuderia. Con <b>3 o più coppie</b> della stessa mentalità, il moltiplicatore sale al <b>+32%</b>. È una delle situazioni più impegnative da costruire del gioco (richiede fino a 6 pezzi su 7 con la stessa mentalità): vale la pena pianificare scouting e sviluppo attorno a un'unica mentalità se ti capitano già 2-3 pezzi che la condividono.</div>
   </div>
   <div class="guide-special-demo semaforo-widget semaforo-on-fire" style="border:1px solid rgba(255,106,26,0.4);">
     <div class="gsd-title" style="color:var(--amber);"><img class=ico src=assets/icons/fire.png> Semaforo "in fiamme" — 3+ sinergie diverse insieme</div>
     <div class="gsd-circles">${fireCircles}</div>
-    <div class="guide-section-body">Se invece hai <b>3 o più coppie di mentalità DIVERSE</b> attive contemporaneamente (nessuna ripetuta), l'intero semaforo prende fuoco visivamente e la scuderia riceve un ulteriore <b>+5%</b> di rating, sommato ai bonus flat già ottenuti da ciascuna coppia. È il segnale che la tua squadra è ben assortita in profondità, non solo su una singola mentalità — tienilo d'occhio nell'Hub e in Pit Lane: se vedi il semaforo animarsi così, stai facendo qualcosa di giusto.</div>
+    <div class="guide-section-body">Se invece hai <b>3 o più coppie di mentalità DIVERSE</b> attive contemporaneamente (nessuna ripetuta), l'intero semaforo prende fuoco visivamente e la scuderia riceve un ulteriore <b>+8%</b> di rating, sommato ai bonus flat già ottenuti da ciascuna coppia. È il segnale che la tua squadra è ben assortita in profondità, non solo su una singola mentalità — tienilo d'occhio nell'Hub e in Pit Lane: se vedi il semaforo animarsi così, stai facendo qualcosa di giusto.</div>
   </div>`;
 }
 
