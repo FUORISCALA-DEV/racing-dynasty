@@ -7994,6 +7994,14 @@ const GOAT_GUIDE_IMG_SRC = 'assets/goat/goat-guide.webp'; // V0.9.7.1: un solo r
 const GOAT_HELMET_FERRARI_SRC = 'assets/goat/goat-helmet-ferrari.png'; // V0.9.7.6: casco rosso Ferrari, layer dedicato SOLO per THE GOAT nell'auto in gara
 // restituisce un <img> con la bandiera SVG; usare SOLO in contesti HTML (mai dentro un <option>,
 // che non puo' contenere immagini - per quel caso specifico vedi flagEmoji() sotto).
+// V0.9.9.149: pulsante indietro in stile iOS — richiesto da Gio: "come l'indietro di iphone, un
+// minore messo bene con il suo spazio, non il carattere < (questo è una merda), fallo in stile
+// Apple, senza testo". Chevron SVG pulito invece del carattere "<" grezzo, nessuna etichetta.
+function backChevronBtnHTML(action, extraAttrs){
+  return `<button class="topbar-back-btn" data-action="${action}" aria-label="${t('daily_hub_back')}" ${extraAttrs||''}>
+    <svg viewBox="0 0 12 20" class="ios-back-chevron"><path d="M10 2L2 10L10 18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>`;
+}
 function flag(country){
   if(!country) return '<span class="flag-ico flag-ico-unknown" aria-hidden="true"><img class=ico src=assets/icons/white_flag.png>️</span>';
   return `<img class="flag-ico" src="assets/flags/${slugify(country)}.svg" alt="" title="${nationLabel(country)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'flag-ico flag-ico-unknown',innerHTML:'<img class=ico src=assets/icons/white_flag.png>️'}))">`;
@@ -8760,7 +8768,7 @@ let __friendsListCache = [];
 function renderFriendsHub(){
   app.innerHTML = `
   <div class="topbar">
-    <button class="topbar-back-btn" data-action="friends-hub-back">← ${t('daily_hub_back')}</button>
+    ${backChevronBtnHTML('friends-hub-back')}
     <div class="brand hdr">RACING DYNASTY<small>AMICI</small></div>
   </div>
   <div class="wrap">
@@ -8817,7 +8825,7 @@ function renderMyProfile(){
   const giorniAttesa = daysUntilNicknameCanChange();
   app.innerHTML = `
   <div class="topbar">
-    <button class="topbar-back-btn" data-action="my-profile-hub-back">← ${t('daily_hub_back')}</button>
+    ${backChevronBtnHTML('my-profile-hub-back')}
     <div class="brand hdr">RACING DYNASTY<small>${t('profile_title')}</small></div>
   </div>
   <div class="wrap">
@@ -8864,7 +8872,7 @@ function renderDailyLeaderboard(tab){
   const titoloTab = tab==='daily' ? t('daily_hub_leaderboard_live') : tab==='yesterday' ? t('daily_hub_leaderboard_yesterday') : t('daily_hub_leaderboard_weighted');
   app.innerHTML = `
   <div class="topbar">
-    <button class="topbar-back-btn" data-action="open-daily-season-hub">← ${t('daily_hub_back')}</button>
+    ${backChevronBtnHTML('open-daily-season-hub')}
     <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON — ${titoloTab}</small></div>
   </div>
   <div class="wrap">
@@ -8977,7 +8985,7 @@ function renderDailySeasonHub(){
   const salvataggioDaily = loadDailyGameSave(); // V0.9.9.132: run interrotta da riprendere?
   app.innerHTML = `
   <div class="topbar">
-    <button class="topbar-back-btn" data-action="go-to-mode-select">← ${t('daily_hub_back')}</button>
+    ${backChevronBtnHTML('go-to-mode-select')}
     <div class="brand hdr">RACING DYNASTY<small>DAILY SEASON</small></div>
   </div>
   <div class="wrap">
@@ -9029,6 +9037,10 @@ function renderDailySeasonHub(){
 }
 function renderModeSelect(){
   app.innerHTML = `
+  <div class="topbar">
+    ${backChevronBtnHTML('mode-select-back-to-title')}
+    <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_title')}</small></div>
+  </div>
   <div class="panel">
     <div class="eyebrow" style="font-size:14px;">${t('diff_new_career')}</div>
     <h2 class="hdr" style="font-size:27px;">${t('mode_select_title')}</h2>
@@ -10704,6 +10716,10 @@ function renderSeasonLength(){
     ? `<div class="dim mono" style="font-size:11px;color:var(--legendary);margin-top:4px;">${t('sl_unlimited')}</div>`
     : `<div class="dim mono" style="font-size:11px;margin-top:4px;">${t('sl_tokens_left', tokenState.t20, FULL_TOKENS.t20)}</div>${countdownHTML(tokenState.t20<=0)}`;
   app.innerHTML = `
+  <div class="topbar">
+    ${backChevronBtnHTML('go-to-mode-select')}
+    <div class="brand hdr">RACING DYNASTY<small>${t('sl_choose')}</small></div>
+  </div>
   <div class="panel">
     <div class="eyebrow">${t('diff_new_career')}</div>
     <h2 class="hdr" style="font-size:24px;">${t('sl_choose')}</h2>
@@ -10750,7 +10766,6 @@ function renderSeasonLength(){
     </div>
     <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;">${t('sl_garage_soon')}</div>
   </div>
-  <div class="btnrow"><button class="ghost" data-action="go-to-mode-select">${t('back_to_mode_select')}</button></div>
   `;
   bindActions();
   clearInterval(__slTokenRefillCheckTimer);
@@ -12084,7 +12099,7 @@ function renderMuseumDynasty(){
 
   app.innerHTML = `
   <div class="topbar">
-    <button class="topbar-back-btn" data-action="close-museum">${t('museum_back')}</button>
+    ${backChevronBtnHTML('close-museum')}
     <div class="brand hdr">RACING DYNASTY<small>${t('museum_title')}</small></div>
   </div>
   <div class="hero" style="padding:26px 20px 20px;">
@@ -12121,7 +12136,7 @@ function renderTrophyRoom(){
 
   app.innerHTML = `
   <div class="topbar">
-    <button class="topbar-back-btn" data-action="close-trophy-room">${t('tr_back')}</button>
+    ${backChevronBtnHTML('close-trophy-room')}
     <div class="brand hdr">RACING DYNASTY<small>${t('tr_title')}</small></div>
   </div>
   <div class="hero" style="padding:26px 20px 20px;">
@@ -12159,7 +12174,7 @@ function renderDriverTrophyRoom(){
 
   app.innerHTML = `
   <div class="topbar">
-    <button class="topbar-back-btn" data-action="close-driver-trophy-room">${t('tr_back')}</button>
+    ${backChevronBtnHTML('close-driver-trophy-room')}
     <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_driver')}</small></div>
   </div>
   <div class="hero" style="padding:26px 20px 20px;">
@@ -13185,6 +13200,7 @@ function onAction(e){
     }, t('dh_quit'));
   }
   else if(action==='go-to-mode-select'){ state.phase='mode-select'; render(); }
+  else if(action==='mode-select-back-to-title'){ goHome(); }
   else if(action==='sign-in-google'){ signInWithGoogle(); }
   else if(action==='sign-out-user'){ signOutUser(); }
   else if(action==='unlock-premium-placeholder'){

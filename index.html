@@ -161,15 +161,16 @@ h1,h2,h3{margin:0;font-weight:800;letter-spacing:0.02em;}
   border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px;flex-wrap:wrap;
   position:sticky;top:0;z-index:50;background:var(--void);padding-top:12px;margin-top:-12px;
 }
-/* V0.9.9.147: pulsante indietro consistente — richiesto da Gio: "il tasto indietro deve essere in
-   una posizione simile in ogni schermata in modo che il giocatore sappia dove guardare". Piccolo,
-   nella topbar (già uno schema fisso in cima usato da più schermate), sempre nello stesso punto. */
+/* V0.9.9.149: pulsante indietro in stile iOS — richiesto da Gio: "come l'indietro di iphone, un
+   minore messo bene con il suo spazio, senza testo". Chevron pulito, area di tocco generosa,
+   allineato a sinistra, sempre nello stesso punto in ogni schermata che lo usa. */
 .topbar-back-btn{
-  background:none; border:none; color:var(--dim); font-family:var(--font-mono); font-size:12px;
-  font-weight:700; letter-spacing:0.03em; cursor:pointer; padding:4px 0; order:-1; flex-basis:100%;
-  text-align:left;
+  background:none; border:none; color:var(--text); cursor:pointer; order:-1; flex-basis:100%;
+  display:flex; align-items:center; justify-content:flex-start;
+  width:40px; height:32px; padding:0; margin-bottom:2px;
 }
-.topbar-back-btn:hover{ color:var(--text); }
+.topbar-back-btn:hover .ios-back-chevron{ opacity:0.7; }
+.ios-back-chevron{ width:13px; height:22px; }
 /* V0.9.9.66: in gara, l'area fissa si estende oltre il solo topbar — fino alle schede pilota con
    l'usura gomme comprese, cosi' restano sempre visibili scorrendo la classifica sotto. */
 .live-sticky-header{ position:sticky; top:0; z-index:51; background:var(--void); align-self:stretch; flex-shrink:0; }
