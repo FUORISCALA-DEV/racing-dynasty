@@ -44,6 +44,13 @@ img{
   -webkit-user-drag:none; user-drag:none;
   pointer-events:none;
 }
+/* V0.9.9.146: rimosso il flash blu di evidenziazione al tocco — richiesto da Gio: "se clicco
+   continuamente diventano azzurre come se fossero selezionate". Problema diverso dalla selezione
+   testo già disattivata sopra: questo è il feedback visivo di default del browser sul tocco/click
+   (tap-highlight su Chrome/Android). Tolto solo per click/tocco — l'indicatore da navigazione
+   tastiera (:focus-visible) resta attivo per l'accessibilità. */
+*{ -webkit-tap-highlight-color:transparent; }
+button:focus:not(:focus-visible), a:focus:not(:focus-visible), [data-action]:focus:not(:focus-visible){ outline:none; }
 /* V0.9.9.77: barra di scroll personalizzata ambra, ma visibile SOLO durante lo scroll vero
    dell'utente (classe .is-scrolling aggiunta/rimossa via JS su evento scroll) — non deve comparire
    solo perché il contenuto della pagina cambia altezza da un ridisegno, quello dava fastidio. */
