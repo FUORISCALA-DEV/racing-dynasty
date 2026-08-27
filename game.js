@@ -611,6 +611,10 @@ const I18N = {
     daily_hub_leaderboard_weighted: 'Classifica generale', daily_hub_back: '← Indietro',
     friends_hub_button: 'Amici', friends_badge_label: 'AMICI', friends_my_code_title: 'Il tuo codice invito', friends_my_code_desc: 'Condividilo con un amico (WhatsApp, Discord...) — lo inserisce lui per aggiungerti.',
     friends_copy_code: 'Copia', friends_code_copied: 'Copiato!', friends_code_error: 'Errore',
+    friends_share_btn: 'Condividi', friends_share_generating: '...', friends_share_cta: 'Aggiungimi con questo codice',
+    friends_share_text: (url,code)=>`Gioca a Racing Dynasty e aggiungimi come amico con questo codice: ${code}\n${url}`,
+    friends_share_fallback: (testo)=>`Immagine salvata! Testo da condividere insieme:\n\n${testo}`,
+    friends_share_error: 'Non sono riuscito a generare l\'immagine. Riprova.',
     friends_add_title: 'Aggiungi un amico', friends_add_btn: 'Aggiungi',
     friends_checking: 'Verifica in corso...', friends_error_invalid: 'Codice non valido.', friends_error_self: 'Non puoi aggiungere te stesso.',
     friends_already: 'Eravate già amici.', friends_added: 'Amico aggiunto!',
@@ -956,6 +960,10 @@ const I18N = {
     daily_hub_leaderboard_weighted: 'Overall leaderboard', daily_hub_back: '← Back',
     friends_hub_button: 'Friends', friends_badge_label: 'FRIEND', friends_my_code_title: 'Your invite code', friends_my_code_desc: 'Share it with a friend (WhatsApp, Discord...) — they enter it to add you.',
     friends_copy_code: 'Copy', friends_code_copied: 'Copied!', friends_code_error: 'Error',
+    friends_share_btn: 'Share', friends_share_generating: '...', friends_share_cta: 'Add me with this code',
+    friends_share_text: (url,code)=>`Play Racing Dynasty and add me as a friend with this code: ${code}\n${url}`,
+    friends_share_fallback: (testo)=>`Image saved! Text to share along with it:\n\n${testo}`,
+    friends_share_error: "Couldn't generate the image. Try again.",
     friends_add_title: 'Add a friend', friends_add_btn: 'Add',
     friends_checking: 'Checking...', friends_error_invalid: 'Invalid code.', friends_error_self: "You can't add yourself.",
     friends_already: 'You were already friends.', friends_added: 'Friend added!',
@@ -1297,6 +1305,10 @@ const I18N = {
     daily_hub_leaderboard_weighted: 'Clasificación general', daily_hub_back: '← Volver',
     friends_hub_button: 'Amigos', friends_badge_label: 'AMIGOS', friends_my_code_title: 'Tu código de invitación', friends_my_code_desc: 'Compártelo con un amigo (WhatsApp, Discord...) — lo introduce para añadirte.',
     friends_copy_code: 'Copiar', friends_code_copied: '¡Copiado!', friends_code_error: 'Error',
+    friends_share_btn: 'Compartir', friends_share_generating: '...', friends_share_cta: 'Añádeme con este código',
+    friends_share_text: (url,code)=>`Juega a Racing Dynasty y añádeme como amigo con este código: ${code}\n${url}`,
+    friends_share_fallback: (testo)=>`¡Imagen guardada! Texto para compartir junto a ella:\n\n${testo}`,
+    friends_share_error: 'No se pudo generar la imagen. Inténtalo de nuevo.',
     friends_add_title: 'Añadir un amigo', friends_add_btn: 'Añadir',
     friends_checking: 'Comprobando...', friends_error_invalid: 'Código no válido.', friends_error_self: 'No puedes añadirte a ti mismo.',
     friends_already: 'Ya erais amigos.', friends_added: '¡Amigo añadido!',
@@ -8593,6 +8605,7 @@ function renderFriendsHub(){
       <div style="display:flex;gap:8px;align-items:center;">
         <div class="mono" id="myFriendCodeDisplay" style="flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:16px;letter-spacing:0.05em;text-align:center;">···</div>
         <button class="ghost" data-action="copy-friend-code" style="flex-shrink:0;">${t('friends_copy_code')}</button>
+        <button class="primary" data-action="share-friend-code" style="flex-shrink:0;">${t('friends_share_btn')}</button>
       </div>
     </div>
     <div class="panel" style="margin-top:12px;">
@@ -9704,6 +9717,80 @@ async function getOrCreateMyFriendCode(){
     myFriendCodeCache = nuovoCodice;
     return myFriendCodeCache;
   }catch(e){ console.warn('Creazione codice invito non riuscita:', e); myFriendCodeCache = null; return null; }
+}
+// V0.9.9.118: immagine condivisibile del codice invito — posa pilota casuale (stessa fascia usata
+// a fine stagione), codice in grande tematizzato col colore della fascia, logo di sfondo. Stesso
+// schema già collaudato di buildShareCardCanvas/shareResultCard, qui semplificato per un'immagine
+// quadrata (formato social) invece della carta verticale.
+async function buildFriendCodeShareCanvas(code){
+  const fasce = ['debole','discreto','intermedio','ottimo','eccellente','legendary','immortal'];
+  const bandCasuale = fasce[Math.floor(Math.random()*fasce.length)];
+  const poseNumCasuale = 1 + Math.floor(Math.random()*5);
+  const poseSrc = `assets/share-poses/pose${poseNumCasuale}_${bandCasuale}.webp`;
+  const accent = CAR_RARITY_COLOR[bandCasuale];
+
+  const [logoImg, poseImg] = await Promise.all([loadImg(LOGO_DATA_URI), loadImg(poseSrc)]);
+
+  const S = 1080; // immagine quadrata, formato social
+  const cv = document.createElement('canvas');
+  cv.width = S; cv.height = S;
+  const ctx = cv.getContext('2d');
+
+  // sfondo scuro con un alone del colore della fascia dietro la posa
+  const bg = ctx.createRadialGradient(S/2, S*0.42, S*0.1, S/2, S*0.42, S*0.65);
+  bg.addColorStop(0, accent+'33'); bg.addColorStop(1, '#0d0d0f');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, S, S);
+
+  // logo in alto, centrato
+  const logoW = S*0.42, logoH = logoImg.height*(logoW/logoImg.width);
+  ctx.globalAlpha = 0.92;
+  ctx.drawImage(logoImg, (S-logoW)/2, 46, logoW, logoH);
+  ctx.globalAlpha = 1;
+
+  // posa pilota, grande, centrata verticalmente nella zona centrale
+  const poseH = S*0.62, poseW = poseImg.width*(poseH/poseImg.height);
+  ctx.save();
+  ctx.filter = 'blur(22px)'; ctx.globalAlpha = 0.35;
+  ctx.drawImage(poseImg, (S-poseW)/2, S*0.22, poseW, poseH);
+  ctx.restore();
+  ctx.drawImage(poseImg, (S-poseW)/2, S*0.20, poseW, poseH);
+
+  // codice in grande, tematizzato col colore della fascia, in basso
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(8,8,11,0.88)';
+  ctx.fillRect(0, S*0.855, S, S*0.145);
+  ctx.fillStyle = accent;
+  ctx.font = '900 64px -apple-system,sans-serif';
+  ctx.shadowColor = accent; ctx.shadowBlur = 24;
+  ctx.fillText(code, S/2, S*0.925);
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#c9c9d0';
+  ctx.font = '600 20px -apple-system,sans-serif';
+  ctx.fillText(t('friends_share_cta'), S/2, S*0.965);
+  ctx.textAlign = 'left';
+
+  return cv;
+}
+async function shareFriendCode(code){
+  try{
+    const cv = await buildFriendCodeShareCanvas(code);
+    const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
+    const fileName = 'racing-dynasty-amico.png';
+    const gameUrl = 'https://fuoriscala-dev.github.io/racing-dynasty/';
+    const shareText = t('friends_share_text', gameUrl, code);
+    if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
+      await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText, url: gameUrl });
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = fileName; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 2000);
+      alert(t('friends_share_fallback', shareText));
+    }
+  }catch(e){
+    console.warn('Generazione immagine condivisibile codice amico non riuscita:', e);
+    alert(t('friends_share_error'));
+  }
 }
 async function redeemFriendCode(code){
   if(!currentUser || !supabaseClient) return { ok:false, error:'not_authenticated' };
@@ -12787,6 +12874,16 @@ function onAction(e){
     closeMenuPanel();
     openRedeemCodePanel();
   }
+  else if(action==='share-friend-code'){
+    const displayEl = document.getElementById('myFriendCodeDisplay');
+    const testo = displayEl ? displayEl.textContent : '';
+    if(testo && testo !== '···'){
+      const testoOriginale = el.textContent;
+      el.textContent = t('friends_share_generating');
+      el.disabled = true;
+      shareFriendCode(testo).finally(()=>{ el.textContent = testoOriginale; el.disabled = false; });
+    }
+  }
   else if(action==='copy-friend-code'){
     const displayEl = document.getElementById('myFriendCodeDisplay');
     const testo = displayEl ? displayEl.textContent : '';
@@ -13220,6 +13317,15 @@ function onAction(e){
 /* ---------------- V0.9.2: intro d'apertura (muta, una sola volta per avvio) ---------------- */
 let __introCarAudioEl = null; // V0.9.7.8.15: tracciato per poterlo sfumare, non solo interromperlo di colpo
 function playIntroOnce(){
+  // V0.9.9.119: BUG CRITICO CORRETTO — segnalato da Gio come "schermo nero, app infruibile".
+  // playIntroOnce() viene chiamata da 6 punti diversi nel codice; in 5 di questi il pattern e'
+  // "state.phase='title'; render(); playIntroOnce();" — se questa sequenza scatta due volte in
+  // rapida successione (capita in alcuni percorsi di avvio), si creavano DUE overlay con lo STESSO
+  // id fisso 'introOverlay' sovrapposti nel DOM. removeIntroOverlayIfPresent() usa getElementById,
+  // che trova e rimuove SOLO il primo — il secondo restava bloccato per sempre sopra tutto lo
+  // schermo (schermo nero fisso, esattamente il sintomo segnalato). Corretto rimuovendo sempre
+  // l'overlay precedente PRIMA di crearne uno nuovo, cosi' non possono mai coesisterne due.
+  removeIntroOverlayIfPresent();
   __introCarAudioEl = playRealSfx('audio/sfx_intro_car.mp3'); // V0.9.7.8.14 — resta lungo (10s) di suo
   const overlay = document.createElement('div');
   overlay.id = 'introOverlay';
@@ -13233,7 +13339,9 @@ function playIntroOnce(){
     <div class="intro-whiteout"></div>
   `;
   document.body.appendChild(overlay);
-  setTimeout(()=>{ overlay.remove(); }, 2600);
+  // il timer si controlla da solo: rimuove SOLO se e' ancora lui l'overlay presente (per id e per
+  // riferimento diretto all'elemento), non un overlay piu' nuovo creato nel frattempo
+  setTimeout(()=>{ if(document.getElementById('introOverlay')===overlay) overlay.remove(); }, 2600);
 }
 // V0.9.7.8.15: quando si lascia il titolo per un'altra schermata, se il suono dell'auto d'apertura
 // sta ancora suonando lo sfumiamo in 0.5s invece di tagliarlo di netto — nessuna interruzione brusca.
@@ -13255,8 +13363,10 @@ function fadeOutIntroCarAudioIfNeeded(){
 // nuova si caricava sotto ma l'overlay restava sopra fino alla scadenza del suo timer, coprendo
 // tutto e sembrando uno schermo vuoto. Ora lo rimuoviamo subito, non aspettiamo piu' il timer.
 function removeIntroOverlayIfPresent(){
-  const overlay = document.getElementById('introOverlay');
-  if(overlay) overlay.remove();
+  // V0.9.9.119: querySelectorAll invece di getElementById — rete di sicurezza extra, rimuove TUTTI
+  // gli overlay eventualmente presenti (anche se in teoria non dovrebbero mai essercene piu' di
+  // uno dopo il fix in playIntroOnce), non solo il primo che l'id incontra.
+  document.querySelectorAll('#introOverlay').forEach(el=>el.remove());
 }
 
 /* ==================== V0.9.4.2.8: icona hamburger + pannello menu — logica ====================
