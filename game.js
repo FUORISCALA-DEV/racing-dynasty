@@ -10205,14 +10205,9 @@ function renderStudioSplash(){
     if(state.phase!=='studio-splash') return;
     if(root) root.classList.add('leaving');
     setTimeout(()=>{
-      if(!hasLangBeenChosen()){
-        state.phase = 'lang-select';
-      } else if(isStreamerModeOn() && !isEmbeddedStreamerInstance()){
-        state.phase = 'streamer-continue-check';
-      } else {
-        state.phase = 'title';
-        playIntroOnce();
-      }
+      const fase = determinePhaseAfterSplash();
+      state.phase = fase;
+      if(fase==='title') playIntroOnce();
       render();
     }, 280);
   };
@@ -14866,11 +14861,32 @@ let museumPreviousPhase = 'title'; // V0.9.4.1: dove tornare chiudendo il Museo 
 // qualunque motivo (rete, file mancante, JSON rotto), il gioco parte comunque normalmente — la
 // manutenzione deve essere una scelta esplicita, mai un blocco accidentale.
 const MAINTENANCE_BYPASS_KEY = 'racingDynastyMaintenanceBypassV1';
+// V0.9.9.129: estratta dalla logica già esistente dentro lo splash (che gestiva correttamente il
+// salto di lingua/streamer, ma solo DOPO aver comunque mostrato lo splash) — ora riusata anche al
+// boot, per saltare lo splash stesso quando l'utente l'ha già visto prima. Corregge il problema
+// segnalato da Gio: il login Google causa un ricaricamento pagina (redirect fisico, inevitabile),
+// che senza questo fix rimostrava sempre lo splash da zero, sembrando che il login non fosse mai
+// avvenuto.
+function determinePhaseAfterSplash(){
+  if(!hasLangBeenChosen()) return 'lang-select';
+  if(isStreamerModeOn() && !isEmbeddedStreamerInstance()) return 'streamer-continue-check';
+  return 'title';
+}
 function bootGameNormally(){
-  state = { phase:'studio-splash', selectedDifficulty:'medio' };
-  initSidebar();
-  applyStaticMenuTranslations();
-  render(); // V0.9.8.9: lo splash parte SUBITO, pulito — Supabase si inizializza un attimo dopo
+  if(hasLangBeenChosen()){
+    // già visto lo splash in una visita precedente — si salta del tutto, si va dritti alla fase giusta
+    const faseIniziale = determinePhaseAfterSplash();
+    state = { phase:faseIniziale, selectedDifficulty:'medio' };
+    initSidebar();
+    applyStaticMenuTranslations();
+    render();
+    if(faseIniziale==='title') playIntroOnce();
+  } else {
+    state = { phase:'studio-splash', selectedDifficulty:'medio' };
+    initSidebar();
+    applyStaticMenuTranslations();
+    render(); // V0.9.8.9: lo splash parte SUBITO, pulito — Supabase si inizializza un attimo dopo
+  }
   setTimeout(()=>{
     initSupabase();
     handlePremiumCheckoutReturn();
