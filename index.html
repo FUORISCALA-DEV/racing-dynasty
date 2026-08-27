@@ -1531,9 +1531,18 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
   padding: 0;
   box-shadow: 0 6px 18px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.03);
   transition: filter .12s ease, border-color .12s ease;
+  /* V0.9.9.143: BUG CONFERMATO CON SCREENSHOT da Gio — su WebKit/Safari, un'animazione CSS
+     altrove nella pagina (le transizioni tra schermate) può far "tremare" momentaneamente elementi
+     position:fixed anche se non sono discendenti dell'elemento animato — un comportamento noto e
+     documentato di questo motore di rendering, non riproducibile nell'ambiente Chromium usato per
+     i test in questa sessione (WebKit non installabile per restrizioni di rete). Corretto forzando
+     questo pulsante sul proprio livello di rendering stabile (GPU layer), isolandolo da qualunque
+     animazione accada altrove sulla pagina. */
+  will-change: transform;
+  transform: translateZ(0);
 }
 .menu-toggle-btn:hover{ filter: brightness(1.18); border-color: #3a4356; }
-.menu-toggle-btn:active{ transform: translateY(1px); filter: brightness(0.95); }
+.menu-toggle-btn:active{ transform: translateY(1px) translateZ(0); filter: brightness(0.95); }
 .menu-toggle-btn:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 1px; }
 
 .menu-toggle-icon{
@@ -1562,9 +1571,12 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
   padding: 0;
   box-shadow: 0 6px 18px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.03);
   transition: filter .12s ease, border-color .12s ease;
+  /* V0.9.9.143: stessa correzione del pulsante menu — vedi commento lì per i dettagli completi */
+  will-change: transform;
+  transform: translateZ(0);
 }
 .fullscreen-toggle-btn:hover{ filter: brightness(1.18); border-color: #3a4356; }
-.fullscreen-toggle-btn:active{ transform: translateY(1px); filter: brightness(0.95); }
+.fullscreen-toggle-btn:active{ transform: translateY(1px) translateZ(0); filter: brightness(0.95); }
 .fullscreen-toggle-btn:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 1px; }
 .fullscreen-toggle-icon{ width: 18px; height: 18px; color: var(--amber); }
 
