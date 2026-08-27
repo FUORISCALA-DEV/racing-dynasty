@@ -290,10 +290,14 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .se-driver-summary-line strong{ color:var(--text); font-weight:700; }
 /* V0.9.9.83: countdown e riga trofei nella carta Daily Season */
 .daily-countdown{ font-family:var(--font-mono); font-size:15px; font-weight:700; color:var(--amber); letter-spacing:0.04em; transition:color 0.3s; }
-.daily-countdown.daily-countdown-done{ color:var(--dim); }
+/* V0.9.9.153: BUG CORRETTO — segnalato da Gio, "prossima Daily tra... quando è in grigio è poco
+   leggibile, stessa cosa per nessun reroll sopra". Il grigio medio (--dim) perdeva contrasto sopra
+   lo sfondo fotografico vario della scheda Daily. Schiarito al bianco quasi puro (--text), con
+   un'ombra leggera per garantire leggibilità su qualunque punto dell'immagine sottostante. */
+.daily-countdown.daily-countdown-done{ color:var(--text); text-shadow:0 1px 3px rgba(0,0,0,0.7); }
 .daily-gp-count{ font-family:var(--font-mono); font-weight:700; color:var(--text); letter-spacing:0.02em; font-size:13px; }
-.daily-reroll-count{ font-family:var(--font-mono); color:var(--dim); font-size:13px; }
-.daily-reroll-count::before{ content:'·'; margin-right:8px; color:var(--dim); }
+.daily-reroll-count{ font-family:var(--font-mono); color:var(--text); font-size:13px; text-shadow:0 1px 3px rgba(0,0,0,0.7); }
+.daily-reroll-count::before{ content:'·'; margin-right:8px; color:var(--text); }
 .daily-countdown-row{ display:flex; align-items:center; gap:10px; }
 .daily-status-badge{ display:flex; align-items:center; gap:6px; padding:5px 12px; border-radius:20px; background:rgba(255,255,255,0.08); }
 .daily-status-badge.daily-status-gold{ background:rgba(255,200,60,0.16); }

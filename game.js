@@ -9084,7 +9084,7 @@ function renderModeSelect(){
       <div class="mode-select-bottom-scrim">
         <div class="daily-countdown-row">
           <div class="daily-countdown" id="modeSelectDailyCountdown">--:--:--</div>
-          <div id="modeSelectDailyStatusBadge">${dailyStatusBadgeHTML()}</div>
+          <div id="modeSelectDailyStatusBadge">${dailyStatusBadgeHTML(true)}</div>
         </div>
         <div class="card-tap-hint" style="font-size:12px;">${t('mode_select_daily_hint')}</div>
       </div>` : (!currentUser ? `
@@ -9105,7 +9105,7 @@ function renderModeSelect(){
     startDailyCountdownTicker('modeSelectDailyCountdown');
     loadDailyBestResultToday().then(()=>{
       const badge = document.getElementById('modeSelectDailyStatusBadge');
-      if(badge) badge.innerHTML = dailyStatusBadgeHTML();
+      if(badge) badge.innerHTML = dailyStatusBadgeHTML(true);
       updateDailyCountdownColor('modeSelectDailyCountdown');
     });
   }
@@ -9115,7 +9115,7 @@ function renderModeSelect(){
 // completata senza vincere nessun titolo. Spunta ORO se ha vinto un titolo (costruttori O piloti)
 // dentro quella Daily. DOPPIA spunta ORO in stile WhatsApp (due segni di spunta sovrapposti, non
 // due emoji separate) se ha vinto ENTRAMBI i titoli.
-function dailyStatusBadgeHTML(){
+function dailyStatusBadgeHTML(compatto){
   const today = todayDateStringUTC();
   const playedToday = dailyBestResultCache && dailyBestResultCache.daily_date===today;
   if(!playedToday) return ''; // niente per chi deve ancora farla
@@ -9125,18 +9125,25 @@ function dailyStatusBadgeHTML(){
   // V0.9.9.141: TESTO CELEBRATIVO aggiunto — richiesto da Gio: prima c'erano solo simboli di spunta
   // senza alcuna spiegazione visibile di cosa significassero. Ora un vero riassunto testuale di cosa
   // si è ottenuto nella Daily di oggi, invece del solo tooltip nascosto.
-  const posC = dailyBestResultCache.constructor_position, posD = dailyBestResultCache.driver_position;
-  let testoRiassunto;
-  if(wonBoth) testoRiassunto = t('daily_status_text_grandslam');
-  else if(dailyBestResultCache.won_constructor) testoRiassunto = t('daily_status_text_won_constructor');
-  else if(dailyBestResultCache.won_driver) testoRiassunto = t('daily_status_text_won_driver');
-  else testoRiassunto = t('daily_status_text_positions', posC||'—', posD||'—');
+  // V0.9.9.153: BUG CORRETTO — segnalato da Gio con screenshot, il testo lungo usciva dalla scheda
+  // stretta di selezione modalità (condivisa a metà schermo col timer, molto meno spazio dell'hub
+  // Daily dove questo badge era stato pensato). Aggiunta una modalità "compatta" (solo spunte, come
+  // era in origine) per i contesti stretti, mantenendo il testo completo dove c'è spazio (hub Daily).
+  const testoHTML = compatto ? '' : (()=>{
+    const posC = dailyBestResultCache.constructor_position, posD = dailyBestResultCache.driver_position;
+    let testoRiassunto;
+    if(wonBoth) testoRiassunto = t('daily_status_text_grandslam');
+    else if(dailyBestResultCache.won_constructor) testoRiassunto = t('daily_status_text_won_constructor');
+    else if(dailyBestResultCache.won_driver) testoRiassunto = t('daily_status_text_won_driver');
+    else testoRiassunto = t('daily_status_text_positions', posC||'—', posD||'—');
+    return `<span class="daily-status-text">${testoRiassunto}</span>`;
+  })();
   if(wonBoth){
-    return `<div class="daily-status-badge daily-status-gold" title="${t('daily_status_both')}">${checkSvg}${checkSvg}<span class="daily-status-text">${testoRiassunto}</span></div>`;
+    return `<div class="daily-status-badge daily-status-gold" title="${t('daily_status_both')}">${checkSvg}${checkSvg}${testoHTML}</div>`;
   } else if(wonOne){
-    return `<div class="daily-status-badge daily-status-gold" title="${t('daily_status_one')}">${checkSvg}<span class="daily-status-text">${testoRiassunto}</span></div>`;
+    return `<div class="daily-status-badge daily-status-gold" title="${t('daily_status_one')}">${checkSvg}${testoHTML}</div>`;
   } else {
-    return `<div class="daily-status-badge daily-status-plain" title="${t('daily_status_done')}">${checkSvg}<span class="daily-status-text">${testoRiassunto}</span></div>`;
+    return `<div class="daily-status-badge daily-status-plain" title="${t('daily_status_done')}">${checkSvg}${testoHTML}</div>`;
   }
 }
 let dailyBestResultCache = undefined; // undefined = non ancora controllato
