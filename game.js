@@ -12083,6 +12083,10 @@ function renderMuseumDynasty(){
   const compCards = Object.values(museumData.componenti).map(c=>museumCardHTML(c,false)).join('');
 
   app.innerHTML = `
+  <div class="topbar">
+    <button class="topbar-back-btn" data-action="close-museum">${t('museum_back')}</button>
+    <div class="brand hdr">RACING DYNASTY<small>${t('museum_title')}</small></div>
+  </div>
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
       <h1 class="hdr" style="font-size:30px;">${t('museum_title')}</h1>
@@ -12093,7 +12097,6 @@ function renderMuseumDynasty(){
     <div class="trophy-stats-row">
       <div class="trophy-stat"><div class="trophy-stat-value">${unlockedAll}/${totalAll}</div><div class="trophy-stat-label">${t('museum_completion')} · ${pct}%</div></div>
     </div>
-    <div class="btnrow"><button class="primary" data-action="close-museum">${t('museum_back')}</button></div>
   </div>
   <div class="panel">
     <div class="panel-title"><h3 class="hdr">${t('museum_drivers')}</h3><span class="dim mono" style="font-size:11px;">${unlockedPiloti}/${totalPiloti}</span></div>
@@ -12117,6 +12120,10 @@ function renderTrophyRoom(){
   const cardsHTML = circuits.map(c=>trophyCellHTML(c, trophyData)).join('');
 
   app.innerHTML = `
+  <div class="topbar">
+    <button class="topbar-back-btn" data-action="close-trophy-room">${t('tr_back')}</button>
+    <div class="brand hdr">RACING DYNASTY<small>${t('tr_title')}</small></div>
+  </div>
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
       <h1 class="hdr" style="font-size:30px;">${t('tr_title')}</h1>
@@ -12131,7 +12138,6 @@ function renderTrophyRoom(){
     <div class="btnrow">
       <button class="ghost" data-action="share-trophy-room">${t('tr_share')}</button>
       <button class="ghost" data-action="open-museum">${t('tr_museum_btn')}</button>
-      <button class="primary" data-action="close-trophy-room">${t('tr_back')}</button>
     </div>
   </div>
   <div class="panel">
@@ -12152,6 +12158,10 @@ function renderDriverTrophyRoom(){
   const cardsHTML = circuits.map(c=>trophyCellHTML(c, driverTrophyData)).join('');
 
   app.innerHTML = `
+  <div class="topbar">
+    <button class="topbar-back-btn" data-action="close-driver-trophy-room">${t('tr_back')}</button>
+    <div class="brand hdr">RACING DYNASTY<small>${t('mode_select_driver')}</small></div>
+  </div>
   <div class="hero" style="padding:26px 20px 20px;">
     <div class="hero-inner">
       <h1 class="hdr" style="font-size:30px;"><img class=ico src=assets/icons/checkered_flag.png> ${t('mode_select_driver')}</h1>
@@ -12165,7 +12175,6 @@ function renderDriverTrophyRoom(){
     </div>
     <div class="btnrow">
       <button class="ghost" data-action="open-museum">${t('tr_museum_btn')}</button>
-      <button class="primary" data-action="close-driver-trophy-room">${t('tr_back')}</button>
     </div>
   </div>
   <div class="panel">
