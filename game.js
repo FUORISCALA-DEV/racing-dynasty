@@ -10259,7 +10259,7 @@ async function pullSaveFromCloud(){
     }
   }catch(e){ console.warn('Caricamento cloud non riuscito:', e); }
 }
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial','tutorial-first-launch-prompt','tutorial-intro','tutorial-draft','tutorial-goat-reveal','tutorial-sponsor','tutorial-complete','daily-nickname-setup','daily-season-hub','daily-leaderboard','premium-thank-you']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial','tutorial-first-launch-prompt','tutorial-intro','tutorial-draft','tutorial-goat-reveal','tutorial-sponsor','tutorial-complete','daily-nickname-setup','daily-season-hub','daily-leaderboard','premium-thank-you','friends-hub','my-profile','edit-nickname']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -13779,7 +13779,18 @@ function onAction(e){
   else if(action==='skip-midseason-swap'){ skipMidseasonSwap(); }
   else if(action==='continue-save'){
     const saved = loadGame();
-    if(saved && saved.state){ state = saved.state; render(); }
+    if(saved && saved.state){
+      state = saved.state;
+      // V0.9.9.157: BUG CORRETTO — segnalato da Gio: "Continua Stagione" portava alla schermata
+      // Amici invece che alla partita vera. Causa: friends-hub/my-profile non erano escluse dal
+      // salvataggio (ora lo sono, vedi NO_SAVE_PHASES sopra), quindi un vecchio salvataggio poteva
+      // avere quella fase "congelata" come punto di ripresa. Protezione anche per chi ha già un
+      // salvataggio corrotto da prima di questa correzione: se la fase salvata non è più valida
+      // come punto di ripresa, si torna alla schermata hub della stagione invece di mostrare la
+      // fase salvata (che romperebbe l'interfaccia, essendo pensata per essere raggiunta diversamente).
+      if(NO_SAVE_PHASES.has(state.phase)) state.phase = 'hub';
+      render();
+    }
   }
   else if(action==='new-season-confirm'){
     gameConfirm('Vuoi davvero cancellare la stagione salvata e iniziarne una nuova?', ()=>{
