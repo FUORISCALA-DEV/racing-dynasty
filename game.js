@@ -7070,10 +7070,17 @@ function estimateSquadEffect(catKey, candidate){
 
 // V0.9.3.1: mai proporre un upgrade che non potrebbe dare alcun guadagno reale (componente gia' a 100)
 function isUpgradeUseful(u){
-  const areaMap = {'Piloti':'pilotMain','Motore':'motore','Telaio':'telaio','Aerodinamica':'aero','Gomme':'gomme','Strategia':'stratega'};
   if(u.area==='Globale'){
     return ['motore','telaio','aero','gomme','stratega'].some(k=> state.team[k].rating < 100);
   }
+  // V0.9.9.161: un upgrade "Piloti" è utile se ALMENO UNO dei due piloti ha margine di crescita —
+  // prima controllava solo pilotMain, escludendo ingiustamente offerte quando pilotMain era pieno
+  // ma pilotSecond no (o viceversa).
+  if(u.area==='Piloti'){
+    const p2 = state.team.pilotSecond;
+    return state.team.pilotMain.rating < 100 || (p2 && p2.rating < 100);
+  }
+  const areaMap = {'Motore':'motore','Telaio':'telaio','Aerodinamica':'aero','Gomme':'gomme','Strategia':'stratega'};
   const key = areaMap[u.area];
   if(!key) return true;
   return state.team[key].rating < 100;
@@ -7292,6 +7299,14 @@ function buildPitlaneOptions(){
     const finalCosto = Math.round(u.costo*costMult);
     const clone = {
       ...u, costo: finalCosto,
+      // V0.9.9.161: BUG CORRETTO — segnalato da Gio: "durante le partite non ti chiede mai di
+      // migliorare il pilota n. 2". Causa: TUTTO il sistema upgrade per l'area "Piloti" era
+      // strutturalmente legato solo a pilotMain (Pilota #1) in 3 punti diversi del codice — i dati
+      // statici degli upgrade non specificano mai quale pilota, e ogni punto che li processava
+      // assumeva sempre pilotMain. Ora, al momento della generazione dell'offerta, si sceglie quale
+      // dei due piloti è il vero bersaglio — pesato verso chi ha più margine di crescita (mai
+      // proposto per un pilota già al massimo se l'altro non lo è), altrimenti scelta casuale.
+      targetPilotSlot: u.area==='Piloti' ? sceltaPilotaBersaglio() : undefined,
       // V0.9.9.19: segniamo la carta extra (oltre le prime 2, sbloccata da Skyvane) e lo sconto
       // sponsor (Ferrotech), per mostrare i banner giusti nel rendering.
       sponsorExtraCard: (i>=2 && sponsorEffectForCount && sponsorEffectForCount.type==='extra_pitlane_option') ? state.sponsor.nome : null,
@@ -7390,8 +7405,12 @@ function applyUpgrade(upg, investT){
   const riskPct = isGuaranteed ? 0 : investedRisk(investT);
   const failed = isGuaranteed ? false : (rnd()*100 < riskPct);
   if(failed) unlockAchievement('si-impara-perdendo'); // V0.9.7.9
-  const areaMap = {'Piloti':'pilotMain','Motore':'motore','Telaio':'telaio','Aerodinamica':'aero','Gomme':'gomme','Strategia':'stratega'};
-  let areaLabel = upg.area;
+  // V0.9.9.161: BUG CORRETTO — il pilota bersaglio ora è quello scelto/memorizzato al momento
+  // della generazione dell'offerta (targetPilotSlot), non più sempre pilotMain. areaLabel usa la
+  // nuova funzione dedicata, così la schermata di rivelazione mostra "Pilota #1" o "Pilota #2"
+  // correttamente invece del generico "Piloti".
+  const areaMap = {'Piloti':(upg.targetPilotSlot==='pilotSecond'?'pilotSecond':'pilotMain'),'Motore':'motore','Telaio':'telaio','Aerodinamica':'aero','Gomme':'gomme','Strategia':'stratega'};
+  let areaLabel = displayAreaForUpgrade(upg);
   if(upg.area==='Globale'){
     if(!failed){
       ['motore','telaio','aero','gomme','stratega'].forEach(k=>{
@@ -7405,7 +7424,7 @@ function applyUpgrade(upg, investT){
     const key = areaMap[upg.area];
     if(key && !failed){
       state.team[key].rating = clamp(state.team[key].rating + upg.guadagno, 1, 100);
-      state.log.unshift({type:'pos', text:`Upgrade applicato: ${upg.nome} su ${upg.area} (+${upg.guadagno}).`});
+      state.log.unshift({type:'pos', text:`Upgrade applicato: ${upg.nome} su ${areaLabel} (+${upg.guadagno}).`});
     } else if(key){
       state.log.unshift({type:'neg', text:`Sviluppo fallito: ${upg.nome}. ${upg.malus}`});
     }
@@ -8024,6 +8043,28 @@ function flag(country){
 }
 // versione testuale (emoji), da usare SOLO dove l'HTML non e' permesso: <option>, attributi title/alt, ecc.
 function flagEmoji(country){ return COUNTRY_FLAG[country] || '<img class=ico src=assets/icons/white_flag.png>️'; }
+// V0.9.9.161: sceglie quale pilota è il vero bersaglio di un upgrade "Piloti" — pesato verso chi
+// ha più margine di crescita (rating più basso), mai verso un pilota già al rating massimo se
+// l'altro non lo è. Se entrambi sono ugualmente disponibili, scelta casuale 50/50.
+function sceltaPilotaBersaglio(){
+  const p1 = state.team.pilotMain, p2 = state.team.pilotSecond;
+  if(!p2) return 'pilotMain'; // nessun secondo pilota in squadra al momento: nessuna scelta possibile
+  const p1Pieno = p1.rating>=100, p2Pieno = p2.rating>=100;
+  if(p1Pieno && !p2Pieno) return 'pilotSecond';
+  if(p2Pieno && !p1Pieno) return 'pilotMain';
+  // entrambi con margine (o entrambi pieni, caso raro): pesa leggermente verso chi ha rating piu' basso
+  const pesoP1 = Math.max(1, 100-p1.rating), pesoP2 = Math.max(1, 100-p2.rating);
+  return rnd()*(pesoP1+pesoP2) < pesoP1 ? 'pilotMain' : 'pilotSecond';
+}
+// V0.9.9.161: etichetta corretta per un upgrade specifico (Pilota #1 o #2 in base al bersaglio
+// scelto), da usare SOLO per upgrade veri — displayArea() resta invariata per altri contesti
+// generici (es. componente dominante di un circuito), dove non esiste un'offerta specifica da targettare.
+function displayAreaForUpgrade(u){
+  if(u.area==='Piloti'){
+    return t(u.targetPilotSlot==='pilotSecond' ? 'comp_driver2' : 'comp_driver1');
+  }
+  return displayArea(u.area);
+}
 function displayArea(area){
   const map = { 'Motore':t('comp_engine'), 'Telaio':t('comp_chassis'), 'Aerodinamica':t('comp_aero'), 'Gomme':t('comp_tires'), 'Strategia':t('comp_strategist'), 'Piloti':t('comp_driver1') };
   return map[area] || area;
@@ -11619,15 +11660,17 @@ function currentItemCardHTML(item){
 }
 
 function upgradeTargetInfo(u){
-  const areaMap = {'Piloti':'pilotMain','Motore':'motore','Telaio':'telaio','Aerodinamica':'aero','Gomme':'gomme','Strategia':'stratega'};
+  // V0.9.9.161: bersaglio corretto (memorizzato al momento della generazione dell'offerta) invece
+  // di sempre pilotMain, ed etichetta corretta ("Pilota #1"/"Pilota #2") tramite displayAreaForUpgrade.
+  const areaMap = {'Piloti':(u.targetPilotSlot==='pilotSecond'?'pilotSecond':'pilotMain'),'Motore':'motore','Telaio':'telaio','Aerodinamica':'aero','Gomme':'gomme','Strategia':'stratega'};
   if(u.area==='Globale'){
     return { label:'Tutta la vettura', change:`+${u.guadagno} RATING su motore, telaio, aero, gomme e stratega` };
   }
   const key = areaMap[u.area];
   const current = key ? state.team[key] : null;
-  if(!current) return { label:displayArea(u.area), change:'' };
+  if(!current) return { label:displayAreaForUpgrade(u), change:'' };
   const after = clamp(current.rating+u.guadagno, 1, 100);
-  return { label:displayArea(u.area), change:`${current.rating} → ${after} RATING`, before:current.rating, after };
+  return { label:displayAreaForUpgrade(u), change:`${current.rating} → ${after} RATING`, before:current.rating, after };
 }
 
 function riskLevel(prob){
@@ -11754,7 +11797,7 @@ function pitlaneCardHTML(node, idx){
       ${u.malus? `<div class="tag-line malus">${t('pcard_if_fails', u.malus)}</div>`:''}
       <details class="card-details">
         <summary onclick="event.stopPropagation()">${t('pcard_more_info')}</summary>
-        <div class="tag-line dim">${t('pcard_dev_area', displayArea(u.area))}</div>
+        <div class="tag-line dim">${t('pcard_dev_area', displayAreaForUpgrade(u))}</div>
         ${u.durata? `<div class="tag-line dim">${t('pcard_duration', u.durata)}</div>`:''}
         <div class="tag-line dim">${t('pcard_risk_range', RISK_MIN, RISK_MAX, !!u.malus)}</div>
       </details>
@@ -11999,7 +12042,7 @@ function renderUpgradeResult(){
     <div class="suspense-sub dim">${u.nome}${u.riskPct!==undefined?t('upg_risk_taken', u.riskPct):''}</div>
     ${u.failed
       ? `<div class="tag-line malus" style="margin-top:10px;font-size:13px;">${u.malus || t('upg_no_gain')}</div>`
-      : `<div class="tag-line bonus" style="margin-top:10px;font-size:13px;">${u.area==='Globale' ? t('upg_gain_global', u.guadagno) : t('upg_gain_area', u.guadagno, displayArea(u.area))}</div>`}
+      : `<div class="tag-line bonus" style="margin-top:10px;font-size:13px;">${u.area==='Globale' ? t('upg_gain_global', u.guadagno) : t('upg_gain_area', u.guadagno, displayAreaForUpgrade(u))}</div>`}
     <button class="primary" data-action="continue-upgrade-result" style="width:100%;margin-top:22px;position:relative;z-index:1;">${t('upg_continue')}</button>
   </div>
   `;
