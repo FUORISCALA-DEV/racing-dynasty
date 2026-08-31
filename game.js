@@ -10154,20 +10154,26 @@ async function loadMyFriendsList(){
     // SEMPRE dagli amici veri (idAmici), con le statistiche unite quando ci sono e zero/sconosciuto
     // quando mancano — un amico non sparisce mai solo perche' non ha ancora sincronizzato nulla.
     const { data: stats, error: statsError } = await supabaseClient.from('player_public_stats')
-      .select('user_id, circuiti_vinti, circuiti_totali, completamento_museo_pct, obiettivi_sbloccati, obiettivi_totali, is_premium')
+      .select('user_id, nickname, circuiti_vinti, circuiti_totali, completamento_museo_pct, obiettivi_sbloccati, obiettivi_totali, is_premium')
       .in('user_id', idAmici);
     if(statsError) console.warn('Caricamento statistiche amici non riuscito (proseguo con valori di default):', statsError.message);
     const statsPerUtente = {};
     (stats||[]).forEach(s => { statsPerUtente[s.user_id] = s; });
 
+    // V0.9.9.160: BUG CORRETTO — segnalato da Gio, amici con un nickname vero comparivano come
+    // "Giocatore". Causa: il nickname veniva cercato SOLO nelle viste classifica Daily (che
+    // richiedono aver giocato la Daily almeno una volta), mai in player_public_stats — che pure
+    // contiene già il nickname sincronizzato (con ripiego al nome Google) indipendentemente dalla
+    // Daily. Usato ora come prima fonte, prima di ricorrere alle viste Daily-dipendenti.
+    let nicknamePerUtente = {}, ratingPerUtente = {};
+    (stats||[]).forEach(s => { if(s.nickname) nicknamePerUtente[s.user_id] = s.nickname; });
     // nickname E rating vivono insieme nella vista classifica generale già esistente e già
     // verificata funzionante per mostrare nickname di ALTRI giocatori (non solo il proprio) —
     // più sicuro che interrogare direttamente daily_nicknames, dove i permessi non sono verificati
-    let nicknamePerUtente = {}, ratingPerUtente = {};
     try{
       const { data: ratingData } = await supabaseClient.from('daily_weighted_leaderboard_view')
         .select('user_id, nickname, rating_medio').in('user_id', idAmici);
-      (ratingData||[]).forEach(r => { ratingPerUtente[r.user_id] = r.rating_medio; nicknamePerUtente[r.user_id] = r.nickname; });
+      (ratingData||[]).forEach(r => { ratingPerUtente[r.user_id] = r.rating_medio; if(!nicknamePerUtente[r.user_id]) nicknamePerUtente[r.user_id] = r.nickname; });
     }catch(e){ /* silenzioso: la lista amici funziona comunque senza rating/nickname da qui */ }
     // ripiego: se un amico non ha ancora 15 run Daily (non compare nella vista sopra, che li
     // richiede), proviamo comunque a recuperare almeno il nickname da una qualunque sua Daily
