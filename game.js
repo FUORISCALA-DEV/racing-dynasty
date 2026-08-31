@@ -11183,6 +11183,57 @@ function teamStrengthColor(v){
 // da una schermata all'altra) in cerchi "spenti" — nessun bonus, solo per completare la fila.
 // V0.9.7: forza scuderia per una composizione qualsiasi (attuale o ipotetica) — stessa formula
 // gia' usata altrove per il confronto rapido, ora riutilizzabile per anteprima prima/dopo.
+// V0.9.9.162: BUG CORRETTO — segnalato da Gio: "quando prendo un componente sinergico per
+// sostituirne uno che non ha sinergie vedo nell'anteprima rating+x che in realtà non sta
+// considerando l'effetto sinergia che otterò". CAUSA: state.team ha i rating già "cotti dentro" con
+// la sinergia applicata (applySynergyBonuses li modifica direttamente). L'anteprima "dopo" scambiava
+// semplicemente un pezzo (col suo rating GREZZO, mai bonusato) dentro una squadra i cui ALTRI 6 pezzi
+// restavano con la VECCHIA sinergia già applicata — un mix incoerente, senza mai ricalcolare quale
+// sarebbe la sinergia VERA con la nuova composizione. Questa funzione riparte sempre dai rating
+// grezzi (togliendo il bonus già applicato, tracciato in _synergyBonus) e ricalcola la sinergia da
+// zero sulla composizione ipotetica — mai mutando lo stato reale.
+function computeTeamStrengthWithSynergy(teamSnapshot){
+  const grezzo = {};
+  TEAM_ROLE_ORDER.forEach(([catKey])=>{
+    const item = teamSnapshot[catKey];
+    if(!item) return;
+    const bonusGiaApplicato = (teamSnapshot._synergyBonus && teamSnapshot._synergyBonus[catKey]) || 0;
+    grezzo[catKey] = { ...item, rating: item.rating - bonusGiaApplicato };
+  });
+  const teamGrezzo = { ...teamSnapshot, ...grezzo };
+
+  const slots = teamSynergySlots(undefined, teamGrezzo);
+  const groups = {};
+  slots.forEach(s=>{ (groups[s.mentId]=groups[s.mentId]||[]).push(s); });
+  let stackPct = 0;
+  const flatPairs = [];
+  Object.keys(groups).forEach(mentId=>{
+    const items = groups[mentId];
+    const pairCount = Math.floor(items.length/2);
+    if(pairCount === 1) flatPairs.push([items[0], items[1]]);
+    else if(pairCount >= 2){
+      const pct = SYNERGY_STACK_PCT[Math.min(pairCount,3)] || SYNERGY_STACK_PCT[3];
+      if(pct > stackPct) stackPct = pct;
+    }
+  });
+
+  const dopoSinergia = { ...teamGrezzo };
+  flatPairs.forEach(([a,b])=>{
+    [a,b].forEach(s=>{
+      dopoSinergia[s.catKey] = { ...dopoSinergia[s.catKey], rating: clamp(dopoSinergia[s.catKey].rating + SYNERGY_BONUS, 1, 100) };
+    });
+  });
+  if(stackPct > 0){
+    TEAM_ROLE_ORDER.forEach(([catKey])=>{
+      if(dopoSinergia[catKey]) dopoSinergia[catKey] = { ...dopoSinergia[catKey], rating: clamp(Math.round(dopoSinergia[catKey].rating*(1+stackPct)), 1, 100) };
+    });
+  } else if(flatPairs.length >= 3){
+    TEAM_ROLE_ORDER.forEach(([catKey])=>{
+      if(dopoSinergia[catKey]) dopoSinergia[catKey] = { ...dopoSinergia[catKey], rating: clamp(Math.round(dopoSinergia[catKey].rating*(1+SYNERGY_DIVERSE_BONUS_PCT)), 1, 100) };
+    });
+  }
+  return computeTeamStrength(dopoSinergia);
+}
 function computeTeamStrength(t){
   const r1 = weightedBase({pilota:t.pilotMain.rating, motore:t.motore.rating, telaio:t.telaio.rating, aero:t.aero.rating, gomme:t.gomme.rating, stratega:t.stratega.rating});
   const r2 = weightedBase({pilota:t.pilotSecond.rating, motore:t.motore.rating, telaio:t.telaio.rating, aero:t.aero.rating, gomme:t.gomme.rating, stratega:t.stratega.rating});
@@ -11927,11 +11978,12 @@ function renderPitlaneConfirm(){
   // V0.9.7: anteprima "prima -> dopo" su semaforo e rating scuderia, calcolata su una squadra
   // ipotetica (clone con il candidato al posto dell'attuale) senza toccare lo stato reale.
   const teamBefore = state.team;
-  const teamAfter = { ...state.team, [pr.catKey]: candidate };
+  const teamAfter = { ...state.team, [pr.catKey]: candidate,
+    _synergyBonus: { ...(state.team._synergyBonus||{}), [pr.catKey]: 0 } }; // il candidato e' un rating grezzo, mai bonusato prima
   const circlesBefore = semaforoCirclesData(teamBefore);
   const circlesAfter = semaforoCirclesData(teamAfter);
-  const strengthBefore = computeTeamStrength(teamBefore);
-  const strengthAfter = computeTeamStrength(teamAfter);
+  const strengthBefore = computeTeamStrengthWithSynergy(teamBefore);
+  const strengthAfter = computeTeamStrengthWithSynergy(teamAfter);
   const strengthDelta = strengthAfter - strengthBefore;
   const strengthDeltaLabel = strengthDelta===0 ? '±0' : (strengthDelta>0? `+${strengthDelta}` : `${strengthDelta}`);
   const strengthDeltaColor = strengthDelta>0 ? 'var(--ok)' : strengthDelta<0 ? 'var(--danger)' : 'var(--dim)';
