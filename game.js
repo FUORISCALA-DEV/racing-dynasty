@@ -74,7 +74,14 @@ function onAuthStateResolved(event){
   if(currentUser && (event==='SIGNED_IN' || event==='INITIAL_SESSION')){
     if(typeof pullSaveFromCloud==='function') pullSaveFromCloud();
     if(typeof fetchPremiumStatus==='function') fetchPremiumStatus().then(()=>{
-      if(state && (state.phase==='title' || state.phase==='season-length')) render();
+      // V0.9.9.164: BUG CORRETTO — segnalato da Gio (punti 8 e 11): lo stato premium non si vedeva
+      // caricato al primo ingresso (serviva un refresh manuale), e dopo un codice premium le run
+      // aggiuntive Daily non si sbloccavano subito. Causa: questo ri-render scattava SOLO se
+      // l'utente era ancora su title/season-length nel momento esatto in cui la richiesta di rete
+      // finiva — se nel frattempo era già passato altrove (es. hub Daily), l'interfaccia restava
+      // congelata sui vecchi valori. Ora ricarica su QUALUNQUE schermata tranne lo splash iniziale
+      // (dove romperebbe l'animazione di apertura, motivo per cui era stato escluso in origine).
+      if(state && state.phase!=='studio-splash') render();
     });
     // V0.9.9.121: sincronizzazione statistiche pubbliche AL LOGIN — segnalato da Gio: senza
     // questo, chi ha progressi vecchi (da prima che esistesse il sistema amici) resta a zero
