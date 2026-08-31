@@ -250,6 +250,21 @@ function updateStreamerFrameLayout(){
   if(twitchEl){
     twitchEl.style.left = (offX + STREAMER_TWITCH_TAG.centerX*dispW) + 'px';
     twitchEl.style.top = (offY + STREAMER_TWITCH_TAG.centerY*dispH) + 'px';
+    // V0.9.9.169: BUG CORRETTO — segnalato da Gio: "l'etichetta nome streamer è troppo piccola".
+    // Causa più profonda del previsto: il font restava FISSO in pixel (12px) indipendentemente da
+    // quanto grande venisse mostrata la cornice — su un setup di streaming vero (OBS a piena
+    // risoluzione, spesso molto più grande della finestra di sviluppo), il badge risultava
+    // proporzionalmente minuscolo rispetto al resto della cornice, che invece scala correttamente
+    // con la posizione. Ora il font/padding/icona scalano insieme alla cornice (riferimento: 1672px
+    // di larghezza, la stessa usata per STREAMER_FRAME_RATIO), con anche una base più grande di
+    // partenza (16px invece di 12px) per essere più leggibile anche alla dimensione "naturale".
+    const scala = dispW / 1672;
+    const nameLabel = document.getElementById('streamerNameLabel');
+    if(nameLabel){ nameLabel.style.fontSize = (16*scala) + 'px'; nameLabel.style.maxWidth = (190*scala) + 'px'; }
+    twitchEl.style.padding = `${5*scala}px ${14*scala}px ${5*scala}px ${9*scala}px`;
+    twitchEl.style.gap = (7*scala) + 'px';
+    const twitchIcon = twitchEl.querySelector('.streamer-twitch-icon');
+    if(twitchIcon){ twitchIcon.style.width = (19*scala)+'px'; twitchIcon.style.height = (19*scala)+'px'; }
   }
   if(logoEl){
     logoEl.style.left = (offX + STREAMER_FUORISCALA_LOGO.centerX*dispW) + 'px';
