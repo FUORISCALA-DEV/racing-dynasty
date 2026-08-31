@@ -15188,20 +15188,16 @@ async function riscattaCodiceAmicoInSospesoSeCe(){
 }
 function bootGameNormally(){
   catturaCodiceAmicoDaUrl();
-  if(hasLangBeenChosen()){
-    // già visto lo splash in una visita precedente — si salta del tutto, si va dritti alla fase giusta
-    const faseIniziale = determinePhaseAfterSplash();
-    state = { phase:faseIniziale, selectedDifficulty:'medio' };
-    initSidebar();
-    applyStaticMenuTranslations();
-    render();
-    if(faseIniziale==='title') playIntroOnce();
-  } else {
-    state = { phase:'studio-splash', selectedDifficulty:'medio' };
-    initSidebar();
-    applyStaticMenuTranslations();
-    render(); // V0.9.8.9: lo splash parte SUBITO, pulito — Supabase si inizializza un attimo dopo
-  }
+  // V0.9.9.159: splash SEMPRE mostrato ad ogni accesso — richiesto esplicitamente da Gio (punto 15
+  // della lista note). Prima veniva saltato per chi l'aveva già visto in una visita precedente (per
+  // evitare che il redirect di login Google rimostrasse l'intera introduzione) — ora si vede sempre,
+  // ma il passo successivo (scelta lingua/domanda streamer) continua comunque a saltarsi da solo se
+  // già impostato in precedenza (determinePhaseAfterSplash, invariata), quindi non si ripropone tutta
+  // l'introduzione al login, solo il tocco iniziale sul logo.
+  state = { phase:'studio-splash', selectedDifficulty:'medio' };
+  initSidebar();
+  applyStaticMenuTranslations();
+  render(); // V0.9.8.9: lo splash parte SUBITO, pulito — Supabase si inizializza un attimo dopo
   setTimeout(()=>{
     initSupabase();
     handlePremiumCheckoutReturn();
