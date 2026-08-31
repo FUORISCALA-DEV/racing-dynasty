@@ -15534,6 +15534,21 @@ function handleBackGesture(){
   if(state && state.phase==='trophy-room'){ state.phase = trophyRoomPreviousPhase || 'title'; render(); return; }
   if(state && state.phase==='museum-dynasty'){ state.phase = museumPreviousPhase || 'title'; render(); return; }
   if(state && state.phase==='garage'){ state.phase = museumPreviousPhase || 'title'; render(); return; }
+  // V0.9.9.174: PUNTO 22 — richiesto da Gio: "l'indietro delle gesture smartphone deve funzionare
+  // come i tasti indietro presenti sulle schermate". Prima il gesto/tasto fisico indietro conosceva
+  // solo un elenco ristretto di schermate (sopra) — per tutte le altre schermate con un chevron
+  // indietro dedicato (Amici, Il mio profilo, classifiche, hub Daily, selezione modalità, lunghezza
+  // stagione, difficoltà), il gesto cadeva nel ramo generico "Vuoi uscire dal gioco?", sbagliato.
+  // Ogni riga qui sotto usa ESATTAMENTE la stessa destinazione del rispettivo pulsante chevron,
+  // garantendo un comportamento identico tra gesto e tocco.
+  if(state && state.phase==='friends-hub'){ state.phase = friendsHubPreviousPhase || 'title'; render(); return; }
+  if(state && state.phase==='my-profile'){ state.phase = myProfilePreviousPhase || 'title'; render(); return; }
+  if(state && state.phase==='edit-nickname'){ state.phase = 'my-profile'; render(); return; }
+  if(state && state.phase==='daily-leaderboard'){ state.phase = 'daily-season-hub'; render(); return; }
+  if(state && state.phase==='daily-season-hub'){ state.phase = 'mode-select'; render(); return; }
+  if(state && state.phase==='mode-select'){ goHome(); return; }
+  if(state && state.phase==='season-length'){ state.phase = 'mode-select'; render(); return; }
+  if(state && state.phase==='difficulty'){ state.phase = 'season-length'; render(); return; }
   // nessun overlay riconosciuto aperto: chiediamo conferma prima di uscire, mai un'uscita diretta
   gameConfirm('Vuoi davvero uscire dal gioco? La carriera in corso e\u2019 gia\u2019 salvata automaticamente.', ()=>{
     /* conferma ricevuta: non ripubblichiamo una nuova guardia, cosi' una successiva pressione
