@@ -10959,6 +10959,23 @@ function draftTurnCardHTML(categoryLabel, item, statKeys, synergyCatKey, sparkle
   </div>`;
 }
 
+// V0.9.9.165: BUG CORRETTO — segnalato da Gio: "il semaforo sinergie non si aggiorna durante il
+// draft con tutti e 7 i componenti, esempio: ho preso un pilota come terzo elemento e i semicerchi
+// sono rimasti 2". CAUSA: i piloti scelti durante il draft vivono in draftPilotsChosen (un array
+// temporaneo), NON in state.team.pilotMain/pilotSecond — quell'assegnazione avviene solo alla FINE
+// del draft (finalizeDraftPilots). Il semaforo, chiamato senza override, leggeva sempre
+// state.team direttamente: per TUTTO il draft, qualunque sinergia portata da un pilota (con
+// l'altro pilota o con un componente già scelto) restava invisibile. Questa funzione costruisce
+// una squadra ipotetica che include i piloti già scelti finora, per il solo scopo di calcolare il
+// semaforo — non tocca mai lo stato reale.
+function draftOverrideTeamForSemaforo(){
+  const piloti = state.draftPilotsChosen || [];
+  return {
+    ...state.team,
+    pilotMain: piloti[0] || state.team.pilotMain,
+    pilotSecond: piloti[1] || state.team.pilotSecond,
+  };
+}
 function renderDraft(){
   const showReroll = state.difficulty !== 'hardcore';
   const canReroll = state.rerollsLeft > 0;
@@ -11027,7 +11044,7 @@ function renderDraft(){
   </div>
   <div class="draft-turn-grid">${offerCards.join('')}</div>
   ${lockedCards.length ? `<div class="dim mono" style="font-size:11px;margin-top:16px;">${t('draft_already_chosen')}</div><div class="draft-turn-grid draft-locked-grid">${lockedCards.join('')}</div>` : ''}
-  ${semaforoWidgetHTML()}
+  ${semaforoWidgetHTML(draftOverrideTeamForSemaforo())}
   `;
   bindActions();
 }
