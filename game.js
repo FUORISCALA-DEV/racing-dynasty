@@ -633,7 +633,7 @@ const I18N = {
     daily_score_factor_rating: 'Rating Componenti', daily_score_factor_gap: 'Distacco dal rivale',
     daily_score_factor_budget: 'Budget risparmiato', daily_score_factor_platino: 'Componenti Immortal',
     daily_score_factor_initial: 'Rating di partenza',
-    daily_score_title: 'PUNTEGGIO DAILY', daily_score_points_label: 'Punti gara', daily_score_secondary_label: 'Bonus fattori',
+    daily_score_title: 'RISULTATO DAILY', daily_score_subtitle: 'La tua prestazione di oggi', daily_score_out_of: (m)=>`su ${m}`, daily_score_detail_title: 'DETTAGLIO FATTORI', daily_score_points_label: 'Punti gara', daily_score_secondary_label: 'Bonus fattori',
     daily_score_total_label: 'PUNTEGGIO FINALE', daily_score_penalty_note: (n)=>`Penalità ${n}° tentativo: -${(n-1)}%`,
     daily_score_continue: 'Continua →',
 
@@ -1000,7 +1000,7 @@ const I18N = {
     daily_score_factor_rating: 'Component rating', daily_score_factor_gap: 'Gap from rival',
     daily_score_factor_budget: 'Budget saved', daily_score_factor_platino: 'Immortal components',
     daily_score_factor_initial: 'Starting rating',
-    daily_score_title: 'DAILY SCORE', daily_score_points_label: 'Race points', daily_score_secondary_label: 'Factor bonus',
+    daily_score_title: 'DAILY RESULT', daily_score_subtitle: "Today's performance", daily_score_out_of: (m)=>`out of ${m}`, daily_score_detail_title: 'FACTOR DETAIL', daily_score_points_label: 'Race points', daily_score_secondary_label: 'Factor bonus',
     daily_score_total_label: 'FINAL SCORE', daily_score_penalty_note: (n)=>`Attempt ${n} penalty: -${(n-1)}%`,
     daily_score_continue: 'Continue →',
 
@@ -1363,7 +1363,7 @@ const I18N = {
     daily_score_factor_rating: 'Rating Componentes', daily_score_factor_gap: 'Distancia del rival',
     daily_score_factor_budget: 'Presupuesto ahorrado', daily_score_factor_platino: 'Componentes Immortal',
     daily_score_factor_initial: 'Rating inicial',
-    daily_score_title: 'PUNTUACIÓN DAILY', daily_score_points_label: 'Puntos carrera', daily_score_secondary_label: 'Bono factores',
+    daily_score_title: 'RESULTADO DAILY', daily_score_subtitle: 'Tu actuación de hoy', daily_score_out_of: (m)=>`de ${m}`, daily_score_detail_title: 'DETALLE DE FACTORES', daily_score_points_label: 'Puntos carrera', daily_score_secondary_label: 'Bono factores',
     daily_score_total_label: 'PUNTUACIÓN FINAL', daily_score_penalty_note: (n)=>`Penalización intento ${n}: -${(n-1)}%`,
     daily_score_continue: 'Continuar →',
 
@@ -12687,14 +12687,17 @@ function computeDailyScoreBreakdown(){
   return {
     totale, puntiComponente: Math.round(puntiComponente), secondarioComponente: Math.round(secondarioComponente*10)/10,
     fattorePenalita, attemptNumber, points,
+    // V0.9.9.172: valueLabel aggiunto per ciascun fattore — un valore leggibile ("1°", "400/500",
+    // "+15 pt") da mostrare accanto al nome, non solo la percentuale. Nessuna modifica alla formula
+    // di calcolo sopra, solo dati aggiuntivi per la visualizzazione.
     fattori: [
-      { label:t('daily_score_factor_driver'), pct:driverScore, peso:19 },
-      { label:t('daily_score_factor_constructor'), pct:ctorScore, peso:19 },
-      { label:t('daily_score_factor_rating'), pct:ratingScore, peso:19 },
-      { label:t('daily_score_factor_gap'), pct:gapScore, peso:16 },
-      { label:t('daily_score_factor_budget'), pct:budgetScore, peso:11 },
-      { label:t('daily_score_factor_platino'), pct:platinoScore, peso:11 },
-      { label:t('daily_score_factor_initial'), pct:ratingIniScore, peso:5 },
+      { label:t('daily_score_factor_driver'), pct:driverScore, peso:19, valueLabel: driverPosition ? `${driverPosition}°` : '—' },
+      { label:t('daily_score_factor_constructor'), pct:ctorScore, peso:19, valueLabel: constructorPosition ? `${constructorPosition}°` : '—' },
+      { label:t('daily_score_factor_rating'), pct:ratingScore, peso:19, valueLabel: `${componentsSum}/500` },
+      { label:t('daily_score_factor_gap'), pct:gapScore, peso:16, valueLabel: `${gapFromRival>=0?'+':''}${gapFromRival} pt` },
+      { label:t('daily_score_factor_budget'), pct:budgetScore, peso:11, valueLabel: `${fmtM(state.budget)}` },
+      { label:t('daily_score_factor_platino'), pct:platinoScore, peso:11, valueLabel: `${platinumParts}/5` },
+      { label:t('daily_score_factor_initial'), pct:ratingIniScore, peso:5, valueLabel: `${initialRating ?? 0}/500` },
     ],
   };
 }
@@ -13233,104 +13236,144 @@ function rivalComparisonSentence(){
 function renderDailyScoreReveal(){
   const breakdown = computeDailyScoreBreakdown();
   state._dailyScoreBreakdownCache = breakdown; // serve al termine dell'animazione, per il pulsante continua
+  const maxPunti = DAILY_SCORE_MAX - DAILY_SCORE_SECONDARY_MAX; // 9980
+  const maxSecondario = DAILY_SCORE_SECONDARY_MAX; // 20
+
+  // V0.9.9.172: RIDISEGNO COMPLETO — richiesto da Gio dopo un confronto con un altro assistente
+  // ("fa schifo, sembra un pannello di debug"), concordo con la valutazione. Card centrale per il
+  // punteggio (protagonista vero, non un riquadro tra tanti), righe compatte colorate per fattore
+  // invece di 7 barre lunghe identiche, sezione dettaglio distinta visivamente. Nessuna modifica
+  // alla logica di calcolo (computeDailyScoreBreakdown, invariata sopra) — solo la presentazione.
+  const coloreFattore = pct => pct>=70 ? 'var(--uncommon)' : pct>=35 ? 'var(--amber)' : 'var(--danger)';
   const fattoriHTML = breakdown.fattori.map((f,i)=>`
     <div class="dsr-factor-row" id="dsrFactor${i}" style="opacity:0;">
-      <span class="dsr-factor-label">${f.label}</span>
-      <div class="dsr-factor-bar-track"><div class="dsr-factor-bar-fill" id="dsrBar${i}" style="width:0%;"></div></div>
-      <span class="dsr-factor-pct" id="dsrPct${i}">0%</span>
+      <span class="dsr-factor-name">${f.label}</span>
+      <span class="dsr-factor-value" style="color:${coloreFattore(f.pct)};">${f.valueLabel}</span>
+      <div class="dsr-factor-indicator"><div class="dsr-factor-indicator-fill" id="dsrBar${i}" style="width:0%;background:${coloreFattore(f.pct)};"></div></div>
     </div>`).join('');
 
   app.innerHTML = `
   <div class="wrap dsr-wrap">
-    <div class="dsr-title">${t('daily_score_title')}</div>
-    <div class="panel" style="margin-top:16px;">
-      ${fattoriHTML}
+    <div class="dsr-header" id="dsrHeader">
+      <div class="dsr-eyebrow">DAILY SEASON</div>
+      <h1 class="dsr-title">${t('daily_score_title')}</h1>
+      <div class="dsr-subtitle">${t('daily_score_subtitle')}</div>
     </div>
-    <div class="dsr-subtotal-row" id="dsrSecondaryRow" style="opacity:0;">
-      <span>${t('daily_score_secondary_label')}</span>
-      <span class="mono" id="dsrSecondaryVal">0</span><span class="dim">/20</span>
+
+    <div class="dsr-score-card" id="dsrScoreCard">
+      <div class="dsr-score-label">${t('daily_score_total_label')}</div>
+      <div class="dsr-score-value" id="dsrTotalValue">0</div>
+      <div class="dsr-score-max">${t('daily_score_out_of', DAILY_SCORE_MAX.toLocaleString('it-IT'))}</div>
     </div>
-    <div class="dsr-subtotal-row" id="dsrPointsRow" style="opacity:0;">
-      <span>${t('daily_score_points_label')}</span>
-      <span class="mono" id="dsrPointsVal">0</span><span class="dim">/9980</span>
+
+    <div class="dsr-summary-row" id="dsrSummaryRow">
+      <div class="dsr-summary-card">
+        <div class="dsr-summary-label">${t('daily_score_points_label')}</div>
+        <div class="dsr-summary-value"><span id="dsrPointsVal">0</span><span class="dsr-summary-max">/${maxPunti.toLocaleString('it-IT')}</span></div>
+      </div>
+      <div class="dsr-summary-card">
+        <div class="dsr-summary-label">${t('daily_score_secondary_label')}</div>
+        <div class="dsr-summary-value"><span id="dsrSecondaryVal">0</span><span class="dsr-summary-max">/${maxSecondario}</span></div>
+      </div>
     </div>
     ${breakdown.attemptNumber>1 ? `<div class="dim dsr-penalty-note" id="dsrPenaltyNote" style="opacity:0;">${t('daily_score_penalty_note', breakdown.attemptNumber)}</div>` : ''}
-    <div class="dsr-total-block" id="dsrTotalBlock" style="opacity:0;">
-      <div class="dsr-total-label">${t('daily_score_total_label')}</div>
-      <div class="dsr-total-value" id="dsrTotalValue">0</div>
+
+    <div class="dsr-detail-section" id="dsrDetailSection" style="opacity:0;">
+      <button type="button" class="dsr-detail-toggle" data-action="dsr-toggle-detail" aria-expanded="true">
+        <span>${t('daily_score_detail_title')}</span>
+        <svg viewBox="0 0 12 8" class="dsr-toggle-chevron" id="dsrToggleChevron"><path d="M1 1.5L6 6.5L11 1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="dsr-detail-rows" id="dsrDetailRows">
+        ${fattoriHTML}
+      </div>
     </div>
-    <div class="btnrow" id="dsrContinueRow" style="opacity:0;margin-top:20px;">
+
+    <div class="btnrow dsr-continue-row" id="dsrContinueRow" style="opacity:0;">
       <button class="primary" data-action="daily-score-reveal-continue" style="width:100%;">${t('daily_score_continue')}</button>
     </div>
   </div>`;
   bindActions();
   runDailyScoreRevealAnimation(breakdown);
 }
-// V0.9.9.170: sequenza di rivelazione animata — i 7 fattori uno alla volta (barra che si riempie),
-// poi il bonus fattori, poi i punti gara, poi il totale finale con un conteggio numerico drammatico.
-// Tutta a base di setTimeout incrementali, nessuna libreria esterna necessaria.
+// V0.9.9.172: sequenza di rivelazione ridisegnata — richiesto da Gio, ~2.5-3.5s totali (prima
+// arrivava fino a quasi 5s, con ogni fattore rivelato uno alla volta separatamente). Ordine:
+// header -> card punteggio -> conteggio numerico -> le due card riepilogo insieme -> dettaglio
+// fattori (tutto insieme, non più uno alla volta) -> pulsante continua. Rispetta
+// prefers-reduced-motion (nessun conteggio progressivo, il numero appare già al valore finale).
 function runDailyScoreRevealAnimation(breakdown){
-  let ritardo = 300;
-  const PASSO_FATTORE = 260;
-  breakdown.fattori.forEach((f,i)=>{
-    setTimeout(()=>{
-      const row = document.getElementById(`dsrFactor${i}`);
-      const bar = document.getElementById(`dsrBar${i}`);
-      const pct = document.getElementById(`dsrPct${i}`);
-      if(!row) return; // la schermata potrebbe essere stata abbandonata nel frattempo
-      row.style.opacity = '1';
-      requestAnimationFrame(()=>{ if(bar) bar.style.width = Math.round(f.pct)+'%'; });
-      if(pct) pct.textContent = Math.round(f.pct)+'%';
-      playSfx('ui_click');
-    }, ritardo);
-    ritardo += PASSO_FATTORE;
-  });
-  ritardo += 200;
+  const riduciMovimento = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let ritardo = riduciMovimento ? 0 : 150;
+
   setTimeout(()=>{
-    const row = document.getElementById('dsrSecondaryRow');
-    const val = document.getElementById('dsrSecondaryVal');
-    if(!row) return;
-    row.style.opacity = '1';
-    if(val) val.textContent = breakdown.secondarioComponente;
+    const header = document.getElementById('dsrHeader');
+    if(header) header.classList.add('dsr-in');
   }, ritardo);
-  ritardo += 400;
+  ritardo += riduciMovimento ? 0 : 250;
+
   setTimeout(()=>{
-    const row = document.getElementById('dsrPointsRow');
-    const val = document.getElementById('dsrPointsVal');
-    if(!row) return;
-    row.style.opacity = '1';
-    if(val) val.textContent = breakdown.puntiComponente;
-    playRealSfx('audio/sfx_component_pick.mp3');
+    const card = document.getElementById('dsrScoreCard');
+    if(!card) return;
+    card.classList.add('dsr-in');
+    playRealSfx('audio/sfx_victory_fanfare.mp3');
+    const target = breakdown.totale;
+    if(riduciMovimento){
+      const el = document.getElementById('dsrTotalValue');
+      if(el) el.textContent = target.toLocaleString('it-IT');
+      card.classList.add('dsr-score-lit');
+      return;
+    }
+    const durata = 1400, inizio = performance.now();
+    function tick(ora){
+      const el = document.getElementById('dsrTotalValue');
+      const cardEl = document.getElementById('dsrScoreCard');
+      if(!el || !cardEl) return; // schermata abbandonata
+      const progresso = Math.min(1, (ora-inizio)/durata);
+      const eased = 1 - Math.pow(1-progresso, 3); // ease-out cubico, parte veloce e rallenta
+      el.textContent = Math.round(target*eased).toLocaleString('it-IT');
+      cardEl.style.setProperty('--dsr-glow', eased);
+      if(progresso < 1) requestAnimationFrame(tick);
+      else {
+        el.textContent = target.toLocaleString('it-IT');
+        cardEl.classList.add('dsr-score-lit'); // impatto finale: flash breve del bordo
+      }
+    }
+    requestAnimationFrame(tick);
   }, ritardo);
-  ritardo += 500;
+  ritardo += riduciMovimento ? 0 : 1500;
+
+  setTimeout(()=>{
+    const row = document.getElementById('dsrSummaryRow');
+    const pv = document.getElementById('dsrPointsVal');
+    const sv = document.getElementById('dsrSecondaryVal');
+    if(!row) return;
+    row.classList.add('dsr-in');
+    if(pv) pv.textContent = breakdown.puntiComponente.toLocaleString('it-IT');
+    if(sv) sv.textContent = breakdown.secondarioComponente;
+    playSfx('ui_confirm');
+  }, ritardo);
+  ritardo += riduciMovimento ? 0 : 350;
+
   if(breakdown.attemptNumber>1){
     setTimeout(()=>{
       const note = document.getElementById('dsrPenaltyNote');
       if(note) note.style.opacity = '1';
     }, ritardo);
-    ritardo += 300;
   }
-  ritardo += 300;
+  ritardo += riduciMovimento ? 0 : 250;
+
   setTimeout(()=>{
-    const block = document.getElementById('dsrTotalBlock');
-    const valueEl = document.getElementById('dsrTotalValue');
-    if(!block || !valueEl) return;
-    block.style.opacity = '1';
-    playRealSfx('audio/sfx_victory_fanfare.mp3');
-    // conteggio numerico da 0 al totale vero, in circa 1.4 secondi, rallentando verso la fine
-    const durata = 1400, inizio = performance.now(), target = breakdown.totale;
-    function tick(ora){
-      const el = document.getElementById('dsrTotalValue');
-      if(!el) return; // schermata abbandonata
-      const progresso = Math.min(1, (ora-inizio)/durata);
-      const eased = 1 - Math.pow(1-progresso, 3); // ease-out cubico, parte veloce e rallenta
-      el.textContent = Math.round(target*eased).toLocaleString('it-IT');
-      if(progresso < 1) requestAnimationFrame(tick);
-      else el.textContent = target.toLocaleString('it-IT');
-    }
-    requestAnimationFrame(tick);
+    const section = document.getElementById('dsrDetailSection');
+    if(!section) return;
+    section.style.opacity = '1';
+    breakdown.fattori.forEach((f,i)=>{
+      const rowEl = document.getElementById(`dsrFactor${i}`);
+      const barEl = document.getElementById(`dsrBar${i}`);
+      if(rowEl) rowEl.style.opacity = '1';
+      if(barEl) requestAnimationFrame(()=>{ barEl.style.width = Math.round(f.pct)+'%'; });
+    });
   }, ritardo);
-  ritardo += 1700;
+  ritardo += riduciMovimento ? 0 : 400;
+
   setTimeout(()=>{
     const row = document.getElementById('dsrContinueRow');
     if(row) row.style.opacity = '1';
@@ -14152,6 +14195,15 @@ function onAction(e){
       deleteSave();
       render();
     }, 'Cancella Salvataggio');
+  }
+  else if(action==='dsr-toggle-detail'){
+    const rows = document.getElementById('dsrDetailRows');
+    const chevron = document.getElementById('dsrToggleChevron');
+    if(!rows) return;
+    const aperto = rows.style.display !== 'none';
+    rows.style.display = aperto ? 'none' : '';
+    el.setAttribute('aria-expanded', aperto ? 'false' : 'true');
+    if(chevron) chevron.style.transform = aperto ? 'rotate(-90deg)' : 'rotate(0deg)';
   }
   else if(action==='daily-score-reveal-continue'){
     state.phase = 'season_end';
