@@ -1778,6 +1778,18 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
 .circuit-badge-new{ background:rgba(247,184,0,0.15); color:var(--legendary); border:1px solid rgba(247,184,0,0.4); }
 .circuit-badge-unwon{ background:rgba(255,255,255,0.06); color:var(--dim); border:1px solid var(--line); }
 .museum-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:10px; max-height:420px; overflow-y:auto; }
+/* V0.9.9.167: BUG CORRETTO — segnalato da Gio: "le scrollbar nel museo a volte le vedo default del
+   browser e a volte arancioni giuste, dipende da dove tengo il puntatore". Causa: .museum-grid ha
+   uno scroll INTERNO indipendente, separato dallo scroll dell'intera pagina — la classe tematizzata
+   scattava solo su QUELLO (window), mai su questo contenitore specifico. Qui, a differenza dello
+   scroll di pagina (reso condizionale in precedenza per evitare un effetto "lampeggiante"), lo stile
+   resta SEMPRE attivo — è un'area piccola e contenuta, non l'intera pagina.
+   scrollbar-width/scrollbar-color: standard, gia' supportato ovunque tranne Safari < 18.2.
+   ::-webkit-scrollbar-*: prefisso necessario per Safari (incluso iOS) e per i motori piu' vecchi. */
+.museum-grid{ scrollbar-width:thin; scrollbar-color:var(--amber) rgba(255,255,255,0.06); }
+.museum-grid::-webkit-scrollbar{ width:10px; }
+.museum-grid::-webkit-scrollbar-track{ background:rgba(255,255,255,0.05); border-radius:5px; }
+.museum-grid::-webkit-scrollbar-thumb{ background:var(--amber); border-radius:5px; border:2px solid var(--void); }
 .museum-card{ background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:10px; }
 .museum-card-name{ font-weight:700; font-size:13px; }
 .museum-card-arch{ font-size:11px; color:var(--dim); margin-top:3px; }
