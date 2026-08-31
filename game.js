@@ -10843,27 +10843,11 @@ function renderSeasonLength(){
   <div class="card" style="margin-top:10px;">
     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
       <div>
-        <div style="font-weight:700;">${t('sl_aiuto_coda')}</div>
-        <div class="dim" style="font-size:11.5px; margin-top:3px; line-height:1.4;">${state.selectedAiutoInCoda!==false ? t('sl_aiuto_coda_desc_on') : t('sl_aiuto_coda_desc_off')}</div>
-      </div>
-      <button type="button" class="toggle-switch ${state.selectedAiutoInCoda!==false?'on':''}" data-action="toggle-aiuto-coda" aria-label="${t('sl_aiuto_coda')}"><span class="toggle-knob"></span></button>
-    </div>
-  </div>
-  <div class="card" style="margin-top:10px;">
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
-      <div>
         <div style="font-weight:700;">${t('sl_riflessi_partenza')}</div>
         <div class="dim" style="font-size:11.5px; margin-top:3px; line-height:1.4;">${state.selectedRiflessiPartenza!==false ? t('sl_riflessi_partenza_desc_on') : t('sl_riflessi_partenza_desc_off')}</div>
       </div>
       <button type="button" class="toggle-switch ${state.selectedRiflessiPartenza!==false?'on':''}" data-action="toggle-riflessi-partenza" aria-label="${t('sl_riflessi_partenza')}"><span class="toggle-knob"></span></button>
     </div>
-  </div>
-  <div class="card pickable trophy-room-card garage-coming-soon" data-action="request-password-gate" data-gate-for="garage">
-    <span class="rarity-tag" data-rarity="Rare"><img class=ico src=assets/icons/palette.png> ${t('sl_garage')}</span>
-    <div class="trophy-room-card-body">
-      <div class="ability">${t('sl_garage_desc')}</div>
-    </div>
-    <div class="card-tap-hint" style="color:var(--legendary);font-weight:800;">${t('sl_garage_soon')}</div>
   </div>
   `;
   bindActions();
@@ -13422,10 +13406,6 @@ function onAction(e){
     state.phase = 'driver-creation-done';
     render();
   }
-  else if(action==='toggle-aiuto-coda'){
-    state.selectedAiutoInCoda = state.selectedAiutoInCoda===false ? true : false;
-    render();
-  }
   else if(action==='toggle-riflessi-partenza'){
     state.selectedRiflessiPartenza = state.selectedRiflessiPartenza===false ? true : false;
     render();
@@ -13700,7 +13680,7 @@ function onAction(e){
     }
     state.selectedDifficulty = diff;
     consumeToken(len);
-    newRun(diff, len, state.selectedAiutoInCoda!==false, state.selectedRiflessiPartenza!==false);
+    newRun(diff, len, true, state.selectedRiflessiPartenza!==false); // V0.9.9.166: aiuto in coda sempre attivo per tutti, tolto il toggle
     state.phase='naming';
     render();
   }
@@ -15130,7 +15110,7 @@ function applyStaticMenuTranslations(){
   const map = {
     menuHomeBtn: 'menu_home', menuNewCareerBtn: 'menu_new_career', menuTrophyBtn: 'menu_trophy_room', menuGuideBtn: 'menu_guide',
     menuAchievementsBtn: 'menu_achievements', menuSettingsBtn: 'menu_settings', menuCreditsBtn: 'menu_credits',
-    menuDriverTrophyBtn: 'menu_driver_trophy_room', menuMuseumBtn: 'menu_museum', menuTutorialBtn: 'menu_tutorial',
+    menuDriverTrophyBtn: 'menu_driver_trophy_room', menuMuseumBtn: 'menu_museum',
   };
   Object.entries(map).forEach(([id, key])=>{
     const el = document.getElementById(id);
@@ -15156,8 +15136,6 @@ function initSidebar(){
 
   document.getElementById('menuHomeBtn').addEventListener('click', goHome);
   document.getElementById('menuNewCareerBtn').addEventListener('click', newCareer);
-  const tutorialBtn = document.getElementById('menuTutorialBtn');
-  if(tutorialBtn) tutorialBtn.addEventListener('click', ()=>{ closeMenuPanel(); openPasswordGate('tutorial'); });
   document.getElementById('menuTrophyBtn').addEventListener('click', openTrophies);
   const driverTrophyBtn = document.getElementById('menuDriverTrophyBtn');
   if(driverTrophyBtn) driverTrophyBtn.addEventListener('click', openDriverTrophies);
