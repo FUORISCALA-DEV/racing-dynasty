@@ -629,6 +629,14 @@ const I18N = {
     mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tocca per iniziare o vedere le classifiche', daily_gp_count: (n)=>`${n} Gran Premi oggi`, daily_status_done: 'Daily di oggi completata', share_daily_meta: (n)=>`Daily Season · ${n} Gran Premi`, daily_status_one: 'Hai vinto un titolo nella Daily di oggi', daily_status_both: 'Hai vinto ENTRAMBI i titoli nella Daily di oggi!',
     daily_status_text_grandslam: 'Grand Slam — entrambi i titoli!', daily_status_text_won_constructor: 'Vittoria titolo Costruttori',
     daily_status_text_won_driver: 'Vittoria titolo Piloti', daily_status_text_positions: (c,d)=>`Costruttori P${c} · Miglior pilota P${d}`, daily_reroll_count: (n)=> n===0 ? 'Nessun reroll disponibile' : (n===1 ? '1 reroll disponibile' : `${n} reroll disponibili`),
+    daily_score_factor_driver: 'Posizione Piloti', daily_score_factor_constructor: 'Posizione Costruttori',
+    daily_score_factor_rating: 'Rating Componenti', daily_score_factor_gap: 'Distacco dal rivale',
+    daily_score_factor_budget: 'Budget risparmiato', daily_score_factor_platino: 'Componenti Immortal',
+    daily_score_factor_initial: 'Rating di partenza',
+    daily_score_title: 'PUNTEGGIO DAILY', daily_score_points_label: 'Punti gara', daily_score_secondary_label: 'Bonus fattori',
+    daily_score_total_label: 'PUNTEGGIO FINALE', daily_score_penalty_note: (n)=>`Penalità ${n}° tentativo: -${(n-1)}%`,
+    daily_score_continue: 'Continua →',
+
     daily_share_badge_today: 'classifica Daily di oggi', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} generale`,
     daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
@@ -988,6 +996,14 @@ const I18N = {
     mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Tap to start or check the leaderboards', daily_gp_count: (n)=>`${n} Grands Prix today`, daily_status_done: "Today's Daily completed", share_daily_meta: (n)=>`Daily Season · ${n} Grands Prix`, daily_status_one: "You won a title in today's Daily", daily_status_both: "You won BOTH titles in today's Daily!",
     daily_status_text_grandslam: 'Grand Slam — both titles!', daily_status_text_won_constructor: "Constructors' title won",
     daily_status_text_won_driver: "Drivers' title won", daily_status_text_positions: (c,d)=>`Constructors P${c} · Best driver P${d}`, daily_reroll_count: (n)=> n===0 ? 'No rerolls available' : (n===1 ? '1 reroll available' : `${n} rerolls available`),
+    daily_score_factor_driver: 'Driver position', daily_score_factor_constructor: 'Constructor position',
+    daily_score_factor_rating: 'Component rating', daily_score_factor_gap: 'Gap from rival',
+    daily_score_factor_budget: 'Budget saved', daily_score_factor_platino: 'Immortal components',
+    daily_score_factor_initial: 'Starting rating',
+    daily_score_title: 'DAILY SCORE', daily_score_points_label: 'Race points', daily_score_secondary_label: 'Factor bonus',
+    daily_score_total_label: 'FINAL SCORE', daily_score_penalty_note: (n)=>`Attempt ${n} penalty: -${(n-1)}%`,
+    daily_score_continue: 'Continue →',
+
     daily_share_badge_today: "today's Daily leaderboard", daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} overall`,
     daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
@@ -1343,6 +1359,14 @@ const I18N = {
     mode_select_daily: 'Daily Season', mode_select_daily_hint: 'Toca para empezar o ver las clasificaciones', daily_gp_count: (n)=>`${n} Grandes Premios hoy`, daily_status_done: 'Daily de hoy completada', share_daily_meta: (n)=>`Daily Season · ${n} Grandes Premios`, daily_status_one: 'Ganaste un título en la Daily de hoy', daily_status_both: '¡Ganaste AMBOS títulos en la Daily de hoy!',
     daily_status_text_grandslam: 'Grand Slam — ¡ambos títulos!', daily_status_text_won_constructor: 'Título Constructores ganado',
     daily_status_text_won_driver: 'Título Pilotos ganado', daily_status_text_positions: (c,d)=>`Constructores P${c} · Mejor piloto P${d}`, daily_reroll_count: (n)=> n===0 ? 'Sin rerolls disponibles' : (n===1 ? '1 reroll disponible' : `${n} rerolls disponibles`),
+    daily_score_factor_driver: 'Posición Pilotos', daily_score_factor_constructor: 'Posición Constructores',
+    daily_score_factor_rating: 'Rating Componentes', daily_score_factor_gap: 'Distancia del rival',
+    daily_score_factor_budget: 'Presupuesto ahorrado', daily_score_factor_platino: 'Componentes Immortal',
+    daily_score_factor_initial: 'Rating inicial',
+    daily_score_title: 'PUNTUACIÓN DAILY', daily_score_points_label: 'Puntos carrera', daily_score_secondary_label: 'Bono factores',
+    daily_score_total_label: 'PUNTUACIÓN FINAL', daily_score_penalty_note: (n)=>`Penalización intento ${n}: -${(n-1)}%`,
+    daily_score_continue: 'Continuar →',
+
     daily_share_badge_today: 'clasificación Daily de hoy', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} general`,
     daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
@@ -7708,7 +7732,9 @@ function advanceAfterPitlane(){
   state.raceIndex++;
   if(state.raceIndex >= state.calendar.length){
     if(state.isDailySeason) saveDailySeasonResult();
-    state.phase = state.isTutorialRun ? 'tutorial-complete' : 'season_end';
+    // V0.9.9.170: le run Daily (non tutorial) passano ora dalla rivelazione animata del punteggio,
+    // richiesta da Gio (punto 13) — non più dritte alla normale fine stagione.
+    state.phase = state.isTutorialRun ? 'tutorial-complete' : (state.isDailySeason ? 'daily-score-reveal' : 'season_end');
   } else {
     applyAIUpgrades();
     reevaluateRivals();
@@ -8705,6 +8731,7 @@ function renderInner(){
   if(state.phase==='upgrade_result') return renderUpgradeResult();
   if(state.phase==='start_lights') return renderStartLights();
   if(state.phase==='pitlane_confirm') return renderPitlaneConfirm();
+  if(state.phase==='daily-score-reveal') return renderDailyScoreReveal();
   if(state.phase==='season_end') return renderSeasonEnd();
 }
 
@@ -10352,7 +10379,7 @@ async function pullSaveFromCloud(){
     }
   }catch(e){ console.warn('Caricamento cloud non riuscito:', e); }
 }
-const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial','tutorial-first-launch-prompt','tutorial-intro','tutorial-draft','tutorial-goat-reveal','tutorial-sponsor','tutorial-complete','daily-nickname-setup','daily-season-hub','daily-leaderboard','premium-thank-you','friends-hub','my-profile','edit-nickname']);
+const NO_SAVE_PHASES = new Set(['studio-splash','lang-select','title','difficulty','season-length','naming','race_live','start_lights','upgrade_suspense','trophy-room','museum-dynasty','garage','mode-select','driver-creation','driver-creation-done','driver-trophy-room','driver-hub','driver-season-end','driver-retirement','driver-activity','driver-activity-result','driver-contract','driver-media-event','streamer-question','streamer-name-input','streamer-continue-check','out-of-tokens','pedal-tutorial','tutorial-first-launch-prompt','tutorial-intro','tutorial-draft','tutorial-goat-reveal','tutorial-sponsor','tutorial-complete','daily-nickname-setup','daily-season-hub','daily-leaderboard','premium-thank-you','friends-hub','my-profile','edit-nickname','daily-score-reveal']);
 function saveGame(){
   try{
     if(!state || NO_SAVE_PHASES.has(state.phase)) return;
@@ -12605,6 +12632,72 @@ function loadImg(src){
 // V0.9.9.73: formato condiviso per le schermate finali — il FOCUS e' la scuderia, non il singolo
 // pilota, come richiesto esplicitamente da Gio con 3 esempi precisi. Riusata sia dalla carta
 // condivisibile (immagine) sia dalla schermata fine stagione a schermo, cosi' restano coerenti.
+// V0.9.9.170: PUNTO 13 — schermata di rivelazione punteggio Daily con animazione, richiesta da
+// Gio. Calcola il dettaglio completo del punteggio direttamente dai dati locali disponibili a fine
+// gara (senza aspettare il salvataggio sul database) — riusa esattamente la stessa formula di
+// computeDailyFinalScore (mai calcoli duplicati/divergenti che potrebbero disallinearsi in futuro),
+// ma restituisce anche tutti i valori intermedi (i singoli fattori, non solo il totale) per poterli
+// mostrare uno per uno nella rivelazione animata.
+function computeDailyScoreBreakdown(){
+  const cstd = constructorStandingsSorted();
+  const myConstructorIdx = cstd.findIndex(c=>c.teamId==='PLAYER');
+  const myConstructor = myConstructorIdx>=0 ? cstd[myConstructorIdx] : null;
+  const points = myConstructor ? myConstructor.points : 0;
+  const componentsSum = ['motore','telaio','aero','gomme','stratega']
+    .reduce((sum,key)=> sum + (state.team[key] ? state.team[key].rating : 0), 0);
+  const dstd = driverStandingsSorted().filter(d=>!d.isFormer);
+  const myDriverIdx = dstd.findIndex(d=>d.isPlayerTeam);
+  const driverPosition = myDriverIdx>=0 ? myDriverIdx+1 : null;
+  const constructorPosition = myConstructorIdx>=0 ? myConstructorIdx+1 : null;
+  let gapFromRival = 0;
+  if(myConstructor && cstd.length>1){
+    const rivali = cstd.filter(c=>c.teamId!=='PLAYER');
+    let minAbsGap = Infinity;
+    rivali.forEach(c=>{
+      const g = myConstructor.points - c.points;
+      if(Math.abs(g) < minAbsGap){ minAbsGap = Math.abs(g); gapFromRival = g; }
+    });
+  }
+  const initialRating = state.initialComponentRatings
+    ? Object.values(state.initialComponentRatings).reduce((s,v)=>s+v, 0) : null;
+  const platinumParts = ['motore','telaio','aero','gomme','stratega']
+    .filter(key => state.team[key] && state.team[key].rating>=100).length;
+  const attemptNumber = state.dailySeasonAttemptNumber || 1;
+
+  const r = { points, budget_saved: state.budget, components_sum: componentsSum,
+    driver_position: driverPosition, constructor_position: constructorPosition,
+    gap_from_rival: gapFromRival, initial_rating: initialRating, platinum_parts: platinumParts,
+    attempt_number: attemptNumber };
+
+  // stessi identici calcoli di computeDailyFinalScore, ma qui restiamo con i valori intermedi
+  const driverScore = Math.max(0, (21 - (driverPosition ?? 20)) / 20 * 100);
+  const ctorScore = Math.max(0, (11 - (constructorPosition ?? 10)) / 10 * 100);
+  const ratingScore = Math.min(100, componentsSum / 500 * 100);
+  const gapScore = Math.max(0, Math.min(100, 50 + gapFromRival / 2));
+  const budgetScore = Math.min(100, state.budget / 60 * 100);
+  const platinoScore = platinumParts / 5 * 100;
+  const ratingIniScore = Math.min(100, (initialRating ?? 0) / 500 * 100);
+  const secondario0a100 = 0.19*driverScore + 0.19*ctorScore + 0.19*ratingScore + 0.16*gapScore
+    + 0.11*budgetScore + 0.11*platinoScore + 0.05*ratingIniScore;
+  const puntiComponente = Math.min(1, points / DAILY_SCORE_POINTS_MAX) * (DAILY_SCORE_MAX - DAILY_SCORE_SECONDARY_MAX);
+  const secondarioComponente = (secondario0a100/100) * DAILY_SCORE_SECONDARY_MAX;
+  const fattorePenalita = 1 - Math.max(0, attemptNumber-1) * 0.01;
+  const totale = Math.round((puntiComponente + secondarioComponente) * fattorePenalita);
+
+  return {
+    totale, puntiComponente: Math.round(puntiComponente), secondarioComponente: Math.round(secondarioComponente*10)/10,
+    fattorePenalita, attemptNumber, points,
+    fattori: [
+      { label:t('daily_score_factor_driver'), pct:driverScore, peso:19 },
+      { label:t('daily_score_factor_constructor'), pct:ctorScore, peso:19 },
+      { label:t('daily_score_factor_rating'), pct:ratingScore, peso:19 },
+      { label:t('daily_score_factor_gap'), pct:gapScore, peso:16 },
+      { label:t('daily_score_factor_budget'), pct:budgetScore, peso:11 },
+      { label:t('daily_score_factor_platino'), pct:platinoScore, peso:11 },
+      { label:t('daily_score_factor_initial'), pct:ratingIniScore, peso:5 },
+    ],
+  };
+}
 function computeSeasonEndSummaryLines(){
   const dstd = driverStandingsSorted();
   const cstd = constructorStandingsSorted();
@@ -13132,6 +13225,112 @@ function rivalComparisonSentence(){
   return '';
 }
 
+function renderDailyScoreReveal(){
+  const breakdown = computeDailyScoreBreakdown();
+  state._dailyScoreBreakdownCache = breakdown; // serve al termine dell'animazione, per il pulsante continua
+  const fattoriHTML = breakdown.fattori.map((f,i)=>`
+    <div class="dsr-factor-row" id="dsrFactor${i}" style="opacity:0;">
+      <span class="dsr-factor-label">${f.label}</span>
+      <div class="dsr-factor-bar-track"><div class="dsr-factor-bar-fill" id="dsrBar${i}" style="width:0%;"></div></div>
+      <span class="dsr-factor-pct" id="dsrPct${i}">0%</span>
+    </div>`).join('');
+
+  app.innerHTML = `
+  <div class="wrap dsr-wrap">
+    <div class="dsr-title">${t('daily_score_title')}</div>
+    <div class="panel" style="margin-top:16px;">
+      ${fattoriHTML}
+    </div>
+    <div class="dsr-subtotal-row" id="dsrSecondaryRow" style="opacity:0;">
+      <span>${t('daily_score_secondary_label')}</span>
+      <span class="mono" id="dsrSecondaryVal">0</span><span class="dim">/20</span>
+    </div>
+    <div class="dsr-subtotal-row" id="dsrPointsRow" style="opacity:0;">
+      <span>${t('daily_score_points_label')}</span>
+      <span class="mono" id="dsrPointsVal">0</span><span class="dim">/9980</span>
+    </div>
+    ${breakdown.attemptNumber>1 ? `<div class="dim dsr-penalty-note" id="dsrPenaltyNote" style="opacity:0;">${t('daily_score_penalty_note', breakdown.attemptNumber)}</div>` : ''}
+    <div class="dsr-total-block" id="dsrTotalBlock" style="opacity:0;">
+      <div class="dsr-total-label">${t('daily_score_total_label')}</div>
+      <div class="dsr-total-value" id="dsrTotalValue">0</div>
+    </div>
+    <div class="btnrow" id="dsrContinueRow" style="opacity:0;margin-top:20px;">
+      <button class="primary" data-action="daily-score-reveal-continue" style="width:100%;">${t('daily_score_continue')}</button>
+    </div>
+  </div>`;
+  bindActions();
+  runDailyScoreRevealAnimation(breakdown);
+}
+// V0.9.9.170: sequenza di rivelazione animata — i 7 fattori uno alla volta (barra che si riempie),
+// poi il bonus fattori, poi i punti gara, poi il totale finale con un conteggio numerico drammatico.
+// Tutta a base di setTimeout incrementali, nessuna libreria esterna necessaria.
+function runDailyScoreRevealAnimation(breakdown){
+  let ritardo = 300;
+  const PASSO_FATTORE = 260;
+  breakdown.fattori.forEach((f,i)=>{
+    setTimeout(()=>{
+      const row = document.getElementById(`dsrFactor${i}`);
+      const bar = document.getElementById(`dsrBar${i}`);
+      const pct = document.getElementById(`dsrPct${i}`);
+      if(!row) return; // la schermata potrebbe essere stata abbandonata nel frattempo
+      row.style.opacity = '1';
+      requestAnimationFrame(()=>{ if(bar) bar.style.width = Math.round(f.pct)+'%'; });
+      if(pct) pct.textContent = Math.round(f.pct)+'%';
+      playSfx('ui_click');
+    }, ritardo);
+    ritardo += PASSO_FATTORE;
+  });
+  ritardo += 200;
+  setTimeout(()=>{
+    const row = document.getElementById('dsrSecondaryRow');
+    const val = document.getElementById('dsrSecondaryVal');
+    if(!row) return;
+    row.style.opacity = '1';
+    if(val) val.textContent = breakdown.secondarioComponente;
+  }, ritardo);
+  ritardo += 400;
+  setTimeout(()=>{
+    const row = document.getElementById('dsrPointsRow');
+    const val = document.getElementById('dsrPointsVal');
+    if(!row) return;
+    row.style.opacity = '1';
+    if(val) val.textContent = breakdown.puntiComponente;
+    playRealSfx('audio/sfx_component_pick.mp3');
+  }, ritardo);
+  ritardo += 500;
+  if(breakdown.attemptNumber>1){
+    setTimeout(()=>{
+      const note = document.getElementById('dsrPenaltyNote');
+      if(note) note.style.opacity = '1';
+    }, ritardo);
+    ritardo += 300;
+  }
+  ritardo += 300;
+  setTimeout(()=>{
+    const block = document.getElementById('dsrTotalBlock');
+    const valueEl = document.getElementById('dsrTotalValue');
+    if(!block || !valueEl) return;
+    block.style.opacity = '1';
+    playRealSfx('audio/sfx_victory_fanfare.mp3');
+    // conteggio numerico da 0 al totale vero, in circa 1.4 secondi, rallentando verso la fine
+    const durata = 1400, inizio = performance.now(), target = breakdown.totale;
+    function tick(ora){
+      const el = document.getElementById('dsrTotalValue');
+      if(!el) return; // schermata abbandonata
+      const progresso = Math.min(1, (ora-inizio)/durata);
+      const eased = 1 - Math.pow(1-progresso, 3); // ease-out cubico, parte veloce e rallenta
+      el.textContent = Math.round(target*eased).toLocaleString('it-IT');
+      if(progresso < 1) requestAnimationFrame(tick);
+      else el.textContent = target.toLocaleString('it-IT');
+    }
+    requestAnimationFrame(tick);
+  }, ritardo);
+  ritardo += 1700;
+  setTimeout(()=>{
+    const row = document.getElementById('dsrContinueRow');
+    if(row) row.style.opacity = '1';
+  }, ritardo);
+}
 function renderSeasonEnd(){
   unlockMuseumForCurrentTeam();
   checkMasteryAchievements();
@@ -13948,6 +14147,10 @@ function onAction(e){
       deleteSave();
       render();
     }, 'Cancella Salvataggio');
+  }
+  else if(action==='daily-score-reveal-continue'){
+    state.phase = 'season_end';
+    render();
   }
   else if(action==='share-result-card'){
     shareResultCard().then(()=>{

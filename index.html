@@ -1787,6 +1787,21 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
    scrollbar-width/scrollbar-color: standard, gia' supportato ovunque tranne Safari < 18.2.
    ::-webkit-scrollbar-*: prefisso necessario per Safari (incluso iOS) e per i motori piu' vecchi. */
 .museum-grid{ scrollbar-width:thin; scrollbar-color:var(--amber) rgba(255,255,255,0.06); }
+/* V0.9.9.170: PUNTO 13 — schermata rivelazione punteggio Daily con animazione */
+.dsr-wrap{ padding-top:30px; max-width:480px; margin:0 auto; }
+.dsr-title{ text-align:center; font-family:var(--font-mono); font-weight:800; font-size:15px; letter-spacing:0.08em; color:var(--amber); }
+.dsr-factor-row{ display:flex; align-items:center; gap:10px; padding:7px 0; transition:opacity 0.4s ease; }
+.dsr-factor-row:not(:last-child){ border-bottom:1px solid var(--line); }
+.dsr-factor-label{ flex:0 0 132px; font-size:12px; color:var(--dim); }
+.dsr-factor-bar-track{ flex:1; height:8px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; }
+.dsr-factor-bar-fill{ height:100%; background:linear-gradient(90deg, var(--cyan), var(--amber)); border-radius:4px; transition:width 0.6s cubic-bezier(.2,.8,.3,1); }
+.dsr-factor-pct{ flex:0 0 40px; text-align:right; font-family:var(--font-mono); font-size:12px; font-weight:700; }
+.dsr-subtotal-row{ display:flex; justify-content:space-between; align-items:baseline; padding:8px 4px; font-size:13px; transition:opacity 0.5s ease; }
+.dsr-subtotal-row .mono{ font-weight:800; font-size:16px; margin-left:auto; margin-right:3px; }
+.dsr-penalty-note{ text-align:center; font-size:11.5px; transition:opacity 0.5s ease; margin-top:2px; }
+.dsr-total-block{ text-align:center; margin-top:22px; padding:20px; border:1px solid var(--amber); border-radius:12px; background:rgba(255,106,26,0.07); transition:opacity 0.5s ease; }
+.dsr-total-label{ font-family:var(--font-mono); font-size:12px; letter-spacing:0.08em; color:var(--dim); margin-bottom:6px; }
+.dsr-total-value{ font-family:var(--font-mono); font-weight:800; font-size:44px; color:var(--amber); text-shadow:0 0 20px rgba(255,106,26,0.4); }
 .museum-grid::-webkit-scrollbar{ width:10px; }
 .museum-grid::-webkit-scrollbar-track{ background:rgba(255,255,255,0.05); border-radius:5px; }
 .museum-grid::-webkit-scrollbar-thumb{ background:var(--amber); border-radius:5px; border:2px solid var(--void); }
