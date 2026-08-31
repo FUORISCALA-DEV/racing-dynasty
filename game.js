@@ -2464,6 +2464,13 @@ async function updateDailyNickname(nickname, flagCountryName){
       return { error:'unknown', detail:error.message };
     }
     dailyNicknameCache = { nickname:nickname.trim(), flag_code:flagCode, nickname_changed_at:adesso };
+    // V0.9.9.173: BUG CORRETTO — segnalato da Gio: "in lista amici vedo nome e cognome (nome
+    // Google), in classifica li vedo giusti". Causa: player_public_stats.nickname non veniva mai
+    // risincronizzato dopo aver salvato/modificato il vero nickname — restava bloccato sul primo
+    // valore sincronizzato in assoluto (spesso il nome Google, prima di scegliere un nickname). La
+    // lista amici legge da quella tabella, la classifica invece da daily_nicknames (sempre
+    // aggiornata) — da qui la discrepanza.
+    if(typeof pushPublicStatsToCloud==='function') pushPublicStatsToCloud();
     return { ok:true };
   }catch(e){ return { error:'unknown', detail:String(e) }; }
 }
@@ -2480,6 +2487,7 @@ async function saveDailyNickname(nickname, flagCountryName){
       return { error:'unknown', detail:error.message };
     }
     dailyNicknameCache = { nickname:nickname.trim(), flag_code:flagCode };
+    if(typeof pushPublicStatsToCloud==='function') pushPublicStatsToCloud(); // V0.9.9.173: stesso motivo di sopra
     return { ok:true };
   }catch(e){ return { error:'unknown', detail:String(e) }; }
 }
@@ -10274,32 +10282,39 @@ async function loadMyFriendsList(){
     const statsPerUtente = {};
     (stats||[]).forEach(s => { statsPerUtente[s.user_id] = s; });
 
-    // V0.9.9.160: BUG CORRETTO — segnalato da Gio, amici con un nickname vero comparivano come
-    // "Giocatore". Causa: il nickname veniva cercato SOLO nelle viste classifica Daily (che
-    // richiedono aver giocato la Daily almeno una volta), mai in player_public_stats — che pure
-    // contiene già il nickname sincronizzato (con ripiego al nome Google) indipendentemente dalla
-    // Daily. Usato ora come prima fonte, prima di ricorrere alle viste Daily-dipendenti.
+    // V0.9.9.173: BUG CORRETTO — segnalato da Gio: "in lista amici vedo nome e cognome (nome
+    // Google), in classifica li vedo giusti, voglio il nickname in ogni parte del gioco". Causa:
+    // la priorità era invertita — player_public_stats.nickname (che poteva restare bloccato sul
+    // nome Google se mai risincronizzato dopo la scelta di un vero nickname, corretto qui sopra
+    // alla radice) veniva controllato PER PRIMO, le viste basate su daily_nicknames (la vera fonte
+    // scelta dall'utente, sempre aggiornata) solo come ripiego. Ora l'ordine è invertito: le viste
+    // daily_nicknames-based vengono controllate prima, player_public_stats resta l'ultima risorsa
+    // per chi non ha mai giocato la Daily nemmeno una volta (unico caso in cui è l'unica fonte
+    // disponibile).
     let nicknamePerUtente = {}, ratingPerUtente = {};
-    (stats||[]).forEach(s => { if(s.nickname) nicknamePerUtente[s.user_id] = s.nickname; });
     // nickname E rating vivono insieme nella vista classifica generale già esistente e già
     // verificata funzionante per mostrare nickname di ALTRI giocatori (non solo il proprio) —
     // più sicuro che interrogare direttamente daily_nicknames, dove i permessi non sono verificati
     try{
       const { data: ratingData } = await supabaseClient.from('daily_weighted_leaderboard_view')
         .select('user_id, nickname, rating_medio').in('user_id', idAmici);
-      (ratingData||[]).forEach(r => { ratingPerUtente[r.user_id] = r.rating_medio; if(!nicknamePerUtente[r.user_id]) nicknamePerUtente[r.user_id] = r.nickname; });
+      (ratingData||[]).forEach(r => { ratingPerUtente[r.user_id] = r.rating_medio; nicknamePerUtente[r.user_id] = r.nickname; });
     }catch(e){ /* silenzioso: la lista amici funziona comunque senza rating/nickname da qui */ }
-    // ripiego: se un amico non ha ancora 15 run Daily (non compare nella vista sopra, che li
+    // ripiego 1: se un amico non ha ancora 15 run Daily (non compare nella vista sopra, che li
     // richiede), proviamo comunque a recuperare almeno il nickname da una qualunque sua Daily
     // passata, non solo quella di oggi
-    const mancantiNickname = idAmici.filter(uid => !nicknamePerUtente[uid]);
-    if(mancantiNickname.length>0){
+    const mancantiNickname1 = idAmici.filter(uid => !nicknamePerUtente[uid]);
+    if(mancantiNickname1.length>0){
       try{
         const { data: nickData } = await supabaseClient.from('daily_leaderboard_view')
-          .select('user_id, nickname').in('user_id', mancantiNickname).limit(mancantiNickname.length);
+          .select('user_id, nickname').in('user_id', mancantiNickname1).limit(mancantiNickname1.length);
         (nickData||[]).forEach(n => { nicknamePerUtente[n.user_id] = n.nickname; });
       }catch(e){ /* silenzioso */ }
     }
+    // ripiego 2 (ULTIMA risorsa): per chi non ha mai giocato la Daily nemmeno una volta, usiamo
+    // player_public_stats — potrebbe essere il vero nickname (se sincronizzato dopo averlo scelto)
+    // o il nome Google di ripiego (se non ha ancora scelto un nickname): comunque meglio di niente.
+    (stats||[]).forEach(s => { if(s.nickname && !nicknamePerUtente[s.user_id]) nicknamePerUtente[s.user_id] = s.nickname; });
 
     return idAmici.map(uid => {
       const s = statsPerUtente[uid];
