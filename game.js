@@ -4887,12 +4887,28 @@ function interpolateCumTimeForShift(cumTimeSnapshot, order, slotKey, newIdx, ret
 }
 function applyStartShiftAcrossPhases(timeline, slotKey, shift){
   if(!shift) return;
+  // V0.9.9.160: BUG CORRETTO — segnalato da Gio: "capita che un mio pilota RIT durante una gara
+  // sia davanti a qualcuno che ha concluso la gara". Causa: questa funzione (applica il bonus/malus
+  // di reazione al semaforo di partenza) spostava un pilota nell'ordine con uno splice semplice,
+  // SENZA MAI verificare se fosse già ritirato in quella fase specifica — a differenza di TUTTE le
+  // altre funzioni di riordino nel file (i vari ricalcoli per pit-stop), che ricostruiscono sempre
+  // "attivi prima, ritirati dopo" esplicitamente. Un pilota ritirato poteva così finire spostato
+  // davanti a un pilota ancora in gara in una fase successiva, rompendo l'ordine corretto.
   for(let phase=0; phase<PHASES.length; phase++){
     const order = timeline.phaseOrders[phase];
     if(!order) continue;
     const idx = order.indexOf(slotKey);
     if(idx<0) continue;
-    const newIdx = Math.max(0, Math.min(order.length-1, idx+shift));
+    // se il pilota è già ritirato IN QUESTA FASE, la reazione al semaforo (di inizio gara) non ha
+    // più alcun senso da applicare: lascialo dov'è, non toccarlo
+    const giaRitiratoQui = timeline.retiredAtPhase && timeline.retiredAtPhase[slotKey]!=null && phase >= timeline.retiredAtPhase[slotKey];
+    if(giaRitiratoQui) continue;
+    // vincola lo spostamento a restare SOLO dentro il gruppo degli ancora-attivi in questa fase —
+    // mai oltre il confine nel gruppo dei ritirati
+    const isRacingAt = k => !timeline.retiredAtPhase || timeline.retiredAtPhase[k]==null || phase < timeline.retiredAtPhase[k];
+    let limiteAttivi = order.length;
+    for(let i=0;i<order.length;i++){ if(!isRacingAt(order[i])){ limiteAttivi = i; break; } }
+    const newIdx = Math.max(0, Math.min(limiteAttivi-1, idx+shift));
     order.splice(idx,1); order.splice(newIdx,0,slotKey);
     interpolateCumTimeForShift(timeline.cumTimeByPhase && timeline.cumTimeByPhase[phase], order, slotKey, newIdx, timeline.retiredAtPhase);
   }
