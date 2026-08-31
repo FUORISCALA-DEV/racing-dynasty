@@ -5242,14 +5242,22 @@ function renderStartLights(){
   // press/hold veri (non un semplice click) per i pedali touch — attacco diretto, non tramite bindActions
   document.querySelectorAll('.pedal-box').forEach(el=>{
     const slotKey = el.dataset.pedalSlot;
-    const start = (e)=>{ e.preventDefault(); pedalPress(slotKey); };
-    const end = (e)=>{ e.preventDefault(); pedalRelease(slotKey); };
+    // V0.9.9.168: BUG CORRETTO — segnalato da Gio: "passando il mouse sopra a un paddle premuto con
+    // la tastiera... quando il mouse esce dall'area del paddle è come se smettessi di cliccare e lo
+    // sblocca nonostante la lettera da tastiera sia ancora premuta". Causa: mouseleave controllava
+    // solo se il pedale risultasse "premuto" in generale (state.startLights.pedals[slotKey].held),
+    // senza sapere CON QUALE metodo — bastava che il mouse passasse sopra e poi via, mentre si teneva
+    // premuto da tastiera, per far scattare un rilascio indesiderato. Ora tracciamo esplicitamente
+    // se è stato IL MOUSE a iniziare questa pressione specifica.
+    let premutoDalMouse = false;
+    const start = (e)=>{ e.preventDefault(); premutoDalMouse = true; pedalPress(slotKey); };
+    const end = (e)=>{ e.preventDefault(); premutoDalMouse = false; pedalRelease(slotKey); };
     el.addEventListener('touchstart', start, { passive:false });
     el.addEventListener('touchend', end);
     el.addEventListener('touchcancel', end);
     el.addEventListener('mousedown', start);
     el.addEventListener('mouseup', end);
-    el.addEventListener('mouseleave', (e)=>{ if(state.startLights?.pedals[slotKey]?.held) end(e); });
+    el.addEventListener('mouseleave', (e)=>{ if(premutoDalMouse) end(e); });
   });
 }
 
