@@ -637,7 +637,7 @@ const I18N = {
     daily_score_total_label: 'PUNTEGGIO FINALE', daily_score_penalty_note: (n)=>`Penalità ${n}° tentativo: -${(n-1)}%`,
     daily_score_continue: 'Continua →',
 
-    daily_share_badge_today: 'classifica Daily di oggi', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} generale`,
+    daily_share_badge_today: 'classifica Daily di oggi', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} generale`, daily_share_badge_score: (s)=>`${s} pt`,
     daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
     daily_trophy_podium: 'Sali sul podio oggi', daily_trophy_win: 'Vinci la Daily di oggi',
@@ -1004,7 +1004,7 @@ const I18N = {
     daily_score_total_label: 'FINAL SCORE', daily_score_penalty_note: (n)=>`Attempt ${n} penalty: -${(n-1)}%`,
     daily_score_continue: 'Continue →',
 
-    daily_share_badge_today: "today's Daily leaderboard", daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} overall`,
+    daily_share_badge_today: "today's Daily leaderboard", daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} overall`, daily_share_badge_score: (s)=>`${s} pts`,
     daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
     daily_trophy_podium: 'Reach the podium today', daily_trophy_win: "Win today's Daily",
@@ -1367,7 +1367,7 @@ const I18N = {
     daily_score_total_label: 'PUNTUACIÓN FINAL', daily_score_penalty_note: (n)=>`Penalización intento ${n}: -${(n-1)}%`,
     daily_score_continue: 'Continuar →',
 
-    daily_share_badge_today: 'clasificación Daily de hoy', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} general`,
+    daily_share_badge_today: 'clasificación Daily de hoy', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} general`, daily_share_badge_score: (s)=>`${s} pts`,
     daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
     daily_trophy_podium: 'Sube al podio hoy', daily_trophy_win: 'Gana la Daily de hoy',
@@ -12896,7 +12896,12 @@ async function buildShareCardCanvas(){
     ctx.fillStyle = accent; ctx.font = '900 21px -apple-system,sans-serif';
     ctx.fillText(dailyRank!==null ? '#'+dailyRank : '—', M+16, dailyRankY+29);
     ctx.fillStyle = '#c9c9d0'; ctx.font = '600 13px -apple-system,sans-serif';
-    let badgeLabel = t('daily_share_badge_today');
+    // V0.9.9.171: aggiunto il punteggio Daily vero e proprio accanto alla posizione — prima la
+    // carta mostrava solo la classifica (#3, Generale #12/450), mai il numero del punteggio stesso,
+    // nonostante il calcolo esistesse già (usato per la nuova schermata di rivelazione, punto 13).
+    const punteggioDailyVero = computeDailyScoreBreakdown().totale;
+    let badgeLabel = t('daily_share_badge_score', punteggioDailyVero.toLocaleString('it-IT'));
+    badgeLabel += '   ·   ' + t('daily_share_badge_today');
     if(dailyWeightedRank!==null) badgeLabel += '   ·   ' + t('daily_share_badge_weighted', dailyWeightedRank, dailyWeightedTotal);
     ctx.fillText(badgeLabel, M+70, dailyRankY+29);
   }
