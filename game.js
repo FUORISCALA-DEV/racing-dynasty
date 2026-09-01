@@ -506,7 +506,7 @@ const I18N = {
     museum_no_drivers: 'Nessun pilota ancora sbloccato: portane uno fino a fine stagione, o sostituiscilo, per iniziare la collezione.',
     museum_no_components: 'Nessun componente ancora sbloccato.',
     tr_title: '<img class=ico src=assets/icons/trophy.png> Sala Trofei', tr_tagline: 'Un trofeo per ogni circuito — oro se vinto, grigio se corso, nascosto se non ancora visto.',
-    tr_raced: 'CIRCUITI CORSI', tr_won: 'CIRCUITI VINTI', tr_share: '<img class=ico src=assets/icons/upload.png> Condividi Sala Trofei', tr_museum_btn: '<img class=ico src=assets/icons/temple.png>️ Museo Dynasty', tr_back: '← Torna Indietro',
+    tr_raced: 'CIRCUITI CORSI', tr_won: 'CIRCUITI VINTI', tr_share: '<img class=ico src=assets/icons/upload.png> Condividi Sala Trofei', tr_museum_btn: '<img class=ico src=assets/icons/temple.png>️ Museo Dynasty', tr_back: '← Torna Indietro', tr_tab_gara: 'Trofei di gara', tr_tab_badge: 'Badge', tr_tab_eventi: 'Eventi speciali', tr_badge_coming_soon_title: 'In arrivo', tr_badge_coming_soon_desc: 'Presto potrai sbloccare badge (tester, premium e altri) e sceglierne fino a 3 da mostrare accanto al tuo nome in classifica.', tr_events_coming_soon_title: 'In arrivo', tr_events_coming_soon_desc: 'Una pagina dedicata agli eventi speciali, coi premi di chi partecipa o vince.',
     tr_unlock_first: 'TROFEO SBLOCCATO!', tr_unlock_nth: (n)=>`${n}ª VITTORIA SU QUESTO CIRCUITO`, tr_unlock_title: 'VITTORIA!', tr_unlock_continue: 'Continua →',
     tr_detail_participations: 'Partecipazioni', tr_detail_wins: 'Vittorie', tr_detail_never: 'Non ancora corso qui', tr_detail_close: 'Chiudi',
     mss_eyebrow: (r,tot)=>`<img class=ico src=assets/icons/checkered_flag.png> MID SEASON DRAFT — Gara ${r}/${tot}`, mss_title: "L'unica finestra di mercato piloti della stagione",
@@ -599,7 +599,7 @@ const I18N = {
     title_continue: '▶ Continua Stagione', title_new: 'Nuova Stagione', title_delete: '<img class=ico src=assets/icons/trash.png> Cancella Salvataggio',
     title_cta: '<img class=ico src=assets/icons/checkered_flag.png> Scegli la tua sfida e scendi in pista — ', title_cta_bold: 'premi per iniziare',
     // Menu laterale
-    menu_new_career: 'Nuova Run', menu_trophy_room: 'Sala Trofei — Scuderia', menu_driver_trophy_room: 'Sala Trofei — Pilota', menu_museum: 'Museo Dynasty', menu_guide: 'Guida', menu_tutorial: 'Tutorial',
+    menu_new_career: 'Nuova Run', menu_trophy_room: 'Sala Trofei', menu_driver_trophy_room: 'Sala Trofei — Pilota', menu_museum: 'Museo Dynasty', menu_guide: 'Guida', menu_tutorial: 'Tutorial',
     tutorial_intro_ingegnere_text: 'Benvenuto nel modulo di addestramento tecnico. Il presente percorso guidato prevede tre sessioni di gara. Le fasi operative sono, in ordine: selezione dei componenti tecnici, selezione del personale pilota, selezione dello sponsor stagionale, gestione delle finestre di sviluppo pre-gara, gestione delle decisioni durante la sessione di gara. Si proceda con la prima fase operativa.',
     tutorial_ingegnere_rejection: 'Selezione non ottimale. Si raccomanda di valutare nuovamente i parametri disponibili prima di procedere.',
     tutorial_goat_reveal_text: 'Ah, eccoti. Finalmente qualcuno con un minimo di gusto. Dimmi: sei riuscito a restare sveglio per tutto quel discorso sui \"moduli operativi\"? Io mi ero quasi addormentato, e guidavo io la macchina. Comunque: sono Elio. Sì, proprio il pilota che hai appena scelto — parlo anche, non solo guido, con tuo grande sollievo immagino. Da qui in poi tocca a me. L\'ingegnere ha fatto il suo lavoro, ora si fa sul serio.',
@@ -875,7 +875,7 @@ const I18N = {
     museum_no_drivers: "No drivers unlocked yet: carry one to the end of a season, or replace it, to start the collection.",
     museum_no_components: 'No components unlocked yet.',
     tr_title: '<img class=ico src=assets/icons/trophy.png> Trophy Room', tr_tagline: 'A trophy for every circuit — gold if won, gray if raced, hidden if not seen yet.',
-    tr_raced: 'CIRCUITS RACED', tr_won: 'CIRCUITS WON', tr_share: '<img class=ico src=assets/icons/upload.png> Share Trophy Room', tr_museum_btn: '<img class=ico src=assets/icons/temple.png>️ Dynasty Museum', tr_back: '← Back',
+    tr_raced: 'CIRCUITS RACED', tr_won: 'CIRCUITS WON', tr_share: '<img class=ico src=assets/icons/upload.png> Share Trophy Room', tr_museum_btn: '<img class=ico src=assets/icons/temple.png>️ Dynasty Museum', tr_back: '← Back', tr_tab_gara: 'Race Trophies', tr_tab_badge: 'Badges', tr_tab_eventi: 'Special Events', tr_badge_coming_soon_title: 'Coming soon', tr_badge_coming_soon_desc: 'Soon you\'ll be able to unlock badges (tester, premium and more) and choose up to 3 to show next to your name on the leaderboard.', tr_events_coming_soon_title: 'Coming soon', tr_events_coming_soon_desc: 'A dedicated page for special events, with rewards for those who take part or win.',
     tr_unlock_first: 'TROPHY UNLOCKED!', tr_unlock_nth: (n)=>`${n}${n===1?'st':n===2?'nd':n===3?'rd':'th'} WIN AT THIS CIRCUIT`, tr_unlock_title: 'VICTORY!', tr_unlock_continue: 'Continue →',
     tr_detail_participations: 'Participations', tr_detail_wins: 'Wins', tr_detail_never: 'Not raced here yet', tr_detail_close: 'Close',
     mss_eyebrow: (r,tot)=>`<img class=ico src=assets/icons/checkered_flag.png> MID SEASON DRAFT — Race ${r}/${tot}`, mss_title: "The season's only driver market window",
@@ -966,7 +966,7 @@ const I18N = {
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
     title_continue: '▶ Continue Season', title_new: 'New Season', title_delete: '<img class=ico src=assets/icons/trash.png> Delete Save',
     title_cta: '<img class=ico src=assets/icons/checkered_flag.png> Choose your challenge and hit the track — ', title_cta_bold: 'tap to start',
-    menu_new_career: 'New Run', menu_trophy_room: 'Trophy Room — Team', menu_driver_trophy_room: 'Trophy Room — Driver', menu_museum: 'Dynasty Museum', menu_guide: 'Guide', menu_tutorial: 'Tutorial',
+    menu_new_career: 'New Run', menu_trophy_room: 'Trophy Room', menu_driver_trophy_room: 'Trophy Room — Driver', menu_museum: 'Dynasty Museum', menu_guide: 'Guide', menu_tutorial: 'Tutorial',
     tutorial_intro_ingegnere_text: 'Welcome to the technical training module. This guided path consists of three race sessions. The operational phases are, in order: technical component selection, driver personnel selection, seasonal sponsor selection, pre-race development window management, in-race decision management. Please proceed with the first operational phase.',
     tutorial_ingegnere_rejection: 'Suboptimal selection. It is recommended to re-evaluate the available parameters before proceeding.',
     tutorial_goat_reveal_text: 'Ah, there you are. Finally someone with a bit of taste. Tell me: did you manage to stay awake through that whole \"operational modules\" speech? I nearly fell asleep, and I was the one driving the car. Anyway: I\'m Elio. Yes, the very driver you just picked — I talk too, not just drive, much to your relief I imagine. From here on, it\'s my turn. The engineer did his job, now it\'s time to get serious.',
@@ -1238,7 +1238,7 @@ const I18N = {
     museum_no_drivers: 'Todavía no has desbloqueado ningún piloto: llévalo hasta el final de una temporada, o sustitúyelo, para empezar la colección.',
     museum_no_components: 'Todavía no has desbloqueado ningún componente.',
     tr_title: '<img class=ico src=assets/icons/trophy.png> Sala de Trofeos', tr_tagline: 'Un trofeo por cada circuito — dorado si ganado, gris si disputado, oculto si aún no visto.',
-    tr_raced: 'CIRCUITOS DISPUTADOS', tr_won: 'CIRCUITOS GANADOS', tr_share: '<img class=ico src=assets/icons/upload.png> Compartir Sala de Trofeos', tr_museum_btn: '<img class=ico src=assets/icons/temple.png>️ Museo Dynasty', tr_back: '← Volver',
+    tr_raced: 'CIRCUITOS DISPUTADOS', tr_won: 'CIRCUITOS GANADOS', tr_share: '<img class=ico src=assets/icons/upload.png> Compartir Sala de Trofeos', tr_museum_btn: '<img class=ico src=assets/icons/temple.png>️ Museo Dynasty', tr_back: '← Volver', tr_tab_gara: 'Trofeos de carrera', tr_tab_badge: 'Insignias', tr_tab_eventi: 'Eventos especiales', tr_badge_coming_soon_title: 'Próximamente', tr_badge_coming_soon_desc: 'Pronto podrás desbloquear insignias (tester, premium y más) y elegir hasta 3 para mostrar junto a tu nombre en la clasificación.', tr_events_coming_soon_title: 'Próximamente', tr_events_coming_soon_desc: 'Una página dedicada a eventos especiales, con premios para quien participa o gana.',
     tr_unlock_first: '¡TROFEO DESBLOQUEADO!', tr_unlock_nth: (n)=>`${n}ª VICTORIA EN ESTE CIRCUITO`, tr_unlock_title: '¡VICTORIA!', tr_unlock_continue: 'Continuar →',
     tr_detail_participations: 'Participaciones', tr_detail_wins: 'Victorias', tr_detail_never: 'Aún no corrido aquí', tr_detail_close: 'Cerrar',
     mss_eyebrow: (r,tot)=>`<img class=ico src=assets/icons/checkered_flag.png> MID SEASON DRAFT — Carrera ${r}/${tot}`, mss_title: 'La única ventana de mercado de pilotos de la temporada',
@@ -1329,7 +1329,7 @@ const I18N = {
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
     title_continue: '▶ Continuar Temporada', title_new: 'Nueva Temporada', title_delete: '<img class=ico src=assets/icons/trash.png> Borrar Partida',
     title_cta: '<img class=ico src=assets/icons/checkered_flag.png> Elige tu desafío y sal a pista — ', title_cta_bold: 'toca para empezar',
-    menu_new_career: 'Nueva Partida', menu_trophy_room: 'Sala de Trofeos — Escudería', menu_driver_trophy_room: 'Sala de Trofeos — Piloto', menu_museum: 'Museo Dynasty', menu_guide: 'Guía', menu_tutorial: 'Tutorial',
+    menu_new_career: 'Nueva Partida', menu_trophy_room: 'Sala de Trofeos', menu_driver_trophy_room: 'Sala de Trofeos — Piloto', menu_museum: 'Museo Dynasty', menu_guide: 'Guía', menu_tutorial: 'Tutorial',
     tutorial_intro_ingegnere_text: 'Bienvenido al módulo de formación técnica. Este itinerario guiado consta de tres sesiones de carrera. Las fases operativas son, en orden: selección de componentes técnicos, selección de personal piloto, selección de patrocinador de temporada, gestión de ventanas de desarrollo previas a la carrera, gestión de decisiones durante la sesión de carrera. Proceda con la primera fase operativa.',
     tutorial_ingegnere_rejection: 'Selección subóptima. Se recomienda reevaluar los parámetros disponibles antes de continuar.',
     tutorial_goat_reveal_text: 'Ah, aquí estás. Por fin alguien con un poco de gusto. Dime: ¿conseguiste mantenerte despierto durante todo ese discurso sobre \"módulos operativos\"? Yo casi me quedo dormido, y eso que conducía el coche. En fin: soy Elio. Sí, el mismo piloto que acabas de elegir — también hablo, no solo conduzco, para tu gran alivio imagino. De aquí en adelante me toca a mí. El ingeniero ha hecho su trabajo, ahora va en serio.',
@@ -12346,7 +12346,8 @@ function renderMuseumDynasty(){
   bindActions();
 }
 
-function renderTrophyRoom(){
+function renderTrophyRoom(tab){
+  tab = tab || 'gara';
   const circuits = DATA.circuiti;
   const total = circuits.length;
   const racedCount = circuits.filter(c=> trophyData[c.nome] && trophyData[c.nome].raced>0).length;
@@ -12354,6 +12355,35 @@ function renderTrophyRoom(){
   const racedPct = Math.round(racedCount/total*100);
   const wonPct = Math.round(wonCount/total*100);
   const cardsHTML = circuits.map(c=>trophyCellHTML(c, trophyData)).join('');
+
+  // V0.9.9.176: PUNTO 18 — ristrutturazione richiesta da Gio: "la sala trofei scuderia diventa
+  // solo sala trofei, con 3 categorie: trofei di gara (quelli che hai già), badge (per ora coming
+  // soon, non abbiamo immagini), eventi speciali (per ora coming soon)". Ognuna condivisibile a
+  // sé — per ora solo la scheda Trofei di gara ha contenuto reale da condividere.
+  const contenutoTab = tab==='badge' ? `
+    <div class="panel tr-coming-soon-panel">
+      <div class="tr-coming-soon-icon">🎖️</div>
+      <div class="tr-coming-soon-title">${t('tr_badge_coming_soon_title')}</div>
+      <div class="dim" style="font-size:13px;line-height:1.6;max-width:340px;margin:8px auto 0;">${t('tr_badge_coming_soon_desc')}</div>
+    </div>` : tab==='eventi' ? `
+    <div class="panel tr-coming-soon-panel">
+      <div class="tr-coming-soon-icon">🏅</div>
+      <div class="tr-coming-soon-title">${t('tr_events_coming_soon_title')}</div>
+      <div class="dim" style="font-size:13px;line-height:1.6;max-width:340px;margin:8px auto 0;">${t('tr_events_coming_soon_desc')}</div>
+    </div>` : `
+    <div class="panel">
+      <div class="trophy-stats-row">
+        <div class="trophy-stat"><div class="trophy-stat-value">${racedCount}/${total}</div><div class="trophy-stat-label">${t('tr_raced')} · ${racedPct}%</div></div>
+        <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${wonCount}/${total}</div><div class="trophy-stat-label">${t('tr_won')} · ${wonPct}%</div></div>
+      </div>
+      <div class="btnrow">
+        <button class="ghost" data-action="share-trophy-room">${t('tr_share')}</button>
+        <button class="ghost" data-action="open-museum">${t('tr_museum_btn')}</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="trophy-grid">${cardsHTML}</div>
+    </div>`;
 
   app.innerHTML = `
   <div class="topbar">
@@ -12368,18 +12398,13 @@ function renderTrophyRoom(){
       <div class="tagline">${t('tr_tagline')}</div>
     </div>
   </div>
-  <div class="panel">
-    <div class="trophy-stats-row">
-      <div class="trophy-stat"><div class="trophy-stat-value">${racedCount}/${total}</div><div class="trophy-stat-label">${t('tr_raced')} · ${racedPct}%</div></div>
-      <div class="trophy-stat"><div class="trophy-stat-value" style="color:var(--legendary);">${wonCount}/${total}</div><div class="trophy-stat-label">${t('tr_won')} · ${wonPct}%</div></div>
+  <div class="wrap">
+    <div class="btnrow" style="margin-bottom:14px;">
+      <button class="${tab==='gara'?'primary':'ghost'}" data-action="switch-trophy-room-tab" data-tab="gara" style="flex:1;font-size:12px;">${t('tr_tab_gara')}</button>
+      <button class="${tab==='badge'?'primary':'ghost'}" data-action="switch-trophy-room-tab" data-tab="badge" style="flex:1;font-size:12px;">${t('tr_tab_badge')}</button>
+      <button class="${tab==='eventi'?'primary':'ghost'}" data-action="switch-trophy-room-tab" data-tab="eventi" style="flex:1;font-size:12px;">${t('tr_tab_eventi')}</button>
     </div>
-    <div class="btnrow">
-      <button class="ghost" data-action="share-trophy-room">${t('tr_share')}</button>
-      <button class="ghost" data-action="open-museum">${t('tr_museum_btn')}</button>
-    </div>
-  </div>
-  <div class="panel">
-    <div class="trophy-grid">${cardsHTML}</div>
+    ${contenutoTab}
   </div>
   `;
   bindActions();
@@ -14250,6 +14275,9 @@ function onAction(e){
   else if(action==='close-trophy-room'){
     state.phase = trophyRoomPreviousPhase || 'title';
     render();
+  }
+  else if(action==='switch-trophy-room-tab'){
+    renderTrophyRoom(el.dataset.tab);
   }
   else if(action==='open-driver-trophy-room'){
     trophyRoomPreviousPhase = state.phase;
