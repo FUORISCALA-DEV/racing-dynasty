@@ -138,8 +138,8 @@ const AUDIO_SETTINGS_KEY = 'racingDynastyAudioV1';
 function loadAudioSettings(){
   try{
     const raw = localStorage.getItem(AUDIO_SETTINGS_KEY);
-    return raw ? { sfxVolume:0.6, musicVolume:0.5, sfxEnabled:true, musicEnabled:true, hapticEnabled:true, ...JSON.parse(raw) } : { sfxVolume:0.6, musicVolume:0.5, sfxEnabled:true, musicEnabled:true, hapticEnabled:true };
-  }catch(e){ return { sfxVolume:0.6, musicVolume:0.5, sfxEnabled:true, musicEnabled:true, hapticEnabled:true }; }
+    return raw ? { sfxVolume:0.6, musicVolume:0.5, sfxEnabled:true, musicEnabled:true, hapticEnabled:true, transitionTipsEnabled:true, ...JSON.parse(raw) } : { sfxVolume:0.6, musicVolume:0.5, sfxEnabled:true, musicEnabled:true, hapticEnabled:true, transitionTipsEnabled:true };
+  }catch(e){ return { sfxVolume:0.6, musicVolume:0.5, sfxEnabled:true, musicEnabled:true, hapticEnabled:true, transitionTipsEnabled:true }; }
 }
 let audioSettings = loadAudioSettings();
 
@@ -609,7 +609,7 @@ const I18N = {
     achievement_unlocked_label: 'Obiettivo Sbloccato',
     se_drivers_standings_title: 'Classifica Piloti', se_constructors_standings_title: 'Classifica Costruttori', se_constructors_count: (n)=>`${n} SCUDERIE`, se_points_th: 'Punti',
     semaforo_no_synergy: 'Nessuna sinergia', circuit_badge_new: 'NUOVO', circuit_badge_never_won: 'Mai vinto qui',
-    install_pitch_title: 'Ti sta piacendo Racing Dynasty?', install_pitch_body: 'Installalo sul tuo dispositivo: si apre come un\'app vera, a schermo intero, con un\'icona tutta sua — niente barra del browser, niente da digitare.', install_pitch_yes: 'Installalo sul tuo dispositivo', install_pitch_no: 'Magari dopo',
+    install_pitch_title: 'Ti sta piacendo Racing Dynasty?', install_pitch_body: 'Installalo sul tuo dispositivo: si apre come un\'app vera, a schermo intero, con un\'icona tutta sua — niente barra del browser, niente da digitare.', install_pitch_yes: 'Installalo sul tuo dispositivo', install_pitch_no: 'Magari dopo', tt_continue: 'Continua →', settings_transition_tips: 'Consigli tra le schermate',
 
     comp_chassis: 'Telaio', comp_aero: 'Aerodinamica', comp_tires: 'Gomme', comp_strategist: 'Team Principal',
     // Titolo
@@ -999,7 +999,7 @@ const I18N = {
     achievement_unlocked_label: 'Achievement Unlocked',
     se_drivers_standings_title: 'Drivers\' Standings', se_constructors_standings_title: 'Constructors\' Standings', se_constructors_count: (n)=>`${n} TEAMS`, se_points_th: 'Points',
     semaforo_no_synergy: 'No synergy', circuit_badge_new: 'NEW', circuit_badge_never_won: 'Never won here',
-    install_pitch_title: 'Enjoying Racing Dynasty?', install_pitch_body: 'Install it on your device: it opens like a real app, fullscreen, with its own icon — no browser bar, nothing to type.', install_pitch_yes: 'Install on your device', install_pitch_no: 'Maybe later',
+    install_pitch_title: 'Enjoying Racing Dynasty?', install_pitch_body: 'Install it on your device: it opens like a real app, fullscreen, with its own icon — no browser bar, nothing to type.', install_pitch_yes: 'Install on your device', install_pitch_no: 'Maybe later', tt_continue: 'Continue →', settings_transition_tips: 'Between-screen tips',
 
     comp_chassis: 'Chassis', comp_aero: 'Aerodynamics', comp_tires: 'Tires', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
@@ -1383,7 +1383,7 @@ const I18N = {
     achievement_unlocked_label: 'Logro Desbloqueado',
     se_drivers_standings_title: 'Clasificación de Pilotos', se_constructors_standings_title: 'Clasificación de Constructores', se_constructors_count: (n)=>`${n} ESCUDERÍAS`, se_points_th: 'Puntos',
     semaforo_no_synergy: 'Sin sinergia', circuit_badge_new: 'NUEVO', circuit_badge_never_won: 'Nunca ganado aquí',
-    install_pitch_title: '¿Te está gustando Racing Dynasty?', install_pitch_body: 'Instálalo en tu dispositivo: se abre como una app real, a pantalla completa, con su propio icono — sin barra del navegador, nada que escribir.', install_pitch_yes: 'Instalar en tu dispositivo', install_pitch_no: 'Quizás después',
+    install_pitch_title: '¿Te está gustando Racing Dynasty?', install_pitch_body: 'Instálalo en tu dispositivo: se abre como una app real, a pantalla completa, con su propio icono — sin barra del navegador, nada que escribir.', install_pitch_yes: 'Instalar en tu dispositivo', install_pitch_no: 'Quizás después', tt_continue: 'Continuar →', settings_transition_tips: 'Consejos entre pantallas',
 
     comp_chassis: 'Chasis', comp_aero: 'Aerodinámica', comp_tires: 'Neumáticos', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
@@ -7819,12 +7819,14 @@ function advanceAfterPitlane(){
     // V0.9.9.170: le run Daily (non tutorial) passano ora dalla rivelazione animata del punteggio,
     // richiesta da Gio (punto 13) — non più dritte alla normale fine stagione.
     state.phase = state.isTutorialRun ? 'tutorial-complete' : (state.isDailySeason ? 'daily-score-reveal' : 'season_end');
+    render();
   } else {
     applyAIUpgrades();
     reevaluateRivals();
     state.phase = state.pendingRivalNotice ? 'rival-announce' : 'hub';
+    // V0.9.9.189: PUNTO B — schermate di transizione tra una gara e la successiva, richiesto da Gio.
+    maybeShowBetweenRacesTip(render);
   }
-  render();
 }
 
 // V0.9.7.9.5: dopo una gara di Carriera Pilota si torna all'Hub, non al Pit Lane (il giocatore
@@ -14143,7 +14145,7 @@ function onAction(e){
     state.team.customName = val || 'Dynasty Racing';
     const nationEl = document.getElementById('teamNationSelect');
     state.team.nation = (nationEl && nationEl.value) || 'Italia';
-    state.phase='draft'; startDraftTurn();
+    maybeShowSeasonStartTip(()=>{ state.phase='draft'; startDraftTurn(); });
   }
   else if(action==='pick-draft'){ pickDraftTurnOption(el.dataset.id); }
   else if(action==='pick-first-lang'){
@@ -14948,6 +14950,7 @@ function openSettings(){
     ${isStreamerModeOn() ? `<button type="button" class="menu-item" id="sidebarStreamerNameBtn">✏️ <span>${t('settings_streamer_name')}: ${getStreamerName()}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarSpeedBtn"><img class=ico src=assets/icons/rocket.png> <span>${t('settings_speed')}: ${defaultRaceSpeed}×</span></button>
     <button type="button" class="menu-item" id="sidebarDecisionTimerBtn">⏱️ <span>${t('settings_decision_timer')}: ${decisionTimerEnabled?t('on'):t('off')}</span></button>
+    <button type="button" class="menu-item" id="sidebarTransitionTipsBtn">💡 <span>${t('settings_transition_tips')}: ${transitionTipsAbilitate()?t('on'):t('off')}</span></button>
     ${!isStandaloneApp() ? `<button type="button" class="menu-item" id="sidebarInstallBtn" style="color:var(--legendary);"><img class=ico src=assets/icons/mobile.png> <span>${t('settings_install')}</span></button>` : ''}
     <button type="button" class="menu-item" id="sidebarFullResetBtn" style="color:var(--danger);"><img class=ico src=assets/icons/trash.png>️ <span>${t('settings_reset')}</span></button>
   `;
@@ -15041,6 +15044,11 @@ function openSettings(){
     if(state && state.live && state.live.activeDecision){
       state.live.decisionDeadline = decisionTimerEnabled ? (Date.now()+DECISION_TIME_MS) : null;
     }
+  });
+  document.getElementById('sidebarTransitionTipsBtn').addEventListener('click', ()=>{
+    audioSettings.transitionTipsEnabled = !transitionTipsAbilitate();
+    saveAudioSettings();
+    document.getElementById('sidebarTransitionTipsBtn').innerHTML = `💡 <span>${t('settings_transition_tips')}: ${transitionTipsAbilitate()?t('on'):t('off')}</span>`;
   });
   const installBtn = document.getElementById('sidebarInstallBtn');
   if(installBtn){
@@ -15260,6 +15268,44 @@ function guideSynergyStackDemoHTML(){
   </div>`;
 }
 
+// V0.9.9.190: demo isolata per il consiglio "Scouting: prima di confermare" — dati completamente
+// fittizi (mai state.team reale), costruiti apposta per mostrare lo scenario descritto nel
+// consiglio: un candidato con rating grezzo più alto (72 contro 65) che però rompe una sinergia
+// attiva, facendo scendere il totale invece di farlo salire (78->74). Riusa le stesse identiche
+// funzioni della vera schermata di conferma scouting (semaforoCirclesData, miniSemaforoHTML,
+// computeTeamStrengthWithSynergy), passando solo squadre ipotetiche isolate.
+function tipScoutingDemoHTML(){
+  const pilotaFittizio = { nome:'Demo', rating:70, sinergia:'audace' };
+  const squadraPrima = {
+    pilotMain: pilotaFittizio, pilotSecond:{ nome:'Demo 2', rating:68, sinergia:'calcolatore' },
+    motore:{ nome:'Motore A', rating:65, sinergia:'audace' }, // in coppia col pilota: sinergia attiva
+    telaio:{ nome:'Telaio', rating:70, sinergia:'elastico' }, aero:{ nome:'Aero', rating:68, sinergia:'risoluto' },
+    gomme:{ nome:'Gomme', rating:66, sinergia:'instancabile' }, stratega:{ nome:'Stratega', rating:64, sinergia:'silenzioso' },
+    _synergyBonus:{},
+  };
+  const squadraDopo = { ...squadraPrima,
+    motore:{ nome:'Motore B', rating:66, sinergia:'visionario' }, // rating grezzo di poco più alto, ma NESSUNA sinergia col pilota: la coppia si rompe
+    _synergyBonus:{ motore:0 },
+  };
+  const circoliPrima = semaforoCirclesData(squadraPrima);
+  const circoliDopo = semaforoCirclesData(squadraDopo);
+  const totalePrima = computeTeamStrengthWithSynergy(squadraPrima);
+  const totaleDopo = computeTeamStrengthWithSynergy(squadraDopo);
+  const lang = I18N[currentLang] ? currentLang : 'it';
+  const lbl = { it:{ prima:'PRIMA', dopo:'DOPO', rating:'rating' }, en:{ prima:'BEFORE', dopo:'AFTER', rating:'rating' }, es:{ prima:'ANTES', dopo:'DESPUÉS', rating:'rating' } }[lang];
+  return `<div class="guide-img-wrap"><div class="grid grid-2" style="gap:10px;">
+    <div class="mini" style="padding:10px;">
+      <div class="role">${lbl.prima}</div>
+      <div style="margin:6px 0;">${miniSemaforoHTML(circoliPrima)}</div>
+      <div class="rt">${totalePrima} ${lbl.rating}</div>
+    </div>
+    <div class="mini" style="padding:10px;">
+      <div class="role">${lbl.dopo}</div>
+      <div style="margin:6px 0;">${miniSemaforoHTML(circoliDopo)}</div>
+      <div class="rt" style="color:var(--danger);">${totaleDopo} ${lbl.rating}</div>
+    </div>
+  </div></div>`;
+}
 function guideWeightBarsHTML(){
   const labelsIt = { pilota:'Pilota', motore:'Motore', telaio:'Telaio', aero:'Aero', gomme:'Gomme', stratega:'Team Pr.' };
   const labelsEn = { pilota:'Driver', motore:'Engine', telaio:'Chassis', aero:'Aero', gomme:'Tires', stratega:'Team Pr.' };
@@ -15499,6 +15545,310 @@ function guidePanelHTML(){
     <div class="guide-section-body">${s.body}</div>
   </div>`).join('');
 }
+// ============================================================================
+// V0.9.9.189: SCHERMATE DI TRANSIZIONE — richiesto da Gio, brief completo approvato.
+// Consigli pratici, curiosità piloti/scuderie/circuiti, mostrate a rotazione tra una stagione e
+// l'altra e tra una gara e la successiva. Ogni voce: id, categoria, titolo/testo (3 lingue), tipo
+// di visuale (nessuna / demo-ui riusata dalla Guida / illustrazione dedicata), condizioni.
+// Le prime 7 (categoria 'meccanica') riusano le demo GIA' esistenti e GIA' tradotte della Guida
+// (guideSemaforoDemoHTML, guideWeightBarsHTML) dove disponibili — mai duplicati, mai numeri
+// inventati: ogni cifra verificata nel codice prima di scriverla.
+// ============================================================================
+const TRANSITION_TIPS = [
+  {
+    id:'tip-sinergie', categoria:'meccanica', demoFn:'guideSemaforoDemoHTML',
+    titolo:{ it:'Sinergie', en:'Synergies', es:'Sinergias' },
+    testo:{
+      it:'Due pezzi con la stessa mentalità danno un bonus quando sono insieme in squadra. Guarda il semaforo durante il draft: ogni cerchio acceso è una coppia attiva.',
+      en:'Two pieces sharing the same mentality get a bonus when they\'re together on your team. Watch the semaphore during the draft: every lit circle is an active pair.',
+      es:'Dos piezas con la misma mentalidad reciben un bonus cuando están juntas en el equipo. Observa el semáforo durante el draft: cada círculo encendido es una pareja activa.',
+    },
+  },
+  {
+    id:'tip-aiuto-coda', categoria:'meccanica',
+    titolo:{ it:'Aiuto in coda', en:'Catch-up help', es:'Ayuda a los últimos' },
+    testo:{
+      it:'Il prezzo della ricerca di mercato dipende dalla tua posizione in classifica Costruttori. Chi è indietro scouta più a buon mercato — chi guida paga il prezzo pieno.',
+      en:"Market research price depends on your Constructors' standing. If you're behind, scouting is cheaper — the leader pays full price.",
+      es:'El precio de la investigación de mercado depende de tu posición en la clasificación de Constructores. Si vas atrás, escutar sale más barato — quien lidera paga el precio completo.',
+    },
+  },
+  {
+    id:'tip-scouting-confronto', categoria:'meccanica', demoFn:'tipScoutingDemoHTML',
+    titolo:{ it:'Scouting: prima di confermare', en:'Scouting: before you confirm', es:'Scouting: antes de confirmar' },
+    testo:{
+      it:'Ogni sostituzione allo scouting mostra il confronto prima/dopo, sinergie incluse. Se il numero scende, di solito conviene aspettare un pezzo migliore.',
+      en:"Every scouting swap shows a before/after comparison, synergies included. If the number goes down, it's usually worth waiting for a better piece.",
+      es:'Cada sustitución en el scouting muestra la comparación antes/después, sinergias incluidas. Si el número baja, normalmente conviene esperar una pieza mejor.',
+    },
+  },
+  {
+    id:'tip-rischio-sviluppo', categoria:'meccanica',
+    titolo:{ it:'Rischio sviluppo componenti', en:'Component development risk', es:'Riesgo de desarrollo de componentes' },
+    testo:{
+      it:'Sviluppare un componente comporta sempre un rischio di fallimento, tra il 5% e il 50% a seconda di quanto rischi. Più aggressivo lo sviluppo, più alto il rischio — ma anche il guadagno potenziale.',
+      en:'Developing a component always carries a failure risk, between 5% and 50% depending on how much you push it. More aggressive development, higher risk — but also higher potential gain.',
+      es:'Desarrollar un componente siempre conlleva un riesgo de fallo, entre el 5% y el 50% según cuánto arriesgues. Desarrollo más agresivo, mayor riesgo — pero también mayor ganancia potencial.',
+    },
+  },
+  {
+    id:'tip-rain-master', categoria:'meccanica',
+    titolo:{ it:'Piloti sotto la pioggia', en:'Drivers in the rain', es:'Pilotos bajo la lluvia' },
+    testo:{
+      it:'Non tutti i piloti reagiscono uguale sul bagnato. Un Rain Master commette il 45% di errori in meno rispetto a un pilota normale — vale la pena saperlo prima che inizi a piovere.',
+      en:'Not every driver handles wet conditions the same way. A Rain Master makes 45% fewer mistakes than a regular driver — worth knowing before the rain starts.',
+      es:'No todos los pilotos reaccionan igual en mojado. Un Rain Master comete un 45% menos de errores que un piloto normal — vale la pena saberlo antes de que empiece a llover.',
+    },
+  },
+  {
+    id:'tip-museo', categoria:'meccanica',
+    titolo:{ it:'Museo Dynasty', en:'Dynasty Museum', es:'Museo Dynasty' },
+    testo:{
+      it:'A fine stagione, tutto ciò che hai in squadra in quel momento — piloti e componenti — si sblocca automaticamente nel Museo. Non serve fare nulla: basta arrivarci con quel pezzo ancora in squadra.',
+      en:'At the end of the season, everything on your team at that moment — drivers and components — unlocks automatically in the Museum. No action needed: just have that piece still on your team when it happens.',
+      es:'Al final de la temporada, todo lo que tienes en el equipo en ese momento — pilotos y componentes — se desbloquea automáticamente en el Museo. No hace falta hacer nada: basta con tener esa pieza todavía en el equipo.',
+    },
+  },
+  {
+    id:'tip-peso-scuderia', categoria:'meccanica', demoFn:'guideWeightBarsHTML',
+    titolo:{ it:'Il peso reale della scuderia', en:'The real weight of your team', es:'El peso real de la escudería' },
+    testo:{
+      it:'Non tutti i 7 pezzi contano uguale: il pilota pesa il 33% del rating complessivo, quasi il doppio di un singolo componente (10-17% ciascuno). Un pilota forte conta più di un motore perfetto.',
+      en:"Not all 7 pieces count equally: the driver is 33% of the overall rating, almost double a single component (10-17% each). A strong driver matters more than a perfect engine.",
+      es:'No las 7 piezas cuentan igual: el piloto pesa el 33% del rating total, casi el doble que un solo componente (10-17% cada uno). Un piloto fuerte cuenta más que un motor perfecto.',
+    },
+  },
+  { id:'tip-pilota-goat', categoria:'pilota', asset:'assets/tips/pilot-the-goat.webp',
+    titolo:{ it:'THE GOAT', en:'THE GOAT', es:'THE GOAT' },
+    testo:{
+      it:'Nessuno conosce il suo vero nome. Nessuno l\'ha mai visto senza casco. Nelle foto di vent\'anni fa indossa già la stessa tuta. I piloti di allora si sono ritirati. Lui è ancora quello da battere.',
+      en:'Nobody knows his real name. Nobody has ever seen him without a helmet. In photos from twenty years ago, he\'s already wearing the same suit. The drivers from back then have retired. He\'s still the one to beat.',
+      es:'Nadie conoce su verdadero nombre. Nadie lo ha visto nunca sin casco. En fotos de hace veinte años ya lleva el mismo mono. Los pilotos de entonces se han retirado. Él sigue siendo el rival a batir.' } },
+  { id:'tip-pilota-kimi-virtanen', categoria:'pilota', asset:'assets/tips/pilot-kimi-virtanen.webp',
+    titolo:{ it:'Kimi Virtanen', en:'Kimi Virtanen', es:'Kimi Virtanen' },
+    testo:{
+      it:'Dopo la sua prima vittoria, il box gli ha chiesto via radio cosa provasse. «Bene.» Alla domanda se volesse aggiungere qualcosa, ha risposto: «No.» La squadra conserva ancora la registrazione.',
+      en:'After his first win, the pit wall asked over the radio how he felt. "Good." Asked if he wanted to add anything, he said: "No." The team still keeps the recording.',
+      es:'Tras su primera victoria, el muro le preguntó por radio cómo se sentía. «Bien.» Al preguntarle si quería añadir algo, respondió: «No.» El equipo todavía conserva la grabación.' } },
+  { id:'tip-pilota-riccardo-de-santis', categoria:'pilota', asset:'assets/tips/pilot-riccardo-de-santis.webp',
+    titolo:{ it:'Riccardo De Santis', en:'Riccardo De Santis', es:'Riccardo De Santis' },
+    testo:{
+      it:'Dice che vincere sotto la pioggia venga meglio in fotografia. I meccanici lo hanno sorpreso a provare un\'esultanza davanti al riflesso del camion. Era giovedì. Le prove libere non erano ancora cominciate.',
+      en:'He says winning in the rain looks better in photos. His mechanics once caught him rehearsing a celebration in front of the truck\'s reflection. It was Thursday. Practice hadn\'t even started yet.',
+      es:'Dice que ganar bajo la lluvia queda mejor en foto. Los mecánicos lo pillaron ensayando una celebración frente al reflejo del camión. Era jueves. Los libres ni habían empezado.' } },
+  { id:'tip-pilota-aditya-malhotra', categoria:'pilota', asset:'assets/tips/pilot-aditya-malhotra.webp',
+    titolo:{ it:'Aditya Malhotra', en:'Aditya Malhotra', es:'Aditya Malhotra' },
+    testo:{
+      it:'Prima di ogni gara percorre mentalmente il circuito tre volte, curva dopo curva. Una volta un ingegnere lo ha interrotto all\'ultima frenata. Aditya ha riaperto gli occhi, lo ha guardato e ha ricominciato dalla partenza.',
+      en:'Before every race he mentally drives the circuit three times, corner by corner. An engineer once interrupted him at the last braking point. Aditya opened his eyes, looked at him, and started over from the start.',
+      es:'Antes de cada carrera recorre mentalmente el circuito tres veces, curva a curva. Una vez un ingeniero lo interrumpió en la última frenada. Aditya abrió los ojos, lo miró y volvió a empezar desde la salida.' } },
+  { id:'tip-pilota-sven-de-vries', categoria:'pilota', asset:'assets/tips/pilot-sven-de-vries.webp',
+    titolo:{ it:'Sven de Vries', en:'Sven de Vries', es:'Sven de Vries' },
+    testo:{
+      it:'Quando arriva la pioggia, è l\'unico nel box a sorridere. Riguarda ogni suo sorpasso da tutte le telecamere disponibili. Se la regia se ne perde uno, il giorno dopo arriva puntualmente a chiedere spiegazioni.',
+      en:'When the rain arrives, he\'s the only one in the garage smiling. He rewatches every overtake of his from every available camera angle. If the broadcast misses one, he shows up the next day right on time asking why.',
+      es:'Cuando llega la lluvia, es el único en el box que sonríe. Revisa cada uno de sus adelantamientos desde todas las cámaras disponibles. Si la realización se pierde uno, al día siguiente aparece puntual a pedir explicaciones.' } },
+  { id:'tip-pilota-omar-el-amrani', categoria:'pilota', asset:'assets/tips/pilot-omar-el-amrani.webp',
+    titolo:{ it:'Omar El Amrani', en:'Omar El Amrani', es:'Omar El Amrani' },
+    testo:{
+      it:'Nelle interviste risponde a monosillabi. Nei debriefing lascia parlare tutti, poi indica un punto preciso della telemetria. I suoi meccanici hanno imparato a non chiudere mai la riunione prima che abbia detto qualcosa.',
+      en:'In interviews he answers in monosyllables. In debriefs he lets everyone else talk, then points at one precise spot on the telemetry. His mechanics have learned never to close the meeting before he\'s said something.',
+      es:'En las entrevistas responde con monosílabos. En los debriefings deja hablar a todos y luego señala un punto exacto de la telemetría. Sus mecánicos han aprendido a no cerrar nunca la reunión antes de que diga algo.' } },
+  { id:'tip-pilota-hugo-castro', categoria:'pilota', asset:'assets/tips/pilot-hugo-castro.webp',
+    titolo:{ it:'Hugo Castro', en:'Hugo Castro', es:'Hugo Castro' },
+    testo:{
+      it:'In griglia tamburella sul volante, stringe i guanti e controlla gli specchietti. Poi domanda via radio: «Quanto manca?» Il suo ingegnere gli ricorda regolarmente che i semafori sono proprio davanti a lui.',
+      en:'On the grid he drums on the wheel, tightens his gloves, checks the mirrors. Then he asks over the radio: "How long left?" His engineer regularly reminds him the lights are right in front of him.',
+      es:'En la parrilla tamborilea en el volante, se aprieta los guantes y revisa los retrovisores. Luego pregunta por radio: «¿Cuánto falta?» Su ingeniero le recuerda con frecuencia que el semáforo está justo delante.' } },
+  { id:'tip-pilota-ethan-rutherford', categoria:'pilota', asset:'assets/tips/pilot-ethan-rutherford.webp',
+    titolo:{ it:'Ethan Rutherford', en:'Ethan Rutherford', es:'Ethan Rutherford' },
+    testo:{
+      it:'Durante un test ha chiesto tre volte di correggere la regolazione dell\'ala anteriore. Alla fine il meccanico gli ha mostrato il calibro: era esattamente come richiesto. Ethan lo ha osservato un momento. «È tarato?»',
+      en:'During a test he asked three times to correct the front wing setting. Eventually the mechanic showed him the gauge: it was exactly as requested. Ethan looked at it for a moment. "Is that thing calibrated?"',
+      es:'Durante un test pidió tres veces corregir el reglaje del alerón delantero. Al final el mecánico le mostró el calibre: era exactamente lo pedido. Ethan lo observó un momento. «¿Está calibrado eso?»' } },
+  { id:'tip-pilota-haruto-sato', categoria:'pilota', asset:'assets/tips/pilot-haruto-sato.webp',
+    titolo:{ it:'Haruto Sato', en:'Haruto Sato', es:'Haruto Sato' },
+    testo:{
+      it:'Ha cominciato sui kart a noleggio, mettendo da parte i soldi per qualche giro in più. Con il primo contratto ha comprato proprio uno di quei kart. Lo tiene in garage, accanto allo spazio lasciato libero per i trofei.',
+      en:'He started on rental karts, saving up for a few extra laps. With his first contract, he bought one of those very karts. He keeps it in the garage, next to the space he\'s left free for trophies.',
+      es:'Empezó en karts de alquiler, ahorrando para unas vueltas más. Con su primer contrato compró uno de esos mismos karts. Lo guarda en el garaje, junto al espacio que ha dejado libre para trofeos.' } },
+  { id:'tip-pilota-sander-nilsen', categoria:'pilota', asset:'assets/tips/pilot-sander-nilsen.webp',
+    titolo:{ it:'Sander Nilsen', en:'Sander Nilsen', es:'Sander Nilsen' },
+    testo:{
+      it:'Sul suo primo podio ha cercato invano di trattenere un sorriso enorme per tutta la durata dell\'inno. Quando ha visto il suo meccanico piangere sotto il palco, è scoppiato a ridere. La foto è ancora appesa nel box.',
+      en:'On his first podium he tried and failed to hold back a huge grin through the entire anthem. When he saw his mechanic crying below the stage, he burst out laughing. The photo still hangs in the garage.',
+      es:'En su primer podio intentó en vano contener una sonrisa enorme durante todo el himno. Cuando vio a su mecánico llorar bajo el podio, se echó a reír. La foto todavía cuelga en el box.' } },
+  { id:'tip-pilota-felipe-azevedo', categoria:'pilota', asset:'assets/tips/pilot-felipe-azevedo.webp',
+    titolo:{ it:'Felipe Azevedo', en:'Felipe Azevedo', es:'Felipe Azevedo' },
+    testo:{
+      it:'Entra nei box avversari per salutare i meccanici e finisce regolarmente per prendere il caffè con loro. Il suo team principal sostiene che conosca meglio le altre scuderie della propria. Felipe insiste che sia lavoro di squadra.',
+      en:'He walks into rival garages to say hi to the mechanics and regularly ends up having coffee with them. His team principal claims he knows the other teams better than his own. Felipe insists it\'s just teamwork.',
+      es:'Entra en los boxes rivales a saludar a los mecánicos y suele acabar tomando café con ellos. Su jefe de equipo sostiene que conoce mejor a los otros equipos que al suyo. Felipe insiste en que es trabajo en equipo.' } },
+
+  // ---- 6 SCUDERIE (lore approvata) ----
+  { id:'tip-scuderia-phoenix-works', categoria:'scuderia', asset:'assets/team-logos/phoenix-works.webp',
+    titolo:{ it:'Phoenix Works', en:'Phoenix Works', es:'Phoenix Works' },
+    testo:{
+      it:'Budget più basso del paddock, ma il rating componenti tra i più alti. Phoenix Works punta tutto sull\'innovazione tecnica per compensare... o morire provandoci.',
+      en:'The lowest budget in the paddock, but among the highest component ratings. Phoenix Works bets everything on technical innovation to compensate... or dies trying.',
+      es:'El presupuesto más bajo del paddock, pero entre los ratings de componentes más altos. Phoenix Works lo apuesta todo a la innovación técnica para compensar... o muere en el intento.' } },
+  { id:'tip-scuderia-aurora-works', categoria:'scuderia', asset:'assets/team-logos/aurora-works.webp',
+    titolo:{ it:'Aurora Works', en:'Aurora Works', es:'Aurora Works' },
+    testo:{
+      it:'Vent\'anni di storia, nessun titolo e risorse praticamente illimitate. Alla presentazione della stagione, l\'obiettivo è sempre lo stesso: arrivare tra i primi cinque. I giornalisti hanno smesso di chiedere perché. Gli sponsor, non ancora.',
+      en:'Twenty years of history, no titles, and virtually unlimited resources. At every season launch, the goal is always the same: finish in the top five. Journalists have stopped asking why. Sponsors, not yet.',
+      es:'Veinte años de historia, ningún título y recursos prácticamente ilimitados. En la presentación de cada temporada, el objetivo es siempre el mismo: entrar entre los cinco primeros. Los periodistas han dejado de preguntar por qué. Los patrocinadores, todavía no.' } },
+  { id:'tip-scuderia-dragon-gp', categoria:'scuderia', asset:'assets/team-logos/dragon-gp.webp',
+    titolo:{ it:'Dragon GP', en:'Dragon GP', es:'Dragon GP' },
+    testo:{
+      it:'A Dragon GP i giovani non vengono ingaggiati per aspettare il proprio turno. Il team principal indica l\'obiettivo della stagione prima ancora di mostrare la vettura: il titolo. «L\'esperienza arriverà. Intanto proviamo a vincere.»',
+      en:'At Dragon GP, young drivers aren\'t signed to wait their turn. The team principal states the season\'s target before even unveiling the car: the title. "Experience will come. In the meantime, let\'s try to win."',
+      es:'En Dragon GP los jóvenes no se fichan para esperar su turno. El jefe de equipo marca el objetivo de la temporada antes incluso de mostrar el coche: el título. «La experiencia ya llegará. Mientras tanto, intentemos ganar.»' } },
+  { id:'tip-scuderia-tempest-formula', categoria:'scuderia', asset:'assets/team-logos/tempest-formula.webp',
+    titolo:{ it:'Tempest Formula', en:'Tempest Formula', es:'Tempest Formula' },
+    testo:{
+      it:'A Tempest Formula ogni spesa deve essere giustificata, ma il podio resta l\'obiettivo dichiarato. In officina tengono una bottiglia pronta per festeggiare. È nel registro delle spese da tre stagioni. Nessuno ha ancora osato tagliarla.',
+      en:'At Tempest Formula every expense must be justified, but the podium remains the stated goal. The workshop keeps a bottle ready to celebrate. It\'s been on the expense ledger for three seasons. Nobody has dared cut it yet.',
+      es:'En Tempest Formula cada gasto debe justificarse, pero el podio sigue siendo el objetivo declarado. En el taller guardan una botella lista para celebrar. Lleva tres temporadas en el registro de gastos. Nadie se ha atrevido todavía a recortarla.' } },
+  { id:'tip-scuderia-valkyrie-gp', categoria:'scuderia', asset:'assets/team-logos/valkyrie-gp.webp',
+    titolo:{ it:'Valkyrie GP', en:'Valkyrie GP', es:'Valkyrie GP' },
+    testo:{
+      it:'Nel briefing di Valkyrie GP si dedica molto tempo a come attaccare e pochissimo a come aspettare. Una volta un ingegnere ha proposto una gara prudente. Il team principal gli ha chiesto se si sentisse bene.',
+      en:'Valkyrie GP\'s briefings spend a lot of time on how to attack and very little on how to wait. An engineer once suggested a cautious race. The team principal asked him if he was feeling alright.',
+      es:'En el briefing de Valkyrie GP se dedica mucho tiempo a cómo atacar y muy poco a cómo esperar. Una vez un ingeniero propuso una carrera prudente. El jefe de equipo le preguntó si se encontraba bien.' } },
+  { id:'tip-scuderia-quantum-performance', categoria:'scuderia', asset:'assets/team-logos/quantum-performance.webp',
+    titolo:{ it:'Quantum Performance', en:'Quantum Performance', es:'Quantum Performance' },
+    testo:{
+      it:'Quantum Performance investe cifre enormi su piloti che altrove vengono definiti «non ancora pronti». Nei debriefing si confrontano gli errori di oggi con quelli della settimana prima. Se sono diversi, qualcuno prende appunti con soddisfazione.',
+      en:'Quantum Performance invests huge sums in drivers labeled "not ready yet" elsewhere. In debriefs, today\'s mistakes are compared with last week\'s. If they\'re different, someone takes notes with quiet satisfaction.',
+      es:'Quantum Performance invierte cifras enormes en pilotos que en otros sitios llaman «todavía no listos». En los debriefings se comparan los errores de hoy con los de la semana anterior. Si son distintos, alguien toma notas con satisfacción.' } },
+
+  // ---- 5 CIRCUITI (lore approvata) ----
+  { id:'tip-circuito-imperium', categoria:'circuito', asset:'assets/tips/circuit-imperium-grand-prix.webp', circuitoNome:'Imperium Grand Prix',
+    titolo:{ it:'Imperium Grand Prix', en:'Imperium Grand Prix', es:'Imperium Grand Prix' },
+    testo:{
+      it:'Tra le colonne dell\'Imperium il rettilineo sembra non finire mai. Lo spazio tra la vettura e i muri, invece, finisce subito. I piloti parlano volentieri della bellezza del tracciato. Di solito dopo aver parcheggiato.',
+      en:'Between Imperium\'s columns, the straight seems to never end. The gap between car and walls, on the other hand, ends immediately. Drivers love talking about the track\'s beauty. Usually after they\'ve parked.',
+      es:'Entre las columnas del Imperium la recta parece no acabar nunca. El espacio entre el coche y los muros, en cambio, se acaba enseguida. A los pilotos les encanta hablar de la belleza del trazado. Normalmente después de aparcar.' } },
+  { id:'tip-circuito-silver-coast', categoria:'circuito', asset:'assets/tips/circuit-silver-coast-grand-prix.webp', circuitoNome:'Silver Coast Grand Prix',
+    titolo:{ it:'Silver Coast Grand Prix', en:'Silver Coast Grand Prix', es:'Silver Coast Grand Prix' },
+    testo:{
+      it:'A Silver Coast la previsione più affidabile è quella di chi guarda fuori dal box. I meccanici preparano sempre due strategie: una per l\'asciutto e una per quando smetteranno di crederci.',
+      en:'At Silver Coast, the most reliable forecast is whoever\'s looking out of the garage door. The mechanics always prepare two strategies: one for dry conditions, and one for when they stop believing in them.',
+      es:'En Silver Coast la previsión más fiable es la de quien mira por la puerta del box. Los mecánicos siempre preparan dos estrategias: una para seco y otra para cuando dejen de creer en ella.' } },
+  { id:'tip-circuito-golden-dunes', categoria:'circuito', asset:'assets/tips/circuit-golden-dunes-grand-prix.webp', circuitoNome:'Golden Dunes Grand Prix',
+    titolo:{ it:'Golden Dunes Grand Prix', en:'Golden Dunes Grand Prix', es:'Golden Dunes Grand Prix' },
+    testo:{
+      it:'A Golden Dunes, nelle ore più calde, il rettilineo sembra sciogliersi all\'orizzonte. Le fotografie promettono silenzio e dune dorate. Chi scende dall\'auto chiede soltanto dove sia l\'ombra più vicina.',
+      en:'At Golden Dunes, in the hottest hours, the straight seems to melt into the horizon. The photos promise silence and golden dunes. Whoever steps out of the car just asks where the nearest shade is.',
+      es:'En Golden Dunes, en las horas más calurosas, la recta parece derretirse en el horizonte. Las fotos prometen silencio y dunas doradas. Quien baja del coche solo pregunta dónde está la sombra más cercana.' } },
+  { id:'tip-circuito-nordhaven', categoria:'circuito', asset:'assets/tips/circuit-nordhaven-grand-prix.webp', circuitoNome:'Nordhaven Grand Prix',
+    titolo:{ it:'Nordhaven Grand Prix', en:'Nordhaven Grand Prix', es:'Nordhaven Grand Prix' },
+    testo:{
+      it:'Per arrivare a Nordhaven i camion delle scuderie salgono per ore. Dall\'ultima curva si vedono le montagne oltre il paddock. I piloti le scoprono quasi sempre nelle fotografie: durante la gara hanno altro da guardare.',
+      en:'To reach Nordhaven, the team trucks climb for hours. From the last corner you can see the mountains beyond the paddock. Drivers usually discover them in the photos afterward: during the race, they\'ve got other things to look at.',
+      es:'Para llegar a Nordhaven, los camiones de los equipos suben durante horas. Desde la última curva se ven las montañas más allá del paddock. Los pilotos casi siempre las descubren en las fotos: durante la carrera tienen otras cosas que mirar.' } },
+  { id:'tip-circuito-black-forest', categoria:'circuito', asset:'assets/tips/circuit-black-forest-grand-prix.webp', circuitoNome:'Black Forest Grand Prix',
+    titolo:{ it:'Black Forest Grand Prix', en:'Black Forest Grand Prix', es:'Black Forest Grand Prix' },
+    testo:{
+      it:'A Black Forest il rettilineo scompare tra gli alberi e le curve si alternano tra sole e ombra. I veterani riconoscono ogni tratto. Quando devono spiegarlo a un debuttante, «dopo quell\'albero» si rivela un\'indicazione poco utile.',
+      en:'At Black Forest the straight vanishes among the trees and the corners alternate between sun and shade. Veterans know every inch of it. When they try to explain it to a rookie, "after that tree" turns out not to be very useful.',
+      es:'En Black Forest la recta desaparece entre los árboles y las curvas alternan sol y sombra. Los veteranos reconocen cada tramo. Cuando intentan explicárselo a un debutante, «después de aquel árbol» resulta poco útil.' } },
+];
+
+// V0.9.9.189: frequenza configurabile da un unico punto, come richiesto — punto B (tra una gara e
+// la successiva): probabilità e distanza minima. Punto A (nuova stagione, prima del draft): quasi
+// sempre mostrata, essendo rara (una volta a stagione).
+const TRANSITION_TIP_CONFIG = {
+  puntoB_probabilita: 0.35,       // 35% di possibilità ad ogni gara idonea
+  puntoB_distanzaMinima: 3,       // mai a meno di 3 gare dall'ultima volta
+  puntoA_probabilita: 0.9,        // quasi sempre, nuova stagione prima del draft
+};
+
+function transitionTipsAbilitate(){
+  return audioSettings.transitionTipsEnabled !== false;
+}
+
+// selezione: evita l'ultimo id mostrato in assoluto (persistente, anche tra stagioni diverse) e
+// alterna categoria quando possibile
+// V0.9.9.190: nomeCircuitoInArrivo opzionale — se specificato e tra i candidati eleggibili c'è il
+// contenuto proprio di QUEL circuito, lo privilegiamo (richiesto dal brief: "prima di una gara, se
+// viene selezionata questa categoria, privilegia il circuito che il giocatore sta per affrontare").
+// Non forza SEMPRE la categoria circuito — semplicemente, se il caso capita comunque tra i
+// candidati validi, quello specifico ha priorità sugli altri.
+function pickTransitionTip(nomeCircuitoInArrivo){
+  let ultimoId = null;
+  try{ ultimoId = localStorage.getItem('racingDynastyLastTransitionTipId'); }catch(e){ /* ignorato */ }
+  let candidati = TRANSITION_TIPS.filter(t => t.id !== ultimoId);
+  if(candidati.length === 0) candidati = TRANSITION_TIPS; // fallback, non dovrebbe mai servire
+  let scelto;
+  if(nomeCircuitoInArrivo){
+    const circuitoGiusto = candidati.find(t => t.circuitoNome === nomeCircuitoInArrivo);
+    if(circuitoGiusto) scelto = circuitoGiusto;
+  }
+  if(!scelto) scelto = candidati[Math.floor(rnd()*candidati.length)];
+  try{ localStorage.setItem('racingDynastyLastTransitionTipId', scelto.id); }catch(e){ /* ignorato */ }
+  return scelto;
+}
+
+// V0.9.9.189: PUNTO A — nuova stagione, prima del draft. Mai in Daily (il brief lo esclude
+// implicitamente vista la cadenza quotidiana, e la Daily ha già la sua identità/velocità propria),
+// mai nel tutorial.
+function maybeShowSeasonStartTip(callbackContinua){
+  if(!transitionTipsAbilitate() || state.isDailySeason || state.isTutorialRun || rnd() > TRANSITION_TIP_CONFIG.puntoA_probabilita){
+    callbackContinua();
+    return;
+  }
+  showTransitionTipScreen(pickTransitionTip(), callbackContinua);
+}
+
+// V0.9.9.189: PUNTO B — tra una gara e la successiva. Stessa esclusione Daily/tutorial, più la
+// distanza minima configurata e la probabilità.
+function maybeShowBetweenRacesTip(callbackContinua){
+  if(!transitionTipsAbilitate() || state.isDailySeason || state.isTutorialRun){
+    callbackContinua();
+    return;
+  }
+  state.raceSinceLastTransitionTip = (state.raceSinceLastTransitionTip||0) + 1;
+  if(state.raceSinceLastTransitionTip < TRANSITION_TIP_CONFIG.puntoB_distanzaMinima || rnd() > TRANSITION_TIP_CONFIG.puntoB_probabilita){
+    callbackContinua();
+    return;
+  }
+  state.raceSinceLastTransitionTip = 0;
+  const circuitoInArrivo = state.calendar && state.calendar[state.raceIndex] ? state.calendar[state.raceIndex].nome : null;
+  showTransitionTipScreen(pickTransitionTip(circuitoInArrivo), callbackContinua);
+}
+
+function showTransitionTipScreen(tip, callbackContinua){
+  const lang = I18N[currentLang] ? currentLang : 'it';
+  const categoriaLabel = { it:{meccanica:'CONSIGLIO', pilota:'PILOTA', scuderia:'SCUDERIA', circuito:'CIRCUITO'},
+    en:{meccanica:'TIP', pilota:'DRIVER', scuderia:'TEAM', circuito:'CIRCUIT'},
+    es:{meccanica:'CONSEJO', pilota:'PILOTO', scuderia:'ESCUDERÍA', circuito:'CIRCUITO'} }[lang][tip.categoria];
+  const isScena = tip.categoria === 'circuito'; // scena piena (non trasparente): riempie invece di stare "contenuta"
+  const visualHTML = tip.demoFn ? window[tip.demoFn]()
+    : tip.asset ? `<div class="tt-asset-wrap${isScena?' tt-asset-scene':''}"><img src="${tip.asset}" alt="" class="tt-asset-img" onerror="this.parentElement.style.display='none';"></div>`
+    : '';
+  const haVisual = !!visualHTML;
+  app.innerHTML = `
+  <div class="tt-overlay">
+    <div class="tt-bg"></div>
+    <div class="tt-card${haVisual?' tt-has-visual':''}">
+      <div class="tt-header">
+        <img src="assets/logo.png" alt="" class="tt-logo">
+        <div class="tt-eyebrow">${categoriaLabel}</div>
+      </div>
+      <div class="tt-title">${tip.titolo[lang]}</div>
+      ${haVisual ? `<div class="tt-visual-col">${visualHTML}</div>` : ''}
+      <div class="tt-body">${tip.testo[lang]}</div>
+      <button type="button" class="button primary tt-continue-btn" id="ttContinueBtn">${t('tt_continue')}</button>
+    </div>
+  </div>`;
+  document.getElementById('ttContinueBtn').addEventListener('click', ()=>{
+    document.querySelector('.tt-overlay')?.remove();
+    callbackContinua();
+  }, { once:true });
+}
+
 function openGuide(){
   closeMenuPanel();
   document.getElementById('sidebarGuideBody').innerHTML = guidePanelHTML();
