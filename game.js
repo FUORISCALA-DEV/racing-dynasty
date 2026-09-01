@@ -593,6 +593,13 @@ const I18N = {
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalità', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Calendario Stagione', hub_race_word: 'GARA',
     hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ La Tua Scuderia', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento speciale', compat_label: 'Compatibilità', compat_excellent: 'Eccellente', compat_good: 'Buona', compat_average: 'Nella media', compat_below: 'Sotto la media', compat_poor: 'Scarsa',
     hub_weather: 'Clima', comp_driver1: 'Pilota #1', comp_driver2: 'Pilota #2', comp_engine: 'Motore', comp_mentality: 'Mentalità', comp_typology: 'Tipologia', pcard_details: 'Dettagli', pcard_tap_to_choose: 'Tocca il riquadro per scegliere',
+    live_board_title: 'Classifica Live', live_board_count: (n)=>`${n} PILOTI`, live_head_pos: 'Pos', live_head_pilot: 'Pilota', live_head_team: 'Scuderia', live_head_gap: 'Distacco', live_head_status: 'Stato', live_log_title: 'Log Gara',
+    hub_shared_components_title: 'Componenti di Squadra', hub_shared_components_sub: 'CONDIVISI DA ENTRAMBI I PILOTI', hub_starting_grid_title: 'Griglia di Partenza', hub_starting_grid_sub: 'TU E LE RIVALI',
+    achievement_unlocked_label: 'Obiettivo Sbloccato',
+    se_drivers_standings_title: 'Classifica Piloti', se_constructors_standings_title: 'Classifica Costruttori', se_constructors_count: (n)=>`${n} SCUDERIE`, se_points_th: 'Punti',
+    semaforo_no_synergy: 'Nessuna sinergia', circuit_badge_new: 'NUOVO', circuit_badge_never_won: 'Mai vinto qui',
+    install_pitch_title: 'Ti sta piacendo Racing Dynasty?', install_pitch_body: 'Installalo sul tuo dispositivo: si apre come un\'app vera, a schermo intero, con un\'icona tutta sua — niente barra del browser, niente da digitare.', install_pitch_yes: 'Installalo sul tuo dispositivo', install_pitch_no: 'Magari dopo',
+
     comp_chassis: 'Telaio', comp_aero: 'Aerodinamica', comp_tires: 'Gomme', comp_strategist: 'Team Principal',
     // Titolo
     title_tagline_return: (race,total)=>`Bentornato — hai una stagione in corso (Gara ${race}/${total})`,
@@ -962,6 +969,13 @@ const I18N = {
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalry', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Season Calendar', hub_race_word: 'RACE',
     hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Your Team', hub_dominant_component: 'Dominant component', hub_special_event: 'Special event', compat_label: 'Compatibility', compat_excellent: 'Excellent', compat_good: 'Good', compat_average: 'Average', compat_below: 'Below average', compat_poor: 'Poor',
     hub_weather: 'Weather', comp_driver1: 'Driver #1', comp_driver2: 'Driver #2', comp_engine: 'Engine', comp_mentality: 'Mentality', comp_typology: 'Typology', pcard_details: 'Details', pcard_tap_to_choose: 'Tap the card to choose',
+    live_board_title: 'Live Standings', live_board_count: (n)=>`${n} DRIVERS`, live_head_pos: 'Pos', live_head_pilot: 'Driver', live_head_team: 'Team', live_head_gap: 'Gap', live_head_status: 'Status', live_log_title: 'Race Log',
+    hub_shared_components_title: 'Team Components', hub_shared_components_sub: 'SHARED BY BOTH DRIVERS', hub_starting_grid_title: 'Starting Grid', hub_starting_grid_sub: 'YOU AND THE RIVALS',
+    achievement_unlocked_label: 'Achievement Unlocked',
+    se_drivers_standings_title: 'Drivers\' Standings', se_constructors_standings_title: 'Constructors\' Standings', se_constructors_count: (n)=>`${n} TEAMS`, se_points_th: 'Points',
+    semaforo_no_synergy: 'No synergy', circuit_badge_new: 'NEW', circuit_badge_never_won: 'Never won here',
+    install_pitch_title: 'Enjoying Racing Dynasty?', install_pitch_body: 'Install it on your device: it opens like a real app, fullscreen, with its own icon — no browser bar, nothing to type.', install_pitch_yes: 'Install on your device', install_pitch_no: 'Maybe later',
+
     comp_chassis: 'Chassis', comp_aero: 'Aerodynamics', comp_tires: 'Tires', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
     title_continue: '▶ Continue Season', title_new: 'New Season', title_delete: '<img class=ico src=assets/icons/trash.png> Delete Save',
@@ -1325,6 +1339,13 @@ const I18N = {
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalidad', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Calendario de Temporada', hub_race_word: 'CARRERA',
     hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Tu Escudería', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento especial', compat_label: 'Compatibilidad', compat_excellent: 'Excelente', compat_good: 'Buena', compat_average: 'En la media', compat_below: 'Por debajo de la media', compat_poor: 'Escasa',
     hub_weather: 'Clima', comp_driver1: 'Piloto #1', comp_driver2: 'Piloto #2', comp_engine: 'Motor', comp_mentality: 'Mentalidad', comp_typology: 'Tipología', pcard_details: 'Detalles', pcard_tap_to_choose: 'Toca la tarjeta para elegir',
+    live_board_title: 'Clasificación en Vivo', live_board_count: (n)=>`${n} PILOTOS`, live_head_pos: 'Pos', live_head_pilot: 'Piloto', live_head_team: 'Escudería', live_head_gap: 'Distancia', live_head_status: 'Estado', live_log_title: 'Registro de Carrera',
+    hub_shared_components_title: 'Componentes de Equipo', hub_shared_components_sub: 'COMPARTIDOS POR AMBOS PILOTOS', hub_starting_grid_title: 'Parrilla de Salida', hub_starting_grid_sub: 'TÚ Y LAS RIVALES',
+    achievement_unlocked_label: 'Logro Desbloqueado',
+    se_drivers_standings_title: 'Clasificación de Pilotos', se_constructors_standings_title: 'Clasificación de Constructores', se_constructors_count: (n)=>`${n} ESCUDERÍAS`, se_points_th: 'Puntos',
+    semaforo_no_synergy: 'Sin sinergia', circuit_badge_new: 'NUEVO', circuit_badge_never_won: 'Nunca ganado aquí',
+    install_pitch_title: '¿Te está gustando Racing Dynasty?', install_pitch_body: 'Instálalo en tu dispositivo: se abre como una app real, a pantalla completa, con su propio icono — sin barra del navegador, nada que escribir.', install_pitch_yes: 'Instalar en tu dispositivo', install_pitch_no: 'Quizás después',
+
     comp_chassis: 'Chasis', comp_aero: 'Aerodinámica', comp_tires: 'Neumáticos', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
     title_continue: '▶ Continuar Temporada', title_new: 'Nueva Temporada', title_delete: '<img class=ico src=assets/icons/trash.png> Borrar Partida',
@@ -1934,11 +1955,11 @@ function showInstallPitchCard(){
   overlay.innerHTML = `
     <div class="install-pitch-card">
       <div class="install-pitch-emoji"><img class=ico src=assets/icons/checkered_flag.png></div>
-      <div class="install-pitch-title">Ti sta piacendo Racing Dynasty?</div>
-      <div class="install-pitch-body">Installalo sul tuo dispositivo: si apre come un'app vera, a schermo intero, con un'icona tutta sua — niente barra del browser, niente da digitare.</div>
+      <div class="install-pitch-title">${t('install_pitch_title')}</div>
+      <div class="install-pitch-body">${t('install_pitch_body')}</div>
       <div class="install-pitch-actions">
-        <button class="button primary" id="installPitchYes"><img class=ico src=assets/icons/mobile.png> Installalo sul tuo dispositivo</button>
-        <button class="install-pitch-dismiss" id="installPitchNo">Magari dopo</button>
+        <button class="button primary" id="installPitchYes"><img class=ico src=assets/icons/mobile.png> ${t('install_pitch_yes')}</button>
+        <button class="install-pitch-dismiss" id="installPitchNo">${t('install_pitch_no')}</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
@@ -2339,7 +2360,7 @@ function aiTeamSynergyCircles(t){
 }
 
 function miniSemaforoHTML(circles){
-  if(!circles.length) return '<span class="dim" style="font-size:11px;">Nessuna sinergia</span>';
+  if(!circles.length) return `<span class="dim" style="font-size:11px;">${t('semaforo_no_synergy')}</span>`;
   return circles.map(c=>{
     const glow = c.lit ? `style="--glow:${MENTALITA_DEFS[c.mentId].color};"` : '';
     const halfHTML = s => s ? `<div class="sem-half" style="background:${MENTALITA_DEFS[s.mentId].color};" title="${s.roleLabel} (${s.item.nome}) · ${(s.catKey==='pilotMain'||s.catKey==='pilotSecond')?t('comp_mentality'):t('comp_typology')}: ${mentaLabel(s.mentId)}"></div>` : `<div class="sem-half" style="background:rgba(255,255,255,0.06);"></div>`;
@@ -6943,13 +6964,13 @@ function renderRaceLiveInit(){
   </div>
   <div class="live-layout">
     <div class="panel live-board-panel">
-      <div class="panel-title"><h3 class="hdr">Classifica Live</h3><span class="dim mono" style="font-size:11px;">20 PILOTI</span></div>
-      <div class="live-head"><span>Pos</span><span>#</span><span>Pilota</span><span>Scuderia</span><span>Distacco</span><span>Stato</span><span></span></div>
+      <div class="panel-title"><h3 class="hdr">${t('live_board_title')}</h3><span class="dim mono" style="font-size:11px;">${t('live_board_count', 20)}</span></div>
+      <div class="live-head"><span>${t('live_head_pos')}</span><span>#</span><span>${t('live_head_pilot')}</span><span>${t('live_head_team')}</span><span>${t('live_head_gap')}</span><span>${t('live_head_status')}</span><span></span></div>
       <div class="live-board" id="liveBoard" style="height:${rows.length*ROW_H}px;">${rowsHTML}</div>
     </div>
     <div class="panel live-log-panel">
-      <div class="panel-title"><h3 class="hdr">Log Gara</h3></div>
-      <div class="dim" style="font-size:12px;margin-bottom:8px;">${nationLabel(timeline.circuit.paese)} · ${timeline.circuit.tipo} · Componente dominante: ${displayArea(timeline.circuit.componentedominante)}</div>
+      <div class="panel-title"><h3 class="hdr">${t('live_log_title')}</h3></div>
+      <div class="dim" style="font-size:12px;margin-bottom:8px;">${nationLabel(timeline.circuit.paese)} · ${timeline.circuit.tipo} · ${t('hub_dominant_component')}: ${displayArea(timeline.circuit.componentedominante)}</div>
       <div class="live-log" id="liveLog">${logHTML}</div>
     </div>
   </div>
@@ -8460,7 +8481,7 @@ function pregaraSharedComponentsHTML(comp, overrideTeam){
   const stratColor = ratingBandColor(comp.stratega.rating);
   return `
   <div class="panel pregara-shared">
-    <div class="panel-title"><h3 class="hdr">Componenti di Squadra</h3><span class="dim mono" style="font-size:10px;">CONDIVISI DA ENTRAMBI I PILOTI</span></div>
+    <div class="panel-title"><h3 class="hdr">${t('hub_shared_components_title')}</h3><span class="dim mono" style="font-size:10px;">${t('hub_shared_components_sub')}</span></div>
     <div class="pregara-shared-body">
       <div class="pregara-legend">
         ${pregaraLegendRow('MOTORE', comp.motore)}
@@ -8512,7 +8533,7 @@ function startingGridSectionHTML(gridOrder, gridPos){
     </div>`;
   }).filter(Boolean).join('');
   return `<div class="panel">
-    <div class="panel-title"><h3 class="hdr">Griglia di Partenza</h3><span class="dim mono" style="font-size:10px;">TU E LE RIVALI</span></div>
+    <div class="panel-title"><h3 class="hdr">${t('hub_starting_grid_title')}</h3><span class="dim mono" style="font-size:10px;">${t('hub_starting_grid_sub')}</span></div>
     <div class="grid-pos-list">${rows}</div>
   </div>`;
 }
@@ -9724,7 +9745,7 @@ function showAchievementToast(id){
   toast.innerHTML = `
     <div class="achievement-toast-icon">${iconSrc}</div>
     <div class="achievement-toast-body">
-      <div class="achievement-toast-eyebrow">Obiettivo Sbloccato</div>
+      <div class="achievement-toast-eyebrow">${t('achievement_unlocked_label')}</div>
       <div class="achievement-toast-title">${achLoc.title}</div>
     </div>`;
   container.appendChild(toast);
@@ -11497,12 +11518,12 @@ function renderHub(){
     <summary><img class=ico src=assets/icons/chart.png> Classifiche Complete</summary>
     <div class="grid grid-2">
       <div class="panel">
-        <div class="panel-title"><h3 class="hdr">Classifica Piloti</h3><span class="dim mono" style="font-size:11px;">20 PILOTI</span></div>
-        <table><thead><tr><th>Pos</th><th>#</th><th>Pilota</th><th>Scuderia</th><th>Punti</th></tr></thead><tbody>${driverRows}</tbody></table>
+        <div class="panel-title"><h3 class="hdr">${window.t('se_drivers_standings_title')}</h3><span class="dim mono" style="font-size:11px;">${window.t('live_board_count', 20)}</span></div>
+        <table><thead><tr><th>${window.t('live_head_pos')}</th><th>#</th><th>${window.t('live_head_pilot')}</th><th>${window.t('live_head_team')}</th><th>${window.t('se_points_th')}</th></tr></thead><tbody>${driverRows}</tbody></table>
       </div>
       <div class="panel">
-        <div class="panel-title"><h3 class="hdr">Classifica Costruttori</h3><span class="dim mono" style="font-size:11px;">10 SCUDERIE</span></div>
-        <table><thead><tr><th>Pos</th><th>Scuderia</th><th>Punti</th></tr></thead><tbody>${constructorRows}</tbody></table>
+        <div class="panel-title"><h3 class="hdr">${window.t('se_constructors_standings_title')}</h3><span class="dim mono" style="font-size:11px;">${window.t('se_constructors_count', 10)}</span></div>
+        <table><thead><tr><th>${window.t('live_head_pos')}</th><th>${window.t('live_head_team')}</th><th>${window.t('se_points_th')}</th></tr></thead><tbody>${constructorRows}</tbody></table>
       </div>
     </div>
   </details>
@@ -12256,8 +12277,8 @@ function pitlaneRivalsHTML(){
 // V0.9.4.1: indicatore "circuito nuovo" / "mai vinto qui" — mostrato ovunque compare il nome del prossimo circuito
 function circuitStatusBadgeHTML(circuitName){
   const td = trophyData[circuitName];
-  if(!td || td.raced===0) return '<span class="circuit-badge circuit-badge-new">⭐ NUOVO</span>';
-  if(td.won===0) return '<span class="circuit-badge circuit-badge-unwon">Mai vinto qui</span>';
+  if(!td || td.raced===0) return `<span class="circuit-badge circuit-badge-new">⭐ ${t('circuit_badge_new')}</span>`;
+  if(td.won===0) return `<span class="circuit-badge circuit-badge-unwon">${t('circuit_badge_never_won')}</span>`;
   return '';
 }
 
