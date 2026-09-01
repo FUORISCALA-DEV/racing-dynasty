@@ -8672,6 +8672,16 @@ function render(){
     window._transitionCleanupTimer = setTimeout(()=>{
       app.classList.remove('app-enter-standard','app-enter-special');
     }, 500);
+    // V0.9.9.183: PUNTO 14 — ri-ancoriamo le icone ad ogni fotogramma per l'intera durata della
+    // transizione (500ms), indipendentemente da cosa causi l'oscillazione della larghezza pagina
+    // durante l'animazione — garantisce che restino sempre nella posizione corretta.
+    if(typeof pinFixedIconsToVisualViewport==='function'){
+      const finoA = performance.now() + 500;
+      (function ricicla(){
+        pinFixedIconsToVisualViewport();
+        if(performance.now() < finoA) requestAnimationFrame(ricicla);
+      })();
+    }
   }
   if(typeof updateSidebarVisibility==='function') updateSidebarVisibility();
   showGoatRevealIfPending();
@@ -15492,6 +15502,27 @@ function applyStaticMenuTranslations(){
   const promoCta = document.getElementById('promoBannerCta');
   if(promoCta) promoCta.textContent = t('promo_banner_cta');
 }
+// V0.9.9.183: PUNTO 14 — richiesto da Gio con descrizione precisa: "durante la transizione da una
+// pagina all'altra, su quelle con animazioni, la larghezza della pagina aumenti temporaneamente e
+// la posizione delle due icone segua il margine dx della pagina per poi tornare alla dimensione
+// giusta". Confermato con misurazioni dirette: durante l'animazione (che parte con un offset di
+// 28px) la larghezza scrollabile del documento OSCILLA davvero (verificato con dati reali), un
+// comportamento noto sui browser mobile che può disallineare temporaneamente elementi
+// position:fixed ancorati con "right" durante variazioni della UI del browser (barra indirizzi) —
+// non riproducibile in un ambiente di test desktop, dove "right" resta stabile nonostante
+// l'oscillazione della larghezza documento. Invece di continuare ad affidarsi al CSS "right:14px"
+// (calcolato rispetto al layout viewport, che può oscillare), ancoriamo esplicitamente via JS alla
+// VisualViewport — l'API pensata apposta per restituire le dimensioni VERE dello schermo visibile,
+// immune a queste oscillazioni — ricalcolando ad ogni variazione, incluse quelle causate dalla UI
+// del browser mobile.
+function pinFixedIconsToVisualViewport(){
+  const vv = window.visualViewport;
+  const larghezza = vv ? vv.width : window.innerWidth;
+  const menuBtn = document.getElementById('gameMenuToggleBtn');
+  const fsBtn = document.getElementById('fullscreenToggleBtn');
+  if(menuBtn){ menuBtn.style.right = 'auto'; menuBtn.style.left = (larghezza - 14 - menuBtn.offsetWidth) + 'px'; }
+  if(fsBtn){ fsBtn.style.right = 'auto'; fsBtn.style.left = (larghezza - 14 - fsBtn.offsetWidth) + 'px'; }
+}
 function initSidebar(){
   document.getElementById('gameMenuToggleBtn').addEventListener('click', toggleMenuPanel);
   document.querySelector('.game-menu-close').addEventListener('click', closeMenuPanel);
@@ -15767,6 +15798,15 @@ async function checkMaintenanceAndBoot(){
     bootGameNormally();
     if(maintenanceActive) showMaintenanceActiveWatermark(); // V0.9.9.76: sbloccata ma ancora attiva — promemoria visibile
   }
+}
+// V0.9.9.183: PUNTO 14 — posizione corretta fin da subito, e ricalcolo automatico ad ogni
+// variazione del vero viewport visibile (non solo durante le transizioni tra schermate).
+pinFixedIconsToVisualViewport();
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize', pinFixedIconsToVisualViewport);
+  window.visualViewport.addEventListener('scroll', pinFixedIconsToVisualViewport);
+} else {
+  window.addEventListener('resize', pinFixedIconsToVisualViewport);
 }
 checkMaintenanceAndBoot();
 
