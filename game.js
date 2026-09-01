@@ -702,7 +702,7 @@ const I18N = {
     // Crediti
     credits_title: '<img class=ico src=assets/icons/building.png> Crediti', credits_tagline: 'Piccolo studio. Giochi fuori misura.',
     credits_first_game: 'Il primo gioco di FUORISCALA', credits_dev: 'Sviluppato e pubblicato da',
-    credits_created: 'Creato da',
+    credits_created: 'Creato da', credits_contact_email: 'Scrivici — racingdynasty.game@gmail.com',
     // Hub — etichette HUD
     hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Gara',
     hud_best_driver: 'Miglior Pilota', hud_constructors: 'Costruttori',
@@ -1085,7 +1085,7 @@ const I18N = {
     settings_reset: 'Reset Everything (First Launch)', on: 'On', off: 'Off',
     credits_title: '<img class=ico src=assets/icons/building.png> Credits', credits_tagline: 'Small studio. Outsized games.',
     credits_first_game: "FUORISCALA's first game", credits_dev: 'Developed and published by',
-    credits_created: 'Created by',
+    credits_created: 'Created by', credits_contact_email: 'Contact us — racingdynasty.game@gmail.com',
     hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Race',
     hud_best_driver: 'Best Driver', hud_constructors: 'Constructors',
     race_lap: 'LAP', race_retirement: (d,tm)=>`Retirement for ${d} (${tm})`, race_your_driver_bang: " — that's your driver!",
@@ -1466,7 +1466,7 @@ const I18N = {
     settings_reset: 'Restablecer Todo (Primera Apertura)', on: 'Activado', off: 'Desactivado',
     credits_title: '<img class=ico src=assets/icons/building.png> Créditos', credits_tagline: 'Estudio pequeño. Juegos fuera de escala.',
     credits_first_game: 'El primer juego de FUORISCALA', credits_dev: 'Desarrollado y publicado por',
-    credits_created: 'Creado por',
+    credits_created: 'Creado por', credits_contact_email: 'Escríbenos — racingdynasty.game@gmail.com',
     hud_reroll: 'Reroll', hud_budget: 'Presupuesto', hud_sponsor: 'Patrocinador', hud_race: 'Carrera',
     hud_best_driver: 'Mejor Piloto', hud_constructors: 'Constructores',
     race_lap: 'VUELTA', race_retirement: (d,tm)=>`Retirada de ${d} (${tm})`, race_your_driver_bang: ' — ¡es tu piloto!',
@@ -15417,6 +15417,9 @@ function creditsPanelHTML(){
     <div style="font-weight:800;margin-bottom:18px;">${t('credits_first_game')}</div>
     <div>${t('credits_dev')} <b>FUORISCALA</b></div>
     <div>${t('credits_created')} <b>Giorgio Gardon</b></div>
+  </div>
+  <div style="text-align:center;margin-top:22px;">
+    <a href="mailto:racingdynasty.game@gmail.com" style="font-size:12.5px;color:var(--dim);text-decoration:none;">${t('credits_contact_email')}</a>
   </div>
   <div class="dim" style="text-align:center;font-size:11px;margin-top:28px;">© ${new Date().getFullYear()} FUORISCALA</div>
   `;
