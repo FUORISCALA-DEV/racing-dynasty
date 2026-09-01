@@ -6691,6 +6691,16 @@ function interpolatePerPhaseValue(byPhaseArray, tLow, tHigh, frac, key){
   if(a==null) return 0;
   const bRaw = byPhaseArray[tHigh] ? byPhaseArray[tHigh][key] : undefined;
   const b = bRaw!=null ? bRaw : a;
+  // V0.9.9.179: BUG CORRETTO — segnalato da Gio: "l'usura su pc a volte sembra diminuire, succede
+  // solo su pc". Causa probabile: questa interpolazione lineare, usata per l'animazione fluida
+  // dell'usura durante la gara live, mostrava una discesa GRADUALE e visibile quando in mezzo c'era
+  // un pit stop (le gomme nuove resettano correttamente l'usura a un valore basso — dato corretto,
+  // ma l'interpolazione la faceva scendere lentamente frame per frame invece che di scatto, dando
+  // l'impressione di un calo "innaturale" durante l'animazione — più notabile su schermi PC dove i
+  // fotogrammi intermedi sono più facili da percepire rispetto a un rapido sguardo su smartphone).
+  // Ora, se il valore scende tra una fase e l'altra (segno di un pit stop, mai di usura naturale che
+  // aumenta sempre), passiamo di scatto al nuovo valore invece di interpolare gradualmente.
+  if(b < a) return frac < 1 ? a : b;
   return a + (b-a)*frac;
 }
 function computeLiveRows(){
