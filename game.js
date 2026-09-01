@@ -488,7 +488,7 @@ const I18N = {
     eff_reliability: 'Affidabilità', eff_fast_circuits: 'Prestazione circuiti veloci', eff_street_circuits: 'Prestazione circuiti cittadini',
     pc_confirm_title: (l)=>`Conferma Sostituzione — ${l}`, pc_semaforo_title: 'Effetto su Semaforo e Rating Scuderia',
     pc_before: 'PRIMA', pc_after: 'DOPO', pc_rating: 'RATING',
-    pc_disclaimer: 'Una volta confermato, il componente attuale non può essere recuperato in questa carriera. I dettagli del confronto sono qui sotto.',
+    pc_disclaimer: 'Una volta confermato, il componente attuale non può essere recuperato in questa stagione. I dettagli del confronto sono qui sotto.',
     pc_gain: (n)=>`Incassi: +${n}`, pc_cost: (n)=>`Costo: -${n}`, pc_budget_avail: (n)=>`Budget disponibile: ${n}`,
     pc_downgrade_note: 'Rating più basso di quello attuale: questo scambio non chiude il turno.',
     pc_cant_afford: 'Budget insufficiente per questa sostituzione.',
@@ -520,7 +520,7 @@ const I18N = {
     se_constr_champ_pill: 'CAMPIONE COSTRUTTORI', se_constr_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPIONE DEL MONDO COSTRUTTORI', se_team_won_title: (team)=>`<img class=ico src=assets/icons/trophy.png> ${team}: Vittoria titolo costruttori`, se_team_position_title: (team,pos)=>`${team}: P${pos}`,
     se_end_pill: 'FINE STAGIONE', se_end_top3: (n,p)=>`Complimenti ${n} ha chiuso in P${p}`, se_end_other: (n,p)=>`${n} chiude la stagione in P${p}`,
     se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} chiude la stagione con ${pts} punti complessivi, ${wins} vittorie, ${pod} podi e ${dnf} ritiri su ${tot} gare. Budget residuo: ${budget}.`,
-    se_new_career: 'Nuova Carriera', se_share: '<img class=ico src=assets/icons/upload.png> Condividi Risultato', se_your_drivers: 'I Tuoi Piloti',
+    se_daily_rating_label: 'Punteggio Daily:', se_new_career: 'Nuova Stagione', se_share: '<img class=ico src=assets/icons/upload.png> Condividi Risultato', se_your_drivers: 'I Tuoi Piloti',
     se_pilot1: (n)=>`Pilota #1 — ${n}`, se_pilot2: (n)=>`Pilota #2 — ${n}`, se_drivers_pos: (p)=>`Posizione Piloti: P${p}`,
     se_stats: (pts,wins,pod,dnf)=>`${pts} punti · ${wins} vittorie · ${pod} podi · ${dnf} ritiri`,
     se_team_constr_pos: (team,pos)=>`Scuderia <b>${team}</b> — Posizione Costruttori: <b style="color:var(--cyan);">P${pos}</b>`,
@@ -530,7 +530,7 @@ const I18N = {
     se_footer: 'Ogni nuova run genera un nuovo draft di piloti e componenti — la stagione in corso viene salvata automaticamente.',
     cv_driver_champ_title: 'CAMPIONE DEL MONDO PILOTI', cv_driver_champ_sub: (nome)=>`${nome} è Campione del Mondo!`,
     cv_constructor_champ_title: 'CAMPIONI COSTRUTTORI', cv_constructor_champ_sub: (team)=>`${team} vince il titolo Costruttori!`,
-    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} e ${team} — entrambi i titoli in una stagione!`, se_share_before_new_title: 'Condividere prima?', se_share_before_new_desc: 'Vuoi condividere il risultato di questa stagione prima di iniziarne una nuova?',
+    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} e ${team} — entrambi i titoli in una stagione!`, se_leave_without_share_title: 'Andare senza condividere?', se_leave_without_share_desc: 'Vuoi andare al menu scelta stagione senza condividere il tuo risultato?',
     cv_continue: 'Continua →',
     expl_retired: 'Ritirato — nessun punto raccolto in questo Gran Premio.',
     expl_gained: (grid,pos,delta)=>`Partito P${grid}, arrivato P${pos}: <b>+${delta} posizion${delta===1?'e':'i'}</b> guadagnat${delta===1?'a':'e'} in gara.`,
@@ -575,7 +575,7 @@ const I18N = {
     sl_garage: 'GARAGE', sl_garage_desc: 'Personalizza la livrea del telaio con pattern sbloccabili completando obiettivi.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PROSSIMAMENTE',
     sl_aiuto_coda: 'Aiuto in coda', sl_aiuto_coda_desc_on: 'Il prezzo della ricerca di mercato dipende dalla tua posizione: 1× (il minimo) se sei in fondo alla classifica, fino a 20× se sei in testa — il costo sale rapidamente man mano che ti avvicini alla vetta.', sl_aiuto_coda_desc_off: 'Il prezzo della ricerca di mercato è sempre 5× fisso, qualunque sia la tua posizione in classifica.',
     sl_riflessi_partenza: 'Riflessi alla partenza', sl_riflessi_partenza_desc_on: 'Alla partenza usi i paddle veri, il risultato dipende dai tuoi riflessi.', sl_riflessi_partenza_desc_off: 'Partenza automatica: il semaforo mostra le probabilità senza bisogno di premere nulla.',
-    diff_new_career: 'Nuova Carriera', diff_choose: 'Scegli la difficoltà',
+    diff_new_career: 'Nuova Stagione', diff_choose: 'Scegli la difficoltà',
     diff_subtitle: 'Incide solo sui reroll disponibili nel draft — un tocco e si parte.',
     diff_last_used: ' · ultima usata', diff_tap_hint: (l)=>`Tocca per avviare — ${l}`,
     pitlane_window: 'Pit Lane · Finestra di Sviluppo', pitlane_headline: 'Scegli come investire prima della prossima gara',
@@ -609,7 +609,7 @@ const I18N = {
     tutorial_draft_hint_components: 'Bene, ora tocca al resto della squadra. Motore, telaio, gomme e chi guida i box dal muretto: scegli quello che ti sembra più forte, uno alla volta.',
     tutorial_draft_hint_synergy: 'Visto quel cerchio che si è acceso? Sono le sinergie: due pezzi con la stessa mentalità si accoppiano e ti danno un bonus di rating gratis a entrambi. Tienilo d\'occhio quando scegli.',
     tutorial_complete_elio_text: 'Tre gare, sole, pioggia e una Safety Car — hai visto un bel po\' per essere all\'inizio. Il resto — undercut, priorita in Pit Lane, tutte le decisioni che non ti ho mostrato — lo trovi giocando davvero. Io ho fatto la mia parte. Ora tocca a te.',
-    tutorial_goat_rarity_text: 'Un\'ultima cosa, prima che te ne vada con la testa gonfia: nella run vera non mi troverai quasi mai nel draft. Sono un\'eccezione, circa 1 possibilita\' su 2000 a turno — potresti non incontrarmi mai più in una carriera intera. Goditi il ricordo.',
+    tutorial_goat_rarity_text: 'Un\'ultima cosa, prima che te ne vada con la testa gonfia: nella run vera non mi troverai quasi mai nel draft. Sono un\'eccezione, circa 1 possibilita\' su 2000 a turno — potresti non incontrarmi mai più in una stagione intera. Goditi il ricordo.',
     tutorial_complete_cta: 'Torna al menù →',
     tutorial_intro_cta: 'Cominciamo →',
     tutorial_draft_step_of: (a,b)=>`Scelta ${a} di ${b}`,
@@ -889,7 +889,7 @@ const I18N = {
     se_constr_champ_pill: 'CONSTRUCTORS\' CHAMPION', se_constr_champ_title: "<img class=ico src=assets/icons/trophy.png> CONSTRUCTORS' WORLD CHAMPION", se_team_won_title: (team)=>`<img class=ico src=assets/icons/trophy.png> ${team}: Constructors' title won`, se_team_position_title: (team,pos)=>`${team}: P${pos}`,
     se_end_pill: 'SEASON END', se_end_top3: (n,p)=>`Congratulations, ${n} finished P${p}`, se_end_other: (n,p)=>`${n} closes the season in P${p}`,
     se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} closes the season with ${pts} total points, ${wins} wins, ${pod} podiums and ${dnf} retirements across ${tot} races. Remaining budget: ${budget}.`,
-    se_new_career: 'New Career', se_share: '<img class=ico src=assets/icons/upload.png> Share Result', se_your_drivers: 'Your Drivers',
+    se_daily_rating_label: 'Daily Score:', se_new_career: 'New Season', se_share: '<img class=ico src=assets/icons/upload.png> Share Result', se_your_drivers: 'Your Drivers',
     se_pilot1: (n)=>`Driver #1 — ${n}`, se_pilot2: (n)=>`Driver #2 — ${n}`, se_drivers_pos: (p)=>`Drivers' Position: P${p}`,
     se_stats: (pts,wins,pod,dnf)=>`${pts} points · ${wins} wins · ${pod} podiums · ${dnf} retirements`,
     se_team_constr_pos: (team,pos)=>`Team <b>${team}</b> — Constructors' Position: <b style="color:var(--cyan);">P${pos}</b>`,
@@ -899,7 +899,7 @@ const I18N = {
     se_footer: 'Every new run generates a new draft of drivers and components — the current season is saved automatically.',
     cv_driver_champ_title: 'WORLD DRIVERS CHAMPION', cv_driver_champ_sub: (nome)=>`${nome} is World Champion!`,
     cv_constructor_champ_title: 'CONSTRUCTORS CHAMPIONS', cv_constructor_champ_sub: (team)=>`${team} wins the Constructors title!`,
-    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} and ${team} — both titles in one season!`, se_share_before_new_title: 'Share first?', se_share_before_new_desc: 'Would you like to share this season\'s result before starting a new one?',
+    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} and ${team} — both titles in one season!`, se_leave_without_share_title: 'Leave without sharing?', se_leave_without_share_desc: 'Do you want to go to the season selection menu without sharing your result?',
     cv_continue: 'Continue →',
     expl_retired: 'Retired — no points scored in this Grand Prix.',
     expl_gained: (grid,pos,delta)=>`Started P${grid}, finished P${pos}: <b>+${delta} position${delta===1?'':'s'}</b> gained in the race.`,
@@ -944,7 +944,7 @@ const I18N = {
     sl_garage: 'GARAGE', sl_garage_desc: 'Customize your chassis livery with patterns unlockable by completing achievements.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> COMING SOON',
     sl_aiuto_coda: 'Catch-up help', sl_aiuto_coda_desc_on: 'Market research price depends on your standing: 1× (the minimum) if you are at the back, up to 20× if you are leading — cost rises sharply the closer you get to the top.', sl_aiuto_coda_desc_off: 'Market research price is always a fixed 5×, regardless of your standing.',
     sl_riflessi_partenza: 'Start reflexes', sl_riflessi_partenza_desc_on: 'At the start you use the real paddles, the launch depends on your reflexes.', sl_riflessi_partenza_desc_off: 'Automatic start: the lights show the odds without needing to press anything.',
-    diff_new_career: 'New Career', diff_choose: 'Choose difficulty',
+    diff_new_career: 'New Season', diff_choose: 'Choose difficulty',
     diff_subtitle: 'Only affects the rerolls available in the draft — one tap and you\'re off.',
     diff_last_used: ' · last used', diff_tap_hint: (l)=>`Tap to start — ${l}`,
     pitlane_window: 'Pit Lane · Development Window', pitlane_headline: 'Choose how to invest before the next race',
@@ -1252,7 +1252,7 @@ const I18N = {
     se_constr_champ_pill: 'CAMPEÓN DE CONSTRUCTORES', se_constr_champ_title: '<img class=ico src=assets/icons/trophy.png> CAMPEÓN DEL MUNDO DE CONSTRUCTORES', se_team_won_title: (team)=>`<img class=ico src=assets/icons/trophy.png> ${team}: Título de constructores`, se_team_position_title: (team,pos)=>`${team}: P${pos}`,
     se_end_pill: 'FIN DE TEMPORADA', se_end_top3: (n,p)=>`Enhorabuena, ${n} ha terminado P${p}`, se_end_other: (n,p)=>`${n} cierra la temporada en P${p}`,
     se_summary: (team,pts,wins,pod,dnf,tot,budget)=>`${team} cierra la temporada con ${pts} puntos totales, ${wins} victorias, ${pod} podios y ${dnf} retiros en ${tot} carreras. Presupuesto restante: ${budget}.`,
-    se_new_career: 'Nueva Carrera', se_share: '<img class=ico src=assets/icons/upload.png> Compartir Resultado', se_your_drivers: 'Tus Pilotos',
+    se_daily_rating_label: 'Puntuación Daily:', se_new_career: 'Nueva Temporada', se_share: '<img class=ico src=assets/icons/upload.png> Compartir Resultado', se_your_drivers: 'Tus Pilotos',
     se_pilot1: (n)=>`Piloto #1 — ${n}`, se_pilot2: (n)=>`Piloto #2 — ${n}`, se_drivers_pos: (p)=>`Posición de Pilotos: P${p}`,
     se_stats: (pts,wins,pod,dnf)=>`${pts} puntos · ${wins} victorias · ${pod} podios · ${dnf} retiros`,
     se_team_constr_pos: (team,pos)=>`Escudería <b>${team}</b> — Posición de Constructores: <b style="color:var(--cyan);">P${pos}</b>`,
@@ -1262,7 +1262,7 @@ const I18N = {
     se_footer: 'Cada nueva run genera un nuevo draft de pilotos y componentes — la temporada en curso se guarda automáticamente.',
     cv_driver_champ_title: 'CAMPEÓN DEL MUNDO DE PILOTOS', cv_driver_champ_sub: (nome)=>`¡${nome} es Campeón del Mundo!`,
     cv_constructor_champ_title: 'CAMPEONES DE CONSTRUCTORES', cv_constructor_champ_sub: (team)=>`¡${team} gana el título de Constructores!`,
-    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} y ${team} — ¡ambos títulos en una temporada!`, se_share_before_new_title: '¿Compartir primero?', se_share_before_new_desc: '¿Quieres compartir el resultado de esta temporada antes de empezar una nueva?',
+    cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} y ${team} — ¡ambos títulos en una temporada!`, se_leave_without_share_title: '¿Salir sin compartir?', se_leave_without_share_desc: '¿Quieres ir al menú de selección de temporada sin compartir tu resultado?',
     cv_continue: 'Continuar →',
     expl_retired: 'Retirado — sin puntos en este Gran Premio.',
     expl_gained: (grid,pos,delta)=>`Salió P${grid}, terminó P${pos}: <b>+${delta} posición${delta===1?'':'es'}</b> ganada${delta===1?'':'s'} en carrera.`,
@@ -1307,7 +1307,7 @@ const I18N = {
     sl_garage: 'GARAGE', sl_garage_desc: 'Personaliza la librea del chasis con patrones desbloqueables completando logros.', sl_garage_soon: '<img class=ico src=assets/icons/lock.png> PRÓXIMAMENTE',
     sl_aiuto_coda: 'Ayuda de recuperación', sl_aiuto_coda_desc_on: 'El precio de la búsqueda de mercado depende de tu posición: 1× (el mínimo) si vas último, hasta 20× si vas líder — el coste sube rápidamente cuanto más te acercas a la cabeza.', sl_aiuto_coda_desc_off: 'El precio de la búsqueda de mercado es siempre 5× fijo, sea cual sea tu posición.',
     sl_riflessi_partenza: 'Reflejos de salida', sl_riflessi_partenza_desc_on: 'En la salida usas los paddles reales, el resultado depende de tus reflejos.', sl_riflessi_partenza_desc_off: 'Salida automática: el semáforo muestra las probabilidades sin necesidad de pulsar nada.',
-    diff_new_career: 'Nueva Carrera', diff_choose: 'Elige la dificultad',
+    diff_new_career: 'Nueva Temporada', diff_choose: 'Elige la dificultad',
     diff_subtitle: 'Solo afecta a los rerolls disponibles en el draft — un toque y empiezas.',
     diff_last_used: ' · última usada', diff_tap_hint: (l)=>`Toca para empezar — ${l}`,
     pitlane_window: 'Pit Lane · Ventana de Desarrollo', pitlane_headline: 'Elige cómo invertir antes de la próxima carrera',
@@ -9577,7 +9577,7 @@ const ACHIEVEMENTS = [
   { id:'prima-scintilla', cat:'Facile', title:'Prima Scintilla', desc:'Ottieni la tua prima coppia sinergica (semaforo acceso).', en:{title:'First Spark', desc:'Get your first synergy pair (lit-up semaphore).'}, es:{title:'Primera Chispa', desc:'Consigue tu primera pareja con sinergia (semáforo encendido).'} },
   { id:'primo-cimelio', cat:'Facile', title:'Primo Cimelio', desc:'Colleziona il primo pezzo nel Museo Dynasty.', en:{title:'First Keepsake', desc:'Collect the first piece in the Dynasty Museum.'}, es:{title:'Primera Reliquia', desc:'Consigue la primera pieza del Museo Dynasty.'} },
   { id:'underdog', cat:'Facile', title:'Underdog', desc:'Vinci una gara con un pilota di rarità Common.', en:{title:'Underdog', desc:'Win a race with a Common rarity driver.'}, es:{title:'Underdog', desc:'Gana una carrera con un piloto de rareza Common.'} },
-  { id:'partecipazione-onesta', cat:'Facile', title:'Partecipazione Onesta', desc:'Completa una carriera intera senza vincere alcun titolo.', en:{title:'Honest Participation', desc:'Complete a full career without winning any title.'}, es:{title:'Participación Honesta', desc:'Completa una carrera entera sin ganar ningún título.'} },
+  { id:'partecipazione-onesta', cat:'Facile', title:'Partecipazione Onesta', desc:'Completa una stagione intera senza vincere alcun titolo.', en:{title:'Honest Participation', desc:'Complete a full season without winning any title.'}, es:{title:'Participación Honesta', desc:'Completa una temporada entera sin ganar ningún título.'} },
   // Medio
   { id:'cenerentola', cat:'Medio', title:'Cenerentola', desc:'Vinci una gara avendo overall scuderia massimo 60.', en:{title:'Cinderella Story', desc:'Win a race with a team overall of 60 or less.'}, es:{title:'Historia de Cenicienta', desc:'Gana una carrera con un overall de escudería de 60 o menos.'} },
   { id:'lavoro-di-squadra', cat:'Medio', title:'Lavoro di Squadra', desc:'Vinci il titolo Costruttori senza mai essere primo in classifica Piloti.', en:{title:'Team Effort', desc:'Win the Constructors\' title without ever leading the Drivers\' standings.'}, es:{title:'Trabajo en Equipo', desc:'Gana el título de Constructores sin liderar nunca el campeonato de Pilotos.'} },
@@ -9616,7 +9616,7 @@ const ACHIEVEMENTS = [
   { id:'fortuna-sfacciata', cat:'Estremo', title:'Fortuna Sfacciata', desc:'Ottieni THE GOAT sia al Draft sia allo scouting, in due carriere diverse.', en:{title:'Shameless Luck', desc:'Get THE GOAT both at the Draft and via scouting, in two different careers.'}, es:{title:'Suerte Descarada', desc:'Consigue a THE GOAT tanto en el Draft como en el scouting, en dos carreras diferentes.'} },
   { id:'dinastia', cat:'Estremo', title:'Dinastia', desc:'Vinci cinque stagioni Elite consecutive.', en:{title:'Dynasty', desc:'Win five consecutive Elite seasons.'}, es:{title:'Dinastía', desc:'Gana cinco temporadas Elite consecutivas.'} },
   { id:'terrore-della-griglia', cat:'Estremo', title:'Terrore della Griglia', desc:'Vinci ogni gara di una stagione Elite senza mai essere ripreso nel finale.', en:{title:'Terror of the Grid', desc:'Win every race of an Elite season without ever being caught at the end.'}, es:{title:'Terror de la Parrilla', desc:'Gana todas las carreras de una temporada Elite sin ser alcanzado nunca en el tramo final.'} },
-  { id:'rivincita', cat:'Estremo', title:'Rivincita', desc:'Batti il titolo Costruttori contro una rivale che ti aveva già sconfitto in una carriera precedente.', en:{title:'Rematch', desc:'Beat the Constructors\' title against a rival who had already beaten you in a previous career.'}, es:{title:'Revancha', desc:'Gana el título de Constructores contra una rival que ya te había derrotado en una carrera anterior.'} },
+  { id:'rivincita', cat:'Estremo', title:'Rivincita', desc:'Batti il titolo Costruttori contro una rivale che ti aveva già sconfitto in una stagione precedente.', en:{title:'Rematch', desc:'Beat the Constructors\' title against a rival who had already beaten you in a previous season.'}, es:{title:'Revancha', desc:'Gana el título de Constructores contra una rival que ya te había derrotado en una temporada anterior.'} },
   { id:'enciclopedia-vivente', cat:'Estremo', title:'Enciclopedia Vivente', desc:'Sblocca tutti gli altri 49 obiettivi di questa lista.', en:{title:'Living Encyclopedia', desc:'Unlock all the other 49 achievements on this list.'}, es:{title:'Enciclopedia Viviente', desc:'Desbloquea los otros 49 logros de esta lista.'} },
   { id:'con-quello-che-c-e', cat:'Estremo', title:'Con Quello Che C\'è', desc:'Vinci una stagione Elite usando solo pezzi Common o Rare.', en:{title:'With What You\'ve Got', desc:'Win an Elite season using only Common or Rare pieces.'}, es:{title:'Con Lo Que Hay', desc:'Gana una temporada Elite usando solo piezas Common o Rare.'} },
   { id:'il-mito-assoluto', cat:'Estremo', title:'Il Mito Assoluto', desc:'Grande Slam Elite, stagione completa, con THE GOAT, senza sostituire nulla, sempre primi in entrambe le classifiche.', en:{title:'The Absolute Legend', desc:'Elite Grand Slam, full season, with THE GOAT, without replacing anything, always first in both standings.'}, es:{title:'El Mito Absoluto', desc:'Grande Slam Elite, temporada completa, con THE GOAT, sin sustituir nada, siempre primero en ambas clasificaciones.'} },
@@ -13491,6 +13491,7 @@ function renderSeasonEnd(){
     <div class="hero-inner">
       <div class="pill">${pillText}</div>
       <h1 class="hdr" style="margin-top:14px;font-size:38px;">${heroTitle}</h1>
+      ${state.isDailySeason ? `<div class="se-daily-rating-badge">${t('se_daily_rating_label')} <b>${computeDailyScoreBreakdown().totale.toLocaleString('it-IT')}</b></div>` : ''}
       <div class="se-driver-summary" style="margin-top:10px;">${driverSummaryLinesHTML}</div>
       <div class="tagline">${t('se_summary', teamDisplayName(), totalPoints, totalWins, totalPodiums, totalDnfs, state.calendar.length, fmtMIcon(state.budget))}</div>
       <div class="tagline" style="margin-top:6px;">${rivalComparisonSentence()}</div>
@@ -14230,15 +14231,15 @@ function onAction(e){
     });
   }
   else if(action==='se-new-career-confirm'){
-    // V0.9.9.142: richiesto da Gio — "se il player preme nuova stagione deve chiedergli se vuole
-    // condividere il risultato di questa, se si avvia condivisione, se no va alla schermata nuova
-    // carriera". Se sceglie di condividere, DOPO la condivisione procede comunque a nuova carriera
-    // (non lo lascia bloccato sulla schermata di fine stagione).
-    gameConfirm(t('se_share_before_new_desc'), ()=>{
-      shareResultCard().then(()=>{ state.phase='mode-select'; render(); });
-    }, t('se_share_before_new_title'), ()=>{
+    // V0.9.9.174: LOGICA INVERTITA — richiesto da Gio: "dalla schermata fine stagione se premo
+    // nuova stagione mi scrive vuoi condividere il risultato conferma/annulla, dovrebbe essere il
+    // contrario: vuoi andare al menu scelta stagione SENZA condividere il tuo risultato, si/no".
+    // Ora il dialogo chiede se si vuole procedere SENZA condividere — sì porta al menu, no chiude
+    // il dialogo restando sulla schermata (dove il pulsante Condividi lampeggiante resta lì,
+    // pronto per essere usato attivamente dal giocatore stesso se lo desidera).
+    gameConfirm(t('se_leave_without_share_desc'), ()=>{
       state.phase='mode-select'; render();
-    });
+    }, t('se_leave_without_share_title'));
   }
   else if(action==='open-trophy-room'){
     trophyRoomPreviousPhase = state.phase;
@@ -14802,7 +14803,7 @@ function openSettings(){
   }
   document.getElementById('sidebarFullResetBtn').addEventListener('click', ()=>{
     closeSettingsPanel();
-    gameConfirm('Cancella TUTTO: carriera in corso, Sala Trofei, Museo Dynasty e Obiettivi sbloccati. Il gioco tornerà esattamente come alla primissima apertura. Non si può annullare.', ()=>{
+    gameConfirm('Cancella TUTTO: stagione in corso, Sala Trofei, Museo Dynasty e Obiettivi sbloccati. Il gioco tornerà esattamente come alla primissima apertura. Non si può annullare.', ()=>{
       fullResetAll();
       state = { phase:'title', selectedDifficulty:'medio' };
       render();
@@ -14951,7 +14952,7 @@ function guideGoatChapterHTML(){
       <div style="margin-top:8px;"><b style="color:var(--text);">Variabile di rischio</b><br>Quando lotta direttamente per la vittoria, esiste un 15% di possibilità di un errore devastante — l'unica variabile capace di interrompere una prestazione altrimenti dominante nei momenti di massima tensione.</div>
       <div style="margin-top:8px;"><b style="color:var(--text);">Probabilità di trovarlo</b><br>La probabilità di ottenere THE GOAT in una singola estrazione è di circa <b>1 su 6.000</b>. Durante ogni turno dedicato ai piloti, il Draft considera il meglio di 3 estrazioni indipendenti: la probabilità effettiva di vederlo comparire tra le opzioni si avvicina quindi a <b>1 su 2.000 per turno</b> — una possibilità eccezionalmente rara.</div>
       <div class="guide-goat-oddsbar"><div class="guide-goat-oddsbar-fill"></div></div>
-      <div style="margin-top:8px;font-style:italic;color:var(--dim);">Quando THE GOAT compare al Draft o durante lo scouting, non è una semplice proposta: è uno degli eventi più importanti che possano verificarsi in una carriera. Potresti non incontrarlo mai più.</div>
+      <div style="margin-top:8px;font-style:italic;color:var(--dim);">Quando THE GOAT compare al Draft o durante lo scouting, non è una semplice proposta: è uno degli eventi più importanti che possano verificarsi in una stagione. Potresti non incontrarlo mai più.</div>
     </div>
   </div></div>`;
 }
@@ -15083,8 +15084,8 @@ function guideMentalityGridHTML(){
 }
 function guidePanelHTML(){
   const sectionsIt = [
-    { title:'Obiettivo della Carriera', body:`
-      <p>Ogni carriera è una stagione: 10 Gran Premi (Veloce) o 20 (Completa). Vinci punti in ogni gara con entrambi i tuoi piloti, per due classifiche separate e indipendenti: <b>Piloti</b> (il singolo pilota con più punti) e <b>Costruttori</b> (la somma dei punti dei tuoi due piloti contro quella delle scuderie rivali). Puoi vincere l'una senza l'altra, o entrambe nella stessa stagione — un vero "Grande Slam".</p>` },
+    { title:'Obiettivo della Stagione', body:`
+      <p>Ogni stagione dura: 10 Gran Premi (Veloce) o 20 (Completa). Vinci punti in ogni gara con entrambi i tuoi piloti, per due classifiche separate e indipendenti: <b>Piloti</b> (il singolo pilota con più punti) e <b>Costruttori</b> (la somma dei punti dei tuoi due piloti contro quella delle scuderie rivali). Puoi vincere l'una senza l'altra, o entrambe nella stessa stagione — un vero "Grande Slam".</p>` },
     { title:'La Scuderia: Rating e Peso di Ciascun Ruolo', body:`
       <p>La tua scuderia è fatta di 7 pezzi: due piloti e cinque componenti condivisi (motore, telaio, aerodinamica, gomme, team principal/strategia). Ogni pezzo ha un <b>rating</b> da 1 a 100, ma NON contano tutti allo stesso modo nella forza complessiva della scuderia: il pilota pesa quasi il doppio di un singolo componente. Ecco i pesi reali usati dal gioco:</p>
       ${guideWeightBarsHTML()}
@@ -15121,11 +15122,11 @@ function guidePanelHTML(){
     { title:'I Circuiti: non sono tutti uguali', body:`
       <p>Ogni Gran Premio si corre su un circuito con caratteristiche proprie: tipo di tracciato (alta velocità, cittadino, misto...), clima, probabilità di pioggia e di Safety Car, quanto stressa gomme e motore, e soprattutto un <b>componente dominante</b> — quello che in quel circuito specifico pesa di più sul risultato. Su un circuito dove le gomme sono il componente dominante, per esempio, un buon reparto gomme conta più del solito, anche a parità di rating generale della scuderia.</p>` },
     { title:'Il Draft: costruisci la scuderia iniziale', body:`
-      <p>All'inizio di ogni carriera scegli, turno dopo turno, i due piloti e i cinque componenti. Ad ogni turno ti viene proposto un candidato: puoi accettarlo o, se hai ancora rerolls disponibili, richiederne uno diverso. Il numero di rerolls dipende dalla difficoltà scelta — più è alta la difficoltà, meno margine di scelta hai, e più conta la sinergia tra i pezzi che ti capitano piuttosto che il rating puro di ciascuno.</p>` },
+      <p>All'inizio di ogni stagione scegli, turno dopo turno, i due piloti e i cinque componenti. Ad ogni turno ti viene proposto un candidato: puoi accettarlo o, se hai ancora rerolls disponibili, richiederne uno diverso. Il numero di rerolls dipende dalla difficoltà scelta — più è alta la difficoltà, meno margine di scelta hai, e più conta la sinergia tra i pezzi che ti capitano piuttosto che il rating puro di ciascuno.</p>` },
     { title:'La Pit Lane: sviluppo e scouting', body:`
       <p>Dopo ogni gara, il budget guadagnato con i piazzamenti si può investire in due modi, oppure risparmiare per dopo:</p>
       <p><b>Sviluppo (upgrade permanente)</b> — potenzi un componente esistente. Scegli quanto rischiare con un cursore: investimento minimo (rischio più alto, fino al 50%, ma più economico) fino a investimento massimo (rischio minimo, fino al 5%, ma più caro fino al 2.2× del costo base). Se l'investimento fallisce, si applica un malus invece del miglioramento. Il rischio non arriva mai a zero, nemmeno investendo il massimo possibile.</p>
-      <p><b>Scouting (sostituzione)</b> — sostituisci un pezzo con un candidato nuovo. A differenza dello sviluppo, qui non c'è rischio di fallimento: se hai il budget, ottieni esattamente il pezzo che vedi. Il pezzo sostituito non si può recuperare in quella carriera, ma va ad arricchire il Museo Dynasty.</p>` },
+      <p><b>Scouting (sostituzione)</b> — sostituisci un pezzo con un candidato nuovo. A differenza dello sviluppo, qui non c'è rischio di fallimento: se hai il budget, ottieni esattamente il pezzo che vedi. Il pezzo sostituito non si può recuperare in quella stagione, ma va ad arricchire il Museo Dynasty.</p>` },
     { title:'Rivalità: chi devi battere', body:`
       <p>Il gioco ti assegna una o più scuderie rivali in base alla tua forza attuale: sono gli avversari diretti da battere per la classifica Costruttori. Se superi nettamente una rivale, ne ottieni una nuova, più temibile — la sfida si adatta ai tuoi progressi invece di restare fissa per tutta la stagione.</p>` },
     { title:'Difficoltà e Lunghezza Stagione', body:`
@@ -15550,7 +15551,7 @@ function handleBackGesture(){
   if(state && state.phase==='season-length'){ state.phase = 'mode-select'; render(); return; }
   if(state && state.phase==='difficulty'){ state.phase = 'season-length'; render(); return; }
   // nessun overlay riconosciuto aperto: chiediamo conferma prima di uscire, mai un'uscita diretta
-  gameConfirm('Vuoi davvero uscire dal gioco? La carriera in corso e\u2019 gia\u2019 salvata automaticamente.', ()=>{
+  gameConfirm('Vuoi davvero uscire dal gioco? La stagione in corso e\u2019 gia\u2019 salvata automaticamente.', ()=>{
     /* conferma ricevuta: non ripubblichiamo una nuova guardia, cosi' una successiva pressione
        del tasto/gesture back del dispositivo puo' davvero portare fuori dal gioco */
   }, 'Uscire dal Gioco?');

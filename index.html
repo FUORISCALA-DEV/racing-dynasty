@@ -286,6 +286,14 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .maintenance-unlock button{ padding:12px 14px; font-size:14px; font-weight:700; background:var(--amber); border:none; border-radius:8px; color:#0A0C10; cursor:pointer; }
 .maintenance-error{ font-size:12px; color:#ff4d4d; min-height:16px; }
 .se-driver-summary{ display:flex; flex-direction:column; gap:4px; }
+/* V0.9.9.174: badge Daily rating in fine stagione — richiesto da Gio, "sarebbe bello uscisse il
+   Daily rating anche su questa schermata", non solo sulla carta condivisa */
+.se-daily-rating-badge{
+  display:inline-block; margin:10px auto 0; padding:6px 16px; border-radius:20px;
+  background:rgba(255,106,26,0.10); border:1px solid rgba(255,106,26,0.35);
+  font-family:var(--font-mono); font-size:13px; color:var(--dim);
+}
+.se-daily-rating-badge b{ color:var(--amber); font-size:15px; }
 .se-driver-summary-line{ font-size:16px; color:var(--dim); }
 .se-driver-summary-line strong{ color:var(--text); font-weight:700; }
 /* V0.9.9.83: countdown e riga trofei nella carta Daily Season */
