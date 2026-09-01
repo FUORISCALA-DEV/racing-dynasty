@@ -15760,8 +15760,8 @@ const TRANSITION_TIPS = [
 // la successiva): probabilità e distanza minima. Punto A (nuova stagione, prima del draft): quasi
 // sempre mostrata, essendo rara (una volta a stagione).
 const TRANSITION_TIP_CONFIG = {
-  puntoB_probabilita: 0.35,       // 35% di possibilità ad ogni gara idonea
-  puntoB_distanzaMinima: 3,       // mai a meno di 3 gare dall'ultima volta
+  puntoB_probabilita: 1,          // V0.9.9.191: a ogni gara, richiesto da Gio — prima 35%
+  puntoB_distanzaMinima: 0,       // V0.9.9.191: nessuna distanza minima — prima 3 gare
   puntoA_probabilita: 0.9,        // quasi sempre, nuova stagione prima del draft
 };
 
