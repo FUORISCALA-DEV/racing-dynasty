@@ -8986,7 +8986,7 @@ function renderFriendsHub(){
 // locali (non serve interrogare il cloud, sono già qui).
 function renderMyProfile(){
   const stats = computePublicStats();
-  const nickname = dailyNicknameCache?.nickname || currentUser?.name || t('friends_unknown_nick');
+  const nickname = dailyNicknameCache?.nickname || t('friends_unknown_nick');
   const nazioneAttuale = Object.keys(COUNTRY_FLAG).find(c => COUNTRY_FLAG[c] === (dailyNicknameCache?.flag_code)) || null;
   const giorniAttesa = daysUntilNicknameCanChange();
   app.innerHTML = `
@@ -10147,11 +10147,13 @@ function pushPublicStatsToCloud(){
       const stats = computePublicStats();
       const { error } = await supabaseClient.from('player_public_stats').upsert({
         user_id: currentUser.id,
-        // V0.9.9.139: BUG PREESISTENTE CORRETTO — veniva inviato l'intero oggetto cache
-        // (nickname+flag_code+data) invece della sola stringa nickname. Aggiunto anche il fallback
-        // al nome Google per chi non ha ancora scelto un nickname Daily, richiesto da Gio ("gli
-        // amici dovrebbero esserci per tutti, anche per chi non ha accesso alle daily").
-        nickname: dailyNicknameCache?.nickname || currentUser.name || null,
+        // V0.9.9.184: BUG CORRETTO — segnalato da Gio: "vedo nome e cognome su alcuni amici al
+        // posto del nickname, sul gioco in generale deve uscire Player per tutti quelli che non
+        // hanno ancora scelto un nick". Causa: il nome Google veniva salvato QUI, nel database
+        // stesso, al posto di un nickname mancante — non solo mostrato temporaneamente. Tolto il
+        // ripiego: ora salviamo null se non c'è un vero nickname scelto, lasciando che la lista
+        // amici mostri l'etichetta generica "Giocatore"/"Player" già esistente e già corretta.
+        nickname: dailyNicknameCache?.nickname || null,
         is_premium: !!isPremiumUser,
         ...stats,
         updated_at: new Date().toISOString(),
