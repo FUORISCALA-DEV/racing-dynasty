@@ -15829,8 +15829,11 @@ function showTransitionTipScreen(tip, callbackContinua){
     : tip.asset ? `<div class="tt-asset-wrap${isScena?' tt-asset-scene':''}"><img src="${tip.asset}" alt="" class="tt-asset-img" onerror="this.parentElement.style.display='none';"></div>`
     : '';
   const haVisual = !!visualHTML;
+  // V0.9.9.192: PUNTO — richiesto da Gio: "rimuovi il tasto continua, metti un clicca per
+  // continuare come quello dello splash che lampeggia dopo 5s, ovunque clicco va avanti". Riusa
+  // esattamente lo stesso stile/tempo/traduzione dello splash iniziale, mai duplicato.
   app.innerHTML = `
-  <div class="tt-overlay">
+  <div class="tt-overlay" id="ttOverlay">
     <div class="tt-bg"></div>
     <div class="tt-card${haVisual?' tt-has-visual':''}">
       <div class="tt-header">
@@ -15840,11 +15843,15 @@ function showTransitionTipScreen(tip, callbackContinua){
       <div class="tt-title">${tip.titolo[lang]}</div>
       ${haVisual ? `<div class="tt-visual-col">${visualHTML}</div>` : ''}
       <div class="tt-body">${tip.testo[lang]}</div>
-      <button type="button" class="button primary tt-continue-btn" id="ttContinueBtn">${t('tt_continue')}</button>
+      <div class="tt-tap-hint" id="ttTapHint">${t('splash_tap_continue')}</div>
     </div>
   </div>`;
-  document.getElementById('ttContinueBtn').addEventListener('click', ()=>{
-    document.querySelector('.tt-overlay')?.remove();
+  setTimeout(()=>{
+    const hint = document.getElementById('ttTapHint');
+    if(hint && document.getElementById('ttOverlay')) hint.classList.add('splash-hint-blink');
+  }, 5000);
+  document.getElementById('ttOverlay').addEventListener('click', ()=>{
+    document.getElementById('ttOverlay')?.remove();
     callbackContinua();
   }, { once:true });
 }
