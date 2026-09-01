@@ -8946,6 +8946,7 @@ function renderFriendsHub(){
 function renderMyProfile(){
   const stats = computePublicStats();
   const nickname = dailyNicknameCache?.nickname || currentUser?.name || t('friends_unknown_nick');
+  const nazioneAttuale = Object.keys(COUNTRY_FLAG).find(c => COUNTRY_FLAG[c] === (dailyNicknameCache?.flag_code)) || null;
   const giorniAttesa = daysUntilNicknameCanChange();
   app.innerHTML = `
   <div class="topbar">
@@ -8957,6 +8958,7 @@ function renderMyProfile(){
   <div class="wrap">
     <div class="panel">
       <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+        ${nazioneAttuale ? `<span style="font-size:20px;flex-shrink:0;">${flag(nazioneAttuale)}</span>` : ''}
         <div style="font-size:22px;font-weight:800;">${nickname}</div>
         <button class="ghost" data-action="open-edit-nickname" style="padding:6px 10px;flex-shrink:0;" aria-label="${t('profile_edit_nickname')}">✏️</button>
       </div>
