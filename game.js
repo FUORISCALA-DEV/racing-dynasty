@@ -6964,13 +6964,13 @@ function renderRaceLiveInit(){
   </div>
   <div class="live-layout">
     <div class="panel live-board-panel">
-      <div class="panel-title"><h3 class="hdr">${t('live_board_title')}</h3><span class="dim mono" style="font-size:11px;">${t('live_board_count', 20)}</span></div>
-      <div class="live-head"><span>${t('live_head_pos')}</span><span>#</span><span>${t('live_head_pilot')}</span><span>${t('live_head_team')}</span><span>${t('live_head_gap')}</span><span>${t('live_head_status')}</span><span></span></div>
+      <div class="panel-title"><h3 class="hdr">${window.t('live_board_title')}</h3><span class="dim mono" style="font-size:11px;">${window.t('live_board_count', 20)}</span></div>
+      <div class="live-head"><span>${window.t('live_head_pos')}</span><span>#</span><span>${window.t('live_head_pilot')}</span><span>${window.t('live_head_team')}</span><span>${window.t('live_head_gap')}</span><span>${window.t('live_head_status')}</span><span></span></div>
       <div class="live-board" id="liveBoard" style="height:${rows.length*ROW_H}px;">${rowsHTML}</div>
     </div>
     <div class="panel live-log-panel">
-      <div class="panel-title"><h3 class="hdr">${t('live_log_title')}</h3></div>
-      <div class="dim" style="font-size:12px;margin-bottom:8px;">${nationLabel(timeline.circuit.paese)} · ${timeline.circuit.tipo} · ${t('hub_dominant_component')}: ${displayArea(timeline.circuit.componentedominante)}</div>
+      <div class="panel-title"><h3 class="hdr">${window.t('live_log_title')}</h3></div>
+      <div class="dim" style="font-size:12px;margin-bottom:8px;">${nationLabel(timeline.circuit.paese)} · ${timeline.circuit.tipo} · ${window.t('hub_dominant_component')}: ${displayArea(timeline.circuit.componentedominante)}</div>
       <div class="live-log" id="liveLog">${logHTML}</div>
     </div>
   </div>
