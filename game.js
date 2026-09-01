@@ -702,6 +702,9 @@ const I18N = {
     // Crediti
     credits_title: '<img class=ico src=assets/icons/building.png> Crediti', credits_tagline: 'Piccolo studio. Giochi fuori misura.',
     credits_first_game: 'Il primo gioco di FUORISCALA', credits_dev: 'Sviluppato e pubblicato da',
+    
+    survey_close: 'Chiudi', survey_title: 'Com\'è andata la tua prima run?', survey_question: 'Quanto ti è piaciuta, da 1 a 5?', survey_comment_placeholder: 'Vuoi aggiungere un commento? (facoltativo)', survey_submit: 'Invia',
+    bugreport_title: 'Segnala un problema', bugreport_desc: 'Descrivi cosa è successo — leggiamo ogni segnalazione.', bugreport_placeholder: 'Cosa hai visto? Cosa ti aspettavi succedesse?', bugreport_submit: 'Invia segnalazione', bugreport_sending: 'Invio…', bugreport_thanks: 'Grazie, l\'abbiamo ricevuta!',
     credits_created: 'Creato da', credits_contact_email: 'Scrivici — racingdynasty.game@gmail.com',
     // Hub — etichette HUD
     hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Gara',
@@ -1085,6 +1088,9 @@ const I18N = {
     settings_reset: 'Reset Everything (First Launch)', on: 'On', off: 'Off',
     credits_title: '<img class=ico src=assets/icons/building.png> Credits', credits_tagline: 'Small studio. Outsized games.',
     credits_first_game: "FUORISCALA's first game", credits_dev: 'Developed and published by',
+    
+    survey_close: 'Close', survey_title: 'How was your first run?', survey_question: 'How much did you enjoy it, 1 to 5?', survey_comment_placeholder: 'Want to add a comment? (optional)', survey_submit: 'Send',
+    bugreport_title: 'Report a problem', bugreport_desc: "Describe what happened — we read every report.", bugreport_placeholder: 'What did you see? What did you expect to happen?', bugreport_submit: 'Send report', bugreport_sending: 'Sending…', bugreport_thanks: "Thanks, we've got it!",
     credits_created: 'Created by', credits_contact_email: 'Contact us — racingdynasty.game@gmail.com',
     hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Race',
     hud_best_driver: 'Best Driver', hud_constructors: 'Constructors',
@@ -1466,6 +1472,9 @@ const I18N = {
     settings_reset: 'Restablecer Todo (Primera Apertura)', on: 'Activado', off: 'Desactivado',
     credits_title: '<img class=ico src=assets/icons/building.png> Créditos', credits_tagline: 'Estudio pequeño. Juegos fuera de escala.',
     credits_first_game: 'El primer juego de FUORISCALA', credits_dev: 'Desarrollado y publicado por',
+    
+    survey_close: 'Cerrar', survey_title: '¿Qué tal tu primera run?', survey_question: '¿Cuánto te ha gustado, del 1 al 5?', survey_comment_placeholder: '¿Quieres añadir un comentario? (opcional)', survey_submit: 'Enviar',
+    bugreport_title: 'Informar de un problema', bugreport_desc: 'Describe qué ha pasado — leemos todos los informes.', bugreport_placeholder: '¿Qué has visto? ¿Qué esperabas que pasara?', bugreport_submit: 'Enviar informe', bugreport_sending: 'Enviando…', bugreport_thanks: '¡Gracias, lo hemos recibido!',
     credits_created: 'Creado por', credits_contact_email: 'Escríbenos — racingdynasty.game@gmail.com',
     hud_reroll: 'Reroll', hud_budget: 'Presupuesto', hud_sponsor: 'Patrocinador', hud_race: 'Carrera',
     hud_best_driver: 'Mejor Piloto', hud_constructors: 'Constructores',
@@ -13668,6 +13677,7 @@ function renderSeasonEnd(){
   `;
   bindActions();
   if(state.isDailySeason) loadAndShowDailyRankOnSeasonEnd();
+  showFirstRunSurveyIfNeeded();
   if(isDriverChamp || isConstructorChamp){
     renderCelebrationFx(isDriverChamp, isConstructorChamp, state.team.nation);
   }
@@ -14763,6 +14773,104 @@ function toggleMenuPanel(){
   else openMenuPanel();
 }
 
+// V0.9.9.187: PUNTO 17 — sondaggio dopo la prima run mai completata, richiesto da Gio ("domande
+// direttamente dentro RD alla fine della prima run"). Mostrato UNA SOLA VOLTA, mai più, tramite un
+// flag persistente in localStorage — mai invadente (piccolo pannello, mai a schermo intero,
+// facoltativo saltarlo). Risposte inviate a una tabella Supabase dedicata (first_run_survey).
+const FIRST_RUN_SURVEY_KEY = 'racingDynastyFirstRunSurveyShownV1';
+function shouldShowFirstRunSurvey(){
+  if(state.isTutorialRun) return false; // il tutorial non conta come "prima run" vera
+  try{ return localStorage.getItem(FIRST_RUN_SURVEY_KEY) !== '1'; }catch(e){ return false; }
+}
+function markFirstRunSurveyShown(){
+  try{ localStorage.setItem(FIRST_RUN_SURVEY_KEY, '1'); }catch(e){ /* ignorato */ }
+}
+function showFirstRunSurveyIfNeeded(){
+  if(!shouldShowFirstRunSurvey()) return;
+  markFirstRunSurveyShown(); // segnato SUBITO, cosi' non ricompare mai piu' anche se l'utente chiude senza rispondere
+  setTimeout(()=>{
+    const overlay = document.createElement('div');
+    overlay.id = 'firstRunSurveyOverlay';
+    overlay.className = 'first-run-survey-overlay';
+    overlay.innerHTML = `
+      <div class="first-run-survey-card">
+        <button type="button" class="first-run-survey-close" id="firstRunSurveyClose" aria-label="${t('survey_close')}">×</button>
+        <div class="first-run-survey-title">${t('survey_title')}</div>
+        <div class="first-run-survey-question">${t('survey_question')}</div>
+        <div class="first-run-survey-stars" id="firstRunSurveyStars">
+          ${[1,2,3,4,5].map(n=>`<button type="button" class="first-run-survey-star" data-rating="${n}">${n}</button>`).join('')}
+        </div>
+        <textarea id="firstRunSurveyComment" class="first-run-survey-textarea" placeholder="${t('survey_comment_placeholder')}" maxlength="500"></textarea>
+        <button type="button" class="button primary" id="firstRunSurveySubmit" style="width:100%;margin-top:10px;" disabled>${t('survey_submit')}</button>
+      </div>`;
+    document.body.appendChild(overlay);
+    let ratingScelto = null;
+    overlay.querySelectorAll('.first-run-survey-star').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        ratingScelto = Number(btn.dataset.rating);
+        overlay.querySelectorAll('.first-run-survey-star').forEach(b=>{
+          b.classList.toggle('chosen', Number(b.dataset.rating) <= ratingScelto);
+        });
+        document.getElementById('firstRunSurveySubmit').disabled = false;
+      });
+    });
+    const chiudi = () => overlay.remove();
+    document.getElementById('firstRunSurveyClose').addEventListener('click', chiudi);
+    document.getElementById('firstRunSurveySubmit').addEventListener('click', async ()=>{
+      const commento = document.getElementById('firstRunSurveyComment').value.trim();
+      chiudi();
+      if(!ratingScelto || !supabaseClient) return;
+      try{
+        await supabaseClient.from('first_run_survey').insert({
+          user_id: currentUser ? currentUser.id : null,
+          rating: ratingScelto,
+          comment: commento || null,
+        });
+      }catch(e){ console.warn('Invio sondaggio non riuscito:', e); }
+    });
+  }, 1800); // piccolo ritardo, cosi' il giocatore vede prima il proprio risultato
+}
+
+// V0.9.9.187: PUNTO 17 — segnalazione bug semplice (solo testo libero + invio), raggiungibile dal
+// menu principale in ogni momento. Invio a una tabella Supabase dedicata (bug_reports), con la
+// schermata attuale come contesto automatico (mai chiesto al giocatore di specificarla a mano).
+function openBugReportPanel(){
+  closeMenuPanel();
+  const overlay = document.createElement('div');
+  overlay.id = 'bugReportOverlay';
+  overlay.className = 'first-run-survey-overlay'; // stesso stile del sondaggio, riusato
+  overlay.innerHTML = `
+    <div class="first-run-survey-card">
+      <button type="button" class="first-run-survey-close" id="bugReportClose" aria-label="${t('survey_close')}">×</button>
+      <div class="first-run-survey-title">${t('bugreport_title')}</div>
+      <div class="first-run-survey-question">${t('bugreport_desc')}</div>
+      <textarea id="bugReportText" class="first-run-survey-textarea" style="min-height:110px;" placeholder="${t('bugreport_placeholder')}" maxlength="1000"></textarea>
+      <button type="button" class="button primary" id="bugReportSubmit" style="width:100%;margin-top:10px;">${t('bugreport_submit')}</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  const chiudi = () => overlay.remove();
+  document.getElementById('bugReportClose').addEventListener('click', chiudi);
+  document.getElementById('bugReportSubmit').addEventListener('click', async ()=>{
+    const testo = document.getElementById('bugReportText').value.trim();
+    if(!testo) return;
+    const btn = document.getElementById('bugReportSubmit');
+    btn.disabled = true; btn.textContent = t('bugreport_sending');
+    try{
+      if(supabaseClient){
+        await supabaseClient.from('bug_reports').insert({
+          user_id: currentUser ? currentUser.id : null,
+          description: testo,
+          game_phase: state ? state.phase : null,
+        });
+      }
+      overlay.querySelector('.first-run-survey-card').innerHTML = `<div class="first-run-survey-title">${t('bugreport_thanks')}</div>`;
+      setTimeout(chiudi, 1600);
+    }catch(e){
+      btn.disabled = false; btn.textContent = t('bugreport_submit');
+      console.warn('Invio segnalazione non riuscito:', e);
+    }
+  });
+}
 function goHome(){
   // la carriera in corso resta salvata (autosalvataggio gia' attivo): si puo' riprendere da "Continua"
   closeMenuPanel();
@@ -15627,6 +15735,8 @@ function initSidebar(){
   document.getElementById('menuSettingsBtn').addEventListener('click', openSettings);
   const creditsBtn = document.getElementById('menuCreditsBtn');
   if(creditsBtn) creditsBtn.addEventListener('click', openCredits);
+  const bugReportBtn = document.getElementById('menuBugReportBtn');
+  if(bugReportBtn) bugReportBtn.addEventListener('click', openBugReportPanel);
   document.getElementById('menuFullscreenBtn').addEventListener('click', toggleFullscreen);
   const fsBtn = document.getElementById('fullscreenToggleBtn');
   if(fsBtn) fsBtn.addEventListener('click', toggleFullscreen);

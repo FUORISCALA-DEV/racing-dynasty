@@ -339,6 +339,33 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .se2-stat-label{ font-size:9.5px; color:var(--dim); margin-top:2px; }
 .se2-narrative-text{ font-size:14px; line-height:1.6; color:var(--dim); text-align:left; }
 .se2-actions{ margin-bottom:18px; }
+/* V0.9.9.187: PUNTO 17 — sondaggio prima run + segnalazione bug, stesso overlay condiviso */
+@keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+.first-run-survey-overlay{
+  position:fixed; inset:0; z-index:20000; display:flex; align-items:center; justify-content:center;
+  background:rgba(5,5,7,0.72); padding:20px; animation:fadeIn 0.25s ease;
+}
+.first-run-survey-card{
+  position:relative; width:100%; max-width:380px; background:var(--panel); border:1px solid var(--line);
+  border-radius:14px; padding:26px 22px 22px; box-shadow:0 20px 50px rgba(0,0,0,0.5);
+}
+.first-run-survey-close{
+  position:absolute; top:10px; right:10px; width:28px; height:28px; border-radius:8px;
+  background:none; border:none; color:var(--dim); font-size:20px; line-height:1; cursor:pointer;
+}
+.first-run-survey-close:hover{ color:var(--text); }
+.first-run-survey-title{ font-size:17px; font-weight:800; margin-bottom:6px; padding-right:20px; }
+.first-run-survey-question{ font-size:13px; color:var(--dim); margin-bottom:14px; }
+.first-run-survey-stars{ display:flex; gap:8px; margin-bottom:14px; }
+.first-run-survey-star{
+  flex:1; height:40px; border-radius:8px; border:1px solid var(--line); background:var(--panel2);
+  color:var(--dim); font-family:var(--font-mono); font-weight:700; cursor:pointer; transition:all .12s ease;
+}
+.first-run-survey-star.chosen{ background:var(--amber); border-color:var(--amber); color:#140900; }
+.first-run-survey-textarea{
+  width:100%; min-height:70px; background:var(--panel2); border:1px solid var(--line); border-radius:8px;
+  color:var(--text); font-family:inherit; font-size:13px; padding:10px; resize:vertical; box-sizing:border-box;
+}
 /* V0.9.9.174: badge Daily rating in fine stagione — richiesto da Gio, "sarebbe bello uscisse il
    Daily rating anche su questa schermata", non solo sulla carta condivisa */
 .se-daily-rating-badge{
@@ -2358,6 +2385,7 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
       <div class="menu-section-label">INFO</div>
       <button type="button" class="menu-item" id="menuGuideBtn">📖 <span>Guida</span></button>
       <button type="button" class="menu-item" id="menuCreditsBtn">🏢 <span>Crediti</span></button>
+      <button type="button" class="menu-item" id="menuBugReportBtn">🐞 <span>Segnala un problema</span></button>
 
       <div class="menu-section-label">APP</div>
       <button type="button" class="menu-item" id="menuSettingsBtn">⚙️ <span>Impostazioni</span></button>
