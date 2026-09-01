@@ -286,6 +286,59 @@ button:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .maintenance-unlock button{ padding:12px 14px; font-size:14px; font-weight:700; background:var(--amber); border:none; border-radius:8px; color:#0A0C10; cursor:pointer; }
 .maintenance-error{ font-size:12px; color:#ff4d4d; min-height:16px; }
 .se-driver-summary{ display:flex; flex-direction:column; gap:4px; }
+/* V0.9.9.185: RIDISEGNO COMPLETO fine stagione — mobile-first, contenitore centrato su desktop */
+.se2-wrap{ max-width:560px; margin:0 auto; }
+@media (min-width:900px){ .se2-wrap{ max-width:680px; } }
+
+.se2-celebration{
+  position:relative; text-align:center; padding:22px 16px 20px;
+  border:1px solid var(--line); border-radius:12px; margin-bottom:16px; overflow:hidden;
+  background:radial-gradient(ellipse at 50% 0%, rgba(247,184,0,0.16), transparent 65%), var(--panel);
+}
+.se2-celebration-nowin{ background:var(--panel); }
+.se2-eyebrow{ font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:0.14em; color:var(--dim); }
+.se2-trophy-img{
+  display:block; margin:8px auto 2px; max-height:112px; width:auto;
+  filter:drop-shadow(0 8px 16px rgba(0,0,0,0.5));
+  animation:trophyEntrance .7s cubic-bezier(.2,.8,.3,1.15) both;
+}
+.se2-title{
+  font-size:clamp(26px, 8vw, 40px); font-weight:800; line-height:1.08; margin:4px 0 6px;
+  color:var(--legendary); text-shadow:0 2px 14px rgba(247,184,0,0.28); letter-spacing:0.005em;
+}
+.se2-celebration-nowin .se2-title{ color:var(--text); text-shadow:none; }
+.se2-subtitle{ font-size:14px; color:var(--dim); max-width:400px; margin:0 auto; line-height:1.4; }
+
+.se2-results-panel{
+  border:1px solid var(--line); border-radius:12px; background:var(--panel); margin-bottom:14px; overflow:hidden;
+}
+.se2-result-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 16px; }
+.se2-result-row:not(:last-child){ border-bottom:1px solid var(--line); }
+.se2-result-row.se2-result-champ{ background:rgba(247,184,0,0.07); }
+.se2-result-left{ flex:1; min-width:0; }
+.se2-result-label{ font-family:var(--font-mono); font-size:10px; font-weight:700; letter-spacing:0.1em; color:var(--dim); margin-bottom:2px; }
+.se2-result-name{ font-size:16px; font-weight:700; color:var(--text); overflow-wrap:break-word; word-break:break-word; line-height:1.25; }
+.se2-result-champtag{ font-size:11px; font-weight:700; color:var(--legendary); margin-top:3px; }
+.se2-result-pos{ flex:0 0 auto; font-family:var(--font-mono); font-size:22px; font-weight:800; color:var(--dim); min-width:44px; text-align:right; }
+.se2-result-pos-champ{ color:var(--legendary); }
+
+.se2-daily-panel{ display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+@media (min-width:480px){ .se2-daily-panel{ flex-direction:row; } }
+.se2-daily-section{ flex:1; text-align:center; padding:14px; border:1px solid var(--line); border-radius:12px; background:var(--panel); }
+.se2-daily-label{ font-family:var(--font-mono); font-size:10.5px; font-weight:700; letter-spacing:0.1em; color:var(--dim); margin-bottom:6px; }
+.se2-daily-value{ font-family:var(--font-mono); font-weight:800; font-size:30px; color:var(--amber); font-variant-numeric:tabular-nums; }
+.se2-daily-rank-value{ font-family:var(--font-mono); font-weight:800; font-size:22px; color:var(--cyan); }
+.se2-daily-rank-total{ font-size:12px; font-weight:600; color:var(--dim); }
+.se2-daily-rank-muted{ color:var(--dim) !important; font-size:14px !important; font-weight:600 !important; }
+
+.se2-narrative-panel{ margin-bottom:14px; }
+.se2-stat-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:14px; }
+@media (min-width:420px){ .se2-stat-grid{ grid-template-columns:repeat(5, 1fr); } }
+.se2-stat-cell{ text-align:center; padding:9px 2px; background:var(--panel2); border-radius:8px; }
+.se2-stat-value{ font-family:var(--font-mono); font-weight:800; font-size:15px; font-variant-numeric:tabular-nums; }
+.se2-stat-label{ font-size:9.5px; color:var(--dim); margin-top:2px; }
+.se2-narrative-text{ font-size:14px; line-height:1.6; color:var(--dim); text-align:left; }
+.se2-actions{ margin-bottom:18px; }
 /* V0.9.9.174: badge Daily rating in fine stagione — richiesto da Gio, "sarebbe bello uscisse il
    Daily rating anche su questa schermata", non solo sulla carta condivisa */
 .se-daily-rating-badge{

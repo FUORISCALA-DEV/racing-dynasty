@@ -528,6 +528,17 @@ const I18N = {
     se_th_pos: 'Pos', se_th_driver: 'Pilota', se_th_team: 'Scuderia', se_th_points: 'Punti',
     se_you_badge: 'TU', se_ex_badge: 'EX', se_rival_badge: 'RIVALE',
     se_footer: 'Ogni nuova run genera un nuovo draft di piloti e componenti — la stagione in corso viene salvata automaticamente.',
+    se2_eyebrow_daily: 'DAILY SEASON',
+    se2_title_grandslam: 'GRAND SLAM!', se2_title_driver: 'CAMPIONE PILOTI', se2_title_constructor: 'CAMPIONI COSTRUTTORI', se2_title_none: 'STAGIONE CONCLUSA',
+    se2_subtitle_grandslam: 'Entrambi i titoli. Una stagione da ricordare.', se2_subtitle_driver: 'Il titolo piloti è tuo.', se2_subtitle_constructor: 'La squadra ha conquistato il campionato.', se2_subtitle_none: 'Ogni gara lascia qualcosa da cui ripartire.',
+    se2_label_team: 'SCUDERIA', se2_label_driver1: 'PILOTA 1', se2_label_driver2: 'PILOTA 2',
+    se2_champion_tag_constructor: 'Campioni costruttori', se2_champion_tag_driver: 'Campione piloti',
+    se2_daily_score_label: 'PUNTEGGIO DAILY', se2_daily_rank_label: 'POSIZIONE IN CLASSIFICA GIORNALIERA',
+    se2_daily_rank_loading: 'Caricamento…', se2_daily_rank_unavailable: 'Non disponibile', se2_daily_rank_error: 'Impossibile caricare la classifica',
+    se2_daily_rank_of: (tot)=>`su ${tot} partecipanti`,
+    se2_narrative_title: 'La tua stagione',
+    se2_stat_points: 'Punti', se2_stat_wins: 'Vittorie', se2_stat_podiums: 'Podi', se2_stat_dnfs: 'Ritiri', se2_stat_budget: 'Budget',
+
     cv_driver_champ_title: 'CAMPIONE DEL MONDO PILOTI', cv_driver_champ_sub: (nome)=>`${nome} è Campione del Mondo!`,
     cv_constructor_champ_title: 'CAMPIONI COSTRUTTORI', cv_constructor_champ_sub: (team)=>`${team} vince il titolo Costruttori!`,
     cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} e ${team} — entrambi i titoli in una stagione!`, se_leave_without_share_title: 'Andare senza condividere?', se_leave_without_share_desc: 'Vuoi andare al menu scelta stagione senza condividere il tuo risultato?',
@@ -904,6 +915,17 @@ const I18N = {
     se_th_pos: 'Pos', se_th_driver: 'Driver', se_th_team: 'Team', se_th_points: 'Points',
     se_you_badge: 'YOU', se_ex_badge: 'EX', se_rival_badge: 'RIVAL',
     se_footer: 'Every new run generates a new draft of drivers and components — the current season is saved automatically.',
+    se2_eyebrow_daily: 'DAILY SEASON',
+    se2_title_grandslam: 'GRAND SLAM!', se2_title_driver: 'DRIVERS CHAMPION', se2_title_constructor: 'CONSTRUCTORS CHAMPIONS', se2_title_none: 'SEASON COMPLETE',
+    se2_subtitle_grandslam: 'Both titles. A season to remember.', se2_subtitle_driver: "The drivers' title is yours.", se2_subtitle_constructor: 'The team has won the championship.', se2_subtitle_none: 'Every race leaves something to build on.',
+    se2_label_team: 'TEAM', se2_label_driver1: 'DRIVER 1', se2_label_driver2: 'DRIVER 2',
+    se2_champion_tag_constructor: 'Constructors champions', se2_champion_tag_driver: 'Drivers champion',
+    se2_daily_score_label: 'DAILY SCORE', se2_daily_rank_label: 'DAILY LEADERBOARD RANK',
+    se2_daily_rank_loading: 'Loading…', se2_daily_rank_unavailable: 'Not available', se2_daily_rank_error: 'Could not load the leaderboard',
+    se2_daily_rank_of: (tot)=>`of ${tot} participants`,
+    se2_narrative_title: 'Your season',
+    se2_stat_points: 'Points', se2_stat_wins: 'Wins', se2_stat_podiums: 'Podiums', se2_stat_dnfs: 'DNFs', se2_stat_budget: 'Budget',
+
     cv_driver_champ_title: 'WORLD DRIVERS CHAMPION', cv_driver_champ_sub: (nome)=>`${nome} is World Champion!`,
     cv_constructor_champ_title: 'CONSTRUCTORS CHAMPIONS', cv_constructor_champ_sub: (team)=>`${team} wins the Constructors title!`,
     cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} and ${team} — both titles in one season!`, se_leave_without_share_title: 'Leave without sharing?', se_leave_without_share_desc: 'Do you want to go to the season selection menu without sharing your result?',
@@ -1274,6 +1296,17 @@ const I18N = {
     se_th_pos: 'Pos', se_th_driver: 'Piloto', se_th_team: 'Escudería', se_th_points: 'Puntos',
     se_you_badge: 'TÚ', se_ex_badge: 'EX', se_rival_badge: 'RIVAL',
     se_footer: 'Cada nueva run genera un nuevo draft de pilotos y componentes — la temporada en curso se guarda automáticamente.',
+    se2_eyebrow_daily: 'DAILY SEASON',
+    se2_title_grandslam: '¡GRAND SLAM!', se2_title_driver: 'CAMPEÓN DE PILOTOS', se2_title_constructor: 'CAMPEONES DE CONSTRUCTORES', se2_title_none: 'TEMPORADA FINALIZADA',
+    se2_subtitle_grandslam: 'Ambos títulos. Una temporada para recordar.', se2_subtitle_driver: 'El título de pilotos es tuyo.', se2_subtitle_constructor: 'El equipo ha ganado el campeonato.', se2_subtitle_none: 'Cada carrera deja algo de lo que partir.',
+    se2_label_team: 'ESCUDERÍA', se2_label_driver1: 'PILOTO 1', se2_label_driver2: 'PILOTO 2',
+    se2_champion_tag_constructor: 'Campeones de constructores', se2_champion_tag_driver: 'Campeón de pilotos',
+    se2_daily_score_label: 'PUNTUACIÓN DAILY', se2_daily_rank_label: 'POSICIÓN EN LA CLASIFICACIÓN DIARIA',
+    se2_daily_rank_loading: 'Cargando…', se2_daily_rank_unavailable: 'No disponible', se2_daily_rank_error: 'No se pudo cargar la clasificación',
+    se2_daily_rank_of: (tot)=>`de ${tot} participantes`,
+    se2_narrative_title: 'Tu temporada',
+    se2_stat_points: 'Puntos', se2_stat_wins: 'Victorias', se2_stat_podiums: 'Podios', se2_stat_dnfs: 'Retiros', se2_stat_budget: 'Presupuesto',
+
     cv_driver_champ_title: 'CAMPEÓN DEL MUNDO DE PILOTOS', cv_driver_champ_sub: (nome)=>`¡${nome} es Campeón del Mundo!`,
     cv_constructor_champ_title: 'CAMPEONES DE CONSTRUCTORES', cv_constructor_champ_sub: (team)=>`¡${team} gana el título de Constructores!`,
     cv_grand_slam_title: '🏆 GRAND SLAM 🏆', cv_grand_slam_sub: (nome,team)=>`${nome} y ${team} — ¡ambos títulos en una temporada!`, se_leave_without_share_title: '¿Salir sin compartir?', se_leave_without_share_desc: '¿Quieres ir al menú de selección de temporada sin compartir tu resultado?',
@@ -2629,7 +2662,10 @@ async function loadDailyBestResultToday(){
     const mio = data.find(r=>r.user_id===currentUser.id);
     if(!mio){ dailyBestResultCache = null; return null; }
     const rank = data.indexOf(mio) + 1; // la vista arriva gia' ordinata correttamente
-    dailyBestResultCache = { daily_date: today, rank, ...mio };
+    // V0.9.9.185: PUNTO RIDISEGNO FINE STAGIONE — aggiunto il totale partecipanti (dato reale già
+    // disponibile in questa stessa query, mai inventato) per mostrare "#posizione su totale" nel
+    // nuovo pannello risultato Daily.
+    dailyBestResultCache = { daily_date: today, rank, total: data.length, ...mio };
     return dailyBestResultCache;
   }catch(e){ console.warn('Caricamento risultato Daily non riuscito:', e); dailyBestResultCache = null; return null; }
 }
@@ -13479,23 +13515,25 @@ function renderSeasonEnd(){
   const p1 = state.driverStandings['PLAYER-1'];
   const p2 = state.driverStandings['PLAYER-2'];
   const p1Pos = dstd.findIndex(d=>d.slotKey==='PLAYER-1' && !d.isFormer)+1;
-  const p2Pos = dstd.findIndex(d=>d.slotKey==='PLAYER-2' && !d.isFormer)+1;
+  const p2Pos = state.team.pilotSecond ? dstd.findIndex(d=>d.slotKey==='PLAYER-2' && !d.isFormer)+1 : null;
   const constructorPos = cstd.findIndex(c=>c.teamId==='PLAYER')+1;
 
   const driverChamp = dstd[0];
   const constructorChamp = cstd[0];
   const isDriverChamp = driverChamp.isPlayerTeam;
   const isConstructorChamp = constructorChamp.isPlayerTeam;
+  const isGrandSlamEnd = isDriverChamp && isConstructorChamp;
 
   const summary = computeSeasonEndSummaryLines();
 
-  // V0.9.9.142: RISTRUTTURATO su richiesta esplicita di Gio — rimosso l'overlay separato
-  // (championshipVictoryHTML), che causava un vero e proprio scontro visivo: il pilota nell'overlay
-  // (viola, corretto) si sovrapponeva al VECCHIO sistema trofeo della schermata normale sottostante
-  // (rosa/magenta, un colore ormai fuori uso — l'immagine assets/trophies/eccellente.png non era mai
-  // stata aggiornata quando lo schema colori del gioco è cambiato). Ora la LOGICA di selezione posa
-  // (corretta) vive direttamente nella schermata normale, sostituendo il vecchio sistema trofeo —
-  // un solo pilota mostrato, non più due sovrapposti.
+  // V0.9.9.185: RIDISEGNO COMPLETO — richiesto da Gio con un brief dettagliato dopo aver segnalato
+  // che il titolo precedente ("Nome pilota e Nome scuderia — entrambi i titoli in una stagione! Nome
+  // secondo pilota: P5.") era un enorme blocco di testo senza gerarchia, spezzato su troppe righe su
+  // smartphone. Nuova struttura in 5 blocchi: celebrazione (titolo breve, mai nomi dentro), pannello
+  // risultati (nome+posizione per scuderia e piloti, posizione allineata a destra), pannello Daily
+  // (solo in modalità Daily, punteggio+posizione in classifica), racconto+dettagli (griglia
+  // statistiche + testo narrativo), azioni finali (pulsanti invariati). Nessuna modifica a formule
+  // di punteggio, condizioni di vittoria, dati salvati, premi o navigazione — solo presentazione.
   let heroPoseData = null;
   if(isDriverChamp || isConstructorChamp){
     const bestDriverRating = isDriverChamp
@@ -13505,50 +13543,68 @@ function renderSeasonEnd(){
     const poseNum = isDriverChamp ? 1 : (2+Math.floor(rnd()*4));
     const isGoatChamp = isDriverChamp && driverChamp.nome==='THE GOAT';
     const poseBand = isGoatChamp ? 'goat_ferrari' : band;
-    // l'ALTRO pilota (non il campione) — richiesto da Gio: "un'aggiunta, tenere anche la posizione
-    // dell'altro pilota" nel nuovo testo
-    const altroSlotKey = driverChamp.slotKey==='PLAYER-1' ? 'PLAYER-2' : 'PLAYER-1';
-    const altroPilota = dstd.find(d=>d.slotKey===altroSlotKey && !d.isFormer);
-    const altroPos = dstd.findIndex(d=>d.slotKey===altroSlotKey && !d.isFormer)+1;
-    heroPoseData = {
-      poseSrc: `assets/share-poses/pose${poseNum}_${poseBand}.webp`,
-      altroPilotaNome: altroPilota ? altroPilota.nome : null,
-      altroPilotaPos: altroPos>0 ? altroPos : null,
-    };
+    heroPoseData = { poseSrc: `assets/share-poses/pose${poseNum}_${poseBand}.webp` };
   }
-  // V0.9.9.123: integrati i testi della celebrazione Grand Slam (piaciuti a Gio: "puoi usarli per
-  // sostituire o integrare quelli che ci sono già") anche nella normale pagina di fine stagione —
-  // prima il caso "solo titolo Piloti" (senza Costruttori) non aveva un pillText/heroTitle dedicato,
-  // mostrava semplicemente "FINE STAGIONE" generico, un'occasione persa per festeggiare.
-  const isGrandSlamEnd = summary.isConstructorChamp && summary.anyDriverChamp;
-  const pillText = isGrandSlamEnd ? t('cv_grand_slam_title')
-    : summary.isConstructorChamp ? t('se_constr_champ_pill')
-    : summary.anyDriverChamp ? t('cv_driver_champ_title')
-    : t('se_end_pill');
-  const driverChampName = summary.drivers.find(d=>d.isChamp)?.name;
-  // V0.9.9.142: aggiunta la posizione dell'altro pilota al testo, richiesto da Gio ("un'aggiunta,
-  // tenere anche la posizione dell'altro pilota") — se disponibile, altrimenti il testo resta come
-  // prima (nessun secondo pilota valido, es. sostituito durante la stagione).
-  const altroPilotaSuffix = heroPoseData && heroPoseData.altroPilotaNome && heroPoseData.altroPilotaPos
-    ? ` ${heroPoseData.altroPilotaNome}: P${heroPoseData.altroPilotaPos}.` : '';
-  const heroTitle = isGrandSlamEnd ? t('cv_grand_slam_sub', driverChampName, summary.teamName) + altroPilotaSuffix
-    : summary.isConstructorChamp ? t('se_team_won_title', summary.teamName)
-    : summary.anyDriverChamp ? t('cv_driver_champ_sub', driverChampName) + altroPilotaSuffix
-    : t('se_team_position_title', summary.teamName, summary.constructorPos);
-  const driverSummaryLinesHTML = summary.drivers.map(d=>
-    `<div class="se-driver-summary-line">${d.name}: <strong>${d.isChamp ? t('share_champion_short') : 'P'+d.pos}</strong></div>`
-  ).join('');
 
-  // V0.9.7.8: fix bug segnalato da Gio — i totali ora includono anche le statistiche di eventuali
-  // piloti sostituiti a stagione in corso (record EX), non solo i due sedili correnti.
+  // 1. CELEBRAZIONE — titolo/sottotitolo dipendono SOLO dal risultato reale, mai nomi dentro
+  const eyebrowText = state.isDailySeason ? t('se2_eyebrow_daily')
+    : (state.calendar.length<=10 ? t('sl_quick') : t('sl_full'));
+  const celebTitle = isGrandSlamEnd ? t('se2_title_grandslam')
+    : isConstructorChamp ? t('se2_title_constructor')
+    : isDriverChamp ? t('se2_title_driver')
+    : t('se2_title_none');
+  const celebSubtitle = isGrandSlamEnd ? t('se2_subtitle_grandslam')
+    : isConstructorChamp ? t('se2_subtitle_constructor')
+    : isDriverChamp ? t('se2_subtitle_driver')
+    : t('se2_subtitle_none');
+  const hasAnyWin = isDriverChamp || isConstructorChamp;
+
+  // 2. PANNELLO RISULTATI — nome+posizione, scuderia poi i due piloti nell'ordine di squadra reale
+  const resultRowHTML = (label, nome, pos, isChamp, champTagText) => `
+    <div class="se2-result-row${isChamp?' se2-result-champ':''}">
+      <div class="se2-result-left">
+        <div class="se2-result-label">${label}</div>
+        <div class="se2-result-name">${nome}</div>
+        ${isChamp ? `<div class="se2-result-champtag">${champTagText}</div>` : ''}
+      </div>
+      <div class="se2-result-pos${isChamp?' se2-result-pos-champ':''}">P${pos}</div>
+    </div>`;
+  const resultsPanelHTML = `
+    <div class="se2-results-panel">
+      ${resultRowHTML(t('se2_label_team'), teamDisplayName(), constructorPos, isConstructorChamp, t('se2_champion_tag_constructor'))}
+      ${resultRowHTML(t('se2_label_driver1'), state.team.pilotMain.nome, p1Pos, isDriverChamp && driverChamp.slotKey==='PLAYER-1', t('se2_champion_tag_driver'))}
+      ${state.team.pilotSecond ? resultRowHTML(t('se2_label_driver2'), state.team.pilotSecond.nome, p2Pos, isDriverChamp && driverChamp.slotKey==='PLAYER-2', t('se2_champion_tag_driver')) : ''}
+    </div>`;
+
+  // 3. PANNELLO DAILY — solo in modalità Daily, con stato di caricamento gestito esplicitamente
+  const dailyPanelHTML = state.isDailySeason ? `
+    <div class="se2-daily-panel">
+      <div class="se2-daily-section">
+        <div class="se2-daily-label">${t('se2_daily_score_label')}</div>
+        <div class="se2-daily-value">${computeDailyScoreBreakdown().totale.toLocaleString('it-IT')}</div>
+      </div>
+      <div class="se2-daily-section" id="se2DailyRankSection">
+        <div class="se2-daily-label">${t('se2_daily_rank_label')}</div>
+        <div class="se2-daily-rank-value" id="se2DailyRankValue">${t('se2_daily_rank_loading')}</div>
+      </div>
+    </div>` : '';
+
+  // 4. RACCONTO E DETTAGLI — griglia statistiche numeriche + testo narrativo (senza ripetere
+  // campioni/piazzamenti già mostrati sopra)
   const { points: totalPoints, wins: totalWins, podiums: totalPodiums, dnfs: totalDnfs } = playerSeasonTotals();
+  const statGridHTML = `
+    <div class="se2-stat-grid">
+      <div class="se2-stat-cell"><div class="se2-stat-value">${totalPoints}</div><div class="se2-stat-label">${t('se2_stat_points')}</div></div>
+      <div class="se2-stat-cell"><div class="se2-stat-value">${totalWins}</div><div class="se2-stat-label">${t('se2_stat_wins')}</div></div>
+      <div class="se2-stat-cell"><div class="se2-stat-value">${totalPodiums}</div><div class="se2-stat-label">${t('se2_stat_podiums')}</div></div>
+      <div class="se2-stat-cell"><div class="se2-stat-value">${totalDnfs}</div><div class="se2-stat-label">${t('se2_stat_dnfs')}</div></div>
+      <div class="se2-stat-cell"><div class="se2-stat-value">${fmtM(state.budget)}</div><div class="se2-stat-label">${t('se2_stat_budget')}</div></div>
+    </div>`;
 
   const driverRows = dstd.map((d,i)=>{
     const cls = (d.isPlayerTeam ? (d.isFormer?'me former':'me') : '') + (isRivalTeam(d.teamId)?' rival':'');
     const posCls = i===0?'p1':i===1?'p2':i===2?'p3':'';
     const badge = d.isPlayerTeam ? ` <span class="badge-event ${d.isFormer?'ex':''}">${d.isFormer?t('se_ex_badge'):t('se_you_badge')}</span>` : (isRivalTeam(d.teamId)?` <span class="badge-event rival-badge">${t('se_rival_badge')}</span>`:'');
-    // V0.9.9.37: i piloti EX (sostituiti a stagione in corso) non sono cliccabili — il loro slotKey
-    // non corrisponde piu' a un sedile reale, mostrare "la loro auto" oggi sarebbe fuorviante
     const clickAttrs = d.isFormer ? '' : `data-action="open-driver-detail" data-slot-key="${d.slotKey}" data-team-id="${d.teamId}"`;
     return `<tr class="${cls} ${d.isFormer?'':'row-clickable'}" ${clickAttrs}><td><span class="pos ${posCls}">P${i+1}</span></td><td>${d.naz?flag(d.naz)+' ':''}${d.nome}${badge}</td><td class="dim">${d.teamNome}</td><td class="mono">${d.points}</td><td class="mono dim">${d.wins}V</td></tr>`;
   }).join('');
@@ -13561,38 +13617,31 @@ function renderSeasonEnd(){
   }).join('');
 
   app.innerHTML = `
-  <div class="hero season-champ-hero ${heroPoseData?'has-trophy':''}">
-    ${heroPoseData ? `<img src="${heroPoseData.poseSrc}" alt="" class="champ-trophy-img">` : ''}
-    <div class="hero-inner">
-      <div class="pill">${pillText}</div>
-      <h1 class="hdr" style="margin-top:14px;font-size:38px;">${heroTitle}</h1>
-      ${state.isDailySeason ? `<div class="se-daily-rating-badge">${t('se_daily_rating_label')} <b>${computeDailyScoreBreakdown().totale.toLocaleString('it-IT')}</b></div>` : ''}
-      <div class="se-driver-summary" style="margin-top:10px;">${driverSummaryLinesHTML}</div>
-      <div class="tagline">${t('se_summary', teamDisplayName(), totalPoints, totalWins, totalPodiums, totalDnfs, state.calendar.length, fmtMIcon(state.budget))}</div>
-      <div class="tagline" style="margin-top:6px;">${rivalComparisonSentence()}</div>
-      <div class="btnrow" style="justify-content:center;">
-        <button class="ghost" data-action="se-new-career-confirm">${t('se_new_career')}</button>
-        <button class="primary se-share-pulse" data-action="share-result-card">${t('se_share')}</button>
-        ${state.isDailySeason ? `<button class="ghost" data-action="go-to-daily-live-leaderboard">${t('se_view_daily_leaderboard')}</button>` : `<button class="ghost" data-action="open-trophy-room">${t('se_visit_trophy_room')}</button>`}
-      </div>
+  <div class="se2-wrap">
+    <div class="se2-celebration${hasAnyWin?'':' se2-celebration-nowin'}">
+      <div class="se2-eyebrow">${eyebrowText}</div>
+      ${heroPoseData ? `<img src="${heroPoseData.poseSrc}" alt="" class="se2-trophy-img">` : ''}
+      <h1 class="se2-title">${celebTitle}</h1>
+      <div class="se2-subtitle">${celebSubtitle}</div>
+    </div>
+
+    ${resultsPanelHTML}
+    ${dailyPanelHTML}
+
+    <div class="panel se2-narrative-panel">
+      <h3 class="hdr" style="font-size:17px;margin-bottom:12px;">${t('se2_narrative_title')}</h3>
+      ${statGridHTML}
+      <div class="se2-narrative-text">${t('se_summary', teamDisplayName(), totalPoints, totalWins, totalPodiums, totalDnfs, state.calendar.length, fmtMIcon(state.budget))}</div>
+      <div class="se2-narrative-text" style="margin-top:6px;">${rivalComparisonSentence()}</div>
+    </div>
+
+    <div class="btnrow se2-actions" style="justify-content:center;">
+      <button class="ghost" data-action="se-new-career-confirm">${t('se_new_career')}</button>
+      <button class="primary se-share-pulse" data-action="share-result-card">${t('se_share')}</button>
+      ${state.isDailySeason ? `<button class="ghost" data-action="go-to-daily-live-leaderboard">${t('se_view_daily_leaderboard')}</button>` : `<button class="ghost" data-action="open-trophy-room">${t('se_visit_trophy_room')}</button>`}
     </div>
   </div>
-  <div class="panel">
-    <div class="panel-title"><h3 class="hdr">${t('se_your_drivers')}</h3></div>
-    <div class="grid grid-2">
-      <div class="mini" data-rarity="${displayRarity(state.team.pilotMain)}" style="padding:14px;">
-        <div class="role">${t('se_pilot1', state.team.pilotMain.nome)}</div>
-        <div class="nm">${t('se_drivers_pos', p1Pos)}</div>
-        <div class="rt">${t('se_stats', p1.points, p1.wins, p1.podiums, p1.dnfs)}</div>
-      </div>
-      <div class="mini" data-rarity="${displayRarity(state.team.pilotSecond)}" style="padding:14px;">
-        <div class="role">${t('se_pilot2', state.team.pilotSecond.nome)}</div>
-        <div class="nm">${t('se_drivers_pos', p2Pos)}</div>
-        <div class="rt">${t('se_stats', p2.points, p2.wins, p2.podiums, p2.dnfs)}</div>
-      </div>
-    </div>
-    <div class="tag-line" style="margin-top:12px;">${t('se_team_constr_pos', teamDisplayName(), constructorPos)}</div>
-  </div>
+
   <div class="grid grid-2">
     <div class="panel">
       <div class="panel-title"><h3 class="hdr">${t('se_final_drivers')}</h3><span class="dim mono" style="font-size:11px;">${t('se_champion')}: ${driverChamp.nome}</span></div>
@@ -13618,14 +13667,33 @@ function renderSeasonEnd(){
   <div class="footer-note">${t('se_footer')}</div>
   `;
   bindActions();
+  if(state.isDailySeason) loadAndShowDailyRankOnSeasonEnd();
   if(isDriverChamp || isConstructorChamp){
     renderCelebrationFx(isDriverChamp, isConstructorChamp, state.team.nation);
   }
-  // V0.9.9.142: suono agganciato al sistema unificato (non più al vecchio overlay separato, ormai
-  // rimosso — il suo state.championshipVictoryData non viene più impostato da nessuna parte).
   if((isDriverChamp || isConstructorChamp) && !state.championshipVictorySoundPlayedThisSeason){
     state.championshipVictorySoundPlayedThisSeason = true;
     playRealSfx('audio/sfx_victory_fanfare.mp3');
+  }
+}
+// V0.9.9.185: caricamento esplicito della posizione in classifica Daily per la nuova schermata fine
+// stagione — gestisce caricamento, errore e risultato non ancora registrato, mai una posizione
+// finta. Aggiorna solo l'elemento specifico (non un re-render completo), cosi' il layout non salta.
+async function loadAndShowDailyRankOnSeasonEnd(){
+  try{
+    const risultato = await loadDailyBestResultToday();
+    const el = document.getElementById('se2DailyRankValue');
+    if(!el) return; // schermata abbandonata nel frattempo
+    if(!risultato || risultato.rank==null){
+      el.textContent = t('se2_daily_rank_unavailable');
+      el.classList.add('se2-daily-rank-muted');
+      return;
+    }
+    const testoTotale = risultato.total ? ` <span class="se2-daily-rank-total">${t('se2_daily_rank_of', risultato.total)}</span>` : '';
+    el.innerHTML = `#${risultato.rank}${testoTotale}`;
+  }catch(e){
+    const el = document.getElementById('se2DailyRankValue');
+    if(el){ el.textContent = t('se2_daily_rank_error'); el.classList.add('se2-daily-rank-muted'); }
   }
 }
 
