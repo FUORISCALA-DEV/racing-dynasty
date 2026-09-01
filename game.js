@@ -592,7 +592,7 @@ const I18N = {
     hub_pos_drivers: 'POS. PILOTI', hub_pos_constructors: 'POS. COSTRUTTORI', hub_go_to_gp: 'Vai al Gran Premio →',
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalità', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Calendario Stagione', hub_race_word: 'GARA',
     hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ La Tua Scuderia', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento speciale', compat_label: 'Compatibilità', compat_excellent: 'Eccellente', compat_good: 'Buona', compat_average: 'Nella media', compat_below: 'Sotto la media', compat_poor: 'Scarsa',
-    hub_weather: 'Clima', comp_driver1: 'Pilota #1', comp_driver2: 'Pilota #2', comp_engine: 'Motore',
+    hub_weather: 'Clima', comp_driver1: 'Pilota #1', comp_driver2: 'Pilota #2', comp_engine: 'Motore', comp_mentality: 'Mentalità', comp_typology: 'Tipologia', pcard_details: 'Dettagli', pcard_tap_to_choose: 'Tocca il riquadro per scegliere',
     comp_chassis: 'Telaio', comp_aero: 'Aerodinamica', comp_tires: 'Gomme', comp_strategist: 'Team Principal',
     // Titolo
     title_tagline_return: (race,total)=>`Bentornato — hai una stagione in corso (Gara ${race}/${total})`,
@@ -961,7 +961,7 @@ const I18N = {
     hub_pos_drivers: 'DRIVERS POS.', hub_pos_constructors: 'CONSTRUCTORS POS.', hub_go_to_gp: 'Go to Grand Prix →',
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalry', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Season Calendar', hub_race_word: 'RACE',
     hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Your Team', hub_dominant_component: 'Dominant component', hub_special_event: 'Special event', compat_label: 'Compatibility', compat_excellent: 'Excellent', compat_good: 'Good', compat_average: 'Average', compat_below: 'Below average', compat_poor: 'Poor',
-    hub_weather: 'Weather', comp_driver1: 'Driver #1', comp_driver2: 'Driver #2', comp_engine: 'Engine',
+    hub_weather: 'Weather', comp_driver1: 'Driver #1', comp_driver2: 'Driver #2', comp_engine: 'Engine', comp_mentality: 'Mentality', comp_typology: 'Typology', pcard_details: 'Details', pcard_tap_to_choose: 'Tap the card to choose',
     comp_chassis: 'Chassis', comp_aero: 'Aerodynamics', comp_tires: 'Tires', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Welcome back — you have a season in progress (Race ${race}/${total})`,
     title_continue: '▶ Continue Season', title_new: 'New Season', title_delete: '<img class=ico src=assets/icons/trash.png> Delete Save',
@@ -1324,7 +1324,7 @@ const I18N = {
     hub_pos_drivers: 'POS. PILOTOS', hub_pos_constructors: 'POS. CONSTRUCTORES', hub_go_to_gp: 'Ir al Gran Premio →',
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalidad', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Calendario de Temporada', hub_race_word: 'CARRERA',
     hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Tu Escudería', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento especial', compat_label: 'Compatibilidad', compat_excellent: 'Excelente', compat_good: 'Buena', compat_average: 'En la media', compat_below: 'Por debajo de la media', compat_poor: 'Escasa',
-    hub_weather: 'Clima', comp_driver1: 'Piloto #1', comp_driver2: 'Piloto #2', comp_engine: 'Motor',
+    hub_weather: 'Clima', comp_driver1: 'Piloto #1', comp_driver2: 'Piloto #2', comp_engine: 'Motor', comp_mentality: 'Mentalidad', comp_typology: 'Tipología', pcard_details: 'Detalles', pcard_tap_to_choose: 'Toca la tarjeta para elegir',
     comp_chassis: 'Chasis', comp_aero: 'Aerodinámica', comp_tires: 'Neumáticos', comp_strategist: 'Team Principal',
     title_tagline_return: (race,total)=>`Bienvenido de nuevo — tienes una temporada en curso (Carrera ${race}/${total})`,
     title_continue: '▶ Continuar Temporada', title_new: 'Nueva Temporada', title_delete: '<img class=ico src=assets/icons/trash.png> Borrar Partida',
@@ -2342,7 +2342,7 @@ function miniSemaforoHTML(circles){
   if(!circles.length) return '<span class="dim" style="font-size:11px;">Nessuna sinergia</span>';
   return circles.map(c=>{
     const glow = c.lit ? `style="--glow:${MENTALITA_DEFS[c.mentId].color};"` : '';
-    const halfHTML = s => s ? `<div class="sem-half" style="background:${MENTALITA_DEFS[s.mentId].color};" title="${s.roleLabel} (${s.item.nome}) · ${(s.catKey==='pilotMain'||s.catKey==='pilotSecond')?'Mentalità':'Tipologia'}: ${MENTALITA_DEFS[s.mentId].label}"></div>` : `<div class="sem-half" style="background:rgba(255,255,255,0.06);"></div>`;
+    const halfHTML = s => s ? `<div class="sem-half" style="background:${MENTALITA_DEFS[s.mentId].color};" title="${s.roleLabel} (${s.item.nome}) · ${(s.catKey==='pilotMain'||s.catKey==='pilotSecond')?t('comp_mentality'):t('comp_typology')}: ${mentaLabel(s.mentId)}"></div>` : `<div class="sem-half" style="background:rgba(255,255,255,0.06);"></div>`;
     return `<div class="sem-circle mini${c.lit?' full':''}" ${glow}>${halfHTML(c.a)}${halfHTML(c.b)}</div>`;
   }).join('');
 }
@@ -10951,13 +10951,18 @@ function shortenText(text, maxLen){
 function draftCardHTML(item, statKeys, extraLine, synergyCatKey){
   const stats = statKeys.map(([k,l])=> item[k]!==undefined ? statBar(l, item[k]) : '').join('');
   let synBadge = '', rowCls = '';
+  // V0.9.9.180: PUNTI 9/10 — BUG CORRETTO, segnalato da Gio: "sinergie non tradotte e altre robe
+  // nelle carte draft". Trovate 4 stringhe fisse in italiano in questa funzione, mai tradotte in
+  // nessuna lingua indipendentemente da quella selezionata: l'etichetta mentalità/sinergia (usava
+  // m.label direttamente invece della funzione mentaLabel() già esistente e già usata altrove nel
+  // gioco), "Mentalità"/"Tipologia", "Dettagli", "Tocca il riquadro per scegliere". Corrette tutte.
   if(synergyCatKey && item.sinergia && state.team){
     const m = MENTALITA_DEFS[item.sinergia];
     const isPilotRole = synergyCatKey==='pilotMain' || synergyCatKey==='pilotSecond';
-    const kl = isPilotRole ? 'Mentalità' : 'Tipologia';
+    const kl = isPilotRole ? t('comp_mentality') : t('comp_typology');
     const unpaired = unpairedMentalities(synergyCatKey);
     const wouldGain = unpaired.has(item.sinergia);
-    synBadge = `<div class="syn-half-badge" title="${kl}: ${m.label}" style="margin-bottom:6px;"><div class="sem-half" style="background:${m.color};"></div><div class="sem-half" style="background:rgba(255,255,255,0.05);"></div></div>`;
+    synBadge = `<div class="syn-half-badge" title="${kl}: ${mentaLabel(item.sinergia)}" style="margin-bottom:6px;"><div class="sem-half" style="background:${m.color};"></div><div class="sem-half" style="background:rgba(255,255,255,0.05);"></div></div>`;
     if(wouldGain) rowCls = ' card-synergy-gain';
   }
   return `
@@ -10975,13 +10980,13 @@ function draftCardHTML(item, statKeys, extraLine, synergyCatKey){
     ${item.bonus? `<div class="tag-line bonus">▲ ${shortenText(item.bonus,48)}</div>`:''}
     ${item.malus? `<div class="tag-line malus">▼ ${shortenText(item.malus,48)}</div>`:''}
     <details class="card-details">
-      <summary onclick="event.stopPropagation()">Dettagli</summary>
+      <summary onclick="event.stopPropagation()">${t('pcard_details')}</summary>
       <div class="stat-bars">${stats}</div>
       ${item.bonus? `<div class="tag-line bonus">▲ ${item.bonus}</div>`:''}
       ${item.malus? `<div class="tag-line malus">▼ ${item.malus}</div>`:''}
       ${item.abilita? `<div class="ability">${item.abilita}</div>`:''}
     </details>
-    <div class="card-tap-hint">Tocca il riquadro per scegliere</div>
+    <div class="card-tap-hint">${t('pcard_tap_to_choose')}</div>
     ${extraLine||''}
   </div>`;
 }
