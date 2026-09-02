@@ -2707,13 +2707,11 @@ async function enterDailySeasonFlow(){
     // si può tornare indietro — come concordato con Gio.
     gameConfirm(t('daily_confirm_new_attempt_desc'), async ()=>{
       await deleteDailyResultsForToday();
-      state.dailySeasonAttemptNumber = playsToday + 1;
-      startDailySeasonRun();
+      startDailySeasonRun(undefined, playsToday + 1);
     }, t('daily_confirm_new_attempt_title'));
     return;
   }
-  state.dailySeasonAttemptNumber = 1;
-  startDailySeasonRun();
+  startDailySeasonRun(undefined, 1);
 }
 // V0.9.9.85: calcola SOLO quanti GP ha la Daily di oggi, senza avviarla davvero — serve per farlo
 // vedere prima di entrare, cosi' il giocatore sa se ha tempo per finirla, come richiesto da Gio.
@@ -2863,7 +2861,7 @@ function todaysDailySeasonLength(dateStr){
   exitDailyRandomMode();
   return seasonLength;
 }
-function startDailySeasonRun(dateStr){
+function startDailySeasonRun(dateStr, attemptNumber){
   dateStr = dateStr || todayDateStringUTC();
   deleteDailyGameSave(); // V0.9.9.132: mai lasciare in giro il salvataggio di un tentativo precedente
   enterDailyRandomMode(dateStr);
@@ -2876,6 +2874,11 @@ function startDailySeasonRun(dateStr){
   state.rerollsLeft = todaysDailyRerollCount(dateStr); // stream separato, sicuro chiamarlo qui
   state.isDailySeason = true;
   state.dailySeasonDate = dateStr;
+  // V0.9.9.201: impostato QUI, DOPO newRun() — prima veniva impostato dal chiamante PRIMA di questa
+  // funzione, ma newRun() riassegna interamente "state" da zero, cancellando qualunque valore
+  // impostato in precedenza. Il risultato era che ogni tentativo (anche il 2°/3° Premium) veniva
+  // sempre salvato come "tentativo 1", vanificando la penalità prevista per i tentativi successivi.
+  state.dailySeasonAttemptNumber = attemptNumber || 1;
   exitDailyRandomMode(); // dal draft in poi si torna alla vera casualita' — vedi nota di design
   state.phase = 'naming'; // stesso punto di ingresso della run normale dopo newRun()
   render();
@@ -10430,6 +10433,10 @@ async function loadMyFriendsList(){
 
 function pushSaveToCloud(){
   if(!currentUser || !supabaseClient) return;
+  const userIdAlMomento = currentUser.id; // V0.9.9.201: catturato QUI, non dentro il setTimeout —
+  // se l'account attivo cambia prima che il salvataggio differito parta davvero, i dati restano
+  // comunque attribuiti al proprietario giusto (chi ha davvero generato questo salvataggio), non a
+  // chi risulta loggato al momento dell'invio effettivo 2.5s dopo.
   clearTimeout(__cloudSyncDebounceTimer);
   __cloudSyncDebounceTimer = setTimeout(async ()=>{
     try{
@@ -10443,7 +10450,7 @@ function pushSaveToCloud(){
         achievements: achievementData,
       };
       const { error } = await supabaseClient.from(CLOUD_SAVE_TABLE).upsert({
-        user_id: currentUser.id,
+        user_id: userIdAlMomento,
         save_data: bundle,
         updated_at: new Date().toISOString(),
       });
@@ -10496,7 +10503,11 @@ function saveGame(){
     if(state.isTutorialRun) return; // V0.9.9.70: il tutorial non deve MAI sovrascrivere il salvataggio vero del giocatore
     if(state.isDailySeason) return; // V0.9.9.95: stesso motivo, mai per la Daily
     if(state.phase==='season_end'){ deleteSave(); return; }
-    const snapshot = { ...state, live: null, usedIds: Array.from(state.usedIds||[]) };
+    // V0.9.9.201: midSeasonSwappedCats era un Set nativo mai convertito — JSON.stringify lo
+    // serializza come oggetto vuoto {}, e un .add() successivo dopo il ricaricamento lanciava
+    // TypeError. Stesso trattamento già usato per usedIds.
+    const snapshot = { ...state, live: null, usedIds: Array.from(state.usedIds||[]),
+      midSeasonSwappedCats: Array.from(state.midSeasonSwappedCats||[]) };
     localStorage.setItem(SAVE_KEY, JSON.stringify({ saveVersion:'0.9', savedAt: Date.now(), state: snapshot }));
     touchLocalProgress();
     pushSaveToCloud(); // V0.9.8.2: no-op se non loggati
@@ -10509,6 +10520,7 @@ function loadGame(){
     const parsed = JSON.parse(raw);
     if(!parsed || !parsed.state) return null;
     parsed.state.usedIds = new Set(parsed.state.usedIds||[]);
+    parsed.state.midSeasonSwappedCats = new Set(parsed.state.midSeasonSwappedCats||[]); // V0.9.9.201
     return parsed;
   }catch(e){ return null; }
 }
@@ -10526,7 +10538,8 @@ function saveDailyGameState(){
   try{
     if(!state || !state.isDailySeason || NO_SAVE_PHASES.has(state.phase)) return;
     if(state.phase==='season_end'){ deleteDailyGameSave(); return; }
-    const snapshot = { ...state, live: null, usedIds: Array.from(state.usedIds||[]) };
+    const snapshot = { ...state, live: null, usedIds: Array.from(state.usedIds||[]),
+      midSeasonSwappedCats: Array.from(state.midSeasonSwappedCats||[]) }; // V0.9.9.201
     localStorage.setItem(DAILY_SAVE_KEY, JSON.stringify({ savedAt: Date.now(), state: snapshot }));
   }catch(e){ /* storage non disponibile: ignorato silenziosamente */ }
 }
@@ -10540,6 +10553,7 @@ function loadDailyGameSave(){
     // "continuarla" (e il countdown/calendario di un altro giorno non sarebbe più coerente)
     if(parsed.state.dailySeasonDate !== todayDateStringUTC()) { deleteDailyGameSave(); return null; }
     parsed.state.usedIds = new Set(parsed.state.usedIds||[]);
+    parsed.state.midSeasonSwappedCats = new Set(parsed.state.midSeasonSwappedCats||[]); // V0.9.9.201
     return parsed;
   }catch(e){ return null; }
 }

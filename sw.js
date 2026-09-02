@@ -30,7 +30,11 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((names) =>
-      Promise.all(names.filter((n) => n !== CACHE_NAME).map((n) => caches.delete(n)))
+      // V0.9.9.201: filtro per prefisso, non solo per nome esatto diverso — cancelliamo SOLO le
+      // vecchie cache di QUESTO gioco (stesso prefisso "racing-dynasty-"), mai cache di altri
+      // giochi che in futuro potrebbero condividere la stessa origine (es. un dominio FUORISCALA
+      // con più giochi sotto percorsi diversi).
+      Promise.all(names.filter((n) => n.startsWith('racing-dynasty-') && n !== CACHE_NAME).map((n) => caches.delete(n)))
     ).then(() => self.clients.claim())
   );
 });
