@@ -15858,17 +15858,21 @@ function pickTransitionTip(nomeCircuitoInArrivo){
 // implicitamente vista la cadenza quotidiana, e la Daily ha già la sua identità/velocità propria),
 // mai nel tutorial.
 function maybeShowSeasonStartTip(callbackContinua){
-  if(!transitionTipsAbilitate() || state.isDailySeason || state.isTutorialRun || rnd() > TRANSITION_TIP_CONFIG.puntoA_probabilita){
+  // V0.9.9.207: tolta l'esclusione Daily, richiesto esplicitamente da Gio — nessun timer di
+  // completamento esiste per la Daily (solo il countdown per il PROSSIMO giorno disponibile, che
+  // non viene toccato da questa schermata), quindi nessun rischio per l'integrità competitiva.
+  if(!transitionTipsAbilitate() || state.isTutorialRun || rnd() > TRANSITION_TIP_CONFIG.puntoA_probabilita){
     callbackContinua();
     return;
   }
   showTransitionTipScreen(pickTransitionTip(), callbackContinua);
 }
 
-// V0.9.9.189: PUNTO B — tra una gara e la successiva. Stessa esclusione Daily/tutorial, più la
-// distanza minima configurata e la probabilità.
+// V0.9.9.189: PUNTO B — tra una gara e la successiva.
+// V0.9.9.207: tolta l'esclusione Daily, richiesto esplicitamente da Gio — le schermate di
+// transizione compaiono anche nelle run Daily, mai durante il tutorial.
 function maybeShowBetweenRacesTip(callbackContinua){
-  if(!transitionTipsAbilitate() || state.isDailySeason || state.isTutorialRun){
+  if(!transitionTipsAbilitate() || state.isTutorialRun){
     callbackContinua();
     return;
   }
