@@ -15878,15 +15878,16 @@ function showTransitionTipScreen(tip, callbackContinua){
   app.innerHTML = `
   <div class="tt-overlay" id="ttOverlay">
     <div class="tt-bg"></div>
+    <img src="assets/logo.png" alt="" class="tt-top-logo">
     <div class="tt-card${haVisual?' tt-has-visual':''}" id="ttCard">
       <div class="tt-header">
-        <div class="tt-eyebrow-badge"><img src="assets/logo.png" alt="" class="tt-logo">${categoriaLabel}</div>
+        <div class="tt-eyebrow-badge">${categoriaLabel}</div>
       </div>
       <div class="tt-title">${tip.titolo[lang]}</div>
       ${haVisual ? `<div class="tt-visual-col">${visualHTML}</div>` : ''}
       <div class="tt-body tt-body-delayed">${tip.testo[lang]}</div>
-      <div class="tt-tap-hint" id="ttTapHint">${t('splash_tap_continue')}</div>
     </div>
+    <div class="tt-tap-hint" id="ttTapHint">${t('splash_tap_continue')}</div>
   </div>`;
   // icone menu/fullscreen nascoste durante la schermata — competono visivamente col contenuto
   const menuBtn = document.getElementById('gameMenuToggleBtn');
