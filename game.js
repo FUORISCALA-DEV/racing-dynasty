@@ -353,7 +353,7 @@ const I18N = {
     redeem_code_menu_item: 'Ho un codice premium',
     premium_choice_message: 'Hai un codice premium ricevuto da uno streamer o da un amico, oppure vuoi procedere con l\'acquisto?',
     premium_choice_code_btn: '🎁 Ho un codice', premium_choice_pay_btn: '💳 Procedi al pagamento', premium_choice_cancel_btn: 'Annulla', redeem_code_message: 'Se hai ricevuto un codice premium, inseriscilo qui sotto.',
-    redeem_code_checking: 'Verifica in corso...', redeem_code_invalid: 'Codice non valido o già usato.', redeem_code_error: 'Errore di connessione, riprova.',
+    redeem_code_checking: 'Verifica in corso...', redeem_code_invalid: 'Codice non valido o già usato.', redeem_code_retry: 'Problema momentaneo nello sblocco — il codice è di nuovo valido, riprova tra qualche secondo.', redeem_code_error: 'Errore di connessione, riprova.',
     sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Illimitato', sl_tokens_left: (left,total)=>`${left}/${total} gettoni rimasti`, sl_token_refill_at: (h)=>`Nuovi gettoni disponibili alle ${h}`,
     tokens_out_title: 'Gettoni esauriti', tokens_out_desc: (len)=>`Hai finito i gettoni gratuiti per la Stagione Scuderia da ${len} gare. Torna più tardi, oppure sblocca tutto senza limiti.`,
     tokens_out_countdown_label: 'Prossima ricarica tra', tokens_out_unlock: 'Diventa Immortale — 3,99€',
@@ -743,7 +743,7 @@ const I18N = {
     redeem_code_menu_item: 'I have a premium code',
     premium_choice_message: 'Do you have a premium code from a streamer or friend, or would you like to proceed with the purchase?',
     premium_choice_code_btn: '🎁 I have a code', premium_choice_pay_btn: '💳 Proceed to payment', premium_choice_cancel_btn: 'Cancel', redeem_code_message: 'If you received a premium code, enter it below.',
-    redeem_code_checking: 'Checking...', redeem_code_invalid: 'Invalid or already used code.', redeem_code_error: 'Connection error, try again.',
+    redeem_code_checking: 'Checking...', redeem_code_invalid: 'Invalid or already used code.', redeem_code_retry: 'Momentary unlock issue — the code is valid again, try again in a few seconds.', redeem_code_error: 'Connection error, try again.',
     sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Unlimited', sl_tokens_left: (left,total)=>`${left}/${total} tokens left`, sl_token_refill_at: (h)=>`New tokens available at ${h}`,
     tokens_out_title: 'Out of tokens', tokens_out_desc: (len)=>`You've used up your free tokens for the ${len}-race Team Season. Come back later, or unlock everything with no limits.`,
     tokens_out_countdown_label: 'Next refill in', tokens_out_unlock: 'Become Immortal — €3.99',
@@ -1127,7 +1127,7 @@ const I18N = {
     redeem_code_menu_item: 'Tengo un código premium',
     premium_choice_message: '¿Tienes un código premium de un streamer o amigo, o quieres proceder con la compra?',
     premium_choice_code_btn: '🎁 Tengo un código', premium_choice_pay_btn: '💳 Proceder al pago', premium_choice_cancel_btn: 'Cancelar', redeem_code_message: 'Si has recibido un código premium, introdúcelo aquí abajo.',
-    redeem_code_checking: 'Comprobando...', redeem_code_invalid: 'Código no válido o ya usado.', redeem_code_error: 'Error de conexión, inténtalo de nuevo.',
+    redeem_code_checking: 'Comprobando...', redeem_code_invalid: 'Código no válido o ya usado.', redeem_code_retry: 'Problema momentáneo al desbloquear — el código vuelve a ser válido, inténtalo de nuevo en unos segundos.', redeem_code_error: 'Error de conexión, inténtalo de nuevo.',
     sl_unlimited: '<img class=ico src=assets/icons/sparkles.png> Ilimitado', sl_tokens_left: (left,total)=>`${left}/${total} fichas restantes`, sl_token_refill_at: (h)=>`Nuevas fichas disponibles a las ${h}`,
     tokens_out_title: 'Fichas agotadas', tokens_out_desc: (len)=>`Has usado tus fichas gratuitas para la Temporada de Escudería de ${len} carreras. Vuelve más tarde, o desbloquea todo sin límites.`,
     tokens_out_countdown_label: 'Próxima recarga en', tokens_out_unlock: 'Hazte Inmortal — 3,99€',
@@ -14647,7 +14647,11 @@ function openRedeemCodePanel(){
       }
       if(!data || !data.ok){
         console.warn('Funzione redeem-premium-code ha risposto con un errore vero:', data, code);
-        errorEl.textContent = t('redeem_code_invalid');
+        // V0.9.9.203: distinguiamo il nuovo caso "sblocco fallito ma codice tornato valido" (il
+        // server ha automaticamente annullato il reclamo dopo aver riprovato 3 volte) da un vero
+        // codice invalido — mostrare "codice non valido" qui sarebbe fuorviante, il codice è di
+        // nuovo utilizzabile.
+        errorEl.textContent = data && data.error==='unlock_failed_retry' ? t('redeem_code_retry') : t('redeem_code_invalid');
         submitBtn.disabled = false;
         return;
       }
