@@ -15821,6 +15821,47 @@ function maybeShowBetweenRacesTip(callbackContinua){
   showTransitionTipScreen(pickTransitionTip(circuitoInArrivo), callbackContinua);
 }
 
+// V0.9.9.195: PUNTO — miglioramenti richiesti da Gio dopo un confronto con un altro assistente
+// sullo screenshot di Nordhaven: card più curata, non solo un'immagine piccola dentro un riquadro.
+// Estrae il colore dominante VERO di ogni immagine (mai una categoria fissa) via canvas, con un
+// controllo di sicurezza che garantisce sempre leggibilità sullo sfondo scuro (saturazione minima
+// 45%, luminosità forzata tra 55% e 72% — mai un colore troppo scuro o troppo spento). Usato sia
+// per il bagliore dietro l'immagine sia per il colore del "tocca per continuare" quando lampeggia.
+function estraiColoreDominanteImmagine(imgEl, callback){
+  try{
+    const canvas = document.createElement('canvas');
+    const w = 24, h = 24;
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(imgEl, 0, 0, w, h);
+    const data = ctx.getImageData(0, 0, w, h).data;
+    let r=0,g=0,b=0,n=0;
+    for(let i=0; i<data.length; i+=4){
+      if(data[i+3] < 100) continue; // ignoriamo pixel quasi trasparenti (sfondo dei ritratti/loghi)
+      r += data[i]; g += data[i+1]; b += data[i+2]; n++;
+    }
+    if(n===0){ callback(null); return; }
+    r = Math.round(r/n); g = Math.round(g/n); b = Math.round(b/n);
+    callback(rgbAColoreSicuroHTML(r,g,b));
+  }catch(e){ callback(null); } // immagine non ancora caricata, o problema di canvas: nessun bagliore, va bene comunque
+}
+function rgbAColoreSicuroHTML(r,g,b){
+  r/=255; g/=255; b/=255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b);
+  let h=0, s=0; const l=(max+min)/2;
+  if(max!==min){
+    const d=max-min;
+    s = l>0.5 ? d/(2-max-min) : d/(max+min);
+    if(max===r) h=(g-b)/d+(g<b?6:0);
+    else if(max===g) h=(b-r)/d+2;
+    else h=(r-g)/d+4;
+    h/=6;
+  }
+  const hDeg = Math.round(h*360);
+  const sSicura = Math.max(45, Math.round(s*100));
+  const lSicura = Math.min(72, Math.max(55, Math.round(l*100))); // mai troppo scuro (si confonderebbe) ne' troppo chiaro
+  return `hsl(${hDeg}, ${sSicura}%, ${lSicura}%)`;
+}
 function showTransitionTipScreen(tip, callbackContinua){
   const lang = I18N[currentLang] ? currentLang : 'it';
   const categoriaLabel = { it:{meccanica:'CONSIGLIO', pilota:'PILOTA', scuderia:'SCUDERIA', circuito:'CIRCUITO'},
@@ -15828,7 +15869,7 @@ function showTransitionTipScreen(tip, callbackContinua){
     es:{meccanica:'CONSEJO', pilota:'PILOTO', scuderia:'ESCUDERÍA', circuito:'CIRCUITO'} }[lang][tip.categoria];
   const isScena = tip.categoria === 'circuito'; // scena piena (non trasparente): riempie invece di stare "contenuta"
   const visualHTML = tip.demoFn ? window[tip.demoFn]()
-    : tip.asset ? `<div class="tt-asset-wrap${isScena?' tt-asset-scene':''}"><img src="${tip.asset}" alt="" class="tt-asset-img" onerror="this.parentElement.style.display='none';"></div>`
+    : tip.asset ? `<div class="tt-asset-wrap${isScena?' tt-asset-scene':''}"><img src="${tip.asset}" alt="" class="tt-asset-img" id="ttAssetImg" onerror="this.parentElement.style.display='none';"></div>`
     : '';
   const haVisual = !!visualHTML;
   // V0.9.9.192: PUNTO — richiesto da Gio: "rimuovi il tasto continua, metti un clicca per
@@ -15837,23 +15878,40 @@ function showTransitionTipScreen(tip, callbackContinua){
   app.innerHTML = `
   <div class="tt-overlay" id="ttOverlay">
     <div class="tt-bg"></div>
-    <div class="tt-card${haVisual?' tt-has-visual':''}">
+    <div class="tt-card${haVisual?' tt-has-visual':''}" id="ttCard">
       <div class="tt-header">
-        <img src="assets/logo.png" alt="" class="tt-logo">
-        <div class="tt-eyebrow">${categoriaLabel}</div>
+        <div class="tt-eyebrow-badge"><img src="assets/logo.png" alt="" class="tt-logo">${categoriaLabel}</div>
       </div>
       <div class="tt-title">${tip.titolo[lang]}</div>
       ${haVisual ? `<div class="tt-visual-col">${visualHTML}</div>` : ''}
-      <div class="tt-body">${tip.testo[lang]}</div>
+      <div class="tt-body tt-body-delayed">${tip.testo[lang]}</div>
       <div class="tt-tap-hint" id="ttTapHint">${t('splash_tap_continue')}</div>
     </div>
   </div>`;
+  // icone menu/fullscreen nascoste durante la schermata — competono visivamente col contenuto
+  const menuBtn = document.getElementById('gameMenuToggleBtn');
+  const fsBtn = document.getElementById('fullscreenToggleBtn');
+  if(menuBtn) menuBtn.style.display = 'none';
+  if(fsBtn) fsBtn.style.display = 'none';
+  // colore dominante vero dell'immagine, per il bagliore e il "tocca per continuare"
+  const imgEl = document.getElementById('ttAssetImg');
+  if(imgEl){
+    const applica = () => estraiColoreDominanteImmagine(imgEl, colore => {
+      if(colore){
+        const card = document.getElementById('ttCard');
+        if(card) card.style.setProperty('--tt-accent', colore);
+      }
+    });
+    if(imgEl.complete) applica(); else imgEl.addEventListener('load', applica, { once:true });
+  }
   setTimeout(()=>{
     const hint = document.getElementById('ttTapHint');
     if(hint && document.getElementById('ttOverlay')) hint.classList.add('splash-hint-blink');
   }, 5000);
   document.getElementById('ttOverlay').addEventListener('click', ()=>{
     document.getElementById('ttOverlay')?.remove();
+    if(menuBtn) menuBtn.style.display = '';
+    if(fsBtn) fsBtn.style.display = '';
     callbackContinua();
   }, { once:true });
 }
