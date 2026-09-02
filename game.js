@@ -5040,7 +5040,10 @@ function beginRaceWithLights(){
     render();
     return;
   }
-  startLightsSequence();
+  // V0.9.9.193: PUNTO SPOSTATO — richiesto da Gio: "il posto giusto è tra schermata schieramento e
+  // schermata paddle". Prima era agganciato dopo la pit lane (tra una gara e la successiva); ora
+  // è qui, subito prima di entrare nel semaforo/paddle, dopo aver visto la griglia di partenza.
+  maybeShowBetweenRacesTip(startLightsSequence);
 }
 function renderPedalTutorial(){
   const slots = pedalSlotsForRun();
@@ -7824,8 +7827,7 @@ function advanceAfterPitlane(){
     applyAIUpgrades();
     reevaluateRivals();
     state.phase = state.pendingRivalNotice ? 'rival-announce' : 'hub';
-    // V0.9.9.189: PUNTO B — schermate di transizione tra una gara e la successiva, richiesto da Gio.
-    maybeShowBetweenRacesTip(render);
+    render();
   }
 }
 
