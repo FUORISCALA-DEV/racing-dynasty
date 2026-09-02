@@ -688,7 +688,7 @@ const I18N = {
     friends_stat_achievements: 'Obiettivi', friends_stat_rating: 'Rating',
 
     daily_leaderboard_loading: 'Carico la classifica...', daily_leaderboard_error: 'Errore nel caricamento, riprova più tardi.',
-    daily_leaderboard_empty: 'Nessuno ha ancora giocato la Daily di oggi. Sii il primo!',
+    daily_leaderboard_empty: 'Nessuno ha ancora giocato la Daily di oggi. Sii il primo!', daily_your_position_label: 'La tua posizione',
     daily_leaderboard_weighted_empty: 'Nessuno ha ancora giocato abbastanza Daily (minimo 15 giorni) per comparire qui.',
 
     menu_new_run: 'Nuova Run', menu_new_run_confirm: 'Vuoi davvero abbandonare la run attuale e ricominciare da capo? Il progresso non salvato andrà perso.',
@@ -1076,7 +1076,7 @@ const I18N = {
     friends_stat_achievements: 'Achievements', friends_stat_rating: 'Rating',
 
     daily_leaderboard_loading: 'Loading leaderboard...', daily_leaderboard_error: 'Loading failed, try again later.',
-    daily_leaderboard_empty: "Nobody has played today's Daily yet. Be the first!",
+    daily_leaderboard_empty: "Nobody has played today's Daily yet. Be the first!", daily_your_position_label: 'Your position',
     daily_leaderboard_weighted_empty: "Nobody has played enough Dailies yet (minimum 15 days) to show up here.",
 
     menu_new_run: 'New Run', menu_new_run_confirm: 'Do you really want to abandon the current run and start over? Unsaved progress will be lost.',
@@ -1460,7 +1460,7 @@ const I18N = {
     friends_stat_achievements: 'Logros', friends_stat_rating: 'Rating',
 
     daily_leaderboard_loading: 'Cargando clasificación...', daily_leaderboard_error: 'Error al cargar, inténtalo más tarde.',
-    daily_leaderboard_empty: 'Nadie ha jugado todavía la Daily de hoy. ¡Sé el primero!',
+    daily_leaderboard_empty: 'Nadie ha jugado todavía la Daily de hoy. ¡Sé el primero!', daily_your_position_label: 'Tu posición',
     daily_leaderboard_weighted_empty: 'Nadie ha jugado suficientes Dailies todavía (mínimo 15 días) para aparecer aquí.',
 
     menu_new_run: 'Nueva Partida', menu_new_run_confirm: '¿Seguro que quieres abandonar la partida actual y empezar de nuevo? El progreso no guardado se perderá.',
@@ -9130,12 +9130,17 @@ async function loadAndRenderDailyLeaderboard(tab){
   try{
     const idAmiciSet = await loadMyFriendIdsSet(); // V0.9.9.117: per evidenziare gli amici in viola
     let rows;
+    let mioBloccoSeparatoHTML = ''; // V0.9.9.206: riempito sotto solo se il giocatore non rientra nella top 100 mostrata
     if(tab==='daily' || tab==='yesterday'){
       const dataRiferimento = tab==='daily' ? todayDateStringUTC() : previousDailyDateString(todayDateStringUTC());
+      // V0.9.9.206: D7 (audit tecnico) — richiesto da Gio in vista del lancio pubblico: "top 100 +
+      // la mia posizione evidenziata separatamente" invece di scaricare sempre tutta la classifica,
+      // che con molti giocatori potrebbe crescere senza limite.
       let { data, error } = await supabaseClient.from('daily_leaderboard_view')
         .select('user_id, nickname, flag_code, points, budget_saved, components_sum, rerolls_left, completed_at, driver_position, constructor_position, gap_from_rival, initial_rating, platinum_parts, attempt_number, final_score')
         .eq('daily_date', dataRiferimento)
-        .order('final_score', { ascending:false });
+        .order('final_score', { ascending:false })
+        .limit(100);
       if(error){
         console.warn('Lettura classifica col nuovo punteggio non riuscita, riprovo con quello vecchio:', error.message);
         const retry = await supabaseClient.from('daily_leaderboard_view')
@@ -9143,7 +9148,8 @@ async function loadAndRenderDailyLeaderboard(tab){
           .eq('daily_date', dataRiferimento)
           .order('points', { ascending:false }).order('budget_saved', { ascending:false })
           .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
-          .order('completed_at', { ascending:true });
+          .order('completed_at', { ascending:true })
+          .limit(100);
         data = retry.data; error = retry.error;
       }
       if(error) throw error;
@@ -9152,7 +9158,22 @@ async function loadAndRenderDailyLeaderboard(tab){
       // tutti insieme per punteggio finale, cosi' i bot si intrecciano nella classifica vera invece
       // di stare per forza in fondo o in cima.
       const bot = visibleDailyBotsForDate(dataRiferimento);
-      rows = [...(data||[]), ...bot].sort((a,b)=> computeDailyFinalScore(b) - computeDailyFinalScore(a));
+      rows = [...(data||[]), ...bot].sort((a,b)=> computeDailyFinalScore(b) - computeDailyFinalScore(a)).slice(0,100);
+      // se il giocatore loggato non rientra tra i primi 100 mostrati, calcoliamo la sua vera
+      // posizione separatamente (stesso metodo efficiente di loadDailyBestResultToday, mai
+      // scaricando l'intera classifica) e la mostriamo in un blocco a parte sotto la lista
+      if(currentUser && !rows.some(r=>r.user_id===currentUser.id)){
+        const mioRisultato = await loadDailyBestResultToday();
+        if(mioRisultato && mioRisultato.daily_date===dataRiferimento){
+          mioBloccoSeparatoHTML = `
+            <div class="dim" style="text-align:center;font-size:11px;letter-spacing:0.06em;margin:14px 0 6px;">${t('daily_your_position_label')}</div>
+            <div class="daily-leaderboard-row daily-leaderboard-row-mine">
+              <span class="daily-leaderboard-rank">${mioRisultato.rank}</span>
+              <span class="daily-leaderboard-nick">${dailyNicknameCache?.nickname || t('friends_unknown_nick')}</span>
+              <span class="daily-leaderboard-stat daily-leaderboard-score">${computeDailyFinalScore(mioRisultato).toLocaleString('it-IT')}</span>
+            </div>`;
+        }
+      }
     } else {
       const { data, error } = await supabaseClient.from('daily_weighted_leaderboard_view')
         .select('user_id, nickname, flag_code, giorni_giocati, rating_medio')
@@ -9193,7 +9214,7 @@ async function loadAndRenderDailyLeaderboard(tab){
         <span class="daily-leaderboard-stat daily-leaderboard-score">${statoText}</span>
       </div>
       <div class="daily-leaderboard-detail" id="dailyRowDetail${i}" style="display:none;"></div>`;
-    }).join('');
+    }).join('') + mioBloccoSeparatoHTML;
     if(isDettagliata) bindActions(); // V0.9.9.103: le righe sono ora cliccabili, servono i listener veri
   }catch(e){
     const el = document.getElementById('dailyLeaderboardContent');
