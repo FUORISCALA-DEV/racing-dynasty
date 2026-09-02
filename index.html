@@ -2257,6 +2257,7 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
 
 /* V0.9.7.1: guida profonda — diagrammi visivi CSS (non semplice testo) */
 .guide-img-wrap{ margin:10px 0 14px; }
+.tt-visual-col .guide-img-wrap{ display:flex; } /* V0.9.9.198: le due schedine semaforo devono avere la stessa altezza quando affiancate — richiesto da Gio */
 .guide-rarity-row{ display:flex; gap:6px; flex-wrap:wrap; }
 .guide-rarity-chip{
   flex:1; min-width:64px; text-align:center; padding:8px 4px; border-radius:6px;
@@ -2269,8 +2270,8 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
 .guide-weight-fill{ height:100%; background:linear-gradient(90deg, var(--amber), var(--cyan)); }
 .guide-weight-pct{ width:34px; flex-shrink:0; text-align:right; font-family:var(--font-mono); color:var(--text); }
 .guide-semaforo-demo{
-  display:flex; gap:14px; align-items:center; background:var(--panel); border:1px solid var(--line);
-  border-radius:8px; padding:12px; flex-wrap:wrap;
+  display:flex; gap:14px; align-items:flex-start; background:var(--panel); border:1px solid var(--line);
+  border-radius:8px; padding:12px; flex-wrap:wrap; width:100%;
 }
 .guide-sem-circle{ width:30px; height:30px; border-radius:50%; overflow:hidden; display:flex; flex-shrink:0; border:1px solid rgba(255,255,255,0.15); }
 .guide-sem-half{ width:50%; height:100%; }

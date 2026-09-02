@@ -15309,9 +15309,9 @@ function tipScoutingDemoHTML(){
   </div></div>`;
 }
 function guideWeightBarsHTML(){
-  const labelsIt = { pilota:'Pilota', motore:'Motore', telaio:'Telaio', aero:'Aero', gomme:'Gomme', stratega:'Team Pr.' };
-  const labelsEn = { pilota:'Driver', motore:'Engine', telaio:'Chassis', aero:'Aero', gomme:'Tires', stratega:'Team Pr.' };
-  const labelsEs = { pilota:'Piloto', motore:'Motor', telaio:'Chasis', aero:'Aero', gomme:'Neumáticos', stratega:'Team Pr.' };
+  const labelsIt = { pilota:'Ogni pilota', motore:'Motore', telaio:'Telaio', aero:'Aero', gomme:'Gomme', stratega:'Team Pr.' };
+  const labelsEn = { pilota:'Each driver', motore:'Engine', telaio:'Chassis', aero:'Aero', gomme:'Tires', stratega:'Team Pr.' };
+  const labelsEs = { pilota:'Cada piloto', motore:'Motor', telaio:'Chasis', aero:'Aero', gomme:'Neumáticos', stratega:'Team Pr.' };
   const labels = currentLang==='en' ? labelsEn : (currentLang==='es' ? labelsEs : labelsIt);
   const maxW = Math.max(...Object.values(WEIGHTS));
   const rows = Object.keys(WEIGHTS).map(k=>{
@@ -15570,9 +15570,9 @@ const TRANSITION_TIPS = [
     id:'tip-aiuto-coda', categoria:'meccanica',
     titolo:{ it:'Aiuto in coda', en:'Catch-up help', es:'Ayuda a los últimos' },
     testo:{
-      it:'Il prezzo della ricerca di mercato dipende dalla tua posizione in classifica Costruttori. Chi è indietro scouta più a buon mercato — chi guida paga il prezzo pieno.',
+      it:'Il prezzo della ricerca di mercato dipende dalla tua posizione in classifica Costruttori: più sei indietro, meno paghi — chi guida paga il prezzo pieno.',
       en:"Market research price depends on your Constructors' standing. If you're behind, scouting is cheaper — the leader pays full price.",
-      es:'El precio de la investigación de mercado depende de tu posición en la clasificación de Constructores. Si vas atrás, escutar sale más barato — quien lidera paga el precio completo.',
+      es:'El precio de la investigación de mercado depende de tu posición en la clasificación de Constructores: cuanto más atrás vas, menos pagas — quien lidera paga el precio completo.',
     },
   },
   {
@@ -15615,9 +15615,9 @@ const TRANSITION_TIPS = [
     id:'tip-peso-scuderia', categoria:'meccanica', demoFn:'guideWeightBarsHTML',
     titolo:{ it:'Il peso reale della scuderia', en:'The real weight of your team', es:'El peso real de la escudería' },
     testo:{
-      it:'Non tutti i 7 pezzi contano uguale: il pilota pesa il 33% del rating complessivo, quasi il doppio di un singolo componente (10-17% ciascuno). Un pilota forte conta più di un motore perfetto.',
-      en:"Not all 7 pieces count equally: the driver is 33% of the overall rating, almost double a single component (10-17% each). A strong driver matters more than a perfect engine.",
-      es:'No las 7 piezas cuentan igual: el piloto pesa el 33% del rating total, casi el doble que un solo componente (10-17% cada uno). Un piloto fuerte cuenta más que un motor perfecto.',
+      it:'Il rating di ogni pilota pesa il 33% del suo punteggio in pista — quasi il doppio di un singolo componente (10-17% ciascuno). I 5 componenti sono condivisi da entrambi i piloti: un pilota forte conta più di un motore perfetto.',
+      en:"Each driver's rating counts for 33% of their on-track score — almost double a single component (10-17% each). The 5 components are shared by both drivers: a strong driver matters more than a perfect engine.",
+      es:'El rating de cada piloto pesa el 33% de su puntuación en pista — casi el doble que un solo componente (10-17% cada uno). Los 5 componentes son compartidos por ambos pilotos: un piloto fuerte cuenta más que un motor perfecto.',
     },
   },
   { id:'tip-pilota-goat', categoria:'pilota', asset:'assets/tips/pilot-the-goat.webp',
