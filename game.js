@@ -2651,30 +2651,39 @@ async function loadDailyBestResultToday(){
   if(!currentUser || !supabaseClient){ dailyBestResultCache = null; return null; }
   try{
     const today = todayDateStringUTC();
-    // V0.9.9.92/103: FIX CRITICO — stesso ripiego del salvataggio, ora anche per il nuovo
-    // punteggio a più fattori (final_score). Se la vista non e' ancora stata aggiornata (SQL non
-    // ancora eseguito), riproviamo con la selezione/ordinamento vecchio, cosi' funziona comunque.
-    let { data, error } = await supabaseClient.from('daily_leaderboard_view')
+    // V0.9.9.205: D7 (audit tecnico) — invece di scaricare l'INTERA classifica per poi trovare la
+    // mia riga con indexOf() (costo che cresce con ogni nuovo giocatore, e "posizione non trovata"
+    // se mai un limite di risposta tagliasse i risultati), chiediamo solo la MIA riga, poi due
+    // conteggi separati e leggeri: quanti hanno un punteggio più alto di me, e quanti in totale.
+    // Nessun cambiamento nel risultato finale mostrato al giocatore, solo nel modo di calcolarlo.
+    const { data: mioArr, error: mioError } = await supabaseClient.from('daily_leaderboard_view')
       .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at, won_constructor, won_driver, driver_position, constructor_position, gap_from_rival, initial_rating, platinum_parts, attempt_number, final_score')
-      .eq('daily_date', today)
-      .order('final_score', { ascending:false });
-    if(error){
-      console.warn('Lettura Daily col nuovo punteggio non riuscita, riprovo con quello vecchio:', error.message);
-      const retry = await supabaseClient.from('daily_leaderboard_view')
-        .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at')
-        .eq('daily_date', today)
-        .order('points', { ascending:false }).order('budget_saved', { ascending:false })
-        .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
-        .order('completed_at', { ascending:true });
-      data = retry.data; error = retry.error;
+      .eq('daily_date', today).eq('user_id', currentUser.id).limit(1);
+    if(!mioError && mioArr && mioArr.length>0 && mioArr[0].final_score!=null){
+      const mio = mioArr[0];
+      const { count: piuAlti } = await supabaseClient.from('daily_leaderboard_view')
+        .select('user_id', { count:'exact', head:true })
+        .eq('daily_date', today).gt('final_score', mio.final_score);
+      const { count: totale } = await supabaseClient.from('daily_leaderboard_view')
+        .select('user_id', { count:'exact', head:true })
+        .eq('daily_date', today);
+      dailyBestResultCache = { daily_date: today, rank: (piuAlti||0)+1, total: totale||1, ...mio };
+      return dailyBestResultCache;
     }
+    // ripiego: vista vecchia senza final_score (SQL non ancora eseguito) — percorso invariato,
+    // usato solo se il tentativo efficiente sopra non trova un final_score valido
+    console.warn('Lettura Daily col nuovo punteggio non riuscita o incompleta, riprovo con quello vecchio.');
+    const retry = await supabaseClient.from('daily_leaderboard_view')
+      .select('user_id, points, budget_saved, components_sum, rerolls_left, completed_at')
+      .eq('daily_date', today)
+      .order('points', { ascending:false }).order('budget_saved', { ascending:false })
+      .order('components_sum', { ascending:false }).order('rerolls_left', { ascending:false })
+      .order('completed_at', { ascending:true });
+    const data = retry.data, error = retry.error;
     if(error || !data){ dailyBestResultCache = null; return null; }
     const mio = data.find(r=>r.user_id===currentUser.id);
     if(!mio){ dailyBestResultCache = null; return null; }
-    const rank = data.indexOf(mio) + 1; // la vista arriva gia' ordinata correttamente
-    // V0.9.9.185: PUNTO RIDISEGNO FINE STAGIONE — aggiunto il totale partecipanti (dato reale già
-    // disponibile in questa stessa query, mai inventato) per mostrare "#posizione su totale" nel
-    // nuovo pannello risultato Daily.
+    const rank = data.indexOf(mio) + 1;
     dailyBestResultCache = { daily_date: today, rank, total: data.length, ...mio };
     return dailyBestResultCache;
   }catch(e){ console.warn('Caricamento risultato Daily non riuscito:', e); dailyBestResultCache = null; return null; }
@@ -10328,12 +10337,20 @@ async function redeemFriendCode(code){
 // nelle classifiche, dove serve sapere chi ha premium tra TUTTI i giocatori mostrati, non solo gli amici.
 async function loadPremiumUserIdsSet(userIds){
   if(!supabaseClient || userIds.length===0) return new Set();
+  // V0.9.9.205: D8 (audit tecnico) — con tanti giocatori in classifica, un'unica richiesta con
+  // tutti gli ID nell'URL potrebbe diventare troppo lunga. Dividiamo in blocchi da 200 alla volta,
+  // uniamo i risultati — stesso identico risultato finale, solo più sicuro su larga scala.
+  const BLOCCO = 200;
+  const risultato = new Set();
   try{
-    const { data, error } = await supabaseClient.from('player_public_stats')
-      .select('user_id, is_premium').in('user_id', userIds).eq('is_premium', true);
-    if(error || !data) return new Set();
-    return new Set(data.map(r=>r.user_id));
-  }catch(e){ return new Set(); }
+    for(let i=0; i<userIds.length; i+=BLOCCO){
+      const blocco = userIds.slice(i, i+BLOCCO);
+      const { data, error } = await supabaseClient.from('player_public_stats')
+        .select('user_id, is_premium').in('user_id', blocco).eq('is_premium', true);
+      if(!error && data) data.forEach(r => risultato.add(r.user_id));
+    }
+    return risultato;
+  }catch(e){ return risultato; }
 }
 async function loadMyFriendIdsSet(){
   if(!currentUser || !supabaseClient) return new Set();
