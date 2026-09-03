@@ -192,6 +192,12 @@ const STREAMER_CAM_BOX  = { left:0.0556, top:0.1722, width:0.2518, height:0.3996
 // centro della targhetta, non angolo.
 const STREAMER_TWITCH_TAG = { centerX:295/1672, centerY:111/941 };
 const STREAMER_FUORISCALA_LOGO = { centerX:126/1672, centerY:886/941 };
+// V0.9.9.210: banner link al gioco, richiesto da Gio — posizionato nel pannello destro della
+// cornice (prima completamente inutilizzato, confini misurati sui pixel reali dell'immagine:
+// interno da x=1224 a x=1594, da y=111 a y=896 su 1672x941). Centrato orizzontalmente nel
+// pannello, verso il basso (all'85% dell'altezza del pannello, non al centro) per restare
+// "visibile ma non dominante" come richiesto, lasciando libero il resto dello spazio.
+const STREAMER_GAME_LINK = { centerX:(1224+1594)/2/1672, centerY:(111+(896-111)*0.85)/941, widthPct:(1594-1224)*0.80/1672 };
 const STREAMER_FRAME_RATIO = 1672/941;
 
 function updateStreamerFrameLayout(){
@@ -201,6 +207,7 @@ function updateStreamerFrameLayout(){
   const twitchEl = document.getElementById('streamerTwitchTag');
   const frameImg = document.getElementById('streamerFrameImg');
   const logoEl = document.getElementById('streamerFuoriscalaLogo');
+  const gameLinkEl = document.getElementById('streamerGameLinkBtn');
   if(!container || container.style.display==='none') return;
   const cw = container.clientWidth, ch = container.clientHeight;
 
@@ -215,6 +222,7 @@ function updateStreamerFrameLayout(){
     if(camEl) camEl.style.display = 'none';
     if(twitchEl) twitchEl.style.display = 'none';
     if(logoEl) logoEl.style.display = 'none';
+    if(gameLinkEl) gameLinkEl.style.display = 'none';
     if(gameEl){
       gameEl.style.left = '0px'; gameEl.style.top = '0px';
       gameEl.style.width = cw + 'px'; gameEl.style.height = ch + 'px';
@@ -226,6 +234,7 @@ function updateStreamerFrameLayout(){
   if(camEl) camEl.style.display = '';
   if(twitchEl) twitchEl.style.display = '';
   if(logoEl) logoEl.style.display = '';
+  if(gameLinkEl) gameLinkEl.style.display = '';
   if(gameEl) gameEl.style.borderRadius = '';
 
   const containerRatio = cw/ch;
@@ -269,6 +278,12 @@ function updateStreamerFrameLayout(){
   if(logoEl){
     logoEl.style.left = (offX + STREAMER_FUORISCALA_LOGO.centerX*dispW) + 'px';
     logoEl.style.top = (offY + STREAMER_FUORISCALA_LOGO.centerY*dispH) + 'px';
+  }
+  if(gameLinkEl){
+    gameLinkEl.style.left = (offX + STREAMER_GAME_LINK.centerX*dispW) + 'px';
+    gameLinkEl.style.top = (offY + STREAMER_GAME_LINK.centerY*dispH) + 'px';
+    gameLinkEl.style.width = (STREAMER_GAME_LINK.widthPct*dispW) + 'px';
+    if(!gameLinkEl.title) gameLinkEl.title = t('streamer_copy_link_hint'); // impostato una sola volta, il tooltip nativo del browser non serve rinfrescarlo ad ogni resize
   }
 }
 window.addEventListener('resize', updateStreamerFrameLayout);
@@ -705,7 +720,7 @@ const I18N = {
     
     survey_close: 'Chiudi', survey_title: 'Com\'è andata la tua prima run?', survey_question: 'Quanto ti è piaciuta, da 1 a 5?', survey_comment_placeholder: 'Vuoi aggiungere un commento? (facoltativo)', survey_submit: 'Invia',
     bugreport_title: 'Segnala un problema', bugreport_desc: 'Descrivi cosa è successo — leggiamo ogni segnalazione.', bugreport_placeholder: 'Cosa hai visto? Cosa ti aspettavi succedesse?', bugreport_submit: 'Invia segnalazione', bugreport_sending: 'Invio…', bugreport_thanks: 'Grazie, l\'abbiamo ricevuta!',
-    credits_created: 'Creato da', credits_contact_email: 'Scrivici — racingdynasty.game@gmail.com',
+    credits_created: 'Creato da', credits_contact_email: 'Scrivici — racingdynasty.game@gmail.com', streamer_copy_link_hint: 'Premi per copiare il link', streamer_link_copied: 'Link copiato!',
     // Hub — etichette HUD
     hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Gara',
     hud_best_driver: 'Miglior Pilota', hud_constructors: 'Costruttori',
@@ -1091,7 +1106,7 @@ const I18N = {
     
     survey_close: 'Close', survey_title: 'How was your first run?', survey_question: 'How much did you enjoy it, 1 to 5?', survey_comment_placeholder: 'Want to add a comment? (optional)', survey_submit: 'Send',
     bugreport_title: 'Report a problem', bugreport_desc: "Describe what happened — we read every report.", bugreport_placeholder: 'What did you see? What did you expect to happen?', bugreport_submit: 'Send report', bugreport_sending: 'Sending…', bugreport_thanks: "Thanks, we've got it!",
-    credits_created: 'Created by', credits_contact_email: 'Contact us — racingdynasty.game@gmail.com',
+    credits_created: 'Created by', credits_contact_email: 'Contact us — racingdynasty.game@gmail.com', streamer_copy_link_hint: 'Press to copy the link', streamer_link_copied: 'Link copied!',
     hud_reroll: 'Reroll', hud_budget: 'Budget', hud_sponsor: 'Sponsor', hud_race: 'Race',
     hud_best_driver: 'Best Driver', hud_constructors: 'Constructors',
     race_lap: 'LAP', race_retirement: (d,tm)=>`Retirement for ${d} (${tm})`, race_your_driver_bang: " — that's your driver!",
@@ -1475,7 +1490,7 @@ const I18N = {
     
     survey_close: 'Cerrar', survey_title: '¿Qué tal tu primera run?', survey_question: '¿Cuánto te ha gustado, del 1 al 5?', survey_comment_placeholder: '¿Quieres añadir un comentario? (opcional)', survey_submit: 'Enviar',
     bugreport_title: 'Informar de un problema', bugreport_desc: 'Describe qué ha pasado — leemos todos los informes.', bugreport_placeholder: '¿Qué has visto? ¿Qué esperabas que pasara?', bugreport_submit: 'Enviar informe', bugreport_sending: 'Enviando…', bugreport_thanks: '¡Gracias, lo hemos recibido!',
-    credits_created: 'Creado por', credits_contact_email: 'Escríbenos — racingdynasty.game@gmail.com',
+    credits_created: 'Creado por', credits_contact_email: 'Escríbenos — racingdynasty.game@gmail.com', streamer_copy_link_hint: 'Pulsa para copiar el enlace', streamer_link_copied: '¡Enlace copiado!',
     hud_reroll: 'Reroll', hud_budget: 'Presupuesto', hud_sponsor: 'Patrocinador', hud_race: 'Carrera',
     hud_best_driver: 'Mejor Piloto', hud_constructors: 'Constructores',
     race_lap: 'VUELTA', race_retirement: (d,tm)=>`Retirada de ${d} (${tm})`, race_your_driver_bang: ' — ¡es tu piloto!',
@@ -10327,7 +10342,7 @@ async function shareFriendCode(code){
     const cv = await buildFriendCodeShareCanvas(code);
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
     const fileName = 'racing-dynasty-amico.png';
-    const gameUrl = `https://racingdynasty.fuoriscala.xyz/?friend=${encodeURIComponent(code)}`;
+    const gameUrl = `https://fuoriscala-dev.github.io/racing-dynasty/?friend=${encodeURIComponent(code)}`;
     const shareText = t('friends_share_text', gameUrl, code);
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
       await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
@@ -10442,21 +10457,13 @@ async function loadMyFriendsList(){
     }catch(e){ /* silenzioso: la lista amici funziona comunque senza rating/nickname da qui */ }
     // ripiego 1: se un amico non ha ancora 15 run Daily (non compare nella vista sopra, che li
     // richiede), proviamo comunque a recuperare almeno il nickname da una qualunque sua Daily
-    // passata, non solo quella di oggi.
-    // V0.9.9.209: BUG CORRETTO — segnalato da Gio ("vedo Giocatore quando prima vedevo i nick").
-    // Il limite era calcolato sul numero di AMICI mancanti, non sul numero di RIGHE reali — un
-    // amico con molte Daily giocate poteva "riempire" da solo il limite con le sue vecchie righe,
-    // facendo sparire dalla risposta il nickname di un altro amico con una sola riga. Rimosso il
-    // limite (il numero di amici resta comunque piccolo), ordiniamo per data più recente e
-    // prendiamo solo la PRIMA occorrenza per utente (la più recente), invece di lasciare che
-    // l'ultima riga processata vinca in modo arbitrario.
+    // passata, non solo quella di oggi
     const mancantiNickname1 = idAmici.filter(uid => !nicknamePerUtente[uid]);
     if(mancantiNickname1.length>0){
       try{
         const { data: nickData } = await supabaseClient.from('daily_leaderboard_view')
-          .select('user_id, nickname, completed_at').in('user_id', mancantiNickname1)
-          .order('completed_at', { ascending:false });
-        (nickData||[]).forEach(n => { if(!nicknamePerUtente[n.user_id]) nicknamePerUtente[n.user_id] = n.nickname; });
+          .select('user_id, nickname').in('user_id', mancantiNickname1).limit(mancantiNickname1.length);
+        (nickData||[]).forEach(n => { nicknamePerUtente[n.user_id] = n.nickname; });
       }catch(e){ /* silenzioso */ }
     }
     // ripiego 2 (ULTIMA risorsa): per chi non ha mai giocato la Daily nemmeno una volta, usiamo
@@ -13306,7 +13313,7 @@ async function shareTrophyRoomCard(){
     const cv = await buildTrophyRoomCanvas();
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
     const fileName = 'racing-dynasty-sala-trofei.png';
-    const gameUrl = 'https://racingdynasty.fuoriscala.xyz/';
+    const gameUrl = 'https://fuoriscala-dev.github.io/racing-dynasty/';
     const shareText = `La mia Sala Trofei su Racing Dynasty — prova a battermi!\n${gameUrl}`;
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
       await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
@@ -13330,7 +13337,7 @@ async function shareResultCard(){
     const cv = await buildShareCardCanvas();
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
     const fileName = state.isDailySeason ? 'racing-dynasty-daily.png' : 'racing-dynasty-risultato.png';
-    const gameUrl = 'https://racingdynasty.fuoriscala.xyz/';
+    const gameUrl = 'https://fuoriscala-dev.github.io/racing-dynasty/';
     const shareText = state.isDailySeason
       ? t('daily_share_text', gameUrl)
       : `Ho appena chiuso una stagione su Racing Dynasty — prova a battermi!\n${gameUrl}`;
@@ -13732,7 +13739,7 @@ function renderSeasonEnd(){
   </div>
   ${seasonTrophiesPanelHTML()}
   <div class="panel season-end-fs-promo">
-    <a href="https://fuoriscala.xyz/" target="_blank" rel="noopener" class="season-end-fs-link">
+    <a href="https://fuoriscala-dev.github.io/FUORISCALA.SITOWEB/" target="_blank" rel="noopener" class="season-end-fs-link">
       <img src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA" class="season-end-fs-logo">
       <div class="season-end-fs-text">
         <div class="season-end-fs-title">${t('se_fs_title')}</div>
@@ -13917,6 +13924,22 @@ function onAction(e){
   else if(action==='toggle-riflessi-partenza'){
     state.selectedRiflessiPartenza = state.selectedRiflessiPartenza===false ? true : false;
     render();
+  }
+  else if(action==='copy-game-link-streamer'){
+    // V0.9.9.210: banner link al gioco nella cornice streamer, richiesto da Gio — un tocco copia
+    // il link del gioco negli appunti, con un breve bagliore di conferma.
+    const link = 'https://racingdynasty.fuoriscala.xyz/';
+    const btn = document.getElementById('streamerGameLinkBtn');
+    const confermaCopia = () => {
+      if(!btn) return;
+      btn.classList.add('copied');
+      const titoloOriginale = t('streamer_copy_link_hint');
+      btn.title = t('streamer_link_copied');
+      setTimeout(()=>{ btn.classList.remove('copied'); btn.title = titoloOriginale; }, 1800);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(link).then(confermaCopia).catch(()=>{ /* silenzioso: alcuni contesti (es. non-HTTPS) bloccano l'API, niente di grave se non copia */ });
+    }
   }
   else if(action==='tutorial-draft-start'){
     startDraftTurn();
@@ -16003,7 +16026,7 @@ function closeGuidePanel(){
 // V0.9.7.8.12: pannello Crediti — firme standard dal brand kit FUORISCALA (copy_deck.md), stesso
 // identico pattern di apertura/chiusura di Guida e Obiettivi.
 function creditsPanelHTML(){
-  const siteUrl = 'https://fuoriscala.xyz/';
+  const siteUrl = 'https://fuoriscala-dev.github.io/FUORISCALA.SITOWEB/';
   return `
   <div style="text-align:center;padding:24px 12px;">
     <a href="${siteUrl}" target="_blank" rel="noopener" title="FUORISCALA">
@@ -16197,6 +16220,10 @@ function pinFixedIconsToVisualViewport(){
 }
 function initSidebar(){
   document.getElementById('gameMenuToggleBtn').addEventListener('click', toggleMenuPanel);
+  // V0.9.9.210: banner link streamer — vive fuori da #app, bindActions() non lo copre, serve un
+  // listener diretto una tantum come questi altri elementi statici della pagina.
+  const gameLinkBtn = document.getElementById('streamerGameLinkBtn');
+  if(gameLinkBtn) gameLinkBtn.addEventListener('click', onAction);
   document.querySelector('.game-menu-close').addEventListener('click', closeMenuPanel);
   document.getElementById('gameMenuPanel').addEventListener('click', (e)=>{
     if(e.target.id==='gameMenuPanel') closeMenuPanel();
