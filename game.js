@@ -192,12 +192,17 @@ const STREAMER_CAM_BOX  = { left:0.0556, top:0.1722, width:0.2518, height:0.3996
 // centro della targhetta, non angolo.
 const STREAMER_TWITCH_TAG = { centerX:295/1672, centerY:111/941 };
 const STREAMER_FUORISCALA_LOGO = { centerX:126/1672, centerY:886/941 };
-// V0.9.9.210: banner link al gioco, richiesto da Gio — posizionato nel pannello destro della
-// cornice (prima completamente inutilizzato, confini misurati sui pixel reali dell'immagine:
-// interno da x=1224 a x=1594, da y=111 a y=896 su 1672x941). Centrato orizzontalmente nel
-// pannello, verso il basso (all'85% dell'altezza del pannello, non al centro) per restare
-// "visibile ma non dominante" come richiesto, lasciando libero il resto dello spazio.
-const STREAMER_GAME_LINK = { centerX:(1224+1594)/2/1672, centerY:(111+(896-111)*0.85)/941, widthPct:(1594-1224)*0.80/1672 };
+// V0.9.9.211: banner link al gioco, RIPOSIZIONATO — Gio ha corretto: i due rettangoli neri sono
+// riservati (webcam a sinistra, chat Twitch a destra), non spazio libero. Il posto giusto è sotto
+// il riquadro logo "RACING DYNASTY" (che finisce a y≈706 su 941), sullo sfondo colorato a righe
+// diagonali — confini misurati sui pixel reali. Stessa larghezza del riquadro logo sopra, per
+// restare allineato, dimensione aumentata rispetto al primo tentativo su richiesta di Gio.
+// V0.9.9.211: posizione ricalcolata su misure EMPIRICHE dirette (non solo teoriche) — lo spazio
+// verticale reale tra il fondo del riquadro logo (y=706) e l'inizio dell'icona FUORISCALA (che ha
+// dimensione fissa in pixel, quindi la sua posizione normalizzata varia leggermente con la scala)
+// e' piu' stretto del previsto. Larghezza ridotta per stare comodo nello spazio vero disponibile,
+// senza toccare ne' il riquadro sopra ne' l'icona sotto, verificato a più dimensioni finestra.
+const STREAMER_GAME_LINK = { centerX:(85+522)/2/1672, centerY:0.849, widthPct:230/1672 };
 const STREAMER_FRAME_RATIO = 1672/941;
 
 function updateStreamerFrameLayout(){
@@ -269,7 +274,7 @@ function updateStreamerFrameLayout(){
     // partenza (16px invece di 12px) per essere più leggibile anche alla dimensione "naturale".
     const scala = dispW / 1672;
     const nameLabel = document.getElementById('streamerNameLabel');
-    if(nameLabel){ nameLabel.style.fontSize = (16*scala) + 'px'; nameLabel.style.maxWidth = (190*scala) + 'px'; }
+    if(nameLabel){ nameLabel.style.fontSize = (20*scala) + 'px'; nameLabel.style.maxWidth = (210*scala) + 'px'; }
     twitchEl.style.padding = `${5*scala}px ${14*scala}px ${5*scala}px ${9*scala}px`;
     twitchEl.style.gap = (7*scala) + 'px';
     const twitchIcon = twitchEl.querySelector('.streamer-twitch-icon');
@@ -280,9 +285,11 @@ function updateStreamerFrameLayout(){
     logoEl.style.top = (offY + STREAMER_FUORISCALA_LOGO.centerY*dispH) + 'px';
   }
   if(gameLinkEl){
+    const scalaLink = dispW / 1672;
     gameLinkEl.style.left = (offX + STREAMER_GAME_LINK.centerX*dispW) + 'px';
     gameLinkEl.style.top = (offY + STREAMER_GAME_LINK.centerY*dispH) + 'px';
     gameLinkEl.style.width = (STREAMER_GAME_LINK.widthPct*dispW) + 'px';
+    gameLinkEl.style.padding = `${6*scalaLink}px ${12*scalaLink}px`;
     if(!gameLinkEl.title) gameLinkEl.title = t('streamer_copy_link_hint'); // impostato una sola volta, il tooltip nativo del browser non serve rinfrescarlo ad ogni resize
   }
 }
