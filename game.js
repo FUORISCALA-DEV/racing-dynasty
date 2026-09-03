@@ -13933,16 +13933,26 @@ function onAction(e){
     render();
   }
   else if(action==='copy-game-link-streamer'){
-    // V0.9.9.210: banner link al gioco nella cornice streamer, richiesto da Gio — un tocco copia
-    // il link del gioco negli appunti, con un breve bagliore di conferma.
+    // V0.9.9.212: banner link al gioco nella cornice streamer — richiesto da Gio un vero messaggio
+    // visibile di conferma, non solo il tooltip nativo (poco affidabile: si vede solo se il mouse
+    // resta fermo sopra, non risponde in modo garantito a un cambio programmato dopo il click).
+    // Ora un vero elemento "Link copiato!" appare sopra il pulsante con una breve animazione.
     const link = 'https://racingdynasty.fuoriscala.xyz/';
     const btn = document.getElementById('streamerGameLinkBtn');
     const confermaCopia = () => {
       if(!btn) return;
-      btn.classList.add('copied');
-      const titoloOriginale = t('streamer_copy_link_hint');
-      btn.title = t('streamer_link_copied');
-      setTimeout(()=>{ btn.classList.remove('copied'); btn.title = titoloOriginale; }, 1800);
+      btn.classList.remove('copy-pulse'); void btn.offsetWidth; // forza il reflow, l'animazione riparte anche a click ravvicinati
+      btn.classList.add('copy-pulse');
+      let toast = document.getElementById('streamerLinkCopiedToast');
+      if(!toast){
+        toast = document.createElement('div');
+        toast.id = 'streamerLinkCopiedToast';
+        btn.appendChild(toast);
+      }
+      toast.textContent = t('streamer_link_copied');
+      toast.classList.remove('show'); void toast.offsetWidth;
+      toast.classList.add('show');
+      setTimeout(()=>{ toast.classList.remove('show'); }, 1600);
     };
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(link).then(confermaCopia).catch(()=>{ /* silenzioso: alcuni contesti (es. non-HTTPS) bloccano l'API, niente di grave se non copia */ });
