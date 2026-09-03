@@ -10442,13 +10442,21 @@ async function loadMyFriendsList(){
     }catch(e){ /* silenzioso: la lista amici funziona comunque senza rating/nickname da qui */ }
     // ripiego 1: se un amico non ha ancora 15 run Daily (non compare nella vista sopra, che li
     // richiede), proviamo comunque a recuperare almeno il nickname da una qualunque sua Daily
-    // passata, non solo quella di oggi
+    // passata, non solo quella di oggi.
+    // V0.9.9.209: BUG CORRETTO — segnalato da Gio ("vedo Giocatore quando prima vedevo i nick").
+    // Il limite era calcolato sul numero di AMICI mancanti, non sul numero di RIGHE reali — un
+    // amico con molte Daily giocate poteva "riempire" da solo il limite con le sue vecchie righe,
+    // facendo sparire dalla risposta il nickname di un altro amico con una sola riga. Rimosso il
+    // limite (il numero di amici resta comunque piccolo), ordiniamo per data più recente e
+    // prendiamo solo la PRIMA occorrenza per utente (la più recente), invece di lasciare che
+    // l'ultima riga processata vinca in modo arbitrario.
     const mancantiNickname1 = idAmici.filter(uid => !nicknamePerUtente[uid]);
     if(mancantiNickname1.length>0){
       try{
         const { data: nickData } = await supabaseClient.from('daily_leaderboard_view')
-          .select('user_id, nickname').in('user_id', mancantiNickname1).limit(mancantiNickname1.length);
-        (nickData||[]).forEach(n => { nicknamePerUtente[n.user_id] = n.nickname; });
+          .select('user_id, nickname, completed_at').in('user_id', mancantiNickname1)
+          .order('completed_at', { ascending:false });
+        (nickData||[]).forEach(n => { if(!nicknamePerUtente[n.user_id]) nicknamePerUtente[n.user_id] = n.nickname; });
       }catch(e){ /* silenzioso */ }
     }
     // ripiego 2 (ULTIMA risorsa): per chi non ha mai giocato la Daily nemmeno una volta, usiamo
