@@ -10327,7 +10327,7 @@ async function shareFriendCode(code){
     const cv = await buildFriendCodeShareCanvas(code);
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
     const fileName = 'racing-dynasty-amico.png';
-    const gameUrl = `https://fuoriscala-dev.github.io/racing-dynasty/?friend=${encodeURIComponent(code)}`;
+    const gameUrl = `https://racingdynasty.fuoriscala.xyz/?friend=${encodeURIComponent(code)}`;
     const shareText = t('friends_share_text', gameUrl, code);
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
       await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
@@ -13298,7 +13298,7 @@ async function shareTrophyRoomCard(){
     const cv = await buildTrophyRoomCanvas();
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
     const fileName = 'racing-dynasty-sala-trofei.png';
-    const gameUrl = 'https://fuoriscala-dev.github.io/racing-dynasty/';
+    const gameUrl = 'https://racingdynasty.fuoriscala.xyz/';
     const shareText = `La mia Sala Trofei su Racing Dynasty — prova a battermi!\n${gameUrl}`;
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
       await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
@@ -13322,7 +13322,7 @@ async function shareResultCard(){
     const cv = await buildShareCardCanvas();
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
     const fileName = state.isDailySeason ? 'racing-dynasty-daily.png' : 'racing-dynasty-risultato.png';
-    const gameUrl = 'https://fuoriscala-dev.github.io/racing-dynasty/';
+    const gameUrl = 'https://racingdynasty.fuoriscala.xyz/';
     const shareText = state.isDailySeason
       ? t('daily_share_text', gameUrl)
       : `Ho appena chiuso una stagione su Racing Dynasty — prova a battermi!\n${gameUrl}`;
@@ -13724,7 +13724,7 @@ function renderSeasonEnd(){
   </div>
   ${seasonTrophiesPanelHTML()}
   <div class="panel season-end-fs-promo">
-    <a href="https://fuoriscala-dev.github.io/FUORISCALA.SITOWEB/" target="_blank" rel="noopener" class="season-end-fs-link">
+    <a href="https://fuoriscala.xyz/" target="_blank" rel="noopener" class="season-end-fs-link">
       <img src="assets/fuoriscala/fuoriscala_primary_white.svg" alt="FUORISCALA" class="season-end-fs-logo">
       <div class="season-end-fs-text">
         <div class="season-end-fs-title">${t('se_fs_title')}</div>
@@ -15995,7 +15995,7 @@ function closeGuidePanel(){
 // V0.9.7.8.12: pannello Crediti — firme standard dal brand kit FUORISCALA (copy_deck.md), stesso
 // identico pattern di apertura/chiusura di Guida e Obiettivi.
 function creditsPanelHTML(){
-  const siteUrl = 'https://fuoriscala-dev.github.io/FUORISCALA.SITOWEB/';
+  const siteUrl = 'https://fuoriscala.xyz/';
   return `
   <div style="text-align:center;padding:24px 12px;">
     <a href="${siteUrl}" target="_blank" rel="noopener" title="FUORISCALA">
