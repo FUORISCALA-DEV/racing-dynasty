@@ -417,6 +417,18 @@ const I18N = {
     stat_qualifica: 'Qualifica', stat_sorpassi: 'Sorpassi', stat_pioggia: 'Pioggia', stat_costanza: 'Costanza',
     stat_pressione: 'Sotto Pressione', stat_aggressivita: 'Aggressività', stat_partenza: 'Partenza',
     stat_ultimigiri: 'Ultimi Giri', stat_gestionegomme: 'Gestione Gomme', stat_affidabilita: 'Affidabilità',
+    sk_qualifica: 'QUALIFICA', sk_sorpassi: 'SORPASSI', sk_costanza: 'COSTANZA', sk_affidabilita: 'AFFIDAB.',
+    sk_potenza: 'POTENZA', sk_accelerazione: 'ACCEL.', sk_consumo: 'CONSUMO', sk_leggerezza: 'LEGGEREZZA',
+    sk_bilanciamento: 'BILANC.', sk_sicurezza: 'SICUREZZA', sk_velmax: 'VEL. MAX', sk_curveveloci: 'CURVE V.',
+    sk_curvelente: 'CURVE L.', sk_stabilita: "STABILITA'", sk_grip: 'GRIP', sk_durata: 'DURATA',
+    sk_bagnato: 'BAGNATO', sk_degrado: 'DEGRADO', sk_pitstop: 'PIT STOP', sk_letturagara: 'LETTURA',
+    sk_safetycar: 'SAFETY CAR', sk_pressione: 'PRESSIONE',
+    sk_rating: 'Rating', sk_resistenza: 'RESISTENZA', sk_degradogomme: 'DEGRADO GOMME', sk_pioggia: 'PIOGGIA',
+    sk_warmup: 'WARMUP', sk_versatilita: "VERSATILITA'", sk_aggressivita: 'AGGRESSIVITA\'', sk_affidabilitadec: 'AFFID. DECIS.',
+    sk_partenza: 'PARTENZA', sk_ultimigiri: 'ULTIMI GIRI', sk_gestionegomme: 'GESTIONE GOMME',
+    cmp_table_stat: 'Statistica', cmp_table_current: 'Attuale', cmp_table_proposed: 'Proposto', cmp_table_diff: 'Diff.',
+
+
     dh_status_rookie: 'Rookie della squadra', dh_status_second: 'Seconda guida', dh_status_parity: 'Parità con il compagno', dh_status_leader: 'Prima guida — la squadra costruisce su di te',
     dcon_title: 'Situazione contrattuale', dcon_market_score: (n)=>`Valore di mercato: ${n}`,
     dcon_renew: 'Rinnova', dcon_released: (team)=>`${team} non ti rinnova per la prossima stagione.`,
@@ -807,6 +819,18 @@ const I18N = {
     stat_qualifica: 'Qualifying', stat_sorpassi: 'Overtaking', stat_pioggia: 'Rain', stat_costanza: 'Consistency',
     stat_pressione: 'Under Pressure', stat_aggressivita: 'Aggression', stat_partenza: 'Start',
     stat_ultimigiri: 'Late Race', stat_gestionegomme: 'Tire Management', stat_affidabilita: 'Reliability',
+    sk_qualifica: 'QUALIFYING', sk_sorpassi: 'OVERTAKING', sk_costanza: 'CONSIST.', sk_affidabilita: 'RELIAB.',
+    sk_potenza: 'POWER', sk_accelerazione: 'ACCEL.', sk_consumo: 'FUEL USE', sk_leggerezza: 'WEIGHT',
+    sk_bilanciamento: 'BALANCE', sk_sicurezza: 'SAFETY', sk_velmax: 'TOP SPEED', sk_curveveloci: 'FAST CORN.',
+    sk_curvelente: 'SLOW CORN.', sk_stabilita: 'STABILITY', sk_grip: 'GRIP', sk_durata: 'DURAB.',
+    sk_bagnato: 'WET', sk_degrado: 'WEAR', sk_pitstop: 'PIT STOP', sk_letturagara: 'RACE READ.',
+    sk_safetycar: 'SAFETY CAR', sk_pressione: 'PRESSURE',
+    sk_rating: 'Rating', sk_resistenza: 'ENDURANCE', sk_degradogomme: 'TIRE DEGRAD.', sk_pioggia: 'RAIN',
+    sk_warmup: 'WARMUP', sk_versatilita: 'VERSATILITY', sk_aggressivita: 'AGGRESSION', sk_affidabilitadec: 'DECIS. RELIAB.',
+    sk_partenza: 'START', sk_ultimigiri: 'LATE RACE', sk_gestionegomme: 'TIRE MGMT.',
+    cmp_table_stat: 'Stat', cmp_table_current: 'Current', cmp_table_proposed: 'Proposed', cmp_table_diff: 'Diff.',
+
+
     dh_status_rookie: 'Team rookie', dh_status_second: 'Second driver', dh_status_parity: 'On par with your teammate', dh_status_leader: "Team leader — the team is building around you",
     dcon_title: 'Contract situation', dcon_market_score: (n)=>`Market value: ${n}`,
     dcon_renew: 'Renew', dcon_released: (team)=>`${team} won't renew you for next season.`,
@@ -1191,6 +1215,18 @@ const I18N = {
     stat_qualifica: 'Clasificación', stat_sorpassi: 'Adelantamientos', stat_pioggia: 'Lluvia', stat_costanza: 'Constancia',
     stat_pressione: 'Bajo Presión', stat_aggressivita: 'Agresividad', stat_partenza: 'Salida',
     stat_ultimigiri: 'Últimas Vueltas', stat_gestionegomme: 'Gestión de Neumáticos', stat_affidabilita: 'Fiabilidad',
+    sk_qualifica: 'CLASIF.', sk_sorpassi: 'ADELANT.', sk_costanza: 'CONSTANCIA', sk_affidabilita: 'FIABIL.',
+    sk_potenza: 'POTENCIA', sk_accelerazione: 'ACELER.', sk_consumo: 'CONSUMO', sk_leggerezza: 'PESO',
+    sk_bilanciamento: 'EQUIL.', sk_sicurezza: 'SEGURIDAD', sk_velmax: 'VEL. MÁX', sk_curveveloci: 'CURVA RÁP.',
+    sk_curvelente: 'CURVA LENTA', sk_stabilita: 'ESTABILIDAD', sk_grip: 'AGARRE', sk_durata: 'DURABIL.',
+    sk_bagnato: 'MOJADO', sk_degrado: 'DESGASTE', sk_pitstop: 'PIT STOP', sk_letturagara: 'LECTURA',
+    sk_safetycar: 'SAFETY CAR', sk_pressione: 'PRESIÓN',
+    sk_rating: 'Rating', sk_resistenza: 'RESISTENCIA', sk_degradogomme: 'DESGASTE NEUM.', sk_pioggia: 'LLUVIA',
+    sk_warmup: 'WARMUP', sk_versatilita: 'VERSATILIDAD', sk_aggressivita: 'AGRESIVIDAD', sk_affidabilitadec: 'FIABIL. DECIS.',
+    sk_partenza: 'SALIDA', sk_ultimigiri: 'ÚLTIMAS VUELTAS', sk_gestionegomme: 'GESTIÓN NEUM.',
+    cmp_table_stat: 'Estadística', cmp_table_current: 'Actual', cmp_table_proposed: 'Propuesto', cmp_table_diff: 'Dif.',
+
+
     dh_status_rookie: 'Novato del equipo', dh_status_second: 'Segundo piloto', dh_status_parity: 'A la par con tu compañero', dh_status_leader: 'Piloto líder — el equipo construye en torno a ti',
     dcon_title: 'Situación contractual', dcon_market_score: (n)=>`Valor de mercado: ${n}`,
     dcon_renew: 'Renovar', dcon_released: (team)=>`${team} no te renueva para la próxima temporada.`,
@@ -2135,12 +2171,12 @@ const COMPONENT_LABEL = {
 /* ---------------- V0.6: confronto sostituzioni ---------------- */
 // Statistiche confrontate per categoria (spec 0.6, punti 3/4/5) — 'rating' sempre incluso.
 const COMPARE_STATS = {
-  motore:   [['rating','Rating'],['potenza','Potenza'],['affidabilita','Affidabilità'],['accelerazione','Accelerazione'],['consumo','Consumo'],['resistenza','Resistenza']],
-  telaio:   [['rating','Rating'],['leggerezza','Leggerezza'],['bilanciamento','Bilanciamento'],['sicurezza','Sicurezza'],['affidabilita','Affidabilità'],['degradogomme','Degrado Gomme']],
-  aero:     [['rating','Rating'],['velmax','Velocità Massima'],['curveveloci','Curve Veloci'],['curvelente','Curve Lente'],['stabilita','Stabilità'],['pioggia','Pioggia']],
-  gomme:    [['rating','Rating'],['grip','Grip'],['durata','Durata'],['bagnato','Bagnato'],['warmup','Warmup'],['degrado','Degrado'],['versatilita','Versatilità']],
-  stratega: [['rating','Rating'],['pitstop','Pit Stop'],['letturagara','Lettura Gara'],['safetycar','Safety Car'],['pioggia','Pioggia'],['pressione','Pressione'],['aggressivita','Aggressività'],['affidabilitadec','Affidabilità Decisionale']],
-  pilotSecond: [['rating','Rating'],['qualifica','Qualifica'],['sorpassi','Sorpassi'],['pioggia','Pioggia'],['costanza','Costanza'],['pressione','Pressione'],['aggressivita','Aggressività'],['partenza','Partenza'],['ultimigiri','Ultimi Giri'],['gestionegomme','Gestione Gomme'],['affidabilita','Affidabilità']]
+  motore:   ['rating','potenza','affidabilita','accelerazione','consumo','resistenza'],
+  telaio:   ['rating','leggerezza','bilanciamento','sicurezza','affidabilita','degradogomme'],
+  aero:     ['rating','velmax','curveveloci','curvelente','stabilita','pioggia'],
+  gomme:    ['rating','grip','durata','bagnato','warmup','degrado','versatilita'],
+  stratega: ['rating','pitstop','letturagara','safetycar','pioggia','pressione','aggressivita','affidabilitadec'],
+  pilotSecond: ['rating','qualifica','sorpassi','pioggia','costanza','pressione','aggressivita','partenza','ultimigiri','gestionegomme','affidabilita']
 };
 // Statistiche dove un valore PIU' BASSO è migliore (consumo, degrado gomme/telaio)
 const INVERT_STATS = new Set(['consumo','degrado','degradogomme']);
@@ -7156,11 +7192,11 @@ function updateLiveBoard(){
 // Nomenclatura (spec 0.6 punto 6): non tutto e' "upgrade". Confronta le statistiche
 // rilevanti per la categoria e classifica la proposta in base al risultato reale.
 function classifyReplacement(catKey, current, candidate){
-  const statsDef = COMPARE_STATS[catKey] || [['rating','Rating']];
+  const statsDef = COMPARE_STATS[catKey] || ['rating'];
   const sit = SITUATIONAL_STAT[catKey];
   let better=0, worse=0;
   const betterKeys = [];
-  statsDef.forEach(([k])=>{
+  statsDef.forEach(k=>{
     if(current[k]===undefined || candidate[k]===undefined) return;
     const invert = INVERT_STATS.has(k);
     const diff = candidate[k]-current[k];
@@ -11110,7 +11146,7 @@ function shortenText(text, maxLen){
 }
 
 function draftCardHTML(item, statKeys, extraLine, synergyCatKey){
-  const stats = statKeys.map(([k,l])=> item[k]!==undefined ? statBar(l, item[k]) : '').join('');
+  const stats = statKeys.map(k => item[k]!==undefined ? statBar(t('sk_'+k), item[k]) : '').join('');
   let synBadge = '', rowCls = '';
   // V0.9.9.180: PUNTI 9/10 — BUG CORRETTO, segnalato da Gio: "sinergie non tradotte e altre robe
   // nelle carte draft". Trovate 4 stringhe fisse in italiano in questa funzione, mai tradotte in
@@ -11153,13 +11189,13 @@ function draftCardHTML(item, statKeys, extraLine, synergyCatKey){
 }
 
 const STAT_KEYS = {
-  pilotMain: [['qualifica','QUALIFICA'],['sorpassi','SORPASSI'],['costanza','COSTANZA'],['affidabilita','AFFIDAB.']],
-  pilotSecond: [['qualifica','QUALIFICA'],['sorpassi','SORPASSI'],['costanza','COSTANZA'],['affidabilita','AFFIDAB.']],
-  motore: [['potenza','POTENZA'],['affidabilita','AFFIDAB.'],['accelerazione','ACCEL.'],['consumo','CONSUMO']],
-  telaio: [['leggerezza','LEGGEREZZA'],['bilanciamento','BILANC.'],['sicurezza','SICUREZZA'],['affidabilita','AFFIDAB.']],
-  aero: [['velmax','VEL. MAX'],['curveveloci','CURVE V.'],['curvelente','CURVE L.'],['stabilita','STABILITA\'']],
-  gomme: [['grip','GRIP'],['durata','DURATA'],['bagnato','BAGNATO'],['degrado','DEGRADO']],
-  stratega: [['pitstop','PIT STOP'],['letturagara','LETTURA'],['safetycar','SAFETY CAR'],['pressione','PRESSIONE']]
+  pilotMain: ['qualifica','sorpassi','costanza','affidabilita'],
+  pilotSecond: ['qualifica','sorpassi','costanza','affidabilita'],
+  motore: ['potenza','affidabilita','accelerazione','consumo'],
+  telaio: ['leggerezza','bilanciamento','sicurezza','affidabilita'],
+  aero: ['velmax','curveveloci','curvelente','stabilita'],
+  gomme: ['grip','durata','bagnato','degrado'],
+  stratega: ['pitstop','letturagara','safetycar','pressione']
 };
 
 // V0.9.4.2.2: card di un'offerta di turno, con l'etichetta di categoria sopra (non modifica draftCardHTML)
@@ -12187,17 +12223,17 @@ function pitlaneCardHTML(node, idx){
 }
 
 function compareStatTable(catKey, current, candidate){
-  const statsDef = COMPARE_STATS[catKey] || [['rating','Rating']];
-  const rows = statsDef.map(([k,label])=>{
+  const statsDef = COMPARE_STATS[catKey] || ['rating'];
+  const rows = statsDef.map(k=>{
     if(current[k]===undefined || candidate[k]===undefined) return '';
     const invert = INVERT_STATS.has(k);
     const diff = candidate[k]-current[k];
     const goodness = invert ? -diff : diff;
     const cls = goodness>0.001?'cmp-better':(goodness<-0.001?'cmp-worse':'cmp-same');
     const sign = diff>0?'+':'';
-    return `<tr class="${cls}"><td>${label}</td><td class="mono">${current[k]}</td><td class="mono">${candidate[k]}</td><td class="mono">${diff===0?'=':sign+diff}</td></tr>`;
+    return `<tr class="${cls}"><td>${t('sk_'+k)}</td><td class="mono">${current[k]}</td><td class="mono">${candidate[k]}</td><td class="mono">${diff===0?'=':sign+diff}</td></tr>`;
   }).join('');
-  return `<table class="cmp-table"><thead><tr><th>Statistica</th><th>Attuale</th><th>Proposto</th><th>Diff.</th></tr></thead><tbody>${rows}</tbody></table>`;
+  return `<table class="cmp-table"><thead><tr><th>${t('cmp_table_stat')}</th><th>${t('cmp_table_current')}</th><th>${t('cmp_table_proposed')}</th><th>${t('cmp_table_diff')}</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function effectEstimateHTML(effect){
