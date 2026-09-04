@@ -152,6 +152,193 @@ function loadLang(){
 let currentLang = loadLang();
 function saveLang(){ try{ localStorage.setItem('racingDynastyLangV1', currentLang); }catch(e){} }
 function hasLangBeenChosen(){ try{ return localStorage.getItem('racingDynastyLangChosenV1')==='1'; }catch(e){ return false; } }
+
+// V0.9.9.216: traduzioni dei testi di gioco (bonus/malus/abilità dei piloti) — scritti
+// direttamente nei dati (data.json), non nel sistema di traduzione dell'interfaccia. Solo 17
+// combinazioni uniche esistono in tutto il roster di 250 piloti (legate all'archetipo, con 3
+// varianti speciali per la rarità Legendary) — tradotte qui una volta sola, applicate a runtime
+// in base alla lingua corrente, senza toccare i dati originali italiani (che restano la fonte
+// di verità). Se un testo non viene trovato qui (es. dati futuri non ancora tradotti), resta
+// visibile in italiano invece di sparire — mai un buco vuoto.
+const PILOT_DATA_TRANSLATIONS = {
+  '+20 se parte oltre la P10': { en:'+20 if starting beyond P10', es:'+20 si sale desde más allá de P10' },
+  '-9 Qualifica': { en:'-9 Qualifying', es:'-9 Clasificación' },
+  'COMEBACK KING: rimonta amplificata dopo Safety Car': { en:'COMEBACK KING: amplified recovery after Safety Car', es:'COMEBACK KING: remontada amplificada tras el Safety Car' },
+
+  '+25 negli ultimi 3 giri': { en:'+25 in the last 3 laps', es:'+25 en las últimas 3 vueltas' },
+  '+4% errore prima di metà gara': { en:'+4% error chance before halfway', es:'+4% de error antes de la mitad de la carrera' },
+  'LAST LAP KILLER: duelli finali quasi sempre favorevoli': { en:'LAST LAP KILLER: final duels almost always favorable', es:'LAST LAP KILLER: duelos finales casi siempre favorables' },
+
+  '+22 Gestione gomme; stint più lunghi del 12%': { en:'+22 Tire Management; stints 12% longer', es:'+22 Gestión de neumáticos; stints un 12% más largos' },
+  '-6 Partenza e primi giri': { en:'-6 Start and opening laps', es:'-6 Salida y primeras vueltas' },
+  'TIRE WHISPERER: può evitare una sosta': { en:'TIRE WHISPERER: can skip one pit stop', es:'TIRE WHISPERER: puede evitar una parada' },
+
+  '+16 sui circuiti cittadini': { en:'+16 on street circuits', es:'+16 en circuitos urbanos' },
+  '-7 sui circuiti ad alta velocità': { en:'-7 on high-speed circuits', es:'-7 en circuitos de alta velocidad' },
+  'STREET KING: ignora metà del malus traffico': { en:'STREET KING: ignores half of the traffic penalty', es:'STREET KING: ignora la mitad de la penalización de tráfico' },
+
+  '+18 Pioggia; +8 con meteo variabile': { en:'+18 Rain; +8 in mixed weather', es:'+18 Lluvia; +8 con clima variable' },
+  '-5 Qualifica su pista asciutta': { en:'-5 Qualifying on dry track', es:'-5 Clasificación en pista seca' },
+  'RAIN MASTER: riduce del 45% gli errori sul bagnato': { en:'RAIN MASTER: reduces wet-weather errors by 45%', es:'RAIN MASTER: reduce un 45% los errores en mojado' },
+
+  '+15 con strategie alternative': { en:'+15 with alternative strategies', es:'+15 con estrategias alternativas' },
+  '-4 Qualifica': { en:'-4 Qualifying', es:'-4 Clasificación' },
+  "STRATEGIC MIND: bonus quando la strategia ottimale non è la più comune": { en:"STRATEGIC MIND: bonus when the optimal strategy isn't the most common one", es:'STRATEGIC MIND: bono cuando la estrategia óptima no es la más habitual' },
+
+  '+20 Qualifica; +7 Partenza dalla prima fila': { en:'+20 Qualifying; +7 Start from the front row', es:'+20 Clasificación; +7 Salida desde primera fila' },
+  '-8 Costanza nelle gare lunghe': { en:'-8 Consistency in long races', es:'-8 Constancia en carreras largas' },
+  'SATURDAY MONSTER: 12% di probabilità di pole bonus': { en:'SATURDAY MONSTER: 12% chance of a pole bonus', es:'SATURDAY MONSTER: 12% de probabilidad de bono de pole' },
+
+  '+18 Costanza; dimezza gli errori non forzati': { en:'+18 Consistency; halves unforced errors', es:'+18 Constancia; reduce a la mitad los errores no forzados' },
+  '-8 Sorpassi nelle lotte aggressive': { en:'-8 Overtaking in aggressive battles', es:'-8 Adelantamientos en luchas agresivas' },
+  'THE MACHINE: prestazione minima garantita al 92% del potenziale': { en:'THE MACHINE: guaranteed minimum performance at 92% of potential', es:'THE MACHINE: rendimiento mínimo garantizado al 92% del potencial' },
+
+  '+1 potenziale dopo ogni podio': { en:'+1 potential after every podium', es:'+1 potencial tras cada podio' },
+  '-10 Pressione nelle gare decisive': { en:'-10 Under Pressure in decisive races', es:'-10 Bajo Presión en carreras decisivas' },
+  'ROOKIE WONDER: può evolvere durante la stagione': { en:'ROOKIE WONDER: can evolve during the season', es:'ROOKIE WONDER: puede evolucionar durante la temporada' },
+
+  '+22 Aggressività; picchi prestazionali estremi': { en:'+22 Aggression; extreme performance peaks', es:'+22 Agresividad; picos de rendimiento extremos' },
+  '+10% incidente; -15 Costanza': { en:'+10% crash chance; -15 Consistency', es:'+10% de accidente; -15 Constancia' },
+  'WILD CARD: 8% di prestazione eccezionale o disastrosa': { en:'WILD CARD: 8% chance of an exceptional or disastrous performance', es:'WILD CARD: 8% de probabilidad de un rendimiento excepcional o desastroso' },
+
+  '+18 Sorpassi; +10 nelle ripartenze': { en:'+18 Overtaking; +10 on restarts', es:'+18 Adelantamientos; +10 en las reanudaciones' },
+  '+6% rischio incidente o penalità': { en:'+6% risk of crash or penalty', es:'+6% de riesgo de accidente o penalización' },
+  'THE HUNTER: bonus contro avversari con rating superiore': { en:'THE HUNTER: bonus against higher-rated opponents', es:'THE HUNTER: bono contra rivales con rating superior' },
+
+  "+20 Pressione; +10 nell'ultima gara": { en:'+20 Under Pressure; +10 in the final race', es:'+20 Bajo Presión; +10 en la última carrera' },
+  '-5 Aggressività': { en:'-5 Aggression', es:'-5 Agresividad' },
+  'ICE MAN: immune ai crolli psicologici': { en:'ICE MAN: immune to psychological collapses', es:'ICE MAN: inmune a los bajones psicológicos' },
+
+  '+30 Pressione; +20 ultima gara': { en:'+30 Under Pressure; +20 final race', es:'+30 Bajo Presión; +20 última carrera' },
+  '10% calo se domina il campionato': { en:'10% drop if dominating the championship', es:'10% de bajón si domina el campeonato' },
+  'THE EMPEROR: aumenta la prestazione dell\u2019intera scuderia nelle gare decisive': { en:"THE EMPEROR: boosts the whole team's performance in decisive races", es:'THE EMPEROR: mejora el rendimiento de todo el equipo en carreras decisivas' },
+
+  '+28 ultimi giri; +18 duelli': { en:'+28 final laps; +18 duels', es:'+28 últimas vueltas; +18 duelos' },
+  '6% rischio contatto negli ultimi giri': { en:'6% risk of contact in the final laps', es:'6% de riesgo de contacto en las últimas vueltas' },
+  'FINAL BOSS: nelle finali di stagione corre come rating 100': { en:'FINAL BOSS: races as a rating-100 driver in season finales', es:'FINAL BOSS: corre como un piloto de rating 100 en las finales de temporada' },
+
+  '+25 Safety Car; +20 strategia': { en:'+25 Safety Car; +20 strategy', es:'+25 Safety Car; +20 estrategia' },
+  '-12 Pioggia estrema': { en:'-12 Extreme rain', es:'-12 Lluvia extrema' },
+  'GRANDMASTER: annulla un errore strategico per stagione': { en:'GRANDMASTER: cancels one strategic mistake per season', es:'GRANDMASTER: anula un error estratégico por temporada' },
+
+  '+20 a tutte le statistiche contestuali': { en:'+20 to all situational stats', es:'+20 a todas las estadísticas contextuales' },
+  '15% errore devastante in lotta per la vittoria': { en:'15% chance of a devastating error while fighting for the win', es:'15% de error devastador luchando por la victoria' },
+  'THE GOAT: leggenda vivente, praticamente imbattibile \u2014 un mito che non delude quasi mai': { en:'THE GOAT: a living legend, practically unbeatable — a myth that almost never disappoints', es:'THE GOAT: una leyenda viva, prácticamente invencible — un mito que casi nunca decepciona' },
+
+  'Miracle Mode 5%; +30 in rimonta': { en:'Miracle Mode 5%; +30 when recovering', es:'Modo Milagro 5%; +30 en remontada' },
+  'Nessun malus fisso': { en:'No fixed malus', es:'Sin penalización fija' },
+  'MIRACLE MAKER: una volta per stagione può portare tutte le statistiche a 100': { en:'MIRACLE MAKER: once per season can bring all stats to 100', es:'MIRACLE MAKER: una vez por temporada puede llevar todas las estadísticas a 100' },
+
+  // --- V0.9.9.216 (parte 2): stessa cosa per i 5 componenti (motori/telai/aero/gomme/strategie),
+  // scoperta dal vivo — la stessa schermata draft mostra ANCHE le carte componenti, non solo i
+  // piloti. 5 combinazioni uniche per categoria, 25 in totale.
+  '+18 Potenza; +10 Accelerazione': { en:'+18 Power; +10 Acceleration', es:'+18 Potencia; +10 Aceleración' },
+  '+8% guasto; consumo elevato': { en:'+8% failure chance; high fuel use', es:'+8% de avería; consumo elevado' },
+  'OVERBOOST: 6% di potenza extra per una gara': { en:'OVERBOOST: 6% extra power for one race', es:'OVERBOOST: 6% de potencia extra para una carrera' },
+
+  '+20 Consumo; +8 Resistenza': { en:'+20 Fuel Use; +8 Endurance', es:'+20 Consumo; +8 Resistencia' },
+  '-5 Potenza': { en:'-5 Power', es:'-5 Potencia' },
+  'ECO ATTACK: bonus nei GP ad alto consumo': { en:'ECO ATTACK: bonus in high-consumption GPs', es:'ECO ATTACK: bono en GPs de alto consumo' },
+
+  '+6 a tutte le statistiche': { en:'+6 to all stats', es:'+6 a todas las estadísticas' },
+  'Nessun picco specialistico': { en:'No specialist peak', es:'Sin pico especialista' },
+  'PERFECT BALANCE: nessun malus di circuito': { en:'PERFECT BALANCE: no circuit-specific malus', es:'PERFECT BALANCE: sin penalización de circuito' },
+
+  '+20 Affidabilità; +15 Resistenza': { en:'+20 Reliability; +15 Endurance', es:'+20 Fiabilidad; +15 Resistencia' },
+  '-8 Potenza': { en:'-8 Power', es:'-8 Potencia' },
+  'IRON HEART: dimezza i guasti motore': { en:'IRON HEART: halves engine failures', es:'IRON HEART: reduce a la mitad las averías de motor' },
+
+  '+15 Qualifica; +15 Accelerazione': { en:'+15 Qualifying; +15 Acceleration', es:'+15 Clasificación; +15 Aceleración' },
+  '-10 Resistenza': { en:'-10 Endurance', es:'-10 Resistencia' },
+  'PARTY MODE: forte bonus sul giro secco': { en:'PARTY MODE: strong bonus on a single flying lap', es:'PARTY MODE: gran bono en la vuelta rápida' },
+
+  '+20 Sicurezza; +18 Affidabilità': { en:'+20 Safety; +18 Reliability', es:'+20 Seguridad; +18 Fiabilidad' },
+  '-15 Leggerezza': { en:'-15 Weight', es:'-15 Peso' },
+  'SURVIVOR: riduce i danni da contatto': { en:'SURVIVOR: reduces contact damage', es:'SURVIVOR: reduce el daño por contacto' },
+
+  '+20 Leggerezza; +8 Bilanciamento': { en:'+20 Weight; +8 Balance', es:'+20 Peso; +8 Equilibrio' },
+  '-10 Sicurezza': { en:'-10 Safety', es:'-10 Seguridad' },
+  'FEATHER: bonus sui circuiti stop-and-go': { en:'FEATHER: bonus on stop-and-go circuits', es:'FEATHER: bono en circuitos stop-and-go' },
+
+  '+6 globale': { en:'+6 overall', es:'+6 global' },
+  'Nessun vantaggio dominante': { en:'No dominant advantage', es:'Sin ventaja dominante' },
+  'VERSATILE: prestazione stabile': { en:'VERSATILE: stable performance', es:'VERSATILE: rendimiento estable' },
+
+  '+22 gestione degrado': { en:'+22 degradation management', es:'+22 gestión del desgaste' },
+  '-5 Leggerezza': { en:'-5 Weight', es:'-5 Peso' },
+  'LONG RUN: stint più lunghi del 10%': { en:'LONG RUN: stints 10% longer', es:'LONG RUN: stints un 10% más largos' },
+
+  '+18 Bilanciamento': { en:'+18 Balance', es:'+18 Equilibrio' },
+  '-5 Affidabilità': { en:'-5 Reliability', es:'-5 Fiabilidad' },
+  'RAIL CAR: bonus nelle piste tortuose': { en:'RAIL CAR: bonus on twisty tracks', es:'RAIL CAR: bono en trazados sinuosos' },
+
+  '+18 Curve veloci': { en:'+18 Fast Corners', es:'+18 Curvas rápidas' },
+  '+8% errore pilota': { en:'+8% driver error chance', es:'+8% de error del piloto' },
+  'KNIFE EDGE: picchi elevati, rischio elevato': { en:'KNIFE EDGE: high peaks, high risk', es:'KNIFE EDGE: picos altos, riesgo alto' },
+
+  '+22 Pioggia; +12 Stabilità': { en:'+22 Rain; +12 Stability', es:'+22 Lluvia; +12 Estabilidad' },
+  '-6 Velocità massima': { en:'-6 Top Speed', es:'-6 Velocidad máxima' },
+  'RAIN FLOW: ignora metà perdita da pista bagnata': { en:'RAIN FLOW: ignores half the wet-track loss', es:'RAIN FLOW: ignora la mitad de la pérdida en pista mojada' },
+
+  '+7 globale': { en:'+7 overall', es:'+7 global' },
+  'Costo sviluppo elevato': { en:'High development cost', es:'Coste de desarrollo elevado' },
+  'ACTIVE FLOW: cambia profilo secondo il circuito': { en:'ACTIVE FLOW: adapts its profile to the circuit', es:'ACTIVE FLOW: adapta su perfil según el circuito' },
+
+  '+18 curve lente; +10 curve veloci': { en:'+18 Slow Corners; +10 Fast Corners', es:'+18 curvas lentas; +10 curvas rápidas' },
+  '-12 Velocità massima': { en:'-12 Top Speed', es:'-12 Velocidad máxima' },
+  'MAX LOAD: bonus cittadini': { en:'MAX LOAD: bonus on street circuits', es:'MAX LOAD: bono en circuitos urbanos' },
+
+  '+20 Velocità massima': { en:'+20 Top Speed', es:'+20 Velocidad máxima' },
+  '-8 Stabilità e Pioggia': { en:'-8 Stability and Rain', es:'-8 Estabilidad y Lluvia' },
+  'SLIPSTREAM: sorpassi più efficaci': { en:'SLIPSTREAM: more effective overtakes', es:'SLIPSTREAM: adelantamientos más efectivos' },
+
+  '+20 Grip; +15 Warmup': { en:'+20 Grip; +15 Warmup', es:'+20 Agarre; +15 Warmup' },
+  '-15 Durata': { en:'-15 Durability', es:'-15 Durabilidad' },
+  'QUALI ATTACK: eccellente sul giro secco': { en:'QUALI ATTACK: excellent on a single flying lap', es:'QUALI ATTACK: excelente en la vuelta rápida' },
+
+  'Nessun picco': { en:'No peak', es:'Sin pico' },
+  'ALL WEATHER: riduce le penalità meteo': { en:'ALL WEATHER: reduces weather penalties', es:'ALL WEATHER: reduce las penalizaciones climáticas' },
+
+  '+25 Bagnato': { en:'+25 Wet', es:'+25 Mojado' },
+  '-10 Asciutto': { en:'-10 Dry', es:'-10 Seco' },
+  'WET KING: cambi gomme pioggia più rapidi': { en:'WET KING: faster wet-tire changes', es:'WET KING: cambios de neumáticos de lluvia más rápidos' },
+
+  '+18 Grip a temperatura ideale': { en:'+18 Grip at ideal temperature', es:'+18 Agarre a temperatura ideal' },
+  '-12 Warmup; prestazione instabile': { en:'-12 Warmup; unstable performance', es:'-12 Warmup; rendimiento inestable' },
+  'WINDOW: 12% di picco perfetto o calo': { en:'WINDOW: 12% chance of a perfect peak or a drop', es:'WINDOW: 12% de pico perfecto o bajón' },
+
+  '+22 Durata; +20 Degrado': { en:'+22 Durability; +20 Wear', es:'+22 Durabilidad; +20 Desgaste' },
+  '-8 Grip': { en:'-8 Grip', es:'-8 Agarre' },
+  'MARATHON: può evitare una sosta': { en:'MARATHON: can skip one pit stop', es:'MARATHON: puede evitar una parada' },
+
+  '+25 Pit Stop': { en:'+25 Pit Stop', es:'+25 Pit Stop' },
+  '+4% unsafe release': { en:'+4% unsafe release chance', es:'+4% de liberación insegura' },
+  '2.0 SECONDS: pit stop record': { en:'2.0 SECONDS: record pit stop', es:'2.0 SECONDS: parada récord' },
+
+  '+20 affidabilità decisionale': { en:'+20 Decision Reliability', es:'+20 fiabilidad de decisión' },
+  '-12 Aggressività': { en:'-12 Aggression', es:'-12 Agresividad' },
+  'SAFE POINTS: riduce risultati disastrosi': { en:'SAFE POINTS: reduces disastrous outcomes', es:'SAFE POINTS: reduce los resultados desastrosos' },
+
+  '+24 Safety Car': { en:'+24 Safety Car', es:'+24 Safety Car' },
+  '-5 Qualifica strategica': { en:'-5 Strategic Qualifying', es:'-5 Clasificación estratégica' },
+  'FREE STOP: 20% di sosta gratuita': { en:'FREE STOP: 20% chance of a free stop', es:'FREE STOP: 20% de parada gratuita' },
+
+  '+25 strategie aggressive': { en:'+25 aggressive strategies', es:'+25 estrategias agresivas' },
+  '18% strategia fallimentare': { en:'18% chance of a failed strategy', es:'18% de estrategia fallida' },
+  'ALL IN: può ribaltare una gara': { en:'ALL IN: can flip a race on its head', es:'ALL IN: puede dar la vuelta a una carrera' },
+
+  '+25 Pioggia': { en:'+25 Rain', es:'+25 Lluvia' },
+  '-8 gare asciutte lineari': { en:'-8 straightforward dry races', es:'-8 carreras secas lineales' },
+  'RAIN CALL: cambio gomme perfetto': { en:'RAIN CALL: perfect tire-change timing', es:'RAIN CALL: cambio de neumáticos perfecto' },
+};
+// funzione di lookup: ripiega sempre sul testo italiano originale se non trova una traduzione,
+// non lascia mai un vuoto — anche se in futuro venissero aggiunti nuovi piloti con testi non
+// ancora tradotti qui, il gioco continua a funzionare mostrando l'italiano invece di rompersi
+function td(testoItaliano){
+  if(!testoItaliano || currentLang==='it') return testoItaliano;
+  const voce = PILOT_DATA_TRANSLATIONS[testoItaliano];
+  return voce && voce[currentLang] ? voce[currentLang] : testoItaliano;
+}
 // V0.9.7.9.27: modalita' streamer — overlay pensato per OBS con Game Area/Cam Area dedicate.
 function hasStreamerBeenAsked(){ try{ return localStorage.getItem('racingDynastyStreamerAskedV1')==='1'; }catch(e){ return false; } }
 function markStreamerAsked(){ try{ localStorage.setItem('racingDynastyStreamerAskedV1','1'); }catch(e){} }
@@ -7634,7 +7821,7 @@ function applyUpgrade(upg, investT){
       });
       state.log.unshift({type:'pos', text:`Sviluppo riuscito: ${upg.nome} — bonus diffuso a tutta la vettura.`});
     } else {
-      state.log.unshift({type:'neg', text:`Sviluppo fallito: ${upg.nome}. ${upg.malus}`});
+      state.log.unshift({type:'neg', text:`Sviluppo fallito: ${upg.nome}. ${td(upg.malus)}`});
     }
   } else {
     const key = areaMap[upg.area];
@@ -7642,7 +7829,7 @@ function applyUpgrade(upg, investT){
       state.team[key].rating = clamp(state.team[key].rating + upg.guadagno, 1, 100);
       state.log.unshift({type:'pos', text:`Upgrade applicato: ${upg.nome} su ${areaLabel} (+${upg.guadagno}).`});
     } else if(key){
-      state.log.unshift({type:'neg', text:`Sviluppo fallito: ${upg.nome}. ${upg.malus}`});
+      state.log.unshift({type:'neg', text:`Sviluppo fallito: ${upg.nome}. ${td(upg.malus)}`});
     }
   }
 
@@ -11174,14 +11361,14 @@ function draftCardHTML(item, statKeys, extraLine, synergyCatKey){
       </div>
       <div class="card-rating-big">${item.rating}<span class="card-rating-big-label">RATING</span></div>
     </div>
-    ${item.bonus? `<div class="tag-line bonus">▲ ${shortenText(item.bonus,48)}</div>`:''}
-    ${item.malus? `<div class="tag-line malus">▼ ${shortenText(item.malus,48)}</div>`:''}
+    ${item.bonus? `<div class="tag-line bonus">▲ ${shortenText(td(item.bonus),48)}</div>`:''}
+    ${item.malus? `<div class="tag-line malus">▼ ${shortenText(td(item.malus),48)}</div>`:''}
     <details class="card-details">
       <summary onclick="event.stopPropagation()">${t('pcard_details')}</summary>
       <div class="stat-bars">${stats}</div>
-      ${item.bonus? `<div class="tag-line bonus">▲ ${item.bonus}</div>`:''}
-      ${item.malus? `<div class="tag-line malus">▼ ${item.malus}</div>`:''}
-      ${item.abilita? `<div class="ability">${item.abilita}</div>`:''}
+      ${item.bonus? `<div class="tag-line bonus">▲ ${td(item.bonus)}</div>`:''}
+      ${item.malus? `<div class="tag-line malus">▼ ${td(item.malus)}</div>`:''}
+      ${item.abilita? `<div class="ability">${td(item.abilita)}</div>`:''}
     </details>
     <div class="card-tap-hint">${t('pcard_tap_to_choose')}</div>
     ${extraLine||''}
@@ -12132,7 +12319,7 @@ function pitlaneCardHTML(node, idx){
         <div class="dim" style="font-size:10px;margin-top:2px;">${t('pcard_slider_hint')}</div>
       </div>
       `}
-      ${u.malus? `<div class="tag-line malus">${t('pcard_if_fails', u.malus)}</div>`:''}
+      ${u.malus? `<div class="tag-line malus">${t('pcard_if_fails', td(u.malus))}</div>`:''}
       <details class="card-details">
         <summary onclick="event.stopPropagation()">${t('pcard_more_info')}</summary>
         <div class="tag-line dim">${t('pcard_dev_area', displayAreaForUpgrade(u))}</div>
@@ -12319,16 +12506,16 @@ function renderPitlaneConfirm(){
     <div class="grid grid-2" style="margin-top:14px;">
       <div>
         <div class="tag-line dim" style="margin-bottom:4px;text-transform:uppercase;font-size:10px;">${t('pc_current_traits')}</div>
-        ${current.bonus? `<div class="tag-line bonus">▲ ${current.bonus}</div>`:''}
-        ${current.malus? `<div class="tag-line malus">▼ ${current.malus}</div>`:''}
-        ${current.abilita? `<div class="ability">${current.abilita}</div>`:''}
+        ${current.bonus? `<div class="tag-line bonus">▲ ${td(current.bonus)}</div>`:''}
+        ${current.malus? `<div class="tag-line malus">▼ ${td(current.malus)}</div>`:''}
+        ${current.abilita? `<div class="ability">${td(current.abilita)}</div>`:''}
         ${current.arch? `<div class="tag-line dim">${t('pc_trait')}: ${current.arch}</div>`:''}
       </div>
       <div>
         <div class="tag-line dim" style="margin-bottom:4px;text-transform:uppercase;font-size:10px;">${t('pc_proposed_traits')}</div>
-        ${candidate.bonus? `<div class="tag-line bonus">▲ ${candidate.bonus}</div>`:''}
-        ${candidate.malus? `<div class="tag-line malus">▼ ${candidate.malus}</div>`:''}
-        ${candidate.abilita? `<div class="ability">${candidate.abilita}</div>`:''}
+        ${candidate.bonus? `<div class="tag-line bonus">▲ ${td(candidate.bonus)}</div>`:''}
+        ${candidate.malus? `<div class="tag-line malus">▼ ${td(candidate.malus)}</div>`:''}
+        ${candidate.abilita? `<div class="ability">${td(candidate.abilita)}</div>`:''}
         ${candidate.arch? `<div class="tag-line dim">${t('pc_trait')}: ${candidate.arch}</div>`:''}
       </div>
     </div>
