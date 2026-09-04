@@ -330,6 +330,103 @@ const PILOT_DATA_TRANSLATIONS = {
   '+25 Pioggia': { en:'+25 Rain', es:'+25 Lluvia' },
   '-8 gare asciutte lineari': { en:'-8 straightforward dry races', es:'-8 carreras secas lineales' },
   'RAIN CALL: cambio gomme perfetto': { en:'RAIN CALL: perfect tire-change timing', es:'RAIN CALL: cambio de neumáticos perfecto' },
+
+  // --- V0.9.9.218 (parte 3): tabella upgrade — 49 nomi + 5 malus, scoperti dal vivo giocando in
+  // inglese ("telaio ottimizzato", "pacchetto aero evoluto", "una gara di adattamento" ecc.)
+  'Messa a punto motore': { en:'Engine Tune-Up', es:'Puesta a punto del motor' },
+  'Ottimizzazione mappe motore': { en:'Engine Map Optimization', es:'Optimización de mapas del motor' },
+  'Nuova centralina': { en:'New ECU', es:'Nueva centralita' },
+  'Power unit evoluta': { en:'Evolved Power Unit', es:'Unidad de potencia evolucionada' },
+  "Power unit d'elite": { en:'Elite Power Unit', es:'Unidad de potencia de élite' },
+  'Motore da campionato': { en:'Championship Engine', es:'Motor de campeonato' },
+  'Propulsore rivoluzionario': { en:'Revolutionary Powertrain', es:'Propulsor revolucionario' },
+
+  'Rinforzi strutturali': { en:'Structural Reinforcements', es:'Refuerzos estructurales' },
+  'Telaio ottimizzato': { en:'Optimized Chassis', es:'Chasis optimizado' },
+  'Telaio alleggerito': { en:'Lightened Chassis', es:'Chasis aligerado' },
+  'Monoscocca in fibra avanzata': { en:'Advanced Fiber Monocoque', es:'Monocasco de fibra avanzada' },
+  "Monoscocca d'elite": { en:'Elite Monocoque', es:'Monocasco de élite' },
+  'Telaio da record': { en:'Record-Breaking Chassis', es:'Chasis récord' },
+  'Chassis rivoluzionario': { en:'Revolutionary Chassis', es:'Chasis revolucionario' },
+
+  'Piccole modifiche ala': { en:'Minor Wing Tweaks', es:'Pequeños ajustes de alerón' },
+  'Ali riviste': { en:'Revised Wings', es:'Alerones revisados' },
+  'Nuovo fondo': { en:'New Floor', es:'Nuevo fondo plano' },
+  'Pacchetto aero evoluto': { en:'Evolved Aero Package', es:'Paquete aerodinámico evolucionado' },
+  "Pacchetto aero d'elite": { en:'Elite Aero Package', es:'Paquete aerodinámico de élite' },
+  'Aerodinamica da campionato': { en:'Championship Aero', es:'Aerodinámica de campeonato' },
+  'Rivoluzione aerodinamica': { en:'Aero Revolution', es:'Revolución aerodinámica' },
+
+  'Gestione gomme migliorata': { en:'Improved Tire Management', es:'Gestión de neumáticos mejorada' },
+  'Mescole riviste': { en:'Revised Compounds', es:'Compuestos revisados' },
+  'Nuove mescole': { en:'New Compounds', es:'Nuevos compuestos' },
+  'Compound avanzato': { en:'Advanced Compound', es:'Compuesto avanzado' },
+  "Compound d'elite": { en:'Elite Compound', es:'Compuesto de élite' },
+  'Gomme da record': { en:'Record-Breaking Tires', es:'Neumáticos récord' },
+  'Rivoluzione pneumatici': { en:'Tire Revolution', es:'Revolución de neumáticos' },
+
+  'Analisi dati base': { en:'Basic Data Analysis', es:'Análisis de datos básico' },
+  'Analisi dati avanzata': { en:'Advanced Data Analysis', es:'Análisis de datos avanzado' },
+  'Strategia AI': { en:'AI Strategy', es:'Estrategia IA' },
+  'Centro strategico avanzato': { en:'Advanced Strategy Center', es:'Centro estratégico avanzado' },
+  "Centro strategico d'elite": { en:'Elite Strategy Center', es:'Centro estratégico de élite' },
+  'Strategia da campionato': { en:'Championship Strategy', es:'Estrategia de campeonato' },
+  'Genio strategico': { en:'Strategic Genius', es:'Genio estratégico' },
+
+  'Allenamento mirato': { en:'Targeted Training', es:'Entrenamiento específico' },
+  'Allenamento intensivo': { en:'Intensive Training', es:'Entrenamiento intensivo' },
+  'Simulatore avanzato': { en:'Advanced Simulator', es:'Simulador avanzado' },
+  'Coach di alto livello': { en:'High-Level Coach', es:'Entrenador de alto nivel' },
+  "Coach d'elite mondiale": { en:'World-Class Elite Coach', es:'Entrenador de élite mundial' },
+  'Preparazione da campione': { en:"Champion's Preparation", es:'Preparación de campeón' },
+  'Trasformazione totale': { en:'Total Transformation', es:'Transformación total' },
+
+  'Revisione generale': { en:'General Overhaul', es:'Revisión general' },
+  'Sviluppo mirato': { en:'Targeted Development', es:'Desarrollo específico' },
+  'Pacchetto sviluppo': { en:'Development Package', es:'Paquete de desarrollo' },
+  'Aggiornamento completo': { en:'Complete Upgrade', es:'Actualización completa' },
+  "Aggiornamento d'elite": { en:'Elite Upgrade', es:'Actualización de élite' },
+  'Salto di qualità totale': { en:'Total Quality Leap', es:'Salto de calidad total' },
+  'Rivoluzione totale': { en:'Total Revolution', es:'Revolución total' },
+
+  'Una gara di adattamento': { en:'One race of adaptation', es:'Una carrera de adaptación' },
+  '+5% rischio guasto': { en:'+5% failure risk', es:'+5% de riesgo de avería' },
+  '+8% rischio guasto': { en:'+8% failure risk', es:'+8% de riesgo de avería' },
+  '-3 Affidabilità': { en:'-3 Reliability', es:'-3 Fiabilidad' },
+  '-6 Affidabilità': { en:'-6 Reliability', es:'-6 Fiabilidad' },
+
+  // --- V0.9.9.218 (parte 4): campi circuito (tipo/clima/degrado/evento speciale/componente
+  // dominante) — stesso identico problema, testi scritti direttamente nei dati.
+  'Alta velocità': { en:'High Speed', es:'Alta velocidad' },
+  'Cittadino': { en:'Street', es:'Urbano' },
+  'Misto': { en:'Mixed', es:'Mixto' },
+  'Stop-and-go': { en:'Stop-and-go', es:'Stop-and-go' },
+  'Tecnico': { en:'Technical', es:'Técnico' },
+
+  'Caldo': { en:'Hot', es:'Cálido' },
+  'Desertico': { en:'Desert', es:'Desértico' },
+  'Freddo': { en:'Cold', es:'Frío' },
+  'Piovoso': { en:'Rainy', es:'Lluvioso' },
+  'Secco': { en:'Dry', es:'Seco' },
+  'Variabile': { en:'Variable', es:'Variable' },
+
+  'Alto': { en:'High', es:'Alto' },
+  'Basso': { en:'Low', es:'Bajo' },
+  'Medio': { en:'Medium', es:'Medio' },
+
+  'Aerodinamica': { en:'Aero', es:'Aerodinámica' },
+  'Gomme': { en:'Tires', es:'Neumáticos' },
+  'Motore': { en:'Engine', es:'Motor' },
+  'Pilota': { en:'Driver', es:'Piloto' },
+  'Strategia': { en:'Strategy', es:'Estrategia' },
+  'Telaio': { en:'Chassis', es:'Chasis' },
+
+  'Altitudine': { en:'Altitude', es:'Altitud' },
+  'Asfalto abrasivo': { en:'Abrasive asphalt', es:'Asfalto abrasivo' },
+  'Muri vicini': { en:'Close walls', es:'Muros cercanos' },
+  'Nessuno': { en:'None', es:'Ninguno' },
+  'Pioggia improvvisa': { en:'Sudden rain', es:'Lluvia repentina' },
+  'Vento forte': { en:'Strong wind', es:'Viento fuerte' },
 };
 // funzione di lookup: ripiega sempre sul testo italiano originale se non trova una traduzione,
 // non lascia mai un vuoto — anche se in futuro venissero aggiunti nuovi piloti con testi non
@@ -696,7 +793,7 @@ const I18N = {
     pcard_insufficient_budget: 'Budget insufficiente', pcard_tap_buy: 'Tocca per acquistare',
     pcard_frozen: (max)=>`Budget insufficiente — nemmeno l'investimento minimo (rischio ${max}%) è alla tua portata ora.`,
     pcard_invest_cost: 'Costo', pcard_slider_hint: 'Aumentando l\'investimento riduci il rischio di fallimento',
-    pcard_if_fails: (m)=>`Se fallisce: ${m}`, pcard_more_info: 'Più info', pcard_dev_area: (a)=>`Area di sviluppo: ${a}`, log_dev_success:(n)=>`Sviluppo riuscito: ${n} — bonus diffuso a tutta la vettura.`, log_dev_failed:(n,m)=>`Sviluppo fallito: ${n}. ${m}`, log_upgrade_applied:(n,a,g)=>`Upgrade applicato: ${n} su ${a} (+${g}).`, log_scouting_downgrade:(n,c,p)=>`Scambio: ${n} sostituisce il precedente componente (${c}) — incassati ${p}.`, log_scouting_upgrade:(n,c)=>`Scouting: ${n} sostituisce il precedente componente (${c}).`, log_budget_saved:'Budget conservato per la prossima finestra di sviluppo.', log_midseason_draft_done:'Mid Season Draft concluso: la formazione piloti è confermata per il resto della stagione.',
+    pcard_if_fails: (m)=>`Se fallisce: ${m}`, pcard_more_info: 'Più info', pcard_dev_area: (a)=>`Area di sviluppo: ${a}`, log_dev_success:(n)=>`Sviluppo riuscito: ${n} — bonus diffuso a tutta la vettura.`, log_dev_failed:(n,m)=>`Sviluppo fallito: ${n}. ${m}`, log_upgrade_applied:(n,a,g)=>`Upgrade applicato: ${n} su ${a} (+${g}).`, log_scouting_downgrade:(n,c,p)=>`Scambio: ${n} sostituisce il precedente componente (${c}) — incassati ${p}.`, log_scouting_upgrade:(n,c)=>`Scouting: ${n} sostituisce il precedente componente (${c}).`, log_budget_saved:'Budget conservato per la prossima finestra di sviluppo.', log_midseason_draft_done:'Mid Season Draft concluso: la formazione piloti è confermata per il resto della stagione.', phase_start:'Partenza', phase_early:'Prima fase', phase_firststint:'Primo stint', phase_firstbox:'Prima finestra box', phase_weather:'Evoluzione meteo', phase_halfway:'Metà gara', phase_midevent:'Evento centrale', phase_secondbox:'Seconda finestra box', phase_laststint:'Ultimo stint', phase_finalattacks:'Attacchi finali', phase_penultimatelap:'Penultimo giro', phase_finallap:'Ultimo giro',
     pcard_duration: (d)=>`Durata effetto: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`Il rischio va sempre da ${max}% (investimento minimo, più economico) a ${min}% (investimento massimo, mai a zero)${hasMalus?'. In caso di fallimento potrebbe applicarsi un malus':''}.`,
     pcard_confirm_invest: 'Conferma Investimento',
     pcard_mentality: 'Mentalità', pcard_type: 'Tipologia', pcard_in_use: 'In uso ora',
@@ -716,7 +813,7 @@ const I18N = {
     pc_confirm_btn: 'Conferma', pc_cancel_btn: 'Annulla', pc_current_vs_proposed: 'Attuale vs Proposto',
     pc_current: 'ATTUALE', pc_proposed: 'PROPOSTO', pc_current_traits: 'Bonus/Malus/Abilità attuali', pc_proposed_traits: 'Bonus/Malus/Abilità proposti',
     pc_trait: 'Trait', pc_estimated_effect: 'Effetto Stimato sulla Scuderia', pc_avg_all_circuits: 'MEDIA SU TUTTI I CIRCUITI',
-    pit_rivals_plural: 'Le Tue Rivali', pit_rivals_single: 'La Tua Rivale', pit_quick_ref: 'RIFERIMENTO RAPIDO', pit_strength: 'forza',
+    pit_rivals_plural: 'Le Tue Rivali', pit_rivals_single: 'La Tua Rivale', pit_quick_ref: 'RIFERIMENTO RAPIDO', pit_strength: 'forza', pit_primary_objective: 'OBIETTIVO PRIMARIO', risk_none:'Nessun rischio', risk_low:'Rischio fallimento basso', risk_mid:'Rischio fallimento medio', risk_high:'Rischio fallimento alto',
     upg_developing: 'Sviluppo in corso…', upg_tap_skip: 'Tocca per saltare',
     upg_failed: 'Sviluppo Fallito', upg_success: 'Sviluppo Riuscito!', upg_risk_taken: (p)=>` · rischio corso: ${p}%`,
     upg_no_gain: 'Nessun guadagno questa volta.', upg_gain_global: (n)=>`+${n} RATING diffuso su tutta la vettura`,
@@ -1098,7 +1195,7 @@ const I18N = {
     pcard_insufficient_budget: 'Insufficient budget', pcard_tap_buy: 'Tap to buy',
     pcard_frozen: (max)=>`Insufficient budget — not even the minimum investment (${max}% risk) is within reach right now.`,
     pcard_invest_cost: 'Cost', pcard_slider_hint: 'Increasing the investment reduces the risk of failure',
-    pcard_if_fails: (m)=>`If it fails: ${m}`, pcard_more_info: 'More info', pcard_dev_area: (a)=>`Development area: ${a}`, log_dev_success:(n)=>`Development succeeded: ${n} — bonus applied to the whole car.`, log_dev_failed:(n,m)=>`Development failed: ${n}. ${m}`, log_upgrade_applied:(n,a,g)=>`Upgrade applied: ${n} on ${a} (+${g}).`, log_scouting_downgrade:(n,c,p)=>`Swap: ${n} replaces the previous component (${c}) — refunded ${p}.`, log_scouting_upgrade:(n,c)=>`Scouting: ${n} replaces the previous component (${c}).`, log_budget_saved:'Budget saved for the next development window.', log_midseason_draft_done:'Mid-Season Draft complete: the driver lineup is locked in for the rest of the season.',
+    pcard_if_fails: (m)=>`If it fails: ${m}`, pcard_more_info: 'More info', pcard_dev_area: (a)=>`Development area: ${a}`, log_dev_success:(n)=>`Development succeeded: ${n} — bonus applied to the whole car.`, log_dev_failed:(n,m)=>`Development failed: ${n}. ${m}`, log_upgrade_applied:(n,a,g)=>`Upgrade applied: ${n} on ${a} (+${g}).`, log_scouting_downgrade:(n,c,p)=>`Swap: ${n} replaces the previous component (${c}) — refunded ${p}.`, log_scouting_upgrade:(n,c)=>`Scouting: ${n} replaces the previous component (${c}).`, log_budget_saved:'Budget saved for the next development window.', log_midseason_draft_done:'Mid-Season Draft complete: the driver lineup is locked in for the rest of the season.', phase_start:'Start', phase_early:'Early Phase', phase_firststint:'First Stint', phase_firstbox:'First Pit Window', phase_weather:'Weather Shift', phase_halfway:'Race Halfway', phase_midevent:'Mid-Race Event', phase_secondbox:'Second Pit Window', phase_laststint:'Final Stint', phase_finalattacks:'Final Attacks', phase_penultimatelap:'Second-to-Last Lap', phase_finallap:'Final Lap',
     pcard_duration: (d)=>`Effect duration: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`Risk always ranges from ${max}% (minimum investment, cheaper) to ${min}% (maximum investment, never zero)${hasMalus?'. On failure a malus may apply':''}.`,
     pcard_confirm_invest: 'Confirm Investment',
     pcard_mentality: 'Mentality', pcard_type: 'Type', pcard_in_use: 'Currently in use',
@@ -1118,7 +1215,7 @@ const I18N = {
     pc_confirm_btn: 'Confirm', pc_cancel_btn: 'Cancel', pc_current_vs_proposed: 'Current vs Proposed',
     pc_current: 'CURRENT', pc_proposed: 'PROPOSED', pc_current_traits: 'Current Bonus/Malus/Ability', pc_proposed_traits: 'Proposed Bonus/Malus/Ability',
     pc_trait: 'Trait', pc_estimated_effect: 'Estimated Effect on Team', pc_avg_all_circuits: 'AVERAGE ACROSS ALL CIRCUITS',
-    pit_rivals_plural: 'Your Rivals', pit_rivals_single: 'Your Rival', pit_quick_ref: 'QUICK REFERENCE', pit_strength: 'strength',
+    pit_rivals_plural: 'Your Rivals', pit_rivals_single: 'Your Rival', pit_quick_ref: 'QUICK REFERENCE', pit_strength: 'strength', pit_primary_objective: 'PRIMARY OBJECTIVE', risk_none:'No risk', risk_low:'Low failure risk', risk_mid:'Medium failure risk', risk_high:'High failure risk',
     upg_developing: 'Development in progress…', upg_tap_skip: 'Tap to skip',
     upg_failed: 'Development Failed', upg_success: 'Development Succeeded!', upg_risk_taken: (p)=>` · risk taken: ${p}%`,
     upg_no_gain: 'No gain this time.', upg_gain_global: (n)=>`+${n} RATING spread across the whole car`,
@@ -1494,7 +1591,7 @@ const I18N = {
     pcard_insufficient_budget: 'Presupuesto insuficiente', pcard_tap_buy: 'Toca para comprar',
     pcard_frozen: (max)=>`Presupuesto insuficiente — ni siquiera la inversión mínima (riesgo ${max}%) está a tu alcance ahora.`,
     pcard_invest_cost: 'Coste', pcard_slider_hint: 'Aumentar la inversión reduce el riesgo de fallo',
-    pcard_if_fails: (m)=>`Si falla: ${m}`, pcard_more_info: 'Más información', pcard_dev_area: (a)=>`Área de desarrollo: ${a}`, log_dev_success:(n)=>`Desarrollo logrado: ${n} — bono aplicado a todo el monoplaza.`, log_dev_failed:(n,m)=>`Desarrollo fallido: ${n}. ${m}`, log_upgrade_applied:(n,a,g)=>`Mejora aplicada: ${n} en ${a} (+${g}).`, log_scouting_downgrade:(n,c,p)=>`Cambio: ${n} sustituye al componente anterior (${c}) — reembolsado ${p}.`, log_scouting_upgrade:(n,c)=>`Scouting: ${n} sustituye al componente anterior (${c}).`, log_budget_saved:'Presupuesto conservado para la próxima ventana de desarrollo.', log_midseason_draft_done:'Mid Season Draft completado: la alineación de pilotos queda confirmada para el resto de la temporada.',
+    pcard_if_fails: (m)=>`Si falla: ${m}`, pcard_more_info: 'Más información', pcard_dev_area: (a)=>`Área de desarrollo: ${a}`, log_dev_success:(n)=>`Desarrollo logrado: ${n} — bono aplicado a todo el monoplaza.`, log_dev_failed:(n,m)=>`Desarrollo fallido: ${n}. ${m}`, log_upgrade_applied:(n,a,g)=>`Mejora aplicada: ${n} en ${a} (+${g}).`, log_scouting_downgrade:(n,c,p)=>`Cambio: ${n} sustituye al componente anterior (${c}) — reembolsado ${p}.`, log_scouting_upgrade:(n,c)=>`Scouting: ${n} sustituye al componente anterior (${c}).`, log_budget_saved:'Presupuesto conservado para la próxima ventana de desarrollo.', log_midseason_draft_done:'Mid Season Draft completado: la alineación de pilotos queda confirmada para el resto de la temporada.', phase_start:'Salida', phase_early:'Primera fase', phase_firststint:'Primer stint', phase_firstbox:'Primera ventana de boxes', phase_weather:'Cambio de clima', phase_halfway:'Mitad de carrera', phase_midevent:'Evento central', phase_secondbox:'Segunda ventana de boxes', phase_laststint:'Último stint', phase_finalattacks:'Ataques finales', phase_penultimatelap:'Penúltima vuelta', phase_finallap:'Última vuelta',
     pcard_duration: (d)=>`Duración del efecto: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`El riesgo siempre va del ${max}% (inversión mínima, más económica) al ${min}% (inversión máxima, nunca cero)${hasMalus?'. Si falla podría aplicarse un malus':''}.`,
     pcard_confirm_invest: 'Confirmar Inversión',
     pcard_mentality: 'Mentalidad', pcard_type: 'Tipología', pcard_in_use: 'En uso ahora',
@@ -1514,7 +1611,7 @@ const I18N = {
     pc_confirm_btn: 'Confirmar', pc_cancel_btn: 'Cancelar', pc_current_vs_proposed: 'Actual vs Propuesto',
     pc_current: 'ACTUAL', pc_proposed: 'PROPUESTO', pc_current_traits: 'Bonus/Malus/Habilidad actuales', pc_proposed_traits: 'Bonus/Malus/Habilidad propuestos',
     pc_trait: 'Rasgo', pc_estimated_effect: 'Efecto Estimado en la Escudería', pc_avg_all_circuits: 'MEDIA EN TODOS LOS CIRCUITOS',
-    pit_rivals_plural: 'Tus Rivales', pit_rivals_single: 'Tu Rival', pit_quick_ref: 'REFERENCIA RÁPIDA', pit_strength: 'fuerza',
+    pit_rivals_plural: 'Tus Rivales', pit_rivals_single: 'Tu Rival', pit_quick_ref: 'REFERENCIA RÁPIDA', pit_strength: 'fuerza', pit_primary_objective: 'OBJETIVO PRIMARIO', risk_none:'Sin riesgo', risk_low:'Riesgo de fallo bajo', risk_mid:'Riesgo de fallo medio', risk_high:'Riesgo de fallo alto',
     upg_developing: 'Desarrollo en curso…', upg_tap_skip: 'Toca para saltar',
     upg_failed: 'Desarrollo Fallido', upg_success: '¡Desarrollo Conseguido!', upg_risk_taken: (p)=>` · riesgo asumido: ${p}%`,
     upg_no_gain: 'Sin ganancia esta vez.', upg_gain_global: (n)=>`+${n} RATING repartido en todo el coche`,
@@ -3915,7 +4012,7 @@ function renderDriverHub(){
     <div>
       <div class="eyebrow">${t('hub_next_gp')}</div>
       <h2 class="hdr" style="font-size:24px;">${flag(circuit.paese)} ${circuit.nome}</h2>
-      <div class="dim" style="font-size:15px;margin-top:4px;">${nationLabel(circuit.paese)} · ${circuit.tipo} · ${t('hub_weather')} ${circuit.clima}</div>
+      <div class="dim" style="font-size:15px;margin-top:4px;">${nationLabel(circuit.paese)} · ${td(circuit.tipo)} · ${t('hub_weather')} ${td(circuit.clima)}</div>
     </div>
   </div>
   <div class="btnrow"><button class="primary" data-action="run-race">${t('hub_go_to_gp')}</button></div>
@@ -5072,18 +5169,18 @@ function teamDisplayName(){
    simulazione: qui ci limitiamo a mostrarlo un passo alla volta.
    ============================================================ */
 const PHASES = [
-  { name:'Partenza',              pct:0.00 },
-  { name:'Prima fase',            pct:0.10 },
-  { name:'Primo stint',           pct:0.20 },
-  { name:'Prima finestra box',    pct:0.30 },
-  { name:'Evoluzione meteo',      pct:0.40 },
-  { name:'Metà gara',             pct:0.50 },
-  { name:'Evento centrale',       pct:0.60 },
-  { name:'Seconda finestra box',  pct:0.70 },
-  { name:'Ultimo stint',          pct:0.80 },
-  { name:'Attacchi finali',       pct:0.90 },
-  { name:'Penultimo giro',        pct:null }, // = penultimo giro reale
-  { name:'Ultimo giro',           pct:null }  // = ultimo giro reale
+  { name:'phase_start',              pct:0.00 },
+  { name:'phase_early',              pct:0.10 },
+  { name:'phase_firststint',         pct:0.20 },
+  { name:'phase_firstbox',           pct:0.30 },
+  { name:'phase_weather',            pct:0.40 },
+  { name:'phase_halfway',            pct:0.50 },
+  { name:'phase_midevent',           pct:0.60 },
+  { name:'phase_secondbox',          pct:0.70 },
+  { name:'phase_laststint',          pct:0.80 },
+  { name:'phase_finalattacks',       pct:0.90 },
+  { name:'phase_penultimatelap',     pct:null }, // = penultimo giro reale
+  { name:'phase_finallap',           pct:null }  // = ultimo giro reale
 ];
 
 // Le 12 fasi rappresentano percentuali della gara (V0.5.1): si adattano proporzionalmente
@@ -7264,7 +7361,7 @@ function renderRaceLiveInit(){
   <div id="liveDecisionFx">${liveDecisionHTML()}</div>
   <div class="live-sticky-header">
   <div class="topbar">
-    <div class="brand hdr">${flag(timeline.circuit.paese)} ${timeline.circuit.nome}<small id="livePhaseName">${phase.name}</small></div>
+    <div class="brand hdr">${flag(timeline.circuit.paese)} ${timeline.circuit.nome}<small id="livePhaseName">${t(phase.name)}</small></div>
     <div class="hud">
       <div class="hud-item"><div class="hud-label">Leader</div><div class="hud-value cyan" id="liveLeader">${shortName(leader.driverName)}</div></div>
       <div class="hud-item"><div class="hud-label">Meteo</div><div class="hud-value" id="liveWeather">${state.live.weather}</div></div>
@@ -7288,7 +7385,7 @@ function renderRaceLiveInit(){
     </div>
     <div class="panel live-log-panel">
       <div class="panel-title"><h3 class="hdr">${window.t('live_log_title')}</h3></div>
-      <div class="dim" style="font-size:12px;margin-bottom:8px;">${nationLabel(timeline.circuit.paese)} · ${timeline.circuit.tipo} · ${window.t('hub_dominant_component')}: ${displayArea(timeline.circuit.componentedominante)}</div>
+      <div class="dim" style="font-size:12px;margin-bottom:8px;">${nationLabel(timeline.circuit.paese)} · ${td(timeline.circuit.tipo)} · ${window.t('hub_dominant_component')}: ${displayArea(timeline.circuit.componentedominante)}</div>
       <div class="live-log" id="liveLog">${logHTML}</div>
     </div>
   </div>
@@ -7342,7 +7439,7 @@ function updateLiveBoard(){
     }
   });
 
-  document.getElementById('livePhaseName').textContent = phase.name;
+  document.getElementById('livePhaseName').textContent = t(phase.name);
   document.getElementById('livePhaseNum').textContent = timeline.lapNumbers[safeIdx]+'/'+timeline.totalGiri;
   document.getElementById('liveLeader').textContent = shortName(leader.driverName);
 
@@ -7827,17 +7924,17 @@ function applyUpgrade(upg, investT){
       ['motore','telaio','aero','gomme','stratega'].forEach(k=>{
         state.team[k].rating = clamp(state.team[k].rating + upg.guadagno, 1, 100);
       });
-      state.log.unshift({type:'pos', text:t('log_dev_success', upg.nome)});
+      state.log.unshift({type:'pos', text:t('log_dev_success', td(upg.nome))});
     } else {
-      state.log.unshift({type:'neg', text:t('log_dev_failed', upg.nome, td(upg.malus))});
+      state.log.unshift({type:'neg', text:t('log_dev_failed', td(upg.nome), td(upg.malus))});
     }
   } else {
     const key = areaMap[upg.area];
     if(key && !failed){
       state.team[key].rating = clamp(state.team[key].rating + upg.guadagno, 1, 100);
-      state.log.unshift({type:'pos', text:t('log_upgrade_applied', upg.nome, areaLabel, upg.guadagno)});
+      state.log.unshift({type:'pos', text:t('log_upgrade_applied', td(upg.nome), areaLabel, upg.guadagno)});
     } else if(key){
-      state.log.unshift({type:'neg', text:t('log_dev_failed', upg.nome, td(upg.malus))});
+      state.log.unshift({type:'neg', text:t('log_dev_failed', td(upg.nome), td(upg.malus))});
     }
   }
 
@@ -8803,11 +8900,11 @@ function pregaraSharedComponentsHTML(comp, overrideTeam){
     <div class="panel-title"><h3 class="hdr">${t('hub_shared_components_title')}</h3><span class="dim mono" style="font-size:10px;">${t('hub_shared_components_sub')}</span></div>
     <div class="pregara-shared-body">
       <div class="pregara-legend">
-        ${pregaraLegendRow('MOTORE', comp.motore)}
-        ${pregaraLegendRow('TELAIO', comp.telaio)}
-        ${pregaraLegendRow('AERODINAMICA', comp.aero)}
-        ${pregaraLegendRow('GOMME', comp.gomme)}
-        ${pregaraLegendRow('TEAM PRINCIPAL', comp.stratega)}
+        ${pregaraLegendRow(componentLabel('motore').toUpperCase(), comp.motore)}
+        ${pregaraLegendRow(componentLabel('telaio').toUpperCase(), comp.telaio)}
+        ${pregaraLegendRow(componentLabel('aero').toUpperCase(), comp.aero)}
+        ${pregaraLegendRow(componentLabel('gomme').toUpperCase(), comp.gomme)}
+        ${pregaraLegendRow(componentLabel('stratega').toUpperCase(), comp.stratega)}
       </div>
       <div class="car-bulb" title="Team Principal: ${comp.stratega.nome} — ${comp.stratega.rating} RATING">
         ${lightbulbSVG(stratColor)}
@@ -11639,7 +11736,7 @@ function rivalPanelHTML(){
   }).join('');
   return `
   <div class="panel">
-    <div class="panel-title"><h3 class="hdr">${state.rivals.length>1?'Le Tue Rivali':'La Tua Rivale'}</h3><span class="dim mono" style="font-size:10px;">OBIETTIVO PRIMARIO</span></div>
+    <div class="panel-title"><h3 class="hdr">${state.rivals.length>1?t('pit_rivals_plural'):t('pit_rivals_single')}</h3><span class="dim mono" style="font-size:10px;">${t('pit_primary_objective')}</span></div>
     ${rows}
   </div>`;
 }
@@ -11839,15 +11936,15 @@ function renderHub(){
     <div>
       <div class="eyebrow">${window.t('hub_next_gp')}</div>
       <h2 class="hdr" style="font-size:26px;">${flag(circuit.paese)} ${circuit.nome} ${circuitStatusBadgeHTML(circuit.nome)}</h2>
-      <div class="dim" style="font-size:13px;margin-top:4px;">${nationLabel(circuit.paese)} · ${circuit.tipo} · ${circuit.lunghezza}km/giro · ${circuit.giri} giri · ${(circuit.lunghezza*circuit.giri).toFixed(0)}km totali · ${window.t('hub_weather')} ${circuit.clima}</div>
-      <div style="margin-top:8px;font-size:12px;" class="dim">${window.t('hub_dominant_component')}: <b style="color:var(--cyan);">${displayArea(circuit.componentedominante)}</b> · ${window.t('hub_special_event')}: ${circuit.eventospeciale}</div>
+      <div class="dim" style="font-size:13px;margin-top:4px;">${nationLabel(circuit.paese)} · ${td(circuit.tipo)} · ${circuit.lunghezza}km/giro · ${circuit.giri} giri · ${(circuit.lunghezza*circuit.giri).toFixed(0)}km totali · ${window.t('hub_weather')} ${td(circuit.clima)}</div>
+      <div style="margin-top:8px;font-size:12px;" class="dim">${window.t('hub_dominant_component')}: <b style="color:var(--cyan);">${displayArea(circuit.componentedominante)}</b> · ${window.t('hub_special_event')}: ${td(circuit.eventospeciale)}</div>
       <div style="margin-top:6px;font-size:12px;" class="dim">${window.t('compat_label')}: ${circuitCompatBadgeHTML(circuit)}</div>
     </div>
     <div class="circuit-stats">
       <div class="cstat"><div class="n">${EMOJI_RAIN} ${circuit.probpioggia}%</div><div class="l">${window.t('hub_rain')}</div></div>
       <div class="cstat"><div class="n">${EMOJI_SAFETYCAR} ${circuit.probsc}%</div><div class="l">${window.t('hub_safety_car')}</div></div>
       <div class="cstat"><div class="n">${EMOJI_OVERTAKE} ${circuit.sorpassabilita}</div><div class="l">${window.t('hub_overtake')}</div></div>
-      <div class="cstat"><div class="n">${EMOJI_TIRE} ${circuit.degrado}</div><div class="l">${window.t('hub_degradation')}</div></div>
+      <div class="cstat"><div class="n">${EMOJI_TIRE} ${td(circuit.degrado)}</div><div class="l">${window.t('hub_degradation')}</div></div>
     </div>
   </div>
   <div class="hub-quick-stats">
@@ -12207,10 +12304,10 @@ function upgradeTargetInfo(u){
 }
 
 function riskLevel(prob){
-  if(prob===0) return { label:'Nessun rischio', cls:'risk-none' };
-  if(prob<=15) return { label:'Rischio fallimento basso', cls:'risk-low' };
-  if(prob<=35) return { label:'Rischio fallimento medio', cls:'risk-mid' };
-  return { label:'Rischio fallimento alto', cls:'risk-high' };
+  if(prob===0) return { label:t('risk_none'), cls:'risk-none' };
+  if(prob<=15) return { label:t('risk_low'), cls:'risk-low' };
+  if(prob<=35) return { label:t('risk_mid'), cls:'risk-mid' };
+  return { label:t('risk_high'), cls:'risk-high' };
 }
 
 // V0.9.4.5: prezzo dello scambio scouting — proporzionale alla DIFFERENZA di rating tra quello che
@@ -12285,7 +12382,7 @@ function pitlaneCardHTML(node, idx){
         ${topBanner}
         <div class="tag-line dim" style="text-transform:uppercase;letter-spacing:0.06em;font-size:9.5px;">${typeLabel}</div>
         <span class="rarity-tag" data-rarity="${rarityLike}">${u.tier}</span>
-        <div class="card-name">${u.nome}</div>
+        <div class="card-name">${td(u.nome)}</div>
         <div class="dev-target"><span class="dev-area">${info.label}</span><span class="dev-change mono">${info.change}</span></div>
         <div class="dev-meta">${costHTML}<span class="dev-risk risk-none">${t('pcard_no_risk')}</span></div>
         ${discountBanner}
@@ -12308,7 +12405,7 @@ function pitlaneCardHTML(node, idx){
       ${topBanner}
       <div class="tag-line dim" style="text-transform:uppercase;letter-spacing:0.06em;font-size:9.5px;">${typeLabel}</div>
       <span class="rarity-tag" data-rarity="${rarityLike}">${u.tier}</span>
-      <div class="card-name">${u.nome}</div>
+      <div class="card-name">${td(u.nome)}</div>
       <div class="dev-target">
         <span class="dev-area">${info.label}</span>
         <span class="dev-change mono">${info.change}</span>
@@ -12552,7 +12649,7 @@ function renderUpgradeSuspense(){
       <div class="suspense-cell"></div><div class="suspense-cell"></div>
     </div>
     <div class="suspense-title">${t('upg_developing')}</div>
-    <div class="suspense-sub dim">${u.nome}</div>
+    <div class="suspense-sub dim">${td(u.nome)}</div>
     <div class="dim" style="font-size:11px;margin-top:18px;">${t('upg_tap_skip')}</div>
   </div>
   `;
@@ -12573,7 +12670,7 @@ function renderUpgradeResult(){
     ${watermark}
     <div class="result-icon">${icon}</div>
     <div class="suspense-title">${title}</div>
-    <div class="suspense-sub dim">${u.nome}${u.riskPct!==undefined?t('upg_risk_taken', u.riskPct):''}</div>
+    <div class="suspense-sub dim">${td(u.nome)}${u.riskPct!==undefined?t('upg_risk_taken', u.riskPct):''}</div>
     ${u.failed
       ? `<div class="tag-line malus" style="margin-top:10px;font-size:13px;">${u.malus || t('upg_no_gain')}</div>`
       : `<div class="tag-line bonus" style="margin-top:10px;font-size:13px;">${u.area==='Globale' ? t('upg_gain_global', u.guadagno) : t('upg_gain_area', u.guadagno, displayAreaForUpgrade(u))}</div>`}
@@ -12592,7 +12689,7 @@ function upcomingCircuitsHTML(){
     return `<div class="upcoming-row ${isNext?'next':''}">
       <span class="mono dim" style="min-width:56px;">${isNext?t('upcoming_next'):t('upcoming_race', state.raceIndex+1+i)}</span>
       <span class="upcoming-name">${flag(c.paese)} ${c.nome}</span>
-      <span class="dim" style="font-size:11px;">${c.tipo}</span>
+      <span class="dim" style="font-size:11px;">${td(c.tipo)}</span>
       <span class="upcoming-dom" style="color:var(--cyan);">${displayArea(c.componentedominante)}</span>
     </div>`;
   }).join('');
