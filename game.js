@@ -696,7 +696,7 @@ const I18N = {
     pcard_insufficient_budget: 'Budget insufficiente', pcard_tap_buy: 'Tocca per acquistare',
     pcard_frozen: (max)=>`Budget insufficiente — nemmeno l'investimento minimo (rischio ${max}%) è alla tua portata ora.`,
     pcard_invest_cost: 'Costo', pcard_slider_hint: 'Aumentando l\'investimento riduci il rischio di fallimento',
-    pcard_if_fails: (m)=>`Se fallisce: ${m}`, pcard_more_info: 'Più info', pcard_dev_area: (a)=>`Area di sviluppo: ${a}`,
+    pcard_if_fails: (m)=>`Se fallisce: ${m}`, pcard_more_info: 'Più info', pcard_dev_area: (a)=>`Area di sviluppo: ${a}`, log_dev_success:(n)=>`Sviluppo riuscito: ${n} — bonus diffuso a tutta la vettura.`, log_dev_failed:(n,m)=>`Sviluppo fallito: ${n}. ${m}`, log_upgrade_applied:(n,a,g)=>`Upgrade applicato: ${n} su ${a} (+${g}).`, log_scouting_downgrade:(n,c,p)=>`Scambio: ${n} sostituisce il precedente componente (${c}) — incassati ${p}.`, log_scouting_upgrade:(n,c)=>`Scouting: ${n} sostituisce il precedente componente (${c}).`, log_budget_saved:'Budget conservato per la prossima finestra di sviluppo.', log_midseason_draft_done:'Mid Season Draft concluso: la formazione piloti è confermata per il resto della stagione.',
     pcard_duration: (d)=>`Durata effetto: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`Il rischio va sempre da ${max}% (investimento minimo, più economico) a ${min}% (investimento massimo, mai a zero)${hasMalus?'. In caso di fallimento potrebbe applicarsi un malus':''}.`,
     pcard_confirm_invest: 'Conferma Investimento',
     pcard_mentality: 'Mentalità', pcard_type: 'Tipologia', pcard_in_use: 'In uso ora',
@@ -1098,7 +1098,7 @@ const I18N = {
     pcard_insufficient_budget: 'Insufficient budget', pcard_tap_buy: 'Tap to buy',
     pcard_frozen: (max)=>`Insufficient budget — not even the minimum investment (${max}% risk) is within reach right now.`,
     pcard_invest_cost: 'Cost', pcard_slider_hint: 'Increasing the investment reduces the risk of failure',
-    pcard_if_fails: (m)=>`If it fails: ${m}`, pcard_more_info: 'More info', pcard_dev_area: (a)=>`Development area: ${a}`,
+    pcard_if_fails: (m)=>`If it fails: ${m}`, pcard_more_info: 'More info', pcard_dev_area: (a)=>`Development area: ${a}`, log_dev_success:(n)=>`Development succeeded: ${n} — bonus applied to the whole car.`, log_dev_failed:(n,m)=>`Development failed: ${n}. ${m}`, log_upgrade_applied:(n,a,g)=>`Upgrade applied: ${n} on ${a} (+${g}).`, log_scouting_downgrade:(n,c,p)=>`Swap: ${n} replaces the previous component (${c}) — refunded ${p}.`, log_scouting_upgrade:(n,c)=>`Scouting: ${n} replaces the previous component (${c}).`, log_budget_saved:'Budget saved for the next development window.', log_midseason_draft_done:'Mid-Season Draft complete: the driver lineup is locked in for the rest of the season.',
     pcard_duration: (d)=>`Effect duration: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`Risk always ranges from ${max}% (minimum investment, cheaper) to ${min}% (maximum investment, never zero)${hasMalus?'. On failure a malus may apply':''}.`,
     pcard_confirm_invest: 'Confirm Investment',
     pcard_mentality: 'Mentality', pcard_type: 'Type', pcard_in_use: 'Currently in use',
@@ -1494,7 +1494,7 @@ const I18N = {
     pcard_insufficient_budget: 'Presupuesto insuficiente', pcard_tap_buy: 'Toca para comprar',
     pcard_frozen: (max)=>`Presupuesto insuficiente — ni siquiera la inversión mínima (riesgo ${max}%) está a tu alcance ahora.`,
     pcard_invest_cost: 'Coste', pcard_slider_hint: 'Aumentar la inversión reduce el riesgo de fallo',
-    pcard_if_fails: (m)=>`Si falla: ${m}`, pcard_more_info: 'Más información', pcard_dev_area: (a)=>`Área de desarrollo: ${a}`,
+    pcard_if_fails: (m)=>`Si falla: ${m}`, pcard_more_info: 'Más información', pcard_dev_area: (a)=>`Área de desarrollo: ${a}`, log_dev_success:(n)=>`Desarrollo logrado: ${n} — bono aplicado a todo el monoplaza.`, log_dev_failed:(n,m)=>`Desarrollo fallido: ${n}. ${m}`, log_upgrade_applied:(n,a,g)=>`Mejora aplicada: ${n} en ${a} (+${g}).`, log_scouting_downgrade:(n,c,p)=>`Cambio: ${n} sustituye al componente anterior (${c}) — reembolsado ${p}.`, log_scouting_upgrade:(n,c)=>`Scouting: ${n} sustituye al componente anterior (${c}).`, log_budget_saved:'Presupuesto conservado para la próxima ventana de desarrollo.', log_midseason_draft_done:'Mid Season Draft completado: la alineación de pilotos queda confirmada para el resto de la temporada.',
     pcard_duration: (d)=>`Duración del efecto: ${d}`, pcard_risk_range: (min,max,hasMalus)=>`El riesgo siempre va del ${max}% (inversión mínima, más económica) al ${min}% (inversión máxima, nunca cero)${hasMalus?'. Si falla podría aplicarse un malus':''}.`,
     pcard_confirm_invest: 'Confirmar Inversión',
     pcard_mentality: 'Mentalidad', pcard_type: 'Tipología', pcard_in_use: 'En uso ahora',
@@ -2351,9 +2351,17 @@ const RATING_BANDS = [
   { min:100,max:100, p:0.0005 }  // Immortal
 ];
 
-const COMPONENT_LABEL = {
-  motore:'Motore', telaio:'Telaio', aero:'Aerodinamica', gomme:'Gomme', stratega:'Team Principal', pilotSecond:'Secondo Pilota'
+// V0.9.9.217: BUG CORRETTO — COMPONENT_LABEL era fissa in italiano, usata nei messaggi di log e
+// nel Museo. Sostituita con una funzione che traduce a runtime, riusando le chiavi già esistenti
+// in tutte e 3 le lingue (comp_engine/comp_chassis/ecc., già usate altrove nell'interfaccia).
+const COMPONENT_LABEL_KEYS = {
+  motore:'comp_engine', telaio:'comp_chassis', aero:'comp_aero', gomme:'comp_tires',
+  stratega:'comp_strategist', pilotSecond:'comp_driver2'
 };
+function componentLabel(catKey){
+  const chiave = COMPONENT_LABEL_KEYS[catKey];
+  return chiave ? t(chiave) : catKey;
+}
 
 /* ---------------- V0.6: confronto sostituzioni ---------------- */
 // Statistiche confrontate per categoria (spec 0.6, punti 3/4/5) — 'rating' sempre incluso.
@@ -7819,17 +7827,17 @@ function applyUpgrade(upg, investT){
       ['motore','telaio','aero','gomme','stratega'].forEach(k=>{
         state.team[k].rating = clamp(state.team[k].rating + upg.guadagno, 1, 100);
       });
-      state.log.unshift({type:'pos', text:`Sviluppo riuscito: ${upg.nome} — bonus diffuso a tutta la vettura.`});
+      state.log.unshift({type:'pos', text:t('log_dev_success', upg.nome)});
     } else {
-      state.log.unshift({type:'neg', text:`Sviluppo fallito: ${upg.nome}. ${td(upg.malus)}`});
+      state.log.unshift({type:'neg', text:t('log_dev_failed', upg.nome, td(upg.malus))});
     }
   } else {
     const key = areaMap[upg.area];
     if(key && !failed){
       state.team[key].rating = clamp(state.team[key].rating + upg.guadagno, 1, 100);
-      state.log.unshift({type:'pos', text:`Upgrade applicato: ${upg.nome} su ${areaLabel} (+${upg.guadagno}).`});
+      state.log.unshift({type:'pos', text:t('log_upgrade_applied', upg.nome, areaLabel, upg.guadagno)});
     } else if(key){
-      state.log.unshift({type:'neg', text:`Sviluppo fallito: ${upg.nome}. ${td(upg.malus)}`});
+      state.log.unshift({type:'neg', text:t('log_dev_failed', upg.nome, td(upg.malus))});
     }
   }
 
@@ -7922,8 +7930,8 @@ function applyScout(catKey, chosenId, options){
   }
 
   state.log.unshift({type: isDowngrade?'pos':'neu', text:isDowngrade
-    ? `Scambio: ${chosen.nome} sostituisce il precedente componente (${COMPONENT_LABEL[catKey]||catKey}) — incassati ${fmtM(-price)}.`
-    : `Scouting: ${chosen.nome} sostituisce il precedente componente (${COMPONENT_LABEL[catKey]||catKey}).`});
+    ? t('log_scouting_downgrade', chosen.nome, componentLabel(catKey), fmtM(-price))
+    : t('log_scouting_upgrade', chosen.nome, componentLabel(catKey))});
 
   if(isDowngrade){
     // il turno NON si chiude: torniamo alla pit-lane con le stesse offerte, il giocatore puo' continuare
@@ -7934,7 +7942,7 @@ function applyScout(catKey, chosenId, options){
 }
 
 function skipPitlane(){
-  state.log.unshift({type:'neu', text:'Budget conservato per la prossima finestra di sviluppo.'});
+  state.log.unshift({type:'neu', text:t('log_budget_saved')});
   advanceAfterPitlane();
 }
 
@@ -8321,7 +8329,7 @@ function goToPitlaneOrEnd(){
 function skipMidseasonSwap(){
   state.midSeasonSwapDone = true;
   if(state.midSeasonSwappedCats && state.midSeasonSwappedCats.size>=2) unlockAchievement('rivoluzione-a-meta-stagione'); // V0.9.7.9
-  state.log.unshift({type:'neu', text:'Mid Season Draft concluso: la formazione piloti è confermata per il resto della stagione.'});
+  state.log.unshift({type:'neu', text:t('log_midseason_draft_done')});
   advanceAfterPitlane();
 }
 
@@ -11735,8 +11743,8 @@ function semaforoHalfHTML(slot){
   if(!slot) return `<div class="sem-half" style="background:rgba(255,255,255,0.06);"></div>`;
   const m = MENTALITA_DEFS[slot.mentId];
   const isPilot = slot.catKey==='pilotMain' || slot.catKey==='pilotSecond';
-  const kindLabel = isPilot ? 'Mentalità' : 'Tipologia';
-  return `<div class="sem-half" style="background:${m.color};" title="${slot.roleLabel} (${slot.item.nome}) · ${kindLabel}: ${m.label}"></div>`;
+  const kindLabel = isPilot ? t('comp_mentality') : t('comp_typology');
+  return `<div class="sem-half" style="background:${m.color};" title="${slot.roleLabel} (${slot.item.nome}) · ${kindLabel}: ${mentaLabel(slot.mentId)}"></div>`;
 }
 
 // V0.9.9.44: bug segnalato da Gio — mostrava sempre la sinergia del GIOCATORE anche quando si
@@ -12700,7 +12708,7 @@ function showTrophyDetail(circuitName, isDriverSource){
 function museumCardHTML(item, isPilot){
   return `<div class="museum-card">
     <div class="museum-card-name">${isPilot && item.naz? flag(item.naz)+' ':''}${item.nome}</div>
-    <div class="museum-card-arch">${item.arch||''}${!isPilot && item.catKey? ' · '+(COMPONENT_LABEL[item.catKey]||item.catKey):''}</div>
+    <div class="museum-card-arch">${item.arch||''}${!isPilot && item.catKey? ' · '+componentLabel(item.catKey):''}</div>
     <div class="museum-card-rating">${item.rating}</div>
   </div>`;
 }
