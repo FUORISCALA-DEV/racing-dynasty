@@ -5508,7 +5508,7 @@ function handlePedalKeyUp(e){
   const slot = pedalKeyMap()[e.key];
   if(!slot) return;
   e.preventDefault();
-  pedalRelease(slot);
+  pedalRelease(slot, e.timeStamp);
 }
 function attachPedalInputListeners(){
   document.addEventListener('keydown', handlePedalKeyDown);
@@ -5538,7 +5538,17 @@ function pedalPress(slotKey){
     render();
   }
 }
-function pedalRelease(slotKey){
+// V0.9.9.219: BUG CORRETTO — segnalato da Gio su iPhone: "tengo premuto fino allo spegnimento
+// semafori, rilascio al momento giusto ma mi dà partenza troppo tardiva; se rilascio e ripremo
+// velocemente riesco a fare partenza perfetta". CAUSA: il tempo di rilascio veniva letto con
+// performance.now() chiamato DENTRO il gestore dell'evento touch — se il thread JS è occupato
+// proprio in quel momento (luci che si spengono, suono che parte, tutto insieme), l'evento touch
+// arriva comunque puntuale al sistema operativo, ma il codice che lo elabora può partire con un
+// ritardo di qualche decina di millisecondi, facendo risultare "in ritardo" un rilascio che era
+// in realtà perfetto. CORRETTO leggendo il timestamp VERO dell'evento (e.timeStamp, registrato
+// dal sistema operativo al momento del tocco fisico) invece di misurare il tempo dopo che il
+// codice è riuscito a girare.
+function pedalRelease(slotKey, timestampEvento){
   const sl = state.startLights;
   if(!sl) return;
   const p = sl.pedals[slotKey];
@@ -5555,7 +5565,11 @@ function pedalRelease(slotKey){
   if(!sl.off){
     p.shift = -3; // rilasciato PRIMA dello spegnimento: falsa partenza
   } else {
-    const delta = performance.now() - sl.offAt;
+    // timestampEvento e sl.offAt sono entrambi DOMHighResTimeStamp sulla stessa origine (da
+    // navigazione) — confrontabili direttamente. Ripiego su performance.now() se per qualche
+    // motivo l'evento non lo fornisse (non dovrebbe succedere, ma meglio essere difensivi).
+    const ora = (typeof timestampEvento === 'number' && timestampEvento > 0) ? timestampEvento : performance.now();
+    const delta = ora - sl.offAt;
     p.shift = pedalReleaseShift(delta);
   }
   render();
@@ -5734,7 +5748,7 @@ function renderStartLights(){
     // se è stato IL MOUSE a iniziare questa pressione specifica.
     let premutoDalMouse = false;
     const start = (e)=>{ e.preventDefault(); premutoDalMouse = true; pedalPress(slotKey); };
-    const end = (e)=>{ e.preventDefault(); premutoDalMouse = false; pedalRelease(slotKey); };
+    const end = (e)=>{ e.preventDefault(); premutoDalMouse = false; pedalRelease(slotKey, e.timeStamp); };
     el.addEventListener('touchstart', start, { passive:false });
     el.addEventListener('touchend', end);
     el.addEventListener('touchcancel', end);
