@@ -7392,7 +7392,7 @@ function renderRaceLiveInit(){
   <div id="liveDecisionFx">${liveDecisionHTML()}</div>
   <div class="live-sticky-header">
   <div class="topbar">
-    <div class="brand hdr">${flag(timeline.circuit.paese)} ${timeline.circuit.nome}<small id="livePhaseName">${t(phase.name)}</small></div>
+    <div class="brand hdr">${flag(timeline.circuit.paese)} ${timeline.circuit.nome}<small id="livePhaseName">${window.t(phase.name)}</small></div>
     <div class="hud">
       <div class="hud-item"><div class="hud-label">Leader</div><div class="hud-value cyan" id="liveLeader">${shortName(leader.driverName)}</div></div>
       <div class="hud-item"><div class="hud-label">Meteo</div><div class="hud-value" id="liveWeather">${state.live.weather}</div></div>
@@ -7470,7 +7470,7 @@ function updateLiveBoard(){
     }
   });
 
-  document.getElementById('livePhaseName').textContent = t(phase.name);
+  document.getElementById('livePhaseName').textContent = window.t(phase.name);
   document.getElementById('livePhaseNum').textContent = timeline.lapNumbers[safeIdx]+'/'+timeline.totalGiri;
   document.getElementById('liveLeader').textContent = shortName(leader.driverName);
 
