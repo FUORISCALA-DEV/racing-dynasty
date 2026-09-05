@@ -762,7 +762,7 @@ const I18N = {
     dc_done_title: 'Pilota creato', dc_done_subtitle: 'Punto 2 completato — da qui in poi serve l\'Hub vero (punto 3).',
     dc_done_world_info: (n)=>`Il mondo delle 30 scuderie è pronto: ${n} in Kart, 10 in Serie Minore, 10 in Serie Elite, ognuna con una storia simulata alle spalle.`,
     dc_done_footer: 'Schermata temporanea di verifica — non ancora giocabile oltre questo punto.',
-    sl_go_msg: 'VIA!!', sl_ready_msg: 'Pronti...', sl_lighting_msg: 'Si accendono le luci…', sl_waiting_msg: 'Tieni premuto per partire', sl_skip_btn: 'Salta →', sl_skip_reveal_title: 'Partenza in corso…',
+    sl_go_msg: 'VIA!!', sl_ready_msg: 'Pronti...', sl_lighting_msg: 'Si accendono le luci…', sl_waiting_msg: 'Tieni premuto per partire', sl_skip_btn: 'Salta →', sl_skip_reveal_title: 'Partenza in corso…', race_sim_error_title: 'Qualcosa è andato storto', race_sim_error_desc: 'Non siamo riusciti ad avviare la simulazione della gara. Il tuo progresso è salvo — riprova pure.', race_sim_error_retry: 'Torna al garage e riprova',
     pedal_idle_hint_single: 'Tieni premuto SPAZIO e rilascialo allo spegnimento dei semafori', pedal_idle_hint_double: 'Premi i paddle A e D e rilasciali allo spegnimento dei semafori',
     menu_exit_fullscreen: 'Esci da Schermo Intero',
     draft_founding: 'Fondazione scuderia',
@@ -1164,7 +1164,7 @@ const I18N = {
     dc_done_title: 'Driver created', dc_done_subtitle: "Step 2 complete — from here on the real Hub (step 3) is needed.",
     dc_done_world_info: (n)=>`The world of 30 teams is ready: ${n} in Kart, 10 in Minor Series, 10 in Elite Series, each with a simulated history behind it.`,
     dc_done_footer: 'Temporary verification screen — not yet playable beyond this point.',
-    sl_go_msg: 'GO!!', sl_ready_msg: 'Ready...', sl_lighting_msg: 'Lights coming on…', sl_waiting_msg: 'Hold down to start', sl_skip_btn: 'Skip →', sl_skip_reveal_title: 'Starting…',
+    sl_go_msg: 'GO!!', sl_ready_msg: 'Ready...', sl_lighting_msg: 'Lights coming on…', sl_waiting_msg: 'Hold down to start', sl_skip_btn: 'Skip →', sl_skip_reveal_title: 'Starting…', race_sim_error_title: 'Something went wrong', race_sim_error_desc: "We couldn't start the race simulation. Your progress is safe — feel free to try again.", race_sim_error_retry: 'Back to the garage and retry',
     pedal_idle_hint_single: 'Hold SPACE and release it when the lights go out', pedal_idle_hint_double: 'Press paddles A and D and release them when the lights go out',
     menu_exit_fullscreen: 'Exit Fullscreen',
     draft_founding: 'Team founding',
@@ -1560,7 +1560,7 @@ const I18N = {
     dc_done_title: 'Piloto creado', dc_done_subtitle: 'Paso 2 completado — a partir de aquí hace falta el Hub real (paso 3).',
     dc_done_world_info: (n)=>`El mundo de las 30 escuderías está listo: ${n} en Kart, 10 en Serie Menor, 10 en Serie Élite, cada una con una historia simulada detrás.`,
     dc_done_footer: 'Pantalla de verificación temporal — todavía no jugable más allá de este punto.',
-    sl_go_msg: '¡VAMOS!!', sl_ready_msg: 'Listos...', sl_lighting_msg: 'Se encienden las luces…', sl_waiting_msg: 'Mantén pulsado para empezar', sl_skip_btn: 'Saltar →', sl_skip_reveal_title: 'Saliendo…',
+    sl_go_msg: '¡VAMOS!!', sl_ready_msg: 'Listos...', sl_lighting_msg: 'Se encienden las luces…', sl_waiting_msg: 'Mantén pulsado para empezar', sl_skip_btn: 'Saltar →', sl_skip_reveal_title: 'Saliendo…', race_sim_error_title: 'Algo salió mal', race_sim_error_desc: 'No hemos podido iniciar la simulación de la carrera. Tu progreso está a salvo — puedes intentarlo de nuevo.', race_sim_error_retry: 'Volver al garaje y reintentar',
     pedal_idle_hint_single: 'Mantén pulsado ESPACIO y suéltalo cuando se apaguen los semáforos', pedal_idle_hint_double: 'Pulsa los paddles A y D y suéltalos cuando se apaguen los semáforos',
     menu_exit_fullscreen: 'Salir de Pantalla Completa',
     draft_founding: 'Fundación de la escudería',
@@ -5657,14 +5657,31 @@ function resolvePedalsIfNeeded(forceTimeout){
   detachPedalInputListeners();
   render();
   window._lightsTimer = setTimeout(()=>{
-    const { timeline } = simulateFullRace();
-    // V0.9.9.10: FIX BUG SERIO — pedalReleaseShift usa "positivo=buono" (es. +2 per partenza
-    // perfetta, coerente col testo mostrato a schermo), ma applyStartShiftAcrossPhases si aspetta
-    // "negativo=guadagna posizione" (la convenzione di TUTTO il resto del gioco). Senza
-    // l'inversione qui, una falsa partenza (-3) faceva GUADAGNARE 3 posizioni invece di perderle —
-    // l'esatto contrario di quello che doveva succedere.
-    sl.slots.forEach(s=> applyStartShiftAcrossPhases(timeline, s, -sl.pedals[s].shift));
-    startLiveRace(timeline);
+    // V0.9.9.220: RETE DI SICUREZZA — segnalato un blocco permanente sulla schermata dell'esito
+    // (un utente su iPhone: "parte il semaforo e si blocca sull'esito"). Se qualunque cosa qui
+    // dentro lancia un errore, prima non succedeva NULLA di visibile: il timer moriva in silenzio
+    // e il giocatore restava bloccato per sempre senza nessun modo di uscirne. Ora, in quel caso,
+    // mostriamo un messaggio con un pulsante per riprovare invece di un blocco muto.
+    try{
+      const { timeline } = simulateFullRace();
+      // V0.9.9.10: FIX BUG SERIO — pedalReleaseShift usa "positivo=buono" (es. +2 per partenza
+      // perfetta, coerente col testo mostrato a schermo), ma applyStartShiftAcrossPhases si aspetta
+      // "negativo=guadagna posizione" (la convenzione di TUTTO il resto del gioco). Senza
+      // l'inversione qui, una falsa partenza (-3) faceva GUADAGNARE 3 posizioni invece di perderle —
+      // l'esatto contrario di quello che doveva succedere.
+      sl.slots.forEach(s=> applyStartShiftAcrossPhases(timeline, s, -sl.pedals[s].shift));
+      startLiveRace(timeline);
+    }catch(e){
+      console.error('Errore nella simulazione gara dopo il semaforo:', e);
+      app.innerHTML = `
+      ${topbarHTML()}
+      <div class="panel" style="text-align:center;padding:40px 20px;">
+        <h2 class="hdr" style="margin-bottom:12px;">${t('race_sim_error_title')}</h2>
+        <div class="dim" style="margin-bottom:20px;">${t('race_sim_error_desc')}</div>
+        <button class="button primary" data-action="retry-after-lights-error" style="width:100%;">${t('race_sim_error_retry')}</button>
+      </div>`;
+      bindActions();
+    }
   }, 1300); // tempo per leggere l'esito di ciascun paddle prima che parta la gara vera
 }
 function renderStartLights(){
@@ -14272,6 +14289,18 @@ function onAction(e){
   }
   else if(action==='toggle-riflessi-partenza'){
     state.selectedRiflessiPartenza = state.selectedRiflessiPartenza===false ? true : false;
+    render();
+  }
+  else if(action==='retry-after-lights-error'){
+    // V0.9.9.220: rete di sicurezza per il blocco permanente segnalato su iPhone — torniamo
+    // all'hub in modo sicuro invece di ritentare subito la stessa simulazione (che potrebbe
+    // fallire di nuovo per lo stesso motivo). Il progresso della stagione non viene toccato.
+    detachPedalInputListeners();
+    clearTimeout(window._lightsTimer);
+    clearTimeout(window._pedalTimeoutTimer);
+    clearTimeout(window._pedalIdleHintTimer);
+    state.startLights = null;
+    state.phase = 'hub';
     render();
   }
   else if(action==='copy-game-link-streamer'){
