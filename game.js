@@ -2158,12 +2158,12 @@ const OFFLINE_PRELOAD_ASSETS = [
   'assets/team-liveries/solar-formula.webp', 'assets/team-liveries/storm-works.webp', 'assets/team-liveries/tempest-formula.webp', 'assets/team-liveries/titan-dynamics.webp', 'assets/team-liveries/valkyrie-gp.webp', 'assets/team-liveries/vector-performance.webp',
   'assets/team-liveries/vortex-dynamics.webp', 'assets/team-liveries/zenith-formula.webp', 'assets/team-logos/aurora-works.webp', 'assets/team-logos/dragon-gp.webp', 'assets/team-logos/phoenix-works.webp', 'assets/team-logos/quantum-performance.webp',
   'assets/team-logos/tempest-formula.webp', 'assets/team-logos/valkyrie-gp.webp', 'assets/tips/circuit-black-forest-grand-prix.webp', 'assets/tips/circuit-golden-dunes-grand-prix.webp', 'assets/tips/circuit-imperium-grand-prix.webp', 'assets/tips/circuit-nordhaven-grand-prix.webp',
-  'assets/tips/circuit-silver-coast-grand-prix.webp', 'assets/tips/pilot-aditya-malhotra.webp', 'assets/tips/pilot-ethan-rutherford.webp', 'assets/tips/pilot-felipe-azevedo.webp', 'assets/tips/pilot-haruto-sato.webp', 'assets/tips/pilot-hugo-castro.webp',
-  'assets/tips/pilot-kimi-virtanen.webp', 'assets/tips/pilot-omar-el-amrani.webp', 'assets/tips/pilot-riccardo-de-santis.webp', 'assets/tips/pilot-sander-nilsen.webp', 'assets/tips/pilot-sven-de-vries.webp', 'assets/tips/pilot-the-goat.webp',
-  'audio/intro-passby.mp3', 'audio/lap-timer-drift.mp3', 'audio/pit-lane-pulse.mp3', 'audio/sfx_checkered_flag.mp3', 'audio/sfx_component_pick.mp3', 'audio/sfx_draft_reveal.mp3',
-  'audio/sfx_error_disabled.mp3', 'audio/sfx_intro_car.mp3', 'audio/sfx_lights_go.mp3', 'audio/sfx_lights_ignite.mp3', 'audio/sfx_notify_generic.mp3', 'audio/sfx_podium.mp3',
-  'audio/sfx_race_action.mp3', 'audio/sfx_rain_start.mp3', 'audio/sfx_reroll.mp3', 'audio/sfx_ui_click.mp3', 'audio/sfx_ui_confirm.mp3', 'audio/sfx_upgrade_fail.mp3',
-  'audio/sfx_upgrade_success.mp3', 'audio/sfx_victory_fanfare.mp3', 'audio/velvet-grid.mp3',
+  'assets/tips/circuit-silver-coast-grand-prix.webp', 'assets/tips/mecha-offline-download.webp', 'assets/tips/pilot-aditya-malhotra.webp', 'assets/tips/pilot-ethan-rutherford.webp', 'assets/tips/pilot-felipe-azevedo.webp', 'assets/tips/pilot-haruto-sato.webp',
+  'assets/tips/pilot-hugo-castro.webp', 'assets/tips/pilot-kimi-virtanen.webp', 'assets/tips/pilot-omar-el-amrani.webp', 'assets/tips/pilot-riccardo-de-santis.webp', 'assets/tips/pilot-sander-nilsen.webp', 'assets/tips/pilot-sven-de-vries.webp',
+  'assets/tips/pilot-the-goat.webp', 'audio/intro-passby.mp3', 'audio/lap-timer-drift.mp3', 'audio/pit-lane-pulse.mp3', 'audio/sfx_checkered_flag.mp3', 'audio/sfx_component_pick.mp3',
+  'audio/sfx_draft_reveal.mp3', 'audio/sfx_error_disabled.mp3', 'audio/sfx_intro_car.mp3', 'audio/sfx_lights_go.mp3', 'audio/sfx_lights_ignite.mp3', 'audio/sfx_notify_generic.mp3',
+  'audio/sfx_podium.mp3', 'audio/sfx_race_action.mp3', 'audio/sfx_rain_start.mp3', 'audio/sfx_reroll.mp3', 'audio/sfx_ui_click.mp3', 'audio/sfx_ui_confirm.mp3',
+  'audio/sfx_upgrade_fail.mp3', 'audio/sfx_upgrade_success.mp3', 'audio/sfx_victory_fanfare.mp3', 'audio/velvet-grid.mp3',
 ];
 // scarica tutti gli asset in anticipo (li richiede semplicemente via fetch — il service worker li
 // mette in cache da solo, stessa logica gia' usata per qualunque asset incontrato durante il gioco
@@ -16174,6 +16174,15 @@ const TRANSITION_TIPS = [
       it:'A fine stagione, tutto ciò che hai in squadra in quel momento — piloti e componenti — si sblocca automaticamente nel Museo. Non serve fare nulla: basta arrivarci con quel pezzo ancora in squadra.',
       en:'At the end of the season, everything on your team at that moment — drivers and components — unlocks automatically in the Museum. No action needed: just have that piece still on your team when it happens.',
       es:'Al final de la temporada, todo lo que tienes en el equipo en ese momento — pilotos y componentes — se desbloquea automáticamente en el Museo. No hace falta hacer nada: basta con tener esa pieza todavía en el equipo.',
+    },
+  },
+  {
+    id:'tip-offline-download', categoria:'meccanica', asset:'assets/tips/mecha-offline-download.webp',
+    titolo:{ it:'Niente campo? Si corre lo stesso.', en:'No signal? Race on anyway.', es:'¿Sin cobertura? Corre igual.' },
+    testo:{
+      it:'Prima di partire, vai in Impostazioni e tocca "Scarica tutto per giocare offline". In un attimo avrai tutto pronto: così, anche in modalità aereo o senza segnale, la tua stagione continua.',
+      en:'Before you head out, go to Settings and tap "Download everything for offline play." In a moment you\'ll have everything ready — so even in airplane mode or with no signal, your season keeps going.',
+      es:'Antes de salir, ve a Ajustes y toca "Descargar todo para jugar sin conexión". En un momento tendrás todo listo: así, incluso en modo avión o sin cobertura, tu temporada continúa.',
     },
   },
   {
