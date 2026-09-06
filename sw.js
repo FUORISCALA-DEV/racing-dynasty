@@ -44,14 +44,30 @@ function isCodeFile(url) {
   return CODE_FILES.some((f) => path.endsWith(f) || path.endsWith('/' + f)) || path.endsWith('/');
 }
 
+// V0.9.9.231: BUG CRITICO CORRETTO — segnalato da Gio: "se metto modalità aereo non va un
+// cazzo". CAUSA: il tentativo di rete per i file di codice (fetch(event.request)) non aveva
+// NESSUN limite di tempo — in modalità aereo vera, il dispositivo non rifiuta la richiesta
+// all'istante come in un test simulato, il tentativo di connessione resta "appeso" per un tempo
+// lunghissimo (timeout di sistema/DNS) prima di arrendersi, quindi il fallback sulla cache non
+// scattava mai in un tempo ragionevole — la pagina restava a caricare all'infinito, sembrando
+// completamente rotta. CORRETTO: la richiesta di rete ha ora un limite di 3 secondi, passato il
+// quale si ricade sulla cache immediatamente.
+function fetchConLimiteDiTempo(request, msLimite){
+  return Promise.race([
+    fetch(request),
+    new Promise((_, reject)=> setTimeout(()=> reject(new Error('timeout rete')), msLimite))
+  ]);
+}
+
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const isCode = isCodeFile(event.request.url);
 
   if (isCode) {
-    // network-first: prova la rete, aggiorna la cache, usa la cache solo se offline
+    // network-first: prova la rete (con limite di tempo), aggiorna la cache, usa la cache se
+    // offline O se la rete impiega troppo
     event.respondWith(
-      fetch(event.request).then((response) => {
+      fetchConLimiteDiTempo(event.request, 3000).then((response) => {
         if (response && response.status === 200) {
           const toCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, toCache));
@@ -62,11 +78,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // asset pesanti: cache-first, come prima
+  // asset pesanti: cache-first, come prima — stesso limite di tempo se non ancora in cache
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
-      return fetch(event.request).then((response) => {
+      return fetchConLimiteDiTempo(event.request, 3000).then((response) => {
         if (response && response.status === 200 && response.type === 'basic') {
           const toCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, toCache));
