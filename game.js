@@ -6624,7 +6624,21 @@ function isRealMechanicChoice(type, choiceKey){ return REAL_MECHANIC_CHOICES.has
 // scelta (es. chi resta con le gomme sbagliate sotto la pioggia inizia a perdere terreno solo dopo,
 // non nella fase immediatamente successiva). Segnalato da Gio: "deve segnarmi quante sono effettive
 // a valle del pit... nei giri successivi", non l'istantanea del turno subito dopo.
-function downstreamPhaseFor(t){ return Math.min(t+3, PHASES.length-1); }
+// V0.9.9.226: SOSTITUITO — richiesto da Gio dopo una discussione sul design: "le posizioni
+// guadagnate/perse devono essere valutate quando la finestra pit stop è conclusa per tutti (prima
+// o seconda, in base a quella in corso), non un salto generico di fasi che potrebbe cadere prima
+// che i rivali abbiano finito di fermarsi". Prima saltava sempre avanti di 3 fasi fisse,
+// indipendentemente da dove si trovasse davvero la prossima finestra pit. Ora aggancia il "dopo"
+// esattamente alla fine della finestra pit rilevante (prima o seconda), usando le fasi vere del
+// gioco invece di un numero arbitrario. Dopo la seconda finestra, non c'e' piu' nessuna sosta da
+// aspettare: si ripiega sul comportamento precedente (3 fasi avanti) solo in quel caso residuo.
+const IDX_PRIMA_FINESTRA_BOX = PHASES.findIndex(p=>p.name==='phase_firstbox');
+const IDX_SECONDA_FINESTRA_BOX = PHASES.findIndex(p=>p.name==='phase_secondbox');
+function downstreamPhaseFor(t){
+  if(t <= IDX_PRIMA_FINESTRA_BOX) return IDX_PRIMA_FINESTRA_BOX;
+  if(t <= IDX_SECONDA_FINESTRA_BOX) return IDX_SECONDA_FINESTRA_BOX;
+  return Math.min(t+3, PHASES.length-1); // dopo l'ultima sosta prevista: nessuna finestra da aspettare
+}
 function applyLiveDecision(type, choiceKey){
   const timeline = state.live.timeline;
   const t = state.live.phaseIndex;
