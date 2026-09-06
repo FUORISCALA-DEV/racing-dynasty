@@ -16177,7 +16177,7 @@ const TRANSITION_TIPS = [
     },
   },
   {
-    id:'tip-offline-download', categoria:'meccanica', asset:'assets/tips/mecha-offline-download.webp',
+    id:'tip-offline-download', categoria:'meccanica', asset:'assets/tips/mecha-offline-download.webp', inPausa:true, // V0.9.9.230: in pausa — Gio ha segnalato che la modalità offline non funziona ancora davvero, non ha senso pubblicizzarla finché non è verificata
     titolo:{ it:'Niente campo? Si corre lo stesso.', en:'No signal? Race on anyway.', es:'¿Sin cobertura? Corre igual.' },
     testo:{
       it:'Prima di partire, vai in Impostazioni e tocca "Scarica tutto per giocare offline". In un attimo avrai tutto pronto: così, anche in modalità aereo o senza segnale, la tua stagione continua.',
@@ -16355,8 +16355,8 @@ function transitionTipsAbilitate(){
 function pickTransitionTip(nomeCircuitoInArrivo){
   let ultimoId = null;
   try{ ultimoId = localStorage.getItem('racingDynastyLastTransitionTipId'); }catch(e){ /* ignorato */ }
-  let candidati = TRANSITION_TIPS.filter(t => t.id !== ultimoId);
-  if(candidati.length === 0) candidati = TRANSITION_TIPS; // fallback, non dovrebbe mai servire
+  let candidati = TRANSITION_TIPS.filter(t => t.id !== ultimoId && !t.inPausa);
+  if(candidati.length === 0) candidati = TRANSITION_TIPS.filter(t => !t.inPausa); // fallback, non dovrebbe mai servire
   let scelto;
   if(nomeCircuitoInArrivo){
     const circuitoGiusto = candidati.find(t => t.circuitoNome === nomeCircuitoInArrivo);
