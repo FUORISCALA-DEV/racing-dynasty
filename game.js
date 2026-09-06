@@ -927,7 +927,7 @@ const I18N = {
     hub_pos_drivers: 'POS. PILOTI', hub_pos_constructors: 'POS. COSTRUTTORI', hub_go_to_gp: 'Vai al Gran Premio →',
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalità', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Calendario Stagione', hub_race_word: 'GARA',
     hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ La Tua Scuderia', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento speciale', compat_label: 'Compatibilità', compat_excellent: 'Eccellente', compat_good: 'Buona', compat_average: 'Nella media', compat_below: 'Sotto la media', compat_poor: 'Scarsa',
-    hub_weather: 'Clima', comp_driver1: 'Pilota #1', comp_driver2: 'Pilota #2', comp_engine: 'Motore', comp_mentality: 'Mentalità', comp_typology: 'Tipologia', pcard_details: 'Dettagli', pcard_tap_to_choose: 'Tocca il riquadro per scegliere',
+    hub_weather: 'Clima', comp_driver1: 'Pilota #1', comp_driver2: 'Pilota #2', comp_engine: 'Motore', rarity_debole:'DEBOLE', rarity_discreto:'DISCRETO', rarity_intermedio:'INTERMEDIO', rarity_ottimo:'OTTIMO', rarity_eccellente:'ECCELLENTE', rarity_legendary:'LEGENDARY', rarity_immortal:'IMMORTAL', comp_mentality: 'Mentalità', comp_typology: 'Tipologia', pcard_details: 'Dettagli', pcard_tap_to_choose: 'Tocca il riquadro per scegliere',
     live_board_title: 'Classifica Live', live_board_count: (n)=>`${n} PILOTI`, live_head_pos: 'Pos', live_head_pilot: 'Pilota', live_head_team: 'Scuderia', live_head_gap: 'Distacco', live_head_status: 'Stato', live_log_title: 'Log Gara',
     hub_shared_components_title: 'Componenti di Squadra', hub_shared_components_sub: 'CONDIVISI DA ENTRAMBI I PILOTI', hub_starting_grid_title: 'Griglia di Partenza', hub_starting_grid_sub: 'TU E LE RIVALI',
     achievement_unlocked_label: 'Obiettivo Sbloccato',
@@ -1329,7 +1329,7 @@ const I18N = {
     hub_pos_drivers: 'DRIVERS POS.', hub_pos_constructors: 'CONSTRUCTORS POS.', hub_go_to_gp: 'Go to Grand Prix →',
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalry', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Season Calendar', hub_race_word: 'RACE',
     hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Your Team', hub_dominant_component: 'Dominant component', hub_special_event: 'Special event', compat_label: 'Compatibility', compat_excellent: 'Excellent', compat_good: 'Good', compat_average: 'Average', compat_below: 'Below average', compat_poor: 'Poor',
-    hub_weather: 'Weather', comp_driver1: 'Driver #1', comp_driver2: 'Driver #2', comp_engine: 'Engine', comp_mentality: 'Mentality', comp_typology: 'Typology', pcard_details: 'Details', pcard_tap_to_choose: 'Tap the card to choose',
+    hub_weather: 'Weather', comp_driver1: 'Driver #1', comp_driver2: 'Driver #2', comp_engine: 'Engine', rarity_debole:'WEAK', rarity_discreto:'DECENT', rarity_intermedio:'MID-TIER', rarity_ottimo:'GREAT', rarity_eccellente:'EXCELLENT', rarity_legendary:'LEGENDARY', rarity_immortal:'IMMORTAL', comp_mentality: 'Mentality', comp_typology: 'Typology', pcard_details: 'Details', pcard_tap_to_choose: 'Tap the card to choose',
     live_board_title: 'Live Standings', live_board_count: (n)=>`${n} DRIVERS`, live_head_pos: 'Pos', live_head_pilot: 'Driver', live_head_team: 'Team', live_head_gap: 'Gap', live_head_status: 'Status', live_log_title: 'Race Log',
     hub_shared_components_title: 'Team Components', hub_shared_components_sub: 'SHARED BY BOTH DRIVERS', hub_starting_grid_title: 'Starting Grid', hub_starting_grid_sub: 'YOU AND THE RIVALS',
     achievement_unlocked_label: 'Achievement Unlocked',
@@ -1725,7 +1725,7 @@ const I18N = {
     hub_pos_drivers: 'POS. PILOTOS', hub_pos_constructors: 'POS. CONSTRUCTORES', hub_go_to_gp: 'Ir al Gran Premio →',
     hub_rivalry: '<img class=ico src=assets/icons/trophy.png> Rivalidad', hub_calendar: '<img class=ico src=assets/icons/calendar.png>️ Calendario de Temporada', hub_race_word: 'CARRERA',
     hub_your_team: '<img class=ico src=assets/icons/race_car.png>️ Tu Escudería', hub_dominant_component: 'Componente dominante', hub_special_event: 'Evento especial', compat_label: 'Compatibilidad', compat_excellent: 'Excelente', compat_good: 'Buena', compat_average: 'En la media', compat_below: 'Por debajo de la media', compat_poor: 'Escasa',
-    hub_weather: 'Clima', comp_driver1: 'Piloto #1', comp_driver2: 'Piloto #2', comp_engine: 'Motor', comp_mentality: 'Mentalidad', comp_typology: 'Tipología', pcard_details: 'Detalles', pcard_tap_to_choose: 'Toca la tarjeta para elegir',
+    hub_weather: 'Clima', comp_driver1: 'Piloto #1', comp_driver2: 'Piloto #2', comp_engine: 'Motor', rarity_debole:'DÉBIL', rarity_discreto:'DECENTE', rarity_intermedio:'INTERMEDIO', rarity_ottimo:'ÓPTIMO', rarity_eccellente:'EXCELENTE', rarity_legendary:'LEGENDARY', rarity_immortal:'IMMORTAL', comp_mentality: 'Mentalidad', comp_typology: 'Tipología', pcard_details: 'Detalles', pcard_tap_to_choose: 'Toca la tarjeta para elegir',
     live_board_title: 'Clasificación en Vivo', live_board_count: (n)=>`${n} PILOTOS`, live_head_pos: 'Pos', live_head_pilot: 'Piloto', live_head_team: 'Escudería', live_head_gap: 'Distancia', live_head_status: 'Estado', live_log_title: 'Registro de Carrera',
     hub_shared_components_title: 'Componentes de Equipo', hub_shared_components_sub: 'COMPARTIDOS POR AMBOS PILOTOS', hub_starting_grid_title: 'Parrilla de Salida', hub_starting_grid_sub: 'TÚ Y LAS RIVALES',
     achievement_unlocked_label: 'Logro Desbloqueado',
@@ -8614,7 +8614,7 @@ function displayAreaForUpgrade(u){
   return displayArea(u.area);
 }
 function displayArea(area){
-  const map = { 'Motore':t('comp_engine'), 'Telaio':t('comp_chassis'), 'Aerodinamica':t('comp_aero'), 'Gomme':t('comp_tires'), 'Strategia':t('comp_strategist'), 'Piloti':t('comp_driver1') };
+  const map = { 'Motore':t('comp_engine'), 'Telaio':t('comp_chassis'), 'Aerodinamica':t('comp_aero'), 'Gomme':t('comp_tires'), 'Strategia':t('comp_strategist'), 'Piloti':t('comp_driver1'), 'Pilota':t('comp_driver1') };
   return map[area] || area;
 }
 function teamFlag(teamId){
@@ -8638,6 +8638,7 @@ const CAR_RARITY_LABEL = {
   debole:'DEBOLE', discreto:'DISCRETO', intermedio:'INTERMEDIO', ottimo:'OTTIMO',
   eccellente:'ECCELLENTE', legendary:'LEGENDARY', immortal:'IMMORTAL'
 };
+function rarityLabel(key){ return t('rarity_'+key) || CAR_RARITY_LABEL[key] || key; }
 function ratingBandKey(rating){
   if(rating>=100) return 'immortal';
   if(rating>=95) return 'legendary';
@@ -8919,7 +8920,7 @@ function pregaraCarPanelHTML(pilot, carNumber, comp, gridPosNum, teamName){
     <div class="pregara-info">
       <div class="pregara-name">${flag(pilot.naz)} ${pilot.nome}</div>
       <div class="pregara-meta">
-        <span class="rarity-tag" style="border:1px solid ${color};color:${color};background:transparent;">${CAR_RARITY_LABEL[band]}</span>
+        <span class="rarity-tag" style="border:1px solid ${color};color:${color};background:transparent;">${rarityLabel(band)}</span>
         <span class="mono" style="color:${color};">${pilot.rating} RATING</span>
         ${gridPosNum!=null ? `<span class="dim">Griglia P${gridPosNum}</span>` : ''}
       </div>
@@ -13013,7 +13014,7 @@ function garageSandboxCarHTML(){
 }
 
 function garageBandSelectHTML(label, part){
-  const options = RATING_BANDS_ORDER.map(b=> `<option value="${b}" ${garageSandbox[part]===b?'selected':''}>${CAR_RARITY_LABEL[b]}</option>`).join('');
+  const options = RATING_BANDS_ORDER.map(b=> `<option value="${b}" ${garageSandbox[part]===b?'selected':''}>${rarityLabel(b)}</option>`).join('');
   return `<label class="dim" style="display:flex;flex-direction:column;gap:2px;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;">
     ${label}
     <select class="garage-band-select" data-part="${part}" style="font-family:var(--font-ui);padding:6px;border-radius:4px;background:var(--panel2);border:1px solid var(--line);color:var(--text);">${options}</select>
