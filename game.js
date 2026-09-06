@@ -768,7 +768,7 @@ const I18N = {
     dc_done_title: 'Pilota creato', dc_done_subtitle: 'Punto 2 completato — da qui in poi serve l\'Hub vero (punto 3).',
     dc_done_world_info: (n)=>`Il mondo delle 30 scuderie è pronto: ${n} in Kart, 10 in Serie Minore, 10 in Serie Elite, ognuna con una storia simulata alle spalle.`,
     dc_done_footer: 'Schermata temporanea di verifica — non ancora giocabile oltre questo punto.',
-    sl_go_msg: 'VIA!!', sl_ready_msg: 'Pronti...', sl_lighting_msg: 'Si accendono le luci…', sl_waiting_msg: 'Tieni premuto per partire', sl_skip_btn: 'Salta →', sl_skip_reveal_title: 'Partenza in corso…', race_sim_error_title: 'Qualcosa è andato storto', race_sim_error_desc: 'Non siamo riusciti ad avviare la simulazione della gara. Il tuo progresso è salvo — riprova pure.', race_sim_error_retry: 'Torna al garage e riprova',
+    sl_go_msg: 'VIA!!', sl_ready_msg: 'Pronti...', sl_lighting_msg: 'Si accendono le luci…', sl_waiting_msg: 'Tieni premuto per partire', sl_skip_btn: 'Salta →', sl_skip_reveal_title: 'Partenza in corso…', race_sim_error_title: 'Qualcosa è andato storto', race_sim_error_desc: 'Non siamo riusciti ad avviare la simulazione della gara. Il tuo progresso è salvo — riprova pure.', race_sim_error_retry: 'Torna al garage e riprova', confirm_new_season_desc: 'Vuoi davvero cancellare la stagione salvata e iniziarne una nuova?', confirm_new_season_title: 'Nuova Stagione', confirm_delete_save_desc: 'Vuoi davvero cancellare il salvataggio? Non potrai più continuarlo.', confirm_delete_save_title: 'Cancella Salvataggio', confirm_full_reset_desc: 'Cancella TUTTO: stagione in corso, Sala Trofei, Museo Dynasty e Obiettivi sbloccati. Il gioco tornerà esattamente come alla primissima apertura. Non si può annullare.', confirm_full_reset_title: 'Ripristinare Tutto?', confirm_exit_game_desc: 'Vuoi davvero uscire dal gioco? La stagione in corso è già salvata automaticamente.', confirm_exit_game_title: 'Uscire dal Gioco?',
     pedal_idle_hint_single: 'Tieni premuto SPAZIO e rilascialo allo spegnimento dei semafori', pedal_idle_hint_double: 'Premi i paddle A e D e rilasciali allo spegnimento dei semafori',
     menu_exit_fullscreen: 'Esci da Schermo Intero',
     draft_founding: 'Fondazione scuderia',
@@ -1170,7 +1170,7 @@ const I18N = {
     dc_done_title: 'Driver created', dc_done_subtitle: "Step 2 complete — from here on the real Hub (step 3) is needed.",
     dc_done_world_info: (n)=>`The world of 30 teams is ready: ${n} in Kart, 10 in Minor Series, 10 in Elite Series, each with a simulated history behind it.`,
     dc_done_footer: 'Temporary verification screen — not yet playable beyond this point.',
-    sl_go_msg: 'GO!!', sl_ready_msg: 'Ready...', sl_lighting_msg: 'Lights coming on…', sl_waiting_msg: 'Hold down to start', sl_skip_btn: 'Skip →', sl_skip_reveal_title: 'Starting…', race_sim_error_title: 'Something went wrong', race_sim_error_desc: "We couldn't start the race simulation. Your progress is safe — feel free to try again.", race_sim_error_retry: 'Back to the garage and retry',
+    sl_go_msg: 'GO!!', sl_ready_msg: 'Ready...', sl_lighting_msg: 'Lights coming on…', sl_waiting_msg: 'Hold down to start', sl_skip_btn: 'Skip →', sl_skip_reveal_title: 'Starting…', race_sim_error_title: 'Something went wrong', race_sim_error_desc: "We couldn't start the race simulation. Your progress is safe — feel free to try again.", race_sim_error_retry: 'Back to the garage and retry', confirm_new_season_desc: 'Do you really want to delete the saved season and start a new one?', confirm_new_season_title: 'New Season', confirm_delete_save_desc: "Do you really want to delete the save? You won't be able to continue it anymore.", confirm_delete_save_title: 'Delete Save', confirm_full_reset_desc: 'Delete EVERYTHING: current season, Trophy Room, Dynasty Museum and unlocked Achievements. The game will go back to exactly how it was on first launch. This cannot be undone.', confirm_full_reset_title: 'Reset Everything?', confirm_exit_game_desc: 'Do you really want to exit the game? The current season is already saved automatically.', confirm_exit_game_title: 'Exit the Game?',
     pedal_idle_hint_single: 'Hold SPACE and release it when the lights go out', pedal_idle_hint_double: 'Press paddles A and D and release them when the lights go out',
     menu_exit_fullscreen: 'Exit Fullscreen',
     draft_founding: 'Team founding',
@@ -1566,7 +1566,7 @@ const I18N = {
     dc_done_title: 'Piloto creado', dc_done_subtitle: 'Paso 2 completado — a partir de aquí hace falta el Hub real (paso 3).',
     dc_done_world_info: (n)=>`El mundo de las 30 escuderías está listo: ${n} en Kart, 10 en Serie Menor, 10 en Serie Élite, cada una con una historia simulada detrás.`,
     dc_done_footer: 'Pantalla de verificación temporal — todavía no jugable más allá de este punto.',
-    sl_go_msg: '¡VAMOS!!', sl_ready_msg: 'Listos...', sl_lighting_msg: 'Se encienden las luces…', sl_waiting_msg: 'Mantén pulsado para empezar', sl_skip_btn: 'Saltar →', sl_skip_reveal_title: 'Saliendo…', race_sim_error_title: 'Algo salió mal', race_sim_error_desc: 'No hemos podido iniciar la simulación de la carrera. Tu progreso está a salvo — puedes intentarlo de nuevo.', race_sim_error_retry: 'Volver al garaje y reintentar',
+    sl_go_msg: '¡VAMOS!!', sl_ready_msg: 'Listos...', sl_lighting_msg: 'Se encienden las luces…', sl_waiting_msg: 'Mantén pulsado para empezar', sl_skip_btn: 'Saltar →', sl_skip_reveal_title: 'Saliendo…', race_sim_error_title: 'Algo salió mal', race_sim_error_desc: 'No hemos podido iniciar la simulación de la carrera. Tu progreso está a salvo — puedes intentarlo de nuevo.', race_sim_error_retry: 'Volver al garaje y reintentar', confirm_new_season_desc: '¿Seguro que quieres borrar la temporada guardada y empezar una nueva?', confirm_new_season_title: 'Nueva Temporada', confirm_delete_save_desc: '¿Seguro que quieres borrar la partida guardada? No podrás continuarla.', confirm_delete_save_title: 'Borrar Partida', confirm_full_reset_desc: 'Borra TODO: temporada en curso, Sala de Trofeos, Museo Dynasty y Logros desbloqueados. El juego volverá exactamente a como estaba en la primera apertura. No se puede deshacer.', confirm_full_reset_title: '¿Restablecer Todo?', confirm_exit_game_desc: '¿Seguro que quieres salir del juego? La temporada en curso ya está guardada automáticamente.', confirm_exit_game_title: '¿Salir del Juego?',
     pedal_idle_hint_single: 'Mantén pulsado ESPACIO y suéltalo cuando se apaguen los semáforos', pedal_idle_hint_double: 'Pulsa los paddles A y D y suéltalos cuando se apaguen los semáforos',
     menu_exit_fullscreen: 'Salir de Pantalla Completa',
     draft_founding: 'Fundación de la escudería',
@@ -14840,17 +14840,17 @@ function onAction(e){
     }
   }
   else if(action==='new-season-confirm'){
-    gameConfirm('Vuoi davvero cancellare la stagione salvata e iniziarne una nuova?', ()=>{
+    gameConfirm(t('confirm_new_season_desc'), ()=>{
       deleteSave();
       state = { phase:'title', selectedDifficulty:'medio' };
       render();
-    }, 'Nuova Stagione');
+    }, t('confirm_new_season_title'));
   }
   else if(action==='delete-save'){
-    gameConfirm('Vuoi davvero cancellare il salvataggio? Non potrai più continuarlo.', ()=>{
+    gameConfirm(t('confirm_delete_save_desc'), ()=>{
       deleteSave();
       render();
-    }, 'Cancella Salvataggio');
+    }, t('confirm_delete_save_title'));
   }
   else if(action==='dsr-toggle-detail'){
     const rows = document.getElementById('dsrDetailRows');
@@ -15554,11 +15554,11 @@ function openSettings(){
   }
   document.getElementById('sidebarFullResetBtn').addEventListener('click', ()=>{
     closeSettingsPanel();
-    gameConfirm('Cancella TUTTO: stagione in corso, Sala Trofei, Museo Dynasty e Obiettivi sbloccati. Il gioco tornerà esattamente come alla primissima apertura. Non si può annullare.', ()=>{
+    gameConfirm(t('confirm_full_reset_desc'), ()=>{
       fullResetAll();
       state = { phase:'title', selectedDifficulty:'medio' };
       render();
-    }, 'Ripristinare Tutto?');
+    }, t('confirm_full_reset_title'));
   });
   document.getElementById('sidebarSettingsPanel').style.display = 'flex';
   pushBackGuard();
@@ -16744,10 +16744,10 @@ function handleBackGesture(){
   if(state && state.phase==='season-length'){ state.phase = 'mode-select'; render(); return; }
   if(state && state.phase==='difficulty'){ state.phase = 'season-length'; render(); return; }
   // nessun overlay riconosciuto aperto: chiediamo conferma prima di uscire, mai un'uscita diretta
-  gameConfirm('Vuoi davvero uscire dal gioco? La stagione in corso e\u2019 gia\u2019 salvata automaticamente.', ()=>{
+  gameConfirm(t('confirm_exit_game_desc'), ()=>{
     /* conferma ricevuta: non ripubblichiamo una nuova guardia, cosi' una successiva pressione
        del tasto/gesture back del dispositivo puo' davvero portare fuori dal gioco */
-  }, 'Uscire dal Gioco?');
+  }, t('confirm_exit_game_title'));
 }
 
 /* ---------------- boot ---------------- */
