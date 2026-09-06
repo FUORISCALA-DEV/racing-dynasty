@@ -427,6 +427,12 @@ const PILOT_DATA_TRANSLATIONS = {
   'Nessuno': { en:'None', es:'Ninguno' },
   'Pioggia improvvisa': { en:'Sudden rain', es:'Lluvia repentina' },
   'Vento forte': { en:'Strong wind', es:'Viento fuerte' },
+
+  // --- V0.9.9.222 (parte 2): meteo/stato pista durante la gara LIVE — campi separati da quelli
+  // del circuito (usati per la simulazione in tempo reale), segnalati da Gio ancora in italiano.
+  'Asciutto': { en:'Dry', es:'Seco' },
+  'Bagnato': { en:'Wet', es:'Mojado' },
+  'Regolare': { en:'Normal', es:'Normal' },
 };
 // funzione di lookup: ripiega sempre sul testo italiano originale se non trova una traduzione,
 // non lascia mai un vuoto — anche se in futuro venissero aggiunti nuovi piloti con testi non
@@ -804,7 +810,7 @@ const I18N = {
     classify_upgrade: 'UPGRADE GARANTITO', classify_opportunity: 'OPPORTUNITÀ', classify_trade: 'SCAMBIO', classify_replacement: 'SOSTITUZIONE',
     eff_qualifying: 'Qualifica', eff_dry_race: 'Gara asciutta', eff_wet_race: 'Gara bagnata',
     eff_reliability: 'Affidabilità', eff_fast_circuits: 'Prestazione circuiti veloci', eff_street_circuits: 'Prestazione circuiti cittadini',
-    pc_confirm_title: (l)=>`Conferma Sostituzione — ${l}`, pc_semaforo_title: 'Effetto su Semaforo e Rating Scuderia',
+    pc_confirm_title: (l)=>`Conferma Sostituzione — ${l}`, pc_semaforo_title: 'Effetto su Semaforo e Rating Scuderia', semaforo_widget_title: 'SEMAFORO SINERGIE', semaforo_active_singular: 'ATTIVA', semaforo_active_plural: 'ATTIVE', semaforo_first_tip: 'Prima sinergia attivata! I pezzi con la stessa mentalità danno un bonus di rating quando sono insieme in squadra.',
     pc_before: 'PRIMA', pc_after: 'DOPO', pc_rating: 'RATING',
     pc_disclaimer: 'Una volta confermato, il componente attuale non può essere recuperato in questa stagione. I dettagli del confronto sono qui sotto.',
     pc_gain: (n)=>`Incassi: +${n}`, pc_cost: (n)=>`Costo: -${n}`, pc_budget_avail: (n)=>`Budget disponibile: ${n}`,
@@ -1206,7 +1212,7 @@ const I18N = {
     classify_upgrade: 'GUARANTEED UPGRADE', classify_opportunity: 'OPPORTUNITY', classify_trade: 'TRADE-OFF', classify_replacement: 'REPLACEMENT',
     eff_qualifying: 'Qualifying', eff_dry_race: 'Dry race', eff_wet_race: 'Wet race',
     eff_reliability: 'Reliability', eff_fast_circuits: 'Performance on fast circuits', eff_street_circuits: 'Performance on street circuits',
-    pc_confirm_title: (l)=>`Confirm Replacement — ${l}`, pc_semaforo_title: 'Effect on Semaphore and Team Rating',
+    pc_confirm_title: (l)=>`Confirm Replacement — ${l}`, pc_semaforo_title: 'Effect on Semaphore and Team Rating', semaforo_widget_title: 'SYNERGY SEMAPHORE', semaforo_active_singular: 'ACTIVE', semaforo_active_plural: 'ACTIVE', semaforo_first_tip: 'First synergy activated! Pieces sharing the same mentality give a rating bonus when they play together.',
     pc_before: 'BEFORE', pc_after: 'AFTER', pc_rating: 'RATING',
     pc_disclaimer: "Once confirmed, the current component can't be recovered in this career. Comparison details are below.",
     pc_gain: (n)=>`You get: +${n}`, pc_cost: (n)=>`Cost: -${n}`, pc_budget_avail: (n)=>`Available budget: ${n}`,
@@ -1602,7 +1608,7 @@ const I18N = {
     classify_upgrade: 'MEJORA GARANTIZADA', classify_opportunity: 'OPORTUNIDAD', classify_trade: 'INTERCAMBIO', classify_replacement: 'SUSTITUCIÓN',
     eff_qualifying: 'Clasificación', eff_dry_race: 'Carrera en seco', eff_wet_race: 'Carrera en mojado',
     eff_reliability: 'Fiabilidad', eff_fast_circuits: 'Rendimiento en circuitos rápidos', eff_street_circuits: 'Rendimiento en circuitos urbanos',
-    pc_confirm_title: (l)=>`Confirmar Sustitución — ${l}`, pc_semaforo_title: 'Efecto en el Semáforo y el Rating de Escudería',
+    pc_confirm_title: (l)=>`Confirmar Sustitución — ${l}`, pc_semaforo_title: 'Efecto en el Semáforo y el Rating de Escudería', semaforo_widget_title: 'SEMÁFORO DE SINERGIAS', semaforo_active_singular: 'ACTIVA', semaforo_active_plural: 'ACTIVAS', semaforo_first_tip: '¡Primera sinergia activada! Las piezas con la misma mentalidad dan un bono de rating cuando juegan juntas.',
     pc_before: 'ANTES', pc_after: 'DESPUÉS', pc_rating: 'RATING',
     pc_disclaimer: 'Una vez confirmado, el componente actual no se puede recuperar en esta carrera. Los detalles de la comparación están abajo.',
     pc_gain: (n)=>`Ingresas: +${n}`, pc_cost: (n)=>`Coste: -${n}`, pc_budget_avail: (n)=>`Presupuesto disponible: ${n}`,
@@ -7395,8 +7401,8 @@ function renderRaceLiveInit(){
     <div class="brand hdr">${flag(timeline.circuit.paese)} ${timeline.circuit.nome}<small id="livePhaseName">${window.t(phase.name)}</small></div>
     <div class="hud">
       <div class="hud-item"><div class="hud-label">Leader</div><div class="hud-value cyan" id="liveLeader">${shortName(leader.driverName)}</div></div>
-      <div class="hud-item"><div class="hud-label">Meteo</div><div class="hud-value" id="liveWeather">${state.live.weather}</div></div>
-      <div class="hud-item"><div class="hud-label">Pista</div><div class="hud-value ${state.live.trackStatus==='Safety Car'?'amber':''}" id="liveTrack">${state.live.trackStatus}</div></div>
+      <div class="hud-item"><div class="hud-label">Meteo</div><div class="hud-value" id="liveWeather">${td(state.live.weather)}</div></div>
+      <div class="hud-item"><div class="hud-label">Pista</div><div class="hud-value ${state.live.trackStatus==='Safety Car'?'amber':''}" id="liveTrack">${td(state.live.trackStatus)}</div></div>
       <div class="hud-item"><div class="hud-label">Giro</div><div class="hud-value" id="livePhaseNum">${timeline.lapNumbers[safeIdx]}/${timeline.totalGiri}</div></div>
     </div>
   </div>
@@ -7492,9 +7498,9 @@ function updateLiveBoard(){
     fillEl.className = 'tire-wear-fill ' + wearCls;
     card.querySelector('.tire-card-foot').textContent = window.t('live_tire_wear_label') + ' ' + wearPct + '%';
   });
-  document.getElementById('liveWeather').textContent = state.live.weather;
+  document.getElementById('liveWeather').textContent = td(state.live.weather);
   const trackEl = document.getElementById('liveTrack');
-  trackEl.textContent = state.live.trackStatus;
+  trackEl.textContent = td(state.live.trackStatus);
   trackEl.className = 'hud-value ' + (state.live.trackStatus==='Safety Car' ? 'amber':'');
   document.getElementById('liveProgressFill').style.width = ((t/(PHASES.length-1))*100)+'%';
 
@@ -11914,11 +11920,11 @@ function semaforoWidgetHTML(overrideTeam){
   state._synergyJustUnlocked = false;
   return `<div class="semaforo-widget${onFire?' semaforo-on-fire':''}${firstHighlight?' semaforo-first-highlight':''}">
     <div class="semaforo-title-row">
-      <div class="semaforo-title">${onFire?'<img class=ico src=assets/icons/fire.png>':'<img class=ico src=assets/icons/sparkles.png>'} SEMAFORO SINERGIE${litCount?` · ${litCount} ${litCount>1?'ATTIVE':'ATTIVA'}`:''}${onFire?' · ON FIRE!':''}</div>
+      <div class="semaforo-title">${onFire?'<img class=ico src=assets/icons/fire.png>':'<img class=ico src=assets/icons/sparkles.png>'} ${t('semaforo_widget_title')}${litCount?` · ${litCount} ${litCount>1?t('semaforo_active_plural'):t('semaforo_active_singular')}`:''}${onFire?' · ON FIRE!':''}</div>
       ${strengthHTML}
     </div>
     <div class="semaforo-row">${circlesHTML}</div>
-    ${firstHighlight ? '<div class="semaforo-first-tip"><img class=ico src=assets/icons/sparkles.png> Prima sinergia attivata! I pezzi con la stessa mentalità danno un bonus di rating quando sono insieme in squadra.</div>' : ''}
+    ${firstHighlight ? `<div class="semaforo-first-tip"><img class=ico src=assets/icons/sparkles.png> ${t('semaforo_first_tip')}</div>` : ''}
   </div>`;
 }
 
