@@ -15734,11 +15734,11 @@ function openSettings(){
     installBtn.addEventListener('click', async ()=>{
       const worked = await triggerInstallPrompt();
       if(!worked){
-        if(isIOSDevice()){
-          alert(t('install_ios_msg'));
-        } else {
-          alert(t('install_android_msg'));
-        }
+        // V0.9.9.234: BUG CORRETTO — segnalato da Gio su iPhone: "se premo installa l'app non
+        // succede nulla". Sostituito alert() nativo (che può essere bloccato o inaffidabile in
+        // alcuni contesti del browser) con gameConfirm(), il modale del gioco stesso — sotto il
+        // nostro pieno controllo, mai soggetto a restrizioni del browser sui dialoghi nativi.
+        gameConfirm(isIOSDevice() ? t('install_ios_msg') : t('install_android_msg'), ()=>{}, t('settings_install'), null, { hideNo:true });
       }
     });
   }
