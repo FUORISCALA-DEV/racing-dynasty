@@ -980,7 +980,7 @@ const I18N = {
     daily_score_continue: 'Continua →',
 
     daily_share_badge_today: 'classifica Daily di oggi', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} generale`, daily_share_badge_score: (s)=>`${s} pt`,
-    daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`,
+    daily_share_text: (url)=>`Ho appena completato la Daily Season di oggi su Racing Dynasty — prova a battermi prima che scada!\n${url}`, season_share_text: (url)=>`Ho appena chiuso una stagione su Racing Dynasty — prova a battermi!\n${url}`, trophy_share_text: (url)=>`La mia Sala Trofei su Racing Dynasty — prova a battermi!\n${url}`,
     daily_trophy_complete: 'Completa la Daily di oggi', daily_trophy_top10: 'Finisci in top 10 oggi',
     daily_trophy_podium: 'Sali sul podio oggi', daily_trophy_win: 'Vinci la Daily di oggi',
     daily_countdown_label: (t)=>`Prossima Daily tra ${t}`, daily_countdown_label_todo: (t)=>`Hai ancora ${t} per tentare la run`, daily_locked_trophies: (n)=> n===1 ? 'Ti manca 1 trofeo vinto per sbloccare la Daily Season' : `Ti mancano ${n} trofei vinti per sbloccare la Daily Season`, daily_locked_doppietta: 'Ti serve anche una Stagione Scuderia vinta sia come pilota che come costruttore (anche insieme) per sbloccare la Daily Season', daily_locked_titles_v2: 'Ti serve anche aver vinto sia il titolo Costruttori che il titolo Piloti in una Stagione Scuderia (anche in stagioni diverse)', daily_locked_row_constructor: 'Titolo Costruttori', daily_locked_row_driver: 'Titolo Piloti', daily_locked_tap_hint: 'Tocca per i dettagli', daily_locked_need_login: 'Accedi con Google per sbloccare gli obiettivi della Daily',
@@ -1380,7 +1380,7 @@ const I18N = {
     daily_score_continue: 'Continue →',
 
     daily_share_badge_today: "today's Daily leaderboard", daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} overall`, daily_share_badge_score: (s)=>`${s} pts`,
-    daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`,
+    daily_share_text: (url)=>`I just completed today's Daily Season on Racing Dynasty — try to beat me before it expires!\n${url}`, season_share_text: (url)=>`I just finished a season on Racing Dynasty — try to beat me!\n${url}`, trophy_share_text: (url)=>`My Trophy Room on Racing Dynasty — try to beat me!\n${url}`,
     daily_trophy_complete: "Complete today's Daily", daily_trophy_top10: 'Finish top 10 today',
     daily_trophy_podium: 'Reach the podium today', daily_trophy_win: "Win today's Daily",
     daily_countdown_label: (t)=>`Next Daily in ${t}`, daily_countdown_label_todo: (t)=>`You still have ${t} to attempt the run`, daily_locked_trophies: (n)=> n===1 ? 'You need 1 more trophy to unlock Daily Season' : `You need ${n} more trophies to unlock Daily Season`, daily_locked_doppietta: 'You also need a Team Season won as both driver and constructor champion (can be together) to unlock Daily Season', daily_locked_titles_v2: 'You also need to have won both the Constructors title and the Drivers title in a Team Season (can be different seasons)', daily_locked_row_constructor: "Constructors' title", daily_locked_row_driver: "Drivers' title", daily_locked_tap_hint: 'Tap for details', daily_locked_need_login: 'Sign in with Google to unlock the Daily objectives',
@@ -1776,7 +1776,7 @@ const I18N = {
     daily_score_continue: 'Continuar →',
 
     daily_share_badge_today: 'clasificación Daily de hoy', daily_share_badge_weighted: (r,tot)=>`#${r}/${tot} general`, daily_share_badge_score: (s)=>`${s} pts`,
-    daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`,
+    daily_share_text: (url)=>`Acabo de completar la Daily Season de hoy en Racing Dynasty — ¡intenta superarme antes de que expire!\n${url}`, season_share_text: (url)=>`Acabo de terminar una temporada en Racing Dynasty — ¡intenta superarme!\n${url}`, trophy_share_text: (url)=>`Mi Sala de Trofeos en Racing Dynasty — ¡intenta superarme!\n${url}`,
     daily_trophy_complete: 'Completa la Daily de hoy', daily_trophy_top10: 'Termina en el top 10 hoy',
     daily_trophy_podium: 'Sube al podio hoy', daily_trophy_win: 'Gana la Daily de hoy',
     daily_countdown_label: (t)=>`Próxima Daily en ${t}`, daily_countdown_label_todo: (t)=>`Todavía tienes ${t} para intentar la run`, daily_locked_trophies: (n)=> n===1 ? 'Te falta 1 trofeo para desbloquear la Daily Season' : `Te faltan ${n} trofeos para desbloquear la Daily Season`, daily_locked_doppietta: 'También necesitas una Temporada de Escudería ganada como piloto y como constructor (pueden ser juntos) para desbloquear la Daily Season', daily_locked_titles_v2: 'También necesitas haber ganado tanto el título de Constructores como el de Pilotos en una Temporada de Escudería (pueden ser temporadas distintas)', daily_locked_row_constructor: 'Título Constructores', daily_locked_row_driver: 'Título Pilotos', daily_locked_tap_hint: 'Toca para más detalles', daily_locked_need_login: 'Inicia sesión con Google para desbloquear los objetivos de la Daily',
@@ -13851,7 +13851,7 @@ async function shareTrophyRoomCard(){
     const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
     const fileName = 'racing-dynasty-sala-trofei.png';
     const gameUrl = 'https://racingdynasty.fuoriscala.xyz/';
-    const shareText = `La mia Sala Trofei su Racing Dynasty — prova a battermi!\n${gameUrl}`;
+    const shareText = t('trophy_share_text', gameUrl);
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
       await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
     } else {
@@ -13877,7 +13877,7 @@ async function shareResultCard(){
     const gameUrl = 'https://racingdynasty.fuoriscala.xyz/';
     const shareText = state.isDailySeason
       ? t('daily_share_text', gameUrl)
-      : `Ho appena chiuso una stagione su Racing Dynasty — prova a battermi!\n${gameUrl}`;
+      : t('season_share_text', gameUrl);
     if(navigator.share && navigator.canShare && navigator.canShare({ files:[new File([blob], fileName, {type:'image/png'})] })){
       await navigator.share({ files:[new File([blob], fileName, {type:'image/png'})], text: shareText });
     } else {
