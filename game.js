@@ -1016,7 +1016,7 @@ const I18N = {
     daily_leaderboard_weighted_empty: 'Nessuno ha ancora giocato abbastanza Daily (minimo 15 giorni) per comparire qui.',
 
     menu_new_run: 'Nuova Run', menu_new_run_confirm: 'Vuoi davvero abbandonare la run attuale e ricominciare da capo? Il progresso non salvato andrà perso.',
-    menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti', menu_whats_new: 'Novità', whatsnew_empty: 'Nessuna novità al momento.',
+    menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti', menu_whats_new: 'Novità', whatsnew_empty: 'Nessuna novità al momento.', whatsnew_got_it_btn: 'Capito!', whatsnew_show_again_btn: 'Mostra di nuovo',
     menu_fullscreen: 'Schermo Intero', menu_language: 'Lingua',
     // Impostazioni comuni
     settings_title: '<img class=ico src=assets/icons/gear.png>️ Impostazioni', settings_sfx_vol: 'Volume Effetti', settings_music_vol: 'Volume Musica',
@@ -1416,7 +1416,7 @@ const I18N = {
     daily_leaderboard_weighted_empty: "Nobody has played enough Dailies yet (minimum 15 days) to show up here.",
 
     menu_new_run: 'New Run', menu_new_run_confirm: 'Do you really want to abandon the current run and start over? Unsaved progress will be lost.',
-    menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits', menu_whats_new: "What's New", whatsnew_empty: 'Nothing new right now.',
+    menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits', menu_whats_new: "What's New", whatsnew_empty: 'Nothing new right now.', whatsnew_got_it_btn: 'Got it!', whatsnew_show_again_btn: 'Show again next time',
     menu_fullscreen: 'Fullscreen', menu_language: 'Language',
     settings_title: '<img class=ico src=assets/icons/gear.png>️ Settings', settings_sfx_vol: 'Sound Effects Volume', settings_music_vol: 'Music Volume',
     settings_haptic: 'Haptic Feedback', settings_speed: 'Default Race Speed', settings_decision_timer: 'Decision Countdown',
@@ -1812,7 +1812,7 @@ const I18N = {
     daily_leaderboard_weighted_empty: 'Nadie ha jugado suficientes Dailies todavía (mínimo 15 días) para aparecer aquí.',
 
     menu_new_run: 'Nueva Partida', menu_new_run_confirm: '¿Seguro que quieres abandonar la partida actual y empezar de nuevo? El progreso no guardado se perderá.',
-    menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos', menu_whats_new: 'Novedades', whatsnew_empty: 'No hay novedades por ahora.',
+    menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos', menu_whats_new: 'Novedades', whatsnew_empty: 'No hay novedades por ahora.', whatsnew_got_it_btn: '¡Entendido!', whatsnew_show_again_btn: 'Mostrar de nuevo',
     menu_fullscreen: 'Pantalla Completa', menu_language: 'Idioma',
     settings_title: '<img class=ico src=assets/icons/gear.png>️ Ajustes', settings_sfx_vol: 'Volumen de Efectos', settings_music_vol: 'Volumen de Música',
     settings_haptic: 'Vibración', settings_speed: 'Velocidad de Carrera Predeterminada', settings_decision_timer: 'Cuenta Atrás de Decisiones',
@@ -9876,6 +9876,7 @@ function renderDailySeasonHub(){
   });
 }
 function renderModeSelect(){
+  setTimeout(mostraPopupNovitaSeServe, 350); // piccolo ritardo perche' la schermata sia gia' visibile sotto
   app.innerHTML = `
   <div class="topbar">
     <div class="topbar-left-group">
@@ -16763,32 +16764,58 @@ function closeCreditsPanel(){
   document.getElementById('sidebarCreditsPanel').style.display = 'none';
 }
 
-// V0.9.9.242: pannello "Novità" — mostra le voci del registro rilevanti da quando il giocatore ha
-// controllato l'ultima volta (o le ultime 2, se non c'e' nessuna traccia). Segna tutto come visto
-// nel momento in cui la schermata viene APERTA (non serve scorrere fino in fondo).
+// V0.9.9.243: pannello "Novità" — mostra le voci del registro rilevanti da quando il giocatore ha
+// controllato l'ultima volta (o le ultime 2, se non c'e' nessuna traccia).
+// V0.9.9.244: RIDISEGNATO su richiesta di Gio — non più un pulsante nascosto nel menu con "segna
+// come visto" automatico all'apertura, ma un pop-up proattivo con 2 scelte esplicite: "Capito!"
+// (non si vede più finché non arrivano nuove novità) e "Mostra di nuovo" (ricompare al prossimo
+// avvio, insieme a eventuali altre novità nel frattempo). Il pulsante nel menu resta, per rivedere
+// il contenuto quando si vuole, ma usa la stessa identica coppia di pulsanti in fondo.
 function whatsNewPanelHTML(){
   const voci = vociAggiornamentiDaMostrare();
-  if(voci.length===0) return `<div class="dim" style="text-align:center;padding:20px 0;">${t('whatsnew_empty')}</div>`;
-  return voci.map(v=>{
-    const contenuto = v[currentLang] || v.it;
-    const elenco = contenuto.voci.map(riga=>`<li>${riga}</li>`).join('');
-    return `<div class="whatsnew-entry" style="margin-bottom:20px;">
-      <h4 style="margin:0 0 10px;font-size:15px;">${contenuto.titolo}</h4>
-      <ul style="margin:0;padding-left:20px;line-height:1.6;font-size:13.5px;" class="dim">${elenco}</ul>
+  const corpo = voci.length===0
+    ? `<div class="dim" style="text-align:center;padding:20px 0;">${t('whatsnew_empty')}</div>`
+    : voci.map(v=>{
+        const contenuto = v[currentLang] || v.it;
+        const elenco = contenuto.voci.map(riga=>`<li>${riga}</li>`).join('');
+        return `<div class="whatsnew-entry" style="margin-bottom:20px;">
+          <h4 style="margin:0 0 10px;font-size:15px;">${contenuto.titolo}</h4>
+          <ul style="margin:0;padding-left:20px;line-height:1.6;font-size:13.5px;" class="dim">${elenco}</ul>
+        </div>`;
+      }).join('');
+  return `${corpo}
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
+      <button type="button" class="button ghost" id="whatsNewShowAgainBtn" style="flex:1;">${t('whatsnew_show_again_btn')}</button>
+      <button type="button" class="button primary" id="whatsNewGotItBtn" style="flex:1;">${t('whatsnew_got_it_btn')}</button>
     </div>`;
-  }).join('');
+}
+function apriPannelloNovita(){
+  document.getElementById('sidebarWhatsNewBody').innerHTML = whatsNewPanelHTML();
+  document.getElementById('sidebarWhatsNewPanel').style.display = 'flex';
+  document.getElementById('whatsNewGotItBtn').addEventListener('click', ()=>{
+    segnaAggiornamentiComeVisti();
+    const dot = document.getElementById('menuWhatsNewDot');
+    if(dot) dot.style.display = 'none';
+    closeWhatsNewPanel();
+  });
+  document.getElementById('whatsNewShowAgainBtn').addEventListener('click', closeWhatsNewPanel);
+  pushBackGuard();
 }
 function openWhatsNew(){
   closeMenuPanel();
-  document.getElementById('sidebarWhatsNewBody').innerHTML = whatsNewPanelHTML();
-  document.getElementById('sidebarWhatsNewPanel').style.display = 'flex';
-  segnaAggiornamentiComeVisti();
-  const dot = document.getElementById('menuWhatsNewDot');
-  if(dot) dot.style.display = 'none';
-  pushBackGuard();
+  apriPannelloNovita();
 }
 function closeWhatsNewPanel(){
   document.getElementById('sidebarWhatsNewPanel').style.display = 'none';
+}
+// V0.9.9.244: pop-up automatico — una sola volta per sessione (non ad ogni ritorno alla schermata
+// di scelta modalità nella STESSA sessione), mostrato solo se ci sono novità non ancora "Capito!".
+let __popupNovitaMostratoQuestaSessione = false;
+function mostraPopupNovitaSeServe(){
+  if(__popupNovitaMostratoQuestaSessione) return;
+  if(!ciSonoNovitaNonViste()) return;
+  __popupNovitaMostratoQuestaSessione = true;
+  apriPannelloNovita();
 }
 
 // V0.9.7: pannello Obiettivi — 15 achievement raggruppati per categoria, stato sbloccato/bloccato
