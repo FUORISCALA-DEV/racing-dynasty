@@ -5042,6 +5042,15 @@ function simulateFullRace(){
 
     const evThis = [], pitThis = new Set(), penaltyThis = new Set();
     const provisional = [];
+    // V0.9.9.241: penalità da doppia sosta ravvicinata ESTESA A TUTTE LE SQUADRE — richiesto da Gio:
+    // "anche gli avversari se fanno pit insieme e sono vicini si devono trovare nelle medesime
+    // condizioni, non sarebbe equo altrimenti". Prima la penalità (vedi applyRealPitStop più sotto)
+    // si applicava SOLO al giocatore quando sceglieva "Entra ai box" per entrambi i piloti tramite
+    // una decisione live — le squadre rivali, che decidono le soste in automatico proprio qui nella
+    // simulazione base, non la subivano mai. Tracciamo chi si è già fermato per ogni squadra in
+    // QUESTA fase, cosi' il secondo compagno di squadra a fermarsi (se vicino al primo nell'ultimo
+    // ordine confermato) paga lo stesso piccolo extra di coda, chiunque sia — giocatore o rivale.
+    const primoPitPerSquadraQuestaFase = {};
 
     entries.forEach(e=>{
       if(retiredAtPhase[e.slotKey]!==null){
@@ -5060,6 +5069,17 @@ function simulateFullRace(){
         // entrambi in base all'abilita' pit-stop del Team Principal (100=veloce, 0=lento).
         const pitSkillFrac = comp.stratega.pitstop/100;
         pitPenalty = (t===safetyCarPhase) ? (12 - pitSkillFrac*2) : (24 - pitSkillFrac*2);
+        // V0.9.9.241: extra di coda se un compagno di squadra si e' gia' fermato in questa stessa
+        // fase ED erano vicini nell'ultimo ordine confermato — stessa soglia (2 posizioni) usata
+        // altrove nel gioco per "vicini".
+        const compagnoGiaFermato = primoPitPerSquadraQuestaFase[e.teamId];
+        if(compagnoGiaFermato){
+          const ordinePrecedente = phaseOrders[t-1] || [];
+          const iMio = ordinePrecedente.indexOf(e.slotKey), iCompagno = ordinePrecedente.indexOf(compagnoGiaFermato);
+          if(iMio>=0 && iCompagno>=0 && Math.abs(iMio-iCompagno)<=2) pitPenalty += 2.5 + rnd()*2;
+        } else {
+          primoPitPerSquadraQuestaFase[e.teamId] = e.slotKey;
+        }
         tireWear[e.slotKey] = 0.05;
       }
 
