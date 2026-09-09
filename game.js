@@ -678,7 +678,7 @@ const I18N = {
     settings_streamer_mode: 'Modalità Streamer', settings_streamer_mode_desc: "Layout pensato per OBS, con spazio dedicato alla webcam.", settings_streamer_name: 'Nome Streamer',
     bkt_gain_1: 'Guadagni 1 posizione', bkt_gain_1_2: 'Guadagni 1-2 posizioni', bkt_gain_2_3: 'Guadagni 2-3 posizioni', bkt_hold: 'Mantieni la posizione',
     bkt_lose_1: 'Perdi 1 posizione', bkt_lose_2: 'Perdi 2 posizioni', bkt_lose_1_2: 'Perdi 1-2 posizioni', bkt_lose_3: 'Perdi 3 posizioni', bkt_gain_3_5: 'Guadagni 3-5 posizioni', bkt_retired: 'Rischio ritiro', bkt_penalty: 'Penalità', bkt_gain_2: 'Guadagni 2 posizioni',
-    dec_evento_badge: '🚨 EVENTO', dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito', bkt_gain_exact: (n)=>n===1?'Guadagni 1 posizione':`Guadagni ${n} posizioni`, bkt_lose_exact: (n)=>n===1?'Perdi 1 posizione':`Perdi ${n} posizioni`, bkt_gain_seconds: (s)=>`Guadagni ${s} secondi`, bkt_lose_seconds: (s)=>`Perdi ${s} secondi`, variable_outcome_favorable: 'Tendenza favorevole', variable_outcome_risky: 'Tendenza rischiosa', variable_outcome_balanced: 'Esito incerto', variable_outcome_notice: 'Il risultato vero dipende da come si muove tutto il gruppo ai box — può essere più ampio di quanto sembri qui.',
+    dec_evento_badge: '🚨 EVENTO', dec_reveal_title: 'Ballottaggio in pista…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ TUTTO O NIENTE — si decide ora', dec_reveal_title_done: 'Esito', bkt_gain_exact: (n)=>n===1?'Guadagni 1 posizione':`Guadagni ${n} posizioni`, bkt_lose_exact: (n)=>n===1?'Perdi 1 posizione':`Perdi ${n} posizioni`, bkt_gain_seconds: (s)=>`Guadagni ${s} secondi`, bkt_lose_seconds: (s)=>`Perdi ${s} secondi`, variable_outcome_situational: 'Dipende dalla situazione', variable_outcome_notice: 'Il risultato vero dipende da come si muove tutto il gruppo ai box — può essere più ampio di quanto sembri qui.',
     dret_career_totals: 'Numeri di carriera', dret_seasons: 'Stagioni', dret_total_wins: 'Vittorie', dret_total_podiums: 'Podi',
     dret_total_points: (n)=>`${n} punti totali in carriera`,
     dret_best_season: (age,pos,team)=>`Stagione migliore: a ${age} anni, P${pos} con ${team}`,
@@ -1080,7 +1080,7 @@ const I18N = {
     settings_streamer_mode: 'Streamer Mode', settings_streamer_mode_desc: 'Layout designed for OBS, with a dedicated webcam space.', settings_streamer_name: 'Streamer Name',
     bkt_gain_1: 'Gain 1 position', bkt_gain_1_2: 'Gain 1-2 positions', bkt_gain_2_3: 'Gain 2-3 positions', bkt_hold: 'Hold position',
     bkt_lose_1: 'Lose 1 position', bkt_lose_2: 'Lose 2 positions', bkt_lose_1_2: 'Lose 1-2 positions', bkt_lose_3: 'Lose 3 positions', bkt_gain_3_5: 'Gain 3-5 positions', bkt_retired: 'Retirement risk', bkt_penalty: 'Penalty', bkt_gain_2: 'Gain 2 positions',
-    dec_evento_badge: '🚨 EVENT', dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result', bkt_gain_exact: (n)=>n===1?'Gain 1 position':`Gain ${n} positions`, bkt_lose_exact: (n)=>n===1?'Lose 1 position':`Lose ${n} positions`, bkt_gain_seconds: (s)=>`Gain ${s} seconds`, bkt_lose_seconds: (s)=>`Lose ${s} seconds`, variable_outcome_favorable: 'Favorable odds', variable_outcome_risky: 'Risky odds', variable_outcome_balanced: 'Uncertain outcome', variable_outcome_notice: "The real result depends on how the whole field's pit stops play out — it can be bigger than it looks here.",
+    dec_evento_badge: '🚨 EVENT', dec_reveal_title: 'On track right now…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ ALL OR NOTHING — deciding now', dec_reveal_title_done: 'Result', bkt_gain_exact: (n)=>n===1?'Gain 1 position':`Gain ${n} positions`, bkt_lose_exact: (n)=>n===1?'Lose 1 position':`Lose ${n} positions`, bkt_gain_seconds: (s)=>`Gain ${s} seconds`, bkt_lose_seconds: (s)=>`Lose ${s} seconds`, variable_outcome_situational: 'Depends on the situation', variable_outcome_notice: "The real result depends on how the whole field's pit stops play out — it can be bigger than it looks here.",
     dret_career_totals: 'Career numbers', dret_seasons: 'Seasons', dret_total_wins: 'Wins', dret_total_podiums: 'Podiums',
     dret_total_points: (n)=>`${n} total career points`,
     dret_best_season: (age,pos,team)=>`Best season: at age ${age}, P${pos} with ${team}`,
@@ -1476,7 +1476,7 @@ const I18N = {
     settings_streamer_mode: 'Modo Streamer', settings_streamer_mode_desc: 'Diseño pensado para OBS, con espacio dedicado a la cámara web.', settings_streamer_name: 'Nombre de Streamer',
     bkt_gain_1: 'Ganas 1 posición', bkt_gain_1_2: 'Ganas 1-2 posiciones', bkt_gain_2_3: 'Ganas 2-3 posiciones', bkt_hold: 'Mantienes la posición',
     bkt_lose_1: 'Pierdes 1 posición', bkt_lose_2: 'Pierdes 2 posiciones', bkt_lose_1_2: 'Pierdes 1-2 posiciones', bkt_lose_3: 'Pierdes 3 posiciones', bkt_gain_3_5: 'Ganas 3-5 posiciones', bkt_retired: 'Riesgo de retiro', bkt_penalty: 'Penalización', bkt_gain_2: 'Ganas 2 posiciones',
-    dec_evento_badge: '🚨 EVENTO', dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado', bkt_gain_exact: (n)=>n===1?'Ganas 1 posición':`Ganas ${n} posiciones`, bkt_lose_exact: (n)=>n===1?'Pierdes 1 posición':`Pierdes ${n} posiciones`, bkt_gain_seconds: (s)=>`Ganas ${s} segundos`, bkt_lose_seconds: (s)=>`Pierdes ${s} segundos`, variable_outcome_favorable: 'Tendencia favorable', variable_outcome_risky: 'Tendencia arriesgada', variable_outcome_balanced: 'Resultado incierto', variable_outcome_notice: 'El resultado real depende de cómo se muevan todos en boxes — puede ser más grande de lo que parece aquí.',
+    dec_evento_badge: '🚨 EVENTO', dec_reveal_title: 'Decidiéndose en pista…', dec_reveal_title_risky: '<img class=ico src=assets/icons/warning.png>️ TODO O NADA — se decide ahora', dec_reveal_title_done: 'Resultado', bkt_gain_exact: (n)=>n===1?'Ganas 1 posición':`Ganas ${n} posiciones`, bkt_lose_exact: (n)=>n===1?'Pierdes 1 posición':`Pierdes ${n} posiciones`, bkt_gain_seconds: (s)=>`Ganas ${s} segundos`, bkt_lose_seconds: (s)=>`Pierdes ${s} segundos`, variable_outcome_situational: 'Depende de la situación', variable_outcome_notice: 'El resultado real depende de cómo se muevan todos en boxes — puede ser más grande de lo que parece aquí.',
     dret_career_totals: 'Números de carrera', dret_seasons: 'Temporadas', dret_total_wins: 'Victorias', dret_total_podiums: 'Podios',
     dret_total_points: (n)=>`${n} puntos totales en carrera`,
     dret_best_season: (age,pos,team)=>`Mejor temporada: a los ${age} años, P${pos} con ${team}`,
@@ -7389,20 +7389,15 @@ function bucketsSummaryHTML(choiceKey, decisionType){
   // a "meccanica reale" (legate al vero andamento dei pit stop di tutto il gruppo, non a un dado
   // isolato), mostrare un'etichetta precisa come "40% Guadagni 1 posizione" è fuorviante: il vero
   // risultato può essere molto più ampio (misura l'intera finestra pit, non solo questa scelta).
-  // Invece di una falsa precisione, mostriamo la TENDENZA onesta (favorevole/rischiosa/incerta,
-  // calcolata sul peso probabilistico reale delle stesse fasce) più un avviso esplicito sulla
-  // variabilità — niente più numeri specifici prima di scegliere, per queste scelte soltanto.
+  // Invece di una falsa precisione, mostriamo solo l'avviso onesto sulla variabilità — SENZA
+  // nessun giudizio di merito (favorevole/rischiosa). BUG DI DESIGN TROVATO E CORRETTO SUBITO DOPO
+  // LA PRIMA VERSIONE — segnalato da Gio: mostrare "Tendenza favorevole" in verde accanto alle
+  // percentuali normali delle altre scelte rendeva quella scelta visivamente "vincente per forza",
+  // uccidendo la vera decisione strategica ("perché non dovrei scegliere sempre quella?"). Ora è
+  // solo un'etichetta neutra, uguale per tutte le scelte a meccanica reale: nessuna sembra
+  // automaticamente la migliore, la scelta si basa sul contesto descritto sopra, non su un numero.
   if(decisionType && isRealMechanicChoice(decisionType, choiceKey)){
-    let pesoFavorevole = 0, pesoSfavorevole = 0;
-    buckets.forEach(b=>{
-      if(b.label.startsWith('gain')) pesoFavorevole += b.prob;
-      else if(b.label.startsWith('lose') || b.label==='retired') pesoSfavorevole += b.prob;
-    });
-    let chiave, classe;
-    if(pesoFavorevole - pesoSfavorevole > 0.15){ chiave='variable_outcome_favorable'; classe='bkt-gain'; }
-    else if(pesoSfavorevole - pesoFavorevole > 0.15){ chiave='variable_outcome_risky'; classe='bkt-lose'; }
-    else { chiave='variable_outcome_balanced'; classe='bkt-hold'; }
-    return `<span class="decision-bucket-chip ${classe}">${t(chiave)}</span><div class="dim" style="font-size:10px;margin-top:4px;line-height:1.35;">${t('variable_outcome_notice')}</div>`;
+    return `<span class="decision-bucket-chip bkt-hold">${t('variable_outcome_situational')}</span><div class="dim" style="font-size:10px;margin-top:4px;line-height:1.35;">${t('variable_outcome_notice')}</div>`;
   }
   return buckets.map(b=>{
     const pct = Math.round(b.prob*100);
