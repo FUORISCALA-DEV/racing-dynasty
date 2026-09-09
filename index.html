@@ -2530,6 +2530,7 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
       <button type="button" class="menu-item" id="menuMyProfileBtn">👤 <span>Il mio profilo</span></button>
 
       <div class="menu-section-label">INFO</div>
+      <button type="button" class="menu-item" id="menuWhatsNewBtn">🆕 <span>Novità</span><span id="menuWhatsNewDot" style="display:none;width:8px;height:8px;border-radius:50%;background:var(--signal);margin-left:6px;"></span></button>
       <button type="button" class="menu-item" id="menuGuideBtn">📖 <span>Guida</span></button>
       <button type="button" class="menu-item" id="menuCreditsBtn">🏢 <span>Crediti</span></button>
       <button type="button" class="menu-item" id="menuBugReportBtn">🐞 <span>Segnala un problema</span></button>
@@ -2558,6 +2559,16 @@ tr.row-clickable:active{ background:rgba(255,106,26,0.16); }
       <button type="button" class="sidebar-settings-close" id="sidebarCreditsCloseBtn">✕</button>
     </div>
     <div class="sidebar-settings-body" id="sidebarCreditsBody" style="padding:16px;"></div>
+  </div>
+</div>
+
+<div id="sidebarWhatsNewPanel" class="sidebar-settings-overlay" style="display:none;" data-nosnippet>
+  <div class="sidebar-settings-window">
+    <div class="sidebar-settings-title">
+      <span id="sidebarWhatsNewTitle">🆕 Novità</span>
+      <button type="button" class="sidebar-settings-close" id="sidebarWhatsNewCloseBtn">✕</button>
+    </div>
+    <div class="sidebar-settings-body" id="sidebarWhatsNewBody" style="padding:16px;"></div>
   </div>
 </div>
 

@@ -1016,7 +1016,7 @@ const I18N = {
     daily_leaderboard_weighted_empty: 'Nessuno ha ancora giocato abbastanza Daily (minimo 15 giorni) per comparire qui.',
 
     menu_new_run: 'Nuova Run', menu_new_run_confirm: 'Vuoi davvero abbandonare la run attuale e ricominciare da capo? Il progresso non salvato andrà perso.',
-    menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti',
+    menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti', menu_whats_new: 'Novità', whatsnew_empty: 'Nessuna novità al momento.',
     menu_fullscreen: 'Schermo Intero', menu_language: 'Lingua',
     // Impostazioni comuni
     settings_title: '<img class=ico src=assets/icons/gear.png>️ Impostazioni', settings_sfx_vol: 'Volume Effetti', settings_music_vol: 'Volume Musica',
@@ -1416,7 +1416,7 @@ const I18N = {
     daily_leaderboard_weighted_empty: "Nobody has played enough Dailies yet (minimum 15 days) to show up here.",
 
     menu_new_run: 'New Run', menu_new_run_confirm: 'Do you really want to abandon the current run and start over? Unsaved progress will be lost.',
-    menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits',
+    menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits', menu_whats_new: "What's New", whatsnew_empty: 'Nothing new right now.',
     menu_fullscreen: 'Fullscreen', menu_language: 'Language',
     settings_title: '<img class=ico src=assets/icons/gear.png>️ Settings', settings_sfx_vol: 'Sound Effects Volume', settings_music_vol: 'Music Volume',
     settings_haptic: 'Haptic Feedback', settings_speed: 'Default Race Speed', settings_decision_timer: 'Decision Countdown',
@@ -1812,7 +1812,7 @@ const I18N = {
     daily_leaderboard_weighted_empty: 'Nadie ha jugado suficientes Dailies todavía (mínimo 15 días) para aparecer aquí.',
 
     menu_new_run: 'Nueva Partida', menu_new_run_confirm: '¿Seguro que quieres abandonar la partida actual y empezar de nuevo? El progreso no guardado se perderá.',
-    menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos',
+    menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos', menu_whats_new: 'Novedades', whatsnew_empty: 'No hay novedades por ahora.',
     menu_fullscreen: 'Pantalla Completa', menu_language: 'Idioma',
     settings_title: '<img class=ico src=assets/icons/gear.png>️ Ajustes', settings_sfx_vol: 'Volumen de Efectos', settings_music_vol: 'Volumen de Música',
     settings_haptic: 'Vibración', settings_speed: 'Velocidad de Carrera Predeterminada', settings_decision_timer: 'Cuenta Atrás de Decisiones',
@@ -10271,6 +10271,59 @@ let driverTrophyData = loadDriverTrophyData();
    15 obiettivi in 4 categorie, persistenti tra carriere (stesso pattern di museo/trofei).
    Il progresso e' pensato per essere estendibile: nuovi obiettivi si aggiungono all'array
    ACHIEVEMENTS senza dover toccare lo storage o la UI. */
+// V0.9.9.242: registro "Novità" per i giocatori — richiesto da Gio: una scheda non tecnica, "cosa
+// aspettarsi di diverso rispetto all'ultima volta", visibile a tutti. Ogni voce ha un id univoco
+// (serve per sapere fino a dove il giocatore ha già letto) e testo in tutte e 3 le lingue. Aggiungere
+// qui una nuova voce ad ogni sessione di lavoro futura, in cima all'array (le più recenti per prime).
+const UPDATE_LOG = [
+  {
+    id: 'u2026-09-08',
+    it: { titolo: 'Aggiornamento dell\'8 settembre', voci: [
+      'Ora puoi scaricare tutto in anticipo per giocare anche senza connessione — utile in aereo o in metro. Si trova in Impostazioni.',
+      'Risolto un problema serio su iPhone: a volte il rilascio dei paddle alla partenza non veniva riconosciuto.',
+      'Le scelte durante la gara legate ai pit stop ora sono più oneste sul risultato possibile, invece di promettere un numero piccolo e poi sorprenderti con uno grande.',
+      'Se mandi entrambi i piloti ai box insieme mentre sono vicini in pista, ora il secondo perde davvero un po\' di tempo in coda — vale anche per gli avversari, non solo per te.',
+      'Sistemate diverse schermate che restavano in italiano anche giocando in inglese o spagnolo.',
+    ]},
+    en: { titolo: 'September 8th update', voci: [
+      'You can now download everything in advance to play without a connection — handy on a flight or the subway. Find it in Settings.',
+      'Fixed a serious issue on iPhone: sometimes releasing the paddles at the start wasn\'t recognized.',
+      'Pit-stop-related in-race choices are now more honest about the possible outcome, instead of promising a small number and then surprising you with a big one.',
+      'If you send both drivers to the pits together while close on track, the second one now genuinely loses some time queueing — this applies to rivals too, not just you.',
+      'Fixed several screens that stayed in Italian even when playing in English or Spanish.',
+    ]},
+    es: { titolo: 'Actualización del 8 de septiembre', voci: [
+      'Ahora puedes descargar todo por adelantado para jugar sin conexión — útil en un vuelo o en el metro. Está en Ajustes.',
+      'Corregido un problema serio en iPhone: a veces soltar los pedales en la salida no se reconocía.',
+      'Las decisiones en carrera relacionadas con las paradas en boxes ahora son más honestas sobre el resultado posible, en lugar de prometer un número pequeño y luego sorprenderte con uno grande.',
+      'Si envías a los dos pilotos a boxes juntos estando cerca en pista, ahora el segundo pierde de verdad algo de tiempo en la cola — esto también se aplica a los rivales, no solo a ti.',
+      'Corregidas varias pantallas que se quedaban en italiano incluso jugando en inglés o español.',
+    ]},
+  },
+];
+const UPDATE_LOG_SEEN_KEY = 'racingDynastyLastSeenUpdateIdV1';
+function ultimoAggiornamentoVisto(){
+  try{ return localStorage.getItem(UPDATE_LOG_SEEN_KEY); }catch(e){ return null; }
+}
+function segnaAggiornamentiComeVisti(){
+  try{ if(UPDATE_LOG.length) localStorage.setItem(UPDATE_LOG_SEEN_KEY, UPDATE_LOG[0].id); }catch(e){}
+}
+function ciSonoNovitaNonViste(){
+  if(!UPDATE_LOG.length) return false;
+  return ultimoAggiornamentoVisto() !== UPDATE_LOG[0].id;
+}
+// Decide quali voci mostrare: tutte quelle più recenti dell'ultima vista, oppure — se non c'e'
+// nessuna traccia dell'ultima visita (mai aperto prima, o memoria locale assente/cancellata) — le
+// ultime 2 voci del registro, come richiesto da Gio.
+function vociAggiornamentiDaMostrare(){
+  const ultimaVista = ultimoAggiornamentoVisto();
+  if(ultimaVista===null) return UPDATE_LOG.slice(0,2);
+  const idx = UPDATE_LOG.findIndex(v=>v.id===ultimaVista);
+  if(idx===-1) return UPDATE_LOG.slice(0,2); // id salvato non piu' presente nel registro
+  if(idx===0) return [UPDATE_LOG[0]]; // era gia' aggiornato: mostriamo comunque l'ultima voce
+  return UPDATE_LOG.slice(0, idx);
+}
+
 const ACHIEVEMENTS = [
   // Facile
   { id:'primo-giorno', cat:'Facile', title:'Primo Giorno', desc:'Completa il tuo primo Draft e schiera la scuderia.', en:{title:'First Day', desc:'Complete your first Draft and field your team.'}, es:{title:'Primer Día', desc:'Completa tu primer Draft y alinea tu escudería.'} },
@@ -16710,6 +16763,34 @@ function closeCreditsPanel(){
   document.getElementById('sidebarCreditsPanel').style.display = 'none';
 }
 
+// V0.9.9.242: pannello "Novità" — mostra le voci del registro rilevanti da quando il giocatore ha
+// controllato l'ultima volta (o le ultime 2, se non c'e' nessuna traccia). Segna tutto come visto
+// nel momento in cui la schermata viene APERTA (non serve scorrere fino in fondo).
+function whatsNewPanelHTML(){
+  const voci = vociAggiornamentiDaMostrare();
+  if(voci.length===0) return `<div class="dim" style="text-align:center;padding:20px 0;">${t('whatsnew_empty')}</div>`;
+  return voci.map(v=>{
+    const contenuto = v[currentLang] || v.it;
+    const elenco = contenuto.voci.map(riga=>`<li>${riga}</li>`).join('');
+    return `<div class="whatsnew-entry" style="margin-bottom:20px;">
+      <h4 style="margin:0 0 10px;font-size:15px;">${contenuto.titolo}</h4>
+      <ul style="margin:0;padding-left:20px;line-height:1.6;font-size:13.5px;" class="dim">${elenco}</ul>
+    </div>`;
+  }).join('');
+}
+function openWhatsNew(){
+  closeMenuPanel();
+  document.getElementById('sidebarWhatsNewBody').innerHTML = whatsNewPanelHTML();
+  document.getElementById('sidebarWhatsNewPanel').style.display = 'flex';
+  segnaAggiornamentiComeVisti();
+  const dot = document.getElementById('menuWhatsNewDot');
+  if(dot) dot.style.display = 'none';
+  pushBackGuard();
+}
+function closeWhatsNewPanel(){
+  document.getElementById('sidebarWhatsNewPanel').style.display = 'none';
+}
+
 // V0.9.7: pannello Obiettivi — 15 achievement raggruppati per categoria, stato sbloccato/bloccato
 function achievementsPanelHTML(){
   const cats = ['Facile','Medio','Difficile','Estremo'];
@@ -16834,7 +16915,7 @@ function applyStaticMenuTranslations(){
   const map = {
     menuHomeBtn: 'menu_home', menuNewCareerBtn: 'menu_new_career', menuTrophyBtn: 'menu_trophy_room', menuGuideBtn: 'menu_guide',
     menuAchievementsBtn: 'menu_achievements', menuSettingsBtn: 'menu_settings', menuCreditsBtn: 'menu_credits',
-    menuDriverTrophyBtn: 'menu_driver_trophy_room', menuMuseumBtn: 'menu_museum',
+    menuDriverTrophyBtn: 'menu_driver_trophy_room', menuMuseumBtn: 'menu_museum', menuWhatsNewBtn: 'menu_whats_new',
   };
   Object.entries(map).forEach(([id, key])=>{
     const el = document.getElementById(id);
@@ -16907,6 +16988,10 @@ function initSidebar(){
   document.getElementById('menuSettingsBtn').addEventListener('click', openSettings);
   const creditsBtn = document.getElementById('menuCreditsBtn');
   if(creditsBtn) creditsBtn.addEventListener('click', openCredits);
+  const whatsNewBtn = document.getElementById('menuWhatsNewBtn');
+  if(whatsNewBtn) whatsNewBtn.addEventListener('click', openWhatsNew);
+  const whatsNewCloseBtn = document.getElementById('sidebarWhatsNewCloseBtn');
+  if(whatsNewCloseBtn) whatsNewCloseBtn.addEventListener('click', closeWhatsNewPanel);
   const bugReportBtn = document.getElementById('menuBugReportBtn');
   if(bugReportBtn) bugReportBtn.addEventListener('click', openBugReportPanel);
   document.getElementById('menuFullscreenBtn').addEventListener('click', toggleFullscreen);
@@ -17087,6 +17172,11 @@ function bootGameNormally(){
   state = { phase:'studio-splash', selectedDifficulty:'medio' };
   initSidebar();
   applyStaticMenuTranslations();
+  // V0.9.9.242: mostra il puntino "novità" se ci sono aggiornamenti mai visti su questo dispositivo
+  if(ciSonoNovitaNonViste()){
+    const dot = document.getElementById('menuWhatsNewDot');
+    if(dot) dot.style.display = 'inline-block';
+  }
   render(); // V0.9.8.9: lo splash parte SUBITO, pulito — Supabase si inizializza un attimo dopo
   setTimeout(()=>{
     initSupabase();
