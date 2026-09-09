@@ -6689,12 +6689,12 @@ function delayFuturePitStop(timeline, slotKey, tCurrent){
   if(newPhase===cancelPhase || (timeline.pitByPhase[newPhase] && timeline.pitByPhase[newPhase].has(slotKey))) return; // nessun posto libero per ritardare
   applyRealPitStop(timeline, slotKey, tCurrent, false, newPhase);
 }
-function applyRealPitStop(timeline, slotKey, tCurrent, isDiscounted, targetPhase){
+function applyRealPitStop(timeline, slotKey, tCurrent, isDiscounted, targetPhase, costoExtraDaCoda){
   if(targetPhase===undefined) targetPhase = tCurrent;
   cancelFuturePitStop(timeline, slotKey, tCurrent); // prima annulliamo la sosta futura, se c'e'
   const comp = state.team;
   const pitSkillFrac = comp.stratega.pitstop/100;
-  const cost = isDiscounted ? (12 - pitSkillFrac*2) : (24 - pitSkillFrac*2);
+  const cost = (isDiscounted ? (12 - pitSkillFrac*2) : (24 - pitSkillFrac*2)) + (costoExtraDaCoda||0);
   for(let phase=targetPhase+1; phase<PHASES.length; phase++){
     const cumSnap = timeline.cumTimeByPhase[phase];
     if(!cumSnap || cumSnap[slotKey]==null) continue;
@@ -6719,8 +6719,8 @@ function applyRealPitStop(timeline, slotKey, tCurrent, isDiscounted, targetPhase
   timeline.pitByPhase[targetPhase].add(slotKey);
   return cost;
 }
-function applyRealPitUnderSC(timeline, slotKey, tCurrent){
-  return applyRealPitStop(timeline, slotKey, tCurrent, true);
+function applyRealPitUnderSC(timeline, slotKey, tCurrent, costoExtraDaCoda){
+  return applyRealPitStop(timeline, slotKey, tCurrent, true, undefined, costoExtraDaCoda);
 }
 // V0.9.9.72: combinazioni tipo+scelta che toccano DAVVERO il tempo cumulato (pit reale o ritardo
 // sosta) — per queste, lo spostamento narrativo indipendente va saltato: il testo mostrato al
@@ -6826,6 +6826,14 @@ function applyLiveDecision(type, choiceKey){
     const orderBefore = timeline.phaseOrders[downstreamPhaseFor(t)] || timeline.phaseOrders[t] || [];
     affectedSlots.forEach(slotKey=>{ beforeRanks[slotKey] = orderBefore.indexOf(slotKey); });
   }
+  // V0.9.9.240: penalità da "doppia sosta ravvicinata" sotto Safety Car — richiesta da Gio dopo
+  // aver notato che "Entra ai box" per entrambi i piloti insieme non aveva nessun contrappeso
+  // rispetto alla vita reale, dove il secondo pilota della stessa squadra deve aspettare che il
+  // muretto finisca con il primo. Si applica SOLO se i due piloti sono vicini in pista in questo
+  // momento (altrimenti non avrebbe senso "mettersi in coda" a un compagno lontano) — stessa
+  // funzione driversAreClose già usata per altre decisioni identiche.
+  const doppiaSostaRavvicinata = type==='safetycar' && choiceKey==='box' && affectedSlots.length>1 && driversAreClose(timeline, t);
+  let pitGiaApplicatoSottoSC = false;
   affectedSlots.forEach(slotKey=>{
     if(timeline.retiredAtPhase[slotKey]!==null) return; // gia' ritirato: la scelta non ha piu' effetto
     const outcome = pickDecisionOutcome(choiceKey);
@@ -6846,7 +6854,11 @@ function applyLiveDecision(type, choiceKey){
     // applicarne una subito.
     let realPitCost = null;
     if(type==='safetycar' && choiceKey==='box'){
-      realPitCost = applyRealPitUnderSC(timeline, slotKey, t);
+      // il secondo pilota ad arrivare ai box (in ordine di elaborazione) paga un piccolo extra di
+      // coda, solo se i due sono davvero vicini in pista in questo momento
+      const extraCoda = (doppiaSostaRavvicinata && pitGiaApplicatoSottoSC) ? (2.5 + rnd()*2) : 0;
+      realPitCost = applyRealPitUnderSC(timeline, slotKey, t, extraCoda);
+      pitGiaApplicatoSottoSC = true;
     } else if(type==='weather' && choiceKey==='box'){
       realPitCost = applyRealPitStop(timeline, slotKey, t, t===timeline.safetyCarPhase);
     } else if(type==='pit' && choiceKey==='early'){
