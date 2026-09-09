@@ -7172,6 +7172,20 @@ function advanceLivePhase(){
 
   const dec = state.live.pendingDecisions.find(d=>d.phase===t && !state.live.resolvedDecisions.includes(d.phase));
   if(dec){
+    // V0.9.9.237: BUG CORRETTO — segnalato da un utente: gli è comparsa la scelta "rivale davanti,
+    // vuoi spingere per superarlo" mentre i suoi due piloti erano già primo e secondo (nessun vero
+    // rivale davanti a nessuno dei due). CAUSA: tutte le decisioni della gara vengono scelte UNA
+    // SOLA VOLTA a inizio gara (computeLiveDecisions), usando la simulazione pianificata iniziale —
+    // ma decisioni precedenti nella STESSA gara possono cambiare davvero le posizioni (il codice che
+    // lo fa esiste già, vedi timeline.phaseOrders aggiornato in cascata), rendendo una scelta
+    // originariamente valida non più sensata al momento in cui viene davvero mostrata. Ricontrolliamo
+    // qui la stessa condizione usata per sceglierla, con la situazione VERA e attuale — se non regge
+    // più, saltiamo silenziosamente questa decisione invece di mostrare uno scenario illogico.
+    const controlloValiditaAttuale = DECISION_CONTEXT_CHECK[dec.type];
+    if(controlloValiditaAttuale && !controlloValiditaAttuale(timeline, t)){
+      state.live.resolvedDecisions.push(dec.phase);
+      return;
+    }
     state.live.activeDecision = dec;
     state.live.paused = true;
     state.live.decisionDeadline = decisionTimerEnabled ? (Date.now()+DECISION_TIME_MS) : null;
