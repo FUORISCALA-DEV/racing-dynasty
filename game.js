@@ -17370,15 +17370,20 @@ async function controllaAccountBetaGiaSbloccato(){
   }catch(e){ return false; }
 }
 async function checkMaintenanceAndBoot(){
+  // V0.9.9.246: la modalità manutenzione ora vive su Supabase (non più un file statico che
+  // richiedeva un push su GitHub per essere cambiato) — richiesto da Gio per poterla gestire da un
+  // cruscotto personale. Inizializziamo Supabase subito, prima ancora del normale avvio.
+  initSupabase();
   let maintenanceActive = false, unlockCode = null;
   try{
-    const resp = await fetch('maintenance-config.json?t='+Date.now(), {cache:'no-store'});
-    if(resp.ok){
-      const cfg = await resp.json();
-      maintenanceActive = !!cfg.maintenanceMode;
-      unlockCode = cfg.unlockCode || null;
+    if(supabaseClient){
+      const { data, error } = await supabaseClient.rpc('leggi_stato_manutenzione');
+      if(!error && data){
+        maintenanceActive = !!data.maintenanceMode;
+        unlockCode = data.unlockCode || null;
+      }
     }
-  }catch(e){ /* fail-open: nessun blocco se il file non si carica */ }
+  }catch(e){ /* fail-open: nessun blocco se Supabase non risponde */ }
   let alreadyBypassed = false;
   try{ alreadyBypassed = maintenanceActive && localStorage.getItem(MAINTENANCE_BYPASS_KEY)===unlockCode; }catch(e){}
   if(maintenanceActive && !alreadyBypassed){
