@@ -1016,7 +1016,7 @@ const I18N = {
     daily_leaderboard_weighted_empty: 'Nessuno ha ancora giocato abbastanza Daily (minimo 15 giorni) per comparire qui.',
 
     menu_new_run: 'Nuova Run', menu_new_run_confirm: 'Vuoi davvero abbandonare la run attuale e ricominciare da capo? Il progresso non salvato andrà perso.',
-    menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti', menu_whats_new: 'Novità', whatsnew_empty: 'Nessuna novità al momento.', whatsnew_got_it_btn: 'Capito!', whatsnew_show_again_btn: 'Mostra di nuovo',
+    menu_achievements: 'Obiettivi', menu_settings: 'Impostazioni', menu_credits: 'Crediti', menu_whats_new: 'Novità', whatsnew_empty: 'Nessuna novità al momento.', whatsnew_got_it_btn: 'Capito!', whatsnew_show_again_btn: 'Mostra di nuovo', betagate_title: 'Racing Dynasty è in closed beta', betagate_desc: 'Il gioco è ancora in accesso limitato. Se hai un codice invito, inseriscilo qui sotto.', betagate_placeholder: 'Codice invito', betagate_submit_btn: 'Entra', betagate_checking: 'Verifica in corso…', betagate_invalid: 'Codice non valido.', betagate_full: 'La closed beta ha raggiunto il numero massimo di posti disponibili. Segui i canali social per sapere quando si apre di più.', betagate_network_error: 'Impossibile verificare il codice: controlla la connessione e riprova.', betagate_ig_desc: 'Segui @racingdynasty.game e cerca il codice nei post, oppure scrivici in DM per ricevere il codice di accesso — se c\'è ancora posto.', betagate_ig_btn: 'Vai su Instagram', betagate_google_btn: 'Accedi con Google', betagate_or_divider: 'oppure', betagate_logged_in_as: (nome)=>`Accesso effettuato come ${nome}`,
     menu_fullscreen: 'Schermo Intero', menu_language: 'Lingua',
     // Impostazioni comuni
     settings_title: '<img class=ico src=assets/icons/gear.png>️ Impostazioni', settings_sfx_vol: 'Volume Effetti', settings_music_vol: 'Volume Musica',
@@ -1416,7 +1416,7 @@ const I18N = {
     daily_leaderboard_weighted_empty: "Nobody has played enough Dailies yet (minimum 15 days) to show up here.",
 
     menu_new_run: 'New Run', menu_new_run_confirm: 'Do you really want to abandon the current run and start over? Unsaved progress will be lost.',
-    menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits', menu_whats_new: "What's New", whatsnew_empty: 'Nothing new right now.', whatsnew_got_it_btn: 'Got it!', whatsnew_show_again_btn: 'Show again next time',
+    menu_achievements: 'Achievements', menu_settings: 'Settings', menu_credits: 'Credits', menu_whats_new: "What's New", whatsnew_empty: 'Nothing new right now.', whatsnew_got_it_btn: 'Got it!', whatsnew_show_again_btn: 'Show again next time', betagate_title: 'Racing Dynasty is in closed beta', betagate_desc: "The game is still limited access. If you have an invite code, enter it below.", betagate_placeholder: 'Invite code', betagate_submit_btn: 'Enter', betagate_checking: 'Checking…', betagate_invalid: 'Invalid code.', betagate_full: 'The closed beta has reached its maximum number of available spots. Follow our social channels to know when more open up.', betagate_network_error: "Couldn't verify the code: check your connection and try again.", betagate_ig_desc: 'Follow @racingdynasty.game and look for the code in our posts, or DM us to get an access code — if there\'s still room.', betagate_ig_btn: 'Go to Instagram', betagate_google_btn: 'Sign in with Google', betagate_or_divider: 'or', betagate_logged_in_as: (nome)=>`Signed in as ${nome}`,
     menu_fullscreen: 'Fullscreen', menu_language: 'Language',
     settings_title: '<img class=ico src=assets/icons/gear.png>️ Settings', settings_sfx_vol: 'Sound Effects Volume', settings_music_vol: 'Music Volume',
     settings_haptic: 'Haptic Feedback', settings_speed: 'Default Race Speed', settings_decision_timer: 'Decision Countdown',
@@ -1812,7 +1812,7 @@ const I18N = {
     daily_leaderboard_weighted_empty: 'Nadie ha jugado suficientes Dailies todavía (mínimo 15 días) para aparecer aquí.',
 
     menu_new_run: 'Nueva Partida', menu_new_run_confirm: '¿Seguro que quieres abandonar la partida actual y empezar de nuevo? El progreso no guardado se perderá.',
-    menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos', menu_whats_new: 'Novedades', whatsnew_empty: 'No hay novedades por ahora.', whatsnew_got_it_btn: '¡Entendido!', whatsnew_show_again_btn: 'Mostrar de nuevo',
+    menu_achievements: 'Logros', menu_settings: 'Ajustes', menu_credits: 'Créditos', menu_whats_new: 'Novedades', whatsnew_empty: 'No hay novedades por ahora.', whatsnew_got_it_btn: '¡Entendido!', whatsnew_show_again_btn: 'Mostrar de nuevo', betagate_title: 'Racing Dynasty está en closed beta', betagate_desc: 'El juego todavía tiene acceso limitado. Si tienes un código de invitación, introdúcelo abajo.', betagate_placeholder: 'Código de invitación', betagate_submit_btn: 'Entrar', betagate_checking: 'Comprobando…', betagate_invalid: 'Código no válido.', betagate_full: 'La closed beta ha alcanzado el número máximo de plazas disponibles. Sigue nuestras redes sociales para saber cuándo se abran más.', betagate_network_error: 'No se pudo verificar el código: comprueba tu conexión e inténtalo de nuevo.', betagate_ig_desc: 'Sigue a @racingdynasty.game y busca el código en nuestras publicaciones, o escríbenos por DM para recibir un código de acceso — si todavía hay sitio.', betagate_ig_btn: 'Ir a Instagram', betagate_google_btn: 'Iniciar sesión con Google', betagate_or_divider: 'o', betagate_logged_in_as: (nome)=>`Sesión iniciada como ${nome}`,
     menu_fullscreen: 'Pantalla Completa', menu_language: 'Idioma',
     settings_title: '<img class=ico src=assets/icons/gear.png>️ Ajustes', settings_sfx_vol: 'Volumen de Efectos', settings_music_vol: 'Volumen de Música',
     settings_haptic: 'Vibración', settings_speed: 'Velocidad de Carrera Predeterminada', settings_decision_timer: 'Cuenta Atrás de Decisiones',
@@ -17252,6 +17252,123 @@ function showMaintenanceActiveWatermark(){
   `;
   document.body.appendChild(el);
 }
+// V0.9.9.244: CANCELLO BETA CHIUSA — richiesto da Gio: il gioco ora richiede un codice
+// (pubblicato su Instagram) per i NUOVI giocatori, con un tetto massimo di posti. Chi gioca già
+// (ha un salvataggio, trofei o obiettivi su questo dispositivo) resta dentro automaticamente,
+// senza dover inserire nulla — il cancello riguarda solo chi arriva da adesso in poi. Deve
+// funzionare anche senza login Google (il gioco resta giocabile senza account), quindi la verifica
+// passa da una Edge Function pubblica, non da un sistema legato all'utente autenticato.
+const BETA_GATE_GRANTED_KEY = 'racingDynastyBetaGateGrantedV1';
+function haAccessoBetaConcesso(){
+  try{ return localStorage.getItem(BETA_GATE_GRANTED_KEY)==='1'; }catch(e){ return false; }
+}
+function concediAccessoBeta(){
+  try{ localStorage.setItem(BETA_GATE_GRANTED_KEY, '1'); }catch(e){}
+}
+function giocatoreGiaEsistente(){
+  // "gia' esistente" = ha una qualunque traccia di partita precedente su questo dispositivo
+  try{
+    return !!(localStorage.getItem(SAVE_KEY) || localStorage.getItem(ACHIEVEMENT_SAVE_KEY) ||
+              localStorage.getItem(TROPHY_SAVE_KEY) || localStorage.getItem(DRIVER_TROPHY_SAVE_KEY));
+  }catch(e){ return true; } // se non riusciamo nemmeno a leggere localStorage, non blocchiamo nessuno
+}
+function renderBetaGateScreen(){
+  document.body.innerHTML = `
+  <div class="tt-overlay" style="position:fixed;">
+    <div class="tt-bg"></div>
+    <div class="tt-card" style="text-align:center;max-width:420px;">
+      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:2px;">
+        <button type="button" class="lang-btn betagate-lang-btn ${currentLang==='it'?'active':''}" data-lang-choice="it">IT</button>
+        <button type="button" class="lang-btn betagate-lang-btn ${currentLang==='en'?'active':''}" data-lang-choice="en">EN</button>
+        <button type="button" class="lang-btn betagate-lang-btn ${currentLang==='es'?'active':''}" data-lang-choice="es">ES</button>
+      </div>
+      <img src="assets/logo.png" alt="Racing Dynasty" style="width:120px;max-width:60%;margin:0 auto 4px;display:block;">
+      <h1 style="margin:0;font-size:22px;line-height:1.25;">${t('betagate_title')}</h1>
+      <div class="dim" style="font-size:14px;line-height:1.5;">${t('betagate_desc')}</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;">
+        ${currentUser ? `<div class="dim" style="font-size:12.5px;">${t('betagate_logged_in_as', currentUser.name)}</div>` : `<button type="button" id="betaGateGoogleBtn" class="button ghost" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.4 0 6.4 1.2 8.8 3.5l6.6-6.6C35.3 2.5 30 0 24 0 14.6 0 6.5 5.4 2.5 13.2l7.7 6c1.9-5.7 7.2-9.7 13.8-9.7z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.5 3-2.2 5.5-4.7 7.2l7.2 5.6c4.2-3.9 6.7-9.6 6.7-17.3z"/><path fill="#FBBC05" d="M10.2 19.2c-.4 1.2-.7 2.5-.7 3.8s.2 2.6.7 3.8l-7.7 6C.9 29.6 0 26.9 0 24s.9-5.6 2.5-8.8l7.7 6z"/><path fill="#34A853" d="M24 48c6 0 11.3-2 15.1-5.4l-7.2-5.6c-2 1.4-4.6 2.2-7.9 2.2-6.6 0-11.9-4-13.8-9.7l-7.7 6C6.5 42.6 14.6 48 24 48z"/></svg><span>${t('betagate_google_btn')}</span></button>
+        <div class="dim" style="font-size:11.5px;">${t('betagate_or_divider')}</div>`}
+        <input type="text" id="betaGateCodeInput" placeholder="${t('betagate_placeholder')}" autocomplete="off" spellcheck="false"
+          style="width:100%;box-sizing:border-box;padding:13px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);color:#fff;font-size:15px;text-align:center;">
+        <button type="button" id="betaGateCodeSubmit" class="button primary" style="width:100%;">${t('betagate_submit_btn')}</button>
+        <div id="betaGateCodeError" style="color:var(--danger,#ff6b6b);font-size:13px;min-height:18px;"></div>
+      </div>
+      <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.12);">
+        <div class="dim" style="font-size:13px;line-height:1.5;margin-bottom:12px;">${t('betagate_ig_desc')}</div>
+        <a href="https://www.instagram.com/racingdynasty.game?stkn=ZGJxNmZlbmIzamc=" target="_blank" rel="noopener"
+          style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;padding:11px 20px;border-radius:10px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;font-weight:700;font-size:14px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke="white" stroke-width="1.8"/><circle cx="12" cy="12" r="4.3" stroke="white" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.15" fill="white"/></svg>
+          <span>${t('betagate_ig_btn')}</span>
+        </a>
+      </div>
+    </div>
+  </div>`;
+  document.querySelectorAll('.betagate-lang-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      currentLang = btn.dataset.langChoice;
+      saveLang();
+      renderBetaGateScreen(); // ridisegna tutto nella nuova lingua, mantenendo quello che aveva scritto nel campo codice si perde ma e' un caso raro/accettabile
+    });
+  });
+  const googleBtn = document.getElementById('betaGateGoogleBtn');
+  if(googleBtn) googleBtn.addEventListener('click', ()=>{ signInWithGoogle(); });
+  const input = document.getElementById('betaGateCodeInput');
+  const errorEl = document.getElementById('betaGateCodeError');
+  const submitBtn = document.getElementById('betaGateCodeSubmit');
+  async function trySubmit(){
+    const val = input.value.trim();
+    if(!val) return;
+    submitBtn.disabled = true;
+    errorEl.textContent = t('betagate_checking');
+    try{
+      const resp = await fetch(SUPABASE_URL + '/functions/v1/redeem-beta-access', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
+        body: JSON.stringify({ code: val, user_id: currentUser ? currentUser.id : null }),
+      });
+      const data = await resp.json();
+      if(data && data.ok){
+        concediAccessoBeta();
+        window.location.reload();
+        return;
+      }
+      errorEl.textContent = (data && data.error==='beta_full') ? t('betagate_full') : t('betagate_invalid');
+    }catch(e){
+      console.warn('Verifica codice beta non riuscita (problema di rete):', e);
+      errorEl.textContent = t('betagate_network_error');
+    }
+    submitBtn.disabled = false;
+  }
+  submitBtn.addEventListener('click', trySubmit);
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter') trySubmit(); });
+}
+// V0.9.9.245: prima di decidere se mostrare il cancello beta, controlliamo se l'utente è già
+// loggato con un account Google (sessione salvata dal browser) — se sì, e se quell'account ha già
+// sbloccato in passato (magari su un altro dispositivo), lo lasciamo entrare senza richiedere nulla.
+// Popola anche currentUser da subito, cosi' se il codice va inserito comunque (primo utilizzo di
+// quell'account), il riscatto lo collega subito all'account.
+async function verificaLoginPrimaDelCancello(){
+  try{
+    initSupabase();
+    if(!supabaseClient) return;
+    const { data:{ session } } = await supabaseClient.auth.getSession();
+    if(session && session.user){
+      currentUser = {
+        id: session.user.id, email: session.user.email,
+        name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email,
+        avatarUrl: session.user.user_metadata?.avatar_url || null,
+      };
+    }
+  }catch(e){ /* ignorato: procediamo come se non fosse loggato, il cancello resta comunque valido */ }
+}
+async function controllaAccountBetaGiaSbloccato(){
+  if(!currentUser || !supabaseClient) return false;
+  try{
+    const { data, error } = await supabaseClient.rpc('controlla_account_beta_sbloccato', { p_user_id: currentUser.id });
+    if(error) return false;
+    return !!data;
+  }catch(e){ return false; }
+}
 async function checkMaintenanceAndBoot(){
   let maintenanceActive = false, unlockCode = null;
   try{
@@ -17266,10 +17383,21 @@ async function checkMaintenanceAndBoot(){
   try{ alreadyBypassed = maintenanceActive && localStorage.getItem(MAINTENANCE_BYPASS_KEY)===unlockCode; }catch(e){}
   if(maintenanceActive && !alreadyBypassed){
     renderMaintenanceScreen(unlockCode);
-  } else {
-    bootGameNormally();
-    if(maintenanceActive) showMaintenanceActiveWatermark(); // V0.9.9.76: sbloccata ma ancora attiva — promemoria visibile
+    return;
   }
+  if(maintenanceActive) showMaintenanceActiveWatermark(); // V0.9.9.76: sbloccata ma ancora attiva — promemoria visibile
+  if(!haAccessoBetaConcesso() && !giocatoreGiaEsistente()){
+    await verificaLoginPrimaDelCancello();
+    const accountGiaSbloccato = await controllaAccountBetaGiaSbloccato();
+    if(accountGiaSbloccato){
+      concediAccessoBeta();
+    } else {
+      renderBetaGateScreen();
+      return;
+    }
+  }
+  if(!haAccessoBetaConcesso()) concediAccessoBeta(); // giocatore gia' esistente: concesso senza chiedere nulla
+  bootGameNormally();
 }
 // V0.9.9.183: PUNTO 14 — posizione corretta fin da subito, e ricalcolo automatico ad ogni
 // variazione del vero viewport visibile (non solo durante le transizioni tra schermate).
